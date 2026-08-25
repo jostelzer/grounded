@@ -25,7 +25,7 @@ python3 scripts/export_review.py --in review.md --out review.pdf --pdf
 
 `--columns 1` for a single-column layout, plain `--out review.html` for HTML only. The review still goes in the chat as well.
 
-The two experimental media modes are the only standing exception: `image` and `mindmap` still deliver the written review in chat, then additionally generate and display one media artifact. The media never replaces the review.
+The two experimental media modes are the only standing exception: `image` and `mindmap` still deliver the written review in chat, additionally generating and displaying the media artifacts (one mindmap; one to five figures depending on size). The media never replaces the review.
 
 ## Defaults — do not ask, just do this
 
@@ -57,7 +57,7 @@ Style never changes search depth, source counts, citations, term links, or verif
 
 **Media modes (experimental)** — these are additive artifacts, not styles:
 
-- **Image** — only when the user explicitly asks for an `image` as the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Run the **small** review pipeline, then create one scientific illustration from the verified findings.
+- **Image** — only when the user explicitly asks for an `image`/`figures` as part of the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Combines with any size and style; the figure budget scales with size (small 1, medium up to 3, large up to 5 — caps, not quotas). Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`, placing each after the section it supports. Figures flow into the PDF export automatically.
 - **Mindmap** — only when the user explicitly asks for a `mindmap` as the output or names `mindmap mode`. Do not infer it merely because a diagram might be helpful. Run the **small** review pipeline, then create one rendered mindmap from the verified findings.
 
 If the user explicitly asks for both `image` and `mindmap`, run one small review and add both media artifacts. For either media mode, read `references/media-modes.md` before planning the visual. Media creation happens only after the evidence has been searched, read, verified, and synthesized.

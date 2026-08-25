@@ -60,6 +60,12 @@
       "prompt": "Use the scientific-review skill, medium prose: does regular sauna use reduce cardiovascular risk?",
       "expected_output": "A narrative article of 1,500-2,500 body words: a citation-free Abstract answering the question, an Introduction motivating it, thematic sections of topic-sentence-led paragraphs where every empirical sentence carries an author-year DOI-linked citation, contrary evidence in explicit contrast paragraphs, a Conclusion synthesizing without new evidence, and a generated sources block with 30-60 verified peer-reviewed references. Same verification rigour as bullets; no filler; offers the journal-styled PDF export at the end.",
       "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "Use the scientific-review skill, medium image mode: how does chronic stress affect the immune system?",
+      "expected_output": "A medium bullets review (30-60 verified sources, 6-9 punchline sections, 1-2 tables) plus up to three figures, each earned by a distinct visual story (e.g. a mechanism synthesis with glossary band, an evidence map, or a real-numbers effect summary using only values cited in the text), every character in every figure deterministically typeset, each figure placed after the section it supports with an alt text and a cited caption, and each rendered figure inspected before delivery.",
+      "files": []
     }
   ]
 }

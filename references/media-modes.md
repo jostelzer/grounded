@@ -1,6 +1,6 @@
 # Experimental media modes
 
-Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Both modes use the complete **small** review pipeline first. The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
+Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small bullets when none is named); mindmap mode uses the small pipeline. The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
 
 ## Shared evidence boundary
 
@@ -15,7 +15,32 @@ Read this reference only when the user explicitly requests `image` or `mindmap` 
 
 ## Image mode
 
-Create one polished, self-explanatory scientific illustration that communicates the review's main synthesis at a glance. The figure must be understandable to an educated non-specialist without relying on the surrounding review or caption to decode its terminology.
+Create polished, self-explanatory scientific figures that communicate the review's synthesis. Image mode combines with any size and style; the figure budget scales with the size:
+
+| | Small | Medium | Large |
+|---|---|---|---|
+| Figures | 1 | up to 3 | up to 5 |
+
+"Up to" is a cap, not a quota: every figure must be earned by a distinct visual story in the evidence. A medium review with one genuinely visual finding gets one figure. Never pad with a figure that restates a table or decorates a section.
+
+**What a figure can be — maximum flexibility within the rules.** Any figure that serves the evidence is allowed. Examples, not an exhaustive list:
+
+- the main synthesis illustration — the whole answer at a glance (this is always figure 1);
+- a mechanism or pathway diagram;
+- an evidence map — studies laid out by population, dose, duration, or outcome;
+- a forest-style effect summary plotting the effect sizes and intervals *already extracted into the review* — real numbers only, each traceable to a cited source;
+- a timeline — the history of a claim, or intervention-to-outcome time courses;
+- a flow diagram — study selection, patient flow, a decision path;
+- a dose–response or exposure–response schematic from reported values;
+- an anatomical or structural schematic, at the level of detail the sources support;
+- a conceptual framework showing how the field's competing explanations relate;
+- a contrast panel — "what the claim says" versus "what the trials measured".
+
+Invent freely beyond this list. The constraints are always the same: built only from the verified synthesis, no fabricated data points or scales, uncertainty visible, and the composition rules below.
+
+**Placement.** Figures go where they support the argument — each one inserted after the section it illustrates, with its caption — not stacked at the end. In prose style, reference each figure from the running text. The first figure keeps the bottom glossary band; later figures may instead carry a self-contained caption that defines any symbol or abbreviation not already defined in the review or an earlier figure.
+
+Every figure must be understandable to an educated non-specialist without relying on the surrounding review to decode its terminology.
 
 ### The one rule that governs everything: text is typeset, never generated
 
@@ -62,15 +87,14 @@ Two acceptable builds:
 7. Distinguish observed findings from proposed mechanisms through layout and visual styling.
 8. After generation, inspect the image at its delivered size. Regenerate or edit it if labels or glossary text are garbled, any abbreviation or difficult concept is undefined, anatomy is wrong, arrows imply unsupported causality, components are clipped or overlapping, or the hierarchy does not match the evidence.
 
-Deliver the small review using the normal writing guide, then insert:
+Deliver the review at its size and style using the normal writing guide, inserting each figure after the section it supports:
 
 ```text
-### Scientific illustration
-<rendered image>
+![<specific alt text: the visual structure and the scientific point>](<figure file>)
 *Caption: what the visual shows, what is established versus uncertain, and 2–5 supporting review citations.*
 ```
 
-Use specific alt text that communicates the visual structure and scientific point. The caption may elaborate, but the illustration itself must remain independently understandable.
+(When there is a single synthesis figure and no better anchor section, a `### Scientific illustration` section before **Sources** is still acceptable.) The caption may elaborate, but each figure must remain independently understandable. This exact `![...](...)` + `*Caption: …*` pairing is what `scripts/export_review.py` recognizes, so the figures flow into the PDF export automatically.
 
 ## Mindmap mode
 

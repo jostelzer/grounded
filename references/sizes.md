@@ -8,7 +8,7 @@ Styles change only the writing register — never search depth, source counts, c
 - **Prose** (explicit: "prose", "narrative", "essay", "write it out"): a narrative article — abstract, introduction, thematic sections of topic-sentence paragraphs, conclusion. Body budget ~1.5× the size tier: small 600–1,000, medium 1,500–2,500, large 3,500–6,000 words. Rules in "Prose style" in `writing-guide.md`. Offer the journal PDF export after delivering.
 - **ELI5** (explicit: `eli5`, "explain like I'm five", very simple language): very simple English at the chosen size (defaults small; body may stretch ~1.2× because plain words take more of them). Rules in "ELI5 language" in `writing-guide.md`.
 
-`Image` and `mindmap` are explicit-only experimental media modes, not styles: each uses small-tier search and bullets-style writing, then adds the requested media by following `media-modes.md`.
+`Image` and `mindmap` are explicit-only experimental media modes, not styles. Image combines with any size and style, with a size-scaled figure budget (small 1, medium up to 3, large up to 5 — caps, not quotas); mindmap uses small-tier search and bullets-style writing. Both follow `media-modes.md`.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|

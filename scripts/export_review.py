@@ -48,7 +48,22 @@ def split_row(line):
     return [c.strip() for c in cells]
 
 
-def to_html(md):
+MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp"}
+
+
+def image_data_uri(path, base_dir):
+    """Embed a local image as a data URI so the export is self-contained."""
+    import base64
+    p = path if os.path.isabs(path) else os.path.join(base_dir, path)
+    ext = os.path.splitext(p)[1].lower()
+    if ext not in MIME or not os.path.exists(p):
+        return None
+    with open(p, "rb") as f:
+        return f"data:{MIME[ext]};base64," + base64.b64encode(f.read()).decode()
+
+
+def to_html(md, base_dir="."):
     """Convert the review markdown to body HTML. Returns (title, lead, body)."""
     lines = md.split("\n")
     out, i = [], 0
@@ -71,6 +86,26 @@ def to_html(md):
         if s.startswith("### "):
             out.append(f"<h2>{inline(s[4:])}</h2>")
             i += 1
+            continue
+
+        # figure: ![alt](file), optionally followed by an *Caption: …* line
+        fig = re.match(r"^!\[([^\]]*)\]\(([^)\s]+)\)$", s)
+        if fig:
+            alt, src = fig.group(1), fig.group(2)
+            i += 1
+            caption = ""
+            while i < len(lines) and not lines[i].strip():
+                i += 1
+            if i < len(lines):
+                cm = re.match(r"^\*(?:Caption:\s*)?(.+)\*$", lines[i].strip())
+                if cm and lines[i].strip().lower().startswith("*caption"):
+                    caption = f"<figcaption>{inline(cm.group(1))}</figcaption>"
+                    i += 1
+            uri = image_data_uri(src, base_dir)
+            if uri is None:
+                print(f"warning: figure not embedded (missing or unsupported): {src}", file=sys.stderr)
+                uri = html.escape(src, quote=True)
+            out.append(f'<figure><img src="{uri}" alt="{html.escape(alt, quote=True)}">{caption}</figure>')
             continue
 
         if s.startswith("## "):
@@ -114,7 +149,7 @@ def to_html(md):
         # paragraph (gather until blank)
         para = [s]
         i += 1
-        while i < len(lines) and lines[i].strip() and not re.match(r"^[#\-*>|]", lines[i].strip()):
+        while i < len(lines) and lines[i].strip() and not re.match(r"^[#\-*>|!]", lines[i].strip()):
             para.append(lines[i].strip())
             i += 1
         text = " ".join(para)
@@ -216,9 +251,10 @@ tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
 .refs { font-size: 8pt; line-height: 1.4; color: #333; text-align: left; }
 .refs p { margin: 0 0 5px; padding-left: 1.1em; text-indent: -1.1em; }
 .refs a { border-bottom: none; color: var(--muted); word-break: break-all; }
-figure { margin: 10px 0; break-inside: avoid; }
-figure img { width: 100%; height: auto; }
-figcaption { font-size: 8pt; color: var(--muted); margin-top: 5px; }
+/* Figures, like tables, span the full page width and are never clipped. */
+figure { column-span: all; margin: 12px 0 14px; break-inside: avoid; }
+figure img { display: block; width: 100%; height: auto; }
+figcaption { font-size: 8pt; color: var(--muted); margin-top: 5px; text-align: left; }
 footer.colophon {
   margin-top: 16px; padding-top: 7px; border-top: 1px solid var(--rule);
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -255,8 +291,8 @@ PAGE = """<!doctype html>
 """
 
 
-def build_html(md, columns=2, kicker="Scientific review", colophon=None):
-    title, lead, body = to_html(md)
+def build_html(md, columns=2, kicker="Scientific review", colophon=None, base_dir="."):
+    title, lead, body = to_html(md, base_dir)
     title = title or "Scientific review"
     lead_html = ""
     if lead:
@@ -265,7 +301,7 @@ def build_html(md, columns=2, kicker="Scientific review", colophon=None):
     import urllib.parse
     # inline citation URLs percent-encode parens, sources-block URLs don't;
     # normalize both forms before deduplicating
-    n_refs = len({urllib.parse.unquote(d).lower().rstrip(").,;")
+    n_refs = len({urllib.parse.unquote(d).lower().rstrip(").,;*_")
                   for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
     right = f"{n_refs} verified references" if n_refs else ""
     if colophon is None:
@@ -348,7 +384,8 @@ def main():
     args = ap.parse_args()
 
     md = open(args.src).read()
-    page = build_html(md, columns=args.columns, kicker=args.kicker, colophon=args.colophon)
+    page = build_html(md, columns=args.columns, kicker=args.kicker, colophon=args.colophon,
+                      base_dir=os.path.dirname(os.path.abspath(args.src)))
 
     want_pdf = args.pdf or args.out.lower().endswith(".pdf")
     if want_pdf:

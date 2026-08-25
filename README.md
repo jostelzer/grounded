@@ -42,7 +42,7 @@ A review has a **size** — `small` (default), `medium`, `large` — and a **sty
 | Sources | 10–20 | 30–60 | 70–150 |
 | Full texts read | 2–4 load-bearing papers | 8–15 | 25+ |
 
-Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) runs the small pipeline and then additionally produces one scientific illustration built from the verified findings — self-explanatory to an educated non-specialist, with a glossary for every abbreviation. The skill can also check an existing draft's claims and references against the literature.
+Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be whatever the evidence earns: mechanism diagrams, evidence maps, timelines, flow diagrams, forest-style effect summaries plotting only numbers from the cited sources, and more — always with deterministically typeset text, self-explanatory to a non-specialist, placed after the sections they support, and flowing automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
 
 ## Ways to use it
 
@@ -79,11 +79,11 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 
 → [output](examples/small-blue-light-sleep.md) · small · 18 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
 
-**Produce a figure**
+**Produce figures**
 
-> Use the scientific-review skill in image mode: how do mRNA vaccines work?
+> Use the scientific-review skill, medium image mode: how do mRNA vaccines work?
 
-→ [output](examples/image-mrna-vaccines.md) · image · 20 verified sources plus an SVG illustration with glossary
+→ [output](examples/image-mrna-vaccines.md) · medium image · 59 verified sources plus three SVG figures (mechanism synthesis with glossary, efficacy-vs-antibody panels, myocarditis risk in context — the data figures plot only values cited in the text) · [illustrated PDF](examples/image-mrna-vaccines.pdf)
 
 Practical notes: unless you say otherwise you get a **small** review (a fast, dense ~500-word answer) — say `medium` or `large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
 
