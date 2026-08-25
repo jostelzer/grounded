@@ -38,6 +38,7 @@ Head-to-head studies; network meta-analyses; separate evidence bases for each; d
 - **Then the newest**: `--from-year <two years ago>` to catch work newer than the latest reviews.
 - **Contradiction pass**: queries that name the null or the criticism explicitly; the index does not rank disagreement for you.
 - **Label every run with `--angle`** so the ledger shows coverage per angle.
+- **Give OpenAlex a contact address**: `export OPENALEX_MAILTO="you@example.org"` (or `--mailto you@example.org`) enters its polite pool. Requests are throttled and retried with backoff either way, but OpenAlex 429s can carry a Retry-After measured in hours; when that happens the script skips OpenAlex for the rest of the run, prints a NOTE, and keeps going on PubMed. Treat that as thinner discovery — widen the queries, add `WebSearch` leads, and record it in `search_log.md` — not as a problem with the citations, which are verified against Crossref.
 
 Use `WebSearch` when you need to discover what a programme, drug, or debate is called, or to locate a specific paper whose title you know — then add it via a `find_papers.py` query so it enters the ledger with a DOI. Never cite from the web page.
 

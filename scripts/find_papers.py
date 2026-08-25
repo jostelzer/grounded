@@ -14,6 +14,13 @@ Usage:
   python3 find_papers.py --query "..." --sort cited                    # most-cited first
   python3 find_papers.py --ledger sources.json --show                  # print the ledger
 
+OpenAlex courtesy settings:
+  Set OPENALEX_MAILTO (or pass --mailto you@example.org) to enter OpenAlex's polite pool, which
+  carries a higher and far more reliable rate limit. Requests are throttled, and 429/5xx responses
+  are retried with exponential backoff honouring Retry-After. OpenAlex 429s can carry a multi-hour
+  Retry-After (a spent request quota rather than a burst); when that happens OpenAlex is skipped
+  for the rest of the run, clearly logged, and discovery continues on PubMed alone.
+
 What it does:
   * Queries OpenAlex (/works, relevance-ranked) and PubMed (esearch + efetch) for each query.
   * Keeps peer-reviewed journal articles only: OpenAlex type in {article, review},
@@ -29,8 +36,11 @@ cited_by_count, oa_url, is_retracted, is_preprint, found_by (list of {query, ang
 status ('candidate' until verify_citations.py marks it 'verified').
 """
 import argparse
+import datetime
+import email.utils
 import json
 import os
+import random
 import re
 import sys
 import time
@@ -39,24 +49,129 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
-UA = "scientific-review-skill/1.0 (mailto:review-skill@example.org)"
+VERSION = "1.1"
+SKILL_URL = "https://github.com/jostelzer/scientific-review-skill"
+# Request pacing: OpenAlex's polite pool allows 10 req/s, NCBI allows 3 req/s without an API key.
+OPENALEX_MIN_INTERVAL = 0.15
+PUBMED_MIN_INTERVAL = 0.34
+# A Retry-After longer than this is a spent request quota, not a burst limit: waiting it out
+# inside a run is pointless, so we stop asking and fall back to PubMed.
+MAX_RETRY_WAIT = 120.0
+# Contact address sent to each service (polite pool); filled in by main() from --mailto/env.
+SERVICE_MAILTO = {}
 TERTIARY_VENUES = ("statpearls", "uptodate", "merck manual", "wikipedia", "encyclopedia",
                    "cochrane clinical answers", "dynamed", "bmj best practice")
 PREPRINT_HOSTS = ("biorxiv", "medrxiv", "arxiv", "ssrn", "research square", "preprints.org",
                   "psyarxiv", "osf preprints", "chemrxiv", "authorea", "scielo preprints", "europe pmc preprints")
 
 
-def get(url, retries=3, sleep=1.0):
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    for i in range(retries):
+def user_agent(mailto=None):
+    """Descriptive UA; the mailto form is what OpenAlex and Crossref ask for."""
+    return f"scientific-review-skill/{VERSION} (+{SKILL_URL}" + (f"; mailto:{mailto})" if mailto else ")")
+
+
+class ServiceUnavailable(Exception):
+    """The service could not be reached, or asked us to come back later than this run can wait."""
+
+    def __init__(self, service, reason, retry_after=None):
+        super().__init__(f"{service} unavailable: {reason}")
+        self.service = service
+        self.reason = reason
+        self.retry_after = retry_after
+
+
+_last_request = {}
+
+
+def throttle(service, min_interval):
+    prev = _last_request.get(service)
+    if prev is not None:
+        gap = min_interval - (time.monotonic() - prev)
+        if gap > 0:
+            time.sleep(gap)
+    _last_request[service] = time.monotonic()
+
+
+def parse_retry_after(headers):
+    """Retry-After is either a number of seconds or an HTTP-date."""
+    if not headers:
+        return None
+    raw = headers.get("Retry-After")
+    if not raw:
+        return None
+    raw = raw.strip()
+    try:
+        return max(0.0, float(raw))
+    except ValueError:
+        pass
+    try:
+        when = email.utils.parsedate_to_datetime(raw)
+    except (TypeError, ValueError):
+        return None
+    if when is None:
+        return None
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=datetime.timezone.utc)
+    return max(0.0, (when - datetime.datetime.now(datetime.timezone.utc)).total_seconds())
+
+
+def http_get(url, service, min_interval=0.0, retries=3, backoff=1.0, timeout=30):
+    """GET with throttling and exponential backoff on 429/5xx, honouring Retry-After.
+
+    Raises ServiceUnavailable when the service is out of reach for this run.
+    """
+    headers = {"User-Agent": user_agent(SERVICE_MAILTO.get(service))}
+    req = urllib.request.Request(url, headers=headers)
+    for attempt in range(retries + 1):
+        throttle(service, min_interval)
         try:
-            with urllib.request.urlopen(req, timeout=30) as r:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.read().decode("utf-8", errors="replace")
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
-            if i == retries - 1:
-                sys.stderr.write(f"  request failed: {url[:100]}... ({e})\n")
-                return None
-            time.sleep(sleep * (i + 1))
+        except urllib.error.HTTPError as e:
+            retry_after = parse_retry_after(e.headers)
+            if e.code not in (429, 500, 502, 503, 504):
+                raise ServiceUnavailable(service, f"HTTP {e.code} {e.reason}") from e
+            if retry_after is not None and retry_after > MAX_RETRY_WAIT:
+                raise ServiceUnavailable(
+                    service,
+                    f"HTTP {e.code} (Retry-After {fmt_duration(retry_after)}): a spent request "
+                    "quota rather than a burst limit, so this run will not wait it out",
+                    retry_after=retry_after,
+                ) from e
+            if attempt == retries:
+                raise ServiceUnavailable(service, f"HTTP {e.code} after {retries + 1} attempts",
+                                         retry_after=retry_after) from e
+            wait = retry_after if retry_after is not None else backoff * (2 ** attempt)
+            wait = min(max(wait, 0.0), MAX_RETRY_WAIT) + random.uniform(0, 0.25)
+            sys.stderr.write(f"  {service}: HTTP {e.code}, retrying in {wait:.1f}s "
+                             f"(attempt {attempt + 2}/{retries + 1})\n")
+            time.sleep(wait)
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            if attempt == retries:
+                raise ServiceUnavailable(service, f"{e} after {retries + 1} attempts") from e
+            wait = backoff * (2 ** attempt) + random.uniform(0, 0.25)
+            sys.stderr.write(f"  {service}: {e}, retrying in {wait:.1f}s "
+                             f"(attempt {attempt + 2}/{retries + 1})\n")
+            time.sleep(wait)
+
+
+def fmt_duration(seconds):
+    if seconds >= 86400:
+        return f"{seconds / 86400:.1f}d"
+    if seconds >= 3600:
+        return f"{seconds / 3600:.1f}h"
+    if seconds >= 60:
+        return f"{seconds / 60:.1f}min"
+    return f"{seconds:.0f}s"
+
+
+def get(url, service="pubmed", min_interval=PUBMED_MIN_INTERVAL, retries=3):
+    """Fetch a URL, reporting rather than raising when the service is out of reach."""
+    try:
+        return http_get(url, service=service, min_interval=min_interval, retries=retries)
+    except ServiceUnavailable as e:
+        sys.stderr.write(f"  {e}\n")
+        return None
 
 
 def norm_doi(doi):
@@ -86,7 +201,41 @@ def make_key(authors, year, title):
 
 # ---------------------------------------------------------------- OpenAlex
 
-def search_openalex(query, from_year, to_year, limit, types, sort):
+class OpenAlexClient:
+    """OpenAlex access with a polite-pool contact address and a one-strike availability latch.
+
+    OpenAlex answers an exhausted request quota with 429 and a Retry-After measured in hours.
+    Once that (or any other hard failure) happens, further OpenAlex calls in this run are
+    pointless, so the client latches off and discovery carries on with PubMed alone.
+    """
+
+    def __init__(self, mailto=None, retries=3):
+        self.mailto = mailto
+        self.retries = retries
+        self.unavailable = None      # reason string once OpenAlex is given up on
+        self.retry_after = None
+        SERVICE_MAILTO["openalex"] = mailto
+
+    @property
+    def enabled(self):
+        return self.unavailable is None
+
+    def fetch(self, url):
+        if not self.enabled:
+            return None
+        try:
+            return http_get(url, service="openalex", min_interval=OPENALEX_MIN_INTERVAL,
+                            retries=self.retries)
+        except ServiceUnavailable as e:
+            self.unavailable = e.reason
+            self.retry_after = e.retry_after
+            sys.stderr.write(f"  {e}\n")
+            sys.stderr.write("  skipping OpenAlex for the rest of this run — "
+                             "discovery continues on PubMed alone\n")
+            return None
+
+
+def search_openalex(client, query, from_year, to_year, limit, types, sort):
     filt = ["is_paratext:false"]
     if types == "review":
         filt.append("type:review|article")
@@ -105,12 +254,19 @@ def search_openalex(query, from_year, to_year, limit, types, sort):
     }
     if sort == "cited":
         params["sort"] = "cited_by_count:desc"
+    if client.mailto:
+        params["mailto"] = client.mailto      # OpenAlex polite pool
     url = "https://api.openalex.org/works?" + urllib.parse.urlencode(params)
-    raw = get(url)
+    raw = client.fetch(url)
     if not raw:
         return []
+    try:
+        results = json.loads(raw).get("results", [])
+    except json.JSONDecodeError:
+        sys.stderr.write("  openalex: unreadable response, skipping this query\n")
+        return []
     out = []
-    for w in json.loads(raw).get("results", []):
+    for w in results:
         loc = w.get("primary_location") or {}
         src = loc.get("source") or {}
         src_name = (src.get("display_name") or "")
@@ -162,7 +318,6 @@ def search_pubmed(query, from_year, to_year, limit, types):
     ids = json.loads(raw).get("esearchresult", {}).get("idlist", [])
     if not ids:
         return []
-    time.sleep(0.4)  # NCBI rate limit (3 req/s without key)
     url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + urllib.parse.urlencode(
         {"db": "pubmed", "id": ",".join(ids), "retmode": "xml"})
     raw = get(url)
@@ -288,6 +443,10 @@ def main():
     ap.add_argument("--types", choices=["all", "review"], default="all", help="'review' = reviews/meta-analyses only")
     ap.add_argument("--sort", choices=["relevance", "cited"], default="relevance")
     ap.add_argument("--sources", default="openalex,pubmed")
+    ap.add_argument("--mailto", default=os.environ.get("OPENALEX_MAILTO", "").strip() or None,
+                    help="contact address for OpenAlex's polite pool (default: $OPENALEX_MAILTO)")
+    ap.add_argument("--openalex-retries", type=int, default=3,
+                    help="retries per OpenAlex request before giving up on OpenAlex (default: 3)")
     ap.add_argument("--include-preprints", action="store_true")
     ap.add_argument("--ledger", default="sources.json")
     ap.add_argument("--show", action="store_true", help="print the ledger and exit")
@@ -300,11 +459,18 @@ def main():
         print(f"\n{len(ledger['entries'])} entries in {args.ledger}")
         return
 
+    use_openalex = "openalex" in args.sources
+    client = OpenAlexClient(mailto=args.mailto, retries=args.openalex_retries)
+    if use_openalex and not client.mailto:
+        sys.stderr.write("Note: no --mailto / OPENALEX_MAILTO set — OpenAlex requests go to the "
+                         "shared pool, which is throttled harder than the polite pool.\n")
+
     new_entries = []
     for q in args.query:
         hits = []
-        if "openalex" in args.sources:
-            hits += search_openalex(q, args.from_year, args.to_year, args.limit, args.types, args.sort)
+        if use_openalex and client.enabled:
+            hits += search_openalex(client, q, args.from_year, args.to_year, args.limit,
+                                    args.types, args.sort)
         if "pubmed" in args.sources:
             hits += search_pubmed(q, args.from_year, args.to_year, args.limit, args.types)
         if not args.include_preprints:
@@ -324,6 +490,12 @@ def main():
         if args.abstracts:
             for e in fresh:
                 print(f"\n[{e['key']}] {e['title']}\n  {e.get('abstract') or '(no abstract available)'}\n")
+
+    if use_openalex and not client.enabled:
+        print(f"\nNOTE: OpenAlex was skipped for this run — {client.unavailable}. "
+              "These hits come from PubMed alone, so coverage outside biomedicine may be thin: "
+              "widen the queries, or rerun later"
+              + ("." if client.mailto else ", and set OPENALEX_MAILTO to use the polite pool."))
 
     retracted = [e for e in ledger["entries"] if e.get("is_retracted")]
     if retracted:

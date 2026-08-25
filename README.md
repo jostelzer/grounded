@@ -101,6 +101,7 @@ If the agent's Python sandbox has no network access (e.g. ChatGPT's code interpr
 
 - **No API keys, no pip installs.** The scripts are pure Python 3 standard library, calling the free public APIs of OpenAlex, PubMed, Crossref, and Europe PMC.
 - Internet access — either from Python or from the agent's web-fetch tool (the fallback path).
+- **Optional but recommended:** `export OPENALEX_MAILTO="you@example.org"` (or `--mailto`). OpenAlex gives requests carrying a contact address a higher, more reliable rate limit. Not a key and not an account — just a courtesy header. When OpenAlex rate-limits anyway, the search degrades to PubMed and says so; verification is unaffected, since that runs against Crossref.
 
 ## Installation
 

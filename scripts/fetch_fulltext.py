@@ -17,13 +17,16 @@ If no full text is available, says so and prints the abstract from the ledger in
 """
 import argparse
 import json
+import os
 import re
 import sys
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
-UA = "scientific-review-skill/1.0 (mailto:review-skill@example.org)"
+_MAILTO = os.environ.get("OPENALEX_MAILTO", "").strip()
+UA = ("scientific-review-skill/1.1 (+https://github.com/jostelzer/scientific-review-skill"
+      + (f"; mailto:{_MAILTO})" if _MAILTO else ")"))
 
 
 def get(url, timeout=40):
