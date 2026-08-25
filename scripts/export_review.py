@@ -148,8 +148,9 @@ html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: "Source Serif 4", "Charter", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  font-size: 10.5pt; line-height: 1.5;
+  font-size: 9.5pt; line-height: 1.45;
   font-variant-numeric: oldstyle-figures proportional-nums;
+  text-align: justify; hyphens: auto; -webkit-hyphens: auto;
 }
 .sheet { max-width: 190mm; margin: 0 auto; padding: 14mm 12mm 18mm; }
 header.masthead {
@@ -163,11 +164,11 @@ header.masthead {
   color: var(--muted); font-weight: 600;
 }
 h1 {
-  font-size: 21pt; line-height: 1.18; margin: 2px 0 10px; font-weight: 600;
-  letter-spacing: -0.01em; max-width: 34em;
+  font-size: 19pt; line-height: 1.18; margin: 2px 0 10px; font-weight: 600;
+  letter-spacing: -0.01em; max-width: 34em; text-align: left; hyphens: none;
 }
 .lead {
-  font-size: 11.5pt; line-height: 1.45; margin: 0 0 4px;
+  font-size: 10pt; line-height: 1.45; margin: 0 0 4px;
   padding: 10px 14px; background: var(--panel);
   border-left: 3px solid var(--accent);
 }
@@ -181,9 +182,9 @@ h1 {
 .body.cols { column-count: 2; column-gap: 9mm; column-rule: 1px solid #ebebeb; }
 h2 {
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
-  font-size: 9.5pt; font-weight: 700; line-height: 1.35;
-  letter-spacing: .01em; margin: 15px 0 6px; color: var(--accent);
-  break-after: avoid; page-break-after: avoid;
+  font-size: 8.75pt; font-weight: 700; line-height: 1.35;
+  letter-spacing: .01em; margin: 14px 0 5px; color: var(--accent);
+  break-after: avoid; page-break-after: avoid; text-align: left; hyphens: none;
 }
 h2:first-child { margin-top: 0; }
 h2.refhead {
@@ -196,18 +197,23 @@ li { margin: 0 0 4.5px; break-inside: avoid; }
 a { color: inherit; text-decoration: none; border-bottom: .5px solid rgba(122,32,24,.45); }
 a:hover { border-bottom-color: var(--accent); }
 code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; }
-.tablewrap { break-inside: avoid; margin: 8px 0 12px; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; line-height: 1.35; }
+/* Tables span the full page width (interrupting the columns, as journals do)
+   and wrap their cell content — a table is never clipped or truncated. */
+.tablewrap { column-span: all; break-inside: avoid; margin: 10px 0 12px; overflow: visible; }
+table { width: 100%; border-collapse: collapse; font-size: 7.8pt; line-height: 1.35; }
 thead th {
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
-  font-size: 7.5pt; text-transform: uppercase; letter-spacing: .06em;
+  font-size: 7pt; text-transform: uppercase; letter-spacing: .06em;
   text-align: left; font-weight: 700;
   border-top: 1.5px solid var(--ink); border-bottom: .75px solid var(--ink);
-  padding: 5px 7px 4px;
+  padding: 5px 7px 4px; hyphens: none;
 }
-tbody td { padding: 4.5px 7px; border-bottom: .5px solid #e8e8e8; vertical-align: top; }
+tbody td {
+  padding: 4px 7px; border-bottom: .5px solid #e8e8e8; vertical-align: top;
+  text-align: left; overflow-wrap: break-word; hyphens: auto;
+}
 tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
-.refs { font-size: 8.5pt; line-height: 1.4; color: #333; }
+.refs { font-size: 8pt; line-height: 1.4; color: #333; text-align: left; }
 .refs p { margin: 0 0 5px; padding-left: 1.1em; text-indent: -1.1em; }
 .refs a { border-bottom: none; color: var(--muted); word-break: break-all; }
 figure { margin: 10px 0; break-inside: avoid; }
@@ -221,7 +227,8 @@ footer.colophon {
 @media screen and (max-width: 700px) {
   .sheet { padding: 6mm; }
   .body.cols { column-count: 1; }
-  h1 { font-size: 17pt; }
+  h1 { font-size: 16pt; }
+  .tablewrap { overflow-x: auto; }
 }
 """
 
@@ -255,7 +262,11 @@ def build_html(md, columns=2, kicker="Scientific review", colophon=None):
     if lead:
         label = "Abstract" if lead[0] == "Abstract" else "Summary"
         lead_html = f'<p class="lead"><b>{label}</b> — {lead[1]}</p>'
-    n_refs = len({d.lower() for d in re.findall(r"https?://doi\.org/(\S+?)[\s)<]", md + " ")})
+    import urllib.parse
+    # inline citation URLs percent-encode parens, sources-block URLs don't;
+    # normalize both forms before deduplicating
+    n_refs = len({urllib.parse.unquote(d).lower().rstrip(").,;")
+                  for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
     right = f"{n_refs} verified references" if n_refs else ""
     if colophon is None:
         colophon = ("Every citation in this review was resolved and verified through Crossref, "

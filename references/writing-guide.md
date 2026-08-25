@@ -66,6 +66,7 @@ A compact block at the end: one line per source, `**Author 2026** Title. *Journa
 
 ## Language
 
+- **Objective scientific register.** The voice of a good journal article, not of science journalism. No rhetorical hooks ("Few claims have travelled further…"), no rhetorical questions, no drama or colour, no appeals to the reader, no first person. State findings and their limits; let the evidence carry the interest.
 - **Concise above all.** Cut every word that does not carry information. Prefer the short form: "no benefit" over "did not demonstrate a statistically significant benefit".
 - **Numbers, not adjectives.** Effect sizes with intervals, sample sizes, absolute risks. "HbA1c −0.06% (95% CI −0.27 to 0.16)" not "no meaningful improvement".
 - **Design in a parenthesis**: "(12-mo RCT, n=137)". It calibrates the reader without a clause.
@@ -103,6 +104,7 @@ would settle the open questions. No new evidence introduced here.>
 
 Paragraph craft:
 
+- **The register is that of a peer-reviewed narrative review** — objective, precise, and plain. Open sections with the finding, not with scene-setting flourishes; the Introduction motivates the question with facts (prevalence, contested claims, stakes), never with journalistic hooks. Calibrated verbs ("reduces", "is associated with", "may"), quantities over adjectives, no metaphors, no first person.
 - **The punchline moves from the heading into the topic sentence.** Headings become short thematic labels; every paragraph opens with the claim it defends, then weaves in the evidence — numbers, intervals, designs — with the same `Author 2026` DOI links inline.
 - One claim per paragraph, 3–6 sentences. A paragraph that needs eight sentences is two claims.
 - Transitions carry the argument between paragraphs and sections ("The picture changes in older adults…"), but every empirical sentence still carries its citation.
