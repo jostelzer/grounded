@@ -112,7 +112,7 @@ git clone https://github.com/jostelzer/scientific-review-skill.git scientific-re
 3. Upload `SKILL.md` and every file from `references/` and `scripts/` to the project's files.
 4. Set the project instructions to:
    > Follow the workflow in SKILL.md for every review request. Load the referenced files from the project files when SKILL.md points to them.
-5. Make sure **Web Search** is available, then ask: *"scientific review: does creatine reduce depressive symptoms?"* — add `medium`, `large`, or `image` to pick a mode.
+5. Make sure **Web Search** is available, then ask: *"Use the scientific-review skill: does creatine reduce depressive symptoms?"* — add `medium`, `large`, or `image` to pick a mode.
 
 **As a Custom GPT** (reusable/shareable):
 

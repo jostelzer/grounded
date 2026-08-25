@@ -1,4 +1,4 @@
-> Unedited example output. Mode: small (the default). Prompt: *"scientific review: does creatine supplementation reduce depressive symptoms?"*
+> Unedited example output. Mode: small (the default). Prompt: *"Use the scientific-review skill: does creatine supplementation reduce depressive symptoms?"*
 
 ## Does creatine supplementation reduce depressive symptoms?
 
