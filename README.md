@@ -154,7 +154,18 @@ Give the agent the folder as a working directory or attached files, use `SKILL.m
 - `scripts/` — search (`find_papers.py`), full text (`fetch_fulltext.py`), verification (`verify_citations.py`), and reference formatting (`format_references.py`).
 - `references/` — detailed guides loaded as needed: search playbook, evidence weighing, writing guide, citation rules, size tiers, media modes, and the no-network fallback pipeline.
 - `examples/` — full, unedited example outputs.
+- `scripts/export_review.py` — journal-styled HTML/PDF export (see below).
 - `evals/` — evaluation cases used to test the skill.
+
+## Export to PDF
+
+Ask for a PDF ("give me that as a PDF", "make it printable") and the skill typesets the review like a journal article — title block, summary lead, two-column body, hairline-ruled tables, references in small type, live DOI links throughout:
+
+```bash
+python3 scripts/export_review.py --in review.md --out review.pdf --pdf
+```
+
+`--columns 1` gives a single-column layout, and `--out review.html` exports HTML only (which prints cleanly from any browser). PDF rendering uses headless Chrome/Chromium/Edge or WeasyPrint if one is installed; the script itself stays pure standard library.
 
 ## How it's tested
 

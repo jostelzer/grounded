@@ -17,13 +17,21 @@ Working files are different. `sources.json`, `search_log.md` and the draft are s
 
 Produce a file **only** when the user asks for one ("save it", "give me a .md", "export to Word"). Then write the file *and* still put the review in the chat.
 
+When the user asks for a **PDF**, a **printable** or **shareable** version, or "make it look like a journal article", run `scripts/export_review.py` on the finished markdown — it typesets the review the way a journal does (title block, summary lead, two-column body, ruled tables, small reference type) and renders a PDF via headless Chrome or WeasyPrint:
+
+```bash
+python3 scripts/export_review.py --in review.md --out review.pdf --pdf
+```
+
+`--columns 1` for a single-column layout, plain `--out review.html` for HTML only. The review still goes in the chat as well.
+
 The two experimental media modes are the only standing exception: `image` and `mindmap` still deliver the written review in chat, then additionally generate and display one media artifact. The media never replaces the review.
 
 ## Defaults — do not ask, just do this
 
 - **Size: small.** Only go bigger if the user asks for medium/large or the question plainly needs it. Never ask which size.
 - **Delivered in the chat**, formatted with markdown, as well-presented as possible. No file, no attachment, unless asked.
-- **Citations: `Author 2026` inline, hyperlinked to the DOI** (markdown `[Author 2026](https://doi.org/…)` — the reader sees a plain author–year link, no visible brackets), with a compact sources block at the end carrying DOIs.
+- **Citations: `Author 2026` inline, hyperlinked to the DOI.** The reader must never see square brackets around a citation — they exist only as markdown link syntax. Never write a bare `[Author 2026]`, `[1]`, or `(Author, 2026)` in the finished text. Sources block at the end carries the DOIs.
 - **Structure is fixed** — question → TL;DR → punchline sections of bullets → sources. Exact layout in `references/writing-guide.md`.
 - **Technical terms link to explainers.** The first use of an abbreviation or specialist term (SMD, CI, GRADE, HAM-D, mRNA, …) is a link to its verified Wikipedia article, so a non-specialist can click instead of googling. Rules and verification in `references/writing-guide.md`.
 - **No preamble and no meta.** No scope note, assumptions paragraph, audience statement, size label, or "how this review was produced" section. Make sensible scope choices silently.
@@ -115,6 +123,7 @@ Skip this step in small, medium, and large/big modes. In image or mindmap mode, 
 - `scripts/verify_citations.py` — Crossref bibliographic and retraction verification using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` — open-access full text via Europe PMC, as plain text.
 - `scripts/format_references.py` — resolves `[@key]` citations, builds the reference list (Vancouver / APA / Nature).
+- `scripts/export_review.py` — journal-styled HTML and PDF export of the finished review; use when the user asks for a PDF or a printable version.
 - `references/no-script-fallback.md` — the tool-only pipeline for sandboxes with no Python network access (claude.ai); read this whenever Step 0 fails.
 - `references/sizes.md` — what small, medium, and large mean for scope, search depth, structure, and effort.
 - `references/search-playbook.md` — generating angles, building queries, stopping rules, coverage checks, field notes.

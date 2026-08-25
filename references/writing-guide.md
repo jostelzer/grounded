@@ -24,7 +24,7 @@ It is not a document with front matter, not an essay, and not a report about its
 **Author 2026** Title. *Journal*. https://doi.org/…
 ```
 
-In-text citations render as plain `Author 2026` links — the markdown link syntax means the reader sees no square brackets, just a clickable author–year that resolves to the paper.
+In-text citations render as plain `Author 2026` links: the square brackets are markdown link syntax only and must never be visible in the finished text. If the delivered review shows a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong — every citation is a hyperlink whose visible text is just the author and year.
 
 Nothing before the question. No scope note, no assumptions paragraph, no audience statement, no size label, no date line, no "how this was produced" section.
 
