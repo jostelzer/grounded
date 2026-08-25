@@ -74,6 +74,44 @@ A compact block at the end: one line per source, `**Author 2026** Title. *Journa
 - **Active and direct.** Name who found what.
 - Define an abbreviation once, at first use.
 
+## Prose style
+
+In `prose` style only (explicit request: "prose", "narrative", "essay", "write it out", "flowing text"). The pipeline, evidence standard, citations, term links, and verification are identical to bullets; only the register changes — the review becomes a narrative article of the kind journals publish.
+
+Structure:
+
+```
+## <The question>
+
+**Abstract** — <120–250 words, citation-free, plain language, answering the question:
+the finding, its size, its certainty, and the main caveat. This replaces the TL;DR.>
+
+### Introduction
+<Why the question matters, what is claimed or contested, and the scope — 1–3 paragraphs.
+This is the one style where scene-setting is content, not preamble. No methods narration.>
+
+### <Short thematic heading, e.g. "Cardiovascular outcomes">
+<Paragraphs. See rules below.>
+
+### Conclusion
+<Synthesis across sections, what the evidence supports at what confidence, and what
+would settle the open questions. No new evidence introduced here.>
+
+**Sources**
+<same generated sources block as always>
+```
+
+Paragraph craft:
+
+- **The punchline moves from the heading into the topic sentence.** Headings become short thematic labels; every paragraph opens with the claim it defends, then weaves in the evidence — numbers, intervals, designs — with the same `Author 2026` DOI links inline.
+- One claim per paragraph, 3–6 sentences. A paragraph that needs eight sentences is two claims.
+- Transitions carry the argument between paragraphs and sections ("The picture changes in older adults…"), but every empirical sentence still carries its citation.
+- Contrary evidence gets its own paragraphs with explicit contrast ("Against this…", "The null results cluster where…").
+- Tables remain allowed and follow the same rules; introduce each one in the running text.
+- The banned-filler list still applies in full. Prose means flowing, not padded: no "it is important to note", no throat-clearing, no restating the abstract in the conclusion.
+- Word budgets run ~1.5× the bullet tiers because connective tissue costs words: small 600–1,000, medium 1,500–2,500, large 3,500–6,000. Sources, angles, and search depth are unchanged from the chosen size.
+- Prose reviews print beautifully — end the delivery by offering the journal-styled PDF (`scripts/export_review.py`), but the review itself still goes in the chat.
+
 ## ELI5 language
 
 In `eli5` mode only. The evidence pipeline, structure, citations, and verification are exactly small mode; only the register changes. Write for a smart reader with no science background at all.

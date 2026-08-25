@@ -31,9 +31,9 @@ Example (excerpt from a real small-mode run):
 
 Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so the compact style stays readable for non-specialists. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md).
 
-## Modes and sizes
+## Sizes and styles
 
-Five modes: **small**, **medium**, **large**, **eli5**, and **image**. Name one in your request ("medium review of …", "eli5: …", "image mode: …") or say nothing and get small.
+A review has a **size** — `small` (default), `medium`, `large` — and a **style** — `bullets` (default), `prose`, `eli5`. They combine freely: "medium prose review of …", "eli5: …". Say nothing and you get a small bullets review. `image` mode additionally produces an illustration.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
@@ -42,7 +42,7 @@ Five modes: **small**, **medium**, **large**, **eli5**, and **image**. Name one 
 | Sources | 10–20 | 30–60 | 70–150 |
 | Full texts read | 2–4 load-bearing papers | 8–15 | 25+ |
 
-**ELI5 mode** is small with the language swapped for very simple English — same searches, same 10–20 verified sources, same citations, but written so a reader with no science background follows every sentence. **Image mode** (experimental) runs the small pipeline and then additionally produces one scientific illustration built from the verified findings — self-explanatory to an educated non-specialist, with a glossary for every abbreviation. The skill can also check an existing draft's claims and references against the literature.
+Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) runs the small pipeline and then additionally produces one scientific illustration built from the verified findings — self-explanatory to an educated non-specialist, with a glossary for every abbreviation. The skill can also check an existing draft's claims and references against the literature.
 
 ## Ways to use it
 
@@ -71,12 +71,13 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 > Make me a large scientific review about benefits of mediterranean diet
 
 → [output](examples/large-mediterranean-diet.md) · large · 80 verified sources, 14 sections (the retracted-and-republished PREDIMED trial handled as its own section)
+→ the same review in **prose style**: [markdown](examples/prose-large-mediterranean-diet.md) · [journal-styled PDF](examples/prose-large-mediterranean-diet.pdf)
 
 **Settle a claim you've seen circulating**
 
 > I keep reading that blue light before bed ruins sleep. Use the scientific-review skill — what does the evidence actually show?
 
-→ [output](examples/small-blue-light-sleep.md) · small · 18 verified sources
+→ [output](examples/small-blue-light-sleep.md) · small · 18 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
 
 **Produce a figure**
 

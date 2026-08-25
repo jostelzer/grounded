@@ -32,7 +32,7 @@ def inline(s):
     """Inline markdown -> HTML. Escapes first, so source text can contain < or &."""
     s = html.escape(s, quote=False)
     # links before emphasis: link text may contain punctuation but not brackets
-    s = re.sub(r"\[([^\]]+)\]\((https?://[^\s)]+)\)",
+    s = re.sub(r"\[([^\]]+)\]\((https?://(?:[^\s()]|\([^\s()]*\))+)\)",
                lambda m: f'<a href="{html.escape(m.group(2), quote=True)}">{m.group(1)}</a>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<![*\w])\*([^*]+)\*(?!\w)", r"<em>\1</em>", s)
@@ -119,9 +119,10 @@ def to_html(md):
             i += 1
         text = " ".join(para)
 
-        # the TL;DR becomes the journal "lead"; the Sources heading starts the refs
-        if re.match(r"^\*\*TL;DR\*\*", text):
-            lead = inline(re.sub(r"^\*\*TL;DR\*\*\s*[—–-]?\s*", "", text))
+        # the TL;DR or Abstract becomes the journal "lead"; the Sources heading starts the refs
+        m = re.match(r"^\*\*(TL;DR|Abstract)\*\*", text)
+        if m:
+            lead = (m.group(1), inline(re.sub(r"^\*\*(TL;DR|Abstract)\*\*\s*[—–-]?\s*", "", text)))
             continue
         if re.match(r"^\*\*Sources\*\*\s*$", text):
             out.append('<h2 class="refhead">References</h2><div class="refs">')
@@ -250,7 +251,10 @@ PAGE = """<!doctype html>
 def build_html(md, columns=2, kicker="Scientific review", colophon=None):
     title, lead, body = to_html(md)
     title = title or "Scientific review"
-    lead_html = f'<p class="lead"><b>Summary</b> — {lead}</p>' if lead else ""
+    lead_html = ""
+    if lead:
+        label = "Abstract" if lead[0] == "Abstract" else "Summary"
+        lead_html = f'<p class="lead"><b>{label}</b> — {lead[1]}</p>'
     n_refs = len({d.lower() for d in re.findall(r"https?://doi\.org/(\S+?)[\s)<]", md + " ")})
     right = f"{n_refs} verified references" if n_refs else ""
     if colophon is None:

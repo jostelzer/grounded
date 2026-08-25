@@ -1,6 +1,6 @@
 ---
 name: scientific-review
-description: Write a scientific review of a topic or research question in small, medium, large/big, eli5 (very simple English), image, or mindmap mode, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
+description: Write a scientific review of a topic or research question at small, medium, or large size, as bullets, flowing prose, or eli5 (very simple English), optionally with an image or mindmap, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
 ---
 
 # Scientific review
@@ -29,24 +29,36 @@ The two experimental media modes are the only standing exception: `image` and `m
 
 ## Defaults — do not ask, just do this
 
-- **Size: small.** Only go bigger if the user asks for medium/large or the question plainly needs it. Never ask which size.
+- **Size: small. Style: bullets.** Only deviate if the user asks or the question plainly needs it. Never ask which size or style.
 - **Delivered in the chat**, formatted with markdown, as well-presented as possible. No file, no attachment, unless asked.
 - **Citations: `Author 2026` inline, hyperlinked to the DOI.** The reader must never see square brackets around a citation — they exist only as markdown link syntax. Never write a bare `[Author 2026]`, `[1]`, or `(Author, 2026)` in the finished text. Sources block at the end carries the DOIs.
-- **Structure is fixed** — question → TL;DR → punchline sections of bullets → sources. Exact layout in `references/writing-guide.md`.
+- **Structure is fixed per style** — bullets: question → TL;DR → punchline sections of bullets → sources; prose: question → abstract → introduction → thematic sections → conclusion → sources. Exact layouts in `references/writing-guide.md`.
 - **Technical terms link to explainers.** The first use of an abbreviation or specialist term (SMD, CI, GRADE, HAM-D, mRNA, …) is a link to its verified Wikipedia article, so a non-specialist can click instead of googling. Rules and verification in `references/writing-guide.md`.
 - **No preamble and no meta.** No scope note, assumptions paragraph, audience statement, size label, or "how this review was produced" section. Make sensible scope choices silently.
 - **Concise throughout.** Shortest language that carries the evidence.
 
-## Mode routing
+## Sizes and styles
 
-Choose exactly one mode unless the user explicitly asks for both media outputs:
+A review has a **size** (how much evidence) and a **style** (how it is written). The two are independent; any size combines with any style.
 
-- **Small** — default. Use when no mode is requested.
+**Size** — default **small**:
+
+- **Small** — default. Use when no size is requested.
 - **Medium** — when the user asks for `medium`, or when the question plainly contains several genuinely distinct sub-questions that cannot be answered well at small depth.
 - **Large** — when the user asks for `large` or `big`; the words are aliases.
-- **ELI5** — when the user asks for `eli5`, "explain like I'm five", or very simple language. Identical to small in search depth, sources, citations, and verification; only the writing register changes to very simple English, per "ELI5 language" in `references/writing-guide.md`.
-- **Image (experimental)** — only when the user explicitly asks for an `image` as the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Run the **small** review pipeline, then create one scientific illustration from the verified findings.
-- **Mindmap (experimental)** — only when the user explicitly asks for a `mindmap` as the output or names `mindmap mode`. Do not infer it merely because a diagram might be helpful. Run the **small** review pipeline, then create one rendered mindmap from the verified findings.
+
+**Style** — default **bullets**:
+
+- **Bullets** — default. Punchline headings, cited bullet bodies, per `references/writing-guide.md`.
+- **Prose** — when the user asks for `prose`, "narrative", "essay", or written-out flowing text. A narrative article: abstract, introduction, topic-sentence paragraphs, conclusion. Word budgets ~1.5× the bullet tier. Rules in "Prose style" in `references/writing-guide.md`. Prose prints well — after delivering, offer the PDF export.
+- **ELI5** — when the user asks for `eli5`, "explain like I'm five", or very simple language. Very simple English, per "ELI5 language" in `references/writing-guide.md`. Defaults to small size unless a size is named.
+
+Style never changes search depth, source counts, citations, term links, or verification — only the writing register.
+
+**Media modes (experimental)** — these are additive artifacts, not styles:
+
+- **Image** — only when the user explicitly asks for an `image` as the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Run the **small** review pipeline, then create one scientific illustration from the verified findings.
+- **Mindmap** — only when the user explicitly asks for a `mindmap` as the output or names `mindmap mode`. Do not infer it merely because a diagram might be helpful. Run the **small** review pipeline, then create one rendered mindmap from the verified findings.
 
 If the user explicitly asks for both `image` and `mindmap`, run one small review and add both media artifacts. For either media mode, read `references/media-modes.md` before planning the visual. Media creation happens only after the evidence has been searched, read, verified, and synthesized.
 
@@ -59,9 +71,9 @@ If the user explicitly asks for both `image` and `mindmap`, run one small review
 | Full texts read | The 2–4 load-bearing papers | 8–15 | 25+ |
 | Tables | 0–1 | 1–2 | 2–4 |
 
-Bigger sizes add sections, bullets, and tables — never longer sentences.
+Bigger sizes add sections, bullets, and tables — never longer sentences. In prose style, multiply body length by ~1.5; everything else in the table is unchanged.
 
-Full tier definitions are in `references/sizes.md`.
+Full tier and style definitions are in `references/sizes.md`.
 
 ## Step 0: check whether the scripts can reach the network
 

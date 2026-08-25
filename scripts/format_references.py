@@ -216,7 +216,9 @@ def main():
                 order.append(k)
             nums.append(order.index(k) + 1)
             if args.style == "bracket":
-                intext.append(f"[{bracket_intext(e['canonical'], suffix.get(k, ''))}](https://doi.org/{e['doi']})")
+                # parens are legal in DOIs but break naive markdown-link parsers; encode them
+                doi_url = "https://doi.org/" + e["doi"].replace("(", "%28").replace(")", "%29")
+                intext.append(f"[{bracket_intext(e['canonical'], suffix.get(k, ''))}]({doi_url})")
             else:
                 intext.append(apa_intext(e["canonical"], suffix.get(k, "")))
         if args.style == "bracket":

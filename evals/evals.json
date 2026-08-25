@@ -54,6 +54,12 @@
       "prompt": "Use the scientific-review skill in eli5 mode: does taking vitamin D actually prevent colds?",
       "expected_output": "A small-tier review written entirely in very simple English: everyday words, short sentences, no unexplained jargon, numbers explained in words. Same rigour as small - 10-20 verified peer-reviewed references, in-text author-year citations hyperlinked to their DOIs, contrary evidence included, citation-free TL;DR, punchline headings in plain words, and a generated sources block with DOI links. Uncertainty stated plainly, never dropped.",
       "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "Use the scientific-review skill, medium prose: does regular sauna use reduce cardiovascular risk?",
+      "expected_output": "A narrative article of 1,500-2,500 body words: a citation-free Abstract answering the question, an Introduction motivating it, thematic sections of topic-sentence-led paragraphs where every empirical sentence carries an author-year DOI-linked citation, contrary evidence in explicit contrast paragraphs, a Conclusion synthesizing without new evidence, and a generated sources block with 30-60 verified peer-reviewed references. Same verification rigour as bullets; no filler; offers the journal-styled PDF export at the end.",
+      "files": []
     }
   ]
 }
