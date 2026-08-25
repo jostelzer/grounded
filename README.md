@@ -75,9 +75,32 @@ Zip the folder and upload it as a skill in **Settings → Capabilities → Skill
 git clone https://github.com/jostelzer/scientific-review-skill.git scientific-review && cd scientific-review && zip -r ../scientific-review.zip . -x '.git/*'
 ```
 
-### ChatGPT and other agents
+### ChatGPT
 
-The skill is plain markdown plus stdlib Python — nothing in it is Claude-specific. Give your agent the folder (project files, custom GPT knowledge, or a working directory), use `SKILL.md` as the operating instructions, and keep `references/` and `scripts/` alongside so it can load them on demand. Any agent that can execute Python or fetch URLs can run the full pipeline.
+Nothing in the skill is Claude-specific — `SKILL.md` is the operating instructions, and the rest are files the agent loads on demand. Two ways to set it up:
+
+**As a Project** (quickest):
+
+1. Download the repo: **Code → Download ZIP** on GitHub (or `git clone`), and unzip it.
+2. In ChatGPT, create a new **Project**.
+3. Upload `SKILL.md` and every file from `references/` and `scripts/` to the project's files.
+4. Set the project instructions to:
+   > Follow the workflow in SKILL.md for every review request. Load the referenced files from the project files when SKILL.md points to them.
+5. Make sure **Web Search** is available, then ask: *"scientific review: does creatine reduce depressive symptoms?"* — add `medium`, `large`, or `image` to pick a mode.
+
+**As a Custom GPT** (reusable/shareable):
+
+1. **Explore GPTs → Create**, give it a name like "Scientific Review".
+2. Paste the full text of `SKILL.md` into the **Instructions** field.
+3. Upload all files from `references/` and `scripts/` under **Knowledge**.
+4. Enable the **Web Search** and **Code Interpreter** capabilities.
+5. Save, then ask it for a review.
+
+One expected difference from Claude Code: ChatGPT's Python sandbox has no internet access, so the skill's built-in network check (Step 0 in `SKILL.md`) fails and the agent switches to `references/no-script-fallback.md`, which runs the identical search-and-verify pipeline through web browsing against the same OpenAlex/PubMed/Crossref APIs. The verification standard doesn't change — this is the designed path for sandboxed environments, the same one used on claude.ai.
+
+### Other agents
+
+Give the agent the folder as a working directory or attached files, use `SKILL.md` as the operating instructions, and keep `references/` and `scripts/` alongside. Any agent that can execute Python **or** fetch URLs can run the full pipeline — for CLI agents (e.g. Codex CLI), clone the repo and add a line to your `AGENTS.md` pointing review requests at `SKILL.md`.
 
 ## Repository layout
 
