@@ -107,7 +107,7 @@ Then ask for a review in any session ("give me a scientific review of X"), or sc
 
 ### claude.ai
 
-Zip the folder and upload it as a skill in **Settings → Capabilities → Skills**:
+Download `scientific-review.skill` from the [latest release](https://github.com/jostelzer/scientific-review-skill/releases/latest) and upload it in **Settings → Capabilities → Skills**. Or build the bundle yourself:
 
 ```bash
 git clone https://github.com/jostelzer/scientific-review-skill.git scientific-review && cd scientific-review && zip -r ../scientific-review.zip . -x '.git/*'
