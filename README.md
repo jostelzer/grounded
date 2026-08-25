@@ -56,6 +56,14 @@ Name the skill in your prompt so it triggers reliably:
 
 > Use the scientific-review skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
 
+**Explain it in very simple terms**
+
+> Use scientific review skill in ELI5 mode to explain me why clouds are white
+
+**Survey a field in depth**
+
+> Make me a large scientific review about benefits of mediterranean diet
+
 **Settle a claim you've seen circulating**
 
 > I keep reading that blue light before bed ruins sleep. Use the scientific-review skill — what does the evidence actually show?
