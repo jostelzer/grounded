@@ -57,7 +57,7 @@ Style never changes search depth, source counts, citations, term links, or verif
 
 **Media modes (experimental)** — these are additive artifacts, not styles:
 
-- **Image** — only when the user explicitly asks for an `image`/`figures` as part of the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Combines with any size and style; the figure budget scales with size (small 1, medium up to 3, large up to 5 — caps, not quotas). Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`, placing each after the section it supports. Figures flow into the PDF export automatically.
+- **Image** — only when the user explicitly asks for an `image`/`figures` as part of the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Combines with any size and style; the figure budget scales with size (small 1, medium up to 3, large up to 5 — caps, not quotas). Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`. For image generation, also read `references/figure-style-system.md` and `references/image-prompt-guide.md`; build the prompt from a structured figure specification with `scripts/build_figure_prompt.py`. Place each figure after the section it supports. Figures flow into the PDF export automatically.
 - **Mindmap** — only when the user explicitly asks for a `mindmap` as the output or names `mindmap mode`. Do not infer it merely because a diagram might be helpful. Run the **small** review pipeline, then create one rendered mindmap from the verified findings.
 
 If the user explicitly asks for both `image` and `mindmap`, run one small review and add both media artifacts. For either media mode, read `references/media-modes.md` before planning the visual. Media creation happens only after the evidence has been searched, read, verified, and synthesized.
@@ -95,7 +95,9 @@ Before searching, write down the angles a thorough reviewer would cover — this
 
 ### 2. Search, angle by angle
 
-Use `scripts/find_papers.py` — it queries OpenAlex and PubMed, keeps peer-reviewed journal articles, excludes preprints unless told otherwise, flags retractions, and merges everything into `sources.json` with the angle that found it. Run reviews-first (`--types review`) for each angle, then primary studies, then a cited-sort pass for the field's foundational papers. Log every query and hit count in `search_log.md` (kept for auditing; it does not appear in the review). If it reports that OpenAlex was skipped (rate-limited), the hits came from PubMed alone: widen the queries, lean harder on `WebSearch` for discovery outside biomedicine, and note the thinner discovery in `search_log.md` — never in the review, and never as a caveat on verification, which runs against Crossref. Setting `OPENALEX_MAILTO` to a contact address puts requests in OpenAlex's polite pool and makes this less likely. Use `WebSearch` only to discover candidate papers (titles, DOIs) that you then add through the ledger; never cite from a web page directly. Stop when new queries return mostly papers already in the ledger (see the stopping rules by size in the playbook).
+Use `scripts/find_papers.py`. It cursor-pages through OpenAlex and offset-pages through PubMed up to `--limit` records per query and database (default 100), automatically appends every database run and its total/retrieved/accepted/new counts to `search_log.md`, and merges accepted candidates into `sources.json` with discovery provenance. `--query` searches both databases; use `--openalex-query` and `--pubmed-query` for database-specific syntax. The default strict policy admits explicitly typed journal research/reviews, excludes obvious non-evidence types such as editorials and letters, excludes preprints unless deliberately enabled, and admits conference-literature candidates only with `--include-conference-papers`. This is an index-based candidate screen, **not proof of peer review**: entries say `peer_review_status: not_independently_verified`, so confirm the venue's peer-review model when it is ambiguous.
+
+Run reviews-first (`--types review`) for each angle, then primary studies, then an OpenAlex cited-sort pass for foundational papers. For medium and large reviews, automate backward and forward citation discovery from the central ledger entries with `--chase <key> --chase-direction both`; the resulting ledger provenance records the seed and direction. If OpenAlex is skipped, widen the PubMed queries and use `WebSearch` only to discover candidate titles/DOIs that are then added through the ledger. Stop by the coverage rules in the playbook, not merely because one top-results page repeats.
 
 ### 3. Read
 
@@ -115,11 +117,11 @@ Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; 
 
 ### 7. Create the requested media
 
-Skip this step in small, medium, and large/big modes. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Image-mode illustrations must be self-explanatory to an educated non-specialist and include a readable bottom glossary that expands every abbreviation and briefly explains every non-obvious concept used in the figure. Inspect the rendered result for factual accuracy, readable text, clipping, and misleading visual emphasis. Display it in the reply with a concise caption and useful alt text.
+Skip this step in small, medium, and large/big modes. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Read the journal-grade system in `references/figure-style-system.md`, choose a style profile and figure archetype, record the evidence and exact copy in a figure-spec JSON, and generate the prompt with `scripts/build_figure_prompt.py` as specified in `references/image-prompt-guide.md`. When a capable image-generation model is available, use it to render the complete figure end to end, including its exact title, labels, callouts, values, legend, and glossary; use deterministic SVG or another vector renderer only when image generation is unavailable or the generated result cannot pass QA. Image-mode illustrations must be self-explanatory to an educated non-specialist. Inspect the defined Arial typography, every rendered word and number, scientific content, clipping, visual balance, and misleading emphasis. Display it in the reply with a concise caption and useful alt text.
 
 ## Rules that do not bend
 
-- **Peer-reviewed journal literature only.** No preprints, blogs, news, or grey literature as evidence. If a preprint is the only source for something important, it may be mentioned once, labelled "(preprint, not peer reviewed)", and never load-bearing. Retracted papers are cited only to say they were retracted.
+- **Peer-reviewed literature only.** No preprints, blogs, news, or grey literature as evidence. Search eligibility and Crossref type are useful proxies, not a universal peer-review registry; check the venue or article when status is ambiguous, especially for conference proceedings and unfamiliar journals. If a preprint is the only source for something important, it may be mentioned once, labelled "(preprint, not peer reviewed)", and never load-bearing. Retracted papers are cited only to say they were retracted.
 - **Never claim a check you did not perform.** "Verified" means the DOI resolved in Crossref; title, year, and source type matched; and Crossref's publisher/Retraction Watch update metadata showed no retraction signal. If Crossref is unavailable, verification is incomplete and the citation does not pass. OpenAlex search availability is irrelevant to this check.
 - **No citation from memory.** If you remember a paper, find it with the search script and verify it; if it cannot be found, it does not exist for this review. This applies to "classic" papers too.
 - **Read before you cite.** Abstract minimum; full text for anything the argument leans on.
@@ -131,11 +133,12 @@ Skip this step in small, medium, and large/big modes. In image or mindmap mode, 
 
 ## Bundled resources
 
-- `scripts/find_papers.py` — OpenAlex + PubMed search into a ledger; peer-reviewed filter; retraction flags.
+- `scripts/find_papers.py` — paginated OpenAlex + PubMed search, database-specific queries, automatic audit logging, explicit publication-eligibility filtering, and OpenAlex citation-graph traversal.
 - `scripts/verify_citations.py` — Crossref bibliographic and retraction verification using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` — open-access full text via Europe PMC, as plain text.
 - `scripts/format_references.py` — resolves `[@key]` citations, builds the reference list (Vancouver / APA / Nature).
 - `scripts/export_review.py` — journal-styled HTML and PDF export of the finished review; use when the user asks for a PDF or a printable version.
+- `scripts/build_figure_prompt.py` — composes an end-to-end ImageGen prompt from a structured evidence specification, a reusable journal-style profile, and a figure archetype.
 - `references/no-script-fallback.md` — the tool-only pipeline for sandboxes with no Python network access (claude.ai); read this whenever Step 0 fails.
 - `references/sizes.md` — what small, medium, and large mean for scope, search depth, structure, and effort.
 - `references/search-playbook.md` — generating angles, building queries, stopping rules, coverage checks, field notes.
@@ -143,3 +146,6 @@ Skip this step in small, medium, and large/big modes. In image or mindmap mode, 
 - `references/writing-guide.md` — structures by size, paragraph craft, evidence language, tables, the methods box, the quality gate.
 - `references/citation-rules.md` — keys, styles, in-text conventions, what may and may not be cited.
 - `references/media-modes.md` — explicit-only image and mindmap mode workflow, visual grammar, rendering, captions, and QA.
+- `references/figure-style-system.md` — defined Arial typography, Nature-inspired visual grammar, style selection, and adaptation boundaries.
+- `references/image-prompt-guide.md` — modular prompt specification, iteration protocol, and acceptance contract.
+- `references/figure-style-presets.json` and `references/figure-archetypes.json` — machine-readable style and composition modules used by the prompt builder.

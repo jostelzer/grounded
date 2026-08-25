@@ -14,13 +14,13 @@ Give it a topic or research question; it returns a compact, evidence-dense revie
 
 Example (excerpt from a real small-mode run):
 
-> ## Does creatine supplementation reduce depressive symptoms?
+> ## Does creatine improve depressive symptoms?
 >
-> **TL;DR** — Possibly, as an add-on to an antidepressant or to CBT, but the effect is small, the trials are few and tiny, and the only meta-analysis rates the evidence very low quality and warns the true effect may be nothing. Cheap and safe enough to try alongside real treatment; nowhere near good enough to replace one.
+> **TL;DR** — Creatine is promising as a short-term add-on to established depression treatment, but it is not yet a proven antidepressant or stand-alone therapy. The pooled average benefit is smaller than a clinically important change, certainty is very low, and the best signals come from small, population-specific trials.
 >
-> ### The pooled effect is small, uncertain, and below what a patient would notice
+> ### The pooled effect is small and may not be clinically important
 >
-> - Across 11 randomised trials (n=1,093), creatine beat placebo by [SMD](https://en.wikipedia.org/wiki/Standardized_mean_difference) **−0.34** (95% [CI](https://en.wikipedia.org/wiki/Confidence_interval) −0.68 to −0.00) — about **2.2 points** on the 17-item [Hamilton scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression), under the 3.0-point minimal important difference; [I²](https://en.wikipedia.org/wiki/Study_heterogeneity) = 71.3%, [GRADE](https://en.wikipedia.org/wiki/GRADE_approach) **very low** [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588).
+> - A 2025 meta-analysis (11 placebo-controlled trials; n=1,093) estimated a [standardized mean difference](https://en.wikipedia.org/wiki/Standardized_mean_difference) of −0.34 (95% [confidence interval](https://en.wikipedia.org/wiki/Confidence_interval) −0.68 to −0.00), equivalent to **2.2 points** on the [Hamilton Depression Rating Scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression)—below its 3-point minimal important difference. Results varied substantially, bias analyses favoured creatine, and [GRADE](https://en.wikipedia.org/wiki/GRADE_approach) certainty was very low. [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588)
 > - …
 >
 > **Sources**
@@ -42,7 +42,7 @@ A review has a **size** — `small` (default), `medium`, `large` — and a **sty
 | Sources | 10–20 | 30–60 | 70–150 |
 | Full texts read | 2–4 load-bearing papers | 8–15 | 25+ |
 
-Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be whatever the evidence earns: mechanism diagrams, evidence maps, timelines, flow diagrams, forest-style effect summaries plotting only numbers from the cited sources, and more — always with deterministically typeset text, self-explanatory to a non-specialist, placed after the sections they support, and flowing automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
+Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be mechanism diagrams, evidence maps, timelines, comparisons, quantitative summaries and more. A capable image-generation model renders the complete figure, including text, when available; deterministic SVG is the fallback. The modular figure system separates the verified evidence, figure archetype and journal-inspired style profile, with Arial defined throughout and Nature-derived rules for restraint, accessibility and balance. Every result remains self-explanatory to a non-specialist, is placed after the section it supports, and flows automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
 
 ## Ways to use it
 
@@ -58,50 +58,51 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 
 > Use the scientific-review skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
 
-→ [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 50 verified sources (one retracted paper caught and excluded during search)
+→ [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 46 verified sources (three retracted papers caught and excluded during search)
 
 **Explain it in very simple terms**
 
 > Use scientific review skill in ELI5 mode to explain me why clouds are white
 
-→ [output](examples/eli5-why-clouds-are-white.md) · eli5 · 16 verified sources
+→ [output](examples/eli5-why-clouds-are-white.md) · eli5 · 13 verified sources
 
 **Survey a field in depth**
 
 > Make me a large scientific review about benefits of mediterranean diet
 
-→ [output](examples/large-mediterranean-diet.md) · large · 80 verified sources, 14 sections (the retracted-and-republished PREDIMED trial handled as its own section)
+→ [output](examples/large-mediterranean-diet.md) · large · 97 verified sources, 13 sections (the retracted original PREDIMED report is excluded and its corrected republication is used)
 → the same review in **prose style**: [markdown](examples/prose-large-mediterranean-diet.md) · [journal-styled PDF](examples/prose-large-mediterranean-diet.pdf)
 
 **Settle a claim you've seen circulating**
 
 > I keep reading that blue light before bed ruins sleep. Use the scientific-review skill — what does the evidence actually show?
 
-→ [output](examples/small-blue-light-sleep.md) · small · 18 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
+→ [output](examples/small-blue-light-sleep.md) · small · 11 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
 
 **Produce figures**
 
 > Use the scientific-review skill, medium image mode: how do mRNA vaccines work?
 
-→ [output](examples/image-mrna-vaccines.md) · medium image · 59 verified sources plus three SVG figures (mechanism synthesis with glossary, efficacy-vs-antibody panels, myocarditis risk in context — the data figures plot only values cited in the text) · [illustrated PDF](examples/image-mrna-vaccines.pdf)
+→ [output](examples/image-mrna-vaccines.md) · medium image · 45 verified sources plus two end-to-end ImageGen figures and one exact-geometry SVG fallback, all built from reusable evidence specs, archetypes and the Arial-based Nature Neuroscience-inspired system · [illustrated PDF](examples/image-mrna-vaccines.pdf)
 
 Practical notes: unless you say otherwise you get a **small** review (a fast, dense ~500-word answer) — say `medium` or `large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
 
 ## How it works
 
 1. **Scope** the question into the angles a thorough reviewer would cover (existing reviews, largest primary studies, mechanism, contradictory findings, harms, methodological critiques, …).
-2. **Search** angle by angle via OpenAlex + PubMed (`scripts/find_papers.py`), merging hits into a source ledger; preprints excluded, retractions flagged.
+2. **Search** angle by angle via paginated OpenAlex + PubMed queries (`scripts/find_papers.py`), with database-specific syntax, automatic audit logging, explicit publication-type screening, and optional backward/forward citation chasing; preprints are excluded and retractions flagged.
 3. **Read** every abstract that might be cited; pull open-access full text (`scripts/fetch_fulltext.py`, Europe PMC) for the load-bearing papers.
 4. **Verify** every entry against Crossref (`scripts/verify_citations.py`) — DOI, title, year, article type, and retraction status. A failure is a hard stop: the source is fixed or removed before writing.
 5. **Write** the draft citing ledger keys, then render citations and the reference list from the verified metadata (`scripts/format_references.py`), which refuses to run on any unverified key.
+6. **Illustrate when requested** from a structured evidence-and-copy specification: `scripts/build_figure_prompt.py` combines a reusable figure archetype with an Arial-based journal-style profile, then the finished render passes text, data, science, composition and style QA.
 
 If the agent's Python sandbox has no network access (e.g. ChatGPT's code interpreter, claude.ai), `references/no-script-fallback.md` runs the same pipeline through the agent's web-fetch tool against the same APIs — the verification standard is identical.
 
 ## Requirements
 
-- **No API keys, no pip installs.** The scripts are pure Python 3 standard library, calling the free public APIs of OpenAlex, PubMed, Crossref, and Europe PMC.
+- **No pip installs.** The scripts use only the Python 3 standard library. PubMed, Crossref, and Europe PMC require no key; OpenAlex can take `OPENALEX_API_KEY`/`--openalex-api-key` when required by its current access policy.
 - Internet access — either from Python or from the agent's web-fetch tool (the fallback path).
-- **Optional but recommended:** `export OPENALEX_MAILTO="you@example.org"` (or `--mailto`). OpenAlex gives requests carrying a contact address a higher, more reliable rate limit. Not a key and not an account — just a courtesy header. When OpenAlex rate-limits anyway, the search degrades to PubMed and says so; verification is unaffected, since that runs against Crossref.
+- **Optional identity metadata:** `OPENALEX_API_KEY` (or `--openalex-api-key`) and `OPENALEX_MAILTO` (or `--mailto`). When OpenAlex becomes unavailable, completed PubMed searches remain usable and the failure is written to the audit log; Crossref verification is separate.
 
 ## Installation
 
@@ -171,7 +172,7 @@ python3 scripts/export_review.py --in review.md --out review.pdf --pdf
 
 ## How it's tested
 
-`evals/evals.json` holds the evaluation cases the skill is developed against: review prompts across the modes, each with an expected-output specification — verified peer-reviewed references in the size-appropriate count, contrary evidence included, and the fixed output format (citation-free TL;DR, punchline headings, cited bullets, DOI-linked sources block). If you change the skill, run these before relying on it.
+`tests/test_find_papers.py` provides deterministic standard-library tests for OpenAlex cursor pagination, PubMed offset pagination, database-specific query routing, publication-type filtering, automatic logging, and bidirectional citation chasing. Run `python3 -m unittest discover -s tests -v`. `evals/evals.json` separately holds review-output evaluation cases across the modes.
 
 ## License
 

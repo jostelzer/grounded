@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
-"""
-Search the peer-reviewed literature (OpenAlex + PubMed) and build a source ledger.
+"""Search scholarly indexes and build an auditable source ledger.
 
-Standard library only. Every hit is a real record from a scholarly index, with a DOI
-where one exists — never a recalled citation.
+The script searches OpenAlex and PubMed with pagination, applies an explicit
+publication-eligibility policy, automatically records database runs in
+``search_log.md``, and can traverse backward and forward citations via OpenAlex.
 
 Usage:
   python3 find_papers.py --query "school-based mindfulness adolescents anxiety" \
       --query "mindfulness intervention adolescent anxiety randomized" \
       --from-year 2015 --limit 25 --ledger sources.json --angle "human RCTs"
 
-  python3 find_papers.py --query "..." --types review --limit 10      # reviews/meta-analyses only
-  python3 find_papers.py --query "..." --sort cited                    # most-cited first
-  python3 find_papers.py --ledger sources.json --show                  # print the ledger
+  python3 find_papers.py --openalex-query "school mindfulness adolescent anxiety" \
+      --pubmed-query 'mindfulness[tiab] AND adolescent*[tiab] AND anxiety[tiab]'
+
+  python3 find_papers.py --ledger sources.json --chase Kuyken2022effectiveness \
+      --chase-direction both --chase-limit 50
+
+  python3 find_papers.py --query "..." --types review --limit 100
+  python3 find_papers.py --ledger sources.json --show
 
 OpenAlex courtesy settings:
   Set OPENALEX_MAILTO (or pass --mailto you@example.org) to enter OpenAlex's polite pool, which
@@ -21,19 +26,11 @@ OpenAlex courtesy settings:
   Retry-After (a spent request quota rather than a burst); when that happens OpenAlex is skipped
   for the rest of the run, clearly logged, and discovery continues on PubMed alone.
 
-What it does:
-  * Queries OpenAlex (/works, relevance-ranked) and PubMed (esearch + efetch) for each query.
-  * Keeps peer-reviewed journal articles only: OpenAlex type in {article, review},
-    source type 'journal', not a preprint server; PubMed records are journal-indexed by design.
-    Use --include-preprints to keep preprints (they are flagged 'PREPRINT').
-  * Records retraction status (OpenAlex is_retracted) and flags retracted papers.
-  * Merges by DOI (or PMID when no DOI) into --ledger (JSON), adding the query and angle that
-    found each paper, so you can see coverage per angle.
-  * Prints a compact table: key, year, citations, type, title, journal.
-
-Ledger entry fields: key, doi, pmid, title, authors, year, journal, type, abstract,
-cited_by_count, oa_url, is_retracted, is_preprint, found_by (list of {query, angle, source}),
-status ('candidate' until verify_citations.py marks it 'verified').
+``--query`` is sent to every enabled database. ``--openalex-query`` and
+``--pubmed-query`` are database-specific, so PubMed field syntax never leaks
+into OpenAlex. The strict publication policy removes obvious non-evidence
+records, but does not pretend that an index or Crossref proves peer review:
+accepted entries explicitly carry ``peer_review_status=not_independently_verified``.
 """
 import argparse
 import datetime
@@ -48,8 +45,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+from collections import Counter
+from dataclasses import dataclass, field
 
-VERSION = "1.1"
+VERSION = "1.2"
 SKILL_URL = "https://github.com/jostelzer/scientific-review-skill"
 # Request pacing: OpenAlex's polite pool allows 10 req/s, NCBI allows 3 req/s without an API key.
 OPENALEX_MIN_INTERVAL = 0.15
@@ -57,17 +56,64 @@ PUBMED_MIN_INTERVAL = 0.34
 # A Retry-After longer than this is a spent request quota, not a burst limit: waiting it out
 # inside a run is pointless, so we stop asking and fall back to PubMed.
 MAX_RETRY_WAIT = 120.0
+OPENALEX_MAX_PAGE_SIZE = 100
+PUBMED_MAX_RESULTS = 10_000
 # Contact address sent to each service (polite pool); filled in by main() from --mailto/env.
 SERVICE_MAILTO = {}
 TERTIARY_VENUES = ("statpearls", "uptodate", "merck manual", "wikipedia", "encyclopedia",
                    "cochrane clinical answers", "dynamed", "bmj best practice")
 PREPRINT_HOSTS = ("biorxiv", "medrxiv", "arxiv", "ssrn", "research square", "preprints.org",
-                  "psyarxiv", "osf preprints", "chemrxiv", "authorea", "scielo preprints", "europe pmc preprints")
+                  "psyarxiv", "osf preprints", "chemrxiv", "authorea",
+                  "scielo preprints", "europe pmc preprints")
+PUBMED_EXCLUDED_TYPES = frozenset({
+    "Autobiography", "Biography", "Comment", "Directory", "Editorial",
+    "Expression of Concern", "Interview", "Letter", "News", "Newspaper Article",
+    "Personal Narrative", "Portrait", "Preprint", "Published Erratum",
+    "Retraction of Publication",
+})
+PUBMED_EVIDENCE_TYPES = frozenset({
+    "Adaptive Clinical Trial", "Case Reports", "Clinical Study", "Clinical Trial",
+    "Clinical Trial, Phase I", "Clinical Trial, Phase II", "Clinical Trial, Phase III",
+    "Clinical Trial, Phase IV", "Comparative Study", "Consensus Development Conference",
+    "Controlled Clinical Trial", "Evaluation Study", "Guideline", "Journal Article",
+    "Meta-Analysis", "Multicenter Study", "Observational Study", "Practice Guideline",
+    "Pragmatic Clinical Trial", "Randomized Controlled Trial", "Review",
+    "Systematic Review", "Twin Study", "Validation Study",
+})
+OPENALEX_WORK_FIELDS = (
+    "id,doi,title,authorships,publication_year,publication_date,cited_by_count,"
+    "primary_location,type,abstract_inverted_index,is_retracted,ids,best_oa_location,open_access"
+)
+PUBMED_SORT_VALUES = {
+    "relevance": "relevance",
+    "pub-date": "pub_date",
+    "first-author": "Author",
+    "journal": "JournalName",
+}
+
+
+@dataclass
+class SearchResult:
+    database: str
+    query: str
+    api_query: str
+    filters: str
+    sort: str
+    hits: list = field(default_factory=list)
+    total_matches: int = None
+    pages: int = 0
+    status: str = "ok"
+    exclusions: Counter = field(default_factory=Counter)
+
+    @property
+    def retrieved(self):
+        return len(self.hits) + sum(self.exclusions.values())
 
 
 def user_agent(mailto=None):
     """Descriptive UA; the mailto form is what OpenAlex and Crossref ask for."""
-    return f"scientific-review-skill/{VERSION} (+{SKILL_URL}" + (f"; mailto:{mailto})" if mailto else ")")
+    contact = f"; mailto:{mailto}" if mailto else ""
+    return f"scientific-review-skill/{VERSION} (+{SKILL_URL}{contact})"
 
 
 class ServiceUnavailable(Exception):
@@ -182,6 +228,13 @@ def norm_doi(doi):
     return doi or None
 
 
+def short_openalex_id(value):
+    if not value:
+        return None
+    match = re.search(r"(?:^|/)(W\d+)$", str(value), re.I)
+    return match.group(1).upper() if match else None
+
+
 def inverted_to_text(inv):
     if not inv:
         return ""
@@ -199,6 +252,16 @@ def make_key(authors, year, title):
     return f"{first}{year or 'nd'}{(w[0].lower() if w else '')}"
 
 
+def ordered_unique(values):
+    seen = set()
+    result = []
+    for value in values:
+        if value not in seen:
+            seen.add(value)
+            result.append(value)
+    return result
+
+
 # ---------------------------------------------------------------- OpenAlex
 
 class OpenAlexClient:
@@ -209,9 +272,10 @@ class OpenAlexClient:
     pointless, so the client latches off and discovery carries on with PubMed alone.
     """
 
-    def __init__(self, mailto=None, retries=3):
+    def __init__(self, mailto=None, retries=3, api_key=None):
         self.mailto = mailto
         self.retries = retries
+        self.api_key = api_key
         self.unavailable = None      # reason string once OpenAlex is given up on
         self.retry_after = None
         SERVICE_MAILTO["openalex"] = mailto
@@ -220,195 +284,610 @@ class OpenAlexClient:
     def enabled(self):
         return self.unavailable is None
 
-    def fetch(self, url):
+    def add_identity(self, params):
+        params = dict(params)
+        if self.mailto:
+            params["mailto"] = self.mailto
+        if self.api_key:
+            params["api_key"] = self.api_key
+        return params
+
+    def fetch(self, url, latch=True):
         if not self.enabled:
             return None
         try:
             return http_get(url, service="openalex", min_interval=OPENALEX_MIN_INTERVAL,
                             retries=self.retries)
         except ServiceUnavailable as e:
-            self.unavailable = e.reason
-            self.retry_after = e.retry_after
             sys.stderr.write(f"  {e}\n")
-            sys.stderr.write("  skipping OpenAlex for the rest of this run — "
-                             "discovery continues on PubMed alone\n")
+            seed_miss = (
+                e.reason.startswith("HTTP 400") or e.reason.startswith("HTTP 404")
+            )
+            if latch or not seed_miss:
+                self.unavailable = e.reason
+                self.retry_after = e.retry_after
+                sys.stderr.write("  skipping OpenAlex for the rest of this run — "
+                                 "discovery continues on PubMed alone\n")
             return None
 
 
-def search_openalex(client, query, from_year, to_year, limit, types, sort):
-    filt = ["is_paratext:false"]
+def parse_openalex_work(work):
+    location = work.get("primary_location") or {}
+    source = location.get("source") or {}
+    source_name = source.get("display_name") or ""
+    source_type = source.get("type") or ""
+    work_type = work.get("type") or ""
+    is_preprint = (
+        work_type == "preprint"
+        or (source_type == "repository" and any(
+            host in source_name.lower() for host in PREPRINT_HOSTS
+        ))
+    )
+    authors = []
+    for authorship in work.get("authorships") or []:
+        name = (authorship.get("author") or {}).get("display_name")
+        if name:
+            authors.append(name)
+    oa_location = work.get("best_oa_location") or {}
+    return {
+        "doi": norm_doi(work.get("doi")),
+        "pmid": ((work.get("ids") or {}).get("pmid") or "").split("/")[-1] or None,
+        "openalex": work.get("id"),
+        "title": (work.get("title") or "").strip(),
+        "authors": authors,
+        "year": work.get("publication_year"),
+        "journal": source_name,
+        "source_type": source_type,
+        "type": work_type,
+        "abstract": inverted_to_text(work.get("abstract_inverted_index")),
+        "cited_by_count": work.get("cited_by_count", 0),
+        "oa_url": oa_location.get("pdf_url") or oa_location.get("landing_page_url"),
+        "is_retracted": bool(work.get("is_retracted")),
+        "is_preprint": bool(is_preprint),
+        "peer_review_status": "not_independently_verified",
+        "_source": "openalex",
+    }
+
+
+def fetch_openalex_pages(client, base_params, limit, page_size):
+    """Fetch up to ``limit`` works with OpenAlex cursor pagination."""
+    works = []
+    total_matches = None
+    pages = 0
+    cursor = "*"
+    seen_cursors = set()
+    status = "ok"
+    while len(works) < limit and cursor and cursor not in seen_cursors:
+        seen_cursors.add(cursor)
+        params = dict(base_params)
+        params["per_page"] = str(min(
+            page_size, OPENALEX_MAX_PAGE_SIZE, limit - len(works)
+        ))
+        params["cursor"] = cursor
+        params = client.add_identity(params)
+        url = "https://api.openalex.org/works?" + urllib.parse.urlencode(params)
+        raw = client.fetch(url)
+        if not raw:
+            status = client.unavailable or "no response"
+            break
+        pages += 1
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError:
+            status = "unreadable JSON response"
+            break
+        meta = payload.get("meta") or {}
+        if total_matches is None:
+            try:
+                total_matches = int(meta.get("count"))
+            except (TypeError, ValueError):
+                total_matches = None
+        batch = payload.get("results") or []
+        works.extend(batch[:limit - len(works)])
+        next_cursor = meta.get("next_cursor")
+        if not batch or not next_cursor:
+            break
+        cursor = next_cursor
+    return works, total_matches, pages, status
+
+
+def openalex_type_filter(types, include_preprints):
     if types == "review":
-        filt.append("type:review|article")
+        values = ["review", "article"]
     else:
-        filt.append("type:article|review")
+        values = ["article", "review"]
+        if include_preprints:
+            values.append("preprint")
+    return "|".join(values)
+
+
+def search_openalex(
+        client, query, from_year, to_year, limit, types, sort, page_size=100,
+        include_preprints=False):
+    filters = [
+        "is_paratext:false",
+        f"type:{openalex_type_filter(types, include_preprints)}",
+    ]
     if from_year:
-        filt.append(f"from_publication_date:{from_year}-01-01")
+        filters.append(f"from_publication_date:{from_year}-01-01")
     if to_year:
-        filt.append(f"to_publication_date:{to_year}-12-31")
+        filters.append(f"to_publication_date:{to_year}-12-31")
     params = {
         "search": query,
-        "filter": ",".join(filt),
-        "per-page": str(min(limit, 50)),
-        "select": "id,doi,title,authorships,publication_year,cited_by_count,primary_location,type,"
-                  "abstract_inverted_index,is_retracted,ids,best_oa_location,open_access",
+        "filter": ",".join(filters),
+        "select": OPENALEX_WORK_FIELDS,
     }
     if sort == "cited":
-        params["sort"] = "cited_by_count:desc"
-    if client.mailto:
-        params["mailto"] = client.mailto      # OpenAlex polite pool
-    url = "https://api.openalex.org/works?" + urllib.parse.urlencode(params)
-    raw = client.fetch(url)
-    if not raw:
-        return []
-    try:
-        results = json.loads(raw).get("results", [])
-    except json.JSONDecodeError:
-        sys.stderr.write("  openalex: unreadable response, skipping this query\n")
-        return []
-    out = []
-    for w in results:
-        loc = w.get("primary_location") or {}
-        src = loc.get("source") or {}
-        src_name = (src.get("display_name") or "")
-        src_type = src.get("type") or ""
-        is_preprint = (src_type == "repository" and any(h in src_name.lower() for h in PREPRINT_HOSTS)) \
-            or w.get("type") == "preprint"
-        if types == "review" and w.get("type") != "review" and not re.search(
-                r"meta-analy|systematic review|umbrella review|scoping review|review", w.get("title") or "", re.I):
+        params["sort"] = "-cited_by_count"
+    raw_works, total, pages, status = fetch_openalex_pages(
+        client, params, limit=limit, page_size=page_size,
+    )
+    result = SearchResult(
+        database="openalex", query=query, api_query=query,
+        filters=params["filter"], sort=sort, total_matches=total,
+        pages=pages, status=status,
+    )
+    for work in raw_works:
+        if types == "review" and work.get("type") != "review" and not re.search(
+                r"meta-analy|systematic review|umbrella review|scoping review|review",
+                work.get("title") or "", re.I):
+            result.exclusions["not a review"] += 1
             continue
-        authors = []
-        for a in w.get("authorships") or []:
-            n = (a.get("author") or {}).get("display_name")
-            if n:
-                authors.append(n)
-        oa = (w.get("best_oa_location") or {})
-        out.append({
-            "doi": norm_doi(w.get("doi")),
-            "pmid": ((w.get("ids") or {}).get("pmid") or "").split("/")[-1] or None,
-            "openalex": w.get("id"),
-            "title": (w.get("title") or "").strip(),
-            "authors": authors,
-            "year": w.get("publication_year"),
-            "journal": src_name,
-            "source_type": src_type,
-            "type": w.get("type"),
-            "abstract": inverted_to_text(w.get("abstract_inverted_index")),
-            "cited_by_count": w.get("cited_by_count", 0),
-            "oa_url": oa.get("pdf_url") or oa.get("landing_page_url"),
-            "is_retracted": bool(w.get("is_retracted")),
-            "is_preprint": bool(is_preprint),
-            "_source": "openalex",
-        })
-    return out
+        result.hits.append(parse_openalex_work(work))
+    return result
 
 
 # ---------------------------------------------------------------- PubMed
 
-def search_pubmed(query, from_year, to_year, limit, types):
+def pubmed_term(query, from_year, to_year, types):
     term = query
     if types == "review":
         term += " AND (systematic review[pt] OR meta-analysis[pt] OR review[pt])"
     if from_year or to_year:
         term += f" AND ({from_year or 1800}[dp] : {to_year or 3000}[dp])"
-    url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?" + urllib.parse.urlencode(
-        {"db": "pubmed", "term": term, "retmax": str(limit), "retmode": "json", "sort": "relevance"})
-    raw = get(url)
-    if not raw:
-        return []
-    ids = json.loads(raw).get("esearchresult", {}).get("idlist", [])
-    if not ids:
-        return []
-    url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + urllib.parse.urlencode(
-        {"db": "pubmed", "id": ",".join(ids), "retmode": "xml"})
-    raw = get(url)
-    if not raw:
-        return []
-    out = []
+    return term
+
+
+def parse_pubmed_articles(raw_xml):
     try:
-        root = ET.fromstring(raw)
+        root = ET.fromstring(raw_xml)
     except ET.ParseError:
-        return []
-    for art in root.findall(".//PubmedArticle"):
-        pmid = (art.findtext(".//PMID") or "").strip()
-        tel = art.find(".//ArticleTitle")
-        title = "".join(tel.itertext()).strip() if tel is not None else ""
-        journal = art.findtext(".//Journal/Title") or ""
-        year = art.findtext(".//PubDate/Year") or (art.findtext(".//PubDate/MedlineDate") or "")[:4]
+        return None
+    output = []
+    for article in root.findall(".//PubmedArticle"):
+        pmid = (article.findtext(".//PMID") or "").strip()
+        title_element = article.find(".//ArticleTitle")
+        title = "".join(title_element.itertext()).strip() if title_element is not None else ""
+        journal = article.findtext(".//Journal/Title") or ""
+        year = article.findtext(".//PubDate/Year") or (
+            article.findtext(".//PubDate/MedlineDate") or ""
+        )[:4]
         try:
             year = int(year)
         except ValueError:
             year = None
-        abstract = " ".join("".join(a.itertext()).strip() for a in art.findall(".//Abstract/AbstractText"))
+        abstract = " ".join(
+            "".join(element.itertext()).strip()
+            for element in article.findall(".//Abstract/AbstractText")
+        )
         authors = []
-        for a in art.findall(".//AuthorList/Author"):
-            ln, fn = a.findtext("LastName"), a.findtext("ForeName")
-            if ln:
-                authors.append(f"{fn} {ln}".strip() if fn else ln)
+        for author in article.findall(".//AuthorList/Author"):
+            last_name = author.findtext("LastName")
+            first_name = author.findtext("ForeName")
+            if last_name:
+                authors.append(
+                    f"{first_name} {last_name}".strip() if first_name else last_name
+                )
         doi = None
-        for el in art.findall("./MedlineCitation/Article/ELocationID"):
-            if el.get("EIdType") == "doi" and el.text:
-                doi = norm_doi(el.text)
+        for element in article.findall("./MedlineCitation/Article/ELocationID"):
+            if element.get("EIdType") == "doi" and element.text:
+                doi = norm_doi(element.text)
         if not doi:
-            for idn in art.findall("./PubmedData/ArticleIdList/ArticleId"):
-                if idn.get("IdType") == "doi" and idn.text:
-                    doi = norm_doi(idn.text)
-        ptypes = [p.text or "" for p in art.findall(".//PublicationTypeList/PublicationType")]
-        retracted = any("Retracted Publication" in p for p in ptypes)
-        is_review = any(p in ("Review", "Systematic Review", "Meta-Analysis") for p in ptypes)
-        out.append({
-            "doi": doi, "pmid": pmid or None, "openalex": None, "title": title, "authors": authors,
-            "year": year, "journal": journal, "source_type": "journal",
-            "type": "review" if is_review else "article", "abstract": abstract,
-            "cited_by_count": None, "oa_url": None, "is_retracted": retracted, "is_preprint": False,
-            "pub_types": ptypes, "_source": "pubmed",
+            for identifier in article.findall("./PubmedData/ArticleIdList/ArticleId"):
+                if identifier.get("IdType") == "doi" and identifier.text:
+                    doi = norm_doi(identifier.text)
+        publication_types = [
+            element.text or ""
+            for element in article.findall(".//PublicationTypeList/PublicationType")
+        ]
+        is_retracted = "Retracted Publication" in publication_types
+        is_review = bool(
+            {"Review", "Systematic Review", "Meta-Analysis"} & set(publication_types)
+        )
+        output.append({
+            "doi": doi,
+            "pmid": pmid or None,
+            "openalex": None,
+            "title": title,
+            "authors": authors,
+            "year": year,
+            "journal": journal,
+            "source_type": "journal",
+            "type": "review" if is_review else "article",
+            "abstract": abstract,
+            "cited_by_count": None,
+            "oa_url": None,
+            "is_retracted": is_retracted,
+            "is_preprint": False,
+            "pub_types": publication_types,
+            "peer_review_status": "not_independently_verified",
+            "_source": "pubmed",
         })
-    return out
+    return output
 
 
-# ---------------------------------------------------------------- ledger
+def search_pubmed(
+        query, from_year, to_year, limit, types, page_size=100,
+        sort="relevance"):
+    term = pubmed_term(query, from_year, to_year, types)
+    api_sort = PUBMED_SORT_VALUES[sort]
+    result = SearchResult(
+        database="pubmed", query=query, api_query=term,
+        filters="publication-date" if from_year or to_year else "none",
+        sort=api_sort,
+    )
+    retstart = 0
+    effective_limit = min(limit, PUBMED_MAX_RESULTS)
+    while retstart < effective_limit:
+        retmax = min(page_size, effective_limit - retstart)
+        params = {
+            "db": "pubmed", "term": term, "retstart": str(retstart),
+            "retmax": str(retmax), "retmode": "json", "sort": api_sort,
+        }
+        url = (
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?" +
+            urllib.parse.urlencode(params)
+        )
+        raw = get(url)
+        if not raw:
+            result.status = "PubMed ESearch unavailable"
+            break
+        try:
+            search_payload = json.loads(raw).get("esearchresult", {})
+        except json.JSONDecodeError:
+            result.status = "unreadable PubMed ESearch response"
+            break
+        if result.total_matches is None:
+            try:
+                result.total_matches = int(search_payload.get("count", 0))
+            except (TypeError, ValueError):
+                result.total_matches = None
+        ids = search_payload.get("idlist") or []
+        if not ids:
+            break
+        fetch_url = (
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" +
+            urllib.parse.urlencode({
+                "db": "pubmed", "id": ",".join(ids), "retmode": "xml",
+            })
+        )
+        raw_xml = get(fetch_url)
+        if not raw_xml:
+            result.status = "PubMed EFetch unavailable"
+            break
+        articles = parse_pubmed_articles(raw_xml)
+        if articles is None:
+            result.status = "unreadable PubMed EFetch response"
+            break
+        result.hits.extend(articles)
+        result.pages += 1
+        retstart += len(ids)
+        if len(ids) < retmax or (
+                result.total_matches is not None and retstart >= result.total_matches):
+            break
+    if limit > PUBMED_MAX_RESULTS and result.status == "ok":
+        result.status = f"capped at PubMed ESearch limit ({PUBMED_MAX_RESULTS})"
+    return result
+
+
+# ------------------------------------------------------ publication eligibility
+
+def candidate_eligibility(
+        hit, include_preprints=False, include_conference_papers=False,
+        policy="strict"):
+    """Return ``(eligible, reason)`` under a transparent index-based policy."""
+    journal = (hit.get("journal") or "").lower()
+    if any(venue in journal for venue in TERTIARY_VENUES):
+        return False, "tertiary source"
+    if hit.get("is_preprint"):
+        if include_preprints:
+            hit["publication_eligibility"] = "preprint; not peer reviewed"
+            return True, "preprint explicitly included"
+        return False, "preprint"
+
+    if hit.get("_source") == "openalex":
+        work_type = hit.get("type")
+        source_type = hit.get("source_type")
+        if source_type == "conference" or work_type == "proceedings-article":
+            if not include_conference_papers:
+                return False, "conference paper not enabled"
+            hit["publication_eligibility"] = "conference-paper candidate"
+            return True, "eligible conference candidate"
+        if work_type not in ("article", "review"):
+            return False, f"OpenAlex type {work_type or 'missing'}"
+        if policy == "strict" and source_type != "journal":
+            return False, f"OpenAlex source type {source_type or 'missing'}"
+        if policy == "broad" and source_type not in ("journal", "", None):
+            return False, f"OpenAlex source type {source_type}"
+        hit["publication_eligibility"] = "journal-indexed candidate"
+        return True, "eligible journal candidate"
+
+    publication_types = set(hit.get("pub_types") or [])
+    excluded = publication_types & PUBMED_EXCLUDED_TYPES
+    if excluded:
+        return False, "PubMed non-evidence type: " + ", ".join(sorted(excluded))
+    if policy == "strict" and not publication_types & PUBMED_EVIDENCE_TYPES:
+        return False, "no eligible PubMed publication type"
+    hit["publication_eligibility"] = "PubMed journal-indexed candidate"
+    return True, "eligible PubMed candidate"
+
+
+def filter_candidates(
+        hits, include_preprints=False, include_conference_papers=False,
+        policy="strict"):
+    accepted = []
+    exclusions = Counter()
+    for hit in hits:
+        eligible, reason = candidate_eligibility(
+            hit,
+            include_preprints=include_preprints,
+            include_conference_papers=include_conference_papers,
+            policy=policy,
+        )
+        if eligible:
+            accepted.append(hit)
+        else:
+            exclusions[reason] += 1
+    return accepted, exclusions
+
+
+# ------------------------------------------------------------- citation chasing
+
+def ledger_seed(ledger, token):
+    normalized_doi = norm_doi(token)
+    lowered = token.lower()
+    for entry in ledger["entries"]:
+        if entry.get("key", "").lower() == lowered:
+            return entry
+        if entry.get("doi") and entry["doi"] == normalized_doi:
+            return entry
+        if entry.get("pmid") and str(entry["pmid"]) == token:
+            return entry
+        if (short_openalex_id(entry.get("openalex")) and
+                short_openalex_id(entry.get("openalex")) == short_openalex_id(token)):
+            return entry
+    if short_openalex_id(token):
+        return {"key": short_openalex_id(token), "openalex": short_openalex_id(token)}
+    if normalized_doi and normalized_doi.startswith("10."):
+        return {"key": normalized_doi, "doi": normalized_doi}
+    if token.isdigit():
+        return {"key": token, "pmid": token}
+    return None
+
+
+def openalex_seed_identifier(entry):
+    if short_openalex_id(entry.get("openalex")):
+        return short_openalex_id(entry["openalex"])
+    if entry.get("doi"):
+        return "doi:" + entry["doi"]
+    if entry.get("pmid"):
+        return "pmid:" + str(entry["pmid"])
+    return None
+
+
+def fetch_openalex_seed(client, entry):
+    identifier = openalex_seed_identifier(entry)
+    if not identifier:
+        return None
+    encoded_identifier = urllib.parse.quote(identifier, safe=":/")
+    params = client.add_identity({
+        "select": OPENALEX_WORK_FIELDS + ",referenced_works",
+    })
+    url = (
+        "https://api.openalex.org/works/" + encoded_identifier + "?" +
+        urllib.parse.urlencode(params)
+    )
+    raw = client.fetch(url, latch=False)
+    if not raw:
+        return None
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+
+
+def rank_chase_hits(hits, chase_sort):
+    if chase_sort == "recent":
+        return sorted(
+            hits,
+            key=lambda hit: (
+                hit.get("year") or 0, hit.get("cited_by_count") or 0,
+            ),
+            reverse=True,
+        )
+    return sorted(
+        hits,
+        key=lambda hit: (
+            hit.get("cited_by_count") or 0, hit.get("year") or 0,
+        ),
+        reverse=True,
+    )
+
+
+def backward_citations(
+        client, seed_work, seed_label, limit, pool, page_size, chase_sort):
+    referenced_ids = ordered_unique([
+        short_openalex_id(value)
+        for value in seed_work.get("referenced_works") or []
+        if short_openalex_id(value)
+    ])
+    scanned_ids = referenced_ids[:pool]
+    raw_works = []
+    pages = 0
+    status = "ok"
+    for start in range(0, len(scanned_ids), 100):
+        chunk = scanned_ids[start:start + 100]
+        params = {
+            "filter": "openalex:" + "|".join(chunk),
+            "select": OPENALEX_WORK_FIELDS,
+        }
+        works, _, chunk_pages, chunk_status = fetch_openalex_pages(
+            client, params, limit=len(chunk), page_size=min(page_size, 100),
+        )
+        raw_works.extend(works)
+        pages += chunk_pages
+        if chunk_status != "ok":
+            status = chunk_status
+            break
+    hits = rank_chase_hits(
+        [parse_openalex_work(work) for work in raw_works], chase_sort
+    )[:limit]
+    for hit in hits:
+        hit["_citation_direction"] = "backward"
+        hit["_citation_seed"] = seed_label
+    return SearchResult(
+        database="openalex", query=seed_label,
+        api_query=f"referenced_works({seed_label})",
+        filters=f"openalex IDs from seed; scanned {len(scanned_ids)}/{len(referenced_ids)}",
+        sort=chase_sort, hits=hits, total_matches=len(referenced_ids),
+        pages=pages, status=status,
+    )
+
+
+def forward_citations(
+        client, seed_work, seed_label, limit, page_size, chase_sort):
+    seed_id = short_openalex_id(seed_work.get("id"))
+    if not seed_id:
+        return SearchResult(
+            database="openalex", query=seed_label,
+            api_query=f"cites({seed_label})", filters="cites:unresolved",
+            sort=chase_sort, status="seed has no OpenAlex ID",
+        )
+    params = {
+        "filter": f"cites:{seed_id}",
+        "select": OPENALEX_WORK_FIELDS,
+        "sort": (
+            "-publication_date" if chase_sort == "recent"
+            else "-cited_by_count"
+        ),
+    }
+    raw_works, total, pages, status = fetch_openalex_pages(
+        client, params, limit=limit, page_size=page_size,
+    )
+    hits = [parse_openalex_work(work) for work in raw_works]
+    for hit in hits:
+        hit["_citation_direction"] = "forward"
+        hit["_citation_seed"] = seed_label
+    return SearchResult(
+        database="openalex", query=seed_label,
+        api_query=f"cites:{seed_id}", filters=f"cites:{seed_id}",
+        sort=chase_sort, hits=hits, total_matches=total,
+        pages=pages, status=status,
+    )
+
+
+def chase_citations(
+        client, ledger, tokens, direction, limit, pool, page_size, chase_sort):
+    results = []
+    for token in tokens:
+        entry = ledger_seed(ledger, token)
+        if not entry:
+            results.append(SearchResult(
+                database="openalex", query=token, api_query=token,
+                filters="citation seed", sort=chase_sort,
+                status=(
+                    "seed not found in ledger and is not a DOI, PMID, or OpenAlex ID"
+                ),
+            ))
+            continue
+        seed_label = entry.get("key") or token
+        seed_work = fetch_openalex_seed(client, entry)
+        if not seed_work:
+            results.append(SearchResult(
+                database="openalex", query=seed_label, api_query=token,
+                filters="citation seed", sort=chase_sort,
+                status="could not resolve citation seed in OpenAlex",
+            ))
+            continue
+        if direction in ("backward", "both"):
+            results.append(backward_citations(
+                client, seed_work, seed_label, limit, pool, page_size, chase_sort,
+            ))
+        if direction in ("forward", "both"):
+            results.append(forward_citations(
+                client, seed_work, seed_label, limit, page_size, chase_sort,
+            ))
+    return results
+
+
+# ---------------------------------------------------------------- ledger + log
 
 def load_ledger(path):
     if path and os.path.exists(path):
-        with open(path) as fh:
+        with open(path, encoding="utf-8") as fh:
             return json.load(fh)
     return {"created": time.strftime("%Y-%m-%d"), "entries": []}
 
 
-def merge(ledger, hits, query, angle):
+def provenance_for(hit, query, angle, method):
+    provenance = {
+        "query": query,
+        "angle": angle,
+        "source": hit["_source"],
+        "method": method,
+    }
+    if hit.get("_citation_direction"):
+        provenance["direction"] = hit["_citation_direction"]
+    if hit.get("_citation_seed"):
+        provenance["seed"] = hit["_citation_seed"]
+    return provenance
+
+
+def merge(ledger, hits, query, angle, method="keyword"):
     by_id = {}
     for e in ledger["entries"]:
         if e.get("doi"):
             by_id["doi:" + e["doi"]] = e
         if e.get("pmid"):
-            by_id["pmid:" + e["pmid"]] = e
+            by_id["pmid:" + str(e["pmid"])] = e
+        if short_openalex_id(e.get("openalex")):
+            by_id["openalex:" + short_openalex_id(e["openalex"])] = e
     added, updated = 0, 0
     for h in hits:
-        ident = ("doi:" + h["doi"]) if h.get("doi") else (("pmid:" + h["pmid"]) if h.get("pmid") else None)
-        if ident is None:
+        identifiers = []
+        if h.get("doi"):
+            identifiers.append("doi:" + h["doi"])
+        if h.get("pmid"):
+            identifiers.append("pmid:" + str(h["pmid"]))
+        if short_openalex_id(h.get("openalex")):
+            identifiers.append("openalex:" + short_openalex_id(h["openalex"]))
+        if not identifiers:
             continue
-        e = by_id.get(ident)
-        if e is None and h.get("doi") and h.get("pmid"):
-            e = by_id.get("pmid:" + h["pmid"])
+        e = next((by_id[ident] for ident in identifiers if ident in by_id), None)
+        provenance = provenance_for(h, query, angle, method)
         if e:
             # fill gaps
-            for k in ("doi", "pmid", "openalex", "abstract", "oa_url", "journal", "year", "cited_by_count"):
+            for k in (
+                    "doi", "pmid", "openalex", "abstract", "oa_url", "journal",
+                    "year", "cited_by_count", "pub_types",
+                    "publication_eligibility", "peer_review_status", "source_type"):
                 if not e.get(k) and h.get(k):
                     e[k] = h[k]
             if h.get("is_retracted"):
                 e["is_retracted"] = True
-            e["found_by"].append({"query": query, "angle": angle, "source": h["_source"]})
+            if provenance not in e.setdefault("found_by", []):
+                e["found_by"].append(provenance)
+            for ident in identifiers:
+                by_id[ident] = e
             updated += 1
         else:
             e = {k: v for k, v in h.items() if not k.startswith("_")}
             e["key"] = make_key(e["authors"], e["year"], e["title"])
-            e["found_by"] = [{"query": query, "angle": angle, "source": h["_source"]}]
+            e["found_by"] = [provenance]
             e["status"] = "candidate"
             ledger["entries"].append(e)
-            by_id[ident] = e
-            if e.get("doi"):
-                by_id["doi:" + e["doi"]] = e
-            if e.get("pmid"):
-                by_id["pmid:" + e["pmid"]] = e
+            for ident in identifiers:
+                by_id[ident] = e
             added += 1
     # make keys unique
     seen = {}
@@ -424,87 +903,336 @@ def merge(ledger, hits, query, angle):
 
 def print_table(entries, max_rows=None):
     rows = entries if max_rows is None else entries[:max_rows]
-    print(f"{'key':<26} {'year':>4} {'cites':>6} {'type':<8} {'flags':<10} title | journal")
+    print(
+        f"{'key':<26} {'year':>4} {'cites':>6} {'type':<8} "
+        f"{'flags':<10} title | journal"
+    )
     for e in rows:
-        flags = ("RETRACTED " if e.get("is_retracted") else "") + ("PREPRINT " if e.get("is_preprint") else "")
+        flags = (
+            ("RETRACTED " if e.get("is_retracted") else "") +
+            ("PREPRINT " if e.get("is_preprint") else "")
+        )
         flags = flags.strip() or ("verified" if e.get("status") == "verified" else "")
         cites = e.get("cited_by_count")
-        print(f"{e['key']:<26} {str(e.get('year') or ''):>4} {str(cites if cites is not None else '-'):>6} "
-              f"{(e.get('type') or '')[:8]:<8} {flags:<10} {e['title'][:80]} | {(e.get('journal') or '')[:40]}")
+        print(
+            f"{e['key']:<26} {str(e.get('year') or ''):>4} "
+            f"{str(cites if cites is not None else '-'):>6} "
+            f"{(e.get('type') or '')[:8]:<8} {flags:<10} {e['title'][:80]} | "
+            f"{(e.get('journal') or '')[:40]}"
+        )
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--query", "-q", action="append", default=[], help="search query (repeatable)")
-    ap.add_argument("--angle", default="", help="label for the angle these queries cover (stored in ledger)")
+def markdown_cell(value):
+    text = "" if value is None else str(value)
+    return text.replace("|", "\\|").replace("\n", " ")
+
+
+def append_search_log(
+        path, result, angle, method, accepted, added, updated, exclusions):
+    if not path:
+        return
+    needs_header = not os.path.exists(path) or os.path.getsize(path) == 0
+    combined_exclusions = result.exclusions + exclusions
+    exclusion_text = "; ".join(
+        f"{reason}={count}" for reason, count in sorted(combined_exclusions.items())
+    ) or "none"
+    timestamp = datetime.datetime.now(datetime.timezone.utc).replace(
+        microsecond=0
+    ).isoformat()
+    row = [
+        timestamp, result.database, method, angle, result.query, result.api_query,
+        result.filters, result.sort, result.total_matches, result.retrieved,
+        len(accepted), added, updated, result.pages, exclusion_text, result.status,
+    ]
+    with open(path, "a", encoding="utf-8") as handle:
+        if needs_header:
+            handle.write(
+                "# Search log\n\n"
+                "Generated automatically by `find_papers.py`. Total matches is the "
+                "database-reported count; retrieved is the number inspected locally.\n\n"
+                "| UTC timestamp | database | method | angle | requested query/seed | "
+                "API query | filters | sort | total matches | retrieved | accepted | "
+                "new | updated | pages | exclusions | status |\n"
+                "|---|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|---|---|\n"
+            )
+        handle.write(
+            "| " + " | ".join(markdown_cell(value) for value in row) + " |\n"
+        )
+
+
+def parse_sources(value):
+    sources = ordered_unique([
+        source.strip().lower() for source in value.split(",") if source.strip()
+    ])
+    unknown = set(sources) - {"openalex", "pubmed"}
+    if unknown:
+        raise ValueError("unknown source(s): " + ", ".join(sorted(unknown)))
+    if not sources:
+        raise ValueError("at least one source is required")
+    return sources
+
+
+def build_query_plan(shared_queries, openalex_queries, pubmed_queries, sources):
+    plan = []
+    seen = set()
+    for query in shared_queries:
+        for source in sources:
+            pair = (source, query)
+            if pair not in seen:
+                seen.add(pair)
+                plan.append(pair)
+    for source, queries in (
+            ("openalex", openalex_queries), ("pubmed", pubmed_queries)):
+        if source not in sources:
+            continue
+        for query in queries:
+            pair = (source, query)
+            if pair not in seen:
+                seen.add(pair)
+                plan.append(pair)
+    return plan
+
+
+def process_result(result, ledger, args, method):
+    accepted, exclusions = filter_candidates(
+        result.hits,
+        include_preprints=args.include_preprints,
+        include_conference_papers=args.include_conference_papers,
+        policy=args.publication_policy,
+    )
+    before_length = len(ledger["entries"])
+    added, updated = merge(
+        ledger, accepted, result.query, args.angle, method=method,
+    )
+    fresh = ledger["entries"][before_length:]
+    append_search_log(
+        args.search_log, result, args.angle, method, accepted,
+        added, updated, exclusions,
+    )
+    total = result.total_matches if result.total_matches is not None else "?"
+    print(
+        f"\n## {result.database} {method}: {result.query} "
+        f"({total} total; {result.retrieved} retrieved across {result.pages} "
+        f"page(s); {len(accepted)} accepted; {added} new, {updated} already in ledger)"
+    )
+    if result.status != "ok":
+        print(f"  status: {result.status}")
+    if exclusions or result.exclusions:
+        combined = result.exclusions + exclusions
+        print("  excluded: " + ", ".join(
+            f"{reason}={count}" for reason, count in sorted(combined.items())
+        ))
+    print_table(fresh)
+    if args.abstracts:
+        for entry in fresh:
+            print(
+                f"\n[{entry['key']}] {entry['title']}\n  "
+                f"{entry.get('abstract') or '(no abstract available)'}\n"
+            )
+
+
+def build_parser():
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    ap.add_argument(
+        "--query", "-q", action="append", default=[],
+        help="query sent to every enabled database (repeatable)",
+    )
+    ap.add_argument(
+        "--openalex-query", action="append", default=[],
+        help="OpenAlex-only query (repeatable)",
+    )
+    ap.add_argument(
+        "--pubmed-query", action="append", default=[],
+        help="PubMed-only query; PubMed field syntax is allowed (repeatable)",
+    )
+    ap.add_argument(
+        "--angle", default="",
+        help="evidence angle stored in the ledger and search log",
+    )
     ap.add_argument("--from-year", type=int)
     ap.add_argument("--to-year", type=int)
-    ap.add_argument("--limit", type=int, default=20, help="max hits per query per source")
-    ap.add_argument("--types", choices=["all", "review"], default="all", help="'review' = reviews/meta-analyses only")
-    ap.add_argument("--sort", choices=["relevance", "cited"], default="relevance")
+    ap.add_argument(
+        "--limit", type=int, default=100,
+        help="total records retrieved per query per database (default: 100)",
+    )
+    ap.add_argument(
+        "--page-size", type=int, default=50,
+        help="records requested per API page (default: 50)",
+    )
+    ap.add_argument(
+        "--types", choices=["all", "review"], default="all",
+        help="review = reviews/meta-analyses only",
+    )
+    ap.add_argument(
+        "--sort", choices=["relevance", "cited"], default="relevance",
+        help="OpenAlex sort",
+    )
+    ap.add_argument(
+        "--pubmed-sort",
+        choices=["relevance", "pub-date", "first-author", "journal"],
+        default="relevance",
+    )
     ap.add_argument("--sources", default="openalex,pubmed")
-    ap.add_argument("--mailto", default=os.environ.get("OPENALEX_MAILTO", "").strip() or None,
-                    help="contact address for OpenAlex's polite pool (default: $OPENALEX_MAILTO)")
-    ap.add_argument("--openalex-retries", type=int, default=3,
-                    help="retries per OpenAlex request before giving up on OpenAlex (default: 3)")
+    ap.add_argument(
+        "--mailto", default=os.environ.get("OPENALEX_MAILTO", "").strip() or None,
+        help="contact address for OpenAlex courtesy metadata",
+    )
+    ap.add_argument(
+        "--openalex-api-key",
+        default=os.environ.get("OPENALEX_API_KEY", "").strip() or None,
+        help="optional OpenAlex API key (default: OPENALEX_API_KEY)",
+    )
+    ap.add_argument("--openalex-retries", type=int, default=3)
     ap.add_argument("--include-preprints", action="store_true")
+    ap.add_argument(
+        "--include-conference-papers", action="store_true",
+        help="include OpenAlex article records hosted by conference sources",
+    )
+    ap.add_argument(
+        "--publication-policy", choices=["strict", "broad"], default="strict",
+        help="strict requires explicit eligible publication types (default: strict)",
+    )
     ap.add_argument("--ledger", default="sources.json")
+    ap.add_argument(
+        "--search-log",
+        help="automatic markdown log (default: search_log.md beside ledger)",
+    )
+    ap.add_argument("--no-search-log", action="store_true")
+    ap.add_argument(
+        "--chase", action="append", default=[], metavar="KEY_OR_ID",
+        help="ledger key, DOI, PMID, or OpenAlex ID to citation-chase",
+    )
+    ap.add_argument(
+        "--chase-direction", choices=["backward", "forward", "both"],
+        default="both",
+    )
+    ap.add_argument(
+        "--chase-limit", type=int, default=50,
+        help="records retrieved per seed and direction",
+    )
+    ap.add_argument(
+        "--chase-pool", type=int, default=500,
+        help="maximum backward references inspected per seed",
+    )
+    ap.add_argument("--chase-sort", choices=["cited", "recent"], default="cited")
     ap.add_argument("--show", action="store_true", help="print the ledger and exit")
-    ap.add_argument("--abstracts", action="store_true", help="also print abstracts of new hits")
-    args = ap.parse_args()
+    ap.add_argument(
+        "--abstracts", action="store_true",
+        help="print abstracts of newly added entries",
+    )
+    return ap
+
+
+def main(argv=None):
+    ap = build_parser()
+    args = ap.parse_args(argv)
+    if (args.limit <= 0 or args.page_size <= 0 or args.chase_limit <= 0 or
+            args.chase_pool <= 0):
+        ap.error(
+            "--limit, --page-size, --chase-limit, and --chase-pool must be positive"
+        )
+    if args.from_year and args.to_year and args.from_year > args.to_year:
+        ap.error("--from-year cannot be later than --to-year")
+    try:
+        sources = parse_sources(args.sources)
+    except ValueError as exc:
+        ap.error(str(exc))
 
     ledger = load_ledger(args.ledger)
-    if args.show or not args.query:
+    if args.show:
         print_table(ledger["entries"])
         print(f"\n{len(ledger['entries'])} entries in {args.ledger}")
-        return
+        return 0
 
-    use_openalex = "openalex" in args.sources
-    client = OpenAlexClient(mailto=args.mailto, retries=args.openalex_retries)
-    if use_openalex and not client.mailto:
-        sys.stderr.write("Note: no --mailto / OPENALEX_MAILTO set — OpenAlex requests go to the "
-                         "shared pool, which is throttled harder than the polite pool.\n")
+    has_search = bool(args.query or args.openalex_query or args.pubmed_query)
+    if not has_search and not args.chase:
+        print_table(ledger["entries"])
+        print(f"\n{len(ledger['entries'])} entries in {args.ledger}")
+        return 0
+    if args.openalex_query and "openalex" not in sources:
+        ap.error("--openalex-query requires openalex in --sources")
+    if args.pubmed_query and "pubmed" not in sources:
+        ap.error("--pubmed-query requires pubmed in --sources")
+    if args.chase and "openalex" not in sources:
+        ap.error("--chase requires openalex in --sources")
 
-    new_entries = []
-    for q in args.query:
-        hits = []
-        if use_openalex and client.enabled:
-            hits += search_openalex(client, q, args.from_year, args.to_year, args.limit,
-                                    args.types, args.sort)
-        if "pubmed" in args.sources:
-            hits += search_pubmed(q, args.from_year, args.to_year, args.limit, args.types)
-        if not args.include_preprints:
-            hits = [h for h in hits if not h["is_preprint"]]
-        # Tertiary reference works (StatPearls et al.) are indexed in PubMed but are not studies.
-        before_t = len(hits)
-        hits = [h for h in hits if not any(v in (h.get("journal") or "").lower() for v in TERTIARY_VENUES)]
-        if len(hits) < before_t:
-            print(f"  (dropped {before_t - len(hits)} tertiary-source record(s) — StatPearls/UpToDate-type entries are not citable)")
-        hits = [h for h in hits if h.get("source_type") in ("journal", "", None) or h.get("_source") == "pubmed"]
-        before = {e.get("doi") or e.get("pmid") for e in ledger["entries"]}
-        added, updated = merge(ledger, hits, q, args.angle)
-        fresh = [e for e in ledger["entries"] if (e.get("doi") or e.get("pmid")) not in before]
-        new_entries += fresh
-        print(f"\n## query: {q}   ({len(hits)} hits; {added} new, {updated} already in ledger)")
-        print_table(fresh)
-        if args.abstracts:
-            for e in fresh:
-                print(f"\n[{e['key']}] {e['title']}\n  {e.get('abstract') or '(no abstract available)'}\n")
+    if args.no_search_log:
+        args.search_log = None
+    elif not args.search_log:
+        ledger_directory = os.path.dirname(os.path.abspath(args.ledger))
+        args.search_log = os.path.join(ledger_directory, "search_log.md")
 
-    if use_openalex and not client.enabled:
-        print(f"\nNOTE: OpenAlex was skipped for this run — {client.unavailable}. "
-              "These hits come from PubMed alone, so coverage outside biomedicine may be thin: "
-              "widen the queries, or rerun later"
-              + ("." if client.mailto else ", and set OPENALEX_MAILTO to use the polite pool."))
+    client = OpenAlexClient(
+        mailto=args.mailto, retries=args.openalex_retries,
+        api_key=args.openalex_api_key,
+    )
+    uses_openalex = (
+        "openalex" in sources and
+        bool(args.query or args.openalex_query or args.chase)
+    )
+    if uses_openalex and not client.mailto and not client.api_key:
+        sys.stderr.write(
+            "Note: no --openalex-api-key / OPENALEX_API_KEY or --mailto / "
+            "OPENALEX_MAILTO set; anonymous OpenAlex limits may be stricter.\n"
+        )
+
+    plan = build_query_plan(
+        args.query, args.openalex_query, args.pubmed_query, sources,
+    )
+    for database, query in plan:
+        if database == "openalex":
+            if not client.enabled:
+                result = SearchResult(
+                    database="openalex", query=query, api_query=query,
+                    filters="not run", sort=args.sort,
+                    status=client.unavailable or "OpenAlex disabled",
+                )
+            else:
+                result = search_openalex(
+                    client, query, args.from_year, args.to_year, args.limit,
+                    args.types, args.sort, page_size=args.page_size,
+                    include_preprints=args.include_preprints,
+                )
+        else:
+            result = search_pubmed(
+                query, args.from_year, args.to_year, args.limit, args.types,
+                page_size=args.page_size, sort=args.pubmed_sort,
+            )
+        process_result(result, ledger, args, method="keyword")
+
+    if args.chase:
+        results = chase_citations(
+            client, ledger, args.chase, args.chase_direction,
+            args.chase_limit, args.chase_pool, args.page_size, args.chase_sort,
+        )
+        for result in results:
+            method = "citation"
+            if result.hits and result.hits[0].get("_citation_direction"):
+                method = result.hits[0]["_citation_direction"] + "-citation"
+            process_result(result, ledger, args, method=method)
+
+    if uses_openalex and not client.enabled:
+        print(
+            f"\nNOTE: OpenAlex became unavailable — {client.unavailable}. "
+            "Completed PubMed searches remain in the ledger and log."
+        )
 
     retracted = [e for e in ledger["entries"] if e.get("is_retracted")]
     if retracted:
-        print(f"\nWARNING: {len(retracted)} retracted paper(s) in ledger — do not cite except to discuss the retraction: "
-              + ", ".join(e["key"] for e in retracted))
-    with open(args.ledger, "w") as fh:
+        print(
+            f"\nWARNING: {len(retracted)} retracted paper(s) in ledger — do not cite "
+            "except to discuss the retraction: " +
+            ", ".join(e["key"] for e in retracted)
+        )
+    with open(args.ledger, "w", encoding="utf-8") as fh:
         json.dump(ledger, fh, indent=2, ensure_ascii=False)
     print(f"\nLedger: {len(ledger['entries'])} entries → {args.ledger}")
+    if args.search_log:
+        print(f"Search log → {args.search_log}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

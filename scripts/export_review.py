@@ -341,36 +341,53 @@ def find_chrome():
 
 def write_pdf(html_text, out_path):
     """Render HTML to PDF with headless Chrome or weasyprint. Returns the tool used."""
+    target = os.path.abspath(out_path)
+    target_dir = os.path.dirname(target)
     chrome = find_chrome()
     if chrome:
-        with tempfile.TemporaryDirectory() as td:
+        with tempfile.TemporaryDirectory(prefix=".scientific-review-", dir=target_dir) as td:
             src = os.path.join(td, "review.html")
+            rendered = os.path.join(td, "rendered.pdf")
             with open(src, "w") as f:
                 f.write(html_text)
             cmd = [chrome, "--headless", "--disable-gpu", "--no-sandbox",
-                   "--no-pdf-header-footer", f"--print-to-pdf={os.path.abspath(out_path)}",
+                   "--no-pdf-header-footer", f"--print-to-pdf={rendered}",
                    "file://" + src]
             r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
-            if os.path.exists(out_path) and os.path.getsize(out_path) > 0:
+            if r.returncode == 0 and is_pdf(rendered):
+                os.replace(rendered, target)
                 return os.path.basename(chrome)
             # older builds reject --no-pdf-header-footer
             cmd.remove("--no-pdf-header-footer")
+            if os.path.exists(rendered):
+                os.unlink(rendered)
             r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
-            if os.path.exists(out_path) and os.path.getsize(out_path) > 0:
+            if r.returncode == 0 and is_pdf(rendered):
+                os.replace(rendered, target)
                 return os.path.basename(chrome)
             raise RuntimeError(f"chrome failed to write a PDF: {r.stderr.strip()[:300]}")
     if shutil.which("weasyprint"):
-        with tempfile.TemporaryDirectory() as td:
+        with tempfile.TemporaryDirectory(prefix=".scientific-review-", dir=target_dir) as td:
             src = os.path.join(td, "review.html")
+            rendered = os.path.join(td, "rendered.pdf")
             with open(src, "w") as f:
                 f.write(html_text)
-            r = subprocess.run(["weasyprint", src, out_path], capture_output=True, text=True, timeout=180)
-            if r.returncode != 0:
+            r = subprocess.run(["weasyprint", src, rendered], capture_output=True, text=True, timeout=180)
+            if r.returncode != 0 or not is_pdf(rendered):
                 raise RuntimeError(f"weasyprint failed: {r.stderr.strip()[:300]}")
+            os.replace(rendered, target)
             return "weasyprint"
     raise RuntimeError(
         "no PDF renderer found. Install Chrome/Chromium or weasyprint, or export "
         "HTML and print to PDF from the browser (Cmd/Ctrl-P).")
+
+
+def is_pdf(path):
+    """Return whether *path* is a non-empty PDF, not a stale output sentinel."""
+    if not os.path.exists(path) or os.path.getsize(path) < 5:
+        return False
+    with open(path, "rb") as f:
+        return f.read(5) == b"%PDF-"
 
 
 def main():

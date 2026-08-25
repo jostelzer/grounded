@@ -1,0 +1,63 @@
+{
+  "profile": "nature-data",
+  "archetype": "comparison",
+  "purpose": "Compare the average decline in vaccine effectiveness against infection and severe disease without using generated geometry that could imply false numerical precision.",
+  "title": "Protection wanes faster against infection",
+  "subtitle": "Average decline from month 1 to month 6 · pre-Omicron systematic review",
+  "story": [
+    "Effectiveness against infection declined by 21.0 percentage points on average.",
+    "Effectiveness against severe disease declined by 10.0 percentage points on average.",
+    "Circulating immune memory, limited airway immunity and variant escape are supported explanations, but the studies do not assign a percentage to each cause."
+  ],
+  "data": {
+    "infection": {
+      "decline_percentage_points": 21.0,
+      "month_range": [1, 6],
+      "95_percent_confidence_interval": [13.9, 29.8]
+    },
+    "severe_disease": {
+      "decline_percentage_points": 10.0,
+      "month_range": [1, 6],
+      "95_percent_confidence_interval": [6.1, 15.4]
+    }
+  },
+  "layout_notes": [
+    "Use two equal-area aligned rows, one for infection and one for severe disease; row area must not encode magnitude.",
+    "Use large black numerals, small coloured outcome markers, and thin grey separators; no rounded cards.",
+    "Place three concise supported explanations in one quiet column using simple labelled biological marks, not decorative icons.",
+    "Use a compact bottom key without a glossary badge or book symbol."
+  ],
+  "constraints": [
+    "Do not draw an axis, bar, dot, whisker or other quantitative geometry.",
+    "Keep the two evidence rows exactly the same size.",
+    "Do not imply that the three explanations quantitatively partition the decline.",
+    "Keep pre-Omicron scope visible."
+  ],
+  "avoid": [
+    "scaled card sizes",
+    "charts or axes",
+    "virus shield icons",
+    "dashboard panels"
+  ],
+  "exact_text": [
+    "Protection wanes faster against infection",
+    "Average decline from month 1 to month 6 · pre-Omicron systematic review",
+    "Infection",
+    "21.0 percentage points",
+    "95% CI 13.9–29.8",
+    "Severe disease",
+    "10.0 percentage points",
+    "95% CI 6.1–15.4",
+    "Equal row sizes do not encode magnitude",
+    "Supported explanations",
+    "Circulating memory",
+    "B and T cells can limit progression after infection",
+    "Airway gap",
+    "Injected vaccine elicits limited local airway immunity",
+    "Variant escape",
+    "Changed spike can evade existing antibodies",
+    "95% CI = confidence interval",
+    "Percentage point = absolute change in percentages",
+    "Pre-Omicron = evidence preceded widespread Omicron"
+  ]
+}

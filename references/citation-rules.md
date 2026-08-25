@@ -5,7 +5,7 @@ Fabricated, misattributed, or retracted citations are the failure mode that dest
 ## The ledger is the only source of citations
 
 - `sources.json` holds every candidate source with its DOI, metadata, abstract, the query that found it, and a verification record.
-- A paper is citable only if it is in the ledger and `verify_citations.py` has marked it `verified` after checking both its Crossref bibliographic record and Crossref's publisher/Retraction Watch update metadata for retraction signals.
+- A paper is citable only if it is in the ledger, its peer-review status is appropriate for the field, and `verify_citations.py` has marked it `verified` after checking both its Crossref bibliographic record and Crossref's publisher/Retraction Watch update metadata for retraction signals. Crossref type and index inclusion do not independently prove peer review.
 - If you remember a paper that belongs in the review, find it with `find_papers.py` (search its title or distinctive phrases). If the index cannot find it, or the DOI does not verify, it is not cited. No exceptions for famous papers.
 - `format_references.py` builds the reference list from the Crossref metadata stored at verification. You never type an author list, journal, volume, or page by hand.
 

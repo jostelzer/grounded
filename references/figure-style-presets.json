@@ -1,0 +1,179 @@
+{
+  "nature-neuroscience": {
+    "name": "Nature Neuroscience-inspired explanatory figure",
+    "intent": "A clean, publication-grade neuroscience or biomedical schematic with one dominant scientific idea, restrained illustration, and high information density without visual noise.",
+    "font": {
+      "family": "Arial",
+      "fallback": "Helvetica",
+      "text_color": "#1A1A1A",
+      "minimum_px_at_1536_width": 22,
+      "body_px_at_1536_width": 24,
+      "section_px_at_1536_width": 28,
+      "title_px_at_1536_width": 38,
+      "panel_label_px_at_1536_width": 26,
+      "rules": [
+        "Use Arial throughout; Helvetica is the only acceptable visual fallback.",
+        "Use sentence case, ordinary-width letterforms, and compact but comfortable leading.",
+        "Use bold only for the title, panel letters, and one short heading level.",
+        "Keep text black or near-black; communicate categories with nearby marks, keylines, or swatches rather than coloured words.",
+        "Never use serif, slab-serif, condensed display, handwritten, outlined, beveled, or shadowed type."
+      ]
+    },
+    "canvas": {
+      "background": "#FFFFFF",
+      "aspect": "3:2 landscape unless the content requires another ratio",
+      "margin": "6–8% clear outer margin",
+      "density": "Fill the canvas efficiently while preserving quiet space around labels"
+    },
+    "palette": {
+      "black": "#1A1A1A",
+      "grey": "#767676",
+      "light_grey": "#D9D9D9",
+      "blue": "#0072B2",
+      "sky_blue": "#56B4E9",
+      "bluish_green": "#009E73",
+      "orange": "#E69F00",
+      "vermillion": "#D55E00",
+      "reddish_purple": "#CC79A7"
+    },
+    "visual_language": [
+      "Use crisp 2D scientific-editorial illustration with restrained, shallow biological shading only where it clarifies form.",
+      "Prefer thin consistent keylines, simple arrows, open white space, and direct labels connected by short leaders.",
+      "Use colour on scientific structures and data marks, not as large decorative fields.",
+      "Keep each panel to one visual claim and 3–6 meaningful elements.",
+      "Use anatomical or molecular detail only at the level supported by the evidence.",
+      "Use lower-case bold panel letters a, b, c when a multipart layout is necessary."
+    ],
+    "avoid": [
+      "serif typography",
+      "oversized magazine headline typography",
+      "rounded dashboard cards",
+      "glossy 3D rendering",
+      "cinematic lighting",
+      "drop shadows",
+      "gradients used only for decoration",
+      "background gridlines",
+      "rainbow colour maps",
+      "red–green-only encodings",
+      "decorative icons",
+      "book, shield, checkmark, badge, or app-interface motifs",
+      "coloured paragraph text",
+      "text over busy imagery",
+      "watermarks or journal branding"
+    ]
+  },
+  "nature-reviews": {
+    "name": "Nature Reviews-inspired conceptual synthesis",
+    "intent": "A polished conceptual review figure that integrates mechanisms or systems across several levels while remaining spare, balanced, and readable.",
+    "font": {
+      "family": "Arial",
+      "fallback": "Helvetica",
+      "text_color": "#1A1A1A",
+      "minimum_px_at_1536_width": 22,
+      "body_px_at_1536_width": 24,
+      "section_px_at_1536_width": 29,
+      "title_px_at_1536_width": 40,
+      "panel_label_px_at_1536_width": 26,
+      "rules": [
+        "Use Arial throughout; Helvetica is the only acceptable visual fallback.",
+        "Use sentence case and a shallow hierarchy of at most three sizes.",
+        "Use bold sparingly for panel labels and concise concept headings.",
+        "Use black or near-black text; coloured text is not a category encoding.",
+        "Never use serif, outlined, condensed display, beveled, or shadowed type."
+      ]
+    },
+    "canvas": {
+      "background": "#FFFFFF",
+      "aspect": "3:2 landscape unless the content requires another ratio",
+      "margin": "6–8% clear outer margin",
+      "density": "Balanced explanatory composition with no unused voids and no crowding"
+    },
+    "palette": {
+      "black": "#1A1A1A",
+      "grey": "#767676",
+      "light_grey": "#D9D9D9",
+      "blue": "#0072B2",
+      "sky_blue": "#56B4E9",
+      "bluish_green": "#009E73",
+      "orange": "#E69F00",
+      "vermillion": "#D55E00",
+      "reddish_purple": "#CC79A7"
+    },
+    "visual_language": [
+      "Use refined 2D editorial illustration with restrained depth, clean cutaway anatomy, and consistent line weights.",
+      "Organize complexity into a small number of clearly related panels or layers.",
+      "Let biological structures carry the visual interest; keep the surrounding interface visually quiet.",
+      "Use direct labels, short leaders, and one compact legend or glossary only when needed.",
+      "Use uncertainty styling that is subtle but explicit: dashed boundary, pale tint, or a short qualifier."
+    ],
+    "avoid": [
+      "serif typography",
+      "dashboard or presentation-slide styling",
+      "glossy photorealism",
+      "dramatic highlights",
+      "drop shadows",
+      "decorative gradients",
+      "background gridlines",
+      "decorative icons",
+      "large coloured text blocks",
+      "dense borders around every concept",
+      "watermarks or journal branding"
+    ]
+  },
+  "nature-data": {
+    "name": "Nature-inspired quantitative figure",
+    "intent": "A minimal, publication-grade quantitative figure whose geometry, scales, uncertainty, and denominators are the visual focus.",
+    "font": {
+      "family": "Arial",
+      "fallback": "Helvetica",
+      "text_color": "#1A1A1A",
+      "minimum_px_at_1536_width": 22,
+      "body_px_at_1536_width": 23,
+      "section_px_at_1536_width": 27,
+      "title_px_at_1536_width": 36,
+      "panel_label_px_at_1536_width": 26,
+      "rules": [
+        "Use Arial throughout; Helvetica is the only acceptable visual fallback.",
+        "Use sentence case and black or near-black labels.",
+        "Use bold only for panel letters and short panel headings.",
+        "Never use serif, condensed, outlined, beveled, or shadowed type."
+      ]
+    },
+    "canvas": {
+      "background": "#FFFFFF",
+      "aspect": "3:2 landscape unless the data require another ratio",
+      "margin": "7% clear outer margin",
+      "density": "Compact, aligned panels with enough room for axes and uncertainty"
+    },
+    "palette": {
+      "black": "#1A1A1A",
+      "grey": "#767676",
+      "light_grey": "#D9D9D9",
+      "blue": "#0072B2",
+      "sky_blue": "#56B4E9",
+      "bluish_green": "#009E73",
+      "orange": "#E69F00",
+      "vermillion": "#D55E00",
+      "reddish_purple": "#CC79A7"
+    },
+    "visual_language": [
+      "Use black axes and tick marks, explicit units, exact uncertainty marks, and direct labels where space permits.",
+      "Use colour-blind-safe solid colours only to distinguish datasets.",
+      "Use no background gridlines; if a reference line is scientifically necessary, keep it thin and light grey.",
+      "Use simple panel boundaries only when they clarify different denominators or scales.",
+      "Keep all non-data illustration subordinate to the plotted evidence."
+    ],
+    "avoid": [
+      "serif typography",
+      "3D charts",
+      "background gridlines",
+      "drop shadows",
+      "patterns",
+      "decorative icons",
+      "unlabelled axes",
+      "truncated axes that exaggerate effects",
+      "cross-panel comparisons across incompatible denominators",
+      "watermarks or journal branding"
+    ]
+  }
+}

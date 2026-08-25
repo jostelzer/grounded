@@ -1,0 +1,87 @@
+{
+  "mechanism": {
+    "goal": "Explain a causal or proposed biological sequence without implying more certainty than the reviewed evidence supports.",
+    "composition": [
+      "Use a single left-to-right or top-to-bottom pathway with 3–5 stages.",
+      "Give each stage one focal biological structure and one concise label.",
+      "Use arrows only for relationships stated in the evidence payload.",
+      "Visually separate directly observed steps from inferred or model-supported steps."
+    ],
+    "qa": [
+      "Every arrow direction matches the written synthesis.",
+      "No structure resembles a different molecule, organ, cell, or organism.",
+      "No proposed mechanism is styled as established fact."
+    ]
+  },
+  "comparison": {
+    "goal": "Compare outcomes, populations, interventions, or explanations without allowing layout area to imply an unsupported effect size.",
+    "composition": [
+      "Use aligned columns or rows with the same visual weight unless magnitude is explicitly encoded.",
+      "Keep comparison dimensions identical and in the same order.",
+      "Place the most decision-relevant difference first.",
+      "State incompatible denominators or populations directly in the panel."
+    ],
+    "qa": [
+      "Equal-area elements do not imply unequal magnitude.",
+      "Unequal-area elements are proportional to verified values.",
+      "Cross-panel comparisons are either valid or explicitly prohibited."
+    ]
+  },
+  "quantitative": {
+    "goal": "Show verified numerical estimates, uncertainty, scales, and denominators with geometry that is mathematically faithful.",
+    "composition": [
+      "Use a standard plot form appropriate to the values: dot-and-whisker, line, bar, or scatter.",
+      "Label axes and units and include tick marks; do not use background gridlines.",
+      "Use direct labels or a compact key with black text and coloured swatches.",
+      "Keep incompatible scales or denominators in clearly separated panels."
+    ],
+    "qa": [
+      "Every plotted coordinate is proportional to the supplied data.",
+      "Every confidence or credible interval has the supplied endpoints.",
+      "No axis, tick, value, unit, sample size, or denominator is invented or altered.",
+      "If image generation cannot satisfy exact geometry after one targeted correction, use an evidence-card comparison or the deterministic renderer fallback."
+    ]
+  },
+  "evidence-map": {
+    "goal": "Show how evidence types, populations, outcomes, and limitations relate without pretending that study count alone equals evidence strength.",
+    "composition": [
+      "Group studies or findings by the review's actual decision dimensions.",
+      "Use position and concise labels before colour.",
+      "Reserve a small explicit legend for evidence-strength or uncertainty encoding.",
+      "Keep review-level synthesis visually distinct from individual studies."
+    ],
+    "qa": [
+      "Node size, colour, and position have defined meanings.",
+      "Study quantity is not presented as quality unless the review supports that inference.",
+      "Contradictory and null findings remain visible."
+    ]
+  },
+  "timeline": {
+    "goal": "Show an evidence-backed sequence through time, distinguishing event time, measurement time, and publication time.",
+    "composition": [
+      "Use one dominant chronological axis with evenly interpretable spacing.",
+      "Label the time basis and units explicitly.",
+      "Use lanes only for genuinely different processes or evidence classes.",
+      "Keep callouts concise and place them on alternating sides when useful."
+    ],
+    "qa": [
+      "Temporal spacing is proportional unless explicitly labelled schematic.",
+      "No event appears earlier or later than the verified record.",
+      "Different time bases are not silently mixed."
+    ]
+  },
+  "mindmap": {
+    "goal": "Expose the explanatory structure of the review as a readable hierarchy rather than a decorative radial graphic.",
+    "composition": [
+      "Put the sharpened question at the root and use 4–7 primary branches.",
+      "Use short labels and no more than two branch depths unless the topic requires it.",
+      "Use a consistent evidence-strength encoding and a compact legend.",
+      "Minimize crossing connectors and preserve generous node spacing."
+    ],
+    "qa": [
+      "Every branch maps to a reviewed section or finding.",
+      "Branch size does not imply effect size unless explicitly defined.",
+      "Limitations and contrary evidence are not visually subordinated."
+    ]
+  }
+}

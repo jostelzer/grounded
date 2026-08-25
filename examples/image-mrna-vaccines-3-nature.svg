@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Myocarditis risk is concentrated, not uniform</title>
+  <desc id="desc">Two mathematically scaled dot-and-whisker panels. Panel a shows pooled myocarditis cases per million adolescent vaccine doses by sex and dose. Panel b shows excess cases per million vaccinated Nordic males aged 16 to 24 after dose 2 by vaccine product. The panels use different denominators and scales and must not be compared directly.</desc>
+  <defs>
+    <style>
+      .text{font-family:Arial,Helvetica,sans-serif;fill:#1a1a1a}
+      .title{font-size:40px;font-weight:700}
+      .subtitle{font-size:25px;font-weight:400}
+      .panel-letter{font-size:28px;font-weight:700}
+      .panel-title{font-size:28px;font-weight:700}
+      .label{font-size:25px;font-weight:400}
+      .axis-label{font-size:23px;font-weight:700}
+      .tick{font-size:21px;font-weight:400}
+      .note{font-size:21px;font-weight:400}
+      .estimate{font-size:22px;font-weight:700}
+      .axis{stroke:#1a1a1a;stroke-width:3;fill:none}
+      .divider{stroke:#8a8a8a;stroke-width:2}
+      .ci{stroke:#0072b2;stroke-width:4;stroke-linecap:round}
+      .cap{stroke:#0072b2;stroke-width:3}
+      .point{fill:#0072b2;stroke:#ffffff;stroke-width:3}
+    </style>
+  </defs>
+
+  <rect width="1536" height="1024" fill="#ffffff"/>
+
+  <text class="text title" x="768" y="62" text-anchor="middle">Myocarditis risk is concentrated, not uniform</text>
+  <text class="text subtitle" x="768" y="103" text-anchor="middle">Two datasets · compare within each panel only · whiskers are 95% confidence intervals</text>
+
+  <line class="divider" x1="768" y1="140" x2="768" y2="788"/>
+
+  <text class="text panel-letter" x="52" y="170">a</text>
+  <text class="text panel-title" x="94" y="170">Pooled adolescents, age 12–17</text>
+
+  <text class="text label" x="52" y="257">Male</text>
+  <line class="ci" x1="327.1" y1="247" x2="657.6" y2="247"/>
+  <line class="cap" x1="327.1" y1="235" x2="327.1" y2="259"/>
+  <line class="cap" x1="657.6" y1="235" x2="657.6" y2="259"/>
+  <circle class="point" cx="452.5" cy="247" r="12"/>
+  <text class="text estimate" x="452.5" y="220" text-anchor="middle">66.0</text>
+
+  <text class="text label" x="52" y="362">Female</text>
+  <line class="ci" x1="157.5" y1="352" x2="211.6" y2="352"/>
+  <line class="cap" x1="157.5" y1="340" x2="157.5" y2="364"/>
+  <line class="cap" x1="211.6" y1="340" x2="211.6" y2="364"/>
+  <circle class="point" cx="177.7" cy="352" r="12"/>
+  <text class="text estimate" x="177.7" y="325" text-anchor="middle">10.1</text>
+
+  <text class="text label" x="52" y="467">Dose 2</text>
+  <line class="ci" x1="312.9" y1="457" x2="604.5" y2="457"/>
+  <line class="cap" x1="312.9" y1="445" x2="312.9" y2="469"/>
+  <line class="cap" x1="604.5" y1="445" x2="604.5" y2="469"/>
+  <circle class="point" cx="425.0" cy="457" r="12"/>
+  <text class="text estimate" x="425.0" y="430" text-anchor="middle">60.4</text>
+
+  <text class="text label" x="52" y="572">Dose 1</text>
+  <line class="ci" x1="170.8" y1="562" x2="284.8" y2="562"/>
+  <line class="cap" x1="170.8" y1="550" x2="170.8" y2="574"/>
+  <line class="cap" x1="284.8" y1="550" x2="284.8" y2="574"/>
+  <circle class="point" cx="209.6" cy="562" r="12"/>
+  <text class="text estimate" x="209.6" y="535" text-anchor="middle">16.6</text>
+
+  <line class="axis" x1="128" y1="634" x2="718" y2="634"/>
+  <g class="text tick" text-anchor="middle">
+    <line class="axis" x1="128" y1="634" x2="128" y2="648"/><text x="128" y="676">0</text>
+    <line class="axis" x1="226.3" y1="634" x2="226.3" y2="648"/><text x="226.3" y="676">20</text>
+    <line class="axis" x1="324.7" y1="634" x2="324.7" y2="648"/><text x="324.7" y="676">40</text>
+    <line class="axis" x1="423" y1="634" x2="423" y2="648"/><text x="423" y="676">60</text>
+    <line class="axis" x1="521.3" y1="634" x2="521.3" y2="648"/><text x="521.3" y="676">80</text>
+    <line class="axis" x1="619.7" y1="634" x2="619.7" y2="648"/><text x="619.7" y="676">100</text>
+    <line class="axis" x1="718" y1="634" x2="718" y2="648"/><text x="718" y="676">120</text>
+  </g>
+  <text class="text axis-label" x="423" y="720" text-anchor="middle">Cases per million vaccine doses</text>
+  <text class="text note" x="423" y="756" text-anchor="middle">15 observational studies · 39.6 million doses</text>
+  <text class="text note" x="423" y="790" text-anchor="middle">Sex and dose are separate pooled subgroup analyses</text>
+
+  <text class="text panel-letter" x="808" y="170">b</text>
+  <text class="text panel-title" x="850" y="170">Nordic males, age 16–24</text>
+
+  <text class="text label" x="790" y="343">BNT162b2</text>
+  <line class="ci" x1="894.1" y1="333" x2="976.1" y2="333"/>
+  <line class="cap" x1="894.1" y1="321" x2="894.1" y2="345"/>
+  <line class="cap" x1="976.1" y1="321" x2="976.1" y2="345"/>
+  <circle class="point" cx="935.2" cy="333" r="12"/>
+  <text class="text estimate" x="935.2" y="306" text-anchor="middle">55.5</text>
+
+  <text class="text label" x="790" y="520">mRNA-1273</text>
+  <line class="ci" x1="1012.9" y1="510" x2="1427.4" y2="510"/>
+  <line class="cap" x1="1012.9" y1="498" x2="1012.9" y2="522"/>
+  <line class="cap" x1="1427.4" y1="498" x2="1427.4" y2="522"/>
+  <circle class="point" cx="1220.3" cy="510" r="12"/>
+  <text class="text estimate" x="1220.3" y="483" text-anchor="middle">183.9</text>
+
+  <line class="axis" x1="812" y1="634" x2="1478" y2="634"/>
+  <g class="text tick" text-anchor="middle">
+    <line class="axis" x1="812" y1="634" x2="812" y2="648"/><text x="812" y="676">0</text>
+    <line class="axis" x1="923" y1="634" x2="923" y2="648"/><text x="923" y="676">50</text>
+    <line class="axis" x1="1034" y1="634" x2="1034" y2="648"/><text x="1034" y="676">100</text>
+    <line class="axis" x1="1145" y1="634" x2="1145" y2="648"/><text x="1145" y="676">150</text>
+    <line class="axis" x1="1256" y1="634" x2="1256" y2="648"/><text x="1256" y="676">200</text>
+    <line class="axis" x1="1367" y1="634" x2="1367" y2="648"/><text x="1367" y="676">250</text>
+    <line class="axis" x1="1478" y1="634" x2="1478" y2="648"/><text x="1478" y="676">300</text>
+  </g>
+  <text class="text axis-label" x="1145" y="720" text-anchor="middle">Excess cases per million vaccinated after dose 2</text>
+  <text class="text note" x="1145" y="756" text-anchor="middle">Four linked national cohorts · 28-day window</text>
+
+  <line class="divider" x1="96" y1="846" x2="1440" y2="846"/>
+  <text class="text note" x="110" y="888">Panel a = observed cases per million vaccine doses</text>
+  <text class="text note" x="622" y="888">Panel b = excess cases per million vaccinated people</text>
+  <text class="text note" x="1160" y="888">95% CI = confidence interval</text>
+  <text class="text panel-title" x="768" y="952" text-anchor="middle">Do not compare magnitudes across panels</text>
+</svg>

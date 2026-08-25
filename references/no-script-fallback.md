@@ -23,26 +23,28 @@ The ledger is now a markdown table you maintain in `notes.md` (or in your workin
 
 ### B1. Search
 
-**OpenAlex** (all fields, relevance-ranked). Fetch:
+**OpenAlex** (all fields, relevance-ranked). Fetch the first page with a cursor:
 
 ```
-https://api.openalex.org/works?search=YOUR+QUERY+TERMS&filter=type:article|review,is_paratext:false,from_publication_date:2015-01-01&per-page=25&select=doi,title,authorships,publication_year,cited_by_count,primary_location,type,is_retracted,abstract_inverted_index
+https://api.openalex.org/works?search=YOUR+OPENALEX_QUERY&filter=type:article|review,is_paratext:false,from_publication_date:2015-01-01&per_page=100&cursor=*&select=doi,title,authorships,publication_year,cited_by_count,primary_location,type,is_retracted,abstract_inverted_index&api_key=YOUR_OPENALEX_API_KEY
 ```
 
-Ask the fetch prompt for: title, doi, year, journal, citation count, type, is_retracted, and the abstract for each result. Drop `from_publication_date` for foundational work; add `&sort=cited_by_count:desc` for the most-cited pass.
+Ask the fetch prompt for the results plus `meta.count` and `meta.next_cursor`. Follow `next_cursor` until you reach the planned limit or it becomes null; do not infer saturation from the first page. Record title, DOI, year, journal, citation count, type, `is_retracted`, and abstract. Drop `from_publication_date` for foundational work; add `&sort=-cited_by_count` for the most-cited pass. Use a query written for OpenAlex, not PubMed field tags.
 
 **PubMed** (biomedical). Two steps:
 
 ```
-https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=YOUR+QUERY&retmax=20&retmode=json&sort=relevance
+https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=YOUR+PUBMED_QUERY&retstart=0&retmax=100&retmode=json&sort=relevance
 https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=PMID1,PMID2,PMID3&retmode=xml
 ```
 
-Ask the second fetch for title, journal, year, DOI, abstract, and publication types per record.
+Ask the first fetch for `count` as well as the PMID list. Repeat it with `retstart=100`, `200`, … until the planned limit or count is reached, fetching each PMID batch with the second URL. Extract title, journal, year, DOI, abstract, and publication types. Exclude editorials, letters, comments, news, corrections/retraction notices, and records without an eligible research/review/guideline publication type. Journal/index inclusion is not proof of peer review; confirm ambiguous venues manually.
 
 Use the regular web-search tool only to *discover* what something is called or to locate a paper whose title you know. Never cite from a search-result snippet or a publisher web page — everything must come back through the API records above.
 
 Run the same angle coverage as `search-playbook.md`: reviews first, then primary studies, then most-cited, then most-recent, then an explicit contradiction pass.
+
+For citation chasing, fetch each central OpenAlex work and read its `referenced_works` for backward links. For forward links, page through `https://api.openalex.org/works?filter=cites:OPENALEX_ID&sort=-cited_by_count&per_page=100&cursor=*&api_key=YOUR_OPENALEX_API_KEY`. Add accepted candidates to the ledger with seed and direction. Because the fallback has no script to write it, maintain the same `search_log.md` columns manually.
 
 ### B2. Read
 
