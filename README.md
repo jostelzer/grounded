@@ -46,39 +46,23 @@ Four modes: **small**, **medium**, **large**, and **image**. Name one in your re
 
 ## Ways to use it
 
-Just ask in plain language — no special syntax. Some prompts that trigger the skill:
+Name the skill in your prompt so it triggers reliably:
 
 **Answer a research question**
 
-> Scientific review: does intermittent fasting improve insulin sensitivity?
-
-> Is there good evidence that cold exposure improves mood? Quick review.
+> Use the scientific-review skill: does intermittent fasting improve insulin sensitivity?
 
 **Get an overview of a field**
 
-> Give me a medium review of what's known about the gut microbiome's role in Parkinson's disease.
-
-> Large review: the state of the evidence on psychedelics for treatment-resistant depression.
-
-**Support your own writing**
-
-> I'm writing a paper on sleep and memory consolidation — write me a related-work section with verified citations.
-
-> Write the background section for a grant proposal on tau imaging in early Alzheimer's.
-
-**Check existing work**
-
-> Here's my draft introduction [paste or attach]. Check every claim and reference against the literature and flag anything unsupported, misattributed, or retracted.
-
-> Are these five references real, and do they actually say what I claim they say?
+> Use the scientific-review skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
 
 **Settle a claim you've seen circulating**
 
-> I keep reading that blue light before bed ruins sleep. What does the peer-reviewed evidence actually show?
+> I keep reading that blue light before bed ruins sleep. Use the scientific-review skill — what does the evidence actually show?
 
 **Produce a figure**
 
-> Image mode: how do mRNA vaccines work?
+> Use the scientific-review skill in image mode: how do mRNA vaccines work?
 
 Practical notes: unless you say otherwise you get a **small** review (a fast, dense ~500-word answer) — say `medium` or `large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
 
