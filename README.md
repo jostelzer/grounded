@@ -2,7 +2,11 @@
 
 An agent skill that writes scientific literature reviews built **only on real, verified, peer-reviewed citations**. Works with any LLM agent that can read files and run Python or fetch URLs — ChatGPT, Claude, and others.
 
-The core problem this skill solves: LLMs fabricate references. Here, **no citation is ever recalled from memory** — every source comes from a live search of OpenAlex and PubMed, every DOI is verified against Crossref (including retraction screening via publisher and Retraction Watch update metadata), and the reference list is generated programmatically from the verified records. A citation that cannot be found and verified does not exist for the review.
+What makes it great:
+
+- **You choose the depth.** One word — `small`, `medium`, `large`, or `image` — scales the same rigorous pipeline from a fast ~500-word answer to a full field survey with 70+ sources, or a review topped with a scientific illustration.
+- **Ultra-compact reviews.** No filler: headings that state the finding, bullets that carry effect sizes and confidence intervals, tables where studies line up — the evidence density of a good systematic review at a fraction of the length.
+- **Only real, published, cross-referenced science.** Every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref (with retraction screening via publisher and Retraction Watch metadata), and the reference list is generated programmatically from the verified records — so every citation resolves, every time.
 
 ## What you get
 
