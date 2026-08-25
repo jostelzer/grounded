@@ -40,6 +40,44 @@ Four modes: **small**, **medium**, **large**, and **image**. Name one in your re
 
 **Image mode** (experimental) runs the small pipeline and then additionally produces one scientific illustration built from the verified findings — self-explanatory to an educated non-specialist, with a glossary for every abbreviation. The skill can also check an existing draft's claims and references against the literature.
 
+## Ways to use it
+
+Just ask in plain language — no special syntax. Some prompts that trigger the skill:
+
+**Answer a research question**
+
+> Scientific review: does intermittent fasting improve insulin sensitivity?
+
+> Is there good evidence that cold exposure improves mood? Quick review.
+
+**Get an overview of a field**
+
+> Give me a medium review of what's known about the gut microbiome's role in Parkinson's disease.
+
+> Large review: the state of the evidence on psychedelics for treatment-resistant depression.
+
+**Support your own writing**
+
+> I'm writing a paper on sleep and memory consolidation — write me a related-work section with verified citations.
+
+> Write the background section for a grant proposal on tau imaging in early Alzheimer's.
+
+**Check existing work**
+
+> Here's my draft introduction [paste or attach]. Check every claim and reference against the literature and flag anything unsupported, misattributed, or retracted.
+
+> Are these five references real, and do they actually say what I claim they say?
+
+**Settle a claim you've seen circulating**
+
+> I keep reading that blue light before bed ruins sleep. What does the peer-reviewed evidence actually show?
+
+**Produce a figure**
+
+> Image mode: how do mRNA vaccines work?
+
+Practical notes: unless you say otherwise you get a **small** review (a fast, dense ~500-word answer) — say `medium` or `large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
+
 ## How it works
 
 1. **Scope** the question into the angles a thorough reviewer would cover (existing reviews, largest primary studies, mechanism, contradictory findings, harms, methodological critiques, …).
