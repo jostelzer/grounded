@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1330" width="900" height="1330" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif">
+  <title>How an mRNA vaccine works</title>
+  <desc>A four-step figure: an injected lipid nanoparticle carrying mRNA; muscle cells translating the mRNA into spike protein; the droplet and mRNA acting as an immune alarm that activates dendritic cells; and a germinal centre in a lymph node refining antibodies over months. A results strip gives trial efficacy and waning, and a glossary band at the bottom defines every term.</desc>
+
+  <rect x="0" y="0" width="900" height="1330" fill="#ffffff"/>
+
+  <!-- ===== Header ===== -->
+  <text x="40" y="48" font-size="27" font-weight="700" fill="#0f172a">How an mRNA vaccine works</text>
+  <text x="40" y="78" font-size="14.5" fill="#5b6879">From an injected fatty droplet to antibodies that keep improving for months</text>
+  <line x1="40" y1="96" x2="860" y2="96" stroke="#d7dee8" stroke-width="1"/>
+
+  <!-- ===== Step 1 ===== -->
+  <rect x="40" y="110" width="820" height="175" rx="12" fill="#f6f8fb" stroke="#d7dee8"/>
+  <!-- syringe -->
+  <rect x="72" y="165" width="64" height="22" rx="3" fill="#ffffff" stroke="#5b6879" stroke-width="1.6"/>
+  <rect x="74" y="167" width="26" height="18" fill="#dbeafe"/>
+  <line x1="60" y1="176" x2="72" y2="176" stroke="#5b6879" stroke-width="3"/>
+  <line x1="60" y1="167" x2="60" y2="185" stroke="#5b6879" stroke-width="3"/>
+  <line x1="136" y1="176" x2="160" y2="176" stroke="#5b6879" stroke-width="2"/>
+  <text x="104" y="205" font-size="10.5" text-anchor="middle" fill="#5b6879">injection</text>
+  <!-- lipid nanoparticle -->
+  <circle cx="196" cy="176" r="34" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <path d="M180 184 q8 -14 16 0 q8 14 16 0" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="196" y="168" font-size="11" font-weight="700" text-anchor="middle" fill="#1d4ed8">LNP</text>
+  <text x="196" y="228" font-size="11" text-anchor="middle" fill="#5b6879">mRNA inside</text>
+
+  <text x="262" y="150" font-size="17" font-weight="700" fill="#0f172a">1. A fatty droplet delivers a set of instructions</text>
+  <text x="262" y="176" font-size="13.5" fill="#24303f">• No virus is injected. The vaccine carries mRNA — a short-lived</text>
+  <text x="272" y="196" font-size="13.5" fill="#24303f">copy of one gene — wrapped in a fatty lipid nanoparticle (LNP).</text>
+  <text x="262" y="222" font-size="13.5" fill="#24303f">• The RNA is built with a modified letter (m1Ψ) so the body's alarm</text>
+  <text x="272" y="242" font-size="13.5" fill="#24303f">sensors ignore it long enough for the message to be read.</text>
+
+  <!-- ===== Step 2 ===== -->
+  <rect x="40" y="300" width="820" height="175" rx="12" fill="#f6f8fb" stroke="#d7dee8"/>
+  <!-- muscle cell -->
+  <rect x="62" y="330" width="175" height="115" rx="40" fill="#eef6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <circle cx="98" cy="370" r="15" fill="#ffffff" stroke="#5b6879" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="98" y="396" font-size="10.5" text-anchor="middle" fill="#5b6879">endosome</text>
+  <ellipse cx="158" cy="366" rx="15" ry="9" fill="#fde68a" stroke="#b45309" stroke-width="1.4"/>
+  <ellipse cx="158" cy="376" rx="12" ry="7" fill="#fde68a" stroke="#b45309" stroke-width="1.4"/>
+  <text x="158" y="404" font-size="10.5" text-anchor="middle" fill="#5b6879">ribosome</text>
+  <path d="M186 330 l0 -14 M180 316 l12 0" stroke="#0d9488" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M206 330 l0 -14 M200 316 l12 0" stroke="#0d9488" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="196" y="308" font-size="10.5" text-anchor="middle" fill="#0d9488">spike protein</text>
+
+  <text x="262" y="340" font-size="17" font-weight="700" fill="#0f172a">2. Your own cells build one harmless viral protein</text>
+  <text x="262" y="366" font-size="13.5" fill="#24303f">• The droplet is swallowed into a bubble (endosome), the mRNA slips</text>
+  <text x="272" y="386" font-size="13.5" fill="#24303f">out, and ribosomes translate it into spike protein.</text>
+  <text x="262" y="412" font-size="13.5" fill="#24303f">• Spike appears on the cell surface as the antigen. It is one piece of</text>
+  <text x="272" y="432" font-size="13.5" fill="#24303f">the virus and cannot cause an infection.</text>
+
+  <!-- ===== Step 3 (mouse-evidence, dashed) ===== -->
+  <rect x="40" y="490" width="820" height="175" rx="12" fill="#fffbeb" stroke="#b45309" stroke-width="1.4" stroke-dasharray="7 5"/>
+  <circle cx="100" cy="560" r="26" fill="#fef3c7" stroke="#b45309" stroke-width="1.8"/>
+  <path d="M100 534 l0 -12 M126 560 l12 0 M100 586 l0 12 M74 560 l-12 0 M118 542 l9 -9 M118 578 l9 9 M82 578 l-9 9 M82 542 l-9 -9" stroke="#b45309" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="100" y="614" font-size="10.5" text-anchor="middle" fill="#5b6879">dendritic cell</text>
+  <line x1="150" y1="560" x2="172" y2="560" stroke="#5b6879" stroke-width="2"/>
+  <path d="M172 560 l-7 -4 l0 8 z" fill="#5b6879"/>
+  <ellipse cx="206" cy="560" rx="30" ry="23" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.8"/>
+  <text x="206" y="614" font-size="10.5" text-anchor="middle" fill="#5b6879">lymph node</text>
+
+  <text x="262" y="530" font-size="17" font-weight="700" fill="#0f172a">3. The droplet itself sounds the alarm</text>
+  <rect x="645" y="514" width="150" height="21" rx="10" fill="#fde68a" stroke="#b45309" stroke-width="1"/>
+  <text x="654" y="529" font-size="11.5" fill="#7c3d12">mainly mouse evidence</text>
+  <text x="262" y="556" font-size="13.5" fill="#24303f">• The droplet is not just packaging: in mice it also works as an</text>
+  <text x="272" y="576" font-size="13.5" fill="#24303f">adjuvant, an ingredient that strengthens the immune response.</text>
+  <text x="262" y="602" font-size="13.5" fill="#24303f">• The mRNA itself triggers type I interferon, which matures dendritic</text>
+  <text x="272" y="622" font-size="13.5" fill="#24303f">cells that carry the antigen to a nearby lymph node.</text>
+
+  <!-- ===== Step 4 ===== -->
+  <rect x="40" y="680" width="820" height="175" rx="12" fill="#f6f8fb" stroke="#d7dee8"/>
+  <ellipse cx="110" cy="750" rx="42" ry="34" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.8"/>
+  <circle cx="94" cy="740" r="6" fill="#7c3aed"/>
+  <circle cx="120" cy="736" r="6" fill="#7c3aed"/>
+  <circle cx="104" cy="762" r="6" fill="#7c3aed"/>
+  <circle cx="128" cy="758" r="6" fill="#7c3aed"/>
+  <text x="110" y="806" font-size="10.5" text-anchor="middle" fill="#5b6879">germinal centre</text>
+  <line x1="160" y1="750" x2="184" y2="750" stroke="#5b6879" stroke-width="2"/>
+  <path d="M184 750 l-7 -4 l0 8 z" fill="#5b6879"/>
+  <path d="M212 764 l0 -14 M212 750 l-11 -12 M212 750 l11 -12" stroke="#0d9488" stroke-width="3" stroke-linecap="round"/>
+  <text x="212" y="806" font-size="10.5" text-anchor="middle" fill="#5b6879">antibody</text>
+
+  <text x="262" y="720" font-size="17" font-weight="700" fill="#0f172a">4. Antibodies are refined for months afterwards</text>
+  <text x="262" y="746" font-size="13.5" fill="#24303f">• In the lymph node a germinal centre forms: B cells mutate their</text>
+  <text x="272" y="766" font-size="13.5" fill="#24303f">antibody genes and compete, and only the best binders survive.</text>
+  <text x="262" y="792" font-size="13.5" fill="#24303f">• In people this reaction lasted at least 12 weeks, and mutation rose</text>
+  <text x="272" y="812" font-size="13.5" fill="#24303f">3.5-fold over 6 months, leaving memory B cells and plasma cells.</text>
+
+  <!-- ===== Results strip ===== -->
+  <rect x="40" y="870" width="820" height="95" rx="12" fill="#ecfdf5" stroke="#0d9488" stroke-width="1.2"/>
+  <text x="62" y="900" font-size="15" font-weight="700" fill="#0f172a">What this achieves — and where it fades</text>
+  <text x="62" y="926" font-size="13" fill="#24303f">Randomised trials: 95% and 94.1% efficacy against symptomatic COVID-19 (43,448 and 30,420 people).</text>
+  <text x="62" y="948" font-size="13" fill="#24303f">By 6 months, protection against infection fell about 21 points; against severe disease about 10 points.</text>
+
+  <!-- ===== Glossary band ===== -->
+  <rect x="40" y="985" width="820" height="325" rx="12" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="60" y="1013" font-size="14" font-weight="700" fill="#0f172a">Glossary — plain-language meaning of every term in this figure</text>
+
+  <!-- column 1 -->
+  <text x="60" y="1043" font-size="13" fill="#24303f"><tspan font-weight="700">mRNA (messenger RNA)</tspan> — a short-lived working copy of</text>
+  <text x="60" y="1058" font-size="13" fill="#24303f">a gene; a cell reads it to build one protein.</text>
+  <text x="60" y="1077" font-size="13" fill="#24303f"><tspan font-weight="700">Lipid nanoparticle (LNP)</tspan> — a tiny fatty bubble that</text>
+  <text x="60" y="1092" font-size="13" fill="#24303f">protects the mRNA and carries it inside a cell.</text>
+  <text x="60" y="1111" font-size="13" fill="#24303f"><tspan font-weight="700">m1Ψ (N1-methylpseudouridine)</tspan> — a modified RNA</text>
+  <text x="60" y="1126" font-size="13" fill="#24303f">letter that keeps the body from destroying the message.</text>
+  <text x="60" y="1145" font-size="13" fill="#24303f"><tspan font-weight="700">Ribosome</tspan> — the cell's protein-making machine; it reads</text>
+  <text x="60" y="1160" font-size="13" fill="#24303f">the mRNA and assembles the protein it specifies.</text>
+  <text x="60" y="1179" font-size="13" fill="#24303f"><tspan font-weight="700">Endosome</tspan> — the bubble a cell makes when it swallows</text>
+  <text x="60" y="1194" font-size="13" fill="#24303f">something from outside; the mRNA escapes from it.</text>
+  <text x="60" y="1213" font-size="13" fill="#24303f"><tspan font-weight="700">Spike protein</tspan> — one surface protein of the virus. On its</text>
+  <text x="60" y="1228" font-size="13" fill="#24303f">own it cannot infect anything; it is only the target.</text>
+  <text x="60" y="1247" font-size="13" fill="#24303f"><tspan font-weight="700">Antigen</tspan> — whatever the immune system recognises and</text>
+  <text x="60" y="1262" font-size="13" fill="#24303f">builds a targeted response against.</text>
+  <text x="60" y="1281" font-size="13" fill="#24303f"><tspan font-weight="700">Adjuvant</tspan> — an ingredient that makes a vaccine provoke</text>
+  <text x="60" y="1296" font-size="13" fill="#24303f">a stronger response than the antigen alone.</text>
+
+  <!-- column 2 -->
+  <text x="478" y="1043" font-size="13" fill="#24303f"><tspan font-weight="700">Type I interferon</tspan> — an early alarm signal released by</text>
+  <text x="478" y="1058" font-size="13" fill="#24303f">cells that alerts and matures nearby immune cells.</text>
+  <text x="478" y="1077" font-size="13" fill="#24303f"><tspan font-weight="700">Dendritic cell</tspan> — an immune cell that carries antigen to</text>
+  <text x="478" y="1092" font-size="13" fill="#24303f">a lymph node and starts the response there.</text>
+  <text x="478" y="1111" font-size="13" fill="#24303f"><tspan font-weight="700">Lymph node</tspan> — a small organ where immune cells meet</text>
+  <text x="478" y="1126" font-size="13" fill="#24303f">and coordinate the response to a vaccine.</text>
+  <text x="478" y="1145" font-size="13" fill="#24303f"><tspan font-weight="700">Germinal centre</tspan> — a temporary training camp inside a</text>
+  <text x="478" y="1160" font-size="13" fill="#24303f">lymph node where antibody-making B cells are selected.</text>
+  <text x="478" y="1179" font-size="13" fill="#24303f"><tspan font-weight="700">Memory B and plasma cells</tspan> — long-lived cells that recall</text>
+  <text x="478" y="1194" font-size="13" fill="#24303f">the antigen or keep secreting antibody.</text>
+  <text x="478" y="1213" font-size="13" fill="#24303f"><tspan font-weight="700">Antibody</tspan> — a Y-shaped protein that sticks to the antigen</text>
+  <text x="478" y="1228" font-size="13" fill="#24303f">and blocks or marks the virus.</text>
+  <text x="478" y="1247" font-size="13" fill="#24303f"><tspan font-weight="700">Efficacy</tspan> — how much less often disease occurred in the</text>
+  <text x="478" y="1262" font-size="13" fill="#24303f">vaccinated group than in the comparison group.</text>
+  <text x="478" y="1281" font-size="13" fill="#24303f"><tspan font-weight="700">Dashed amber box</tspan> — step shown mainly by mouse</text>
+  <text x="478" y="1296" font-size="13" fill="#24303f">studies, not yet measured as directly in people.</text>
+</svg>

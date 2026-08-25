@@ -29,7 +29,7 @@ Example (excerpt from a real small-mode run):
 >
 > …
 
-Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so the compact style stays readable for non-specialists. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md) — and [`examples/eli5-creatine-depression.md`](examples/eli5-creatine-depression.md) answers the same question from the same verified sources in eli5 mode, where every sentence is very simple English ("Scientists collected 11 studies where about 1,100 people got either creatine or a dummy pill…").
+Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so the compact style stays readable for non-specialists. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md).
 
 ## Modes and sizes
 
@@ -46,31 +46,43 @@ Five modes: **small**, **medium**, **large**, **eli5**, and **image**. Name one 
 
 ## Ways to use it
 
-Name the skill in your prompt so it triggers reliably:
+Name the skill in your prompt so it triggers reliably. Every prompt below has actually been run through the skill — each links to its full, unedited output:
 
 **Answer a research question**
 
 > Use the scientific-review skill: does intermittent fasting improve insulin sensitivity?
 
+→ [output](examples/small-intermittent-fasting-insulin.md) · small · 15 verified sources
+
 **Get an overview of a field**
 
 > Use the scientific-review skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
+
+→ [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 50 verified sources (one retracted paper caught and excluded during search)
 
 **Explain it in very simple terms**
 
 > Use scientific review skill in ELI5 mode to explain me why clouds are white
 
+→ [output](examples/eli5-why-clouds-are-white.md) · eli5 · 16 verified sources
+
 **Survey a field in depth**
 
 > Make me a large scientific review about benefits of mediterranean diet
+
+→ [output](examples/large-mediterranean-diet.md) · large · 80 verified sources, 14 sections (the retracted-and-republished PREDIMED trial handled as its own section)
 
 **Settle a claim you've seen circulating**
 
 > I keep reading that blue light before bed ruins sleep. Use the scientific-review skill — what does the evidence actually show?
 
+→ [output](examples/small-blue-light-sleep.md) · small · 18 verified sources
+
 **Produce a figure**
 
 > Use the scientific-review skill in image mode: how do mRNA vaccines work?
+
+→ [output](examples/image-mrna-vaccines.md) · image · 20 verified sources plus an SVG illustration with glossary
 
 Practical notes: unless you say otherwise you get a **small** review (a fast, dense ~500-word answer) — say `medium` or `large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
 
