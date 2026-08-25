@@ -1,6 +1,6 @@
 # Scientific Review Skill
 
-An agent skill that writes scientific literature reviews built **only on real, verified, peer-reviewed citations**. Works with Claude (Claude Code, claude.ai), ChatGPT, and any LLM agent that can read files and run Python or fetch URLs.
+An agent skill that writes scientific literature reviews built **only on real, verified, peer-reviewed citations**. Works with any LLM agent that can read files and run Python or fetch URLs — ChatGPT, Claude, and others.
 
 The core problem this skill solves: LLMs fabricate references. Here, **no citation is ever recalled from memory** — every source comes from a live search of OpenAlex and PubMed, every DOI is verified against Crossref (including retraction screening via publisher and Retraction Watch update metadata), and the reference list is generated programmatically from the verified records. A citation that cannot be found and verified does not exist for the review.
 
@@ -25,7 +25,7 @@ Example (excerpt from a real small-mode run):
 >
 > …
 
-Every DOI in the sources block resolves, and every cited paper was screened for retraction.
+Every DOI in the sources block resolves, and every cited paper was screened for retraction. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md).
 
 ## Modes and sizes
 
@@ -86,7 +86,7 @@ Practical notes: unless you say otherwise you get a **small** review (a fast, de
 4. **Verify** every entry against Crossref (`scripts/verify_citations.py`) — DOI, title, year, article type, and retraction status. A failure is a hard stop: the source is fixed or removed before writing.
 5. **Write** the draft citing ledger keys, then render citations and the reference list from the verified metadata (`scripts/format_references.py`), which refuses to run on any unverified key.
 
-If the agent's Python sandbox has no network access (e.g. claude.ai), `references/no-script-fallback.md` runs the same pipeline through the agent's web-fetch tool against the same APIs — the verification standard is identical.
+If the agent's Python sandbox has no network access (e.g. ChatGPT's code interpreter, claude.ai), `references/no-script-fallback.md` runs the same pipeline through the agent's web-fetch tool against the same APIs — the verification standard is identical.
 
 ## Requirements
 
@@ -115,7 +115,7 @@ git clone https://github.com/jostelzer/scientific-review-skill.git scientific-re
 
 ### ChatGPT
 
-Nothing in the skill is Claude-specific — `SKILL.md` is the operating instructions, and the rest are files the agent loads on demand. Two ways to set it up:
+`SKILL.md` is the operating instructions; the rest are files the agent loads on demand. Two ways to set it up:
 
 **As a Project** (quickest):
 
@@ -134,7 +134,7 @@ Nothing in the skill is Claude-specific — `SKILL.md` is the operating instruct
 4. Enable the **Web Search** and **Code Interpreter** capabilities.
 5. Save, then ask it for a review.
 
-One expected difference from Claude Code: ChatGPT's Python sandbox has no internet access, so the skill's built-in network check (Step 0 in `SKILL.md`) fails and the agent switches to `references/no-script-fallback.md`, which runs the identical search-and-verify pipeline through web browsing against the same OpenAlex/PubMed/Crossref APIs. The verification standard doesn't change — this is the designed path for sandboxed environments, the same one used on claude.ai.
+Note: ChatGPT's Python sandbox has no internet access, so the skill's built-in network check (Step 0 in `SKILL.md`) detects this and the agent switches to `references/no-script-fallback.md`, which runs the identical search-and-verify pipeline through web browsing against the same OpenAlex/PubMed/Crossref APIs. The verification standard doesn't change — this is the designed path for any sandboxed environment.
 
 ### Other agents
 
@@ -145,7 +145,12 @@ Give the agent the folder as a working directory or attached files, use `SKILL.m
 - `SKILL.md` — the skill: workflow, mode routing, and the rules that do not bend.
 - `scripts/` — search (`find_papers.py`), full text (`fetch_fulltext.py`), verification (`verify_citations.py`), and reference formatting (`format_references.py`).
 - `references/` — detailed guides loaded as needed: search playbook, evidence weighing, writing guide, citation rules, size tiers, media modes, and the no-network fallback pipeline.
+- `examples/` — full, unedited example outputs.
 - `evals/` — evaluation cases used to test the skill.
+
+## How it's tested
+
+`evals/evals.json` holds the evaluation cases the skill is developed against: review prompts across the modes, each with an expected-output specification — verified peer-reviewed references in the size-appropriate count, contrary evidence included, and the fixed output format (citation-free TL;DR, punchline headings, cited bullets, DOI-linked sources block). If you change the skill, run these before relying on it.
 
 ## License
 
