@@ -2,7 +2,7 @@
 
 **Default is small.** Do not ask the user which size; produce small unless they ask for more or the question obviously needs it. Bigger sizes add sections, bullets and tables — never longer sentences. The layout (question → TL;DR → punchline sections of bullets → sources) is identical at every size; see `writing-guide.md`.
 
-The five named modes are `small`, `medium`, `large`/`big`, `image`, and `mindmap`. `Big` is an alias for large. Image and mindmap are explicit-only experimental modes: each uses small-tier search and writing depth, then adds the requested media by following `media-modes.md`.
+The six named modes are `small`, `medium`, `large`/`big`, `eli5`, `image`, and `mindmap`. `Big` is an alias for large. ELI5 is small with the language register swapped for very simple English (see below and `writing-guide.md`). Image and mindmap are explicit-only experimental modes: each uses small-tier search and writing depth, then adds the requested media by following `media-modes.md`.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
@@ -26,6 +26,10 @@ More angles, not more words per bullet: add mechanism, moderators, measurement p
 ## Large / big
 
 Full coverage of the field: history, competing frameworks, generalisability, quality of the evidence base, research agenda — each as punchline sections. Multiple tables. Citation chasing on the central papers. Use only when the user asks for `large` or `big`.
+
+## ELI5
+
+Small in every number that matters — same angles, same search depth, same 10–20 verified sources, same citation and verification rules — but written in very simple English for a reader with no science background. Explicit-only: use when the user asks for `eli5`, "explain like I'm five", or plainly asks for very simple language. The word budget may stretch slightly above small (to ~800) because explaining in plain words takes more of them; sections may be fewer (3–4). Language rules are in `writing-guide.md` under "ELI5 language".
 
 ## Image and mindmap
 

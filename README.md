@@ -29,11 +29,11 @@ Example (excerpt from a real small-mode run):
 >
 > …
 
-Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so the compact style stays readable for non-specialists. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md).
+Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so the compact style stays readable for non-specialists. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md) — and [`examples/eli5-creatine-depression.md`](examples/eli5-creatine-depression.md) answers the same question from the same verified sources in eli5 mode, where every sentence is very simple English ("Scientists collected 11 studies where about 1,100 people got either creatine or a dummy pill…").
 
 ## Modes and sizes
 
-Four modes: **small**, **medium**, **large**, and **image**. Name one in your request ("medium review of …", "image mode: …") or say nothing and get small.
+Five modes: **small**, **medium**, **large**, **eli5**, and **image**. Name one in your request ("medium review of …", "eli5: …", "image mode: …") or say nothing and get small.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
@@ -42,7 +42,7 @@ Four modes: **small**, **medium**, **large**, and **image**. Name one in your re
 | Sources | 10–20 | 30–60 | 70–150 |
 | Full texts read | 2–4 load-bearing papers | 8–15 | 25+ |
 
-**Image mode** (experimental) runs the small pipeline and then additionally produces one scientific illustration built from the verified findings — self-explanatory to an educated non-specialist, with a glossary for every abbreviation. The skill can also check an existing draft's claims and references against the literature.
+**ELI5 mode** is small with the language swapped for very simple English — same searches, same 10–20 verified sources, same citations, but written so a reader with no science background follows every sentence. **Image mode** (experimental) runs the small pipeline and then additionally produces one scientific illustration built from the verified findings — self-explanatory to an educated non-specialist, with a glossary for every abbreviation. The skill can also check an existing draft's claims and references against the literature.
 
 ## Ways to use it
 

@@ -74,6 +74,19 @@ A compact block at the end: one line per source, `**Author 2026** Title. *Journa
 - **Active and direct.** Name who found what.
 - Define an abbreviation once, at first use.
 
+## ELI5 language
+
+In `eli5` mode only. The evidence pipeline, structure, citations, and verification are exactly small mode; only the register changes. Write for a smart reader with no science background at all.
+
+- **Everyday words only.** "People in the study" not "participants"; "made-up pill" or "dummy pill" not "placebo"; "the studies disagree" not "heterogeneity". If a ten-year-old wouldn't know the word, don't use it.
+- **Short sentences.** One idea per sentence. No semicolons, no nested clauses.
+- **Numbers stay, but say what they mean.** Not "SMD −0.34 (95% CI −0.68 to −0.00)" but "the people taking creatine improved a little more — about 2 points on a 52-point mood questionnaire, which is too small a change for most people to feel. And the studies were so different from each other that the real effect could be zero."
+- **Jargon is rewritten, not linked.** Term links are for standard modes; here the plain words replace the term entirely. If a term truly cannot be avoided (a scale's name, a drug class), name it once, explain it in the same sentence in plain words, and give it the usual verified term link.
+- **Honesty survives the simplification.** "We don't really know yet" instead of silently dropping uncertainty. Small studies are "too small to trust on their own", not omitted. Never round a weak finding up to a strong claim because the plain words feel less precise.
+- **Analogies are allowed, sparingly**, and must not smuggle in claims the sources don't make.
+- **Citations unchanged.** Every factual bullet still ends with its author–year DOI links; punchline headings still tell the story, phrased in plain words ("The studies mostly say it helps a little, but they're small").
+- TL;DR, sources block, and the quality gate all apply as normal.
+
 ## Term links
 
 The first use of a technical abbreviation or specialist term is a markdown link to its English Wikipedia article — `[SMD](https://en.wikipedia.org/wiki/Standardized_mean_difference)`, `[GRADE](https://en.wikipedia.org/wiki/GRADE_approach)`, `[mRNA](https://en.wikipedia.org/wiki/Messenger_RNA)` — so a non-specialist can click for an explanation without leaving the review.

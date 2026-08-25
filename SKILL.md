@@ -1,6 +1,6 @@
 ---
 name: scientific-review
-description: Write a scientific review of a topic or research question in small, medium, large/big, image, or mindmap mode, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
+description: Write a scientific review of a topic or research question in small, medium, large/big, eli5 (very simple English), image, or mindmap mode, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
 ---
 
 # Scientific review
@@ -36,6 +36,7 @@ Choose exactly one mode unless the user explicitly asks for both media outputs:
 - **Small** — default. Use when no mode is requested.
 - **Medium** — when the user asks for `medium`, or when the question plainly contains several genuinely distinct sub-questions that cannot be answered well at small depth.
 - **Large** — when the user asks for `large` or `big`; the words are aliases.
+- **ELI5** — when the user asks for `eli5`, "explain like I'm five", or very simple language. Identical to small in search depth, sources, citations, and verification; only the writing register changes to very simple English, per "ELI5 language" in `references/writing-guide.md`.
 - **Image (experimental)** — only when the user explicitly asks for an `image` as the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Run the **small** review pipeline, then create one scientific illustration from the verified findings.
 - **Mindmap (experimental)** — only when the user explicitly asks for a `mindmap` as the output or names `mindmap mode`. Do not infer it merely because a diagram might be helpful. Run the **small** review pipeline, then create one rendered mindmap from the verified findings.
 
