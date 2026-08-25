@@ -25,6 +25,7 @@ The two experimental media modes are the only standing exception: `image` and `m
 - **Delivered in the chat**, formatted with markdown, as well-presented as possible. No file, no attachment, unless asked.
 - **Citations: `Author 2026` inline, hyperlinked to the DOI** (markdown `[Author 2026](https://doi.org/…)` — the reader sees a plain author–year link, no visible brackets), with a compact sources block at the end carrying DOIs.
 - **Structure is fixed** — question → TL;DR → punchline sections of bullets → sources. Exact layout in `references/writing-guide.md`.
+- **Technical terms link to explainers.** The first use of an abbreviation or specialist term (SMD, CI, GRADE, HAM-D, mRNA, …) is a link to its verified Wikipedia article, so a non-specialist can click instead of googling. Rules and verification in `references/writing-guide.md`.
 - **No preamble and no meta.** No scope note, assumptions paragraph, audience statement, size label, or "how this review was produced" section. Make sensible scope choices silently.
 - **Concise throughout.** Shortest language that carries the evidence.
 

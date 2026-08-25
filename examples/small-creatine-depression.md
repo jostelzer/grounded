@@ -6,24 +6,24 @@
 
 ### The pooled effect is small, uncertain, and below what a patient would notice
 
-- Across 11 randomised trials (n=1,093), creatine beat placebo by SMD **−0.34** (95% CI −0.68 to −0.00) — about **2.2 points** on the 17-item Hamilton scale, under the 3.0-point minimal important difference; I² = 71.3%, GRADE **very low** [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588).
-- Trim-and-fill and subgroup analyses there indicated substantial bias favouring creatine; the authors conclude the true effect may be trivial or null. Secondary endpoints point opposite ways — remission favoured creatine (3 trials, OR 3.60, 95% CI 1.76–7.56), response did not (2 trials, OR 0.72, 95% CI 0.28–1.88) [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588).
-- Restricted to diagnosed mental disorder, the base is thinner still: **5 RCTs, 238 participants**, all adjunctive, 2–10 g/day for 4–8 weeks, 74% female [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171).
+- Across 11 randomised trials (n=1,093), creatine beat placebo by [SMD](https://en.wikipedia.org/wiki/Standardized_mean_difference) **−0.34** (95% [CI](https://en.wikipedia.org/wiki/Confidence_interval) −0.68 to −0.00) — about **2.2 points** on the 17-item [Hamilton scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression), under the 3.0-point minimal important difference; [I²](https://en.wikipedia.org/wiki/Study_heterogeneity) = 71.3%, [GRADE](https://en.wikipedia.org/wiki/GRADE_approach) **very low** [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588).
+- [Trim-and-fill](https://en.wikipedia.org/wiki/Trim_and_fill) and subgroup analyses there indicated substantial bias favouring creatine; the authors conclude the true effect may be trivial or null. Secondary endpoints point opposite ways — remission favoured creatine (3 trials, [OR](https://en.wikipedia.org/wiki/Odds_ratio) 3.60, 95% CI 1.76–7.56), response did not (2 trials, OR 0.72, 95% CI 0.28–1.88) [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588).
+- Restricted to diagnosed mental disorder, the base is thinner still: **5 [RCTs](https://en.wikipedia.org/wiki/Randomized_controlled_trial), 238 participants**, all adjunctive, 2–10 g/day for 4–8 weeks, 74% female [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171).
 
 ### Two trials are positive and four are null — the split tracks what creatine was added to
 
 | Trial | Design | n | Result | Ref |
 |---|---|---|---|---|
-| Escitalopram + creatine 5 g/d, 8 wk, women with MDD | DB RCT | 52 | Greater HAM-D improvement from week 2; d = 1.13 at 8 wk | [Lyoo et al. 2012](https://doi.org/10.1176/appi.ajp.2012.12010009), [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171) |
-| CBT + creatine 5 g/d, 8 wk, adults with depression | DB RCT, pilot | 100 | PHQ-9 mean difference **−5.12** vs CBT + placebo | [Sherpa et al. 2025](https://doi.org/10.1016/j.euroneuro.2024.10.004) |
-| SSRI/SNRI non-responders, 5 or 10 g/d, 4 wk | DB RCT | 18 | **No difference** vs placebo | [Nemets & Levine 2013](https://doi.org/10.1097/yic.0b013e32835ff20f) |
-| Adolescent females, SSRI-resistant, 2/4/10 g/d, 8 wk | DB RCT, dose-ranging | n/r | Phosphocreatine rose dose-dependently; **no clinical advantage** | [Kondo et al. 2016](https://doi.org/10.1007/s00726-016-2194-3), [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171) |
-| Bipolar depression, 6 g/d, 6 wk | DB RCT | 35 | MADRS null (p = 0.560, d = 0.231); remission 52.9% vs 11.1% | [Toniolo et al. 2018](https://doi.org/10.1007/s00702-017-1817-5) |
+| Escitalopram + creatine 5 g/d, 8 wk, women with [MDD](https://en.wikipedia.org/wiki/Major_depressive_disorder) | DB RCT | 52 | Greater HAM-D improvement from week 2; d = 1.13 at 8 wk | [Lyoo et al. 2012](https://doi.org/10.1176/appi.ajp.2012.12010009), [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171) |
+| [CBT](https://en.wikipedia.org/wiki/Cognitive_behavioral_therapy) + creatine 5 g/d, 8 wk, adults with depression | DB RCT, pilot | 100 | [PHQ-9](https://en.wikipedia.org/wiki/Patient_Health_Questionnaire) mean difference **−5.12** vs CBT + placebo | [Sherpa et al. 2025](https://doi.org/10.1016/j.euroneuro.2024.10.004) |
+| [SSRI](https://en.wikipedia.org/wiki/Selective_serotonin_reuptake_inhibitor)/[SNRI](https://en.wikipedia.org/wiki/Serotonin%E2%80%93norepinephrine_reuptake_inhibitor) non-responders, 5 or 10 g/d, 4 wk | DB RCT | 18 | **No difference** vs placebo | [Nemets & Levine 2013](https://doi.org/10.1097/yic.0b013e32835ff20f) |
+| Adolescent females, SSRI-resistant, 2/4/10 g/d, 8 wk | DB RCT, dose-ranging | n/r | [Phosphocreatine](https://en.wikipedia.org/wiki/Phosphocreatine) rose dose-dependently; **no clinical advantage** | [Kondo et al. 2016](https://doi.org/10.1007/s00726-016-2194-3), [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171) |
+| Bipolar depression, 6 g/d, 6 wk | DB RCT | 35 | [MADRS](https://en.wikipedia.org/wiki/Montgomery%E2%80%93%C3%85sberg_Depression_Rating_Scale) null (p = 0.560, d = 0.231); remission 52.9% vs 11.1% | [Toniolo et al. 2018](https://doi.org/10.1007/s00702-017-1817-5) |
 | Non-depressed older women ± strength training, 24 wk | DB RCT, 2×2 | 56 | Training cut depression scores; creatine added **nothing** (p = 0.83) | [Alves et al. 2013](https://doi.org/10.1371/journal.pone.0076301) |
 
 - Both positives added creatine at the **start** of a treatment that works alone; every trial asking creatine to rescue prior SSRI failure was null [Nemets & Levine 2013](https://doi.org/10.1097/yic.0b013e32835ff20f), [Kondo et al. 2016](https://doi.org/10.1007/s00726-016-2194-3).
 - The CBT trial, the largest in depressed people, calls itself a pilot feasibility and hypothesis-generating study [Sherpa et al. 2025](https://doi.org/10.1016/j.euroneuro.2024.10.004).
-- Open-label studies report far bigger drops — 60% on HAM-D with creatine plus 5-HTP (15 women) [Kious et al. 2017](https://doi.org/10.1097/jcp.0000000000000754), 56% on CDRS-R (5 adolescent girls) [Kondo et al. 2011](https://doi.org/10.1016/j.jad.2011.07.010) — with no control for expectancy or regression to the mean [Hellem et al. 2015](https://doi.org/10.1080/15504263.2015.1100471).
+- [Open-label](https://en.wikipedia.org/wiki/Open-label_trial) studies report far bigger drops — 60% on HAM-D with creatine plus [5-HTP](https://en.wikipedia.org/wiki/5-Hydroxytryptophan) (15 women) [Kious et al. 2017](https://doi.org/10.1097/jcp.0000000000000754), 56% on CDRS-R (5 adolescent girls) [Kondo et al. 2011](https://doi.org/10.1016/j.jad.2011.07.010) — with no control for expectancy or regression to the mean [Hellem et al. 2015](https://doi.org/10.1080/15504263.2015.1100471).
 
 ### Creatine demonstrably hits the brain target; the target has not been shown to move mood
 
@@ -34,13 +34,13 @@
 ### Population data agree but cannot carry the causal claim
 
 - Among 22,692 US adults, depression prevalence was 5.98/100 in the top quartile of dietary creatine intake versus 10.23/100 in the bottom; adjusted OR 0.68 (95% CI 0.52–0.88), strongest in women (0.62) and ages 20–39 (0.52) [Bakian et al. 2020](https://doi.org/10.1038/s41398-020-0741-x).
-- A Korean survey (n=5,257) replicated it — 6.9% prevalence in the lowest intake quartile versus 3.3–4.3% above — but both are cross-sectional, and depression itself reduces appetite and meat intake [Ostojic et al. 2026](https://doi.org/10.1080/1028415x.2025.2558118), [Bakian et al. 2020](https://doi.org/10.1038/s41398-020-0741-x).
+- A Korean survey (n=5,257) replicated it — 6.9% prevalence in the lowest intake quartile versus 3.3–4.3% above — but both are [cross-sectional](https://en.wikipedia.org/wiki/Cross-sectional_study), and depression itself reduces appetite and meat intake [Ostojic et al. 2026](https://doi.org/10.1080/1028415x.2025.2558118), [Bakian et al. 2020](https://doi.org/10.1038/s41398-020-0741-x).
 
 ### Safety is not the limiting factor — except in bipolar disorder
 
 - Across 685 trials (12,839 on creatine, 13,452 on placebo, ~12.5 g/day, follow-up to 14 years), side-effect frequency was 4.60% versus 4.21% (p = 0.828) [Kreider et al. 2025](https://doi.org/10.1080/15502783.2025.2488937).
-- Creatine raises serum creatinine 0.13 mg/dL (95% CI 0.07–0.18, 19 RCTs) without changing eGFR (−5.20, 95% CI −15.00 to 4.60) — an assay artefact, not kidney injury [Tsiaras et al. 2026](https://doi.org/10.1053/j.jrn.2026.04.010).
-- Manic switching is the real signal: both bipolar patients in the first open series switched [Roitman et al. 2007](https://doi.org/10.1111/j.1399-5618.2007.00532.x), as did 2 of 17 in the bipolar RCT [Toniolo et al. 2018](https://doi.org/10.1007/s00702-017-1817-5) and 2 of 17 across the randomised evidence overall [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171).
+- Creatine raises serum [creatinine](https://en.wikipedia.org/wiki/Creatinine) 0.13 mg/dL (95% CI 0.07–0.18, 19 RCTs) without changing [eGFR](https://en.wikipedia.org/wiki/Renal_function) (−5.20, 95% CI −15.00 to 4.60) — an assay artefact, not kidney injury [Tsiaras et al. 2026](https://doi.org/10.1053/j.jrn.2026.04.010).
+- [Manic](https://en.wikipedia.org/wiki/Mania) switching is the real signal: both bipolar patients in the first open series switched [Roitman et al. 2007](https://doi.org/10.1111/j.1399-5618.2007.00532.x), as did 2 of 17 in the bipolar RCT [Toniolo et al. 2018](https://doi.org/10.1007/s00702-017-1817-5) and 2 of 17 across the randomised evidence overall [Jeryous Fares et al. 2026](https://doi.org/10.1177/07067437251408171).
 
 ### What would settle it
 

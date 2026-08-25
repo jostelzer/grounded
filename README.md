@@ -20,7 +20,7 @@ Example (excerpt from a real small-mode run):
 >
 > ### The pooled effect is small, uncertain, and below what a patient would notice
 >
-> - Across 11 randomised trials (n=1,093), creatine beat placebo by SMD **−0.34** (95% CI −0.68 to −0.00) — about **2.2 points** on the 17-item Hamilton scale, under the 3.0-point minimal important difference; I² = 71.3%, GRADE **very low** [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588).
+> - Across 11 randomised trials (n=1,093), creatine beat placebo by [SMD](https://en.wikipedia.org/wiki/Standardized_mean_difference) **−0.34** (95% [CI](https://en.wikipedia.org/wiki/Confidence_interval) −0.68 to −0.00) — about **2.2 points** on the 17-item [Hamilton scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression), under the 3.0-point minimal important difference; [I²](https://en.wikipedia.org/wiki/Study_heterogeneity) = 71.3%, [GRADE](https://en.wikipedia.org/wiki/GRADE_approach) **very low** [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588).
 > - …
 >
 > **Sources**
@@ -29,7 +29,7 @@ Example (excerpt from a real small-mode run):
 >
 > …
 
-Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md).
+Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so the compact style stays readable for non-specialists. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md).
 
 ## Modes and sizes
 

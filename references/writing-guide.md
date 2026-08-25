@@ -74,6 +74,17 @@ A compact block at the end: one line per source, `**Author 2026** Title. *Journa
 - **Active and direct.** Name who found what.
 - Define an abbreviation once, at first use.
 
+## Term links
+
+The first use of a technical abbreviation or specialist term is a markdown link to its English Wikipedia article — `[SMD](https://en.wikipedia.org/wiki/Standardized_mean_difference)`, `[GRADE](https://en.wikipedia.org/wiki/GRADE_approach)`, `[mRNA](https://en.wikipedia.org/wiki/Messenger_RNA)` — so a non-specialist can click for an explanation without leaving the review.
+
+- **Link what a non-specialist would need explained**, not everyday scientific words: SMD, CI, OR, I², GRADE, HAM-D, PHQ-9, mRNA, phosphocreatine — yes; "placebo", "trial", "dose" — no.
+- **First occurrence only**, anywhere in the review (body or table); later occurrences stay plain.
+- **Not in the TL;DR** — it is written in plain language and should not need jargon at all.
+- **Never link from memory.** Confirm the exact article URL resolves before using it — fetch the page with whatever network access the environment has (the same check as Step 0, or the web-fetch tool on the no-script path). Wikipedia article titles are guessable and often wrong; a link that 404s or lands on the wrong concept is worse than no link. If the target cannot be confirmed, expand the term inline and leave it unlinked.
+- **Article pages only, no section anchors** — anchors rot; the article's lead section is usually enough.
+- Wikipedia is the linked *explainer*, never a *source*: term links carry no evidential weight and nothing may be cited to them. Citations remain author–year links to DOIs; the two are distinguishable because citations always look like `Author 2026`.
+
 ## Length
 
 Default **small**: aim for something a reader takes in within a couple of minutes — roughly 350–700 words in the body plus the sources block. Medium and large scale up the number of sections, bullets, and tables, never the wordiness of individual bullets. Sizes are in `sizes.md`.
@@ -100,5 +111,6 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 6. Numbers match sources; intervals included where reported.
 7. Nothing before the question; no methods section; no audience or scope preamble.
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded.
+8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut 10% more.
 10. In image or mindmap mode, the requested visual is rendered, evidence-grounded, legible, inspected, and accompanied by a cited caption.
