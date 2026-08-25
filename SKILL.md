@@ -23,7 +23,7 @@ The two experimental media modes are the only standing exception: `image` and `m
 
 - **Size: small.** Only go bigger if the user asks for medium/large or the question plainly needs it. Never ask which size.
 - **Delivered in the chat**, formatted with markdown, as well-presented as possible. No file, no attachment, unless asked.
-- **Citations: `[Author 2026]`** inline, with a compact sources block at the end carrying DOIs.
+- **Citations: `Author 2026` inline, hyperlinked to the DOI** (markdown `[Author 2026](https://doi.org/…)` — the reader sees a plain author–year link, no visible brackets), with a compact sources block at the end carrying DOIs.
 - **Structure is fixed** — question → TL;DR → punchline sections of bullets → sources. Exact layout in `references/writing-guide.md`.
 - **No preamble and no meta.** No scope note, assumptions paragraph, audience statement, size label, or "how this review was produced" section. Make sensible scope choices silently.
 - **Concise throughout.** Shortest language that carries the evidence.
@@ -89,7 +89,7 @@ Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; 
 
 ### 6. Format and check
 
-`scripts/format_references.py --ledger sources.json --draft review_draft.md --style bracket` — with no `--out`, it prints the finished review to stdout. It renders `[Author 2026]`, builds the sources block from the verified Crossref metadata, and refuses to run if any key is unknown or unverified. Run the quality gate in `references/writing-guide.md`, then **write that text as your reply**. Pass `--out` only when the user asked for a file.
+`scripts/format_references.py --ledger sources.json --draft review_draft.md --style bracket` — with no `--out`, it prints the finished review to stdout. It renders each citation as an `Author 2026` link to its DOI, builds the sources block from the verified Crossref metadata, and refuses to run if any key is unknown or unverified. Run the quality gate in `references/writing-guide.md`, then **write that text as your reply**. Pass `--out` only when the user asked for a file.
 
 ### 7. Create the requested media
 

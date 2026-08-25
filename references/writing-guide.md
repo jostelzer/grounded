@@ -14,15 +14,17 @@ It is not a document with front matter, not an essay, and not a report about its
 **TL;DR** — <the answer in 1–3 sentences, plain language, no citations, no hedging padding>
 
 ### <Punchline of section 1 — a claim, stated concisely>
-- <evidence with numbers> [Author 2026]
-- <evidence with numbers> [Author & Author 2025]
+- <evidence with numbers> [Author 2026](https://doi.org/…)
+- <evidence with numbers> [Author & Author 2025](https://doi.org/…)
 
 ### <Punchline of section 2>
 - …
 
 **Sources**
-**[Author 2026]** Title. *Journal*. https://doi.org/…
+**Author 2026** Title. *Journal*. https://doi.org/…
 ```
+
+In-text citations render as plain `Author 2026` links — the markdown link syntax means the reader sees no square brackets, just a clickable author–year that resolves to the paper.
 
 Nothing before the question. No scope note, no assumptions paragraph, no audience statement, no size label, no date line, no "how this was produced" section.
 
@@ -60,7 +62,7 @@ Do not force a table when the data does not line up; do not build one from a sin
 ### Sources
 Guidelines published as journal articles belong here and are cited as guidance ("the AAP recommends…"), not as evidence. Tertiary sources — StatPearls, UpToDate, textbooks — never appear; cite the primary study instead (`citation-rules.md`).
 
-A compact block at the end: one line per source, `**[Author 2026]** Title. *Journal*. DOI link`, alphabetical. This is the only apparatus the review keeps — it is what makes the citations checkable, so it stays even though everything else is trimmed.
+A compact block at the end: one line per source, `**Author 2026** Title. *Journal*. DOI link`, alphabetical. This is the only apparatus the review keeps — it is what makes the citations checkable, so it stays even though everything else is trimmed.
 
 ## Language
 
@@ -78,7 +80,7 @@ Default **small**: aim for something a reader takes in within a couple of minute
 
 ## Citing
 
-Write the draft with `[@key]` and let `format_references.py --style bracket` render `[Author 2026]` and build the sources block. On the tool-only path, write `[Author 2026]` directly and transcribe the sources block from the verified Crossref records.
+Write the draft with `[@key]` and let `format_references.py --style bracket` render each citation as an `[Author 2026](https://doi.org/…)` link and build the sources block. On the tool-only path, write the `[Author 2026](https://doi.org/…)` links directly, using the DOI from the verified Crossref record, and transcribe the sources block the same way.
 
 ## If verification could not be completed
 

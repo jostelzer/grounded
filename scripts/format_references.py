@@ -122,20 +122,20 @@ def fmt_nature(n, c, doi):
 
 
 def bracket_intext(c, suffix=""):
-    """[Author 2026] / [Author & Author 2026] / [Author et al. 2026]"""
+    """Author 2026 / Author & Author 2026 / Author et al. 2026 — rendered in text as a DOI link"""
     au = c.get("authors_structured") or []
     year = f"{c.get('year') or 'n.d.'}{suffix}"
     if not au:
-        return f"[Anon. {year}]"
+        return f"Anon. {year}"
     if len(au) == 1:
-        return f"[{fix_case(au[0]['family'])} {year}]"
+        return f"{fix_case(au[0]['family'])} {year}"
     if len(au) == 2:
-        return f"[{fix_case(au[0]['family'])} & {fix_case(au[1]['family'])} {year}]"
-    return f"[{fix_case(au[0]['family'])} et al. {year}]"
+        return f"{fix_case(au[0]['family'])} & {fix_case(au[1]['family'])} {year}"
+    return f"{fix_case(au[0]['family'])} et al. {year}"
 
 
 def fmt_bracket(c, doi, suffix=""):
-    """One compact line: **[Author 2026]** Title. *Journal*. doi link"""
+    """One compact line: **Author 2026** Title. *Journal*. doi link"""
     tag = bracket_intext(c, suffix)
     title = clean_title(c.get("title", ""))
     journal = clean(c.get("journal") or c.get("journal_short") or "")
@@ -215,9 +215,12 @@ def main():
             if k not in order:
                 order.append(k)
             nums.append(order.index(k) + 1)
-            intext.append((bracket_intext if args.style == "bracket" else apa_intext)(e["canonical"], suffix.get(k, "")))
+            if args.style == "bracket":
+                intext.append(f"[{bracket_intext(e['canonical'], suffix.get(k, ''))}](https://doi.org/{e['doi']})")
+            else:
+                intext.append(apa_intext(e["canonical"], suffix.get(k, "")))
         if args.style == "bracket":
-            return " ".join(intext)
+            return ", ".join(intext)
         if args.style == "apa":
             return "(" + "; ".join(intext) + ")"
         if args.style == "nature":
