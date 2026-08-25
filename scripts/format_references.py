@@ -1,0 +1,276 @@
+#!/usr/bin/env python3
+"""
+Resolve [@key] citations in a draft and build the reference list from bibliographically verified ledger entries.
+
+Write the review with citation keys from the ledger, e.g.:
+    ... no superiority over teaching-as-usual at one year [@Kuyken2022effectiveness].
+    ... earlier meta-analyses were more optimistic [@Dunning2018research; @Caldwell2019school].
+
+Then run:
+    python3 format_references.py --ledger sources.json --draft review_draft.md --out review.md --style vancouver
+    python3 format_references.py --ledger sources.json --draft review_draft.md --out review.md --style apa
+
+Styles: vancouver (numbered, order of first appearance; default), apa (author-year), nature (numbered, superscript).
+
+Rules enforced:
+  * A key that is not in the ledger, or whose status is not 'verified', is a hard error. Run
+    verify_citations.py first. Nothing unverified can reach the reference list.
+  * Reference entries are built from the Crossref 'canonical' metadata saved by verify_citations.py,
+    never from the model's memory.
+  * Every entry ends with its DOI link so a reader can check it.
+  * The verifier has already checked Crossref's publisher and Retraction Watch update metadata;
+    no service-status notes or per-reference warning symbols are added to the review.
+
+Outputs the finished markdown and prints a citation count summary (refs used, refs in ledger unused).
+"""
+import argparse
+import html
+import json
+import re
+import sys
+
+
+def clean(t):
+    """Unescape HTML entities and strip markup from Crossref strings."""
+    return re.sub(r"<[^>]+>", "", html.unescape(t or "")).strip()
+
+
+def is_verified(entry):
+    verification = entry.get("verification") or {}
+    return (
+        entry.get("status") == "verified"
+        and bool(entry.get("canonical"))
+        and verification.get("bibliographic_status") == "verified"
+        and verification.get("retraction_status") == "clear"
+    )
+
+
+def fix_case(name):
+    """Crossref sometimes stores ALL-CAPS surnames; title-case them (keeps mixed-case names untouched)."""
+    name = clean(name)
+    if len(name) > 1 and name.isupper():
+        return " ".join(w.title() if not w.startswith(("d'", "D'")) else w[:2] + w[2:].title() for w in name.split(" "))
+    return name
+
+
+def clean_title(t):
+    """Strip markup and make sure the title ends with exactly one terminal mark."""
+    t = clean(t)
+    t = re.sub(r"\s+", " ", t)
+    return t if t.endswith(("?", "!", ".")) else t + "."
+
+
+def initials(given):
+    parts = re.split(r"[\s\-.]+", given or "")
+    return "".join(p[0].upper() for p in parts if p)
+
+
+def initials_dotted(given):
+    parts = re.split(r"[\s\-.]+", given or "")
+    return " ".join(p[0].upper() + "." for p in parts if p)
+
+
+def fmt_vancouver(n, c, doi):
+    au = c.get("authors_structured") or []
+    names = [f"{fix_case(a['family'])} {initials(a['given'])}".strip() for a in au[:6]]
+    if len(au) > 6:
+        names.append("et al")
+    authors = ", ".join(names)
+    title = clean_title(c.get("title", ""))
+    journal = clean(c.get("journal") or c.get("journal_short") or "")
+    year = c.get("year") or "n.d."
+    vol = c.get("volume") or ""
+    iss = f"({c['issue']})" if c.get("issue") else ""
+    pages = c.get("pages") or c.get("article_number") or ""
+    loc = f"{year};{vol}{iss}" + (f":{pages}" if pages else "")
+    return f"{n}. {authors}. {title} {journal}. {loc}. doi:{doi}"
+
+
+def fmt_apa(c, doi, suffix=""):
+    au = c.get("authors_structured") or []
+    def one(a):
+        return f"{fix_case(a['family'])}, {initials_dotted(a['given'])}".rstrip(", ").strip()
+    if len(au) == 0:
+        authors = ""
+    elif len(au) == 1:
+        authors = one(au[0])
+    elif len(au) <= 20:
+        authors = ", ".join(one(a) for a in au[:-1]) + ", & " + one(au[-1])
+    else:
+        authors = ", ".join(one(a) for a in au[:19]) + ", ... " + one(au[-1])
+    title = clean_title(c.get("title", ""))
+    journal = clean(c.get("journal") or "")
+    year = f"{c.get('year') or 'n.d.'}{suffix}"
+    vol = c.get("volume") or ""
+    iss = f"({c['issue']})" if c.get("issue") else ""
+    pages = c.get("pages") or c.get("article_number") or ""
+    pages = pages.replace("-", "–") if pages else ""
+    loc = f"*{journal}*" + (f", *{vol}*{iss}" if vol else "") + (f", {pages}" if pages else "")
+    return f"{authors} ({year}). {title} {loc}. https://doi.org/{doi}"
+
+
+def fmt_nature(n, c, doi):
+    au = c.get("authors_structured") or []
+    names = [f"{fix_case(a['family'])}, {initials_dotted(a['given'])}".rstrip(", ") for a in au[:5]]
+    if len(au) > 5:
+        names = names[:1] + ["et al."]
+    title = clean_title(c.get("title", ""))
+    journal = clean(c.get("journal") or c.get("journal_short") or "")
+    vol = c.get("volume") or ""
+    pages = c.get("pages") or c.get("article_number") or ""
+    return f"{n}. {', '.join(names)} {title} *{journal}* **{vol}**, {pages} ({c.get('year') or 'n.d.'}). https://doi.org/{doi}"
+
+
+def bracket_intext(c, suffix=""):
+    """[Author 2026] / [Author & Author 2026] / [Author et al. 2026]"""
+    au = c.get("authors_structured") or []
+    year = f"{c.get('year') or 'n.d.'}{suffix}"
+    if not au:
+        return f"[Anon. {year}]"
+    if len(au) == 1:
+        return f"[{fix_case(au[0]['family'])} {year}]"
+    if len(au) == 2:
+        return f"[{fix_case(au[0]['family'])} & {fix_case(au[1]['family'])} {year}]"
+    return f"[{fix_case(au[0]['family'])} et al. {year}]"
+
+
+def fmt_bracket(c, doi, suffix=""):
+    """One compact line: **[Author 2026]** Title. *Journal*. doi link"""
+    tag = bracket_intext(c, suffix)
+    title = clean_title(c.get("title", ""))
+    journal = clean(c.get("journal") or c.get("journal_short") or "")
+    return f"**{tag}** {title} *{journal}*. https://doi.org/{doi}"
+
+
+def apa_intext(c, suffix=""):
+    au = c.get("authors_structured") or []
+    year = f"{c.get('year') or 'n.d.'}{suffix}"
+    if not au:
+        return f"Anon., {year}"
+    if len(au) == 1:
+        return f"{fix_case(au[0]['family'])}, {year}"
+    if len(au) == 2:
+        return f"{fix_case(au[0]['family'])} & {fix_case(au[1]['family'])}, {year}"
+    return f"{fix_case(au[0]['family'])} et al., {year}"
+
+
+def year_suffixes(keys, by_key, style):
+    """Assign a/b/c suffixes to cited entries that would render identically in text."""
+    label = bracket_intext if style == "bracket" else apa_intext
+    groups = {}
+    for k in keys:
+        c = by_key[k]["canonical"]
+        groups.setdefault(label(c), []).append(k)
+    out = {}
+    for same in groups.values():
+        if len(same) > 1:
+            same.sort(key=lambda k: clean_title(by_key[k]["canonical"].get("title", "")).lower())
+            for i, k in enumerate(same):
+                out[k] = chr(97 + i)
+    return out
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--ledger", required=True)
+    ap.add_argument("--draft", required=True)
+    ap.add_argument("--out", help="write here; omit to print to stdout (the default — the review is a chat message, not a file)")
+    ap.add_argument("--style", choices=["bracket", "vancouver", "apa", "nature"], default="bracket")
+    ap.add_argument("--heading", default="**Sources**")
+    args = ap.parse_args()
+
+    ledger = json.load(open(args.ledger))
+    by_key = {e["key"]: e for e in ledger["entries"]}
+    text = open(args.draft).read()
+
+    order = []          # keys in order of first appearance
+    errors = []
+    # pass 1: collect cited keys so APA suffixes can be assigned before substitution
+    cited_keys = []
+    for grp in re.findall(r"\[(@[^\]]+)\]", text):
+        for k in grp.split(";"):
+            k = k.strip().lstrip("@")
+            if k and k not in cited_keys:
+                cited_keys.append(k)
+    verified_cited = [k for k in cited_keys if k in by_key and is_verified(by_key[k])]
+    suffix = year_suffixes(verified_cited, by_key, args.style) if args.style in ("apa", "bracket") else {}
+
+    def resolve_group(m):
+        keys = [k.strip().lstrip("@") for k in m.group(1).split(";") if k.strip()]
+        nums = []
+        intext = []
+        for k in keys:
+            e = by_key.get(k)
+            if e is None:
+                errors.append(f"unknown citation key: {k}")
+                continue
+            if not is_verified(e):
+                verification = e.get("verification") or {}
+                errors.append(
+                    f"citation not verified: {k} "
+                    f"(status={e.get('status')}, bibliographic={verification.get('bibliographic_status')}, "
+                    f"retraction={verification.get('retraction_status')}) — run verify_citations.py"
+                )
+                continue
+            if k not in order:
+                order.append(k)
+            nums.append(order.index(k) + 1)
+            intext.append((bracket_intext if args.style == "bracket" else apa_intext)(e["canonical"], suffix.get(k, "")))
+        if args.style == "bracket":
+            return " ".join(intext)
+        if args.style == "apa":
+            return "(" + "; ".join(intext) + ")"
+        if args.style == "nature":
+            return "^" + ",".join(str(n) for n in nums) + "^"
+        # vancouver: compress runs like 1,2,3 -> 1–3
+        nums = sorted(set(nums))
+        runs, start, prev = [], None, None
+        for n in nums:
+            if start is None:
+                start = prev = n
+            elif n == prev + 1:
+                prev = n
+            else:
+                runs.append((start, prev)); start = prev = n
+        if start is not None:
+            runs.append((start, prev))
+        return "[" + ",".join(f"{a}–{b}" if b > a + 1 else (f"{a},{b}" if b == a + 1 else f"{a}") for a, b in runs) + "]"
+
+    body = re.sub(r"\[(@[^\]]+)\]", resolve_group, text)
+
+    if errors:
+        print("ERRORS — output not written:")
+        for e in sorted(set(errors)):
+            print("  -", e)
+        sys.exit(1)
+
+    refs = []
+    if args.style == "bracket":
+        entries = sorted(order, key=lambda k: ((by_key[k]["canonical"].get("authors_structured") or [{"family": ""}])[0]["family"].lower(), by_key[k]["canonical"].get("year") or 0))
+        for k in entries:
+            refs.append(fmt_bracket(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")))
+    elif args.style == "apa":
+        entries = sorted(order, key=lambda k: ((by_key[k]["canonical"].get("authors_structured") or [{"family": ""}])[0]["family"].lower(), by_key[k]["canonical"].get("year") or 0))
+        for k in entries:
+            refs.append(fmt_apa(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")))
+    else:
+        for i, k in enumerate(order, 1):
+            c, doi = by_key[k]["canonical"], by_key[k]["doi"]
+            refs.append(fmt_vancouver(i, c, doi) if args.style == "vancouver" else fmt_nature(i, c, doi))
+
+    out = body.rstrip() + "\n\n" + args.heading + "\n\n" + "\n\n".join(refs) + "\n"
+
+    unused = [e["key"] for e in ledger["entries"] if is_verified(e) and e["key"] not in order]
+    if args.out:
+        open(args.out, "w").write(out)
+        print(f"Wrote {args.out}: {len(order)} references cited ({args.style}).", file=sys.stderr)
+    else:
+        # Default: print the finished review so it can be pasted straight into the reply.
+        print(out)
+        print(f"\n[{len(order)} references cited, {args.style} style]", file=sys.stderr)
+    if unused:
+        print(f"{len(unused)} verified ledger entries not cited: {', '.join(unused[:15])}{' …' if len(unused) > 15 else ''}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()
