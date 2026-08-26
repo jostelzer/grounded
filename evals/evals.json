@@ -1,5 +1,5 @@
 {
-  "skill_name": "scientific-review",
+  "skill_name": "grounded",
   "evals": [
     {
       "id": 0,
@@ -51,31 +51,31 @@
     },
     {
       "id": 8,
-      "prompt": "Use the scientific-review skill in eli5 mode: does taking vitamin D actually prevent colds?",
-      "expected_output": "A small-tier review written entirely in very simple English: everyday words, short sentences, no unexplained jargon, numbers explained in words. Same rigour as small - 10-20 verified peer-reviewed references, in-text author-year citations hyperlinked to their DOIs, contrary evidence included, citation-free TL;DR, punchline headings in plain words, and a generated sources block with DOI links. Uncertainty stated plainly, never dropped.",
+      "prompt": "Use the grounded skill in eli5 mode: does taking vitamin D actually prevent colds?",
+      "expected_output": "A small-tier review written as flowing narrative text in very simple English: a citation-free TL;DR followed by plain-language headings and short connected paragraphs, with no bullet-list body unless the user explicitly asks for bullets too. Everyday words, short sentences, no unexplained jargon, and numbers explained in words. Same rigour as small - 10-20 verified peer-reviewed references, in-text author-year citations hyperlinked to their DOIs, contrary evidence included, and a generated sources block with DOI links. Uncertainty stated plainly, never dropped.",
       "files": []
     },
     {
       "id": 9,
-      "prompt": "Use the scientific-review skill, medium prose: does regular sauna use reduce cardiovascular risk?",
+      "prompt": "Use the grounded skill, medium prose: does regular sauna use reduce cardiovascular risk?",
       "expected_output": "A narrative article of 1,500-2,500 body words: a citation-free Abstract answering the question, an Introduction motivating it, thematic sections of topic-sentence-led paragraphs where every empirical sentence carries an author-year DOI-linked citation, contrary evidence in explicit contrast paragraphs, a Conclusion synthesizing without new evidence, and a generated sources block with 30-60 verified peer-reviewed references. Same verification rigour as bullets; no filler; offers the journal-styled PDF export at the end.",
       "files": []
     },
     {
       "id": 10,
-      "prompt": "Use the scientific-review skill, medium image mode: how does chronic stress affect the immune system?",
+      "prompt": "Use the grounded skill, medium image mode: how does chronic stress affect the immune system?",
       "expected_output": "A medium prose review (30-60 verified sources, citation-free Abstract, Introduction, 6-9 thematic sections, Conclusion, and 1-2 tables) plus up to three figures, each earned by a distinct visual story (e.g. a mechanism synthesis with local definitions, an evidence map, or a real-numbers effect summary using only values cited in the text), every character and value in every figure exact and inspected, each figure placed after the section it supports with alt text and a cited prose caption, and each rendered figure inspected before delivery.",
       "files": []
     },
     {
       "id": 11,
-      "prompt": "Use the scientific-review skill in bullet style: does dietary nitrate improve endurance performance?",
+      "prompt": "Use the grounded skill in bullet style: does dietary nitrate improve endurance performance?",
       "expected_output": "An explicit bullet-style review with a citation-free TL;DR, punchline headings, bullet-only evidence bodies, and a generated Sources block. It does not use the default prose Abstract, Introduction, thematic paragraphs, or Conclusion. Search depth, verified peer-reviewed source counts, DOI-linked author-year citations, contrary evidence, and uncertainty remain unchanged.",
       "files": []
     },
     {
       "id": 12,
-      "prompt": "Use the scientific-review skill in popsci style, like a Scientific American feature: is intermittent fasting actually better for weight loss?",
+      "prompt": "Use the grounded skill in popsci style, like a Scientific American feature: is intermittent fasting actually better for weight loss?",
       "expected_output": "A small-tier magazine feature: an honest curiosity-driven headline recasting the question, a citation-free italic standfirst stating the question and the shape of the answer, a concrete cited lede drawn from a real study with no invented detail, a nut graf posing the throughline, evocative but honest crossheads, the contrary or null evidence given its own section as the story's turn, and a kicker that circles back and names what would settle the question. Jargon is named, glossed inline, and term-linked; numbers are human-scale with the exact statistic in parentheses; no hype vocabulary (breakthrough, game-changer, miracle); hedges from the sources survive. Same rigour as every style: 10-20 verified peer-reviewed references, every empirical sentence carrying an author-year DOI-linked citation, and a generated sources block.",
       "files": []
     }

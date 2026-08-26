@@ -7,7 +7,7 @@ prose prompt from memory. The builder encodes the visual audit in
 1. **Evidence specification** — what the reviewed literature supports.
 2. **Figure archetype** — how that evidence should be organized.
 3. **Style profile** — font, palette, composition, and exclusions.
-4. **Render context** — article figure or standalone figure.
+4. **Render context** — article, standalone, or 16:9 deck-slide figure.
 5. **Exact-text manifest** — every in-figure string that must appear verbatim.
 6. **QA contract** — what must be inspected and when to fall back.
 
@@ -56,7 +56,9 @@ Optional:
 - `profile`: `nature-neuroscience` (default), `nature-reviews`, or `nature-data`.
 - `archetype`: `mechanism`, `anatomical-mechanism`, `study-overview`,
   `comparison`, `quantitative`, `evidence-map`, `timeline`, or `mindmap`.
-- `render_context`: `article` (the profile default) or `standalone`.
+- `render_context`: `article` (the profile default), `standalone`, or `slide`.
+  Use `slide` only for artwork that will be wrapped by `export_deck.py`; the
+  builder reserves quiet top and bottom zones for the renderer's real text.
 - `subtitle`: short scope or evidence qualifier.
 - `observed`: findings directly observed in cited human or experimental data.
 - `inferred`: synthesis, model-supported, animal-only, mixed, or uncertain relationships.
@@ -71,10 +73,12 @@ Optional:
 - Ask for the complete finished figure, including text, in one render.
 - In `article` context, treat `title` and `subtitle` as caption context and do
   not render them inside the artwork. In `standalone` context, render the title
-  compactly and include it in `exact_text`.
+  compactly and include it in `exact_text`. In `slide` context, keep the title,
+  citations, evidence chip, masthead, and slide counter out of the pixels.
 - Quote every required in-figure string through `exact_text`; spell difficult
   labels exactly once rather than offering variants. The builder removes an
-  exact title/subtitle match from the in-figure manifest in `article` context.
+  exact title/subtitle match from the in-figure manifest in `article` and
+  `slide` contexts.
 - State `Arial throughout` as a hard requirement and explicitly ban serif type.
 - Describe what should be seen, not which software operations to simulate.
 - Start from the domain-native visual representation—anatomy, signal flow,

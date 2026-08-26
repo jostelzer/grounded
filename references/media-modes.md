@@ -1,6 +1,6 @@
 # Experimental media modes
 
-Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small scientific when none is named); mindmap mode uses the small pipeline and the selected writing style (scientific when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
+Read this reference when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small scientific when none is named); mindmap mode uses the small pipeline and the selected writing style (scientific when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard. An explicitly requested `deck`, `slides`, presentation, slide deck, or journal club deck follows the same shared evidence boundary below but uses the complete workflow in `deck-guide.md`.
 
 Before creating media, also read `figure-reference-analysis.md`,
 `figure-style-system.md`, `image-prompt-guide.md`, and `figure-captions.md`.
@@ -18,6 +18,10 @@ an improvised prose prompt.
 - Generate the actual media. Do not substitute a prompt, text outline, ASCII diagram, or unrendered diagram source.
 - Prefer a capable image-generation model for the complete rendered artifact, including text. Supply exact copy and inspect every character; deterministic SVG or another renderer is the fallback when generation is unavailable or cannot pass QA.
 - If the required media tooling is unavailable or generation fails, still deliver the written review at its selected tier and state in one sentence that the visual could not be generated. Do not claim that media was created.
+
+## Deck mode
+
+Deck is explicit-only, combines with every size and style, and adds a 16:9 PDF to the complete written review. Read `deck-guide.md` before planning it. Every content slide uses `render_context: slide`, a full-sentence cited claim in real-text chrome, one full-bleed generated image, and a `strong`/`mixed`/`limited` evidence grade. The canonical exporter adds title and two-column reference slides from the verified ledger; the dedicated QA inspects every landscape page and its live DOI links. Deck has no deterministic or text-slide fallback: when no capable image-generation model is available, deliver the written review and state in one sentence that the deck could not be generated.
 
 ## Image mode
 
@@ -67,7 +71,9 @@ an archetype from `figure-archetypes.json`, then run
 `scripts/build_figure_prompt.py`. This keeps evidence, composition, framing, and
 art direction independently reusable. Use `render_context: standalone` only
 when there will be no adjacent title/caption; its compact title is still
-rendered end to end by the image model.
+rendered end to end by the image model. Use `render_context: slide` only for a
+requested PDF deck built with `scripts/export_deck.py`; it creates 16:9 artwork
+with quiet chrome zones and keeps the claim and citations as real deck text.
 
 The generated prompt must contain the figure's evidence-backed visual story and **all required text verbatim**. Quote titles, labels, numbers, units, confidence intervals, legend entries, and glossary definitions. State which relationships are observed, inferred, mixed, or uncertain and how that distinction must appear. For quantitative figures, supply every plotted value and scale explicitly; the model must not invent, interpolate, or relabel data. Arial is the defined font; visually reject serif, condensed, display, outlined, or shadowed lettering.
 
@@ -94,7 +100,11 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
 - **Don't accept approximately correct text or data.** Every rendered word, number, unit, and symbol must match the supplied copy exactly.
 - **Don't place text over busy artwork.** Labels need quiet space or a plain backing plate.
 - **Don't let panels, icons, or captions overlap.** Bounding boxes must be disjoint. Overlap is not a style choice; it reads as a broken render.
-- **Don't drift into slide or dashboard design.** No serif headlines, rounded UI cards, badges, decorative icons, drop shadows, cinematic lighting, glossy 3D, or ornamental gradients.
+- **Don't drift into slide or dashboard design.** Article and standalone figures
+  must not imitate presentation furniture. Slide-context artwork still excludes
+  serif headlines, rounded UI cards, badges, decorative icons, drop shadows,
+  cinematic lighting, glossy 3D, and ornamental gradients; the canonical deck
+  renderer owns all presentation chrome.
 - **Don't drift into poster design.** In article context, no internal hero title
   or subtitle, oversized number, footer banner, or universal sequence of equal
   presentation columns.
@@ -139,8 +149,8 @@ The mechanism is summarized in {{figure:mechanism}}.
 The caption may elaborate, but each figure must remain independently
 understandable. Bullet reviews may use the structured `Shows / Evidence boundary
 / Sources` caption; scientific uses a short flowing paragraph; popsci uses a
-short flowing paragraph in the magazine register; ELI5 uses short
-everyday sentences. `scripts/format_references.py` and
+short flowing paragraph in the magazine register; ELI5 uses a short flowing
+paragraph of everyday sentences. `scripts/format_references.py` and
 `scripts/export_review.py` validate the contract.
 
 ## Mindmap mode

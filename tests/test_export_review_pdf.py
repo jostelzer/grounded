@@ -68,6 +68,15 @@ class PdfExportTests(unittest.TestCase):
             self.assertTrue(first_bytes.startswith(b"%PDF-"))
             inspection = qa_review_pdf.inspect_structure(first, self.markdown())
             self.assertEqual(inspection["expected_dois"], 1)
+            self.assertEqual(inspection["release"], "v-test")
+            checked = qa_review_pdf.inspect_structure(
+                first, self.markdown(), expected_release="v-test"
+            )
+            self.assertEqual(checked["release"], "v-test")
+            with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "expected v-other"):
+                qa_review_pdf.inspect_structure(
+                    first, self.markdown(), expected_release="v-other"
+                )
             self.assertGreaterEqual(inspection["internal_links"], 1)
             self.assertEqual(inspection["expected_figures"], 1)
 
@@ -333,6 +342,25 @@ class PdfExportTests(unittest.TestCase):
         self.assertIn('<div class="body structured-flow">', page)
         self.assertNotIn('<div class="body cols">', page)
 
+    def test_eli5_showcase_exports_as_flowing_prose_not_bullets(self):
+        example_dir = os.path.join(ROOT, "examples")
+        source = os.path.join(example_dir, "eli5-why-clouds-are-white.md")
+        with open(source, encoding="utf-8") as stream:
+            markdown = stream.read()
+
+        page = export_review.build_html(
+            markdown,
+            base_dir=example_dir,
+            release="v-test",
+            repo="example.test/grounded",
+            compiled_date="2026-08-26",
+        )
+
+        self.assertNotRegex(markdown, r"(?m)^[-*]\s+")
+        self.assertNotIn("<ul>", page)
+        self.assertIn("<p>An ordinary warm cloud is made of tiny clear water drops.", page)
+        self.assertIn("<div class=\"body cols\">", page)
+
     @unittest.skipUnless(shutil.which("pdftoppm"), "Poppler is not installed")
     def test_independent_raster_qa_checks_every_page(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -525,6 +553,67 @@ class FigureExportTests(unittest.TestCase):
         self.assertIn('<figcaption><b class="figno">Figure 1.</b>', body)
         self.assertIn("<ul><li><strong>Shows:</strong> Three steps.</li>", body)
         self.assertIn("<strong>Sources:</strong>", body)
+
+    def test_page_flow_mode_is_propagated_explicitly(self):
+        structured_caption = (
+            "**Figure 1. A plain-language mechanism.**\n"
+            "- **Shows:** Three steps.\n"
+            "- **Evidence boundary:** The dashed step is uncertain.\n"
+            "- **Sources:** [Smith 2024](https://doi.org/10.1000/example)"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "figure.png"), "wb") as stream:
+                stream.write(b"png")
+            structured = export_review.build_html(
+                self.markdown(caption=structured_caption), base_dir=tmp,
+                release="v-test", repo="example.test/grounded",
+                compiled_date="2026-08-26",
+            )
+            plain = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+            )
+        self.assertIn('<div class="body structured-flow">', structured)
+        self.assertNotIn('<div class="body cols">', structured)
+        self.assertIn('<div class="body cols">', plain)
+        self.assertNotIn('<div class="body structured-flow">', plain)
+
+    def test_raster_layout_gate_catches_sparse_pages_and_column_imbalance(self):
+        from PIL import Image, ImageDraw
+
+        sparse = Image.new("RGB", (1000, 1400), "white")
+        draw = ImageDraw.Draw(sparse)
+        for y in range(150, 950, 12):
+            draw.line((70, y, 930, y), fill="black", width=2)
+        sparse_metrics = qa_review_pdf._page_layout_metrics(sparse)
+        sparse_failures = qa_review_pdf._layout_failures(sparse_metrics, 2, 4)
+        self.assertTrue(any("under-filled" in failure for failure in sparse_failures))
+
+        unbalanced = Image.new("RGB", (1000, 1400), "white")
+        draw = ImageDraw.Draw(unbalanced)
+        for y in range(150, 1280, 5):
+            draw.line((70, y, 465, y), fill="black", width=3)
+        for y in range(150, 620, 5):
+            draw.line((535, y, 930, y), fill="black", width=3)
+        unbalanced_metrics = qa_review_pdf._page_layout_metrics(unbalanced)
+        unbalanced_failures = qa_review_pdf._layout_failures(
+            unbalanced_metrics, 4, 4
+        )
+        self.assertTrue(
+            any("unbalanced column" in failure for failure in unbalanced_failures)
+        )
+
+        balanced = Image.new("RGB", (1000, 1400), "white")
+        draw = ImageDraw.Draw(balanced)
+        for y in range(150, 900, 10):
+            draw.line((70, y, 465, y), fill="black", width=2)
+            draw.line((535, y, 930, y), fill="black", width=2)
+        self.assertEqual(
+            qa_review_pdf._layout_failures(
+                qa_review_pdf._page_layout_metrics(balanced), 4, 4
+            ),
+            [],
+        )
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import importlib.util
 import json
 import os
 import struct
+import sys
 import tempfile
 import unittest
 from urllib.parse import urlparse
@@ -9,6 +10,7 @@ from urllib.parse import urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPT = os.path.join(ROOT, "scripts", "download_figure_references.py")
+sys.path.insert(0, os.path.dirname(SCRIPT))
 MANIFEST = os.path.join(ROOT, "references", "nature-figure-corpus.json")
 SPEC = importlib.util.spec_from_file_location("download_figure_references", SCRIPT)
 MODULE = importlib.util.module_from_spec(SPEC)

@@ -1,6 +1,6 @@
 ---
 name: grounded
-description: Write a scientific review of a topic or research question at small, medium, or large size, in scientific style (flowing narrative prose, the default), popsci style (popular-science magazine storytelling like Scientific American), bullets, or eli5 (very simple English), optionally with an image or mindmap, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
+description: Write a scientific review of a topic or research question at small, medium, or large size, in scientific style (flowing narrative prose, the default), popsci style (popular-science magazine storytelling like Scientific American), bullets, or eli5 (very simple flowing prose), optionally with an image, mindmap, or verified 16:9 deck PDF, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, a findings mindmap, or explicitly asks for a deck, slides, presentation, slide deck, or journal club deck. Also use it to check a draft's claims or references against the literature.
 ---
 
 # Grounded — scientific reviews with no floating claims
@@ -27,16 +27,40 @@ python3 scripts/qa_review_pdf.py review.pdf --markdown review.md --render-dir re
 
 The runtime check is a hard gate. If it fails, install the exact packages in `requirements-pdf.txt` and the native Pango runtime required by WeasyPrint, then rerun it; never silently switch renderers. On macOS, use the matching Homebrew WeasyPrint executable so Pango is self-contained. The exporter embeds every figure as a data URI and permits the renderer to load only `data:` resources: remote, missing, and escaping assets are hard failures, while PNG/JPEG/WebP and SVG are supported directly. Output is written atomically: a failed build cannot overwrite an existing good PDF. After rendering, the exporter strictly parses the artifact and refuses to replace the prior PDF unless the producer is pinned WeasyPrint and the embedded fonts include Charter and Helvetica Neue; a fallback-font redesign is a hard failure. HTML sidecars are off by default and require `--html-sidecar` explicitly.
 
-The QA command is also mandatory before delivery. It strictly parses the PDF, checks A4 geometry, metadata, prohibited document actions, DOI and internal figure links, running masthead and total-aware page number on every page, then independently rasterizes every page through Poppler and checks masthead, page number, body, and clipping-edge pixels. Use a new or empty `--render-dir` and inspect every generated page and contact sheet visually. A heading stranded at the bottom of a page, a heading separated from its first paragraph/table/figure, an avoidably sparse spill page, or a large preventable blank region is a release-blocking defect even when structural QA passes. Rebalance the source or layout and rebuild without dropping evidence, shrinking text below the established design, or weakening figure/table legibility; repeat full-document raster inspection after every pagination change. `--columns 1` gives a single-column layout; plain `--out review.html` remains the separate HTML-only path. `--kicker "Review · Immunology"` sets the label above the title; the version and repository label in the provenance line are auto-detected from git (`--release`/`--repo` override them). The review still goes in the chat as well.
+The QA command is also mandatory before delivery. It strictly parses the PDF, checks A4 geometry, metadata, prohibited document actions, DOI and internal figure links, running masthead and total-aware page number on every page, then independently rasterizes every page through Poppler and checks masthead, page number, body, clipping-edge pixels, under-filled non-final pages, and severely unbalanced column endings. Use a new or empty `--render-dir` and inspect every generated page and contact sheet visually. A heading stranded at the bottom while its first paragraph/table/figure starts on the next page, an avoidably sparse spill page, or a large preventable blank region is a release-blocking defect even when the automated checks pass. Rebalance the source or layout and rebuild without dropping evidence, shrinking text below the established design, or weakening figure/table legibility; repeat full-document raster inspection after every pagination change. `--columns 1` gives a single-column layout; plain `--out review.html` remains the separate HTML-only path. `--kicker "Review · Immunology"` sets the label above the title; the version and repository label in the provenance line are auto-detected from git (`--release`/`--repo` override them). For checked-in or release PDFs, pass the intended version explicitly to both exporter and QA (`--release vX.Y.Z`); a stale embedded version is a hard failure. The review still goes in the chat as well.
 
-The two experimental media modes are the only standing exception: `image` and `mindmap` still deliver the written review in chat, additionally generating and displaying the media artifacts (one mindmap; one to five figures depending on size). The media never replaces the review.
+If the user explicitly asks for a **deck**, **slides**, a **presentation**, a
+**slide deck**, or a **journal club deck**, keep the full written review in the
+reply and build the deck PDF as an additional artifact. Never infer deck mode.
+Read `references/deck-guide.md` before storyboarding. Turn the verified synthesis
+into the selected style's size-appropriate arc, make every content-slide title a
+full-sentence cited claim, and create its full-bleed artwork with
+`render_context: slide`. Version 1 is 16:9 PDF only.
+
+```bash
+python3 scripts/export_deck.py --check-pdf-runtime
+python3 scripts/export_deck.py --storyboard storyboard.json --ledger sources.json --out review-deck.pdf
+python3 scripts/qa_deck_pdf.py review-deck.pdf --storyboard storyboard.json --ledger sources.json --render-dir review-deck-qa
+```
+
+The exporter enforces the style arc, slide-count limits, verified DOI coverage,
+16:9 image geometry, data-URI-only assets, atomic writes, canonical fonts, and
+pinned WeasyPrint. Deck QA is mandatory: inspect every generated slide and
+contact sheet after the structural and Poppler gates pass. If no capable
+image-generation model is available, deliver the written review and state in one
+sentence that the deck could not be generated; do not fake it with text slides,
+SVG, or placeholders.
+
+The three explicit-only media/delivery modes are the standing exception:
+`image`, `mindmap`, and `deck` still deliver the written review in chat and add
+the requested media artifact. The media never replaces the review.
 
 ## Defaults — do not ask, just do this
 
 - **Size: small. Style: scientific** (formerly named `prose`; treat `prose` as an alias). Only deviate if the user asks or the question plainly needs it. Never ask which size or style.
 - **Delivered in the chat**, formatted with markdown, as well-presented as possible. No file, no attachment, unless asked.
 - **Citations: `Author 2026` inline, hyperlinked to the DOI.** The reader must never see square brackets around a citation — they exist only as markdown link syntax. Never write a bare `[Author 2026]`, `[1]`, or `(Author, 2026)` in the finished text. Sources block at the end carries the DOIs.
-- **Structure is fixed per style** — scientific: question → abstract → introduction → thematic sections → conclusion → sources; popsci: headline → standfirst → lede → nut graf → narrative crossheads with a turn → kicker → sources; bullets: question → TL;DR → punchline sections of bullets → sources; ELI5 uses the bullet-shaped structure in very simple language. Exact layouts in `references/writing-guide.md`.
+- **Structure is fixed per style** — scientific: question → abstract → introduction → thematic sections → conclusion → sources; popsci: headline → standfirst → lede → nut graf → narrative crossheads with a turn → kicker → sources; bullets: question → TL;DR → punchline sections of bullets → sources; ELI5: question → TL;DR → plain-language sections of short flowing paragraphs → closing synthesis → sources. Exact layouts in `references/writing-guide.md`.
 - **Technical terms link to explainers.** The first use of an abbreviation or specialist term (SMD, CI, GRADE, HAM-D, mRNA, …) is a link to its verified Wikipedia article, so a non-specialist can click instead of googling. Rules and verification in `references/writing-guide.md`.
 - **No preamble and no meta.** No scope note, assumptions paragraph, audience statement, size label, or "how this review was produced" section. Make sensible scope choices silently.
 - **Concise throughout.** Shortest language that carries the evidence.
@@ -56,7 +80,7 @@ A review has a **size** (how much evidence) and a **style** (how it is written).
 - **Scientific** — default (alias: `prose`, its former name). A narrative article in journal register: abstract, introduction, topic-sentence paragraphs, conclusion. Word budgets ~1.5× the bullet tier. Rules in "Scientific style" in `references/writing-guide.md`. Scientific prints well — after delivering, offer the PDF export.
 - **Popsci** — when the user asks for `popsci`, "popular science", "magazine style", "science journalism", or names Scientific American, New Scientist, Quanta, or a similar magazine. A magazine feature for a curious educated adult: honest headline, standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, kicker — with full verified citations throughout. Rules in "Popsci style" in `references/writing-guide.md`.
 - **Bullets** — when the user asks for `bullets`, a list, or the compact structured format. Punchline headings and cited bullet bodies, per `references/writing-guide.md`.
-- **ELI5** — when the user asks for `eli5`, "explain like I'm five", or very simple language. Very simple English, per "ELI5 language" in `references/writing-guide.md`. Defaults to small size unless a size is named.
+- **ELI5** — when the user asks for `eli5`, "explain like I'm five", or very simple language. Short, connected narrative paragraphs in very simple English, per "ELI5 style" in `references/writing-guide.md`; do not turn it into a bullet list unless the user also explicitly asks for bullets. When both are requested, use `bullets` as the structural style and ELI5 as its language register. Defaults to small size unless a size is named.
 
 Style never changes search depth, source counts, citations, or verification. Scientific and bullets use the normal verified term links; popsci names a term, glosses it inline, and links it; ELI5 rewrites jargon into everyday language and links only an unavoidable term after explaining it. The register spectrum runs scientific → popsci → ELI5.
 
@@ -64,18 +88,22 @@ Style never changes search depth, source counts, citations, or verification. Sci
 
 - **Image** — only when the user explicitly asks for an `image`/`figures` as part of the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Combines with any size and style; the figure budget scales with size (small 1, medium up to 3, large up to 5 — caps, not quotas). Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`. For image generation, also read `references/figure-reference-analysis.md`, `references/figure-style-system.md`, `references/image-prompt-guide.md`, and `references/figure-captions.md`; build the prompt from a structured figure specification with `scripts/build_figure_prompt.py`. Place each figure after the section it supports, reference it from the body, and give it a style-matched caption with verified citations. Figures flow into the PDF export automatically.
 - **Mindmap** — only when the user explicitly asks for a `mindmap` as the output or names `mindmap mode`. Do not infer it merely because a diagram might be helpful. Run the **small** review pipeline, then create one rendered mindmap from the verified findings.
+- **Deck** — only for the explicit triggers `deck`, `slides`, “presentation”, “slide deck”, or “journal club deck”. Never infer it. Combines freely with every size and style, keeps the full written review in chat, and adds a verified 16:9 deck PDF. Follow `references/deck-guide.md`; generate one slide-context image per content slide, then run the canonical exporter and mandatory landscape QA.
 
-If the user explicitly asks for both `image` and `mindmap`, run one small review and add both media artifacts. For either media mode, read `references/media-modes.md` before planning the visual. Media creation happens only after the evidence has been searched, read, verified, and synthesized.
+If the user explicitly asks for several media modes, run one review at the selected tier and add only the named artifacts. Read `references/media-modes.md` for image or mindmap and `references/deck-guide.md` for deck before planning visuals. Media creation happens only after the evidence has been searched, read, verified, and synthesized.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
 | Scientific/popsci body length (default) | 600–1,000 words | 1,500–2,500 words | 3,500–6,000 words |
 | Bullet body length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
+| ELI5 narrative body length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
 | Sections | 3–5 | 6–9 | 10–15 |
 | Sources | 10–20 | 30–60 | 70–150 |
 | Searches | 1–2 queries per angle, 3–5 angles | 2–3 per angle, 5–8 angles | 3–5 per angle, 8–12 angles, plus citation chasing |
 | Full texts read | The 2–4 load-bearing papers | 8–15 | 25+ |
 | Tables | 0–1 | 1–2 | 2–4 |
+| Deck content slides | 4–6 | 8–12 | 14–20 |
+| Deck total slides | 6–8 | 10–15 | 18–25 (hard max 25) |
 
 Bigger sizes add sections, evidence, and tables — never longer sentences. Style changes the body budget shown above; search depth and evidence requirements stay unchanged.
 
@@ -93,7 +121,7 @@ python3 -c "import urllib.request;print(urllib.request.urlopen('https://api.cros
 
 ## The pipeline
 
-Work through every step; the order matters because the later steps depend on the ledger built in the early ones. Keep all working files in one folder for the review (`<topic-slug>/`): `sources.json` (the ledger), `search_log.md`, `notes.md`, `review_draft.md`, `review.md`, plus the generated media only in image or mindmap mode.
+Work through every step; the order matters because the later steps depend on the ledger built in the early ones. Keep all working files in one folder for the review (`<topic-slug>/`): `sources.json` (the ledger), `search_log.md`, `notes.md`, `review_draft.md`, `review.md`, plus the generated media only in image, mindmap, or deck mode. Deck working files also include `storyboard.json` and one 16:9 raster per content slide.
 
 ### 1. Scope the question into angles
 
@@ -115,15 +143,30 @@ Run `scripts/verify_citations.py --ledger sources.json`. It uses the Crossref re
 
 ### 5. Write the draft
 
-Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; @b]` for several. Follow the selected style's fixed layout in `references/writing-guide.md`. The default scientific review uses a citation-free Abstract, an Introduction that poses one throughline, thematic sections of topic-sentence paragraphs that advance it, and a Conclusion that names the cross-cutting pattern. Popsci uses a magazine feature architecture — honest headline, citation-free standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, and a kicker — with the storytelling rules in "Popsci style". Explicit bullet style uses a citation-free TL;DR, punchline headings, and cited bullet bodies. ELI5 keeps that bullet-shaped layout but rewrites every claim and quantity in simple language. In every style, order the argument deliberately, contrast opposing evidence, use a table wherever several studies share dimensions, report numbers with intervals, cite primary studies for findings, and use reviews for consensus.
+Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; @b]` for several. Follow the selected style's fixed layout in `references/writing-guide.md`. The default scientific review uses a citation-free Abstract, an Introduction that poses one throughline, thematic sections of topic-sentence paragraphs that advance it, and a Conclusion that names the cross-cutting pattern. Popsci uses a magazine feature architecture — honest headline, citation-free standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, and a kicker — with the storytelling rules in "Popsci style". Explicit bullet style uses a citation-free TL;DR, punchline headings, and cited bullet bodies. ELI5 uses a citation-free TL;DR followed by plain-language headings and short flowing paragraphs that connect the evidence into one explanation; bullet bodies are wrong unless the user explicitly requested bullets too. In every style, order the argument deliberately, contrast opposing evidence, use a table wherever several studies share dimensions, report numbers with intervals, cite primary studies for findings, and use reviews for consensus.
 
 ### 6. Format and check
 
-`scripts/format_references.py --ledger sources.json --draft review_draft.md --style bracket` — with no `--out`, it prints the finished review to stdout. It renders each citation as an `Author 2026` link to its DOI, builds the sources block from the verified Crossref metadata, and refuses to run if any key is unknown or unverified. Run the quality gate in `references/writing-guide.md`, then **write that text as your reply**. Pass `--out` only when the user asked for a file.
+Run the formatter through the deterministic writing-contract validator:
+
+```bash
+python3 scripts/format_references.py --ledger sources.json --draft review_draft.md --style bracket | python3 scripts/validate_review.py - --style scientific --size small --pass-through
+```
+
+Replace `scientific` and `small` with the selected style and size. The formatter renders each citation as an `Author 2026` DOI link, builds Sources from verified Crossref metadata, and refuses unknown or unverified keys. The validator then hard-checks the fixed style skeleton, the scientific Abstract's 120–250-word limit, citation-free lead, terminal Sources, DOI parity, unresolved citation tokens, and figure contracts; approximate tier word budgets are reported as warnings. Its stdout is the validated finished review and its JSON report goes to stderr. Run the semantic quality gate in `references/writing-guide.md` as well—argument quality, claim-level citation placement, narrative callbacks, evidence balance, and language still require reading—then **write the validated text as your reply**. Use a file path instead of `-` only when a file was requested or already exists for PDF export.
 
 ### 7. Create the requested media
 
-Skip this step unless the user explicitly requested image or mindmap mode. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Read the visual audit in `references/figure-reference-analysis.md`, the journal-grade system in `references/figure-style-system.md`, and the caption contract in `references/figure-captions.md`; choose a style profile and figure archetype, record the evidence and exact copy in a figure-spec JSON, and generate the prompt with `scripts/build_figure_prompt.py` as specified in `references/image-prompt-guide.md`. Use `render_context: article` for a figure inserted beside a caption and `standalone` only when the pixels must carry their own compact title. When a capable image-generation model is available, use it to render the complete figure end to end, including all in-figure labels, callouts, values, legends, and essential definitions; use deterministic SVG or another vector renderer only when image generation is unavailable or the generated result cannot pass QA. Image-mode illustrations must be self-explanatory to an educated non-specialist. Give every figure a stable ID, reference it from the relevant body text, and write a caption that matches the review's style register (scientific, popsci, bullets, or ELI5) and ends with 2–5 verified ledger citations. `format_references.py` assigns figure numbers, creates cross-links, and rejects missing, uncited, duplicated, broken, or unreferenced figures. Inspect the defined Arial typography, every rendered word and number, scientific content, clipping, visual balance, caption, and misleading emphasis. Display it in the reply with useful alt text.
+Skip this step unless the user explicitly requested image, mindmap, or deck mode. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Read the visual audit in `references/figure-reference-analysis.md`, the journal-grade system in `references/figure-style-system.md`, and the caption contract in `references/figure-captions.md`; choose a style profile and figure archetype, record the evidence and exact copy in a figure-spec JSON, and generate the prompt with `scripts/build_figure_prompt.py` as specified in `references/image-prompt-guide.md`. Use `render_context: article` for a figure inserted beside a caption and `standalone` only when the pixels must carry their own compact title. When a capable image-generation model is available, use it to render the complete figure end to end, including all in-figure labels, callouts, values, legends, and essential definitions; use deterministic SVG or another vector renderer only when image generation is unavailable or the generated result cannot pass QA. Image-mode illustrations must be self-explanatory to an educated non-specialist. Give every figure a stable ID, reference it from the relevant body text, and write a caption that matches the review's style register (scientific, popsci, bullets, or ELI5) and ends with 2–5 verified ledger citations. `format_references.py` assigns figure numbers, creates cross-links, and rejects missing, uncited, duplicated, broken, or unreferenced figures. Inspect the defined Arial typography, every rendered word and number, scientific content, clipping, visual balance, caption, and misleading emphasis. Display it in the reply with useful alt text.
+
+In deck mode, follow `references/deck-guide.md`. Use the same verified synthesis
+and figure pipeline, but set `render_context: slide` for every content image.
+Storyboard according to the selected style, keep claim titles and DOI citations
+in renderer chrome, build with `export_deck.py`, and run `qa_deck_pdf.py`. Inspect
+every slide raster. Deck mode does not permit the deterministic vector fallback:
+if a capable image model is unavailable or the images cannot pass QA, still
+deliver the written review and state in one sentence that the deck could not be
+generated.
 
 ## Rules that do not bend
 
@@ -133,7 +176,7 @@ Skip this step unless the user explicitly requested image or mindmap mode. In im
 - **Read before you cite.** Abstract minimum; full text for anything the argument leans on.
 - **Represent the whole literature, not the convenient part.** If studies disagree, say so and say why they might. If the best evidence is weak, say the evidence is weak. A review that only tells one side is advocacy.
 - **Keep the story and the evidence distinct.** Findings are attributed ("the MYRIAD trial found …"); synthesis is signposted ("taken together, …"); speculation is labelled as such.
-- **Never hand back a file instead of an answer.** The review lives in the reply. A file is an extra only when requested or when image/mindmap mode requires the generated media artifact.
+- **Never hand back a file instead of an answer.** The review lives in the reply. A file is an extra only when requested or when image, mindmap, or deck mode requires the generated media artifact.
 - **The sources block is the audit trail.** Reviews carry no methods section; resolvable DOIs are what make the work checkable. Say nothing when verification completes cleanly. Verification failures are fixed or removed before writing, never decorated with warning symbols in the finished review.
 - **Numbers over adjectives.** Effect sizes, intervals, sample sizes, and absolute risks where the sources give them; "significant" on its own is not a result.
 
@@ -143,12 +186,18 @@ Skip this step unless the user explicitly requested image or mindmap mode. In im
 - `scripts/verify_citations.py` — Crossref bibliographic and retraction verification using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` — open-access full text via Europe PMC, as plain text.
 - `scripts/format_references.py` — resolves `[@key]` citations, builds the reference list (Vancouver / APA / Nature).
+- `scripts/validate_review.py` — deterministic post-format checks for style structure, exact lead constraints, DOI parity, terminal Sources, and figure contracts.
 - `scripts/export_review.py` and `scripts/weasyprint_export.py` — canonical browser-free, atomic journal-styled PDF export plus the separate HTML-only export.
+- `scripts/export_deck.py` — explicit-only, verified 16:9 PDF deck export from a structured storyboard, local slide artwork, and the verified source ledger.
+- `scripts/qa_deck_pdf.py` — fail-closed structural and independent Poppler raster QA for every delivered deck PDF.
 - `scripts/qa_review_pdf.py` — mandatory structural and independent Poppler raster QA for every delivered PDF.
+- `scripts/build_release_skill.py` — deterministic allowlisted `.skill` packaging with version and commit provenance; excludes caches, examples, and scratch output by construction.
+- `VERSION` and `scripts/grounded_metadata.py` — one shared semantic version, repository identity, and network user-agent source for every script.
 - `requirements-pdf.txt` — pinned PDF export and QA packages; the exporter separately verifies the native print engine and canonical Charter/Helvetica Neue font resolution.
 - `scripts/build_figure_prompt.py` — composes an end-to-end ImageGen prompt from a structured evidence specification, a reusable journal-style profile, and a figure archetype.
 - `scripts/download_figure_references.py` — downloads the official-source visual-analysis corpus to an explicit private directory and records provenance, dimensions, hashes, and byte counts; source pixels are never bundled.
 - `references/no-script-fallback.md` — the tool-only pipeline for sandboxes with no Python network access (claude.ai); read this whenever Step 0 fails.
+- `references/deck-guide.md` — explicit-only storyboard, evidence, slide-artwork, export, and QA contract for verified PDF decks.
 - `references/sizes.md` — what small, medium, and large mean for scope, search depth, structure, and effort.
 - `references/search-playbook.md` — generating angles, building queries, stopping rules, coverage checks, field notes.
 - `references/evidence-weighing.md` — how to judge and describe the strength of what you read.

@@ -4,6 +4,12 @@ Use this contract for every rendered figure: generated image, deterministic
 SVG, chart, diagram, or mindmap. A figure is not complete until it has a stable
 ID, a cited caption, and a reference from the review body.
 
+Deck content images are the one delivery-specific exception to the Markdown
+caption shape: `deck-guide.md` puts the full-sentence claim and verified DOI
+citations in real-text slide chrome instead. The image still obeys the same
+exact-text, data, science, uncertainty, and visual-inspection contract, and a
+content slide with no chrome citation is a hard failure.
+
 ## What a caption must do
 
 A caption is part of the evidence-bearing manuscript. It must:
@@ -89,15 +95,13 @@ unchanged.
 
 ### ELI5
 
-Use very short sentences and everyday words. Explain any line, colour, or symbol
-that a new reader could misunderstand. Keep the uncertainty; simplify the words,
-not the evidence.
+Use a short flowing paragraph made from very short sentences and everyday words.
+Explain any line, colour, or symbol that a new reader could misunderstand. Keep
+the uncertainty; simplify the words, not the evidence. Do not switch back to a
+structured bullet caption unless the user explicitly asked for bullets.
 
 ```markdown
-**Figure {#waning}. The vaccine's infection shield gets weaker faster.**
-- The top row is about catching the virus. The bottom row is about getting very sick.
-- The rows are the same size on purpose. Their size is not the amount of protection.
-- **Sources:** [@Feikin2022; @Tang2022]
+**Figure {#waning}. The vaccine's infection shield gets weaker faster.** The top row is about catching the virus. The bottom row is about getting very sick. The rows are the same size on purpose, so their size is not the amount of protection. [@Feikin2022; @Tang2022]
 ```
 
 ## Reference placement

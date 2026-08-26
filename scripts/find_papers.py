@@ -48,8 +48,8 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 from dataclasses import dataclass, field
 
-VERSION = "1.8.0"
-SKILL_URL = "https://github.com/jostelzer/scientific-review-skill"
+from grounded_metadata import user_agent as grounded_user_agent
+
 # Request pacing: OpenAlex's polite pool allows 10 req/s, NCBI allows 3 req/s without an API key.
 OPENALEX_MIN_INTERVAL = 0.15
 PUBMED_MIN_INTERVAL = 0.34
@@ -112,8 +112,7 @@ class SearchResult:
 
 def user_agent(mailto=None):
     """Descriptive UA; the mailto form is what OpenAlex and Crossref ask for."""
-    contact = f"; mailto:{mailto}" if mailto else ""
-    return f"scientific-review-skill/{VERSION} (+{SKILL_URL}{contact})"
+    return grounded_user_agent(mailto=mailto)
 
 
 class ServiceUnavailable(Exception):

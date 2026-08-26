@@ -2,6 +2,7 @@ import contextlib
 import importlib.util
 import io
 import json
+import sys
 import tempfile
 import unittest
 import urllib.parse
@@ -10,6 +11,7 @@ from unittest import mock
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "find_papers.py"
+sys.path.insert(0, str(SCRIPT.parent))
 SPEC = importlib.util.spec_from_file_location("find_papers", SCRIPT)
 find_papers = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(find_papers)

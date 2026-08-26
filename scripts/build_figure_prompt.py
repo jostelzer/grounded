@@ -12,7 +12,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_PROFILES = os.path.join(ROOT, "references", "figure-style-presets.json")
 DEFAULT_ARCHETYPES = os.path.join(ROOT, "references", "figure-archetypes.json")
 REQUIRED_FIELDS = ("purpose", "title", "story", "exact_text")
-RENDER_CONTEXTS = ("article", "standalone")
+RENDER_CONTEXTS = ("article", "standalone", "slide")
 
 
 def load_json(path):
@@ -103,7 +103,7 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "render_context must be one of: %s" % ", ".join(RENDER_CONTEXTS))
 
     rendered_text = list(exact_text)
-    if render_context == "article":
+    if render_context in ("article", "slide"):
         frame_text = {title}
         if subtitle:
             frame_text.add(subtitle.strip())
@@ -121,7 +121,13 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         raise ValueError("data must be an object or list")
 
     font = profile["font"]
-    canvas = profile["canvas"]
+    canvas = copy.deepcopy(profile["canvas"])
+    if render_context == "slide":
+        canvas["aspect"] = "16:9 landscape (required; no other slide ratio)"
+        canvas["margin"] = (
+            "Full-bleed canvas; keep the top 19% and bottom 8% visually quiet "
+            "because the canonical title/citation chrome overlays those zones"
+        )
     sections = [
         "USE CASE\nscientific-educational",
         "ASSET\nComplete publication-grade scientific figure rendered end to end, including every label and all typography.",
@@ -133,6 +139,14 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "Title: %s%s" % (
                 title,
                 "\nSubtitle: %s" % subtitle.strip() if subtitle else ""))
+    elif render_context == "slide":
+        sections.append(
+            "SLIDE CHROME CONTEXT — DO NOT RENDER INSIDE THE ARTWORK\n"
+            "Claim title: %s%s\n"
+            "The canonical deck renderer adds this claim, DOI citations, evidence "
+            "chip, masthead, and slide counter as real text." % (
+                title,
+                "\nScope: %s" % subtitle.strip() if subtitle else ""))
     else:
         sections.append("TITLE — RENDER COMPACTLY\n%s" % title)
         if subtitle:
@@ -176,6 +190,13 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
     if constraints:
         sections.append(bullet_section("SCIENTIFIC CONSTRAINTS", constraints))
 
+    slide_contract = ""
+    if render_context == "slide":
+        slide_contract = (
+            " Keep the top and bottom chrome zones free of essential labels, values, "
+            "arrows, and focal structures. Do not render the claim title, citations, "
+            "evidence chip, masthead, or slide number in the pixels."
+        )
     sections.append(
         "EXACT IN-FIGURE TEXT MANIFEST — RENDER EVERY STRING VERBATIM IN ARIAL\n%s" %
         "\n".join("- %s" % json.dumps(item, ensure_ascii=False)
@@ -190,13 +211,14 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         "Do not add text that is absent from the exact in-figure text manifest. Preserve every "
         "number, unit, interval, denominator, qualifier, and relationship exactly. "
         "No watermark, logo, masthead, or imitation journal branding."
+        + slide_contract
     ])
     return "\n\n".join(section for section in sections if section)
 
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
-        description="Build a modular prompt for a scientific-review figure")
+        description="Build a modular prompt for a Grounded review figure")
     parser.add_argument("--spec", help="JSON evidence and copy specification")
     parser.add_argument("--profile", help="Override the style profile")
     parser.add_argument("--archetype", help="Override the figure archetype")

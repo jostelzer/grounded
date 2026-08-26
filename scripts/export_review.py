@@ -165,8 +165,8 @@ def image_data_uri(path, base_dir):
         return f"data:{MIME[ext]};base64," + base64.b64encode(f.read()).decode()
 
 
-def to_html(md, base_dir=".", columns=2):
-    """Convert the review markdown to body HTML. Returns (title, lead, body)."""
+def _to_html_document(md, base_dir=".", columns=2):
+    """Convert Markdown and return title, lead, body, and explicit flow mode."""
     lines = md.split("\n")
     out, i = [], 0
     title, lead = None, None
@@ -348,13 +348,22 @@ def to_html(md, base_dir=".", columns=2):
                     f'<div>{right}</div></div></section>'
                 ]
             break
+    structured_flow = columns == 2 and has_tall_structured_caption
     body = arrange_page_flow(
         out, columns=columns,
-        use_structured_caption_flow=has_tall_structured_caption)
+        use_structured_caption_flow=structured_flow)
     for figure_id in figure_ids:
         if f'href="#{figure_id}"' not in body:
             raise ValueError(
                 "every figure must be referenced from the text: %s" % figure_id)
+    return title, lead, body, structured_flow
+
+
+def to_html(md, base_dir=".", columns=2):
+    """Convert the review markdown to body HTML. Returns (title, lead, body)."""
+    title, lead, body, _structured_flow = _to_html_document(
+        md, base_dir=base_dir, columns=columns
+    )
     return title, lead, body
 
 
@@ -608,7 +617,7 @@ PAGE = """<!doctype html>
 
 
 def detect_release(script_dir):
-    """Latest git tag of the skill repo, e.g. 'v1.8.0'. Empty string if unknown."""
+    """Latest git tag of the skill repo, e.g. ``vX.Y.Z``. Empty if unknown."""
     try:
         r = subprocess.run(["git", "-C", script_dir, "describe", "--tags", "--abbrev=0"],
                            capture_output=True, text=True, timeout=10)
@@ -657,7 +666,9 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                release=None, repo=None, compiled_date=None):
     import urllib.parse
 
-    title, lead, body = to_html(md, base_dir, columns=columns)
+    title, lead, body, structured_flow = _to_html_document(
+        md, base_dir=base_dir, columns=columns
+    )
     title = title or "Scientific review"
     lead_html = ""
     if lead:
@@ -716,8 +727,8 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         version=html.escape(release), repo_url=html.escape(repo_url, quote=True),
         repo_label=html.escape(repo_label), kicker=html.escape(kicker),
         title=title, metagrid=metagrid, lead=lead_html,
-        cols=((" cols" if columns == 2 and 'class="column-run' not in body else "")
-              + (" structured-flow" if 'class="column-run' in body else "")),
+        cols=(" structured-flow" if structured_flow else
+              (" cols" if columns == 2 else "")),
         body=body,
         colophon=html.escape(colophon))
 

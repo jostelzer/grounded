@@ -87,7 +87,8 @@ def _embedded_font_families(reader) -> set[str]:
     return families
 
 
-def inspect_structure(pdf_path: str, markdown: str | None = None) -> dict[str, object]:
+def inspect_structure(pdf_path: str, markdown: str | None = None,
+                      expected_release: str | None = None) -> dict[str, object]:
     """Inspect PDF objects, metadata, page geometry, links, and running furniture."""
     _Image, _ImageDraw, _ImageOps, PdfReader = _load_runtime()
     try:
@@ -115,6 +116,7 @@ def inspect_structure(pdf_path: str, markdown: str | None = None) -> dict[str, o
             elif action.get("/URI"):
                 external_uris.add(unquote(str(action["/URI"])).lower())
 
+    first_page_text = ""
     for index, page in enumerate(reader.pages, 1):
         width = float(page.mediabox.width)
         height = float(page.mediabox.height)
@@ -123,10 +125,25 @@ def inspect_structure(pdf_path: str, markdown: str | None = None) -> dict[str, o
                 f"page {index} is {width:.2f} x {height:.2f} pt instead of A4"
             )
         text = page.extract_text() or ""
+        if index == 1:
+            first_page_text = text
         if "G R O U N D E D" not in text or "NO FLOATING CLAIMS." not in text:
             failures.append(f"page {index} is missing the running masthead")
         if f"{index} / {len(reader.pages)}" not in text:
             failures.append(f"page {index} is missing its total-aware page number")
+
+    release_match = re.search(r"\bGROUNDED\s+(V[^\s·]+)", first_page_text, re.I)
+    embedded_release = release_match.group(1).lower() if release_match else None
+    if expected_release is not None:
+        expected = expected_release.upper()
+        if not expected.startswith("V"):
+            expected = "V" + expected
+        if embedded_release is None:
+            failures.append("first page is missing the GROUNDED release label")
+        elif embedded_release.upper() != expected:
+            failures.append(
+                f"PDF embeds release {embedded_release}; expected {expected_release}"
+            )
 
     metadata = reader.metadata or {}
     if metadata.get("/Author") != "Grounded":
@@ -170,6 +187,7 @@ def inspect_structure(pdf_path: str, markdown: str | None = None) -> dict[str, o
         "internal_links": internal_links,
         "expected_figures": expected_figures,
         "font_families": sorted(embedded_fonts),
+        "release": embedded_release,
     }
 
 
@@ -181,6 +199,65 @@ def _ink_count(image, box) -> int:
 def _accent_count(image, box) -> int:
     return sum(1 for red, green, blue in image.crop(box).get_flattened_data()
                if red > 190 and green < 170 and blue < 140)
+
+
+def _last_ink_row(image, box) -> tuple[float, float]:
+    """Return last meaningful ink row and active-row share within a box."""
+    crop = image.crop(box)
+    width, height = crop.size
+    pixels = crop.load()
+    row_threshold = max(3, int(0.004 * width))
+    active_rows = []
+    for y in range(height):
+        ink = sum(1 for x in range(width) if min(pixels[x, y]) < 225)
+        if ink >= row_threshold:
+            active_rows.append(y)
+    if not active_rows:
+        return 0.0, 0.0
+    return active_rows[-1] / height, len(active_rows) / height
+
+
+def _page_layout_metrics(page) -> dict[str, float]:
+    """Measure page utilization and gross two-column bottom imbalance."""
+    width, height = page.size
+    x0, x1 = int(0.06 * width), int(0.94 * width)
+    y0, y1 = int(0.085 * height), int(0.90 * height)
+    midpoint = (x0 + x1) // 2
+    gutter = int(0.018 * width)
+    fill, active = _last_ink_row(page, (x0, y0, x1, y1))
+    left_fill, left_active = _last_ink_row(
+        page, (x0, y0, midpoint - gutter, y1)
+    )
+    right_fill, right_active = _last_ink_row(
+        page, (midpoint + gutter, y0, x1, y1)
+    )
+    return {
+        "body_fill": round(fill, 4),
+        "active_rows": round(active, 4),
+        "left_fill": round(left_fill, 4),
+        "right_fill": round(right_fill, 4),
+        "left_active_rows": round(left_active, 4),
+        "right_active_rows": round(right_active, 4),
+        "column_bottom_delta": round(abs(left_fill - right_fill), 4),
+    }
+
+
+def _layout_failures(metrics: dict[str, float], page_number: int,
+                     page_count: int) -> list[str]:
+    failures = []
+    if (page_number < page_count and metrics["body_fill"] < 0.88 and
+            metrics["active_rows"] > 0.05):
+        failures.append(
+            f"page {page_number} is an under-filled non-final page "
+            f"(body fill {metrics['body_fill']:.1%})"
+        )
+    if (metrics["column_bottom_delta"] > 0.45 and
+            min(metrics["left_active_rows"], metrics["right_active_rows"]) > 0.15):
+        failures.append(
+            f"page {page_number} has severely unbalanced column endings "
+            f"(delta {metrics['column_bottom_delta']:.1%})"
+        )
+    return failures
 
 
 def _contact_sheets(page_paths: list[Path], output_dir: Path, Image, ImageDraw,
@@ -248,6 +325,7 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
     failures = []
     dimensions = set()
     accent_counts = []
+    layout_metrics = []
     scale = (dpi / 75.0) ** 2
     for index, path in enumerate(page_paths, 1):
         with Image.open(path) as source:
@@ -273,6 +351,9 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
         body_ink = _ink_count(page, body_box)
         accent = _accent_count(page, chip_box)
         accent_counts.append(accent)
+        layout = _page_layout_metrics(page)
+        layout_metrics.append({"page": index, **layout})
+        failures.extend(_layout_failures(layout, index, len(page_paths)))
         if header_ink < 600 * scale:
             failures.append(f"page {index} masthead raster is missing or incomplete")
         if accent < 40 * scale:
@@ -297,11 +378,13 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
         "rendered_pages": len(page_paths),
         "page_size_pixels": list(next(iter(dimensions))),
         "contact_sheets": contacts,
+        "layout_metrics": layout_metrics,
     }
 
 
 def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
-           render_dir: str | None = None, dpi: int = 120) -> dict[str, object]:
+           render_dir: str | None = None, dpi: int = 120,
+           expected_release: str | None = None) -> dict[str, object]:
     pdf_path = os.path.abspath(pdf_path)
     if not os.path.isfile(pdf_path):
         raise PdfQaError(f"PDF does not exist: {pdf_path}")
@@ -309,7 +392,7 @@ def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
     if markdown_path:
         with open(markdown_path, encoding="utf-8") as stream:
             markdown = stream.read()
-    structural = inspect_structure(pdf_path, markdown)
+    structural = inspect_structure(pdf_path, markdown, expected_release)
     if render_dir is None:
         with tempfile.TemporaryDirectory(prefix="grounded-pdf-qa-") as temporary:
             raster = render_and_inspect(pdf_path, temporary, dpi=dpi)
@@ -335,11 +418,15 @@ def main() -> int:
         "--dpi", type=int, default=120,
         help="independent raster DPI (72–240; default 120)",
     )
+    parser.add_argument(
+        "--release", help="required GROUNDED release label embedded on page 1"
+    )
     args = parser.parse_args()
     try:
         result = qa_pdf(
             args.pdf, markdown_path=args.markdown,
             render_dir=args.render_dir, dpi=args.dpi,
+            expected_release=args.release,
         )
     except PdfQaError as exc:
         print(f"PDF QA failed: {exc}", file=sys.stderr)

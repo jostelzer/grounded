@@ -8,7 +8,7 @@ It is not a document with front matter or a report about itself. Every word earn
 
 ## Choose the writing style
 
-Use **scientific by default** (the style previously named `prose` — treat `prose` as an alias). Its exact structure and narrative rules are in "Scientific style" below. Use the compact bullet structure only when the user explicitly asks for bullets, a list, or the compact structured format. Use **popsci** when the user asks for `popsci`, popular science, magazine style, science journalism, or names that register's magazines (Scientific American, New Scientist, Quanta). Use ELI5 only when requested.
+Use **scientific by default** (the style previously named `prose` — treat `prose` as an alias). Its exact structure and narrative rules are in "Scientific style" below. Use the compact bullet structure only when the user explicitly asks for bullets, a list, or the compact structured format. Use **popsci** when the user asks for `popsci`, popular science, magazine style, science journalism, or names that register's magazines (Scientific American, New Scientist, Quanta). Use ELI5 only when requested; ELI5 is flowing prose in simpler language, not an implicit request for bullets.
 
 The register spectrum runs scientific → popsci → ELI5: a journal reader, a curious educated adult, a smart reader with no science background. Bullets share the scientific register in compact form.
 
@@ -195,18 +195,41 @@ The storytelling — how the magazines actually do it:
 - Word budgets match the scientific tiers: small 600–1,000, medium 1,500–2,500, large 3,500–6,000. Sources, angles, and search depth are unchanged from the chosen size.
 - Popsci prints well too — offer the PDF export after delivering, as with scientific style.
 
-## ELI5 language
+## ELI5 style
 
-In `eli5` mode only. Use the bullet-shaped structure: question, citation-free TL;DR, punchline headings in plain words, factual bullets, and Sources. The evidence pipeline, citations, and verification are unchanged; only the language and jargon treatment change. Write for a smart reader with no science background at all.
+In `eli5` mode only. Write a connected explanation in short, flowing paragraphs: question, citation-free TL;DR, plain-language thematic headings, narrative body, a closing synthesis, and Sources. The evidence pipeline, citations, and verification are unchanged; only the architecture, language, and jargon treatment change. Write for a smart reader with no science background at all. Do not use list bodies or structured bullet captions unless the user explicitly asks for bullets too; in that case use `bullets` as the structural style for validation and apply this plain-language register to it.
+
+Structure:
+
+```text
+## <The question in everyday words>
+
+**TL;DR** — <the answer in 1–3 short, citation-free sentences>
+
+### <Plain-language heading that advances the explanation>
+<One or more short, connected paragraphs. Each paragraph begins with its point,
+then explains the evidence and what it means in everyday words.>
+
+### <The next step, contrast, or limit>
+<Short flowing paragraphs that connect back to what the reader already knows.>
+
+### <Closing synthesis in natural language>
+<Bring the parts together without adding new evidence.>
+
+**Sources**
+<same generated sources block as always>
+```
 
 - **Everyday words only.** "People in the study" not "participants"; "made-up pill" or "dummy pill" not "placebo"; "the studies disagree" not "heterogeneity". If a ten-year-old wouldn't know the word, don't use it.
 - **Short sentences.** One idea per sentence. No semicolons, no nested clauses.
+- **Paragraphs must flow.** Put related sentences together and use simple transitions so each section reads as an explanation, not a stack of facts. A paragraph is usually 2–4 sentences. Begin with the point, support it, then say what it means or lead into the next point.
+- **Headings guide rather than replace the prose.** Use plain headings that mark the steps of the explanation. The reader should understand the argument from the paragraphs, not have to reconstruct it from disconnected labels.
 - **Numbers stay, but say what they mean.** Not "SMD −0.34 (95% CI −0.68 to −0.00)" but "the people taking creatine improved a little more — about 2 points on a 52-point mood questionnaire, which is too small a change for most people to feel. And the studies were so different from each other that the real effect could be zero."
 - **Jargon is rewritten, not linked.** Term links are for standard modes; here the plain words replace the term entirely. If a term truly cannot be avoided (a scale's name, a drug class), name it once, explain it in the same sentence in plain words, and give it the usual verified term link.
 - **Honesty survives the simplification.** "We don't really know yet" instead of silently dropping uncertainty. Small studies are "too small to trust on their own", not omitted. Never round a weak finding up to a strong claim because the plain words feel less precise.
 - **Analogies are allowed, sparingly**, and must not smuggle in claims the sources don't make.
-- **Citations unchanged.** Every factual bullet still ends with its author–year DOI links; punchline headings still tell the story, phrased in plain words ("The studies mostly say it helps a little, but they're small").
-- **Figure captions stay ELI5 too.** Use short everyday sentences, explain what
+- **Citations unchanged.** Every empirical claim still carries its author–year DOI links. Place links naturally at the end of the sentence or short claim cluster they support; do not collect them in a list-like citation dump.
+- **Figure captions stay ELI5 too.** Use a short flowing paragraph of everyday sentences, explain what
   the reader sees and what remains uncertain, and keep the usual verified
   citations. Refer to the picture directly: “You can see the steps in
   `{{figure:mechanism}}`.”
@@ -225,7 +248,7 @@ The first use of a technical abbreviation or specialist term is a markdown link 
 
 ## Length
 
-Default **small scientific**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words in the body plus the sources block. Popsci uses the same budgets. Explicit bullet style uses 350–700 words. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
+Default **small scientific**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words in the body plus the sources block. Popsci uses the same budgets. Explicit bullet style and small ELI5 use 350–700 words, but ELI5 spends that budget on connected paragraphs rather than list items. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
 
 ## Citing
 
@@ -241,8 +264,8 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 ## Quality gate
 
 0. The review is in the reply, not in a file (unless a file was requested).
-1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited.
-2. In bullet style, headings alone tell the argument; in scientific and popsci styles, topic sentences and section landings advance one throughline.
+1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited; in ELI5, citations sit naturally beside the sentence or short claim cluster they support.
+2. In bullet style, headings alone tell the argument; in scientific, popsci, and ELI5 styles, topic sentences and section landings advance one throughline.
 3. The Abstract (scientific), standfirst (popsci), or TL;DR (bullets/ELI5) has no citations; the Abstract and TL;DR answer the question in the first sentence, and the standfirst states the question and the shape of the answer.
 4. Opposing evidence appears, and is contrasted rather than blended.
 5. A table exists wherever several studies share dimensions.
@@ -251,14 +274,18 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded.
 8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut 10% more.
-9b. In scientific style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly.
+9b. In scientific style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly. In ELI5, sections use short flowing paragraphs, simple transitions, and a closing synthesis; bullet-list bodies are absent unless the user requested them.
 9c. In popsci style: the headline is honest; the lede is a concrete, cited close-up with no invented detail; the nut graf poses the throughline; the turn gets its own crosshead; the kicker circles back and looks forward; no hype vocabulary appears; and every hedge in the sources survives into the piece — the certainty matches the evidence exactly.
 10. In image or mindmap mode, every requested visual is rendered,
     evidence-grounded, legible, and inspected; has a unique stable ID; is
     referenced from the relevant body text; and has a caption in the same
-    bullets, prose, or ELI5 register with 2–5 verified citations.
+    scientific, popsci, bullet, or ELI5 register with 2–5 verified citations.
 11. When a PDF is requested, inspect every rendered page. No heading may be
     stranded or separated from its first paragraph, table, or figure; no page
     may be an avoidably sparse spill; and no large preventable blank region may
     remain. Rebalance and rebuild without dropping evidence or reducing
     legibility, then repeat the complete raster inspection.
+12. Run the finished Markdown through `scripts/validate_review.py` with the
+    selected style and size. Fix every hard failure and review every word-budget
+    warning; this deterministic gate complements rather than replaces checks
+    1–11.

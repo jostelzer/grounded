@@ -1,7 +1,7 @@
 # Journal-grade figure style system
 
-Use this system for every `image` or `mindmap` artifact. It translates
-top-journal figure conventions into a display-oriented scientific-review style;
+Use this system for every `image`, `mindmap`, or deck content image. It translates
+top-journal figure conventions into a display-oriented Grounded review style;
 it is not an official Nature template and must not carry Nature branding. Read
 `figure-reference-analysis.md` for the 21-figure visual audit behind the rules.
 
@@ -16,6 +16,9 @@ not a row of generic cards.
   labels, values, units, legends, and essential qualifiers in the figure.
 - In `standalone` context, render a compact title and only an essential short
   subtitle. They must not dominate the scientific content.
+- In `slide` context, render full-bleed 16:9 artwork while keeping the top 19%
+  and bottom 8% visually quiet. The canonical deck renderer adds the claim,
+  citations, evidence chip, masthead, and counter as real text.
 - Establish grouping with alignment and white space before adding borders or
   pale background regions. Do not box every panel.
 - Put explanations next to the structure or data they describe. Use a glossary
@@ -71,7 +74,7 @@ Change one layer at a time:
 2. **Archetype:** mechanism, anatomical mechanism, study overview, comparison,
    quantitative, evidence map, timeline, or mindmap.
 3. **Style profile:** Nature Neuroscience explanatory, Nature Reviews conceptual, or Nature data.
-4. **Render context:** `article` or `standalone`.
+4. **Render context:** `article`, `standalone`, or `slide` for a requested deck.
 5. **Overrides:** aspect ratio, palette subset, panel count, or content-specific constraints.
 
 Never bury evidence changes inside style overrides. If a user requests another journal or house style, add a new profile instead of mutating the default.

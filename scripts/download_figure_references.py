@@ -14,10 +14,12 @@ import tempfile
 import urllib.request
 from urllib.parse import urlparse
 
+from grounded_metadata import user_agent
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_MANIFEST = os.path.join(ROOT, "references", "nature-figure-corpus.json")
-USER_AGENT = "scientific-review-skill/1.8.0 figure-style analysis"
+USER_AGENT = user_agent(qualifier="figure-style-analysis")
 
 
 def png_dimensions(path):

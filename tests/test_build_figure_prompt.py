@@ -24,12 +24,13 @@ class FigurePromptTests(unittest.TestCase):
             "purpose": "Explain a verified mechanism.",
             "title": "A clean mechanism",
             "story": ["A leads to B."],
-            "exact_text": ["A clean mechanism", "A", "B"]
+            "exact_text": ["A clean mechanism", "A", "B"],
         }
 
     def test_default_prompt_defines_arial_and_rejects_serif(self):
         prompt = MODULE.build_prompt(
-            self.minimal_spec(), self.profiles, self.archetypes)
+            self.minimal_spec(), self.profiles, self.archetypes
+        )
         self.assertIn("Render every character in Arial throughout", prompt)
         self.assertIn("serif typography", prompt)
         self.assertIn("#1A1A1A", prompt)
@@ -38,10 +39,12 @@ class FigurePromptTests(unittest.TestCase):
 
     def test_article_context_keeps_caption_title_out_of_render_manifest(self):
         prompt = MODULE.build_prompt(
-            self.minimal_spec(), self.profiles, self.archetypes)
+            self.minimal_spec(), self.profiles, self.archetypes
+        )
         self.assertIn("CAPTION CONTEXT — DO NOT RENDER", prompt)
-        manifest = prompt.split(
-            "EXACT IN-FIGURE TEXT MANIFEST", 1)[1].split("AVOID", 1)[0]
+        manifest = prompt.split("EXACT IN-FIGURE TEXT MANIFEST", 1)[1].split(
+            "AVOID", 1
+        )[0]
         self.assertNotIn("A clean mechanism", manifest)
         self.assertIn('"A"', manifest)
         self.assertIn('"B"', manifest)
@@ -52,9 +55,25 @@ class FigurePromptTests(unittest.TestCase):
         prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
         self.assertIn("Context: standalone", prompt)
         self.assertIn("TITLE — RENDER COMPACTLY\nA clean mechanism", prompt)
-        manifest = prompt.split(
-            "EXACT IN-FIGURE TEXT MANIFEST", 1)[1].split("AVOID", 1)[0]
+        manifest = prompt.split("EXACT IN-FIGURE TEXT MANIFEST", 1)[1].split(
+            "AVOID", 1
+        )[0]
         self.assertIn('"A clean mechanism"', manifest)
+
+    def test_slide_context_reserves_chrome_and_omits_the_claim_from_pixels(self):
+        spec = self.minimal_spec()
+        spec["render_context"] = "slide"
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("Context: slide", prompt)
+        self.assertIn("16:9 landscape", prompt)
+        self.assertIn("top 19% and bottom 8% visually quiet", prompt)
+        self.assertIn("SLIDE CHROME CONTEXT", prompt)
+        manifest = prompt.split("EXACT IN-FIGURE TEXT MANIFEST", 1)[1].split(
+            "AVOID", 1
+        )[0]
+        self.assertNotIn('"A clean mechanism"', manifest)
+        self.assertIn('"A"', manifest)
+        self.assertIn('"B"', manifest)
 
     def test_exact_text_is_json_quoted_verbatim(self):
         spec = self.minimal_spec()
@@ -67,8 +86,12 @@ class FigurePromptTests(unittest.TestCase):
         spec["profile"] = "nature-reviews"
         spec["archetype"] = "comparison"
         prompt = MODULE.build_prompt(
-            spec, self.profiles, self.archetypes,
-            profile_name="nature-data", archetype_name="timeline")
+            spec,
+            self.profiles,
+            self.archetypes,
+            profile_name="nature-data",
+            archetype_name="timeline",
+        )
         self.assertIn("Nature-inspired quantitative figure", prompt)
         self.assertIn("timeline —", prompt)
         self.assertNotIn("Nature Reviews-inspired conceptual synthesis", prompt)
@@ -86,7 +109,7 @@ class FigurePromptTests(unittest.TestCase):
         spec["data"] = {
             "estimate": 21.0,
             "interval": [13.9, 29.8],
-            "unit": "percentage points"
+            "unit": "percentage points",
         }
         prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
         self.assertIn('"estimate": 21.0', prompt)
@@ -97,7 +120,9 @@ class FigurePromptTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "exact_text"):
             MODULE.build_prompt(
                 {"purpose": "x", "title": "y", "story": ["z"]},
-                self.profiles, self.archetypes)
+                self.profiles,
+                self.archetypes,
+            )
 
     def test_invalid_render_context_fails(self):
         spec = self.minimal_spec()

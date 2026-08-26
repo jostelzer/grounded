@@ -30,7 +30,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-UA = "scientific-review-skill/1.8.0"
+from grounded_metadata import user_agent
+
+
+UA = user_agent()
 OK_TYPES = {"journal-article"}
 WARN_TYPES = {"book-chapter", "proceedings-article", "book", "monograph", "reference-entry", "report"}
 
