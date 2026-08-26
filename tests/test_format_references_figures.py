@@ -117,7 +117,7 @@ class FigureResolutionTests(unittest.TestCase):
         self.assertIn("[Figure 1](#fig-mechanism)", rendered)
         self.assertIn("**Figure 1. A transient signal builds memory.**", rendered)
         self.assertIn("[Smith 2024](https://doi.org/10.1000/example)", rendered)
-        self.assertIn("**Smith 2024** A verified figure source.", rendered)
+        self.assertIn("**Smith A (2024)** A verified figure source.", rendered)
 
 
 if __name__ == "__main__":

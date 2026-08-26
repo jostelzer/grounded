@@ -226,8 +226,8 @@ def to_html(md, base_dir="."):
 ACCENT = "#ff4f1f"
 
 # The earth-ground symbol ⏚ drawn as inline SVG so it can never fall back to a
-# missing-glyph box in a PDF renderer.
-GND_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#fff" '
+# missing-glyph box in a PDF renderer. Accent-colored: it sits in an outline chip.
+GND_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#ff4f1f" '
            'stroke-width="2.4" stroke-linecap="round" fill="none">'
            '<path d="M12 3v8"/><path d="M4 11h16"/><path d="M7.5 15.5h9"/>'
            '<path d="M10.5 20h3"/></g></svg>')
@@ -262,17 +262,17 @@ table.paper { width: 100%; border-collapse: collapse; max-width: 194mm; margin: 
 table.paper > thead > tr > th { padding: 0 0 5mm; font-weight: normal; text-align: left; }
 table.paper > tbody > tr > td { padding: 0; }
 .strip {
-  display: flex; align-items: stretch; border-bottom: 1.5px solid var(--ink);
+  display: flex; align-items: stretch; border-bottom: .5px solid var(--ink);
   break-inside: avoid;
 }
 .strip .chip {
-  background: var(--accent); display: flex; align-items: center;
-  padding: 5px 8px; width: 30px;
+  background: none; border: 1.5px solid var(--accent);
+  display: flex; align-items: center; padding: 5px 8px; width: 32px;
 }
 .strip .chip svg { width: 14px; height: 14px; display: block; }
 .strip .mark {
   display: flex; align-items: center; padding: 0 10px;
-  font-weight: 800; font-size: 10.5pt; letter-spacing: .14em; color: var(--ink);
+  font-weight: 600; font-size: 9.5pt; letter-spacing: .3em; color: var(--ink);
 }
 .strip .tagline {
   display: flex; align-items: center; font-size: 6.3pt; font-weight: 600;
@@ -294,12 +294,12 @@ table.paper > tbody > tr > td { padding: 0; }
   text-transform: uppercase; color: var(--accent); margin: 0 0 6px; text-align: left;
 }
 h1 {
-  font-size: 22pt; line-height: 1.06; margin: 0 0 12px; font-weight: 800;
-  letter-spacing: -0.03em; max-width: 30em; text-align: left; hyphens: none;
+  font-size: 24pt; line-height: 1.1; margin: 0 0 12px; font-weight: 300;
+  letter-spacing: -0.015em; max-width: 30em; text-align: left; hyphens: none;
 }
 .metagrid {
   display: grid; grid-template-columns: repeat(4, 1fr);
-  border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--ink);
+  border-top: .5px solid var(--ink); border-bottom: .5px solid var(--ink);
   margin: 0 0 12px; break-inside: avoid;
 }
 .metagrid > div { padding: 5px 8px 6px; border-right: 1px solid var(--rule); text-align: left; }
@@ -308,7 +308,7 @@ h1 {
   display: block; font-size: 5.8pt; font-weight: 700; letter-spacing: .14em;
   text-transform: uppercase; color: var(--faint); margin-bottom: 2px;
 }
-.metagrid span { font-size: 9pt; font-weight: 700; letter-spacing: -.01em; }
+.metagrid span { font-size: 9pt; font-weight: 600; letter-spacing: -.01em; }
 .metagrid span i { font-style: normal; color: var(--accent); }
 .lead { font-size: 9.8pt; line-height: 1.5; font-weight: 500;
   margin: 0 0 12px; max-width: 96%; text-align: left; }
@@ -321,7 +321,7 @@ h1 {
 .body { counter-reset: sec; }
 .body.cols { column-count: 2; column-gap: 8mm; }
 h2 {
-  font-size: 9pt; font-weight: 800; line-height: 1.3; letter-spacing: 0;
+  font-size: 9pt; font-weight: 600; line-height: 1.3; letter-spacing: 0;
   margin: 12px 0 4px; color: var(--ink);
   break-after: avoid; page-break-after: avoid; text-align: left; hyphens: none;
 }
@@ -331,7 +331,7 @@ h2::before {
 }
 .body > h2:first-child, .body.cols > h2:first-child { margin-top: 0; }
 h2.refhead {
-  border-top: 2px solid var(--ink); padding-top: 6px; margin-top: 16px;
+  border-top: 1px solid var(--ink); padding-top: 6px; margin-top: 16px;
   column-span: all; font-size: 9pt;
 }
 h2.refhead::before { content: none; counter-increment: none; }
@@ -351,15 +351,15 @@ strong { letter-spacing: 0; }
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
 thead th {
   font-size: 6.4pt; text-transform: uppercase; letter-spacing: .08em;
-  text-align: left; font-weight: 700;
-  border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink);
+  text-align: left; font-weight: 600;
+  border-top: 1px solid var(--ink); border-bottom: .5px solid var(--ink);
   padding: 4.5px 7px 4px; hyphens: none;
 }
 tbody td {
   padding: 4px 7px; border-bottom: .5px solid var(--rule); vertical-align: top;
   text-align: left; overflow-wrap: break-word; hyphens: auto;
 }
-tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+tbody tr:last-child td { border-bottom: 1px solid var(--ink); }
 .refs { font-size: 7.2pt; line-height: 1.5; color: #333; text-align: left; }
 .refs p { margin: 0 0 5px; padding-left: 1.2em; text-indent: -1.2em; break-inside: avoid; }
 .refs a { border-bottom: none; color: var(--muted); word-break: break-all; }
@@ -376,7 +376,7 @@ figcaption li { margin: 0 0 2px; break-inside: auto; }
 .tomb { text-align: right; color: var(--accent); font-size: 11pt;
   margin: 4px 0 0; column-span: all; }
 footer.colophon {
-  margin-top: 14px; padding-top: 6px; border-top: 1.5px solid var(--ink);
+  margin-top: 14px; padding-top: 6px; border-top: .5px solid var(--ink);
   font-size: 6.5pt; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
   color: var(--faint); display: flex; justify-content: space-between; gap: 12px;
   text-align: left;
@@ -478,9 +478,9 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     n_refs = len({urllib.parse.unquote(d).lower().rstrip(").,;*_")
                   for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
 
-    # masthead furniture: issue number is the day of the year, date alongside
+    # masthead furniture: the export date, top right of every page
     today = datetime.date.today()
-    issue = f"No. {today.timetuple().tm_yday} · {today.strftime('%-d %B %Y')}"
+    issue = today.strftime("%-d %B %Y")
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     if release is None:
@@ -556,7 +556,7 @@ def write_pdf(html_text, out_path):
     target_dir = os.path.dirname(target)
     chrome = find_chrome()
     if chrome:
-        with tempfile.TemporaryDirectory(prefix=".scientific-review-", dir=target_dir) as td:
+        with tempfile.TemporaryDirectory(prefix=".grounded-", dir=target_dir) as td:
             src = os.path.join(td, "review.html")
             rendered = os.path.join(td, "rendered.pdf")
             with open(src, "w") as f:
@@ -578,7 +578,7 @@ def write_pdf(html_text, out_path):
                 return os.path.basename(chrome)
             raise RuntimeError(f"chrome failed to write a PDF: {r.stderr.strip()[:300]}")
     if shutil.which("weasyprint"):
-        with tempfile.TemporaryDirectory(prefix=".scientific-review-", dir=target_dir) as td:
+        with tempfile.TemporaryDirectory(prefix=".grounded-", dir=target_dir) as td:
             src = os.path.join(td, "review.html")
             rendered = os.path.join(td, "rendered.pdf")
             with open(src, "w") as f:

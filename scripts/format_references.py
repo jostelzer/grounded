@@ -180,9 +180,7 @@ def initials_dotted(given):
 
 def fmt_vancouver(n, c, doi):
     au = c.get("authors_structured") or []
-    names = [f"{fix_case(a['family'])} {initials(a['given'])}".strip() for a in au[:6]]
-    if len(au) > 6:
-        names.append("et al")
+    names = [f"{fix_case(a['family'])} {initials(a['given'])}".strip() for a in au]
     authors = ", ".join(names)
     title = clean_title(c.get("title", ""))
     journal = clean(c.get("journal") or c.get("journal_short") or "")
@@ -219,9 +217,7 @@ def fmt_apa(c, doi, suffix=""):
 
 def fmt_nature(n, c, doi):
     au = c.get("authors_structured") or []
-    names = [f"{fix_case(a['family'])}, {initials_dotted(a['given'])}".rstrip(", ") for a in au[:5]]
-    if len(au) > 5:
-        names = names[:1] + ["et al."]
+    names = [f"{fix_case(a['family'])}, {initials_dotted(a['given'])}".rstrip(", ") for a in au]
     title = clean_title(c.get("title", ""))
     journal = clean(c.get("journal") or c.get("journal_short") or "")
     vol = c.get("volume") or ""
@@ -243,11 +239,17 @@ def bracket_intext(c, suffix=""):
 
 
 def fmt_bracket(c, doi, suffix=""):
-    """One compact line: **Author 2026** Title. *Journal*. doi link"""
-    tag = bracket_intext(c, suffix)
+    """One line: **All Authors (2026)** Title. *Journal*. doi link.
+
+    The reference list names every author — "et al." lives only in the in-text tags.
+    """
+    au = c.get("authors_structured") or []
+    names = ", ".join(f"{fix_case(a['family'])} {initials(a['given'])}".strip()
+                      for a in au) or "Anon."
+    year = f"{c.get('year') or 'n.d.'}{suffix}"
     title = clean_title(c.get("title", ""))
     journal = clean(c.get("journal") or c.get("journal_short") or "")
-    return f"**{tag}** {title} *{journal}*. https://doi.org/{doi}"
+    return f"**{names} ({year})** {title} *{journal}*. https://doi.org/{doi}"
 
 
 def apa_intext(c, suffix=""):

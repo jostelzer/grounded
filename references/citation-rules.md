@@ -56,10 +56,10 @@ The ledger keeps two distinct fields under `verification`: `bibliographic_status
 
 | Style | In text | Reference list |
 |---|---|---|
-| `bracket` (default) | `Carter et al. 2018` linked to the DOI | Alphabetical, one compact line each: **Author Year** Title. *Journal*. DOI link |
-| `vancouver` | `[1]`, `[2,3]`, `[4–6]` in order of appearance | Numbered; authors up to 6 then "et al"; title; journal; year;volume(issue):pages; DOI |
+| `bracket` (default) | `Carter et al. 2018` linked to the DOI | Alphabetical, one line each: **All Authors (Year)** Title. *Journal*. DOI link — every author named, never "et al." |
+| `vancouver` | `[1]`, `[2,3]`, `[4–6]` in order of appearance | Numbered; all authors; title; journal; year;volume(issue):pages; DOI |
 | `apa` | `(Author et al., 2022)` | Alphabetical; APA 7th form; DOI as URL |
-| `nature` | `^1,2^` superscripts | Numbered; abbreviated author list; journal in italics, volume bold |
+| `nature` | `^1,2^` superscripts | Numbered; all authors; journal in italics, volume bold |
 
 Journals often require a specific style; ask if the review is for submission.
 

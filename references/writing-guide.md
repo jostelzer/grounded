@@ -21,7 +21,7 @@ It is not a document with front matter, not an essay, and not a report about its
 - …
 
 **Sources**
-**Author 2026** Title. *Journal*. https://doi.org/…
+**Author A, Author B, Author C (2026)** Title. *Journal*. https://doi.org/…
 ```
 
 In-text citations render as plain `Author 2026` links: the square brackets are markdown link syntax only and must never be visible in the finished text. If the delivered review shows a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong — every citation is a hyperlink whose visible text is just the author and year.
@@ -65,7 +65,7 @@ Do not force a table when the data does not line up; do not build one from a sin
 ### Sources
 Guidelines published as journal articles belong here and are cited as guidance ("the AAP recommends…"), not as evidence. Tertiary sources — StatPearls, UpToDate, textbooks — never appear; cite the primary study instead (`citation-rules.md`).
 
-A compact block at the end: one line per source, `**Author 2026** Title. *Journal*. DOI link`, alphabetical. This is the only apparatus the review keeps — it is what makes the citations checkable, so it stays even though everything else is trimmed.
+A compact block at the end: one line per source, `**All Authors (2026)** Title. *Journal*. DOI link`, alphabetical, with every author named — "et al." never appears in the sources block (it lives only in the in-text tags). This is the only apparatus the review keeps — it is what makes the citations checkable, so it stays even though everything else is trimmed.
 
 ## Language
 

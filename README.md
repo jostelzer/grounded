@@ -50,13 +50,13 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 
 **Answer a research question**
 
-> Use the scientific-review skill: does intermittent fasting improve insulin sensitivity?
+> Use the grounded skill: does intermittent fasting improve insulin sensitivity?
 
 → [output](examples/small-intermittent-fasting-insulin.md) · small · 15 verified sources
 
 **Get an overview of a field**
 
-> Use the scientific-review skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
+> Use the grounded skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
 
 → [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 46 verified sources (three retracted papers caught and excluded during search)
 
@@ -75,13 +75,13 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 
 **Settle a claim you've seen circulating**
 
-> I keep reading that blue light before bed ruins sleep. Use the scientific-review skill — what does the evidence actually show?
+> I keep reading that blue light before bed ruins sleep. Use the grounded skill — what does the evidence actually show?
 
 → [output](examples/small-blue-light-sleep.md) · small · 11 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
 
 **Produce figures**
 
-> Use the scientific-review skill, medium image mode: how do mRNA vaccines work?
+> Use the grounded skill, medium image mode: how do mRNA vaccines work?
 
 → [output](examples/image-mrna-vaccines.md) · medium image · 45 verified sources plus two end-to-end ImageGen figures and one exact-geometry SVG fallback, all built from reusable evidence specs, archetypes and the Arial-based Nature Neuroscience-inspired system · [illustrated PDF](examples/image-mrna-vaccines.pdf)
 
@@ -111,17 +111,17 @@ If the agent's Python sandbox has no network access (e.g. ChatGPT's code interpr
 Clone into your skills directory:
 
 ```bash
-git clone https://github.com/jostelzer/scientific-review-skill.git ~/.claude/skills/scientific-review
+git clone https://github.com/jostelzer/grounded.git ~/.claude/skills/grounded
 ```
 
 Then ask for a review in any session ("give me a scientific review of X"), or scope it to one project by cloning into `.claude/skills/` there instead.
 
 ### claude.ai
 
-Download `scientific-review.skill` from the [latest release](https://github.com/jostelzer/scientific-review-skill/releases/latest) and upload it in **Settings → Capabilities → Skills**. Or build the bundle yourself:
+Download `grounded.skill` from the [latest release](https://github.com/jostelzer/grounded/releases/latest) and upload it in **Settings → Capabilities → Skills**. Or build the bundle yourself:
 
 ```bash
-git clone https://github.com/jostelzer/scientific-review-skill.git scientific-review && cd scientific-review && zip -r ../scientific-review.zip . -x '.git/*'
+git clone https://github.com/jostelzer/grounded.git grounded && cd grounded && zip -r ../grounded.zip . -x '.git/*'
 ```
 
 ### ChatGPT
@@ -135,7 +135,7 @@ git clone https://github.com/jostelzer/scientific-review-skill.git scientific-re
 3. Upload `SKILL.md` and every file from `references/` and `scripts/` to the project's files.
 4. Set the project instructions to:
    > Follow the workflow in SKILL.md for every review request. Load the referenced files from the project files when SKILL.md points to them.
-5. Make sure **Web Search** is available, then ask: *"Use the scientific-review skill: does creatine reduce depressive symptoms?"* — add `medium`, `large`, or `image` to pick a mode.
+5. Make sure **Web Search** is available, then ask: *"Use the grounded skill: does creatine reduce depressive symptoms?"* — add `medium`, `large`, or `image` to pick a mode.
 
 **As a Custom GPT** (reusable/shareable):
 

@@ -1,9 +1,9 @@
 ---
-name: scientific-review
+name: grounded
 description: Write a scientific review of a topic or research question at small, medium, or large size, as bullets, flowing prose, or eli5 (very simple English), optionally with an image or mindmap, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
 ---
 
-# Scientific review
+# Grounded — scientific reviews with no floating claims
 
 The user gives a topic or question and may name a mode; you produce a clean, thorough review that looks at the question from every relevant angle and tells a story that rests entirely on peer-reviewed science, cited correctly. The central discipline is that **no citation is ever recalled from memory**: every source comes from a live index search, every DOI is verified before it is cited, and the reference list is generated from the verified records. A review with one fabricated reference is worth less than no review.
 
