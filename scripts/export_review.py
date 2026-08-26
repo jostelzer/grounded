@@ -11,12 +11,13 @@ DOIs stay resolvable.
     python3 export_review.py --in review.md --out review.pdf --pdf
     python3 export_review.py --in review.md --out review.html --columns 1 --title "..."
 
-PDF uses the pinned ReportLab runtime in ``requirements-pdf.txt``.  It never
-launches a browser, executes document code, or accesses the network.  HTML-only
-export remains Python-standard-library-only.
+PDF renders this exact HTML/CSS with pinned WeasyPrint.  It never launches a
+browser, executes document code, or accesses the network.  HTML-only export
+remains Python-standard-library-only.
 """
 
 import argparse
+import datetime
 import html
 import os
 import re
@@ -55,6 +56,8 @@ MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
 def image_data_uri(path, base_dir):
     """Embed a local image as a data URI so the export is self-contained."""
     import base64
+    if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", path):
+        raise ValueError(f"remote figure assets are not allowed: {path}")
     base = os.path.realpath(base_dir)
     p = os.path.realpath(path if os.path.isabs(path) else os.path.join(base, path))
     try:
@@ -239,7 +242,7 @@ GND_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#ff4f1f" '
 
 CSS = r"""
 @page {
-  size: A4; margin: 12mm 13mm 16mm 13mm;
+  size: A4; margin: 25mm 13mm 16mm 13mm;
   /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
     font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #8a8a8a; }
@@ -249,7 +252,7 @@ CSS = r"""
   --accent: #ff4f1f; --bg: #fff;
 }
 * { box-sizing: border-box; }
-html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+html { background: #fff; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: "Charter", "Iowan Old Style", Georgia, "Times New Roman", serif;
@@ -260,11 +263,8 @@ body {
 .tablabel, figcaption, .refs, footer.colophon {
   font-family: -apple-system, "Helvetica Neue", "Helvetica", Arial, sans-serif;
 }
-/* HTML-only print shell. Capable CSS print engines repeat the table header;
-   the canonical PDF path never consumes this markup. */
-table.paper { width: 100%; border-collapse: collapse; max-width: 194mm; margin: 0 auto; }
-table.paper > thead > tr > th { padding: 0 0 5mm; font-weight: normal; text-align: left; }
-table.paper > tbody > tr > td { padding: 0; }
+.paper { width: 100%; max-width: 194mm; margin: 0 auto; }
+.running-header { position: fixed; top: -13mm; left: 0; right: 0; }
 .strip {
   display: flex; align-items: stretch; border-bottom: .5px solid var(--ink);
   break-inside: avoid;
@@ -388,14 +388,15 @@ footer.colophon {
 footer.colophon a { color: var(--faint); border-bottom: none; }
 @media screen {
   body { padding: 10mm 0; background: #f2f2f2; }
-  table.paper { background: #fff; box-shadow: 0 2px 18px rgba(0,0,0,.12); }
-  table.paper > thead > tr > th { padding: 10mm 10mm 5mm; }
-  table.paper > tbody > tr > td { padding: 0 10mm 12mm; }
+  .paper { background: #fff; box-shadow: 0 2px 18px rgba(0,0,0,.12);
+    padding: 0 10mm 12mm; }
+  .running-header { position: static; padding: 10mm 10mm 5mm;
+    max-width: 194mm; margin: 0 auto; background: #fff; }
 }
 @media screen and (max-width: 700px) {
   body { padding: 0; }
-  table.paper > thead > tr > th { padding: 5mm 5mm 4mm; }
-  table.paper > tbody > tr > td { padding: 0 5mm 8mm; }
+  .running-header { padding: 5mm 5mm 4mm; }
+  .paper { padding: 0 5mm 8mm; }
   .body.cols { column-count: 1; }
   h1 { font-size: 16pt; }
   .metagrid { grid-template-columns: repeat(2, 1fr); }
@@ -408,19 +409,22 @@ footer.colophon a { color: var(--faint); border-bottom: none; }
 PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Grounded">
+<meta name="generator" content="Grounded">
+<meta name="description" content="Agentically generated scientific review">
+<meta name="dcterms.created" content="{compiled_iso}">
 <title>{title_text}</title>
 <style>{css}</style>
 </head><body>
-<table class="paper">
-<thead><tr><th>
+<header class="running-header">
   <div class="strip">
     <span class="chip">{gnd}</span>
     <span class="mark">GROUNDED</span>
     <span class="tagline">No floating claims.</span>
     <span class="issue">{issue}</span>
   </div>
-</th></tr></thead>
-<tbody><tr><td>
+</header>
+<main class="paper">
 <div class="provenance">Agentically generated scientific review&nbsp;&nbsp;·&nbsp;&nbsp;<b>grounded</b> {version}&nbsp;&nbsp;·&nbsp;&nbsp;<a href="{repo_url}">{repo_label}</a></div>
 <div class="kicker">{kicker}</div>
 <h1>{title}</h1>
@@ -431,8 +435,7 @@ PAGE = """<!doctype html>
 <div class="tomb">&#8718;</div>
 </div>
 <footer class="colophon"><span>{colophon}</span><span style="white-space:nowrap">grounded {version}</span></footer>
-</td></tr></tbody>
-</table>
+</main>
 </body></html>
 """
 
@@ -465,9 +468,26 @@ def detect_repo(script_dir):
     return label, f"https://{label}"
 
 
+def _compiled_date(value=None):
+    if value is None:
+        return datetime.date.today()
+    if isinstance(value, str):
+        try:
+            return datetime.date.fromisoformat(value)
+        except ValueError as exc:
+            raise ValueError("compiled date must use YYYY-MM-DD") from exc
+    if isinstance(value, datetime.date):
+        return value
+    raise ValueError("compiled date must be a date or YYYY-MM-DD string")
+
+
+def _display_date(value, abbreviated=False):
+    month = value.strftime("%b" if abbreviated else "%B")
+    return f"{value.day} {month} {value.year}"
+
+
 def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
-               release=None, repo=None):
-    import datetime
+               release=None, repo=None, compiled_date=None):
     import urllib.parse
 
     title, lead, body = to_html(md, base_dir)
@@ -483,8 +503,8 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                   for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
 
     # masthead furniture: the export date, top right of every page
-    today = datetime.date.today()
-    issue = today.strftime("%-d %B %Y")
+    today = _compiled_date(compiled_date)
+    issue = _display_date(today)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     if release is None:
@@ -506,7 +526,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         ("References", f"<i>{n_refs}</i> verified" if n_refs else "—"),
         ("Tokens", tok),
         ("Verification", "Crossref"),
-        ("Compiled", today.strftime("%-d %b %Y")),
+        ("Compiled", _display_date(today, abbreviated=True)),
     ]
     metagrid = '<div class="metagrid">' + "".join(
         f"<div><b>{h}</b><span>{v}</span></div>" for h, v in cells) + "</div>"
@@ -521,7 +541,8 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                     "retraction-screened via Crossref")
     plain_title = re.sub(r"<[^>]+>", "", title)
     return PAGE.format(
-        title_text=plain_title, css=CSS, gnd=GND_SVG, issue=html.escape(issue),
+        title_text=plain_title, compiled_iso=today.isoformat(), css=CSS,
+        gnd=GND_SVG, issue=html.escape(issue),
         version=html.escape(release), repo_url=html.escape(repo_url, quote=True),
         repo_label=html.escape(repo_label), kicker=html.escape(kicker),
         title=title, metagrid=metagrid, lead=lead_html,
@@ -543,11 +564,11 @@ def main():
     ap.add_argument("--html-sidecar", action="store_true",
                     help="also write HTML beside a PDF (off by default)")
     ap.add_argument("--check-pdf-runtime", action="store_true",
-                    help="validate the canonical ReportLab runtime and exit")
+                    help="validate the canonical WeasyPrint runtime and exit")
     args = ap.parse_args()
 
     if args.check_pdf_runtime:
-        from reportlab_export import require_runtime
+        from weasyprint_export import require_runtime
         import json
         print(json.dumps(require_runtime(), sort_keys=True))
         return
@@ -560,24 +581,15 @@ def main():
 
     want_pdf = args.pdf or args.out.lower().endswith(".pdf")
     if want_pdf:
-        from reportlab_export import write_pdf
+        from weasyprint_export import write_pdf
         release = args.release or detect_release(os.path.dirname(os.path.abspath(__file__))) or "dev"
-        if args.repo:
-            repo_label = re.sub(r"^https?://", "", args.repo).rstrip("/")
-        else:
-            repo_label, _repo_url = detect_repo(os.path.dirname(os.path.abspath(__file__)))
-        result = write_pdf(
-            md, args.out, base_dir=base_dir, columns=args.columns,
-            kicker=args.kicker, release=release,
-            repo_label=repo_label or "local build",
-            compiled_date=args.compiled_date, colophon=args.colophon,
+        page = build_html(
+            md, columns=args.columns, kicker=args.kicker,
+            colophon=args.colophon, base_dir=base_dir,
+            release=release, repo=args.repo, compiled_date=args.compiled_date,
         )
+        result = write_pdf(page, args.out)
         if args.html_sidecar:
-            page = build_html(
-                md, columns=args.columns, kicker=args.kicker,
-                colophon=args.colophon, base_dir=base_dir,
-                release=release, repo=args.repo,
-            )
             html_side = os.path.splitext(args.out)[0] + ".html"
             with open(html_side, "w", encoding="utf-8") as stream:
                 stream.write(page)
@@ -593,6 +605,7 @@ def main():
             md, columns=args.columns, kicker=args.kicker,
             colophon=args.colophon, base_dir=base_dir,
             release=args.release, repo=args.repo,
+            compiled_date=args.compiled_date,
         )
         with open(args.out, "w", encoding="utf-8") as stream:
             stream.write(page)

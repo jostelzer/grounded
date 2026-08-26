@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,7 +13,7 @@ sys.path.insert(0, SCRIPTS)
 
 import export_review  # noqa: E402
 import qa_review_pdf  # noqa: E402
-import reportlab_export  # noqa: E402
+import weasyprint_export  # noqa: E402
 
 
 class PdfExportTests(unittest.TestCase):
@@ -41,17 +42,22 @@ class PdfExportTests(unittest.TestCase):
         draw.line((160, 350, 1040, 350), fill="#141414", width=8)
         canvas.save(path)
 
+    @staticmethod
+    def write_review(markdown, out, base_dir, **options):
+        page = export_review.build_html(
+            markdown, base_dir=base_dir, release="v-test",
+            repo="example.test/grounded", compiled_date="2026-08-26",
+            **options,
+        )
+        return weasyprint_export.write_pdf(page, out)
+
     def test_actual_pdf_is_deterministic_and_preserves_links(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.make_image(os.path.join(tmp, "figure.png"))
             first = os.path.join(tmp, "first.pdf")
             second = os.path.join(tmp, "second.pdf")
-            kwargs = dict(
-                base_dir=tmp, release="v-test", repo_label="example/grounded",
-                compiled_date="2026-08-26",
-            )
-            result_a = reportlab_export.write_pdf(self.markdown(), first, **kwargs)
-            result_b = reportlab_export.write_pdf(self.markdown(), second, **kwargs)
+            result_a = self.write_review(self.markdown(), first, tmp)
+            result_b = self.write_review(self.markdown(), second, tmp)
             with open(first, "rb") as stream:
                 first_bytes = stream.read()
             with open(second, "rb") as stream:
@@ -65,17 +71,42 @@ class PdfExportTests(unittest.TestCase):
             self.assertGreaterEqual(inspection["internal_links"], 1)
             self.assertEqual(inspection["expected_figures"], 1)
 
+    def test_metadata_uses_fixed_compilation_date(self):
+        from pypdf import PdfReader
+
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            pdf = os.path.join(tmp, "review.pdf")
+            self.write_review(self.markdown(), pdf, tmp)
+            metadata = PdfReader(pdf).metadata
+            self.assertEqual(metadata["/Author"], "Grounded")
+            self.assertEqual(metadata["/Creator"], "Grounded")
+            self.assertEqual(metadata["/CreationDate"], "D:20260826")
+            self.assertEqual(metadata["/Producer"], "WeasyPrint 69.0")
+
     def test_render_failure_preserves_existing_pdf(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = os.path.join(tmp, "review.pdf")
             with open(out, "wb") as stream:
                 stream.write(b"%PDF-old")
-            with self.assertRaisesRegex(
-                    reportlab_export.PdfInputError, "does not exist"):
-                reportlab_export.write_pdf(
-                    self.markdown(image="missing.png"), out,
-                    base_dir=tmp, compiled_date="2026-08-26",
-                )
+            with self.assertRaisesRegex(ValueError, "does not exist"):
+                self.write_review(self.markdown(image="missing.png"), out, tmp)
+            with open(out, "rb") as stream:
+                self.assertEqual(stream.read(), b"%PDF-old")
+
+    def test_renderer_failure_preserves_existing_pdf(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = os.path.join(tmp, "review.pdf")
+            with open(out, "wb") as stream:
+                stream.write(b"%PDF-old")
+            with mock.patch.object(
+                    weasyprint_export, "require_runtime",
+                    return_value={"interface": "python"}), mock.patch.object(
+                        weasyprint_export, "_render_with_python",
+                        side_effect=weasyprint_export.PdfRuntimeError("render failed")):
+                with self.assertRaisesRegex(
+                        weasyprint_export.PdfRuntimeError, "render failed"):
+                    weasyprint_export.write_pdf("<html></html>", out)
             with open(out, "rb") as stream:
                 self.assertEqual(stream.read(), b"%PDF-old")
 
@@ -84,44 +115,41 @@ class PdfExportTests(unittest.TestCase):
             review_dir = os.path.join(tmp, "review")
             os.mkdir(review_dir)
             self.make_image(os.path.join(tmp, "outside.png"))
-            with self.assertRaisesRegex(
-                    reportlab_export.PdfInputError, "escapes the review directory"):
-                reportlab_export.write_pdf(
+            with self.assertRaisesRegex(ValueError, "escapes the review directory"):
+                self.write_review(
                     self.markdown(image="../outside.png"),
-                    os.path.join(review_dir, "review.pdf"),
-                    base_dir=review_dir, compiled_date="2026-08-26",
+                    os.path.join(review_dir, "review.pdf"), review_dir,
                 )
 
     def test_remote_figure_assets_are_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
-            with self.assertRaisesRegex(
-                    reportlab_export.PdfInputError, "remote figure assets"):
-                reportlab_export.write_pdf(
+            with self.assertRaisesRegex(ValueError, "remote figure assets"):
+                self.write_review(
                     self.markdown(image="https://example.com/figure.png"),
-                    os.path.join(tmp, "review.pdf"), base_dir=tmp,
-                    compiled_date="2026-08-26",
+                    os.path.join(tmp, "review.pdf"), tmp,
                 )
 
     def test_invalid_compilation_date_is_rejected_cleanly(self):
         with tempfile.TemporaryDirectory() as tmp:
-            with self.assertRaisesRegex(
-                    reportlab_export.PdfInputError, "YYYY-MM-DD"):
-                reportlab_export.write_pdf(
-                    self.markdown(), os.path.join(tmp, "review.pdf"),
-                    base_dir=tmp, compiled_date="26 August 2026",
+            self.make_image(os.path.join(tmp, "figure.png"))
+            with self.assertRaisesRegex(ValueError, "YYYY-MM-DD"):
+                export_review.build_html(
+                    self.markdown(), base_dir=tmp,
+                    compiled_date="26 August 2026",
                 )
 
-    def test_svg_requires_committed_pdf_companion(self):
+    def test_svg_figure_is_embedded_without_a_companion_raster(self):
         with tempfile.TemporaryDirectory() as tmp:
             with open(os.path.join(tmp, "figure.svg"), "w", encoding="utf-8") as stream:
-                stream.write('<svg xmlns="http://www.w3.org/2000/svg"/>')
-            with self.assertRaisesRegex(
-                    reportlab_export.PdfInputError, "companion PNG"):
-                reportlab_export.write_pdf(
-                    self.markdown(image="figure.svg"),
-                    os.path.join(tmp, "review.pdf"), base_dir=tmp,
-                    compiled_date="2026-08-26",
+                stream.write(
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="1200" '
+                    'height="700"><rect width="1200" height="700" '
+                    'fill="white"/><path d="M80 350H1120" stroke="#ff4f1f" '
+                    'stroke-width="12"/></svg>'
                 )
+            pdf = os.path.join(tmp, "review.pdf")
+            self.write_review(self.markdown(image="figure.svg"), pdf, tmp)
+            self.assertTrue(os.path.isfile(pdf))
 
     def test_cli_does_not_write_html_sidecar_by_default(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -151,10 +179,7 @@ class PdfExportTests(unittest.TestCase):
         )
         with tempfile.TemporaryDirectory() as tmp:
             pdf = os.path.join(tmp, "review.pdf")
-            reportlab_export.write_pdf(
-                markdown, pdf, base_dir=tmp, columns=1,
-                compiled_date="2026-08-26",
-            )
+            self.write_review(markdown, pdf, tmp, columns=1)
             inspection = qa_review_pdf.inspect_structure(pdf, markdown)
             self.assertEqual(inspection["expected_figures"], 0)
             self.assertGreaterEqual(inspection["external_links"], 1)
@@ -165,9 +190,7 @@ class PdfExportTests(unittest.TestCase):
             self.make_image(os.path.join(tmp, "figure.png"))
             pdf = os.path.join(tmp, "review.pdf")
             render_dir = os.path.join(tmp, "render")
-            reportlab_export.write_pdf(
-                self.markdown(), pdf, base_dir=tmp, compiled_date="2026-08-26",
-            )
+            self.write_review(self.markdown(), pdf, tmp)
             structural = qa_review_pdf.inspect_structure(pdf, self.markdown())
             raster = qa_review_pdf.render_and_inspect(pdf, render_dir, dpi=120)
             self.assertEqual(raster["rendered_pages"], structural["pages"])
@@ -182,35 +205,51 @@ class PdfExportTests(unittest.TestCase):
             os.mkdir(render_dir)
             with open(os.path.join(render_dir, "keep.txt"), "w", encoding="utf-8") as stream:
                 stream.write("do not overwrite")
-            reportlab_export.write_pdf(
-                self.markdown(), pdf, base_dir=tmp, compiled_date="2026-08-26",
-            )
+            self.write_review(self.markdown(), pdf, tmp)
             with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "not empty"):
                 qa_review_pdf.render_and_inspect(pdf, render_dir, dpi=120)
 
     @unittest.skipUnless(shutil.which("pdftoppm"), "Poppler is not installed")
     def test_raster_qa_rejects_a_masthead_that_did_not_paint(self):
-        from reportlab.lib.pagesizes import A4
-        from reportlab.pdfgen.canvas import Canvas
+        from pypdf import PdfWriter
 
         with tempfile.TemporaryDirectory() as tmp:
             pdf = os.path.join(tmp, "unpainted-header.pdf")
             render_dir = os.path.join(tmp, "render")
-            canvas = Canvas(pdf, pagesize=A4, invariant=1)
-            canvas.setAuthor("Grounded")
-            canvas.setCreator("Grounded")
-            canvas.setSubject("Agentically generated scientific review")
-            canvas.setFillColorRGB(1, 1, 1)
-            canvas.drawString(40, 800, "G R O U N D E D   NO FLOATING CLAIMS.")
-            canvas.drawString(520, 20, "1 / 1")
-            canvas.setFillColorRGB(0, 0, 0)
-            for row in range(50):
-                canvas.drawString(50, 740 - row * 12, "Visible review body content " * 4)
-            canvas.showPage()
-            canvas.save()
+            writer = PdfWriter()
+            writer.add_blank_page(width=595.2756, height=841.8898)
+            with open(pdf, "wb") as stream:
+                writer.write(stream)
             with self.assertRaisesRegex(
-                    qa_review_pdf.PdfQaError, "masthead raster|masthead chip"):
+                    qa_review_pdf.PdfQaError, "masthead raster|masthead chip|body raster"):
                 qa_review_pdf.render_and_inspect(pdf, render_dir, dpi=120)
+
+    def test_canonical_examples_keep_v2_pagination_and_running_masthead(self):
+        from pypdf import PdfReader
+
+        examples = (
+            ("image-mrna-vaccines.md", 7),
+            ("prose-large-mediterranean-diet.md", 14),
+        )
+        example_dir = os.path.join(ROOT, "examples")
+        with tempfile.TemporaryDirectory() as tmp:
+            for filename, expected_pages in examples:
+                source = os.path.join(example_dir, filename)
+                with open(source, encoding="utf-8") as stream:
+                    markdown = stream.read()
+                output = os.path.join(tmp, filename.replace(".md", ".pdf"))
+                page = export_review.build_html(
+                    markdown, base_dir=example_dir, release="v2.0.0",
+                    compiled_date="2026-08-26",
+                )
+                weasyprint_export.write_pdf(page, output)
+                reader = PdfReader(output)
+                self.assertEqual(len(reader.pages), expected_pages)
+                for number, pdf_page in enumerate(reader.pages, 1):
+                    text = pdf_page.extract_text() or ""
+                    self.assertIn("G R O U N D E D", text)
+                    self.assertIn("NO FLOATING CLAIMS.", text)
+                    self.assertIn(f"{number} / {expected_pages}", text)
 
 
 class FigureExportTests(unittest.TestCase):

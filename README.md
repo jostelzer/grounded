@@ -101,7 +101,7 @@ If the agent's Python sandbox has no network access (e.g. ChatGPT's code interpr
 ## Requirements
 
 - The research, search, verification, formatting, and HTML scripts use only the Python 3 standard library. PubMed, Crossref, and Europe PMC require no key; OpenAlex can take `OPENALEX_API_KEY`/`--openalex-api-key` when required by its current access policy.
-- PDF export and QA use the exact packages pinned in `requirements-pdf.txt`; the font files are bundled under `assets/fonts/`. Independent release QA also requires Poppler's `pdftoppm`. PDF generation never launches Chrome or another browser.
+- PDF export and QA use the exact packages pinned in `requirements-pdf.txt`, pinned WeasyPrint with its native Pango runtime, and the canonical Charter/Helvetica Neue families. Independent release QA also requires Poppler's `pdftoppm`. PDF generation never launches Chrome or another browser, and fails closed if the canonical fonts are unavailable.
 - Internet access — either from Python or from the agent's web-fetch tool (the fallback path).
 - **Optional identity metadata:** `OPENALEX_API_KEY` (or `--openalex-api-key`) and `OPENALEX_MAILTO` (or `--mailto`). When OpenAlex becomes unavailable, completed PubMed searches remain usable and the failure is written to the audit log; Crossref verification is separate.
 
@@ -158,7 +158,7 @@ Give the agent the folder as a working directory or attached files, use `SKILL.m
 - `scripts/` — search (`find_papers.py`), full text (`fetch_fulltext.py`), verification (`verify_citations.py`), reference formatting (`format_references.py`), browser-free PDF export and QA, figure prompt building, and private reference-corpus downloading.
 - `references/` — detailed guides loaded as needed: search playbook, evidence weighing, writing guide, citation rules, size tiers, media modes, the 21-figure visual audit and manifest, and the no-network fallback pipeline.
 - `examples/` — full, unedited example outputs.
-- `assets/fonts/` — the exact bundled fonts used by every PDF, plus their license.
+- `assets/fonts/` — legacy open-font assets retained for compatibility; the v2 PDF design refuses to substitute them for Charter/Helvetica Neue.
 - `requirements-pdf.txt` — pinned PDF export and QA runtime.
 - `evals/` — evaluation cases used to test the skill.
 
@@ -172,7 +172,7 @@ python3 scripts/export_review.py --in review.md --out review.pdf --pdf
 python3 scripts/qa_review_pdf.py review.pdf --markdown review.md --render-dir review-pdf-qa
 ```
 
-PDF output is composed directly with pinned ReportLab and bundled fonts: no Chrome, browser profile, HTML print engine, network request, system font, or renderer fallback is involved. Writes are atomic, fixed-date builds are byte-for-byte deterministic, remote or escaping figure paths are refused, and missing figures are hard failures. SVG figures use a committed `<stem>-pdf.png` sibling for deterministic embedding. `--columns 1` gives a single-column layout; `--html-sidecar` explicitly adds HTML beside a PDF; plain `--out review.html` remains HTML-only.
+PDF output uses the same canonical HTML/CSS as the HTML artifact and renders it with pinned WeasyPrint 69.0: no Chrome, browser profile, network request, approximate renderer, or silent font fallback is involved. All figures are embedded before rendering and only `data:` resource loads are allowed. Writes are atomic, fixed-date builds are byte-for-byte deterministic in the locked runtime, remote or escaping figure paths are refused, and missing figures are hard failures. SVG figures render directly without a raster companion. The finished PDF must embed Charter and Helvetica Neue or the build fails without replacing the previous artifact. `--columns 1` gives a single-column layout; `--html-sidecar` explicitly adds HTML beside a PDF; plain `--out review.html` remains HTML-only.
 
 The QA command strictly checks the PDF object structure, A4 pages, safe actions, metadata, DOI and figure links, masthead, page numbering, and independently rasterizes every page with Poppler. It writes page PNGs plus six-page contact sheets into a new or empty directory; inspect every page before delivery. This independent render is what catches the class of pagination/painting failure that prompted the browser-free exporter.
 
@@ -182,7 +182,7 @@ The test suite covers OpenAlex cursor pagination,
 PubMed offset pagination, database-specific query routing, publication-type
 filtering, automatic logging, bidirectional citation chasing, figure prompt
 framing, stable figure numbering and cross-links, cited caption enforcement,
-visual-corpus manifest integrity and downloader validation, real ReportLab PDF
+visual-corpus manifest integrity and downloader validation, real WeasyPrint PDF
 generation, deterministic repeated builds, atomic failure handling, link and
 metadata inspection, and independent Poppler raster regression checks. Install
 the pinned PDF requirements, then run `python3 -m unittest discover -s tests -v`.

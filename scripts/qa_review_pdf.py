@@ -29,7 +29,7 @@ class PdfQaError(RuntimeError):
 
 def _load_runtime():
     try:
-        from reportlab_export import require_runtime
+        from weasyprint_export import require_runtime
         from PIL import Image, ImageDraw, ImageOps
         from pypdf import PdfReader
         require_runtime()
@@ -70,6 +70,21 @@ def _doi_urls(markdown: str) -> set[str]:
         for match in re.findall(r"https?://doi\.org/([^\s<>\]]+)", markdown, re.I)
     }
     return {"https://doi.org/" + doi for doi in dois}
+
+
+def _embedded_font_families(reader) -> set[str]:
+    families = set()
+    for page in reader.pages:
+        resources = page.get("/Resources")
+        if not resources:
+            continue
+        fonts = resources.get_object().get("/Font")
+        if not fonts:
+            continue
+        for reference in fonts.get_object().values():
+            base_font = str(reference.get_object().get("/BaseFont", ""))
+            families.add(base_font.split("+", 1)[-1])
+    return families
 
 
 def inspect_structure(pdf_path: str, markdown: str | None = None) -> dict[str, object]:
@@ -120,8 +135,12 @@ def inspect_structure(pdf_path: str, markdown: str | None = None) -> dict[str, o
         failures.append("PDF creator metadata is not Grounded")
     if metadata.get("/Subject") != "Agentically generated scientific review":
         failures.append("PDF subject metadata is incomplete")
-    if "ReportLab" not in str(metadata.get("/Producer", "")):
-        failures.append("PDF producer is not the canonical ReportLab renderer")
+    if metadata.get("/Producer") != "WeasyPrint 69.0":
+        failures.append("PDF producer is not the canonical WeasyPrint 69.0 renderer")
+    embedded_fonts = _embedded_font_families(reader)
+    for family in ("Charter", "Helvetica-Neue"):
+        if not any(font.startswith(family) for font in embedded_fonts):
+            failures.append(f"PDF does not embed the canonical {family} family")
 
     expected_dois: set[str] = set()
     expected_figures = 0
@@ -150,6 +169,7 @@ def inspect_structure(pdf_path: str, markdown: str | None = None) -> dict[str, o
         "expected_dois": len(expected_dois),
         "internal_links": internal_links,
         "expected_figures": expected_figures,
+        "font_families": sorted(embedded_fonts),
     }
 
 
@@ -241,15 +261,15 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
                       int(0.96 * width), int(0.085 * height))
         chip_box = (int(0.04 * width), int(0.025 * height),
                     int(0.17 * width), int(0.085 * height))
-        footer_box = (int(0.04 * width), int(0.93 * height),
-                      int(0.96 * width), int(0.985 * height))
+        page_number_box = (int(0.78 * width), int(0.95 * height),
+                           int(0.96 * width), int(0.99 * height))
         body_box = (int(0.04 * width), int(0.085 * height),
                     int(0.96 * width), int(0.93 * height))
         edge_width = max(1, int(0.015 * width))
         edge_ink = _ink_count(page, (0, 0, edge_width, height))
         edge_ink += _ink_count(page, (width - edge_width, 0, width, height))
         header_ink = _ink_count(page, header_box)
-        footer_ink = _ink_count(page, footer_box)
+        page_number_ink = _ink_count(page, page_number_box)
         body_ink = _ink_count(page, body_box)
         accent = _accent_count(page, chip_box)
         accent_counts.append(accent)
@@ -257,8 +277,8 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
             failures.append(f"page {index} masthead raster is missing or incomplete")
         if accent < 40 * scale:
             failures.append(f"page {index} orange masthead chip is missing")
-        if footer_ink < 55 * scale:
-            failures.append(f"page {index} footer raster is missing")
+        if page_number_ink < 8 * scale:
+            failures.append(f"page {index} page-number raster is missing")
         if body_ink < 1500 * scale:
             failures.append(f"page {index} body raster is nearly empty")
         if edge_ink > 4 * scale:
