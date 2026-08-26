@@ -48,7 +48,7 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 from dataclasses import dataclass, field
 
-VERSION = "1.2"
+VERSION = "1.8.0"
 SKILL_URL = "https://github.com/jostelzer/scientific-review-skill"
 # Request pacing: OpenAlex's polite pool allows 10 req/s, NCBI allows 3 req/s without an API key.
 OPENALEX_MIN_INTERVAL = 0.15

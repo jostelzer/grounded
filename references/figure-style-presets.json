@@ -1,20 +1,25 @@
 {
   "nature-neuroscience": {
     "name": "Nature Neuroscience-inspired explanatory figure",
-    "intent": "A clean, publication-grade neuroscience or biomedical schematic with one dominant scientific idea, restrained illustration, and high information density without visual noise.",
+    "intent": "A figure-native neuroscience or biomedical composition with one dominant scientific representation, restrained illustration, and high information density without poster or dashboard framing.",
+    "framing": {
+      "default_context": "article",
+      "article": "Do not render the title or subtitle inside the artwork; the surrounding article caption supplies them.",
+      "standalone": "Render a compact title and only an essential short subtitle; keep both subordinate to the scientific content."
+    },
     "font": {
       "family": "Arial",
       "fallback": "Helvetica",
       "text_color": "#1A1A1A",
-      "minimum_px_at_1536_width": 22,
-      "body_px_at_1536_width": 24,
-      "section_px_at_1536_width": 28,
-      "title_px_at_1536_width": 38,
-      "panel_label_px_at_1536_width": 26,
+      "minimum_px_at_1536_width": 18,
+      "body_px_at_1536_width": 21,
+      "section_px_at_1536_width": 25,
+      "title_px_at_1536_width": 32,
+      "panel_label_px_at_1536_width": 27,
       "rules": [
         "Use Arial throughout; Helvetica is the only acceptable visual fallback.",
         "Use sentence case, ordinary-width letterforms, and compact but comfortable leading.",
-        "Use bold only for the title, panel letters, and one short heading level.",
+        "Use bold only for panel letters, one short heading level, and a compact title in standalone context.",
         "Keep text black or near-black; communicate categories with nearby marks, keylines, or swatches rather than coloured words.",
         "Never use serif, slab-serif, condensed display, handwritten, outlined, beveled, or shadowed type."
       ]
@@ -29,24 +34,27 @@
       "black": "#1A1A1A",
       "grey": "#767676",
       "light_grey": "#D9D9D9",
-      "blue": "#0072B2",
-      "sky_blue": "#56B4E9",
-      "bluish_green": "#009E73",
-      "orange": "#E69F00",
-      "vermillion": "#D55E00",
-      "reddish_purple": "#CC79A7"
+      "blue": "#5B8DB8",
+      "pale_blue": "#B8D5E6",
+      "muted_green": "#83B49B",
+      "pale_green": "#C7DDCF",
+      "muted_orange": "#D8A35D",
+      "salmon": "#D98B80",
+      "lavender": "#B7ADD1"
     },
     "visual_language": [
-      "Use crisp 2D scientific-editorial illustration with restrained, shallow biological shading only where it clarifies form.",
-      "Prefer thin consistent keylines, simple arrows, open white space, and direct labels connected by short leaders.",
-      "Use colour on scientific structures and data marks, not as large decorative fields.",
-      "Keep each panel to one visual claim and 3–6 meaningful elements.",
+      "Use crisp 2D scientific-editorial illustration with recognizable domain-specific structures and shallow biological shading only where it clarifies form.",
+      "Build on a shared invisible grid; use alignment and open white space before adding panel borders.",
+      "Prefer thin black or grey keylines, simple arrows, and direct local labels connected by short leaders.",
+      "Use pale semantic colour on scientific structures and data marks, not as large decorative fields.",
+      "Choose panel topology from the anatomy, experiment, signal flow, geometry, or data instead of forcing equal presentation columns.",
       "Use anatomical or molecular detail only at the level supported by the evidence.",
       "Use lower-case bold panel letters a, b, c when a multipart layout is necessary."
     ],
     "avoid": [
       "serif typography",
       "oversized magazine headline typography",
+      "hero title banners",
       "rounded dashboard cards",
       "glossy 3D rendering",
       "cinematic lighting",
@@ -56,6 +64,7 @@
       "rainbow colour maps",
       "red–green-only encodings",
       "decorative icons",
+      "generic icons replacing biological, experimental, mathematical, or data primitives",
       "book, shield, checkmark, badge, or app-interface motifs",
       "coloured paragraph text",
       "text over busy imagery",
@@ -64,16 +73,21 @@
   },
   "nature-reviews": {
     "name": "Nature Reviews-inspired conceptual synthesis",
-    "intent": "A polished conceptual review figure that integrates mechanisms or systems across several levels while remaining spare, balanced, and readable.",
+    "intent": "A figure-native conceptual synthesis that integrates mechanisms or systems across several levels with content-led topology, restrained illustration, and readable local annotation.",
+    "framing": {
+      "default_context": "article",
+      "article": "Do not render the title or subtitle inside the artwork; the surrounding article caption supplies them.",
+      "standalone": "Render a compact title and only an essential short subtitle; keep both subordinate to the scientific content."
+    },
     "font": {
       "family": "Arial",
       "fallback": "Helvetica",
       "text_color": "#1A1A1A",
-      "minimum_px_at_1536_width": 22,
-      "body_px_at_1536_width": 24,
-      "section_px_at_1536_width": 29,
-      "title_px_at_1536_width": 40,
-      "panel_label_px_at_1536_width": 26,
+      "minimum_px_at_1536_width": 18,
+      "body_px_at_1536_width": 21,
+      "section_px_at_1536_width": 25,
+      "title_px_at_1536_width": 33,
+      "panel_label_px_at_1536_width": 27,
       "rules": [
         "Use Arial throughout; Helvetica is the only acceptable visual fallback.",
         "Use sentence case and a shallow hierarchy of at most three sizes.",
@@ -92,29 +106,33 @@
       "black": "#1A1A1A",
       "grey": "#767676",
       "light_grey": "#D9D9D9",
-      "blue": "#0072B2",
-      "sky_blue": "#56B4E9",
-      "bluish_green": "#009E73",
-      "orange": "#E69F00",
-      "vermillion": "#D55E00",
-      "reddish_purple": "#CC79A7"
+      "blue": "#6C96BD",
+      "pale_cyan": "#BFDDE2",
+      "muted_green": "#91B8A0",
+      "pale_green": "#D2E3D5",
+      "muted_yellow": "#DEC878",
+      "salmon": "#DB958B",
+      "lavender": "#BDB2D4"
     },
     "visual_language": [
-      "Use refined 2D editorial illustration with restrained depth, clean cutaway anatomy, and consistent line weights.",
-      "Organize complexity into a small number of clearly related panels or layers.",
+      "Use refined 2D editorial illustration with recognizable morphology, restrained depth, clean cutaway anatomy, and consistent line weights.",
+      "Organize complexity into content-led panels or layers aligned to a shared invisible grid.",
       "Let biological structures carry the visual interest; keep the surrounding interface visually quiet.",
-      "Use direct labels, short leaders, and one compact legend or glossary only when needed.",
+      "Use direct local labels and short leaders; add one compact unboxed legend only when needed.",
+      "Use pale tinted regions only to define a real anatomical, molecular, or comparison group.",
       "Use uncertainty styling that is subtle but explicit: dashed boundary, pale tint, or a short qualifier."
     ],
     "avoid": [
       "serif typography",
       "dashboard or presentation-slide styling",
+      "hero title banners",
       "glossy photorealism",
       "dramatic highlights",
       "drop shadows",
       "decorative gradients",
       "background gridlines",
       "decorative icons",
+      "generic icons replacing scientific structures",
       "large coloured text blocks",
       "dense borders around every concept",
       "watermarks or journal branding"
@@ -122,16 +140,21 @@
   },
   "nature-data": {
     "name": "Nature-inspired quantitative figure",
-    "intent": "A minimal, publication-grade quantitative figure whose geometry, scales, uncertainty, and denominators are the visual focus.",
+    "intent": "A figure-native quantitative composition whose exact geometry, scales, uncertainty, and denominators are the visual focus.",
+    "framing": {
+      "default_context": "article",
+      "article": "Do not render the title or subtitle inside the artwork; the surrounding article caption supplies them.",
+      "standalone": "Render a compact title and only an essential short subtitle; keep both subordinate to axes and data."
+    },
     "font": {
       "family": "Arial",
       "fallback": "Helvetica",
       "text_color": "#1A1A1A",
-      "minimum_px_at_1536_width": 22,
-      "body_px_at_1536_width": 23,
-      "section_px_at_1536_width": 27,
-      "title_px_at_1536_width": 36,
-      "panel_label_px_at_1536_width": 26,
+      "minimum_px_at_1536_width": 18,
+      "body_px_at_1536_width": 20,
+      "section_px_at_1536_width": 24,
+      "title_px_at_1536_width": 31,
+      "panel_label_px_at_1536_width": 27,
       "rules": [
         "Use Arial throughout; Helvetica is the only acceptable visual fallback.",
         "Use sentence case and black or near-black labels.",
@@ -149,12 +172,13 @@
       "black": "#1A1A1A",
       "grey": "#767676",
       "light_grey": "#D9D9D9",
-      "blue": "#0072B2",
-      "sky_blue": "#56B4E9",
-      "bluish_green": "#009E73",
-      "orange": "#E69F00",
-      "vermillion": "#D55E00",
-      "reddish_purple": "#CC79A7"
+      "blue": "#497FA6",
+      "pale_blue": "#AFCFE0",
+      "muted_green": "#669E83",
+      "pale_green": "#BDD8C8",
+      "muted_orange": "#C88F43",
+      "salmon": "#CA756B",
+      "lavender": "#A79AC4"
     },
     "visual_language": [
       "Use black axes and tick marks, explicit units, exact uncertainty marks, and direct labels where space permits.",

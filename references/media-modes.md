@@ -2,7 +2,10 @@
 
 Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small bullets when none is named); mindmap mode uses the small pipeline. The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
 
-Before creating media, also read `figure-style-system.md` and `image-prompt-guide.md`. The first defines the Arial-based journal visual system; the second defines the structured prompt workflow. Do not substitute an improvised prose prompt.
+Before creating media, also read `figure-reference-analysis.md`,
+`figure-style-system.md`, and `image-prompt-guide.md`. They define the visual
+evidence base, Arial-based journal system, and structured prompt workflow. Do
+not substitute an improvised prose prompt.
 
 ## Shared evidence boundary
 
@@ -40,13 +43,29 @@ Create polished, self-explanatory scientific figures that communicate the review
 
 Invent freely beyond this list. The constraints are always the same: built only from the verified synthesis, no fabricated data points or scales, uncertainty visible, and the composition rules below.
 
-**Placement.** Figures go where they support the argument — each one inserted after the section it illustrates, with its caption — not stacked at the end. In prose style, reference each figure from the running text. The first figure keeps the bottom glossary band; later figures may instead carry a self-contained caption that defines any symbol or abbreviation not already defined in the review or an earlier figure.
+**Placement.** Figures go where they support the argument — each one inserted
+after the section it illustrates, with its caption — not stacked at the end. In
+prose style, reference each figure from the running text. Because that caption
+already supplies the title and scope, use `render_context: article` and do not
+repeat a hero title or subtitle inside the artwork. Define symbols locally or in
+a compact legend; use a glossary region only when essential terminology cannot
+be defined without it.
 
 Every figure must be understandable to an educated non-specialist without relying on the surrounding review to decode its terminology.
 
 ### Preferred build: generate the complete figure end to end
 
-When a capable image-generation model is available, ask it to render the finished scientific figure as one complete artifact: illustration, composition, title, labels, arrows, exact numerical values, legend, uncertainty language, and glossary. Do not automatically split the artwork and typography into separate stages. Create a figure-spec JSON, select a profile from `figure-style-presets.json` and an archetype from `figure-archetypes.json`, then run `scripts/build_figure_prompt.py`. This keeps evidence, composition, and art direction independently reusable.
+When a capable image-generation model is available, ask it to render the
+finished scientific figure as one complete artifact: illustration, composition,
+panel labels, arrows, exact numerical values, legend, uncertainty language, and
+any necessary local definitions. Do not automatically split the artwork and
+typography into separate stages. Create a figure-spec JSON, set
+`render_context: article`, select a profile from `figure-style-presets.json` and
+an archetype from `figure-archetypes.json`, then run
+`scripts/build_figure_prompt.py`. This keeps evidence, composition, framing, and
+art direction independently reusable. Use `render_context: standalone` only
+when there will be no adjacent title/caption; its compact title is still
+rendered end to end by the image model.
 
 The generated prompt must contain the figure's evidence-backed visual story and **all required text verbatim**. Quote titles, labels, numbers, units, confidence intervals, legend entries, and glossary definitions. State which relationships are observed, inferred, mixed, or uncertain and how that distinction must appear. For quantitative figures, supply every plotted value and scale explicitly; the model must not invent, interpolate, or relabel data. Arial is the defined font; visually reject serif, condensed, display, outlined, or shadowed lettering.
 
@@ -56,12 +75,16 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
 
 **Do:**
 
-- Use the selected style profile's canvas, Arial hierarchy, palette, margins, and exclusions consistently.
-- Keep one visual story with 3–6 elements. A figure that tries to show everything shows nothing.
+- Use the selected style profile's canvas, Arial hierarchy, pale semantic
+  palette, margins, and exclusions consistently.
+- Build the layout from domain-specific scientific primitives and a shared
+  invisible grid. Use white space and alignment before borders.
 - Prefer the clean 2D scientific-editorial language defined in `figure-style-system.md`; restrained biological shading is allowed only when it clarifies form.
 - Give every arrow a meaning stated in the figure ("leads to", "measured by", "mixed evidence").
 - Encode uncertainty visibly and explain the encoding in the glossary — dashed outline, muted fill, an explicit `mixed` or `mouse evidence only` tag.
-- Keep all required copy short enough to remain readable at the delivered size. Quote the exact copy in the generation prompt and request deliberate line wrapping.
+- Keep all required in-figure copy short enough to remain readable at the
+  delivered size. Quote the exact copy in the generation prompt and request
+  deliberate line wrapping.
 - Rasterize and *look* at the result if any renderer is available (`rsvg-convert`, `cairosvg`, a headless browser). Inspect at delivered size and at phone width.
 
 **Don't:**
@@ -70,6 +93,9 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
 - **Don't place text over busy artwork.** Labels need quiet space or a plain backing plate.
 - **Don't let panels, icons, or captions overlap.** Bounding boxes must be disjoint. Overlap is not a style choice; it reads as a broken render.
 - **Don't drift into slide or dashboard design.** No serif headlines, rounded UI cards, badges, decorative icons, drop shadows, cinematic lighting, glossy 3D, or ornamental gradients.
+- **Don't drift into poster design.** In article context, no internal hero title
+  or subtitle, oversized number, footer banner, or universal sequence of equal
+  presentation columns.
 - **Don't invent specifics**: no fabricated molecular structures, anatomical detail, instrument readouts, sample images, chart data, or axis scales. If the review has no numbers for it, the figure has no numbers for it.
 - **Don't shrink the glossary into fine print** to make room. Cut concepts instead.
 - **Don't ship a figure you have not looked at.** If you genuinely cannot inspect it, say so in one sentence rather than implying it was checked.
@@ -78,12 +104,18 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
 
 1. Select the single most useful visual story: a mechanism, process, system-level interaction, anatomy-plus-function relationship, intervention pathway, or evidence-backed comparison.
 2. Keep the title and main labels concise. Avoid abbreviations and specialist terminology when an equally accurate plain-language label will fit.
-3. When the figure uses abbreviations or non-obvious concepts, reserve a visually quiet glossary or key region. Use Arial that is smaller than the main labels but still comfortably readable at normal chat width, including on a phone. In that region:
+3. Define abbreviations and non-obvious concepts with a direct local label when
+   possible. If several definitions remain necessary, reserve a visually quiet,
+   compact key region. Use Arial that is smaller than the main labels but still
+   comfortably readable at normal chat width, including on a phone. In that region:
    - expand **every** abbreviation, acronym, initialism, and symbol used anywhere in the figure;
    - explain **every** technical or non-obvious concept in one short plain-language definition;
    - include any color, line, arrow, or uncertainty encoding that is not immediately obvious.
 4. Treat an educated reader outside the specialty as the test audience. Do not assume that a term is self-explanatory merely because it is standard within the field. Common everyday words need no definition.
-5. The glossary is part of the rendered image, not a substitute placed only in the chat caption. Include its exact wording in the generation prompt. Keep citations and longer methodological caveats in the caption.
+5. Any essential local definition or glossary is part of the rendered image,
+   not a substitute placed only in the chat caption. Include its exact wording
+   in the generation prompt. Keep citations and longer methodological caveats in
+   the caption.
 6. If the glossary cannot remain legible, reduce the number of depicted concepts, replace jargon with plain language, or simplify the visual. Do not shrink the footer into unreadable fine print.
 7. Distinguish observed findings from proposed mechanisms through layout and visual styling.
 8. After generation, inspect the image at its delivered size. Regenerate or edit it if labels or glossary text are garbled, any abbreviation or difficult concept is undefined, anatomy is wrong, arrows imply unsupported causality, components are clipped or overlapping, or the hierarchy does not match the evidence.
@@ -127,5 +159,6 @@ Use specific alt text that lists the root and primary branches.
 5. The artifact is rendered and displayed, not supplied as instructions or source code.
 6. Text is readable and exactly correct at normal chat width; nothing important is clipped, overlapping, or lost against the artwork.
 7. The caption explains the synthesis and cites the relevant verified sources.
-8. In image mode, every abbreviation and non-obvious concept is defined in a smaller but readable glossary or key region inside the image.
+8. In image mode, every abbreviation and non-obvious concept is defined by a
+   local label or a smaller but readable legend/key inside the image.
 9. In image mode, the figure can be understood without consulting the surrounding prose for terminology.

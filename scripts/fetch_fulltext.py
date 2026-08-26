@@ -25,7 +25,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 _MAILTO = os.environ.get("OPENALEX_MAILTO", "").strip()
-UA = ("scientific-review-skill/1.1 (+https://github.com/jostelzer/scientific-review-skill"
+UA = ("scientific-review-skill/1.8.0 (+https://github.com/jostelzer/scientific-review-skill"
       + (f"; mailto:{_MAILTO})" if _MAILTO else ")"))
 
 

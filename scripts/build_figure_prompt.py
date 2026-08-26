@@ -12,6 +12,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_PROFILES = os.path.join(ROOT, "references", "figure-style-presets.json")
 DEFAULT_ARCHETYPES = os.path.join(ROOT, "references", "figure-archetypes.json")
 REQUIRED_FIELDS = ("purpose", "title", "story", "exact_text")
+RENDER_CONTEXTS = ("article", "standalone")
 
 
 def load_json(path):
@@ -94,6 +95,22 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
     if subtitle is not None and (not isinstance(subtitle, str) or not subtitle.strip()):
         raise ValueError("subtitle must be a non-empty string when supplied")
 
+    framing = profile.get("framing", {})
+    render_context = spec.get(
+        "render_context", framing.get("default_context", "article"))
+    if render_context not in RENDER_CONTEXTS:
+        raise ValueError(
+            "render_context must be one of: %s" % ", ".join(RENDER_CONTEXTS))
+
+    rendered_text = list(exact_text)
+    if render_context == "article":
+        frame_text = {title}
+        if subtitle:
+            frame_text.add(subtitle.strip())
+        rendered_text = [item for item in rendered_text if item not in frame_text]
+    if not rendered_text:
+        raise ValueError("exact_text must include at least one in-figure string")
+
     observed = optional_string_list(spec, "observed")
     inferred = optional_string_list(spec, "inferred")
     layout_notes = optional_string_list(spec, "layout_notes")
@@ -109,16 +126,28 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         "USE CASE\nscientific-educational",
         "ASSET\nComplete publication-grade scientific figure rendered end to end, including every label and all typography.",
         "PURPOSE\n%s" % purpose,
-        "TITLE\n%s" % title,
     ]
-    if subtitle:
-        sections.append("SUBTITLE\n%s" % subtitle.strip())
+    if render_context == "article":
+        sections.append(
+            "CAPTION CONTEXT — DO NOT RENDER INSIDE THE ARTWORK\n"
+            "Title: %s%s" % (
+                title,
+                "\nSubtitle: %s" % subtitle.strip() if subtitle else ""))
+    else:
+        sections.append("TITLE — RENDER COMPACTLY\n%s" % title)
+        if subtitle:
+            sections.append("SUBTITLE — RENDER ONLY ONCE\n%s" % subtitle.strip())
 
     sections.extend([
         "STYLE PROFILE\n%s\n%s" % (profile["name"], profile["intent"]),
+        "FRAMING\nContext: %s\n%s" % (
+            render_context,
+            framing.get(
+                render_context,
+                "Keep the scientific content visually primary.")),
         "TYPOGRAPHY — HARD REQUIREMENT\n"
         "- Render every character in %s throughout; %s is the only acceptable visual fallback.\n"
-        "- Text colour: %s. Minimum readable text at 1,536 px width: %s px; body %s px; section headings %s px; title %s px; panel letters %s px.\n%s" % (
+        "- Text colour: %s. Minimum readable text at 1,536 px width: %s px; body %s px; local headings %s px; compact standalone title %s px; panel letters %s px.\n%s" % (
             font["family"], font["fallback"], font["text_color"],
             font["minimum_px_at_1536_width"], font["body_px_at_1536_width"],
             font["section_px_at_1536_width"], font["title_px_at_1536_width"],
@@ -148,9 +177,9 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         sections.append(bullet_section("SCIENTIFIC CONSTRAINTS", constraints))
 
     sections.append(
-        "EXACT TEXT MANIFEST — RENDER EVERY STRING VERBATIM IN ARIAL\n%s" %
+        "EXACT IN-FIGURE TEXT MANIFEST — RENDER EVERY STRING VERBATIM IN ARIAL\n%s" %
         "\n".join("- %s" % json.dumps(item, ensure_ascii=False)
-                  for item in exact_text))
+                  for item in rendered_text))
 
     all_avoid = list(profile["avoid"]) + custom_avoid
     sections.extend([
@@ -158,7 +187,7 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         bullet_section("ARCHETYPE QA", archetype["qa"]),
         "FINAL CONTRACT\n"
         "Generate the complete final figure now. Do not leave blank text placeholders. "
-        "Do not add text that is absent from the exact-text manifest. Preserve every "
+        "Do not add text that is absent from the exact in-figure text manifest. Preserve every "
         "number, unit, interval, denominator, qualifier, and relationship exactly. "
         "No watermark, logo, masthead, or imitation journal branding."
     ])

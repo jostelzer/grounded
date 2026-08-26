@@ -30,7 +30,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-UA = "scientific-review-skill/1.1"
+UA = "scientific-review-skill/1.8.0"
 OK_TYPES = {"journal-article"}
 WARN_TYPES = {"book-chapter", "proceedings-article", "book", "monograph", "reference-entry", "report"}
 

@@ -1,6 +1,7 @@
 {
   "profile": "nature-data",
   "archetype": "comparison",
+  "render_context": "article",
   "purpose": "Compare the average decline in vaccine effectiveness against infection and severe disease without using generated geometry that could imply false numerical precision.",
   "title": "Protection wanes faster against infection",
   "subtitle": "Average decline from month 1 to month 6 · pre-Omicron systematic review",

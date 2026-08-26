@@ -1,6 +1,7 @@
 {
   "profile": "nature-data",
   "archetype": "quantitative",
+  "render_context": "article",
   "purpose": "Show that myocarditis risk is rare and concentrated by sex, dose and product while keeping two incompatible denominators and scales visibly separate.",
   "title": "Myocarditis risk is concentrated, not uniform",
   "subtitle": "Two datasets · compare within each panel only · whiskers are 95% confidence intervals",

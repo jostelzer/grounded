@@ -33,6 +33,28 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("Render every character in Arial throughout", prompt)
         self.assertIn("serif typography", prompt)
         self.assertIn("#1A1A1A", prompt)
+        self.assertIn("Context: article", prompt)
+        self.assertIn("figure-native", prompt)
+
+    def test_article_context_keeps_caption_title_out_of_render_manifest(self):
+        prompt = MODULE.build_prompt(
+            self.minimal_spec(), self.profiles, self.archetypes)
+        self.assertIn("CAPTION CONTEXT — DO NOT RENDER", prompt)
+        manifest = prompt.split(
+            "EXACT IN-FIGURE TEXT MANIFEST", 1)[1].split("AVOID", 1)[0]
+        self.assertNotIn("A clean mechanism", manifest)
+        self.assertIn('"A"', manifest)
+        self.assertIn('"B"', manifest)
+
+    def test_standalone_context_renders_a_compact_title(self):
+        spec = self.minimal_spec()
+        spec["render_context"] = "standalone"
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("Context: standalone", prompt)
+        self.assertIn("TITLE — RENDER COMPACTLY\nA clean mechanism", prompt)
+        manifest = prompt.split(
+            "EXACT IN-FIGURE TEXT MANIFEST", 1)[1].split("AVOID", 1)[0]
+        self.assertIn('"A clean mechanism"', manifest)
 
     def test_exact_text_is_json_quoted_verbatim(self):
         spec = self.minimal_spec()
@@ -76,6 +98,16 @@ class FigurePromptTests(unittest.TestCase):
             MODULE.build_prompt(
                 {"purpose": "x", "title": "y", "story": ["z"]},
                 self.profiles, self.archetypes)
+
+    def test_invalid_render_context_fails(self):
+        spec = self.minimal_spec()
+        spec["render_context"] = "poster"
+        with self.assertRaisesRegex(ValueError, "render_context"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_domain_native_archetypes_are_available(self):
+        self.assertIn("anatomical-mechanism", self.archetypes)
+        self.assertIn("study-overview", self.archetypes)
 
     def test_main_writes_prompt_file(self):
         with tempfile.TemporaryDirectory() as tmp:

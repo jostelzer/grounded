@@ -13,6 +13,36 @@
       "No proposed mechanism is styled as established fact."
     ]
   },
+  "anatomical-mechanism": {
+    "goal": "Explain a biological mechanism in its real spatial or anatomical context without reducing the system to generic icons.",
+    "composition": [
+      "Use one recognizable anatomical, cellular, or molecular structure as the spatial anchor.",
+      "Place labels locally with short leaders and add magnified insets only when a scale transition is necessary.",
+      "Use thin arrows for verified flows or interactions and define any coloured pathway consistently across panels.",
+      "Use pale tinted regions only for real compartments, tissues, molecular zones, or compared states."
+    ],
+    "qa": [
+      "The anchor structure has the correct morphology and orientation at the depicted level of abstraction.",
+      "Every inset maps unambiguously to its source region and every scale change is visually explicit.",
+      "No generic icon substitutes for a scientific structure required to understand the mechanism.",
+      "No arrow crosses a boundary or compartment that the reviewed evidence does not support."
+    ]
+  },
+  "study-overview": {
+    "goal": "Summarize an experiment, dataset, or analysis pipeline with the domain-specific inputs, transformations, and outputs that make the study interpretable.",
+    "composition": [
+      "Follow the actual experimental or analytical topology instead of forcing equal columns or cards.",
+      "Use domain-native primitives such as task frames, brain or tissue outlines, waveforms, equations, model blocks, or measured outputs.",
+      "Align stages to a shared invisible grid and label transformations locally with thin arrows or braces.",
+      "Keep illustrative context subordinate to the experimental design, variables, and measured result."
+    ],
+    "qa": [
+      "Every stage and arrow corresponds to the verified methods or analysis sequence.",
+      "Inputs, transformations, and outputs cannot be mistaken for one another.",
+      "No fabricated task image, measurement trace, anatomy, or model component is presented as observed data.",
+      "Repeated entities retain identical colour and visual encoding across the figure."
+    ]
+  },
   "comparison": {
     "goal": "Compare outcomes, populations, interventions, or explanations without allowing layout area to imply an unsupported effect size.",
     "composition": [

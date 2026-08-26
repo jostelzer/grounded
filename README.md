@@ -42,7 +42,7 @@ A review has a **size** — `small` (default), `medium`, `large` — and a **sty
 | Sources | 10–20 | 30–60 | 70–150 |
 | Full texts read | 2–4 load-bearing papers | 8–15 | 25+ |
 
-Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be mechanism diagrams, evidence maps, timelines, comparisons, quantitative summaries and more. A capable image-generation model renders the complete figure, including text, when available; deterministic SVG is the fallback. The modular figure system separates the verified evidence, figure archetype and journal-inspired style profile, with Arial defined throughout and Nature-derived rules for restraint, accessibility and balance. Every result remains self-explanatory to a non-specialist, is placed after the section it supports, and flows automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
+Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be mechanism diagrams, evidence maps, timelines, comparisons, quantitative summaries and more. A capable image-generation model renders the complete figure, including all in-figure text, when available; deterministic SVG is the fallback. The modular figure system separates verified evidence, archetype, render context and journal-inspired profile, with Arial defined throughout. Its figure-native rules come from a reproducible analysis of 21 official-source *Nature Reviews Neuroscience* and *Nature Neuroscience* figures: article figures omit poster-like internal titles, use content-led topology and local labels, and reserve pale semantic colour for scientific structures and data. Every result remains self-explanatory to a non-specialist, is placed after the section it supports, and flows automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
 
 ## Ways to use it
 
@@ -94,7 +94,7 @@ Practical notes: unless you say otherwise you get a **small** review (a fast, de
 3. **Read** every abstract that might be cited; pull open-access full text (`scripts/fetch_fulltext.py`, Europe PMC) for the load-bearing papers.
 4. **Verify** every entry against Crossref (`scripts/verify_citations.py`) — DOI, title, year, article type, and retraction status. A failure is a hard stop: the source is fixed or removed before writing.
 5. **Write** the draft citing ledger keys, then render citations and the reference list from the verified metadata (`scripts/format_references.py`), which refuses to run on any unverified key.
-6. **Illustrate when requested** from a structured evidence-and-copy specification: `scripts/build_figure_prompt.py` combines a reusable figure archetype with an Arial-based journal-style profile, then the finished render passes text, data, science, composition and style QA.
+6. **Illustrate when requested** from a structured evidence-and-copy specification: `scripts/build_figure_prompt.py` combines a reusable figure archetype, article/standalone render context and Arial-based journal-style profile, then the finished render passes text, data, science, composition and style QA. A separate downloader can reproduce the private 21-figure reference corpus used to audit the profiles without bundling copyrighted pixels.
 
 If the agent's Python sandbox has no network access (e.g. ChatGPT's code interpreter, claude.ai), `references/no-script-fallback.md` runs the same pipeline through the agent's web-fetch tool against the same APIs — the verification standard is identical.
 
@@ -154,8 +154,8 @@ Give the agent the folder as a working directory or attached files, use `SKILL.m
 ## Repository layout
 
 - `SKILL.md` — the skill: workflow, mode routing, and the rules that do not bend.
-- `scripts/` — search (`find_papers.py`), full text (`fetch_fulltext.py`), verification (`verify_citations.py`), and reference formatting (`format_references.py`).
-- `references/` — detailed guides loaded as needed: search playbook, evidence weighing, writing guide, citation rules, size tiers, media modes, and the no-network fallback pipeline.
+- `scripts/` — search (`find_papers.py`), full text (`fetch_fulltext.py`), verification (`verify_citations.py`), reference formatting (`format_references.py`), figure prompt building, and private reference-corpus downloading.
+- `references/` — detailed guides loaded as needed: search playbook, evidence weighing, writing guide, citation rules, size tiers, media modes, the 21-figure visual audit and manifest, and the no-network fallback pipeline.
 - `examples/` — full, unedited example outputs.
 - `scripts/export_review.py` — journal-styled HTML/PDF export (see below).
 - `evals/` — evaluation cases used to test the skill.
@@ -172,7 +172,13 @@ python3 scripts/export_review.py --in review.md --out review.pdf --pdf
 
 ## How it's tested
 
-`tests/test_find_papers.py` provides deterministic standard-library tests for OpenAlex cursor pagination, PubMed offset pagination, database-specific query routing, publication-type filtering, automatic logging, and bidirectional citation chasing. Run `python3 -m unittest discover -s tests -v`. `evals/evals.json` separately holds review-output evaluation cases across the modes.
+The deterministic standard-library suite covers OpenAlex cursor pagination,
+PubMed offset pagination, database-specific query routing, publication-type
+filtering, automatic logging, bidirectional citation chasing, figure prompt
+framing, visual-corpus manifest integrity and downloader validation, and PDF
+export. Run `python3 -m unittest discover -s tests -v`.
+`evals/evals.json` separately holds review-output evaluation cases across the
+modes.
 
 ## License
 
