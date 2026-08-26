@@ -12,24 +12,7 @@ What makes it great:
 
 Give it a topic or research question; it returns a compact, evidence-dense narrative review — question, citation-free abstract, introduction, thematic sections that build one argument, conclusion, useful comparison tables, and a sources block with resolvable DOIs. Ask for `popsci` for a popular-science magazine feature, or `bullets` when you want the earlier punchline-heading format.
 
-Example (excerpt from a real small bullet-mode run):
-
-> ## Does creatine reduce depressive symptoms?
->
-> **TL;DR** — Creatine may accelerate and deepen improvement when added to an antidepressant or cognitive behavioural therapy, but the evidence is too small and biased to establish a clinically important benefit. It is unproven as a stand-alone treatment, and bipolar depression requires particular caution.
->
-> ### The pooled benefit is small, uncertain, and below clinical importance
->
-> - The newest meta-analysis (11 placebo-controlled trials; n=1,093) found a [standardized mean difference](https://en.wikipedia.org/wiki/Standardized_mean_difference) of **−0.34** (95% [confidence interval](https://en.wikipedia.org/wiki/Confidence_interval) −0.68 to −0.00), equivalent to **2.2 points** on the [Hamilton Depression Rating Scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression)—below its 3-point minimal important difference. The I² measure of between-study inconsistency was high at 71%, trim-and-fill suggested small-study/publication bias favouring creatine, and [GRADE](https://en.wikipedia.org/wiki/GRADE_approach) certainty was very low. [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588)
-> - …
->
-> **Sources**
->
-> **Eckert I, Lima J, Dariva AA (2025)** Creatine supplementation for treating symptoms of depression: a systematic review and meta-analysis. *British Journal of Nutrition*. https://doi.org/10.1017/s0007114525105588
->
-> …
-
-Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper was screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so the compact style stays readable for non-specialists. The full, unedited output is in [`examples/small-creatine-depression.md`](examples/small-creatine-depression.md).
+Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper is screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so even the compact style stays readable for non-specialists. The four complete examples below show the same evidence standard in each writing style.
 
 ## Sizes and styles
 
@@ -45,46 +28,33 @@ A review has a **size** — `small` (default), `medium`, `large` — and a **sty
 
 Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Scientific** (formerly `prose`) is the default narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **Popsci** tells the same verified evidence as a popular-science magazine feature in the tradition of Scientific American or Quanta: an honest headline, a standfirst, a concrete opening scene drawn from a real study, narrative sections that build to the contrary evidence as the plot's turn, and a kicker — with every claim still carrying its checkable DOI link, which no actual magazine gives you. **Bullets** is the explicit compact option with a TL;DR, punchline headings, and cited bullets. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be mechanism diagrams, evidence maps, timelines, comparisons, quantitative summaries and more. A capable image-generation model renders the complete figure, including all in-figure text, when available; deterministic SVG is the fallback. The modular figure system separates verified evidence, archetype, render context and journal-inspired profile, with Arial defined throughout. Its figure-native rules come from a reproducible analysis of 21 official-source *Nature Reviews Neuroscience* and *Nature Neuroscience* figures: article figures omit poster-like internal titles, use content-led topology and local labels, and reserve pale semantic colour for scientific structures and data. Every figure also has a stable ID, automatic number, clickable body reference, and a caption written in the review's scientific, popsci, bullets, or ELI5 register with verified citations that enter the normal Sources block. Every result remains self-explanatory to a non-specialist, is placed after the section it supports, and flows automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
 
-## Ways to use it
+## Four styles, four real examples
 
-Name the skill in your prompt so it triggers reliably. Every prompt below has actually been run through the skill — each links to its full, unedited output:
+Each prompt below was run through the complete Grounded pipeline. Every example includes its full Markdown review and a PDF rendered with the same canonical journal design.
 
-**Answer a research question**
+**Scientific — Is there actually a healthiest sleeping position?**
 
-> Use the grounded skill in bullet style: does intermittent fasting improve insulin sensitivity?
+> Use the grounded skill in scientific style: is there actually a healthiest sleeping position?
 
-→ [output](examples/small-intermittent-fasting-insulin.md) · small · 16 verified sources
+→ [Markdown](examples/scientific-sleeping-position.md) · [PDF](examples/scientific-sleeping-position.pdf) · small · 13 verified sources
 
-**Get an overview of a field**
+**Popsci — Why do mosquitoes bite some people more than others?**
 
-> Use the grounded skill in medium bullet mode: what's known about the gut microbiome's role in Parkinson's disease?
+> Use the grounded skill in popsci style: why do mosquitoes bite some people more than others?
 
-→ [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 45 verified sources (four retracted papers caught and excluded during search)
+→ [Markdown](examples/popsci-mosquito-preference.md) · [PDF](examples/popsci-mosquito-preference.pdf) · small · 13 verified sources
 
-**Explain it in very simple terms**
-
-> Use the grounded skill in ELI5 image mode to explain why clouds are white
-
-→ [output](examples/eli5-why-clouds-are-white.md) · ELI5 image · 13 verified sources · one end-to-end ImageGen figure with a cited ELI5 caption and a clickable reference from the explanation
-
-**Survey a field in depth**
+**Bullets — Which Mediterranean-diet benefits are genuinely supported?**
 
 > Use the grounded skill in large bullet image mode: which health benefits of the Mediterranean diet are actually supported?
 
-→ [output](examples/large-mediterranean-diet.md) · large bullet image · 97 verified sources, 13 sections, three end-to-end ImageGen figures and one exact quantitative SVG (the retracted original PREDIMED report is excluded and its corrected republication is used)
-→ the same illustrated review in **scientific style**: [markdown](examples/prose-large-mediterranean-diet.md) · [journal-styled PDF](examples/prose-large-mediterranean-diet.pdf)
+→ [Markdown](examples/large-mediterranean-diet.md) · [PDF](examples/large-mediterranean-diet.pdf) · large image · 97 verified sources · four evidence-grounded figures; the retracted original PREDIMED report is excluded and its corrected republication is used
 
-**Settle a claim you've seen circulating**
+**ELI5 — Why are clouds white, but rain clouds dark?**
 
-> I keep reading that blue light before bed ruins sleep. Use the grounded skill — what does the evidence actually show?
+> Use the grounded skill in small ELI5 image mode: why are clouds white, but rain clouds dark?
 
-→ [output](examples/prose-small-blue-light-sleep.md) · default small scientific · 16 verified sources · [journal-styled PDF](examples/prose-small-blue-light-sleep.pdf) · also available [in bullet style](examples/small-blue-light-sleep.md)
-
-**Produce figures**
-
-> Use the grounded skill, medium image mode: how do mRNA vaccines work?
-
-→ [output](examples/prose-image-mrna-vaccines.md) · default medium scientific image · 47 verified sources plus two end-to-end ImageGen figures and one exact-geometry SVG fallback, all built from reusable evidence specs, archetypes and the Arial-based Nature Neuroscience-inspired system · [illustrated PDF](examples/image-mrna-vaccines.pdf) · also available [in bullet style](examples/image-mrna-vaccines.md)
+→ [Markdown](examples/eli5-why-clouds-are-white.md) · [PDF](examples/eli5-why-clouds-are-white.pdf) · small image · 13 verified sources · one cited explanatory figure
 
 Practical notes: unless you say otherwise you get a **small scientific** review (a focused 600–1,000-word narrative) — say `popsci` for the magazine feature, `bullets` for the denser list format, or `medium`/`large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
 
@@ -137,7 +107,7 @@ git clone https://github.com/jostelzer/grounded.git grounded && cd grounded && z
 3. Upload `SKILL.md` and every file from `references/` and `scripts/` to the project's files.
 4. Set the project instructions to:
    > Follow the workflow in SKILL.md for every review request. Load the referenced files from the project files when SKILL.md points to them.
-5. Make sure **Web Search** is available, then ask: *"Use the grounded skill: does creatine reduce depressive symptoms?"* — add `medium`, `large`, or `image` to pick a mode.
+5. Make sure **Web Search** is available, then ask: *"Use the grounded skill in popsci style: why do mosquitoes bite some people more than others?"* — add `medium`, `large`, or `image` to pick a size or media mode.
 
 **As a Custom GPT** (reusable/shareable):
 

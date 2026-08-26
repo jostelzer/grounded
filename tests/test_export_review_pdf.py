@@ -184,6 +184,41 @@ class PdfExportTests(unittest.TestCase):
             self.assertEqual(inspection["expected_figures"], 0)
             self.assertGreaterEqual(inspection["external_links"], 1)
 
+    def test_sources_must_be_the_terminal_review_section(self):
+        markdown = (
+            "## Invalid review\n\n**Abstract** — A short summary.\n\n"
+            "**Sources**\n\n**Smith 2024** A source. *Journal*. "
+            "https://doi.org/10.1000/example\n\n"
+            "### This section is misplaced\n\nMore discussion.\n"
+        )
+        with self.assertRaisesRegex(ValueError, "terminal review section"):
+            export_review.to_html(markdown)
+
+    def test_balanced_short_references_have_a_rendered_text_cap(self):
+        short_entries = "\n\n".join(
+            f"**Author {number} (2024)** A concise source. *Journal*. "
+            f"https://doi.org/10.1000/example{number}"
+            for number in range(2)
+        )
+        short = (
+            "## Review\n\n**Abstract** — A short summary.\n\n"
+            f"**Sources**\n\n{short_entries}\n"
+        )
+        _, _, short_body = export_review.to_html(short)
+        self.assertIn('class="spanning-reference-balanced"', short_body)
+
+        long_entries = "\n\n".join(
+            f"**Author {number} (2024)** " + ("Extended source text. " * 120) +
+            f"*Journal*. https://doi.org/10.1000/long{number}"
+            for number in range(2)
+        )
+        long = (
+            "## Review\n\n**Abstract** — A short summary.\n\n"
+            f"**Sources**\n\n{long_entries}\n"
+        )
+        _, _, long_body = export_review.to_html(long)
+        self.assertNotIn('class="spanning-reference-balanced"', long_body)
+
     def test_auto_hyphenation_uses_ascii_hyphens(self):
         from pypdf import PdfReader
 
@@ -250,6 +285,54 @@ class PdfExportTests(unittest.TestCase):
         self.assertGreater(figure_page, table_page)
         self.assertEqual(figure_page, page_number("FIGURE_PAYLOAD"))
 
+    def test_short_columns_do_not_strand_space_before_a_full_width_figure(self):
+        from pypdf import PdfReader
+
+        items = "\n".join(
+            f"- Evidence item {number} explains a distinct observed mechanism "
+            "with enough detail to exercise balanced column layout."
+            for number in range(1, 7))
+        markdown = (
+            "## Compact display review\n\n**Abstract** — A short summary.\n\n"
+            "### Evidence before the display\n\n" + items + "\n\n"
+            "The pathway is summarized in [Figure 1](#fig-mechanism).\n\n"
+            '<a id="fig-mechanism"></a>\n'
+            "![A three-stage mechanism](figure.png)\n\n"
+            "**Figure 1. SAME_PAGE_FIGURE.** The observed stages are shown. "
+            "[Smith 2024](https://doi.org/10.1000/example)\n\n"
+            "**Sources**\n\n**Smith 2024** A verified source. *Journal*. "
+            "https://doi.org/10.1000/example\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            pdf = os.path.join(tmp, "same-page.pdf")
+            self.write_review(markdown, pdf, tmp)
+            pages = [page.extract_text() or "" for page in PdfReader(pdf).pages]
+
+        self.assertIn("Evidence item 1", pages[0])
+        self.assertIn("Evidence item 6", pages[0])
+        self.assertIn("SAME_PAGE_FIGURE", pages[0])
+
+    def test_explicit_column_runs_never_nest_in_an_outer_multicolumn_body(self):
+        markdown = self.markdown().replace(
+            "**Figure 1. A transient signal builds memory.** "
+            "The solid steps are observed; the dashed step is inferred. "
+            "[Smith 2024](https://doi.org/10.1000/example)",
+            "**Figure 1. A transient signal builds memory.**\n"
+            "- **Shows:** The solid steps are observed; the dashed step is inferred. "
+            "[Smith 2024](https://doi.org/10.1000/example)",
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            page = export_review.build_html(
+                markdown, base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+            )
+
+        self.assertIn('<div class="column-run final">', page)
+        self.assertIn('<div class="body structured-flow">', page)
+        self.assertNotIn('<div class="body cols">', page)
+
     @unittest.skipUnless(shutil.which("pdftoppm"), "Poppler is not installed")
     def test_independent_raster_qa_checks_every_page(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -261,6 +344,29 @@ class PdfExportTests(unittest.TestCase):
             raster = qa_review_pdf.render_and_inspect(pdf, render_dir, dpi=120)
             self.assertEqual(raster["rendered_pages"], structural["pages"])
             self.assertTrue(raster["contact_sheets"])
+
+    @unittest.skipUnless(shutil.which("pdftoppm"), "Poppler is not installed")
+    def test_running_masthead_paints_on_a_real_continuation_page(self):
+        from pypdf import PdfReader
+
+        example_dir = os.path.join(ROOT, "examples")
+        with tempfile.TemporaryDirectory() as tmp:
+            for filename in (
+                    "prose-small-blue-light-sleep.md",
+                    "eli5-why-clouds-are-white.md"):
+                with self.subTest(filename=filename):
+                    source = os.path.join(example_dir, filename)
+                    with open(source, encoding="utf-8") as stream:
+                        markdown = stream.read()
+                    pdf = os.path.join(tmp, filename.replace(".md", ".pdf"))
+                    render_dir = os.path.join(tmp, filename.replace(".md", ""))
+                    self.write_review(markdown, pdf, example_dir)
+                    self.assertEqual(len(PdfReader(pdf).pages), 2)
+                    raster = qa_review_pdf.render_and_inspect(
+                        pdf, render_dir, dpi=120)
+                    # The raster QA independently checks masthead and orange-chip
+                    # ink on page 2, not merely extractable header text.
+                    self.assertEqual(raster["rendered_pages"], 2)
 
     @unittest.skipUnless(shutil.which("pdftoppm"), "Poppler is not installed")
     def test_raster_qa_refuses_a_nonempty_output_directory(self):
@@ -312,11 +418,40 @@ class PdfExportTests(unittest.TestCase):
                 weasyprint_export.write_pdf(page, output)
                 reader = PdfReader(output)
                 self.assertEqual(len(reader.pages), expected_pages)
+                inspection = qa_review_pdf.inspect_structure(output, markdown)
+                self.assertEqual(
+                    inspection["expected_dois"],
+                    len(qa_review_pdf._doi_urls(markdown)),
+                )
+                self.assertEqual(
+                    inspection["expected_figures"],
+                    markdown.count('<a id="fig-'),
+                )
                 for number, pdf_page in enumerate(reader.pages, 1):
                     text = pdf_page.extract_text() or ""
                     self.assertIn("G R O U N D E D", text)
                     self.assertIn("NO FLOATING CLAIMS.", text)
                     self.assertIn(f"{number} / {expected_pages}", text)
+
+    def test_structured_table_uses_space_below_figure_three_safely(self):
+        from pypdf import PdfReader
+
+        example_dir = os.path.join(ROOT, "examples")
+        source = os.path.join(example_dir, "large-mediterranean-diet.md")
+        with open(source, encoding="utf-8") as stream:
+            markdown = stream.read()
+        with tempfile.TemporaryDirectory() as tmp:
+            output = os.path.join(tmp, "mediterranean.pdf")
+            self.write_review(markdown, output, example_dir)
+            pages = [page.extract_text() or "" for page in PdfReader(output).pages]
+
+        self.assertEqual(len(pages), 10)
+        self.assertIn("Figure 3.", pages[5])
+        self.assertIn("The evidence supports a hierarchy of claims", pages[5])
+        self.assertIn("OUTCOME", pages[5])
+        # The continued table repeats its semantic header instead of stranding
+        # a heading or splitting a row at the page boundary.
+        self.assertIn("OUTCOME", pages[6])
 
 
 class FigureExportTests(unittest.TestCase):

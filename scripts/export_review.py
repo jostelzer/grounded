@@ -53,10 +53,90 @@ def append_spanning_block(out, block):
     """Keep a section heading with an immediately following table or figure."""
     if out and out[-1].startswith("<h2>") and out[-1].endswith("</h2>"):
         heading = out.pop()
+        section_class = ("spanning-figure-start" if block.startswith("<figure")
+                         else "spanning-table-start fragmentable-table")
         out.append(
-            f'<section class="spanning-section-start">{heading}{block}</section>')
+            f'<section class="{section_class}">{heading}{block}</section>')
     else:
-        out.append(block)
+        out.append(f'<section class="spanning-block">{block}</section>')
+
+
+def arrange_page_flow(blocks, columns, use_structured_caption_flow=False):
+    """Close column runs around displays with tall structured captions.
+
+    WeasyPrint cannot reliably fragment ``column-span: all``: a display that
+    fits below the preceding columns can be pushed to the next page, stranding
+    most of the current page.  Explicit sibling runs express the same journal
+    layout without asking the renderer to interrupt a fragmented multicolumn
+    box.  A run still fills pages sequentially; only its final fragment is
+    balanced before the following full-width block.  This alternate flow is
+    deliberately reserved for figures whose multi-line bullet captions make
+    the span interruption tall enough to trigger that renderer defect; compact
+    prose captions retain the proven sequential journal-column route.
+    """
+    if columns != 2 or not use_structured_caption_flow or not any(
+            block.startswith('<section class="spanning-') for block in blocks):
+        return "\n".join(blocks)
+
+    flow = []
+    run = []
+
+    def flush_run(before_span=False, final=False):
+        if run:
+            balance_blocks = []
+            for item in run:
+                if item.startswith("<ul>") and item.endswith("</ul>"):
+                    balance_blocks.extend(re.findall(r"<li>.*?</li>", item, re.S))
+                else:
+                    balance_blocks.append(item)
+
+            def render_half(items):
+                rendered = []
+                list_items = []
+                for item in items + [None]:
+                    if item is not None and item.startswith("<li>"):
+                        list_items.append(item)
+                        continue
+                    if list_items:
+                        rendered.append("<ul>" + "".join(list_items) + "</ul>")
+                        list_items = []
+                    if item is not None:
+                        rendered.append(item)
+                return "\n".join(rendered)
+
+            # A short terminal run must shrink-wrap so the display can use the
+            # rest of the page. WeasyPrint stretches a fragmented multicol box
+            # to the page bottom even when its visible columns are short.
+            plain_lengths = [len(re.sub(r"<[^>]+>", "", item))
+                             for item in balance_blocks]
+            candidates = [index for index in range(1, len(balance_blocks))
+                          if not balance_blocks[index - 1].startswith("<h2")]
+            if (before_span and sum(plain_lengths) <= 6000 and
+                    len(balance_blocks) > 1 and candidates):
+                total = sum(plain_lengths)
+                split = min(candidates, key=lambda index: abs(
+                    sum(plain_lengths[:index]) - total / 2))
+                left = render_half(balance_blocks[:split])
+                right = render_half(balance_blocks[split:])
+                flow.append('<div class="compact-column-pair">'
+                            f'<div>{left}</div><div>{right}</div></div>')
+            else:
+                flow.append('<div class="column-run">' + "\n".join(run) + '</div>')
+            run.clear()
+
+    for block in blocks:
+        if block.startswith('<section class="spanning-'):
+            flush_run(before_span=True)
+            flow.append(block)
+        else:
+            run.append(block)
+    flush_run()
+    for index in range(len(flow) - 1, -1, -1):
+        if flow[index].startswith('<div class="column-run">'):
+            flow[index] = flow[index].replace(
+                'class="column-run"', 'class="column-run final"', 1)
+            break
+    return "\n".join(flow)
 
 
 MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
@@ -85,7 +165,7 @@ def image_data_uri(path, base_dir):
         return f"data:{MIME[ext]};base64," + base64.b64encode(f.read()).decode()
 
 
-def to_html(md, base_dir="."):
+def to_html(md, base_dir=".", columns=2):
     """Convert the review markdown to body HTML. Returns (title, lead, body)."""
     lines = md.split("\n")
     out, i = [], 0
@@ -93,6 +173,8 @@ def to_html(md, base_dir="."):
     n_figs = 0
     pending_figure_id = None
     figure_ids = []
+    has_tall_structured_caption = False
+    in_sources = False
     while i < len(lines):
         ln = lines[i]
         s = ln.strip()
@@ -102,6 +184,9 @@ def to_html(md, base_dir="."):
             continue
 
         anchor = re.match(r'^<a id="(fig-[a-z][a-z0-9-]*)"></a>$', s)
+        if in_sources and (anchor or s.startswith(
+                ("# ", "## ", "### ", "> ", "![", "|", "- ", "* "))):
+            raise ValueError("Sources must be the terminal review section")
         if anchor:
             if pending_figure_id is not None:
                 raise ValueError("figure anchor is not followed by a figure")
@@ -156,6 +241,7 @@ def to_html(md, base_dir="."):
                 raise ValueError("every figure caption must contain a DOI citation")
             caption_list = ""
             if caption_bullets:
+                has_tall_structured_caption = True
                 caption_list = "<ul>" + "".join(
                     f"<li>{inline(item)}</li>" for item in caption_bullets) + "</ul>"
             caption = (
@@ -227,19 +313,48 @@ def to_html(md, base_dir="."):
             lead = (m.group(1), inline(re.sub(r"^\*\*(TL;DR|Abstract)\*\*\s*[—–-]?\s*", "", text)))
             continue
         if re.match(r"^\*\*Sources\*\*\s*$", text):
-            out.append('<h2 class="refhead">References</h2><div class="refs">')
+            if in_sources:
+                raise ValueError("Sources must appear exactly once")
+            in_sources = True
+            out.append('<section class="spanning-reference-head">'
+                       '<h2 class="refhead">References</h2></section>')
+            out.append('<div class="refs">')
             continue
         out.append(f"<p>{inline(text)}</p>")
 
-    body = "\n".join(out)
     if pending_figure_id is not None:
         raise ValueError("figure anchor is not followed by a figure")
+    if any(block == '<div class="refs">' for block in out):
+        out.append('<p class="tomb">&#8718;</p></div>')
+    else:
+        out.append('<p class="tomb">&#8718;</p>')
+    for index, block in enumerate(out):
+        if block == '<div class="refs">':
+            entries = out[index + 1:-1]
+            lengths = [len(re.sub(r"<[^>]+>", "", entry))
+                       for entry in entries]
+            if (1 < len(entries) <= 13 and sum(lengths) <= 4000 and
+                    not has_tall_structured_caption):
+                heading = out[index - 1].removeprefix(
+                    '<section class="spanning-reference-head">').removesuffix(
+                        '</section>')
+                split = min(range(1, len(entries)), key=lambda position: abs(
+                    sum(lengths[:position]) - sum(lengths) / 2))
+                left = "\n".join(entries[:split])
+                right = "\n".join(entries[split:] + [out[-1]])
+                out[index - 1:] = [
+                    '<section class="spanning-reference-balanced">'
+                    f'{heading}<div class="refs balanced"><div>{left}</div>'
+                    f'<div>{right}</div></div></section>'
+                ]
+            break
+    body = arrange_page_flow(
+        out, columns=columns,
+        use_structured_caption_flow=has_tall_structured_caption)
     for figure_id in figure_ids:
         if f'href="#{figure_id}"' not in body:
             raise ValueError(
                 "every figure must be referenced from the text: %s" % figure_id)
-    if '<div class="refs">' in body:
-        body += "</div>"
     return title, lead, body
 
 
@@ -259,6 +374,7 @@ GND_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#ff4f1f" '
 CSS = r"""
 @page {
   size: A4; margin: 25mm 13mm 12mm 13mm;
+  @top-center { content: element(pageHeader); vertical-align: bottom; width: 100%; }
   /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
     font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #8a8a8a; }
@@ -281,7 +397,7 @@ body {
   font-family: -apple-system, "Helvetica Neue", "Helvetica", Arial, sans-serif;
 }
 .paper { width: 100%; max-width: 194mm; margin: 0 auto; }
-.running-header { position: fixed; top: -13mm; left: 0; right: 0; }
+.running-header { position: running(pageHeader); width: 100%; }
 .strip {
   display: flex; align-items: stretch; border-bottom: .5px solid var(--ink);
   break-inside: avoid;
@@ -342,7 +458,20 @@ h1 {
 .body { counter-reset: sec; }
 /* Sequential fill avoids a last page made of two balanced half-height columns. */
 .body.cols { column-count: 2; column-gap: 8mm; column-fill: auto; }
-.spanning-section-start { column-span: all; break-inside: avoid; }
+.column-run.final { column-count: 2; column-gap: 8mm; column-fill: balance; }
+.column-run { column-count: 2; column-gap: 8mm; column-fill: balance; }
+.compact-column-pair {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 8mm; break-inside: avoid;
+}
+.spanning-figure-start, .spanning-block,
+.spanning-reference-head, .spanning-reference-balanced { break-inside: avoid; }
+.spanning-table-start { break-inside: avoid; }
+.body.structured-flow > .spanning-table-start { break-inside: auto; }
+.body.cols > .spanning-figure-start, .body.cols > .spanning-table-start,
+.body.cols > .spanning-block,
+.body.cols > .spanning-reference-head { column-span: all; }
+.body.cols > .spanning-reference-balanced { column-span: all; }
 h2 {
   font-size: 9pt; font-weight: 600; line-height: 1.3; letter-spacing: 0;
   margin: 12px 0 4px; color: var(--ink);
@@ -352,10 +481,10 @@ h2::before {
   counter-increment: sec; content: counter(sec, decimal-leading-zero);
   color: var(--accent); margin-right: 7px; font-variant-numeric: tabular-nums;
 }
-.body > h2:first-child, .body.cols > h2:first-child { margin-top: 0; }
+.body > h2:first-child, .column-run > h2:first-child { margin-top: 0; }
 h2.refhead {
   border-top: 1px solid var(--ink); padding-top: 6px; margin-top: 16px;
-  column-span: all; font-size: 9pt;
+  font-size: 9pt;
 }
 h2.refhead::before { content: none; counter-increment: none; }
 h2.refhead small { font-weight: 600; font-size: 6.3pt; letter-spacing: .12em;
@@ -370,7 +499,12 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; 
 strong { letter-spacing: 0; }
 /* Tables span the full page width (interrupting the columns, as journals do)
    and wrap their cell content — a table is never clipped or truncated. */
-.tablewrap { column-span: all; break-inside: avoid; margin: 9px 0 11px; overflow: visible; }
+.tablewrap { break-inside: avoid; margin: 9px 0 11px; overflow: visible; }
+.body.structured-flow > .spanning-table-start > .tablewrap { break-inside: auto; }
+.body.structured-flow > .fragmentable-table thead {
+  display: table-header-group;
+}
+.body.structured-flow > .fragmentable-table tr { break-inside: avoid; }
 .tablewrap table { width: 100%; border-collapse: collapse; font-size: 7.4pt; line-height: 1.4;
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
 thead th {
@@ -385,13 +519,20 @@ tbody td {
 }
 tbody tr:last-child td { border-bottom: 1px solid var(--ink); }
 .refs { font-size: 6.9pt; line-height: 1.2; color: #333; text-align: left; }
+.refs.balanced {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8mm;
+}
 .refs p { margin: 0 0 2.5px; padding-left: 1.2em; text-indent: -1.2em; break-inside: avoid-page; }
 .refs.dense { font-size: 6.5pt; line-height: 1.08; }
 .refs.dense p { margin-bottom: .5px; }
 .refs a { border-bottom: none; color: var(--muted); word-break: break-all; }
 /* Figures, like tables, span the full page width and are never clipped. */
-figure { column-span: all; margin: 10px 0 12px; break-inside: avoid; }
-figure img { display: block; width: 100%; height: auto; }
+figure { margin: 10px 0 12px; break-inside: avoid; }
+figure img {
+  display: block; width: 100%; max-width: 100%; height: auto; max-height: 92mm;
+  object-fit: contain;
+  margin: 0 auto;
+}
 figcaption { font-size: 7.4pt; color: var(--muted); margin-top: 5px;
   text-align: left; line-height: 1.45; }
 figcaption a, figcaption .figno { white-space: nowrap; }
@@ -401,7 +542,7 @@ figcaption .figno::first-letter { color: var(--ink); }
 figcaption ul { margin: 4px 0 0; padding-left: 1.15em; }
 figcaption li { margin: 0 0 2px; break-inside: auto; }
 .tomb { text-align: right; color: var(--accent); font-size: 11pt;
-  margin: 0; line-height: 1; }
+  margin: 0; padding: 0; line-height: 1; }
 footer.colophon {
   /* Keep provenance furniture out of content flow so it cannot create a spill page. */
   position: fixed; bottom: -7mm; left: 0; right: 22mm;
@@ -423,7 +564,8 @@ footer.colophon a { color: var(--faint); border-bottom: none; }
   body { padding: 0; }
   .running-header { padding: 5mm 5mm 4mm; }
   .paper { padding: 0 5mm 8mm; }
-  .body.cols { column-count: 1; }
+  .body.cols, .column-run { column-count: 1; }
+  .compact-column-pair { grid-template-columns: 1fr; }
   h1 { font-size: 16pt; }
   .metagrid { grid-template-columns: repeat(2, 1fr); }
   .metagrid > div { border-bottom: 1px solid var(--rule); }
@@ -458,7 +600,6 @@ PAGE = """<!doctype html>
 {lead}
 <div class="body{cols}">
 {body}
-<div class="tomb">&#8718;</div>
 </div>
 <footer class="colophon"><span>{colophon}</span><span style="white-space:nowrap">grounded {version}</span></footer>
 </main>
@@ -516,7 +657,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                release=None, repo=None, compiled_date=None):
     import urllib.parse
 
-    title, lead, body = to_html(md, base_dir)
+    title, lead, body = to_html(md, base_dir, columns=columns)
     title = title or "Scientific review"
     lead_html = ""
     if lead:
@@ -564,6 +705,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         if n_refs >= 80:
             body = body.replace('<div class="refs">', '<div class="refs dense">')
 
+
     if colophon is None:
         colophon = ("Agentically generated · every citation resolved and "
                     "retraction-screened via Crossref")
@@ -574,7 +716,9 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         version=html.escape(release), repo_url=html.escape(repo_url, quote=True),
         repo_label=html.escape(repo_label), kicker=html.escape(kicker),
         title=title, metagrid=metagrid, lead=lead_html,
-        cols=" cols" if columns == 2 else "", body=body,
+        cols=((" cols" if columns == 2 and 'class="column-run' not in body else "")
+              + (" structured-flow" if 'class="column-run' in body else "")),
+        body=body,
         colophon=html.escape(colophon))
 
 

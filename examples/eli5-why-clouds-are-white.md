@@ -1,17 +1,16 @@
-## Why are clouds white?
+## Why are clouds white, but rain clouds dark?
 
-**TL;DR** — A cloud is made of tiny clear drops or bits of ice. Each one sends the Sun's many colors in new directions. In a whole cloud, the colors come back to our eyes mixed together, so the cloud usually looks white.
+**TL;DR** — A cloud looks white because its tiny clear drops or bits of ice send the Sun's colors back to us mixed together. A thick rain cloud blocks and loses more light before it reaches the bottom, so the part we see can look grey or dark.
 
 ### A cloud is a crowd of clear drops, not a lump of white stuff
 
-- Aircraft measurements found ordinary warm-cloud drops with a middle-size radius near **11 millionths of a metre**. That is many times wider than a wave of visible light. [Fu et al. 2022](https://doi.org/10.5194/acp-22-8259-2022), [Kim et al. 2003](https://doi.org/10.1029/2003jd003721)
-- A drop this big sends red, green, and blue light away with almost the same total strength. It does not send every color in exactly the same direction, so “all colors scatter equally” is a useful shortcut, not a perfect rule. [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4), [Bréon & Goloub 1998](https://doi.org/10.1029/98gl01221)
-- High, icy clouds follow the same big idea. Their ice pieces also send sunlight in many directions. Their shape and roughness change the pattern. [Yang et al. 2013](https://doi.org/10.1175/jas-d-12-039.1), [Yang et al. 2018](https://doi.org/10.3390/atmos9120499)
+- Aircraft measurements show that an ordinary warm-cloud drop is about **22 millionths of a metre across**—much wider than a wave of visible light. [Fu et al. 2022](https://doi.org/10.5194/acp-22-8259-2022), [Kim et al. 2003](https://doi.org/10.1029/2003jd003721)
+- A drop this big sends red, green, and blue light away with almost the same strength, although their exact directions differ. [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4), [Bréon & Goloub 1998](https://doi.org/10.1029/98gl01221)
+- High, icy clouds work similarly. Their ice pieces send light in many directions, with shape and roughness changing the pattern. [Yang et al. 2013](https://doi.org/10.1175/jas-d-12-039.1), [Yang et al. 2018](https://doi.org/10.3390/atmos9120499)
 
 ### Many changes of direction make a soft white glow
 
-- One clear drop is hard to see. A cloud holds a huge crowd of them. Sunlight changes direction again and again before some of it escapes toward your eyes. [Bohren 1987](https://doi.org/10.1119/1.15109), [Davis & Marshak 2010](https://doi.org/10.1088/0034-4885/73/2/026801)
-- Those many trips mix the Sun's colors and spread the light across the cloud. That is why the cloud can look bright from many places instead of shining like one tiny mirror. [Bohren 1987](https://doi.org/10.1119/1.15109), [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4)
+- A cloud's crowd of clear drops turns sunlight again and again. Those trips mix the Sun's colors and spread a soft white glow instead of one tiny reflection. [Bohren 1987](https://doi.org/10.1119/1.15109), [Davis & Marshak 2010](https://doi.org/10.1088/0034-4885/73/2/026801), [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4)
 - You can see the light paths in [Figure 1](#fig-cloud-light-paths).
 
 <a id="fig-cloud-light-paths"></a>
