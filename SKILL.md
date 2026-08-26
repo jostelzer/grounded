@@ -17,13 +17,17 @@ Working files are different. `sources.json`, `search_log.md` and the draft are s
 
 Produce a file **only** when the user asks for one ("save it", "give me a .md", "export to Word"). Then write the file *and* still put the review in the chat.
 
-When the user asks for a **PDF**, a **printable** or **shareable** version, or "make it look like a journal article", run `scripts/export_review.py` on the finished markdown — it typesets the review in **GROUNDED**, the skill's own journal identity (Swiss-modern masthead strip with the earth-ground chip and "No floating claims." tagline, repeated as a running header on every page; a provenance line declaring the review agentically generated with the skill version and repo link; a metadata grid; numbered sections; two-column serif body) and renders a PDF via headless Chrome or WeasyPrint:
+When the user asks for a **PDF**, a **printable** or **shareable** version, or "make it look like a journal article", use the canonical browser-free PDF path below. `scripts/export_review.py` typesets the finished markdown directly with pinned ReportLab and bundled fonts in **GROUNDED**, the skill's own journal identity: Swiss-modern masthead strip with the earth-ground chip and "No floating claims." tagline on every page, provenance line, metadata grid, numbered sections, two-column serif body, full-width tables and figures, cited captions, live DOI links, and clickable figure references. Do not invoke Chrome, another browser, WeasyPrint, or an ad-hoc external template as a fallback.
 
 ```bash
+python3 scripts/export_review.py --check-pdf-runtime
 python3 scripts/export_review.py --in review.md --out review.pdf --pdf
+python3 scripts/qa_review_pdf.py review.pdf --markdown review.md --render-dir review-pdf-qa
 ```
 
-`--columns 1` for a single-column layout, plain `--out review.html` for HTML only. `--kicker "Review · Immunology"` sets the label above the title; the version and repo link in the provenance line are auto-detected from git (`--release`/`--repo` override them). The review still goes in the chat as well.
+The runtime check is a hard gate. If it fails, install the exact packages in `requirements-pdf.txt` into the active Python environment and rerun it; never silently switch renderers. The exporter refuses remote, missing, escaping, or oversized figure assets. SVG figures require a deterministic sibling named `<stem>-pdf.png`, so PDF generation itself never shells out to an SVG renderer. Output is written atomically: a failed build cannot overwrite an existing good PDF. HTML sidecars are off by default and require `--html-sidecar` explicitly.
+
+The QA command is also mandatory before delivery. It strictly parses the PDF, checks A4 geometry, metadata, prohibited document actions, DOI and internal figure links, running masthead and total-aware page number on every page, then independently rasterizes every page through Poppler and checks masthead, footer, body, and clipping-edge pixels. Use a new or empty `--render-dir`, inspect every generated page/contact sheet visually, and fix any defect before delivering. `--columns 1` gives a single-column layout; plain `--out review.html` remains the separate HTML-only path. `--kicker "Review · Immunology"` sets the label above the title; the version and repository label in the provenance line are auto-detected from git (`--release`/`--repo` override them). The review still goes in the chat as well.
 
 The two experimental media modes are the only standing exception: `image` and `mindmap` still deliver the written review in chat, additionally generating and displaying the media artifacts (one mindmap; one to five figures depending on size). The media never replaces the review.
 
@@ -137,7 +141,9 @@ Skip this step in small, medium, and large/big modes. In image or mindmap mode, 
 - `scripts/verify_citations.py` — Crossref bibliographic and retraction verification using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` — open-access full text via Europe PMC, as plain text.
 - `scripts/format_references.py` — resolves `[@key]` citations, builds the reference list (Vancouver / APA / Nature).
-- `scripts/export_review.py` — journal-styled HTML and PDF export of the finished review; use when the user asks for a PDF or a printable version.
+- `scripts/export_review.py` and `scripts/reportlab_export.py` — canonical browser-free, atomic journal-styled PDF export plus the separate HTML-only export.
+- `scripts/qa_review_pdf.py` — mandatory structural and independent Poppler raster QA for every delivered PDF.
+- `requirements-pdf.txt` and `assets/fonts/` — pinned PDF/QA packages and bundled DejaVu font files, including their license.
 - `scripts/build_figure_prompt.py` — composes an end-to-end ImageGen prompt from a structured evidence specification, a reusable journal-style profile, and a figure archetype.
 - `scripts/download_figure_references.py` — downloads the official-source visual-analysis corpus to an explicit private directory and records provenance, dimensions, hashes, and byte counts; source pixels are never bundled.
 - `references/no-script-fallback.md` — the tool-only pipeline for sandboxes with no Python network access (claude.ai); read this whenever Step 0 fails.

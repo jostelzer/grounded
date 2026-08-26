@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export a finished review to journal-styled HTML, and optionally PDF.
+"""Export a finished review to journal-styled HTML or a deterministic PDF.
 
 Takes the markdown produced by format_references.py and typesets it in the
 GROUNDED journal identity: repeating masthead, provenance, metadata grid,
@@ -11,18 +11,17 @@ DOIs stay resolvable.
     python3 export_review.py --in review.md --out review.pdf --pdf
     python3 export_review.py --in review.md --out review.html --columns 1 --title "..."
 
-PDF needs a renderer on PATH: Chrome/Chromium/Edge (headless), or weasyprint.
-Everything else is Python standard library only.
+PDF uses the pinned ReportLab runtime in ``requirements-pdf.txt``.  It never
+launches a browser, executes document code, or accesses the network.  HTML-only
+export remains Python-standard-library-only.
 """
 
 import argparse
 import html
 import os
 import re
-import shutil
 import subprocess
 import sys
-import tempfile
 
 # ---------------------------------------------------------------- markdown ---
 # The skill emits a narrow, fixed subset: ##/### headings, **bold**, *italic*,
@@ -56,10 +55,19 @@ MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
 def image_data_uri(path, base_dir):
     """Embed a local image as a data URI so the export is self-contained."""
     import base64
-    p = path if os.path.isabs(path) else os.path.join(base_dir, path)
+    base = os.path.realpath(base_dir)
+    p = os.path.realpath(path if os.path.isabs(path) else os.path.join(base, path))
+    try:
+        inside = os.path.commonpath([base, p]) == base
+    except ValueError:
+        inside = False
+    if not inside:
+        raise ValueError(f"figure asset escapes the review directory: {path}")
     ext = os.path.splitext(p)[1].lower()
-    if ext not in MIME or not os.path.exists(p):
-        return None
+    if ext not in MIME:
+        raise ValueError(f"unsupported figure format: {path}")
+    if not os.path.isfile(p):
+        raise ValueError(f"figure asset does not exist: {path}")
     with open(p, "rb") as f:
         return f"data:{MIME[ext]};base64," + base64.b64encode(f.read()).decode()
 
@@ -143,9 +151,6 @@ def to_html(md, base_dir="."):
                 f'{inline(cm.group(3) or "")}{caption_list}</figcaption>')
             i = k
             uri = image_data_uri(src, base_dir)
-            if uri is None:
-                print(f"warning: figure not embedded (missing or unsupported): {src}", file=sys.stderr)
-                uri = html.escape(src, quote=True)
             out.append(
                 f'<figure id="{figure_id}"><img src="{uri}" '
                 f'alt="{html.escape(alt, quote=True)}">{caption}</figure>')
@@ -235,8 +240,7 @@ GND_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#ff4f1f" '
 CSS = r"""
 @page {
   size: A4; margin: 12mm 13mm 16mm 13mm;
-  /* Page numbers render where @page margin boxes are supported (WeasyPrint);
-     Chrome ignores them harmlessly. */
+  /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
     font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #8a8a8a; }
 }
@@ -256,8 +260,8 @@ body {
 .tablabel, figcaption, .refs, footer.colophon {
   font-family: -apple-system, "Helvetica Neue", "Helvetica", Arial, sans-serif;
 }
-/* The whole document lives in one table so the masthead strip in <thead>
-   repeats at the top of every printed page (Chrome honors this). */
+/* HTML-only print shell. Capable CSS print engines repeat the table header;
+   the canonical PDF path never consumes this markup. */
 table.paper { width: 100%; border-collapse: collapse; max-width: 194mm; margin: 0 auto; }
 table.paper > thead > tr > th { padding: 0 0 5mm; font-weight: normal; text-align: left; }
 table.paper > tbody > tr > td { padding: 0; }
@@ -525,109 +529,73 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         colophon=html.escape(colophon))
 
 
-# -------------------------------------------------------------------- pdf ---
-
-CHROME_NAMES = [
-    "google-chrome", "google-chrome-stable", "chromium", "chromium-browser",
-    "microsoft-edge", "brave-browser",
-]
-CHROME_APPS = [
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
-    "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-]
-
-
-def find_chrome():
-    for n in CHROME_NAMES:
-        p = shutil.which(n)
-        if p:
-            return p
-    for p in CHROME_APPS:
-        if os.path.exists(p):
-            return p
-    return None
-
-
-def write_pdf(html_text, out_path):
-    """Render HTML to PDF with headless Chrome or weasyprint. Returns the tool used."""
-    target = os.path.abspath(out_path)
-    target_dir = os.path.dirname(target)
-    chrome = find_chrome()
-    if chrome:
-        with tempfile.TemporaryDirectory(prefix=".grounded-", dir=target_dir) as td:
-            src = os.path.join(td, "review.html")
-            rendered = os.path.join(td, "rendered.pdf")
-            with open(src, "w") as f:
-                f.write(html_text)
-            cmd = [chrome, "--headless", "--disable-gpu", "--no-sandbox",
-                   "--no-pdf-header-footer", f"--print-to-pdf={rendered}",
-                   "file://" + src]
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
-            if r.returncode == 0 and is_pdf(rendered):
-                os.replace(rendered, target)
-                return os.path.basename(chrome)
-            # older builds reject --no-pdf-header-footer
-            cmd.remove("--no-pdf-header-footer")
-            if os.path.exists(rendered):
-                os.unlink(rendered)
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
-            if r.returncode == 0 and is_pdf(rendered):
-                os.replace(rendered, target)
-                return os.path.basename(chrome)
-            raise RuntimeError(f"chrome failed to write a PDF: {r.stderr.strip()[:300]}")
-    if shutil.which("weasyprint"):
-        with tempfile.TemporaryDirectory(prefix=".grounded-", dir=target_dir) as td:
-            src = os.path.join(td, "review.html")
-            rendered = os.path.join(td, "rendered.pdf")
-            with open(src, "w") as f:
-                f.write(html_text)
-            r = subprocess.run(["weasyprint", src, rendered], capture_output=True, text=True, timeout=180)
-            if r.returncode != 0 or not is_pdf(rendered):
-                raise RuntimeError(f"weasyprint failed: {r.stderr.strip()[:300]}")
-            os.replace(rendered, target)
-            return "weasyprint"
-    raise RuntimeError(
-        "no PDF renderer found. Install Chrome/Chromium or weasyprint, or export "
-        "HTML and print to PDF from the browser (Cmd/Ctrl-P).")
-
-
-def is_pdf(path):
-    """Return whether *path* is a non-empty PDF, not a stale output sentinel."""
-    if not os.path.exists(path) or os.path.getsize(path) < 5:
-        return False
-    with open(path, "rb") as f:
-        return f.read(5) == b"%PDF-"
-
-
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--in", dest="src", required=True, help="finished review markdown (from format_references.py)")
-    ap.add_argument("--out", required=True, help="output path (.html or .pdf)")
+    ap.add_argument("--in", dest="src", help="finished review markdown (from format_references.py)")
+    ap.add_argument("--out", help="output path (.html or .pdf)")
     ap.add_argument("--pdf", action="store_true", help="render a PDF (implied by an .pdf --out)")
     ap.add_argument("--columns", type=int, choices=[1, 2], default=2, help="body columns on paper (default 2)")
     ap.add_argument("--kicker", default="Review", help="kicker label above the title (e.g. 'Review · Immunology')")
     ap.add_argument("--colophon", help="override the footer line")
     ap.add_argument("--release", help="version shown in the provenance line (default: latest git tag)")
     ap.add_argument("--repo", help="repository link in the provenance line (default: git origin remote)")
+    ap.add_argument("--compiled-date", help="fixed YYYY-MM-DD compilation date (default: today)")
+    ap.add_argument("--html-sidecar", action="store_true",
+                    help="also write HTML beside a PDF (off by default)")
+    ap.add_argument("--check-pdf-runtime", action="store_true",
+                    help="validate the canonical ReportLab runtime and exit")
     args = ap.parse_args()
 
-    md = open(args.src).read()
-    page = build_html(md, columns=args.columns, kicker=args.kicker, colophon=args.colophon,
-                      base_dir=os.path.dirname(os.path.abspath(args.src)),
-                      release=args.release, repo=args.repo)
+    if args.check_pdf_runtime:
+        from reportlab_export import require_runtime
+        import json
+        print(json.dumps(require_runtime(), sort_keys=True))
+        return
+    if not args.src or not args.out:
+        ap.error("--in and --out are required unless --check-pdf-runtime is used")
+
+    with open(args.src, encoding="utf-8") as stream:
+        md = stream.read()
+    base_dir = os.path.dirname(os.path.abspath(args.src))
 
     want_pdf = args.pdf or args.out.lower().endswith(".pdf")
     if want_pdf:
-        tool = write_pdf(page, args.out)
-        html_side = os.path.splitext(args.out)[0] + ".html"
-        with open(html_side, "w") as f:
-            f.write(page)
-        print(f"Wrote {args.out} (via {tool}) and {html_side}", file=sys.stderr)
+        from reportlab_export import write_pdf
+        release = args.release or detect_release(os.path.dirname(os.path.abspath(__file__))) or "dev"
+        if args.repo:
+            repo_label = re.sub(r"^https?://", "", args.repo).rstrip("/")
+        else:
+            repo_label, _repo_url = detect_repo(os.path.dirname(os.path.abspath(__file__)))
+        result = write_pdf(
+            md, args.out, base_dir=base_dir, columns=args.columns,
+            kicker=args.kicker, release=release,
+            repo_label=repo_label or "local build",
+            compiled_date=args.compiled_date, colophon=args.colophon,
+        )
+        if args.html_sidecar:
+            page = build_html(
+                md, columns=args.columns, kicker=args.kicker,
+                colophon=args.colophon, base_dir=base_dir,
+                release=release, repo=args.repo,
+            )
+            html_side = os.path.splitext(args.out)[0] + ".html"
+            with open(html_side, "w", encoding="utf-8") as stream:
+                stream.write(page)
+            suffix = f" and {html_side}"
+        else:
+            suffix = ""
+        print(
+            f"Wrote {args.out} (via {result['renderer']}, sha256 {result['sha256']}){suffix}",
+            file=sys.stderr,
+        )
     else:
-        with open(args.out, "w") as f:
-            f.write(page)
+        page = build_html(
+            md, columns=args.columns, kicker=args.kicker,
+            colophon=args.colophon, base_dir=base_dir,
+            release=args.release, repo=args.repo,
+        )
+        with open(args.out, "w", encoding="utf-8") as stream:
+            stream.write(page)
         print(f"Wrote {args.out}", file=sys.stderr)
 
 

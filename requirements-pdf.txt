@@ -1,0 +1,4 @@
+# Canonical, browser-free Grounded PDF runtime.
+reportlab==4.4.9
+Pillow==12.3.0
+pypdf==6.10.0
