@@ -8,7 +8,9 @@ It is not a document with front matter or a report about itself. Every word earn
 
 ## Choose the writing style
 
-Use **prose by default**. Its exact structure and narrative rules are in "Prose style" below. Use the compact bullet structure only when the user explicitly asks for bullets, a list, or the compact structured format. Use ELI5 only when requested.
+Use **scientific by default** (the style previously named `prose` — treat `prose` as an alias). Its exact structure and narrative rules are in "Scientific style" below. Use the compact bullet structure only when the user explicitly asks for bullets, a list, or the compact structured format. Use **popsci** when the user asks for `popsci`, popular science, magazine style, science journalism, or names that register's magazines (Scientific American, New Scientist, Quanta). Use ELI5 only when requested.
+
+The register spectrum runs scientific → popsci → ELI5: a journal reader, a curious educated adult, a smart reader with no science background. Bullets share the scientific register in compact form.
 
 ## Bullet style (explicit)
 
@@ -75,6 +77,8 @@ A compact block at the end: one line per source, `**All Authors (2026)** Title. 
 
 ## Language
 
+This register applies to the **bullet and scientific styles**. Popsci and ELI5 replace only the register rules, as defined in their own sections; concision, numbers-over-adjectives, calibrated strength, and citations bind every style.
+
 - **Objective scientific register.** The voice of a good journal article, not of science journalism. No rhetorical hooks ("Few claims have travelled further…"), no rhetorical questions, no drama or colour, no appeals to the reader, no first person. State findings and their limits; let the evidence carry the interest.
 - **Concise above all.** Cut every word that does not carry information. Prefer the short form: "no benefit" over "did not demonstrate a statistically significant benefit".
 - **Numbers, not adjectives.** Effect sizes with intervals, sample sizes, absolute risks. "HbA1c −0.06% (95% CI −0.27 to 0.16)" not "no meaningful improvement".
@@ -84,9 +88,9 @@ A compact block at the end: one line per source, `**All Authors (2026)** Title. 
 - **Active and direct.** Name who found what.
 - Define an abbreviation once, at first use.
 
-## Prose style (default)
+## Scientific style (default; alias: prose)
 
-Use this style unless the user explicitly selects bullets or ELI5. The pipeline, evidence standard, citations, and verification are identical across styles; prose and bullets share the normal term-link rules, while ELI5's jargon exception is defined below. Prose changes the review into a narrative article of the kind journals publish.
+Use this style unless the user explicitly selects bullets, popsci, or ELI5. The pipeline, evidence standard, citations, and verification are identical across styles; scientific and bullets share the normal term-link rules, popsci's gloss-and-link pattern and ELI5's jargon exception are defined below. Scientific style shapes the review into a narrative article of the kind journals publish.
 
 Structure:
 
@@ -114,7 +118,7 @@ evidence that would settle what is open. No new evidence introduced here.>
 <same generated sources block as always>
 ```
 
-Narrative arc — what makes prose read as an argument rather than a list:
+Narrative arc — what makes the article read as an argument rather than a list:
 
 - **Find the throughline before drafting.** One sentence naming the tension or pattern the whole review turns on ("the biology is solid, but the sleep effect appears only at high doses"). The Introduction poses it, every section advances it, the Conclusion answers it. If no single sentence covers the review, the plan is a taxonomy, not an argument — reorganize until it is one.
 - **Land every section.** After the evidence, one plain sentence saying what the section adds to the throughline, ideally handing off to the next section ("So the mechanism is real; whether it costs sleep is a separate question — the one the exposure trials answer next."). A section that stops on its last study is unfinished.
@@ -133,9 +137,63 @@ Paragraph craft:
 - Figures are introduced from the running prose with the stable token in
   `figure-captions.md`. Their captions are short flowing paragraphs in the same
   narrative-review register, with verified author–year citations.
-- The banned-filler list still applies in full. Prose means flowing, not padded: no "it is important to note", no throat-clearing, no restating the abstract in the conclusion.
+- The banned-filler list still applies in full. Flowing means flowing, not padded: no "it is important to note", no throat-clearing, no restating the abstract in the conclusion.
 - Word budgets run ~1.5× the bullet tiers because connective tissue costs words: small 600–1,000, medium 1,500–2,500, large 3,500–6,000. Sources, angles, and search depth are unchanged from the chosen size.
-- Prose reviews print beautifully — end the delivery by offering the journal-styled PDF (`scripts/export_review.py`), but the review itself still goes in the chat.
+- Scientific reviews print beautifully — end the delivery by offering the journal-styled PDF (`scripts/export_review.py`), but the review itself still goes in the chat.
+
+## Popsci style (explicit)
+
+Use when the user asks for `popsci`, "popular science", "magazine style", "science journalism", or names a magazine of that register (Scientific American, New Scientist, Quanta, Nautilus). The pipeline, evidence standard, source counts, citations, and verification are identical to every other style — popsci changes the register and the architecture of the telling, nothing underneath. The model is the feature well of a great popular-science magazine: a piece a curious adult reads for pleasure and finishes knowing exactly what science does and does not say — with the one thing no magazine gives them, a checkable citation on every claim.
+
+Structure:
+
+```
+## <Headline — the question recast as a magazine title: concrete, curious, honest>
+
+*<Standfirst — 1–3 citation-free sentences under the headline, italic: state the
+question plainly and preview the stakes and the shape of the answer. This replaces
+the abstract.>*
+
+<The lede: a cold open of 1–2 short paragraphs — a concrete moment from a real
+study, a striking verified fact, or the place the question shows up in the
+reader's life. Cited like all body text.>
+
+<The nut graf: one paragraph that widens the shot — why the question matters,
+what is claimed and contested, and what the piece sets out to find. This is
+where the throughline is posed.>
+
+### <Crosshead — a narrative beat, evocative but honest>
+<Sections as story beats. See rules below.>
+
+### <The turn — the crosshead that names where the evidence complicates>
+<The contrary or null evidence, told as the twist it is.>
+
+### <The kicker>
+<Circle back to the opening image, say plainly where the evidence lands and at
+what confidence, and end on the specific thing that would settle what is open —
+a forward-looking last line, not a shrug.>
+
+**Sources**
+<same generated sources block as always>
+```
+
+The storytelling — how the magazines actually do it:
+
+- **The headline is honest curiosity.** Recast the question so a browsing reader wants the answer ("Does creatine treat depression?" → "The gym supplement that might lift mood"). It may intrigue; it may not overclaim, tease a payoff the evidence doesn't deliver, or promise certainty the kicker walks back. A null result can still headline — make the absence the story ("The memory pill that never was").
+- **Open close, then widen.** The lede is a close-up: one trial's setup, one measured moment, one number that surprises. The nut graf pulls back to the whole literature and poses the throughline. That zoom — close-up on a study, wide shot across the field, back in close — is the piece's basic camera work, and it is what separates a feature from a summary.
+- **Studies are events; people do things.** "In 2022, a team at Oxford followed 8,376 teenagers for a year" — findings arrive as moments in an unfolding investigation, with researchers, cohorts, and instruments as the actors. Use only details that are actually in the paper: sample sizes, settings, methods, years, locations. **Never invent colour** — no imagined patients, composite characters, weather, or lab scenes the methods section doesn't contain. A hypothetical is allowed only when explicitly framed as one ("imagine…"), and sparingly; a real study told well beats an invented scene every time.
+- **Concrete before abstract.** Show the phenomenon, then name the mechanism. Define terms by apposition in the sentence itself — "the hippocampus, the brain's memory hub" — and still give the term its verified link: **name it, gloss it, link it.** This is the middle path between scientific style (link only) and ELI5 (rewrite entirely); the reader leaves knowing the real vocabulary.
+- **Numbers become human-scale, without losing precision.** Lead with what the number means, keep the exact statistic in a parenthesis: "about one extra case for every 900 people vaccinated ([RR](https://en.wikipedia.org/wiki/Relative_risk) 1.13, 95% CI 1.02–1.25)". Prefer absolute risks, frequencies ("one in eight"), and comparisons to familiar magnitudes over bare relative effects.
+- **The contrary evidence is the plot twist, not a footnote.** Popular science at its best treats the complication as the most interesting part. Give the turn its own crosshead, let it genuinely threaten the story so far, then resolve it the way the evidence resolves it — including "it doesn't, yet".
+- **One metaphor family, carried through.** A single well-chosen image (a thermostat, a relay race, a leaky bucket) may recur and evolve across the piece. Mixed metaphors read as decoration; a sustained one is structure. It must never smuggle in a claim the sources don't make.
+- **Rhythm and address.** Sentences vary: a long evidence sentence, then a short verdict. Rhetorical questions and second person are allowed — one or two of each per piece, at genuine hinge points, never as filler. First person plural ("we") only for the shared human situation, never for the analysis.
+- **The certainty survives the storytelling.** This is the rule that keeps popsci honest. Hedges stay hedged; a weak finding stays weak no matter how good the sentence feels; "scientists are still arguing about this" is a legitimate story beat, not a flaw to write around. Banned vocabulary: breakthrough, game-changer, revolutionary, holy grail, miracle, stunning, "scientists baffled".
+- **Citations unchanged.** Every empirical sentence carries its `Author 2026` DOI link, exactly as in every other style. This is the piece's quiet flex — magazine prose that can be checked line by line — so the links are worn lightly but never dropped.
+- **Crossheads are evocative but honest.** A reader who skims only the headline and crossheads should come away with the true arc of the evidence, curiosity intact but never misled.
+- Tables remain allowed where studies line up; introduce each from the running text. Figure captions follow the popsci register in `figure-captions.md`.
+- The banned-filler list still applies: hooks are earned with concreteness, not with "In today's fast-paced world" or "Imagine a world where…" boilerplate.
+- Word budgets match the scientific tiers: small 600–1,000, medium 1,500–2,500, large 3,500–6,000. Sources, angles, and search depth are unchanged from the chosen size.
+- Popsci prints well too — offer the PDF export after delivering, as with scientific style.
 
 ## ELI5 language
 
@@ -167,7 +225,7 @@ The first use of a technical abbreviation or specialist term is a markdown link 
 
 ## Length
 
-Default **small prose**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words in the body plus the sources block. Explicit bullet style uses 350–700 words. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
+Default **small scientific**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words in the body plus the sources block. Popsci uses the same budgets. Explicit bullet style uses 350–700 words. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
 
 ## Citing
 
@@ -184,16 +242,17 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 
 0. The review is in the reply, not in a file (unless a file was requested).
 1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited.
-2. In bullet style, headings alone tell the argument; in prose, topic sentences and section landings advance one throughline.
-3. The Abstract (prose) or TL;DR (bullets/ELI5) has no citations and answers the question in the first sentence.
+2. In bullet style, headings alone tell the argument; in scientific and popsci styles, topic sentences and section landings advance one throughline.
+3. The Abstract (scientific), standfirst (popsci), or TL;DR (bullets/ELI5) has no citations; the Abstract and TL;DR answer the question in the first sentence, and the standfirst states the question and the shape of the answer.
 4. Opposing evidence appears, and is contrasted rather than blended.
 5. A table exists wherever several studies share dimensions.
 6. Numbers match sources; intervals included where reported.
-7. Nothing before the question; no methods section; no audience or scope preamble.
+7. Nothing before the question; no methods section; no audience or scope preamble. In popsci style, the headline is the question recast and the standfirst states it plainly — nothing precedes the headline.
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded.
 8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut 10% more.
-9b. In prose style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly.
+9b. In scientific style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly.
+9c. In popsci style: the headline is honest; the lede is a concrete, cited close-up with no invented detail; the nut graf poses the throughline; the turn gets its own crosshead; the kicker circles back and looks forward; no hype vocabulary appears; and every hedge in the sources survives into the piece — the certainty matches the evidence exactly.
 10. In image or mindmap mode, every requested visual is rendered,
     evidence-grounded, legible, and inspected; has a unique stable ID; is
     referenced from the relevant body text; and has a caption in the same

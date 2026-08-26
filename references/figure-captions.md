@@ -12,7 +12,7 @@ A caption is part of the evidence-bearing manuscript. It must:
 2. explain what is shown and how to read any non-obvious encoding;
 3. state the important evidence boundary or uncertainty;
 4. end with 2–5 citations from the verified review ledger;
-5. use the same language register as the review: bullets, prose, or ELI5.
+5. use the same language register as the review: scientific, popsci, bullets, or ELI5.
 
 Do not use a caption as a source dump, repeat the surrounding section, or hide
 a scientific caveat that belongs in the image itself. Caption citations support
@@ -66,7 +66,7 @@ title is a punchline; the lines are evidence-dense rather than paragraph-like.
 - **Sources:** [@Feikin2022; @Tang2022]
 ```
 
-### Prose
+### Scientific
 
 Use a short flowing paragraph, normally 2–4 sentences. Begin with the finding,
 then explain the visual and its limitation. Keep the objective narrative-review
@@ -74,6 +74,17 @@ register used in the body.
 
 ```markdown
 **Figure {#waning}. Protection wanes faster against infection than severe disease.** The aligned estimates separate outcome-specific decline from the mechanisms proposed to explain it. Equal visual areas do not encode magnitude, and the studies do not quantify how much each mechanism contributes. [@Feikin2022; @Tang2022]
+```
+
+### Popsci
+
+Use a short flowing paragraph in the magazine register: begin with the point as
+a reader-facing sentence, guide the eye through the visual, and keep the
+evidence boundary as part of the story. Human-scale numbers, no hype, citations
+unchanged.
+
+```markdown
+**Figure {#waning}. The shield against infection thins in months; the shield against severe disease holds.** Follow the two rows from month one to month six: the drop is steep on top, shallow below. The rows are drawn the same size, so compare the slopes, not the areas — and all of this data predates Omicron. [@Feikin2022; @Tang2022]
 ```
 
 ### ELI5
@@ -96,8 +107,10 @@ not the evidence.
 - In bullets, add a short navigational clause to an already relevant cited
   bullet, or use a citation-free navigation bullet that makes no new empirical
   claim.
-- In prose, integrate the reference grammatically: “As shown in
+- In scientific style, integrate the reference grammatically: “As shown in
   `{{figure:mechanism}}`, …”.
+- In popsci, weave it into the story: “Trace the pathway in
+  `{{figure:mechanism}}` and the gap becomes visible: …”.
 - In ELI5, use direct language: “You can see the steps in
   `{{figure:mechanism}}`.”
 - Refer to the whole figure as `{{figure:id}}`; refer to a panel as

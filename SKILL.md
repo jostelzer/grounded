@@ -1,6 +1,6 @@
 ---
 name: grounded
-description: Write a scientific review of a topic or research question at small, medium, or large size, as bullets, flowing prose, or eli5 (very simple English), optionally with an image or mindmap, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
+description: Write a scientific review of a topic or research question at small, medium, or large size, in scientific style (flowing narrative prose, the default), popsci style (popular-science magazine storytelling like Scientific American), bullets, or eli5 (very simple English), optionally with an image or mindmap, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, a scientific illustration grounded in reviewed findings, or a findings mindmap. Also use it to check a draft's claims or references against the literature.
 ---
 
 # Grounded — scientific reviews with no floating claims
@@ -33,10 +33,10 @@ The two experimental media modes are the only standing exception: `image` and `m
 
 ## Defaults — do not ask, just do this
 
-- **Size: small. Style: prose.** Only deviate if the user asks or the question plainly needs it. Never ask which size or style.
+- **Size: small. Style: scientific** (formerly named `prose`; treat `prose` as an alias). Only deviate if the user asks or the question plainly needs it. Never ask which size or style.
 - **Delivered in the chat**, formatted with markdown, as well-presented as possible. No file, no attachment, unless asked.
 - **Citations: `Author 2026` inline, hyperlinked to the DOI.** The reader must never see square brackets around a citation — they exist only as markdown link syntax. Never write a bare `[Author 2026]`, `[1]`, or `(Author, 2026)` in the finished text. Sources block at the end carries the DOIs.
-- **Structure is fixed per style** — prose: question → abstract → introduction → thematic sections → conclusion → sources; bullets: question → TL;DR → punchline sections of bullets → sources; ELI5 uses the bullet-shaped structure in very simple language. Exact layouts in `references/writing-guide.md`.
+- **Structure is fixed per style** — scientific: question → abstract → introduction → thematic sections → conclusion → sources; popsci: headline → standfirst → lede → nut graf → narrative crossheads with a turn → kicker → sources; bullets: question → TL;DR → punchline sections of bullets → sources; ELI5 uses the bullet-shaped structure in very simple language. Exact layouts in `references/writing-guide.md`.
 - **Technical terms link to explainers.** The first use of an abbreviation or specialist term (SMD, CI, GRADE, HAM-D, mRNA, …) is a link to its verified Wikipedia article, so a non-specialist can click instead of googling. Rules and verification in `references/writing-guide.md`.
 - **No preamble and no meta.** No scope note, assumptions paragraph, audience statement, size label, or "how this review was produced" section. Make sensible scope choices silently.
 - **Concise throughout.** Shortest language that carries the evidence.
@@ -51,13 +51,14 @@ A review has a **size** (how much evidence) and a **style** (how it is written).
 - **Medium** — when the user asks for `medium`, or when the question plainly contains several genuinely distinct sub-questions that cannot be answered well at small depth.
 - **Large** — when the user asks for `large` or `big`; the words are aliases.
 
-**Style** — default **prose**:
+**Style** — default **scientific**:
 
-- **Prose** — default. A narrative article: abstract, introduction, topic-sentence paragraphs, conclusion. Word budgets ~1.5× the bullet tier. Rules in "Prose style" in `references/writing-guide.md`. Prose prints well — after delivering, offer the PDF export.
+- **Scientific** — default (alias: `prose`, its former name). A narrative article in journal register: abstract, introduction, topic-sentence paragraphs, conclusion. Word budgets ~1.5× the bullet tier. Rules in "Scientific style" in `references/writing-guide.md`. Scientific prints well — after delivering, offer the PDF export.
+- **Popsci** — when the user asks for `popsci`, "popular science", "magazine style", "science journalism", or names Scientific American, New Scientist, Quanta, or a similar magazine. A magazine feature for a curious educated adult: honest headline, standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, kicker — with full verified citations throughout. Rules in "Popsci style" in `references/writing-guide.md`.
 - **Bullets** — when the user asks for `bullets`, a list, or the compact structured format. Punchline headings and cited bullet bodies, per `references/writing-guide.md`.
 - **ELI5** — when the user asks for `eli5`, "explain like I'm five", or very simple language. Very simple English, per "ELI5 language" in `references/writing-guide.md`. Defaults to small size unless a size is named.
 
-Style never changes search depth, source counts, citations, or verification. Prose and bullets use the normal verified term links; ELI5 rewrites jargon into everyday language and links only an unavoidable term after explaining it.
+Style never changes search depth, source counts, citations, or verification. Scientific and bullets use the normal verified term links; popsci names a term, glosses it inline, and links it; ELI5 rewrites jargon into everyday language and links only an unavoidable term after explaining it. The register spectrum runs scientific → popsci → ELI5.
 
 **Media modes (experimental)** — these are additive artifacts, not styles:
 
@@ -68,7 +69,7 @@ If the user explicitly asks for both `image` and `mindmap`, run one small review
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
-| Prose body length (default) | 600–1,000 words | 1,500–2,500 words | 3,500–6,000 words |
+| Scientific/popsci body length (default) | 600–1,000 words | 1,500–2,500 words | 3,500–6,000 words |
 | Bullet body length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
 | Sections | 3–5 | 6–9 | 10–15 |
 | Sources | 10–20 | 30–60 | 70–150 |
@@ -114,7 +115,7 @@ Run `scripts/verify_citations.py --ledger sources.json`. It uses the Crossref re
 
 ### 5. Write the draft
 
-Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; @b]` for several. Follow the selected style's fixed layout in `references/writing-guide.md`. The default prose review uses a citation-free Abstract, an Introduction that poses one throughline, thematic sections of topic-sentence paragraphs that advance it, and a Conclusion that names the cross-cutting pattern. Explicit bullet style uses a citation-free TL;DR, punchline headings, and cited bullet bodies. ELI5 keeps that bullet-shaped layout but rewrites every claim and quantity in simple language. In every style, order the argument deliberately, contrast opposing evidence, use a table wherever several studies share dimensions, report numbers with intervals, cite primary studies for findings, and use reviews for consensus.
+Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; @b]` for several. Follow the selected style's fixed layout in `references/writing-guide.md`. The default scientific review uses a citation-free Abstract, an Introduction that poses one throughline, thematic sections of topic-sentence paragraphs that advance it, and a Conclusion that names the cross-cutting pattern. Popsci uses a magazine feature architecture — honest headline, citation-free standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, and a kicker — with the storytelling rules in "Popsci style". Explicit bullet style uses a citation-free TL;DR, punchline headings, and cited bullet bodies. ELI5 keeps that bullet-shaped layout but rewrites every claim and quantity in simple language. In every style, order the argument deliberately, contrast opposing evidence, use a table wherever several studies share dimensions, report numbers with intervals, cite primary studies for findings, and use reviews for consensus.
 
 ### 6. Format and check
 
@@ -122,7 +123,7 @@ Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; 
 
 ### 7. Create the requested media
 
-Skip this step unless the user explicitly requested image or mindmap mode. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Read the visual audit in `references/figure-reference-analysis.md`, the journal-grade system in `references/figure-style-system.md`, and the caption contract in `references/figure-captions.md`; choose a style profile and figure archetype, record the evidence and exact copy in a figure-spec JSON, and generate the prompt with `scripts/build_figure_prompt.py` as specified in `references/image-prompt-guide.md`. Use `render_context: article` for a figure inserted beside a caption and `standalone` only when the pixels must carry their own compact title. When a capable image-generation model is available, use it to render the complete figure end to end, including all in-figure labels, callouts, values, legends, and essential definitions; use deterministic SVG or another vector renderer only when image generation is unavailable or the generated result cannot pass QA. Image-mode illustrations must be self-explanatory to an educated non-specialist. Give every figure a stable ID, reference it from the relevant body text, and write a caption that matches the review's bullets, prose, or ELI5 register and ends with 2–5 verified ledger citations. `format_references.py` assigns figure numbers, creates cross-links, and rejects missing, uncited, duplicated, broken, or unreferenced figures. Inspect the defined Arial typography, every rendered word and number, scientific content, clipping, visual balance, caption, and misleading emphasis. Display it in the reply with useful alt text.
+Skip this step unless the user explicitly requested image or mindmap mode. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Read the visual audit in `references/figure-reference-analysis.md`, the journal-grade system in `references/figure-style-system.md`, and the caption contract in `references/figure-captions.md`; choose a style profile and figure archetype, record the evidence and exact copy in a figure-spec JSON, and generate the prompt with `scripts/build_figure_prompt.py` as specified in `references/image-prompt-guide.md`. Use `render_context: article` for a figure inserted beside a caption and `standalone` only when the pixels must carry their own compact title. When a capable image-generation model is available, use it to render the complete figure end to end, including all in-figure labels, callouts, values, legends, and essential definitions; use deterministic SVG or another vector renderer only when image generation is unavailable or the generated result cannot pass QA. Image-mode illustrations must be self-explanatory to an educated non-specialist. Give every figure a stable ID, reference it from the relevant body text, and write a caption that matches the review's style register (scientific, popsci, bullets, or ELI5) and ends with 2–5 verified ledger citations. `format_references.py` assigns figure numbers, creates cross-links, and rejects missing, uncited, duplicated, broken, or unreferenced figures. Inspect the defined Arial typography, every rendered word and number, scientific content, clipping, visual balance, caption, and misleading emphasis. Display it in the reply with useful alt text.
 
 ## Rules that do not bend
 

@@ -1,6 +1,6 @@
 # Experimental media modes
 
-Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small prose when none is named); mindmap mode uses the small pipeline and the selected writing style (prose when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
+Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small scientific when none is named); mindmap mode uses the small pipeline and the selected writing style (scientific when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
 
 Before creating media, also read `figure-reference-analysis.md`,
 `figure-style-system.md`, `image-prompt-guide.md`, and `figure-captions.md`.
@@ -138,7 +138,8 @@ The mechanism is summarized in {{figure:mechanism}}.
 `### Scientific illustration` section before **Sources** is still acceptable.)
 The caption may elaborate, but each figure must remain independently
 understandable. Bullet reviews may use the structured `Shows / Evidence boundary
-/ Sources` caption; prose uses a short flowing paragraph; ELI5 uses short
+/ Sources` caption; scientific uses a short flowing paragraph; popsci uses a
+short flowing paragraph in the magazine register; ELI5 uses short
 everyday sentences. `scripts/format_references.py` and
 `scripts/export_review.py` validate the contract.
 
@@ -178,7 +179,7 @@ Use specific alt text that lists the root and primary branches.
 5. The artifact is rendered and displayed, not supplied as instructions or source code.
 6. Text is readable and exactly correct at normal chat width; nothing important is clipped, overlapping, or lost against the artwork.
 7. Every figure has a stable ID, is referenced from the body, and has a caption
-   that matches the review's bullets, prose, or ELI5 register.
+   that matches the review's scientific, popsci, bullets, or ELI5 register.
 8. The caption explains the synthesis, states its evidence boundary, and cites
    2–5 relevant verified sources that also appear in the Sources block.
 9. In image mode, every abbreviation and non-obvious concept is defined by a

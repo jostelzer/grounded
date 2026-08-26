@@ -1,18 +1,19 @@
 # Sizes and styles
 
-A review has a **size** (`small` default, `medium`, `large`/`big` — how much evidence) and a **style** (`prose` default, `bullets`, `eli5` — how it is written). The axes are independent: "medium prose" and "large eli5" are both valid requests. Do not ask which size or style; produce small prose unless the user asks or the question obviously needs more. Bigger sizes add sections, evidence and tables — never longer sentences.
+A review has a **size** (`small` default, `medium`, `large`/`big` — how much evidence) and a **style** (`scientific` default — alias `prose` — plus `popsci`, `bullets`, `eli5` — how it is written). The axes are independent: "medium scientific" and "large eli5" are both valid requests. Do not ask which size or style; produce small scientific unless the user asks or the question obviously needs more. Bigger sizes add sections, evidence and tables — never longer sentences.
 
-Styles change the writing register and jargon treatment — never search depth, source counts, citations, or verification:
+Styles change the writing register and jargon treatment — never search depth, source counts, citations, or verification. The register spectrum runs scientific → popsci → ELI5: a journal reader, a curious educated adult, a smart reader with no science background.
 
-- **Prose** (default): a narrative article — abstract, introduction, thematic sections of topic-sentence paragraphs, conclusion. Body budget: small 600–1,000, medium 1,500–2,500, large 3,500–6,000 words. Rules in "Prose style" in `writing-guide.md`. Offer the journal PDF export after delivering.
+- **Scientific** (default; alias `prose`, its former name): a narrative article in journal register — abstract, introduction, thematic sections of topic-sentence paragraphs, conclusion. Body budget: small 600–1,000, medium 1,500–2,500, large 3,500–6,000 words. Rules in "Scientific style" in `writing-guide.md`. Offer the journal PDF export after delivering.
+- **Popsci** (explicit: `popsci`, "popular science", "magazine style", "science journalism", or naming Scientific American / New Scientist / Quanta): a magazine feature — honest headline, citation-free standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, kicker — jargon named, glossed inline, and linked. Same body budgets as scientific. Rules in "Popsci style" in `writing-guide.md`.
 - **Bullets** (explicit: "bullets", "list", "compact structured format"): question → TL;DR → punchline headings → cited bullets → sources. Body budget: small 350–700, medium 900–1,600, large 2,000–4,000 words. Layout in `writing-guide.md`.
 - **ELI5** (explicit: `eli5`, "explain like I'm five", very simple language): the bullet-shaped structure in very simple English at the chosen size (defaults small; body may stretch ~1.2× because plain words take more of them). It rewrites jargon instead of applying the normal term-link pattern. Rules in "ELI5 language" in `writing-guide.md`.
 
-`Image` and `mindmap` are explicit-only experimental media modes, not styles. Image combines with any size and style, with a size-scaled figure budget (small 1, medium up to 3, large up to 5 — caps, not quotas); mindmap uses the small tier and the selected writing style (prose when none is named). Both follow `media-modes.md`.
+`Image` and `mindmap` are explicit-only experimental media modes, not styles. Image combines with any size and style, with a size-scaled figure budget (small 1, medium up to 3, large up to 5 — caps, not quotas); mindmap uses the small tier and the selected writing style (scientific when none is named). Both follow `media-modes.md`.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
-| Prose body words (default) | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
+| Scientific/popsci body words (default) | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
 | Bullet body words | 350–700 | 900–1,600 | 2,000–4,000 |
 | Sections | 3–5 | 6–9 | 10–15 |
 | Evidence units per section | 2–4 | 3–5 | 3–6 |
