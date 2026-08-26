@@ -3,9 +3,10 @@
 Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small bullets when none is named); mindmap mode uses the small pipeline. The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
 
 Before creating media, also read `figure-reference-analysis.md`,
-`figure-style-system.md`, and `image-prompt-guide.md`. They define the visual
-evidence base, Arial-based journal system, and structured prompt workflow. Do
-not substitute an improvised prose prompt.
+`figure-style-system.md`, `image-prompt-guide.md`, and `figure-captions.md`.
+They define the visual evidence base, Arial-based journal system, structured
+prompt workflow, and cited caption/cross-reference contract. Do not substitute
+an improvised prose prompt.
 
 ## Shared evidence boundary
 
@@ -45,11 +46,12 @@ Invent freely beyond this list. The constraints are always the same: built only 
 
 **Placement.** Figures go where they support the argument — each one inserted
 after the section it illustrates, with its caption — not stacked at the end. In
-prose style, reference each figure from the running text. Because that caption
-already supplies the title and scope, use `render_context: article` and do not
-repeat a hero title or subtitle inside the artwork. Define symbols locally or in
-a compact legend; use a glossary region only when essential terminology cannot
-be defined without it.
+every writing style, reference each figure from the relevant body text using
+the stable-ID syntax in `figure-captions.md`. Because the cited caption supplies
+the title and scope, use `render_context: article` and do not repeat a hero title
+or subtitle inside the artwork. Define symbols locally or in a compact legend;
+use a glossary region only when essential terminology cannot be defined without
+it.
 
 Every figure must be understandable to an educated non-specialist without relying on the surrounding review to decode its terminology.
 
@@ -120,14 +122,25 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
 7. Distinguish observed findings from proposed mechanisms through layout and visual styling.
 8. After generation, inspect the image at its delivered size. Regenerate or edit it if labels or glossary text are garbled, any abbreviation or difficult concept is undefined, anatomy is wrong, arrows imply unsupported causality, components are clipped or overlapping, or the hierarchy does not match the evidence.
 
-Deliver the review at its size and style using the normal writing guide, inserting each figure after the section it supports:
+Deliver the review at its size and style using the stable-ID draft contract in
+`figure-captions.md`. The formatter assigns numbers, verifies the caption's
+ledger citations, inserts anchors, resolves body tokens to clickable `Figure N`
+links, and adds caption sources to the normal Sources block:
 
 ```text
+The mechanism is summarized in {{figure:mechanism}}.
+
 ![<specific alt text: the visual structure and the scientific point>](<figure file>)
-*Caption: what the visual shows, what is established versus uncertain, and 2–5 supporting review citations.*
+**Figure {#mechanism}. <declarative title>.** <style-matched explanation, evidence boundary, and 2–5 ledger citations>
 ```
 
-(When there is a single synthesis figure and no better anchor section, a `### Scientific illustration` section before **Sources** is still acceptable.) The caption may elaborate, but each figure must remain independently understandable. This exact `![...](...)` + `*Caption: …*` pairing is what `scripts/export_review.py` recognizes, so the figures flow into the PDF export automatically.
+(When there is a single synthesis figure and no better anchor section, a
+`### Scientific illustration` section before **Sources** is still acceptable.)
+The caption may elaborate, but each figure must remain independently
+understandable. Bullet reviews may use the structured `Shows / Evidence boundary
+/ Sources` caption; prose uses a short flowing paragraph; ELI5 uses short
+everyday sentences. `scripts/format_references.py` and
+`scripts/export_review.py` validate the contract.
 
 ## Mindmap mode
 
@@ -138,14 +151,20 @@ Create one rendered, readable mindmap that exposes the structure of the evidence
 3. Keep node labels to roughly 2–7 words. Add only enough second-level nodes to preserve the major findings; do not reproduce the entire review in the map.
 4. Encode evidence strength consistently, with a small legend. A useful default is strong/consistent, mixed/moderate, and limited/uncertain. Do not imply that branch size equals effect size unless the data support that encoding.
 5. Prefer a capable image-generation model to render the complete map, including all node and legend text. Inspect every label and relationship. Use deterministic SVG, HTML/canvas, graph rendering, or visibly rendered Mermaid as fallback; never hand back raw diagram source.
-6. Inspect the rendered map. Fix overlaps, clipped nodes, unreadable labels, weak contrast, confusing crossing edges, and any branch whose emphasis misstates the literature.
+6. Give the map a stable figure ID, a style-matched cited caption, and a body
+   reference under the same `figure-captions.md` contract as every other figure.
+7. Inspect the rendered map. Fix overlaps, clipped nodes, unreadable labels,
+   weak contrast, confusing crossing edges, and any branch whose emphasis
+   misstates the literature.
 
-Deliver the small review using the normal writing guide, then insert:
+Deliver the small review using the normal writing guide, reference the map from
+the relevant body bullet, then insert:
 
 ```text
-### Findings mindmap
+The evidence structure is summarized in {{figure:findings-map}}.
+
 <rendered mindmap>
-*Caption: how to read the evidence-strength encoding and which review sections support the main branches.*
+**Figure {#findings-map}. <plain-language evidence-map title>.** <how to read the evidence-strength encoding, the important uncertainty, and 2–5 ledger citations>
 ```
 
 Use specific alt text that lists the root and primary branches.
@@ -158,7 +177,10 @@ Use specific alt text that lists the root and primary branches.
 4. Uncertainty and disagreement remain visible.
 5. The artifact is rendered and displayed, not supplied as instructions or source code.
 6. Text is readable and exactly correct at normal chat width; nothing important is clipped, overlapping, or lost against the artwork.
-7. The caption explains the synthesis and cites the relevant verified sources.
-8. In image mode, every abbreviation and non-obvious concept is defined by a
+7. Every figure has a stable ID, is referenced from the body, and has a caption
+   that matches the review's bullets, prose, or ELI5 register.
+8. The caption explains the synthesis, states its evidence boundary, and cites
+   2–5 relevant verified sources that also appear in the Sources block.
+9. In image mode, every abbreviation and non-obvious concept is defined by a
    local label or a smaller but readable legend/key inside the image.
-9. In image mode, the figure can be understood without consulting the surrounding prose for terminology.
+10. In image mode, the figure can be understood without consulting the surrounding prose for terminology.

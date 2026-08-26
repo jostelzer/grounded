@@ -6,6 +6,14 @@ Write the review with citation keys from the ledger, e.g.:
     ... no superiority over teaching-as-usual at one year [@Kuyken2022effectiveness].
     ... earlier meta-analyses were more optimistic [@Dunning2018research; @Caldwell2019school].
 
+Figures use stable IDs in their captions and stable reference tokens in the
+body. Numbering and links are resolved in order of appearance:
+
+    ... the pathway is summarized in {{figure:mechanism}}.
+
+    ![Specific visual description](mechanism.png)
+    **Figure {#mechanism}. A transient signal builds memory.** Caption text [@Paper2024].
+
 Then run:
     python3 format_references.py --ledger sources.json --draft review_draft.md --out review.md --style vancouver
     python3 format_references.py --ledger sources.json --draft review_draft.md --out review.md --style apa
@@ -20,6 +28,8 @@ Rules enforced:
   * Every entry ends with its DOI link so a reader can check it.
   * The verifier has already checked Crossref's publisher and Retraction Watch update metadata;
     no service-status notes or per-reference warning symbols are added to the review.
+  * Every Markdown image has a unique stable figure ID, a cited caption, and a
+    body cross-reference; numbering and anchors are generated deterministically.
 
 Outputs the finished markdown and prints a citation count summary (refs used, refs in ledger unused).
 """
@@ -28,6 +38,104 @@ import html
 import json
 import re
 import sys
+
+
+FIGURE_ID = r"[a-z][a-z0-9-]*"
+FIGURE_IMAGE_RE = re.compile(r"^!\[([^\]]*)\]\(([^)\s]+)\)$")
+FIGURE_CAPTION_RE = re.compile(
+    r"^\*\*Figure\s+\{#(?P<id>" + FIGURE_ID +
+    r")\}\.\s*(?P<title>.+?)\*\*(?P<body>\s+.+)?$")
+FIGURE_TOKEN_RE = re.compile(r"\{\{figure:(?P<id>" + FIGURE_ID + r")\}\}")
+
+
+def resolve_figures(text):
+    """Validate figure blocks and resolve stable IDs to numbered links.
+
+    Draft syntax deliberately keeps numbering out of the author's hands. Every
+    Markdown image must be followed by a caption with a stable ID and at least
+    one ledger citation. Every declared figure must be referenced from the body.
+    The returned Markdown contains a hidden HTML anchor, a visible numbered
+    caption, and clickable ``Figure N`` body links.
+    """
+    lines = text.split("\n")
+    out = []
+    figures = []
+    by_id = {}
+    errors = []
+    i = 0
+
+    while i < len(lines):
+        image = FIGURE_IMAGE_RE.match(lines[i].strip())
+        if not image:
+            out.append(lines[i])
+            i += 1
+            continue
+
+        image_line = lines[i]
+        j = i + 1
+        blanks = []
+        while j < len(lines) and not lines[j].strip():
+            blanks.append(lines[j])
+            j += 1
+        caption_line = lines[j].strip() if j < len(lines) else ""
+        caption = FIGURE_CAPTION_RE.match(caption_line)
+        if not caption:
+            errors.append(
+                "every figure must be followed by a caption like "
+                "'**Figure {#stable-id}. Declarative title.** Caption [@source].'")
+            out.append(image_line)
+            out.extend(blanks)
+            i = j
+            continue
+
+        figure_id = caption.group("id")
+        if figure_id in by_id:
+            errors.append("duplicate figure id: %s" % figure_id)
+        number = len(figures) + 1
+        record = {"id": figure_id, "number": number,
+                  "title": caption.group("title").strip()}
+        figures.append(record)
+        by_id.setdefault(figure_id, record)
+
+        k = j + 1
+        caption_bullets = []
+        while k < len(lines) and lines[k].strip().startswith("- "):
+            caption_bullets.append(lines[k])
+            k += 1
+        caption_payload = "\n".join([caption_line] + caption_bullets)
+        if not caption.group("body") and not caption_bullets:
+            errors.append("figure caption has no explanatory body: %s" % figure_id)
+        if not re.search(r"\[(@[^\]]+)\]", caption_payload):
+            errors.append("figure caption has no ledger citation: %s" % figure_id)
+
+        out.append('<a id="fig-%s"></a>' % figure_id)
+        out.append(image_line)
+        out.extend(blanks)
+        out.append("**Figure %d. %s**%s" % (
+            number, caption.group("title").strip(), caption.group("body") or ""))
+        out.extend(caption_bullets)
+        i = k
+
+    raw_tokens = re.findall(r"\{\{figure:([^}]+)\}\}", text)
+    for token in raw_tokens:
+        if not re.fullmatch(FIGURE_ID, token):
+            errors.append("invalid figure reference id: %s" % token)
+        elif token not in by_id:
+            errors.append("unknown figure reference: %s" % token)
+    used = set(token for token in raw_tokens if token in by_id)
+    for record in figures:
+        if record["id"] not in used:
+            errors.append("figure is never referenced from the text: %s" % record["id"])
+
+    resolved = "\n".join(out)
+
+    def replace_token(match):
+        record = by_id.get(match.group("id"))
+        if record is None:
+            return match.group(0)
+        return "[Figure %d](#fig-%s)" % (record["number"], record["id"])
+
+    return FIGURE_TOKEN_RE.sub(replace_token, resolved), errors, figures
 
 
 def clean(t):
@@ -183,8 +291,10 @@ def main():
     by_key = {e["key"]: e for e in ledger["entries"]}
     text = open(args.draft).read()
 
+    text, figure_errors, _figures = resolve_figures(text)
+
     order = []          # keys in order of first appearance
-    errors = []
+    errors = list(figure_errors)
     # pass 1: collect cited keys so APA suffixes can be assigned before substitution
     cited_keys = []
     for grp in re.findall(r"\[(@[^\]]+)\]", text):

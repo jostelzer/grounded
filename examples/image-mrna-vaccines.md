@@ -24,10 +24,15 @@
 - Early human trials found strong neutralizing antibodies and TH1-skewed CD4 and [CD8 T-cell](https://en.wikipedia.org/wiki/Cytotoxic_T_cell) responses, while CD8 cells expanded after the first dose before neutralizing antibodies had fully matured. [Sahin et al. 2020](https://doi.org/10.1038/s41586-020-2814-7), [Oberhardt et al. 2021](https://doi.org/10.1038/s41586-021-03841-4)
 - Serial lymph-node sampling found spike-specific [germinal-centre](https://en.wikipedia.org/wiki/Germinal_center) B cells for at least **12 weeks** and T-follicular-helper cells for about **6 months**, although these intensive studies involved small, relatively young cohorts. [Turner et al. 2021](https://doi.org/10.1038/s41586-021-03738-2), [Mudd et al. 2022](https://doi.org/10.1016/j.cell.2021.12.026)
 - Across 1,540 tracked B-cell clones, somatic mutation rose **3.5-fold over six months**; affinity-matured [memory B cells](https://en.wikipedia.org/wiki/Memory_B_cell) and bone-marrow plasma cells persisted even as circulating antibody declined. [Kim et al. 2022](https://doi.org/10.1038/s41586-022-04527-1)
+- The delivery-to-memory pathway and its evidence boundaries are summarized in [Figure 1](#fig-mrna-mechanism).
 
+<a id="fig-mrna-mechanism"></a>
 ![Mechanism map showing a lipid nanoparticle carrying modified mRNA into a cell, transient antigen production, innate immune sensing in a draining lymph node, and the branching formation of antibodies, memory B cells and T cells; dashed borders mark mainly mouse-derived mechanistic evidence.](image-mrna-vaccines-generated.png)
 
-*Caption: the evidence-supported route from injection to memory. Delivery, transient expression and persistent human lymph-node responses are observed; detailed sensing pathways and LNP adjuvanticity rest mainly on mouse experiments. [Pardi & Krammer 2024](https://doi.org/10.1038/s41573-024-01042-y), [Alameh et al. 2021](https://doi.org/10.1016/j.immuni.2021.11.001), [Li et al. 2022](https://doi.org/10.1038/s41590-022-01163-9), [Turner et al. 2021](https://doi.org/10.1038/s41586-021-03738-2), [Kim et al. 2022](https://doi.org/10.1038/s41586-022-04527-1)*
+**Figure 1. A temporary RNA recipe builds immune memory.**
+- **Shows:** A lipid nanoparticle delivers modified mRNA, ribosomes make antigen in the cytoplasm, immune cells coordinate in a draining lymph node, and antibodies plus memory B and T cells remain.
+- **Evidence boundary:** Delivery, temporary expression and persistent human lymph-node responses are observed; the detailed sensing pathway and lipid-nanoparticle adjuvant effect rest mainly on mouse experiments.
+- **Sources:** [Pardi & Krammer 2024](https://doi.org/10.1038/s41573-024-01042-y), [Alameh et al. 2021](https://doi.org/10.1016/j.immuni.2021.11.001), [Li et al. 2022](https://doi.org/10.1038/s41590-022-01163-9), [Turner et al. 2021](https://doi.org/10.1038/s41586-021-03738-2), [Kim et al. 2022](https://doi.org/10.1038/s41586-022-04527-1)
 
 ### Antibodies predict protection, but platform performance depends on pathogen and outcome
 
@@ -49,10 +54,15 @@
 - Variant matching helps incompletely. A BA.1-bivalent booster raised BA.1 titres over the ancestral booster but did not test effectiveness; later BQ.1.1 and XBB.1 escaped much BA.5-bivalent-dose neutralization. [Chalkias et al. 2022](https://doi.org/10.1056/nejmoa2208343), [Kurhade et al. 2023](https://doi.org/10.1038/s41591-022-02162-x)
 - A 28-study synthesis found bivalent boosters added about **28-31% relative effectiveness** against infection and **58-62%** against severe outcomes versus earlier-dose comparators, with substantial heterogeneity. [Song et al. 2024](https://doi.org/10.1016/j.vaccine.2024.04.049)
 - XBB.1.5-vaccine effectiveness in 53.4 million adults fell by month 5 to 26.7% against infection, 52.3% against hospitalization and 69.4% against death; JN.1 replacement reduced it further. Antibody responses remained biased toward epitopes shared with the ancestral strain, with limited truly XBB-specific recruitment in some people. [Ma et al. 2026](https://doi.org/10.1016/j.jmii.2025.07.002), [Johnston et al. 2024](https://doi.org/10.1016/j.immuni.2024.02.017)
+- The two outcome-specific declines and their supported explanations are separated in [Figure 2](#fig-waning).
 
+<a id="fig-waning"></a>
 ![Two equal-sized evidence rows report the average 1-to-6-month decline in vaccine effectiveness against infection and severe disease with confidence intervals; a side panel explains immune memory, the airway gap and variant escape as supported but incomplete explanations.](image-mrna-vaccines-2-generated.png)
 
-*Caption: waning is outcome-dependent. The two estimates and 95% confidence intervals come from a pre-Omicron systematic review/meta-regression; equal row sizes deliberately avoid encoding a false visual scale. Airway sampling and later variant studies explain why infection protection is more fragile, but they do not partition the decline quantitatively. [Feikin et al. 2022](https://doi.org/10.1016/s0140-6736%2822%2900152-0), [Tang et al. 2022](https://doi.org/10.1126/sciimmunol.add4853), [Kurhade et al. 2023](https://doi.org/10.1038/s41591-022-02162-x), [Ma et al. 2026](https://doi.org/10.1016/j.jmii.2025.07.002)*
+**Figure 2. Protection wanes faster against infection than severe disease.**
+- **Shows:** Average decline from month 1 to month 6 was 21.0 percentage points against infection and 10.0 points against severe disease in a pre-Omicron synthesis.
+- **Evidence boundary:** Equal row sizes avoid a false magnitude encoding; airway immunity and variant escape are supported explanations, but the studies do not quantify how much each mechanism contributes.
+- **Sources:** [Feikin et al. 2022](https://doi.org/10.1016/s0140-6736%2822%2900152-0), [Tang et al. 2022](https://doi.org/10.1126/sciimmunol.add4853), [Kurhade et al. 2023](https://doi.org/10.1038/s41591-022-02162-x), [Ma et al. 2026](https://doi.org/10.1016/j.jmii.2025.07.002)
 
 ### Myocarditis is rare, real, and sharply concentrated by age, sex, dose and product
 
@@ -61,10 +71,15 @@
 - In 39.6 million adolescent doses, pooled myopericarditis was **43.5 per million** (95% CI 30.8-61.6): **66.0** in males versus **10.1** in females, and **60.4** after dose 2 versus **16.6** after dose 1. [Guo et al. 2023](https://doi.org/10.1016/j.vaccine.2023.05.049)
 - Nordic registers showed that males aged 16-24 had **55.5 excess cases per million** after BNT162b2 dose 2 and **183.9 per million** after mRNA-1273 dose 2; English data likewise found the highest relative risk after mRNA-1273 dose 2 and a smaller booster signal. [Karlstad et al. 2022](https://doi.org/10.1001/jamacardio.2022.0583), [Stowe et al. 2023](https://doi.org/10.1371/journal.pmed.1004245)
 - Infection is not a uniform comparator: across all ages, infection-associated myocarditis risk was higher, but among men younger than 40 the estimated excess after mRNA-1273 dose 2 was 97 per million versus 16 per million after a positive test. [Patone et al. 2022](https://doi.org/10.1161/circulationaha.122.059970)
+- The sex, dose and product concentration—and the incompatible denominators—are shown in [Figure 3](#fig-myocarditis).
 
+<a id="fig-myocarditis"></a>
 ![Myocarditis evidence figure with two non-comparable panels: pooled adolescent cases per million doses split by sex and dose number, and Nordic excess cases per million vaccinated males aged 16 to 24 after dose 2 split by vaccine product; uncertainty intervals and denominator warnings are explicit.](image-mrna-vaccines-3-nature.svg)
 
-*Caption: the signal is heterogeneous, not a single platform-wide rate. Panel A pools observational adolescent studies; panel B uses Nordic register-derived excess events in young men. Different populations, denominators and axes make within-panel comparisons valid but cross-panel marker positions non-comparable. [Guo et al. 2023](https://doi.org/10.1016/j.vaccine.2023.05.049), [Karlstad et al. 2022](https://doi.org/10.1001/jamacardio.2022.0583), [Patone et al. 2022](https://doi.org/10.1161/circulationaha.122.059970), [Faksova et al. 2024](https://doi.org/10.1016/j.vaccine.2024.01.100)*
+**Figure 3. Myocarditis risk is concentrated rather than uniform.**
+- **Shows:** Panel a separates pooled adolescent rates by sex and dose; panel b separates Nordic excess events in males aged 16–24 by vaccine product.
+- **Evidence boundary:** The panels use different populations, denominators and axes, so comparisons are valid within a panel but marker positions cannot be compared across panels.
+- **Sources:** [Guo et al. 2023](https://doi.org/10.1016/j.vaccine.2023.05.049), [Karlstad et al. 2022](https://doi.org/10.1001/jamacardio.2022.0583), [Patone et al. 2022](https://doi.org/10.1161/circulationaha.122.059970), [Faksova et al. 2024](https://doi.org/10.1016/j.vaccine.2024.01.100)
 
 ### Speed and programmability remain constrained by stability, delivery and evidence gaps
 

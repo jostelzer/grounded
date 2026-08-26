@@ -28,7 +28,10 @@ In-text citations render as plain `Author 2026` links: the square brackets are m
 
 Nothing before the question. No scope note, no assumptions paragraph, no audience statement, no size label, no date line, no "how this was produced" section.
 
-In explicit image or mindmap mode, keep this written structure unchanged at small depth and insert the rendered media section immediately before **Sources**, using the shape and caption rules in `media-modes.md`.
+In explicit image or mindmap mode, keep this written structure and insert each
+rendered figure immediately after the section it supports. Every figure is
+referenced from the body and carries a verified, style-matched caption under
+`figure-captions.md`; use `media-modes.md` for the wider visual workflow.
 
 ### The question
 One line. The user's question sharpened, not restated at length. If they asked something conversational, compress it to its scientific core.
@@ -110,6 +113,9 @@ Paragraph craft:
 - Transitions carry the argument between paragraphs and sections ("The picture changes in older adults…"), but every empirical sentence still carries its citation.
 - Contrary evidence gets its own paragraphs with explicit contrast ("Against this…", "The null results cluster where…").
 - Tables remain allowed and follow the same rules; introduce each one in the running text.
+- Figures are introduced from the running prose with the stable token in
+  `figure-captions.md`. Their captions are short flowing paragraphs in the same
+  narrative-review register, with verified author–year citations.
 - The banned-filler list still applies in full. Prose means flowing, not padded: no "it is important to note", no throat-clearing, no restating the abstract in the conclusion.
 - Word budgets run ~1.5× the bullet tiers because connective tissue costs words: small 600–1,000, medium 1,500–2,500, large 3,500–6,000. Sources, angles, and search depth are unchanged from the chosen size.
 - Prose reviews print beautifully — end the delivery by offering the journal-styled PDF (`scripts/export_review.py`), but the review itself still goes in the chat.
@@ -125,6 +131,10 @@ In `eli5` mode only. The evidence pipeline, structure, citations, and verificati
 - **Honesty survives the simplification.** "We don't really know yet" instead of silently dropping uncertainty. Small studies are "too small to trust on their own", not omitted. Never round a weak finding up to a strong claim because the plain words feel less precise.
 - **Analogies are allowed, sparingly**, and must not smuggle in claims the sources don't make.
 - **Citations unchanged.** Every factual bullet still ends with its author–year DOI links; punchline headings still tell the story, phrased in plain words ("The studies mostly say it helps a little, but they're small").
+- **Figure captions stay ELI5 too.** Use short everyday sentences, explain what
+  the reader sees and what remains uncertain, and keep the usual verified
+  citations. Refer to the picture directly: “You can see the steps in
+  `{{figure:mechanism}}`.”
 - TL;DR, sources block, and the quality gate all apply as normal.
 
 ## Term links
@@ -166,4 +176,7 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded.
 8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut 10% more.
-10. In image or mindmap mode, the requested visual is rendered, evidence-grounded, legible, inspected, and accompanied by a cited caption.
+10. In image or mindmap mode, every requested visual is rendered,
+    evidence-grounded, legible, and inspected; has a unique stable ID; is
+    referenced from the relevant body text; and has a caption in the same
+    bullets, prose, or ELI5 register with 2–5 verified citations.
