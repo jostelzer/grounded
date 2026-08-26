@@ -1,6 +1,6 @@
-# Scientific Review Skill
+# Grounded
 
-An agent skill that writes scientific literature reviews built **only on real, verified, peer-reviewed citations**. Works with any LLM agent that can read files and run Python or fetch URLs — ChatGPT, Claude, and others.
+Grounded is an agent skill that writes scientific literature reviews built **only on real, verified, peer-reviewed citations**. It works with any LLM agent that can read files and run Python or fetch URLs — ChatGPT, Claude, and others.
 
 What makes it great:
 
@@ -14,18 +14,18 @@ Give it a topic or research question; it returns a compact, evidence-dense revie
 
 Example (excerpt from a real small-mode run):
 
-> ## Does creatine improve depressive symptoms?
+> ## Does creatine reduce depressive symptoms?
 >
-> **TL;DR** — Creatine is promising as a short-term add-on to established depression treatment, but it is not yet a proven antidepressant or stand-alone therapy. The pooled average benefit is smaller than a clinically important change, certainty is very low, and the best signals come from small, population-specific trials.
+> **TL;DR** — Creatine may accelerate and deepen improvement when added to an antidepressant or cognitive behavioural therapy, but the evidence is too small and biased to establish a clinically important benefit. It is unproven as a stand-alone treatment, and bipolar depression requires particular caution.
 >
-> ### The pooled effect is small and may not be clinically important
+> ### The pooled benefit is small, uncertain, and below clinical importance
 >
-> - A 2025 meta-analysis (11 placebo-controlled trials; n=1,093) estimated a [standardized mean difference](https://en.wikipedia.org/wiki/Standardized_mean_difference) of −0.34 (95% [confidence interval](https://en.wikipedia.org/wiki/Confidence_interval) −0.68 to −0.00), equivalent to **2.2 points** on the [Hamilton Depression Rating Scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression)—below its 3-point minimal important difference. Results varied substantially, bias analyses favoured creatine, and [GRADE](https://en.wikipedia.org/wiki/GRADE_approach) certainty was very low. [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588)
+> - The newest meta-analysis (11 placebo-controlled trials; n=1,093) found a [standardized mean difference](https://en.wikipedia.org/wiki/Standardized_mean_difference) of **−0.34** (95% [confidence interval](https://en.wikipedia.org/wiki/Confidence_interval) −0.68 to −0.00), equivalent to **2.2 points** on the [Hamilton Depression Rating Scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression)—below its 3-point minimal important difference. The I² measure of between-study inconsistency was high at 71%, trim-and-fill suggested small-study/publication bias favouring creatine, and [GRADE](https://en.wikipedia.org/wiki/GRADE_approach) certainty was very low. [Eckert et al. 2025](https://doi.org/10.1017/s0007114525105588)
 > - …
 >
 > **Sources**
 >
-> **Eckert et al. 2025** Creatine supplementation for treating symptoms of depression: a systematic review and meta-analysis. *British Journal of Nutrition*. https://doi.org/10.1017/s0007114525105588
+> **Eckert I, Lima J, Dariva AA (2025)** Creatine supplementation for treating symptoms of depression: a systematic review and meta-analysis. *British Journal of Nutrition*. https://doi.org/10.1017/s0007114525105588
 >
 > …
 
@@ -52,38 +52,38 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 
 > Use the grounded skill: does intermittent fasting improve insulin sensitivity?
 
-→ [output](examples/small-intermittent-fasting-insulin.md) · small · 15 verified sources
+→ [output](examples/small-intermittent-fasting-insulin.md) · small · 16 verified sources
 
 **Get an overview of a field**
 
 > Use the grounded skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
 
-→ [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 46 verified sources (three retracted papers caught and excluded during search)
+→ [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 45 verified sources (four retracted papers caught and excluded during search)
 
 **Explain it in very simple terms**
 
-> Use scientific review skill in ELI5 mode to explain me why clouds are white
+> Use the grounded skill in ELI5 image mode to explain why clouds are white
 
-→ [output](examples/eli5-why-clouds-are-white.md) · eli5 · 13 verified sources
+→ [output](examples/eli5-why-clouds-are-white.md) · ELI5 image · 13 verified sources · one end-to-end ImageGen figure with a cited ELI5 caption and a clickable reference from the explanation
 
 **Survey a field in depth**
 
-> Make me a large scientific review about benefits of mediterranean diet
+> Use the grounded skill in large image mode: which health benefits of the Mediterranean diet are actually supported?
 
-→ [output](examples/large-mediterranean-diet.md) · large · 97 verified sources, 13 sections (the retracted original PREDIMED report is excluded and its corrected republication is used)
-→ the same review in **prose style**: [markdown](examples/prose-large-mediterranean-diet.md) · [journal-styled PDF](examples/prose-large-mediterranean-diet.pdf)
+→ [output](examples/large-mediterranean-diet.md) · large image · 97 verified sources, 13 sections, three end-to-end ImageGen figures and one exact quantitative SVG (the retracted original PREDIMED report is excluded and its corrected republication is used)
+→ the same illustrated review in **prose style**: [markdown](examples/prose-large-mediterranean-diet.md) · [journal-styled PDF](examples/prose-large-mediterranean-diet.pdf)
 
 **Settle a claim you've seen circulating**
 
 > I keep reading that blue light before bed ruins sleep. Use the grounded skill — what does the evidence actually show?
 
-→ [output](examples/small-blue-light-sleep.md) · small · 11 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
+→ [output](examples/small-blue-light-sleep.md) · small · 16 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
 
 **Produce figures**
 
 > Use the grounded skill, medium image mode: how do mRNA vaccines work?
 
-→ [output](examples/image-mrna-vaccines.md) · medium image · 45 verified sources plus two end-to-end ImageGen figures and one exact-geometry SVG fallback, all built from reusable evidence specs, archetypes and the Arial-based Nature Neuroscience-inspired system · [illustrated PDF](examples/image-mrna-vaccines.pdf)
+→ [output](examples/image-mrna-vaccines.md) · medium image · 47 verified sources plus two end-to-end ImageGen figures and one exact-geometry SVG fallback, all built from reusable evidence specs, archetypes and the Arial-based Nature Neuroscience-inspired system · [illustrated PDF](examples/image-mrna-vaccines.pdf)
 
 Practical notes: unless you say otherwise you get a **small** review (a fast, dense ~500-word answer) — say `medium` or `large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
 

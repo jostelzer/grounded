@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Three cardiovascular endpoint trials shown without pooling unlike outcomes</title>
+  <desc id="desc">Three vertically stacked panels. Panel a is a proportional hazard-ratio plot for the corrected 2018 PREDIMED republication. Panels b and c show paired event counts from Lyon Diet Heart and CORDIOPREV using equal-size markers. Notes state that endpoints and follow-up differ and that the original 2013 PREDIMED report was retracted.</desc>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #171717; }
+    .panel { font-size: 28px; font-weight: 700; }
+    .heading { font-size: 27px; font-weight: 700; }
+    .meta { font-size: 21px; fill: #4a4a4a; }
+    .label { font-size: 23px; }
+    .value { font-size: 23px; font-weight: 700; }
+    .axis { font-size: 19px; fill: #4a4a4a; }
+    .note { font-size: 20px; }
+    .hairline { stroke: #b8b8b8; stroke-width: 1.5; }
+  </style>
+
+  <rect width="1536" height="1024" fill="#ffffff"/>
+
+  <!-- a: corrected PREDIMED republication -->
+  <text x="84" y="78" class="panel">a</text>
+  <text x="122" y="78" class="heading">PREDIMED republication · 2018</text>
+  <text x="122" y="110" class="meta">High cardiovascular risk · n=7,447 · median 4.8 years</text>
+  <text x="122" y="145" class="label">Myocardial infarction, stroke or cardiovascular death</text>
+  <text x="122" y="180" class="meta">Hazard ratio versus low-fat advice</text>
+
+  <!-- linear hazard-ratio axis: x = 660 + (value - 0.4) / 0.8 × 740 -->
+  <line x1="660" y1="321" x2="1400" y2="321" stroke="#252525" stroke-width="2"/>
+  <line x1="660" y1="313" x2="660" y2="329" stroke="#252525" stroke-width="2"/>
+  <line x1="845" y1="313" x2="845" y2="329" stroke="#252525" stroke-width="2"/>
+  <line x1="1030" y1="313" x2="1030" y2="329" stroke="#252525" stroke-width="2"/>
+  <line x1="1215" y1="201" x2="1215" y2="329" stroke="#737373" stroke-width="2"/>
+  <line x1="1400" y1="313" x2="1400" y2="329" stroke="#252525" stroke-width="2"/>
+  <text x="660" y="351" text-anchor="middle" class="axis">0.4</text>
+  <text x="845" y="351" text-anchor="middle" class="axis">0.6</text>
+  <text x="1030" y="351" text-anchor="middle" class="axis">0.8</text>
+  <text x="1215" y="351" text-anchor="middle" class="axis">1.0</text>
+  <text x="1400" y="351" text-anchor="middle" class="axis">1.2</text>
+  <text x="1215" y="186" text-anchor="middle" class="axis">1.0 = no difference</text>
+
+  <text x="122" y="238" class="label">Extra-virgin olive oil</text>
+  <text x="122" y="271" class="value">0.69  (95% CI 0.53–0.91)</text>
+  <line x1="780.25" y1="230" x2="1131.75" y2="230" stroke="#2f6f73" stroke-width="5" stroke-linecap="round"/>
+  <line x1="780.25" y1="219" x2="780.25" y2="241" stroke="#2f6f73" stroke-width="3"/>
+  <line x1="1131.75" y1="219" x2="1131.75" y2="241" stroke="#2f6f73" stroke-width="3"/>
+  <circle cx="928.25" cy="230" r="10" fill="#2f6f73"/>
+
+  <text x="122" y="326" class="label">Nuts</text>
+  <text x="122" y="359" class="value">0.72  (95% CI 0.54–0.95)</text>
+  <line x1="789.5" y1="286" x2="1168.75" y2="286" stroke="#b17825" stroke-width="5" stroke-linecap="round"/>
+  <line x1="789.5" y1="275" x2="789.5" y2="297" stroke="#b17825" stroke-width="3"/>
+  <line x1="1168.75" y1="275" x2="1168.75" y2="297" stroke="#b17825" stroke-width="3"/>
+  <circle cx="956" cy="286" r="10" fill="#b17825"/>
+
+  <line x1="84" y1="398" x2="1452" y2="398" class="hairline"/>
+
+  <!-- b: Lyon Diet Heart -->
+  <text x="84" y="456" class="panel">b</text>
+  <text x="122" y="456" class="heading">Lyon Diet Heart</text>
+  <text x="122" y="488" class="meta">After myocardial infarction · n=605 · 46 months</text>
+  <text x="122" y="523" class="label">Cardiac death or nonfatal myocardial infarction</text>
+
+  <circle cx="705" cy="585" r="13" fill="#2f6f73"/>
+  <text x="742" y="578" class="label">Mediterranean pattern</text>
+  <text x="742" y="613" class="value">14 events</text>
+  <circle cx="1130" cy="585" r="13" fill="#ffffff" stroke="#626262" stroke-width="3"/>
+  <text x="1167" y="578" class="label">Prudent Western diet</text>
+  <text x="1167" y="613" class="value">44 events</text>
+
+  <line x1="84" y1="660" x2="1452" y2="660" class="hairline"/>
+
+  <!-- c: CORDIOPREV -->
+  <text x="84" y="718" class="panel">c</text>
+  <text x="122" y="718" class="heading">CORDIOPREV</text>
+  <text x="122" y="750" class="meta">Established coronary disease · n=1,002 · 7 years</text>
+  <text x="122" y="785" class="label">Major cardiovascular events</text>
+
+  <circle cx="705" cy="847" r="13" fill="#2f6f73"/>
+  <text x="742" y="840" class="label">Mediterranean diet</text>
+  <text x="742" y="875" class="value">87 events</text>
+  <circle cx="1130" cy="847" r="13" fill="#ffffff" stroke="#626262" stroke-width="3"/>
+  <text x="1167" y="840" class="label">Low-fat diet</text>
+  <text x="1167" y="875" class="value">111 events</text>
+  <text x="122" y="842" class="meta">Adjusted hazard ratio 0.72–0.75</text>
+
+  <line x1="84" y1="910" x2="1452" y2="910" class="hairline"/>
+  <text x="84" y="946" class="note">Endpoints and follow-up differ · do not compare magnitudes across panels</text>
+  <text x="84" y="978" class="note">Original 2013 PREDIMED report: retracted · corrected 2018 republication shown</text>
+  <text x="1452" y="978" text-anchor="end" class="axis">95% CI = 95% confidence interval</text>
+</svg>

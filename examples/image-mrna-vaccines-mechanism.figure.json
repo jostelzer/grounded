@@ -3,7 +3,7 @@
   "archetype": "mechanism",
   "render_context": "article",
   "purpose": "Show how a short-lived mRNA payload is delivered, translated, sensed and converted into immune memory while distinguishing observed human responses from less certain mechanistic detail.",
-  "title": "How a temporary RNA recipe builds immune memory",
+  "title": "A temporary RNA recipe builds immune memory",
   "subtitle": "Delivery and immune memory are well observed; detailed sensing pathways remain less certain",
   "story": [
     "A lipid nanoparticle protects modified mRNA and enables cell entry.",

@@ -1,0 +1,119 @@
+{
+  "figure_id": "cardiovascular-endpoints",
+  "profile": "nature-data",
+  "archetype": "quantitative",
+  "render_context": "article",
+  "purpose": "Show the exact major cardiovascular endpoint results from the corrected PREDIMED republication, Lyon Diet Heart Study and CORDIOPREV while preventing false cross-trial magnitude comparisons.",
+  "title": "Three endpoint trials support cardiovascular benefit",
+  "story": [
+    "The corrected 2018 PREDIMED republication reported fewer primary composite events with extra-virgin olive oil and nuts than with low-fat advice.",
+    "The Lyon Diet Heart Study reported 14 versus 44 cardiac deaths or nonfatal myocardial infarctions after myocardial infarction.",
+    "CORDIOPREV reported 87 versus 111 major cardiovascular events among patients with established coronary disease.",
+    "Populations, endpoints, comparators and follow-up differ, so magnitudes must not be compared across panels."
+  ],
+  "data": {
+    "panel_a": {
+      "study": "PREDIMED republication",
+      "population": "High cardiovascular risk; n=7,447; median 4.8 years",
+      "endpoint": "Myocardial infarction, stroke or cardiovascular death",
+      "comparator": "Low-fat advice",
+      "axis": [0.4, 1.2],
+      "series": [
+        {
+          "label": "Extra-virgin olive oil",
+          "hazard_ratio": 0.69,
+          "95_percent_confidence_interval": [0.53, 0.91]
+        },
+        {
+          "label": "Nuts",
+          "hazard_ratio": 0.72,
+          "95_percent_confidence_interval": [0.54, 0.95]
+        }
+      ]
+    },
+    "panel_b": {
+      "study": "Lyon Diet Heart",
+      "population": "After myocardial infarction; n=605; 46 months",
+      "endpoint": "Cardiac death or nonfatal myocardial infarction",
+      "intervention_events": 14,
+      "control_events": 44,
+      "comparator": "Prudent Western diet"
+    },
+    "panel_c": {
+      "study": "CORDIOPREV",
+      "population": "Established coronary disease; n=1,002; 7 years",
+      "endpoint": "Major cardiovascular events",
+      "intervention_events": 87,
+      "control_events": 111,
+      "adjusted_hazard_ratio_range": [0.72, 0.75],
+      "comparator": "Low-fat diet"
+    }
+  },
+  "observed": [
+    "All values are reported trial endpoint results.",
+    "The original 2013 PREDIMED report is retracted; only the corrected 2018 republication is used."
+  ],
+  "inferred": [
+    "The three panels jointly support cardiovascular benefit, but their distinct endpoints and designs do not identify a single pooled effect."
+  ],
+  "evidence_keys": [
+    "Estruch2018primary",
+    "Lorgeril1999mediterranean",
+    "DelgadoLista2022long",
+    "Karam2023comparison"
+  ],
+  "layout_notes": [
+    "Use three vertically aligned open panels labelled a, b and c, separated by thin grey hairlines on a white 3:2 landscape canvas; do not use cards or filled panel backgrounds.",
+    "Panel a uses an exact linear hazard-ratio axis from 0.4 to 1.2, with a thin vertical reference line at 1.0 and proportional dot-and-whisker geometry.",
+    "Panels b and c show paired event counts as direct black numerals with equal-size row marks; row area and numeral size must not encode magnitude.",
+    "Place the cross-panel warning and retraction note as compact black text beneath the panels."
+  ],
+  "constraints": [
+    "Arial throughout; all labels at least 18 px at a 1536 px canvas width.",
+    "Every dot and confidence interval endpoint in panel a must be proportional to the supplied axis.",
+    "Do not derive or display unreported event rates for panels b or c.",
+    "Do not compare bar lengths or areas across panels.",
+    "Keep the title outside the artwork because this is an article figure.",
+    "The original 2013 PREDIMED report must be labelled retracted and must not appear as supporting evidence."
+  ],
+  "avoid": [
+    "heart illustration",
+    "food illustration",
+    "background gridlines",
+    "rounded cards",
+    "bar charts",
+    "single pooled effect",
+    "large internal title",
+    "serif or display lettering"
+  ],
+  "exact_text": [
+    "Three endpoint trials support cardiovascular benefit",
+    "a  PREDIMED republication · 2018",
+    "High cardiovascular risk · n=7,447 · median 4.8 years",
+    "Myocardial infarction, stroke or cardiovascular death",
+    "Hazard ratio versus low-fat advice",
+    "Extra-virgin olive oil",
+    "0.69  (95% CI 0.53–0.91)",
+    "Nuts",
+    "0.72  (95% CI 0.54–0.95)",
+    "1.0 = no difference",
+    "b  Lyon Diet Heart",
+    "After myocardial infarction · n=605 · 46 months",
+    "Cardiac death or nonfatal myocardial infarction",
+    "Mediterranean pattern",
+    "14 events",
+    "Prudent Western diet",
+    "44 events",
+    "c  CORDIOPREV",
+    "Established coronary disease · n=1,002 · 7 years",
+    "Major cardiovascular events",
+    "Mediterranean diet",
+    "87 events",
+    "Low-fat diet",
+    "111 events",
+    "Adjusted hazard ratio 0.72–0.75",
+    "Endpoints and follow-up differ · do not compare magnitudes across panels",
+    "Original 2013 PREDIMED report: retracted · corrected 2018 republication shown",
+    "95% CI = 95% confidence interval"
+  ]
+}

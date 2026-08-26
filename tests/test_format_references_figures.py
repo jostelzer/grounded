@@ -24,6 +24,28 @@ def figure_block(figure_id="mechanism", citation="[@Paper2024]"):
 
 
 class FigureResolutionTests(unittest.TestCase):
+    def test_doi_href_percent_encodes_markdown_and_url_delimiters(self):
+        doi = "10.1175/1520-0469(2000)057<0803:rpoblc>2.0.co;2?x#y"
+        self.assertEqual(
+            MODULE.doi_href(doi),
+            "https://doi.org/10.1175/1520-0469%282000%29057%3C0803:rpoblc%3E2.0.co;2%3Fx%23y",
+        )
+
+    def test_vancouver_reference_links_and_encodes_doi(self):
+        doi = "10.1175/1520-0469(2000)057<0803:rpoblc>2.0.co;2"
+        canonical = {
+            "title": "A complex DOI",
+            "journal": "Journal of Tests",
+            "year": 2000,
+            "authors_structured": [{"family": "Smith", "given": "Ada"}],
+        }
+        rendered = MODULE.fmt_vancouver(1, canonical, doi)
+        self.assertTrue(
+            rendered.endswith(
+                "https://doi.org/10.1175/1520-0469%282000%29057%3C0803:rpoblc%3E2.0.co;2"
+            )
+        )
+
     def test_numbers_anchors_and_body_links_follow_figure_order(self):
         text = (
             figure_block("mechanism") + "\n\n" +

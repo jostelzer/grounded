@@ -1,56 +1,64 @@
-## Why are clouds white, grey, or sometimes colorful?
+## Why are clouds white?
 
-**TL;DR** — A cloud looks white because its many water drops or ice pieces send the Sun’s mix of colors in many directions. A thin cloud lets light through. A thick cloud sends much of it away before it reaches the bottom, so the bottom can look grey or dark.
+**TL;DR** — A cloud is made of tiny clear drops or bits of ice. Each one sends the Sun's many colors in new directions. In a whole cloud, the colors come back to our eyes mixed together, so the cloud usually looks white.
 
-### One clear drop is not white, but a crowd of drops can look white
+### A cloud is a crowd of clear drops, not a lump of white stuff
 
-- A cloud drop is clear, not white. Drops measured from aircraft were about **10–14 millionths of a metre in radius**. A visible light wave is only about 0.4–0.7 millionths of a metre long. [Fu et al. 2022](https://doi.org/10.5194/acp-22-8259-2022), [Kim et al. 2003](https://doi.org/10.1029/2003JD003721), [Kokhanovsky 2004](https://doi.org/10.1016/S0012-8252(03)00042-4)
-- A drop that large redirects red, green, and blue light with almost the same total strength. It sends different amounts in different directions, so “every color is scattered equally” is only a useful shortcut. [Kokhanovsky 2004](https://doi.org/10.1016/S0012-8252(03)00042-4), [Bréon & Goloub 1998](https://doi.org/10.1029/98GL01221)
-- Ice clouds work in the same broad way. Their ice pieces are usually much bigger than visible light waves, but shape and roughness still change where the light goes. [Kokhanovsky 2004](https://doi.org/10.1016/S0012-8252(03)00042-4), [Yang et al. 2013](https://doi.org/10.1175/JAS-D-12-039.1), [Yang et al. 2018](https://doi.org/10.3390/atmos9120499)
-- This is not the same size trick that makes a clear sky blue. Air bits are tiny and favor blue light. Ordinary cloud drops are much larger, and the cloud’s many redirects dominate. [Bohren 1987](https://doi.org/10.1119/1.15109), [Kokhanovsky 2004](https://doi.org/10.1016/S0012-8252(03)00042-4)
+- Aircraft measurements found ordinary warm-cloud drops with a middle-size radius near **11 millionths of a metre**. That is many times wider than a wave of visible light. [Fu et al. 2022](https://doi.org/10.5194/acp-22-8259-2022), [Kim et al. 2003](https://doi.org/10.1029/2003jd003721)
+- A drop this big sends red, green, and blue light away with almost the same total strength. It does not send every color in exactly the same direction, so “all colors scatter equally” is a useful shortcut, not a perfect rule. [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4), [Bréon & Goloub 1998](https://doi.org/10.1029/98gl01221)
+- High, icy clouds follow the same big idea. Their ice pieces also send sunlight in many directions. Their shape and roughness change the pattern. [Yang et al. 2013](https://doi.org/10.1175/jas-d-12-039.1), [Yang et al. 2018](https://doi.org/10.3390/atmos9120499)
 
-### Many changes of direction turn sunlight into a bright white glow
+### Many changes of direction make a soft white glow
 
-- Sunlight entering a cloud meets a huge crowd of particles. It changes direction again and again before escaping. These changes, not the color of one drop, make the cloud bright from many directions. [Bohren 1987](https://doi.org/10.1119/1.15109), [Kokhanovsky 2004](https://doi.org/10.1016/S0012-8252(03)00042-4)
-- Scientists call a cloud “optically thick” when light has a hard time crossing it. More water, more particles, or a longer path can make a cloud thicker to light. Measurements show that both the amount of liquid water and drop size matter. [Kim et al. 2003](https://doi.org/10.1029/2003JD003721)
-- Brightness also depends on where the Sun, cloud, and viewer are. Tests with a real cloud shape found that these angles changed its brightness and the thickness a satellite would guess. [Kato & Marshak 2009](https://doi.org/10.1029/2008JD010579)
+- One clear drop is hard to see. A cloud holds a huge crowd of them. Sunlight changes direction again and again before some of it escapes toward your eyes. [Bohren 1987](https://doi.org/10.1119/1.15109), [Davis & Marshak 2010](https://doi.org/10.1088/0034-4885/73/2/026801)
+- Those many trips mix the Sun's colors and spread the light across the cloud. That is why the cloud can look bright from many places instead of shining like one tiny mirror. [Bohren 1987](https://doi.org/10.1119/1.15109), [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4)
+- You can see the light paths in [Figure 1](#fig-cloud-light-paths).
 
-### Thin clouds show what is behind them; thick clouds shade their own bottoms
+<a id="fig-cloud-light-paths"></a>
+![A side view of a cloud made from many clear water drops. Mixed-color sunlight enters from the left, changes direction many times among the drops, leaves as a bright white glow, and reaches the shaded base less strongly.](eli5-why-clouds-are-white-generated.png)
 
-- In a thin cloud, many light rays meet few drops. The sky or Sun behind it can show through, so the cloud looks see-through, pale, or grey. Small, uneven clouds are especially sensitive to their lumpy shape. [Fu et al. 2022](https://doi.org/10.5194/acp-22-8259-2022), [Kokhanovsky 2004](https://doi.org/10.1016/S0012-8252(03)00042-4)
-- In a thick cloud, much of the sunlight escapes from the top or sides. Far less comes straight through to the base. Measurements beneath one complete overcast found almost no narrow, direct beam even though spread-out light still arrived from the wider sky. [Hall & Rawcliffe 1972](https://doi.org/10.1364/AO.11.000468)
-- A rain cloud is dark underneath mainly because it is often deep, thick, and in its own shadow. The drops have not turned black. Grey is mostly the same mix of colors at lower brightness. [Bohren 1987](https://doi.org/10.1119/1.15109), [Kokhanovsky 2004](https://doi.org/10.1016/S0012-8252(03)00042-4)
+**Figure 1. A crowd of clear drops makes a white cloud.**
+- Sunlight goes into the cloud. The drops send it in many new directions.
+- Much of the light escapes as a white glow. Less reaches the bottom of a thick cloud.
+- The lines show the main idea. Real light does not follow these exact drawn paths.
+- **Sources:** [Bohren 1987](https://doi.org/10.1119/1.15109), [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4), [Kim et al. 2003](https://doi.org/10.1029/2003jd003721), [Kato & Marshak 2009](https://doi.org/10.1029/2008jd010579)
 
-### White is the usual answer, but it is not perfectly exact
+### A thick cloud can shade its own bottom
 
-- A low Sun first turns the light orange or red during its long trip through the air. The cloud then redirects that already-colored light. Sunlit faces and shaded faces can therefore have different colors and brightness. [Lee & Hernández-Andrés 2005](https://doi.org/10.1364/AO.44.005712), [Kato & Marshak 2009](https://doi.org/10.1029/2008JD010579)
-- More than 9,100 color readings showed that thick overcasts were not perfectly colorless filters. Many trips between drops built up water’s tiny extra soaking-up of red light, leaving the light below subtly bluer. Ice also soaks up very little visible light, though not zero. [Lee & Hernández-Andrés 2005](https://doi.org/10.1364/AO.44.005712), [Warren 2019](https://doi.org/10.1098/rsta.2018.0161)
-- Thin patches with small drops of nearly one size can sort colors into rings or bands near the Sun. As the cloud gets thicker, those colors wash into a bright grey background. A recent study found that changing drop size along a cloud edge makes narrow rainbow-like bands. [Gedzelman & Lock 2003](https://doi.org/10.1364/AO.42.000497), [Laven & Hall 2025](https://doi.org/10.1364/AO.580006)
+- A cloud gets harder for light to cross when it holds more water, has more drops, or gives light a longer path. On **13 overcast days**, the amount of liquid water explained most of the changes in how hard the cloud was for light to cross. [Kim et al. 2003](https://doi.org/10.1029/2003jd003721), [Brenguier et al. 2000](https://doi.org/10.1175/1520-0469%282000%29057%3C0803:rpoblc%3E2.0.co;2)
+- In a deep cloud, lots of light escapes from the top and sides before it reaches the bottom. The base then looks grey because it is dimmer, not because the drops turned grey or black. [Bohren 1987](https://doi.org/10.1119/1.15109), [Kokhanovsky 2004](https://doi.org/10.1016/s0012-8252%2803%2900042-4)
+- Real clouds are lumpy. The Sun's place and your viewing place also change which bright and shaded parts you see. [Kato & Marshak 2009](https://doi.org/10.1029/2008jd010579), [Fu et al. 2022](https://doi.org/10.5194/acp-22-8259-2022)
+
+### White is the usual answer, but clouds can show faint colors
+
+- Thick overcast was not a perfectly colorless filter in measured daylight. Many trips through water drops soaked up a tiny bit more red light, so the light below became a little bluer. [Lee & Hernández-Andrés 2005](https://doi.org/10.1364/ao.44.005712)
+- Thin clouds with drops of nearly one size can sort colors into rings near the Sun. As the cloud gets thicker, those colors wash into a bright grey background. [Gedzelman & Lock 2003](https://doi.org/10.1364/ao.42.000497)
+- Some cloud edges show narrow rainbow-like bands. A recent study found that the bands can come from drop size changing along the edge. [Laven & Hall 2026](https://doi.org/10.1364/ao.580006)
 
 **Sources**
 
-**Bohren 1987** Multiple scattering of light and some of its observable consequences. *American Journal of Physics*. https://doi.org/10.1119/1.15109
+**Bohren CF (1987)** Multiple scattering of light and some of its observable consequences. *American Journal of Physics*. https://doi.org/10.1119/1.15109
 
-**Bréon & Goloub 1998** Cloud droplet effective radius from spaceborne polarization measurements. *Geophysical Research Letters*. https://doi.org/10.1029/98GL01221
+**Brenguier JL, Pawlowska H, Schüller L, Preusker R, Fischer J, Fouquart Y (2000)** Radiative Properties of Boundary Layer Clouds: Droplet Effective Radius versus Number Concentration. *Journal of the Atmospheric Sciences*. https://doi.org/10.1175/1520-0469%282000%29057%3C0803:rpoblc%3E2.0.co;2
 
-**Fu et al. 2022** An evaluation of the liquid cloud droplet effective radius derived from MODIS, airborne remote sensing, and in situ measurements from CAMP²Ex. *Atmospheric Chemistry and Physics*. https://doi.org/10.5194/acp-22-8259-2022
+**Bréon F, Goloub P (1998)** Cloud droplet effective radius from spaceborne polarization measurements. *Geophysical Research Letters*. https://doi.org/10.1029/98gl01221
 
-**Gedzelman & Lock 2003** Simulating coronas in color. *Applied Optics*. https://doi.org/10.1364/AO.42.000497
+**Davis AB, Marshak A (2010)** Solar radiation transport in the cloudy atmosphere: a 3D perspective on observations and climate impacts. *Reports on Progress in Physics*. https://doi.org/10.1088/0034-4885/73/2/026801
 
-**Hall & Rawcliffe 1972** Model for the Visible-Light Scattering Properties of Clouds. *Applied Optics*. https://doi.org/10.1364/AO.11.000468
+**Fu D, Di Girolamo L, Rauber RM, McFarquhar GM, Nesbitt SW, Loveridge J, Hong Y, van Diedenhoven B, Cairns B, Alexandrov MD, Lawson P, Woods S, Tanelli S, Schmidt S, Hostetler C, Scarino AJ (2022)** An evaluation of the liquid cloud droplet effective radius derived from MODIS, airborne remote sensing, and in situ measurements from CAMP 2 Ex. *Atmospheric Chemistry and Physics*. https://doi.org/10.5194/acp-22-8259-2022
 
-**Kato & Marshak 2009** Solar zenith and viewing geometry-dependent errors in satellite retrieved cloud optical thickness: Marine stratocumulus case. *Journal of Geophysical Research: Atmospheres*. https://doi.org/10.1029/2008JD010579
+**Gedzelman SD, Lock JA (2003)** Simulating coronas in color. *Applied Optics*. https://doi.org/10.1364/ao.42.000497
 
-**Kim et al. 2003** Effective radius of cloud droplets by ground-based remote sensing: Relationship to aerosol. *Journal of Geophysical Research: Atmospheres*. https://doi.org/10.1029/2003JD003721
+**Kato S, Marshak A (2009)** Solar zenith and viewing geometry‐dependent errors in satellite retrieved cloud optical thickness: Marine stratocumulus case. *Journal of Geophysical Research: Atmospheres*. https://doi.org/10.1029/2008jd010579
 
-**Kokhanovsky 2004** Optical properties of terrestrial clouds. *Earth-Science Reviews*. https://doi.org/10.1016/S0012-8252(03)00042-4
+**Kim B, Schwartz SE, Miller MA, Min Q (2003)** Effective radius of cloud droplets by ground‐based remote sensing: Relationship to aerosol. *Journal of Geophysical Research: Atmospheres*. https://doi.org/10.1029/2003jd003721
 
-**Laven & Hall 2025** Iridescent colored bands on clouds. *Applied Optics*. https://doi.org/10.1364/AO.580006
+**Kokhanovsky A (2004)** Optical properties of terrestrial clouds. *Earth-Science Reviews*. https://doi.org/10.1016/s0012-8252%2803%2900042-4
 
-**Lee & Hernández-Andrés 2005** Colors of the daytime overcast sky. *Applied Optics*. https://doi.org/10.1364/AO.44.005712
+**Laven P, Hall L (2026)** Iridescent colored bands on clouds. *Applied Optics*. https://doi.org/10.1364/ao.580006
 
-**Warren 2019** Optical properties of ice and snow. *Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences*. https://doi.org/10.1098/rsta.2018.0161
+**Lee RL, Hernández-Andrés J (2005)** Colors of the daytime overcast sky. *Applied Optics*. https://doi.org/10.1364/ao.44.005712
 
-**Yang et al. 2013** Spectrally Consistent Scattering, Absorption, and Polarization Properties of Atmospheric Ice Crystals at Wavelengths from 0.2 to 100 μm. *Journal of the Atmospheric Sciences*. https://doi.org/10.1175/JAS-D-12-039.1
+**Yang P, Bi L, Baum BA, Liou KN, Kattawar GW, Mishchenko MI, Cole B (2013)** Spectrally Consistent Scattering, Absorption, and Polarization Properties of Atmospheric Ice Crystals at Wavelengths from 0.2 to 100 μm. *Journal of the Atmospheric Sciences*. https://doi.org/10.1175/jas-d-12-039.1
 
-**Yang et al. 2018** A Review of Ice Cloud Optical Property Models for Passive Satellite Remote Sensing. *Atmosphere*. https://doi.org/10.3390/atmos9120499
+**Yang P, Hioki S, Saito M, Kuo CP, Baum BA, Liou KN (2018)** A Review of Ice Cloud Optical Property Models for Passive Satellite Remote Sensing. *Atmosphere*. https://doi.org/10.3390/atmos9120499

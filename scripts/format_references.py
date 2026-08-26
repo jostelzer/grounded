@@ -38,6 +38,7 @@ import html
 import json
 import re
 import sys
+from urllib.parse import quote
 
 
 FIGURE_ID = r"[a-z][a-z0-9-]*"
@@ -143,6 +144,16 @@ def clean(t):
     return re.sub(r"<[^>]+>", "", html.unescape(t or "")).strip()
 
 
+def doi_href(doi):
+    """Return a Markdown/HTML-safe resolver URL for an arbitrary DOI.
+
+    DOI suffixes may legally contain characters such as parentheses, angle
+    brackets, or question marks. They must remain part of the path rather than
+    being interpreted as Markdown/HTML syntax or URL query delimiters.
+    """
+    return "https://doi.org/" + quote(doi, safe="/:;,-._~")
+
+
 def is_verified(entry):
     verification = entry.get("verification") or {}
     return (
@@ -189,7 +200,7 @@ def fmt_vancouver(n, c, doi):
     iss = f"({c['issue']})" if c.get("issue") else ""
     pages = c.get("pages") or c.get("article_number") or ""
     loc = f"{year};{vol}{iss}" + (f":{pages}" if pages else "")
-    return f"{n}. {authors}. {title} {journal}. {loc}. doi:{doi}"
+    return f"{n}. {authors}. {title} {journal}. {loc}. {doi_href(doi)}"
 
 
 def fmt_apa(c, doi, suffix=""):
@@ -212,7 +223,7 @@ def fmt_apa(c, doi, suffix=""):
     pages = c.get("pages") or c.get("article_number") or ""
     pages = pages.replace("-", "–") if pages else ""
     loc = f"*{journal}*" + (f", *{vol}*{iss}" if vol else "") + (f", {pages}" if pages else "")
-    return f"{authors} ({year}). {title} {loc}. https://doi.org/{doi}"
+    return f"{authors} ({year}). {title} {loc}. {doi_href(doi)}"
 
 
 def fmt_nature(n, c, doi):
@@ -222,7 +233,7 @@ def fmt_nature(n, c, doi):
     journal = clean(c.get("journal") or c.get("journal_short") or "")
     vol = c.get("volume") or ""
     pages = c.get("pages") or c.get("article_number") or ""
-    return f"{n}. {', '.join(names)} {title} *{journal}* **{vol}**, {pages} ({c.get('year') or 'n.d.'}). https://doi.org/{doi}"
+    return f"{n}. {', '.join(names)} {title} *{journal}* **{vol}**, {pages} ({c.get('year') or 'n.d.'}). {doi_href(doi)}"
 
 
 def bracket_intext(c, suffix=""):
@@ -249,7 +260,7 @@ def fmt_bracket(c, doi, suffix=""):
     year = f"{c.get('year') or 'n.d.'}{suffix}"
     title = clean_title(c.get("title", ""))
     journal = clean(c.get("journal") or c.get("journal_short") or "")
-    return f"**{names} ({year})** {title} *{journal}*. https://doi.org/{doi}"
+    return f"**{names} ({year})** {title} *{journal}*. {doi_href(doi)}"
 
 
 def apa_intext(c, suffix=""):
@@ -328,8 +339,7 @@ def main():
                 order.append(k)
             nums.append(order.index(k) + 1)
             if args.style == "bracket":
-                # parens are legal in DOIs but break naive markdown-link parsers; encode them
-                doi_url = "https://doi.org/" + e["doi"].replace("(", "%28").replace(")", "%29")
+                doi_url = doi_href(e["doi"])
                 intext.append(f"[{bracket_intext(e['canonical'], suffix.get(k, ''))}]({doi_url})")
             else:
                 intext.append(apa_intext(e["canonical"], suffix.get(k, "")))

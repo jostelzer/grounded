@@ -3,7 +3,7 @@
   "archetype": "quantitative",
   "render_context": "article",
   "purpose": "Show that myocarditis risk is rare and concentrated by sex, dose and product while keeping two incompatible denominators and scales visibly separate.",
-  "title": "Myocarditis risk is concentrated, not uniform",
+  "title": "Myocarditis risk is concentrated rather than uniform",
   "subtitle": "Two datasets · compare within each panel only · whiskers are 95% confidence intervals",
   "story": [
     "Pooled adolescent cases per million vaccine doses were higher in males than females and after dose 2 than dose 1.",

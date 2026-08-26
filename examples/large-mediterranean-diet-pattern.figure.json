@@ -1,0 +1,71 @@
+{
+  "figure_id": "dietary-pattern",
+  "profile": "nature-reviews",
+  "archetype": "comparison",
+  "render_context": "article",
+  "purpose": "Show the stable core of Mediterranean dietary patterns, the components that vary across definitions, and the common single-ingredient or fixed-menu interpretations that the evidence does not support.",
+  "title": "A Mediterranean diet is a pattern, not one fixed menu",
+  "story": [
+    "The recurring core is a plant-forward replacement pattern built around vegetables, fruit, legumes, nuts, minimally refined grains, olive oil and fish.",
+    "Published definitions vary in dairy, alcohol, portion sizes, scoring cut-offs and local staple foods.",
+    "The evidence does not support treating olive oil alone, wine, automatic calorie restriction or one geographically fixed menu as the intervention."
+  ],
+  "observed": [
+    "Systematic reviews of definitions identify a recurring plant-forward core but substantial variation in operational criteria and adherence scores.",
+    "Trial programmes measure a whole dietary pattern and often provide counselling or foods."
+  ],
+  "inferred": [
+    "The replacement arrow is a synthesis of the recurring pattern rather than a quantified dose-response relation; label it as a pattern-level substitution."
+  ],
+  "evidence_keys": [
+    "Davis2015definition",
+    "BachFaig2011mediterranean",
+    "HutchinsWiese2022mediterranean",
+    "Keshani2024mediterranean"
+  ],
+  "layout_notes": [
+    "Use one continuous left-to-right comparison on a white 3:2 landscape canvas, with three lower-case labelled regions separated mainly by white space and thin neutral leaders rather than boxed cards.",
+    "In region a, arrange recognizable flat scientific food-group silhouettes around a central thin replacement arrow; local labels must sit in quiet white space.",
+    "In region b, use a pale dashed boundary around the components that vary across definitions.",
+    "In region c, use four restrained crossed-out interpretations as plain text with thin neutral strike marks; do not use warning icons, badges, shields or decorative food photography."
+  ],
+  "constraints": [
+    "Arial throughout; all labels at least 20 px at a 1536 px canvas width.",
+    "Keep the title outside the artwork because this is an article figure.",
+    "Use pale green, blue and ochre only for semantic grouping; keep all prose black or near-black.",
+    "The dashed boundary means definitions vary, not that those components are unimportant.",
+    "Do not imply a numerical effect size, serving prescription or mandatory alcohol intake."
+  ],
+  "avoid": [
+    "photorealistic food",
+    "restaurant menu design",
+    "food pyramid",
+    "dashboard cards",
+    "large internal title",
+    "wine as a required component",
+    "olive oil as a medicine",
+    "serif or display lettering"
+  ],
+  "exact_text": [
+    "A Mediterranean diet is a pattern, not one fixed menu",
+    "a  Recurring core",
+    "Vegetables · fruit",
+    "Legumes · nuts",
+    "Whole or minimally refined grains",
+    "Olive oil as the main added fat",
+    "Fish more often than red or processed meat",
+    "pattern-level replacement",
+    "b  Definitions vary",
+    "Dairy amount",
+    "Alcohol",
+    "Portion sizes",
+    "Scoring cut-offs",
+    "Local staple foods",
+    "dashed boundary = varies across studies",
+    "c  The pattern is not",
+    "one fixed menu",
+    "olive oil alone",
+    "a prescription to drink wine",
+    "automatically calorie-restricted"
+  ]
+}

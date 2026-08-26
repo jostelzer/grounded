@@ -1,0 +1,65 @@
+{
+  "figure_id": "cloud-light-paths",
+  "profile": "nature-neuroscience",
+  "archetype": "mechanism",
+  "render_context": "article",
+  "purpose": "Explain in very simple language how many clear cloud droplets redirect mixed-color sunlight into a diffuse white glow, while a thick cloud base receives less light and can look grey.",
+  "title": "A crowd of clear drops makes a white cloud",
+  "story": [
+    "Sunlight arrives as many visible colors together.",
+    "Clear water droplets, each much larger than a visible-light wave, redirect the colors with similar overall strength.",
+    "Inside a crowd of droplets, light changes direction many times and escapes in many directions as a mixed white glow.",
+    "In a thick cloud, less light reaches the bottom, so the base can look grey even though the droplets remain clear."
+  ],
+  "observed": [
+    "Warm-cloud droplets measured in situ have a typical radius near 11 micrometres, many times larger than visible-light wavelengths.",
+    "Cloud optical thickness changes strongly with liquid-water amount and droplet size.",
+    "Cloud brightness and inferred optical thickness vary with three-dimensional shape, sun angle, and viewing angle."
+  ],
+  "inferred": [
+    "The drawn light paths are a teaching schematic, not tracks of measured individual photons; keep them thin, simple, and clearly representative.",
+    "Do not imply that every color follows an identical route or that water droplets absorb most visible light."
+  ],
+  "evidence_keys": [
+    "Bohren1987multiple",
+    "Kokhanovsky2004optical",
+    "Kim2003effective",
+    "Kato2009solar"
+  ],
+  "layout_notes": [
+    "Use one continuous left-to-right scientific mechanism on a white 3:2 landscape canvas, with three lower-case labeled regions rather than boxed cards.",
+    "At left, show three thin parallel red, green, and blue rays grouped as incoming sunlight; they enter a large central cross-section of a pale cloud.",
+    "Build the cloud from many small transparent, outlined spherical water droplets. Show several thin light paths changing direction between droplets without clutter.",
+    "At right and upper edges, show neutral pale rays leaving in several directions as the white glow. At the bottom, use a restrained light-grey shaded region and fewer rays to show that less light arrives there.",
+    "Place every label in quiet white space with a short thin leader. Keep the reading order obvious at phone width."
+  ],
+  "constraints": [
+    "Arial throughout, with all labels at least 20 px at a 1536 px canvas width.",
+    "Depict each droplet as clear water, never as an opaque white ball, soap bubble, snowball, or raindrop shape.",
+    "Use colored rays only to introduce the mixed colors in sunlight. After repeated redirects, use neutral white-to-pale-grey rays rather than a rainbow.",
+    "Every arrow or ray must represent incoming sunlight, a change in direction, escape from the cloud, or reduced light at the base.",
+    "Keep the bottom label visible and do not imply that grey droplets cause the shaded base."
+  ],
+  "avoid": [
+    "prisms",
+    "rainbow arcs",
+    "opaque cotton-ball clouds",
+    "storm lightning",
+    "rain",
+    "glossy 3D bubbles",
+    "large title inside the artwork",
+    "rounded dashboard cards",
+    "decorative footer or glossary banner"
+  ],
+  "exact_text": [
+    "A crowd of clear drops makes a white cloud",
+    "a  Sunlight",
+    "many colors together",
+    "b  Clear water drops",
+    "light changes direction many times",
+    "c  White glow",
+    "colors leave mixed together",
+    "Less light reaches the bottom",
+    "the base can look grey"
+  ]
+}
