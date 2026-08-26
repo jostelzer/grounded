@@ -27,16 +27,16 @@ python3 scripts/qa_review_pdf.py review.pdf --markdown review.md --render-dir re
 
 The runtime check is a hard gate. If it fails, install the exact packages in `requirements-pdf.txt` and the native Pango runtime required by WeasyPrint, then rerun it; never silently switch renderers. On macOS, use the matching Homebrew WeasyPrint executable so Pango is self-contained. The exporter embeds every figure as a data URI and permits the renderer to load only `data:` resources: remote, missing, and escaping assets are hard failures, while PNG/JPEG/WebP and SVG are supported directly. Output is written atomically: a failed build cannot overwrite an existing good PDF. After rendering, the exporter strictly parses the artifact and refuses to replace the prior PDF unless the producer is pinned WeasyPrint and the embedded fonts include Charter and Helvetica Neue; a fallback-font redesign is a hard failure. HTML sidecars are off by default and require `--html-sidecar` explicitly.
 
-The QA command is also mandatory before delivery. It strictly parses the PDF, checks A4 geometry, metadata, prohibited document actions, DOI and internal figure links, running masthead and total-aware page number on every page, then independently rasterizes every page through Poppler and checks masthead, page number, body, and clipping-edge pixels. Use a new or empty `--render-dir`, inspect every generated page/contact sheet visually, and fix any defect before delivering. `--columns 1` gives a single-column layout; plain `--out review.html` remains the separate HTML-only path. `--kicker "Review · Immunology"` sets the label above the title; the version and repository label in the provenance line are auto-detected from git (`--release`/`--repo` override them). The review still goes in the chat as well.
+The QA command is also mandatory before delivery. It strictly parses the PDF, checks A4 geometry, metadata, prohibited document actions, DOI and internal figure links, running masthead and total-aware page number on every page, then independently rasterizes every page through Poppler and checks masthead, page number, body, and clipping-edge pixels. Use a new or empty `--render-dir` and inspect every generated page and contact sheet visually. A heading stranded at the bottom of a page, a heading separated from its first paragraph/table/figure, an avoidably sparse spill page, or a large preventable blank region is a release-blocking defect even when structural QA passes. Rebalance the source or layout and rebuild without dropping evidence, shrinking text below the established design, or weakening figure/table legibility; repeat full-document raster inspection after every pagination change. `--columns 1` gives a single-column layout; plain `--out review.html` remains the separate HTML-only path. `--kicker "Review · Immunology"` sets the label above the title; the version and repository label in the provenance line are auto-detected from git (`--release`/`--repo` override them). The review still goes in the chat as well.
 
 The two experimental media modes are the only standing exception: `image` and `mindmap` still deliver the written review in chat, additionally generating and displaying the media artifacts (one mindmap; one to five figures depending on size). The media never replaces the review.
 
 ## Defaults — do not ask, just do this
 
-- **Size: small. Style: bullets.** Only deviate if the user asks or the question plainly needs it. Never ask which size or style.
+- **Size: small. Style: prose.** Only deviate if the user asks or the question plainly needs it. Never ask which size or style.
 - **Delivered in the chat**, formatted with markdown, as well-presented as possible. No file, no attachment, unless asked.
 - **Citations: `Author 2026` inline, hyperlinked to the DOI.** The reader must never see square brackets around a citation — they exist only as markdown link syntax. Never write a bare `[Author 2026]`, `[1]`, or `(Author, 2026)` in the finished text. Sources block at the end carries the DOIs.
-- **Structure is fixed per style** — bullets: question → TL;DR → punchline sections of bullets → sources; prose: question → abstract → introduction → thematic sections → conclusion → sources. Exact layouts in `references/writing-guide.md`.
+- **Structure is fixed per style** — prose: question → abstract → introduction → thematic sections → conclusion → sources; bullets: question → TL;DR → punchline sections of bullets → sources; ELI5 uses the bullet-shaped structure in very simple language. Exact layouts in `references/writing-guide.md`.
 - **Technical terms link to explainers.** The first use of an abbreviation or specialist term (SMD, CI, GRADE, HAM-D, mRNA, …) is a link to its verified Wikipedia article, so a non-specialist can click instead of googling. Rules and verification in `references/writing-guide.md`.
 - **No preamble and no meta.** No scope note, assumptions paragraph, audience statement, size label, or "how this review was produced" section. Make sensible scope choices silently.
 - **Concise throughout.** Shortest language that carries the evidence.
@@ -51,13 +51,13 @@ A review has a **size** (how much evidence) and a **style** (how it is written).
 - **Medium** — when the user asks for `medium`, or when the question plainly contains several genuinely distinct sub-questions that cannot be answered well at small depth.
 - **Large** — when the user asks for `large` or `big`; the words are aliases.
 
-**Style** — default **bullets**:
+**Style** — default **prose**:
 
-- **Bullets** — default. Punchline headings, cited bullet bodies, per `references/writing-guide.md`.
-- **Prose** — when the user asks for `prose`, "narrative", "essay", or written-out flowing text. A narrative article: abstract, introduction, topic-sentence paragraphs, conclusion. Word budgets ~1.5× the bullet tier. Rules in "Prose style" in `references/writing-guide.md`. Prose prints well — after delivering, offer the PDF export.
+- **Prose** — default. A narrative article: abstract, introduction, topic-sentence paragraphs, conclusion. Word budgets ~1.5× the bullet tier. Rules in "Prose style" in `references/writing-guide.md`. Prose prints well — after delivering, offer the PDF export.
+- **Bullets** — when the user asks for `bullets`, a list, or the compact structured format. Punchline headings and cited bullet bodies, per `references/writing-guide.md`.
 - **ELI5** — when the user asks for `eli5`, "explain like I'm five", or very simple language. Very simple English, per "ELI5 language" in `references/writing-guide.md`. Defaults to small size unless a size is named.
 
-Style never changes search depth, source counts, citations, term links, or verification — only the writing register.
+Style never changes search depth, source counts, citations, or verification. Prose and bullets use the normal verified term links; ELI5 rewrites jargon into everyday language and links only an unavoidable term after explaining it.
 
 **Media modes (experimental)** — these are additive artifacts, not styles:
 
@@ -68,14 +68,15 @@ If the user explicitly asks for both `image` and `mindmap`, run one small review
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
-| Body length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
+| Prose body length (default) | 600–1,000 words | 1,500–2,500 words | 3,500–6,000 words |
+| Bullet body length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
 | Sections | 3–5 | 6–9 | 10–15 |
 | Sources | 10–20 | 30–60 | 70–150 |
 | Searches | 1–2 queries per angle, 3–5 angles | 2–3 per angle, 5–8 angles | 3–5 per angle, 8–12 angles, plus citation chasing |
 | Full texts read | The 2–4 load-bearing papers | 8–15 | 25+ |
 | Tables | 0–1 | 1–2 | 2–4 |
 
-Bigger sizes add sections, bullets, and tables — never longer sentences. In prose style, multiply body length by ~1.5; everything else in the table is unchanged.
+Bigger sizes add sections, evidence, and tables — never longer sentences. Style changes the body budget shown above; search depth and evidence requirements stay unchanged.
 
 Full tier and style definitions are in `references/sizes.md`.
 
@@ -113,7 +114,7 @@ Run `scripts/verify_citations.py --ledger sources.json`. It uses the Crossref re
 
 ### 5. Write the draft
 
-Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; @b]` for several. Follow the fixed layout in `references/writing-guide.md`: the question, a citation-free TL;DR, then sections whose **headings are the punchlines** and whose bodies are **bullets only**, ordered so the argument builds, with opposing evidence contrasted and a table wherever several studies share dimensions. Every empirical bullet cited; numbers with intervals; primary studies for findings, reviews for consensus.
+Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; @b]` for several. Follow the selected style's fixed layout in `references/writing-guide.md`. The default prose review uses a citation-free Abstract, an Introduction that poses one throughline, thematic sections of topic-sentence paragraphs that advance it, and a Conclusion that names the cross-cutting pattern. Explicit bullet style uses a citation-free TL;DR, punchline headings, and cited bullet bodies. ELI5 keeps that bullet-shaped layout but rewrites every claim and quantity in simple language. In every style, order the argument deliberately, contrast opposing evidence, use a table wherever several studies share dimensions, report numbers with intervals, cite primary studies for findings, and use reviews for consensus.
 
 ### 6. Format and check
 
@@ -121,7 +122,7 @@ Write the draft citing with ledger keys: `[@Kuyken2022effectiveness]`, or `[@a; 
 
 ### 7. Create the requested media
 
-Skip this step in small, medium, and large/big modes. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Read the visual audit in `references/figure-reference-analysis.md`, the journal-grade system in `references/figure-style-system.md`, and the caption contract in `references/figure-captions.md`; choose a style profile and figure archetype, record the evidence and exact copy in a figure-spec JSON, and generate the prompt with `scripts/build_figure_prompt.py` as specified in `references/image-prompt-guide.md`. Use `render_context: article` for a figure inserted beside a caption and `standalone` only when the pixels must carry their own compact title. When a capable image-generation model is available, use it to render the complete figure end to end, including all in-figure labels, callouts, values, legends, and essential definitions; use deterministic SVG or another vector renderer only when image generation is unavailable or the generated result cannot pass QA. Image-mode illustrations must be self-explanatory to an educated non-specialist. Give every figure a stable ID, reference it from the relevant body text, and write a caption that matches the review's bullets, prose, or ELI5 register and ends with 2–5 verified ledger citations. `format_references.py` assigns figure numbers, creates cross-links, and rejects missing, uncited, duplicated, broken, or unreferenced figures. Inspect the defined Arial typography, every rendered word and number, scientific content, clipping, visual balance, caption, and misleading emphasis. Display it in the reply with useful alt text.
+Skip this step unless the user explicitly requested image or mindmap mode. In image or mindmap mode, follow `references/media-modes.md` and build the visual from the final verified synthesis—not from preliminary search impressions. Read the visual audit in `references/figure-reference-analysis.md`, the journal-grade system in `references/figure-style-system.md`, and the caption contract in `references/figure-captions.md`; choose a style profile and figure archetype, record the evidence and exact copy in a figure-spec JSON, and generate the prompt with `scripts/build_figure_prompt.py` as specified in `references/image-prompt-guide.md`. Use `render_context: article` for a figure inserted beside a caption and `standalone` only when the pixels must carry their own compact title. When a capable image-generation model is available, use it to render the complete figure end to end, including all in-figure labels, callouts, values, legends, and essential definitions; use deterministic SVG or another vector renderer only when image generation is unavailable or the generated result cannot pass QA. Image-mode illustrations must be self-explanatory to an educated non-specialist. Give every figure a stable ID, reference it from the relevant body text, and write a caption that matches the review's bullets, prose, or ELI5 register and ends with 2–5 verified ledger citations. `format_references.py` assigns figure numbers, creates cross-links, and rejects missing, uncited, duplicated, broken, or unreferenced figures. Inspect the defined Arial typography, every rendered word and number, scientific content, clipping, visual balance, caption, and misleading emphasis. Display it in the reply with useful alt text.
 
 ## Rules that do not bend
 

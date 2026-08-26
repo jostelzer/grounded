@@ -4,37 +4,37 @@
     {
       "id": 0,
       "prompt": "Write me a small review: does intermittent fasting improve glycaemic control in adults with type 2 diabetes compared with continuous calorie restriction?",
-      "expected_output": "A 350-700 word chat-native review with 10-20 verified peer-reviewed references, a citation-free TL;DR, punchline headings with cited bullets, head-to-head evidence with numbers, contrary evidence and safety where relevant, and in-text author-year citations hyperlinked to their DOIs and a generated sources block with DOI links. No methods box or file.",
+      "expected_output": "A 600-1,000 word chat-native prose review with 10-20 verified peer-reviewed references, a citation-free Abstract, an Introduction posing one throughline, thematic sections of topic-sentence paragraphs that advance it, a cross-cutting Conclusion, head-to-head evidence with numbers, contrary evidence and safety where relevant, and in-text author-year citations hyperlinked to their DOIs plus a generated sources block with DOI links. No methods box or file.",
       "files": []
     },
     {
       "id": 1,
       "prompt": "I'd like a medium-sized scientific review on creatine supplementation and cognitive performance in healthy adults — what's the evidence, who benefits, and what's still unresolved?",
-      "expected_output": "A 900-1,600 word chat-native review with 30-60 verified peer-reviewed references, 6-9 punchline sections, at least one comparison table where studies share dimensions, explicit disagreement and limitations, and in-text author-year citations hyperlinked to their DOIs and a generated sources block with DOI links.",
+      "expected_output": "A 1,500-2,500 word chat-native prose review with 30-60 verified peer-reviewed references, a citation-free Abstract, an Introduction and 6-9 thematic sections organized around one throughline, at least one comparison table where studies share dimensions, explicit disagreement and limitations, a synthesizing Conclusion, and in-text author-year citations hyperlinked to their DOIs plus a generated sources block with DOI links.",
       "files": []
     },
     {
       "id": 2,
       "prompt": "Image mode: review how sleep deprivation affects immune function in healthy adults.",
-      "expected_output": "A complete small scientific review with 10-20 verified peer-reviewed sources, followed by one actually generated and displayed scientific illustration grounded only in the verified synthesis. The illustration is independently understandable to an educated non-specialist and contains a visually distinct bottom glossary in smaller but readable type that expands every abbreviation and briefly defines every non-obvious concept used in the figure. It distinguishes established findings from uncertain mechanisms, has exact readable labels, useful alt text, and a concise caption with supporting review citations.",
+      "expected_output": "A complete small prose scientific review with 10-20 verified peer-reviewed sources, followed by one actually generated and displayed scientific illustration grounded only in the verified synthesis. The review has a citation-free Abstract, Introduction, thematic prose sections, and Conclusion. The illustration is independently understandable to an educated non-specialist, defines every abbreviation and non-obvious concept with local labels or a compact readable legend when needed, distinguishes established findings from uncertain mechanisms, has exact readable labels, useful alt text, and a concise prose caption with supporting review citations.",
       "files": []
     },
     {
       "id": 3,
       "prompt": "Mindmap mode: what does peer-reviewed research say about the causes and maintenance of chronic low-back pain?",
-      "expected_output": "A complete small scientific review with 10-20 verified peer-reviewed sources, followed by one actually rendered and displayed mindmap. The root is the sharpened question; branches reflect the review's evidence angles, disagreements, moderators, limitations, and open questions; evidence strength is encoded with a legend; labels are legible; and the caption points back to verified sources.",
+      "expected_output": "A complete small prose scientific review with 10-20 verified peer-reviewed sources, followed by one actually rendered and displayed mindmap. The written review follows the default Abstract-to-Conclusion narrative structure. The root is the sharpened question; branches reflect the review's evidence angles, disagreements, moderators, limitations, and open questions; evidence strength is encoded with a legend; labels are legible; and the caption points back to verified sources.",
       "files": []
     },
     {
       "id": 4,
       "prompt": "Give me a big scientific review of resistance training and bone mineral density after menopause.",
-      "expected_output": "A large-tier 2,000-4,000 word review with 70-150 verified peer-reviewed references, 10-15 concise punchline sections, multiple evidence tables where useful, citation chasing, opposing findings, generalisability, evidence quality, and research gaps. `Big` is treated exactly as the `large` alias.",
+      "expected_output": "A large-tier 3,500-6,000 word prose review with 70-150 verified peer-reviewed references, a citation-free Abstract, Introduction, 10-15 thematic sections that develop one throughline, a synthesizing Conclusion, multiple evidence tables where useful, citation chasing, opposing findings, generalisability, evidence quality, and research gaps. `Big` is treated exactly as the `large` alias.",
       "files": []
     },
     {
       "id": 5,
       "prompt": "Write a small review of medical image registration methods for longitudinal brain MRI.",
-      "expected_output": "A normal text-only small review. The word `image` appears as part of the scientific topic, not as an explicit output request, so image mode must not activate and no media artifact should be generated.",
+      "expected_output": "A normal text-only small prose review with the default Abstract-to-Conclusion narrative structure. The word `image` appears as part of the scientific topic, not as an explicit output request, so image mode must not activate and no media artifact should be generated.",
       "files": []
     },
     {
@@ -64,7 +64,13 @@
     {
       "id": 10,
       "prompt": "Use the scientific-review skill, medium image mode: how does chronic stress affect the immune system?",
-      "expected_output": "A medium bullets review (30-60 verified sources, 6-9 punchline sections, 1-2 tables) plus up to three figures, each earned by a distinct visual story (e.g. a mechanism synthesis with glossary band, an evidence map, or a real-numbers effect summary using only values cited in the text), every character in every figure deterministically typeset, each figure placed after the section it supports with an alt text and a cited caption, and each rendered figure inspected before delivery.",
+      "expected_output": "A medium prose review (30-60 verified sources, citation-free Abstract, Introduction, 6-9 thematic sections, Conclusion, and 1-2 tables) plus up to three figures, each earned by a distinct visual story (e.g. a mechanism synthesis with local definitions, an evidence map, or a real-numbers effect summary using only values cited in the text), every character and value in every figure exact and inspected, each figure placed after the section it supports with alt text and a cited prose caption, and each rendered figure inspected before delivery.",
+      "files": []
+    },
+    {
+      "id": 11,
+      "prompt": "Use the scientific-review skill in bullet style: does dietary nitrate improve endurance performance?",
+      "expected_output": "An explicit bullet-style review with a citation-free TL;DR, punchline headings, bullet-only evidence bodies, and a generated Sources block. It does not use the default prose Abstract, Introduction, thematic paragraphs, or Conclusion. Search depth, verified peer-reviewed source counts, DOI-linked author-year citations, contrary evidence, and uncertainty remain unchanged.",
       "files": []
     }
   ]

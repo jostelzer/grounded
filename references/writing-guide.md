@@ -4,9 +4,13 @@ The review is delivered **as the chat message itself** — not as a file, attach
 
 Create a file only if the user asks, and even then also put the review in the chat. Image and mindmap modes add a rendered media artifact by design; they do not move the written review into a file.
 
-It is not a document with front matter, not an essay, and not a report about itself. Every word earns its place.
+It is not a document with front matter or a report about itself. Every word earns its place.
 
-## The output shape — use this exactly
+## Choose the writing style
+
+Use **prose by default**. Its exact structure and narrative rules are in "Prose style" below. Use the compact bullet structure only when the user explicitly asks for bullets, a list, or the compact structured format. Use ELI5 only when requested.
+
+## Bullet style (explicit)
 
 ```
 ## <The question, as concisely as it can be stated>
@@ -49,6 +53,8 @@ The answer, immediately. One to three sentences. **No citations** — they belon
 ### Ordering
 Sequence sections so the argument builds. Usually: the direct answer first (strongest, most relevant evidence) → supporting or mechanistic evidence → the contrary case → who it varies for (moderators) → caveats and what would settle it. Adapt to the question; never order by date of publication or by how you found things.
 
+When the same pattern recurs across several sections — the same trial-versus-cohort gap, the same dose dependence, the same confound — name it once, plainly, where it second appears or in a short closing synthesis section. That cross-cutting claim is usually the most valuable sentence in the review, and it has no home in any single section unless you give it one.
+
 ### Contrast opposing views explicitly
 When the literature disagrees, do not average it away. Either give the disagreement its own section with the punchline naming the tension ("Small trials and the large trial disagree — and size explains it"), or use bullets that pair the two sides. Then say which side the better evidence favours, or say plainly that it is unresolved.
 
@@ -74,13 +80,13 @@ A compact block at the end: one line per source, `**All Authors (2026)** Title. 
 - **Numbers, not adjectives.** Effect sizes with intervals, sample sizes, absolute risks. "HbA1c −0.06% (95% CI −0.27 to 0.16)" not "no meaningful improvement".
 - **Design in a parenthesis**: "(12-mo RCT, n=137)". It calibrates the reader without a clause.
 - **Calibrated strength**, per `evidence-weighing.md` — "probably", "may", "unclear" tied to actual evidence quality. No "proven", no bare "significant".
-- **No hedging filler**: drop "it is important to note", "interestingly", "it should be emphasised".
+- **No hedging filler**: drop "it is important to note", "interestingly", "it should be emphasised". But do not confuse filler with synthesis: a sentence that weighs or connects evidence ("Taken together, the effect appears only at high doses"; "This suggests the marker, not the mechanism, was at fault") is content, not filler. Filler tells the reader to pay attention; synthesis tells them what to conclude.
 - **Active and direct.** Name who found what.
 - Define an abbreviation once, at first use.
 
-## Prose style
+## Prose style (default)
 
-In `prose` style only (explicit request: "prose", "narrative", "essay", "write it out", "flowing text"). The pipeline, evidence standard, citations, term links, and verification are identical to bullets; only the register changes — the review becomes a narrative article of the kind journals publish.
+Use this style unless the user explicitly selects bullets or ELI5. The pipeline, evidence standard, citations, and verification are identical across styles; prose and bullets share the normal term-link rules, while ELI5's jargon exception is defined below. Prose changes the review into a narrative article of the kind journals publish.
 
 Structure:
 
@@ -92,18 +98,29 @@ the finding, its size, its certainty, and the main caveat. This replaces the TL;
 
 ### Introduction
 <Why the question matters, what is claimed or contested, and the scope — 1–3 paragraphs.
-This is the one style where scene-setting is content, not preamble. No methods narration.>
+This is the one style where scene-setting is content, not preamble. No methods narration.
+End by posing the throughline: the one tension or question the whole review turns on,
+and — if it helps the reader — the sub-questions the sections will answer in order.>
 
 ### <Short thematic heading, e.g. "Cardiovascular outcomes">
 <Paragraphs. See rules below.>
 
 ### Conclusion
-<Synthesis across sections, what the evidence supports at what confidence, and what
-would settle the open questions. No new evidence introduced here.>
+<Name the cross-cutting pattern plainly — the one claim the sections demonstrated
+together — then what the evidence supports at what confidence, and the specific
+evidence that would settle what is open. No new evidence introduced here.>
 
 **Sources**
 <same generated sources block as always>
 ```
+
+Narrative arc — what makes prose read as an argument rather than a list:
+
+- **Find the throughline before drafting.** One sentence naming the tension or pattern the whole review turns on ("the biology is solid, but the sleep effect appears only at high doses"). The Introduction poses it, every section advances it, the Conclusion answers it. If no single sentence covers the review, the plan is a taxonomy, not an argument — reorganize until it is one.
+- **Land every section.** After the evidence, one plain sentence saying what the section adds to the throughline, ideally handing off to the next section ("So the mechanism is real; whether it costs sleep is a separate question — the one the exposure trials answer next."). A section that stops on its last study is unfinished.
+- **Call back across sections.** When a pattern repeats, say so at its second appearance ("the same cohort-versus-trial gap seen for dementia"). One or two callbacks per review are what make it one text rather than stacked summaries.
+- **Interpretive sentences are content, not filler.** Roughly one citation-free sentence per paragraph that weighs or connects the evidence ("The mechanism is real, but the marker does not establish sleep loss."). These carry the argument; the banned-filler list bans throat-clearing, not judgment.
+- **Vary the rhythm, and keep it easy to read.** Not every sentence is finding + (design, n) + citation — follow a long evidence sentence with a short verdict sentence. Prefer two clear sentences over one packed one; plain words and short sentences outrank density everywhere the numbers allow it.
 
 Paragraph craft:
 
@@ -122,7 +139,7 @@ Paragraph craft:
 
 ## ELI5 language
 
-In `eli5` mode only. The evidence pipeline, structure, citations, and verification are exactly small mode; only the register changes. Write for a smart reader with no science background at all.
+In `eli5` mode only. Use the bullet-shaped structure: question, citation-free TL;DR, punchline headings in plain words, factual bullets, and Sources. The evidence pipeline, citations, and verification are unchanged; only the language and jargon treatment change. Write for a smart reader with no science background at all.
 
 - **Everyday words only.** "People in the study" not "participants"; "made-up pill" or "dummy pill" not "placebo"; "the studies disagree" not "heterogeneity". If a ten-year-old wouldn't know the word, don't use it.
 - **Short sentences.** One idea per sentence. No semicolons, no nested clauses.
@@ -150,7 +167,7 @@ The first use of a technical abbreviation or specialist term is a markdown link 
 
 ## Length
 
-Default **small**: aim for something a reader takes in within a couple of minutes — roughly 350–700 words in the body plus the sources block. Medium and large scale up the number of sections, bullets, and tables, never the wordiness of individual bullets. Sizes are in `sizes.md`.
+Default **small prose**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words in the body plus the sources block. Explicit bullet style uses 350–700 words. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
 
 ## Citing
 
@@ -166,9 +183,9 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 ## Quality gate
 
 0. The review is in the reply, not in a file (unless a file was requested).
-1. Every bullet with an empirical claim carries a citation.
-2. Headings alone tell the argument.
-3. TL;DR has no citations and answers the question in the first sentence.
+1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited.
+2. In bullet style, headings alone tell the argument; in prose, topic sentences and section landings advance one throughline.
+3. The Abstract (prose) or TL;DR (bullets/ELI5) has no citations and answers the question in the first sentence.
 4. Opposing evidence appears, and is contrasted rather than blended.
 5. A table exists wherever several studies share dimensions.
 6. Numbers match sources; intervals included where reported.
@@ -176,7 +193,13 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded.
 8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut 10% more.
+9b. In prose style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly.
 10. In image or mindmap mode, every requested visual is rendered,
     evidence-grounded, legible, and inspected; has a unique stable ID; is
     referenced from the relevant body text; and has a caption in the same
     bullets, prose, or ELI5 register with 2–5 verified citations.
+11. When a PDF is requested, inspect every rendered page. No heading may be
+    stranded or separated from its first paragraph, table, or figure; no page
+    may be an avoidably sparse spill; and no large preventable blank region may
+    remain. Rebalance and rebuild without dropping evidence or reducing
+    legibility, then repeat the complete raster inspection.

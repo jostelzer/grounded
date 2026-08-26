@@ -49,6 +49,16 @@ def split_row(line):
     return [c.strip() for c in cells]
 
 
+def append_spanning_block(out, block):
+    """Keep a section heading with an immediately following table or figure."""
+    if out and out[-1].startswith("<h2>") and out[-1].endswith("</h2>"):
+        heading = out.pop()
+        out.append(
+            f'<section class="spanning-section-start">{heading}{block}</section>')
+    else:
+        out.append(block)
+
+
 MIME = {".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg",
         ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp"}
 
@@ -154,9 +164,11 @@ def to_html(md, base_dir="."):
                 f'{inline(cm.group(3) or "")}{caption_list}</figcaption>')
             i = k
             uri = image_data_uri(src, base_dir)
-            out.append(
+            append_spanning_block(
+                out,
                 f'<figure id="{figure_id}"><img src="{uri}" '
-                f'alt="{html.escape(alt, quote=True)}">{caption}</figure>')
+                f'alt="{html.escape(alt, quote=True)}">{caption}</figure>',
+            )
             continue
 
         if s.startswith("## "):
@@ -185,7 +197,11 @@ def to_html(md, base_dir="."):
                 i += 1
             th = "".join(f"<th>{inline(c)}</th>" for c in head)
             trs = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in rows)
-            out.append(f'<div class="tablewrap"><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></div>')
+            append_spanning_block(
+                out,
+                f'<div class="tablewrap"><table><thead><tr>{th}</tr></thead>'
+                f'<tbody>{trs}</tbody></table></div>',
+            )
             continue
 
         # bullet list
@@ -242,7 +258,7 @@ GND_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#ff4f1f" '
 
 CSS = r"""
 @page {
-  size: A4; margin: 25mm 13mm 16mm 13mm;
+  size: A4; margin: 25mm 13mm 12mm 13mm;
   /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
     font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #8a8a8a; }
@@ -256,8 +272,9 @@ html { background: #fff; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: "Charter", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  font-size: 9.5pt; line-height: 1.5;
+  font-size: 9.5pt; line-height: 1.38;
   text-align: justify; hyphens: auto; -webkit-hyphens: auto;
+  hyphenate-character: "-";
 }
 .sans, .strip, .provenance, .kicker, h1, .metagrid, .lead, h2, thead th,
 .tablabel, figcaption, .refs, footer.colophon {
@@ -323,7 +340,9 @@ h1 {
 .note { font-size: 7pt; color: var(--muted); margin: 8px 0 0;
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; text-align: left; }
 .body { counter-reset: sec; }
-.body.cols { column-count: 2; column-gap: 8mm; }
+/* Sequential fill avoids a last page made of two balanced half-height columns. */
+.body.cols { column-count: 2; column-gap: 8mm; column-fill: auto; }
+.spanning-section-start { column-span: all; break-inside: avoid; }
 h2 {
   font-size: 9pt; font-weight: 600; line-height: 1.3; letter-spacing: 0;
   margin: 12px 0 4px; color: var(--ink);
@@ -341,10 +360,11 @@ h2.refhead {
 h2.refhead::before { content: none; counter-increment: none; }
 h2.refhead small { font-weight: 600; font-size: 6.3pt; letter-spacing: .12em;
   text-transform: uppercase; color: var(--muted); float: right; margin-top: 2px; }
-p { margin: 0 0 6.5px; orphans: 2; widows: 2; }
+p { margin: 0 0 4.5px; orphans: 2; widows: 2; }
 ul { margin: 0 0 9px; padding-left: 1.05em; }
 li { margin: 0 0 4.5px; break-inside: avoid; }
 a { color: inherit; text-decoration: none; border-bottom: .5px solid rgba(255,79,31,.55); }
+a[href^="#fig-"] { white-space: nowrap; }
 a:hover { border-bottom-color: var(--accent); }
 code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; }
 strong { letter-spacing: 0; }
@@ -364,27 +384,33 @@ tbody td {
   text-align: left; overflow-wrap: break-word; hyphens: auto;
 }
 tbody tr:last-child td { border-bottom: 1px solid var(--ink); }
-.refs { font-size: 7.2pt; line-height: 1.5; color: #333; text-align: left; }
-.refs p { margin: 0 0 5px; padding-left: 1.2em; text-indent: -1.2em; break-inside: avoid; }
+.refs { font-size: 6.9pt; line-height: 1.2; color: #333; text-align: left; }
+.refs p { margin: 0 0 2.5px; padding-left: 1.2em; text-indent: -1.2em; break-inside: avoid-page; }
+.refs.dense { font-size: 6.5pt; line-height: 1.08; }
+.refs.dense p { margin-bottom: .5px; }
 .refs a { border-bottom: none; color: var(--muted); word-break: break-all; }
 /* Figures, like tables, span the full page width and are never clipped. */
 figure { column-span: all; margin: 10px 0 12px; break-inside: avoid; }
 figure img { display: block; width: 100%; height: auto; }
 figcaption { font-size: 7.4pt; color: var(--muted); margin-top: 5px;
   text-align: left; line-height: 1.45; }
+figcaption a, figcaption .figno { white-space: nowrap; }
 figcaption .figno, figcaption .figtitle { color: var(--ink); }
 figcaption .figno, figcaption .figtitle, .tablabel b { font-weight: 800; }
 figcaption .figno::first-letter { color: var(--ink); }
 figcaption ul { margin: 4px 0 0; padding-left: 1.15em; }
 figcaption li { margin: 0 0 2px; break-inside: auto; }
 .tomb { text-align: right; color: var(--accent); font-size: 11pt;
-  margin: 4px 0 0; column-span: all; }
+  margin: 0; line-height: 1; }
 footer.colophon {
-  margin-top: 14px; padding-top: 6px; border-top: .5px solid var(--ink);
-  font-size: 6.5pt; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  /* Keep provenance furniture out of content flow so it cannot create a spill page. */
+  position: fixed; bottom: -7mm; left: 0; right: 22mm;
+  margin-top: 0; padding-top: 3px; border-top: .5px solid var(--ink);
+  font-size: 6.2pt; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
   color: var(--faint); display: flex; justify-content: space-between; gap: 12px;
   text-align: left;
 }
+footer.colophon span:last-child { display: none; }
 footer.colophon a { color: var(--faint); border-bottom: none; }
 @media screen {
   body { padding: 10mm 0; background: #f2f2f2; }
@@ -535,6 +561,8 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         body = body.replace(
             '<h2 class="refhead">References</h2>',
             f'<h2 class="refhead">References <small>{n_refs} · verified via Crossref</small></h2>')
+        if n_refs >= 80:
+            body = body.replace('<div class="refs">', '<div class="refs dense">')
 
     if colophon is None:
         colophon = ("Agentically generated · every citation resolved and "

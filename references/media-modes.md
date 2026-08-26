@@ -1,6 +1,6 @@
 # Experimental media modes
 
-Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small bullets when none is named); mindmap mode uses the small pipeline. The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
+Read this reference only when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small prose when none is named); mindmap mode uses the small pipeline and the selected writing style (prose when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard.
 
 Before creating media, also read `figure-reference-analysis.md`,
 `figure-style-system.md`, `image-prompt-guide.md`, and `figure-captions.md`.
@@ -10,14 +10,14 @@ an improvised prose prompt.
 
 ## Shared evidence boundary
 
-- Start media planning only after the small review is complete and every cited source is verified.
+- Start media planning only after the written review at the selected tier is complete and every cited source is verified.
 - Depict only relationships, mechanisms, comparisons, or uncertainties supported by the reviewed literature.
 - Never turn an association into causation, a hypothesis into an established mechanism, or a group average into an individual prediction.
 - Encode uncertainty visibly. Use restrained emphasis, dashed or muted elements, and labels such as `mixed`, `limited`, or `hypothesized` when the evidence requires them.
 - Keep citations in the written review and caption rather than filling the visual with DOI text.
 - Generate the actual media. Do not substitute a prompt, text outline, ASCII diagram, or unrendered diagram source.
 - Prefer a capable image-generation model for the complete rendered artifact, including text. Supply exact copy and inspect every character; deterministic SVG or another renderer is the fallback when generation is unavailable or cannot pass QA.
-- If the required media tooling is unavailable or generation fails, still deliver the small review and state in one sentence that the visual could not be generated. Do not claim that media was created.
+- If the required media tooling is unavailable or generation fails, still deliver the written review at its selected tier and state in one sentence that the visual could not be generated. Do not claim that media was created.
 
 ## Image mode
 
@@ -157,8 +157,8 @@ Create one rendered, readable mindmap that exposes the structure of the evidence
    weak contrast, confusing crossing edges, and any branch whose emphasis
    misstates the literature.
 
-Deliver the small review using the normal writing guide, reference the map from
-the relevant body bullet, then insert:
+Deliver the small review using the selected writing style, reference the map from
+the relevant body passage, then insert:
 
 ```text
 The evidence structure is summarized in {{figure:findings-map}}.
@@ -172,7 +172,7 @@ Use specific alt text that lists the root and primary branches.
 ## Final media quality gate
 
 1. The media mode was explicitly requested.
-2. The written review independently answers the question at small depth.
+2. The written review independently answers the question at the selected tier in image mode, or at small depth in mindmap mode.
 3. Every depicted scientific claim is supported by the verified review.
 4. Uncertainty and disagreement remain visible.
 5. The artifact is rendered and displayed, not supplied as instructions or source code.

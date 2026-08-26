@@ -4,15 +4,15 @@ Grounded is an agent skill that writes scientific literature reviews built **onl
 
 What makes it great:
 
-- **You choose the depth.** One word — `small`, `medium`, `large`, or `image` — scales the same rigorous pipeline from a fast ~500-word answer to a full field survey with 70+ sources, or a review topped with a scientific illustration.
-- **Ultra-compact reviews.** No filler: headings that state the finding, bullets that carry effect sizes and confidence intervals, tables where studies line up — the evidence density of a good systematic review at a fraction of the length.
+- **You choose the depth.** One word — `small`, `medium`, `large`, or `image` — scales the same rigorous pipeline from a focused 600–1,000-word narrative to a full field survey with 70+ sources, or a review paired with scientific illustrations.
+- **Evidence-led narrative reviews.** The default prose has a clear throughline from abstract to conclusion, with effect sizes, confidence intervals, explicit contrasts, and tables where studies line up — the rigour of a good scientific review without filler.
 - **Only real, published, cross-referenced science.** Every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref (with retraction screening via publisher and Retraction Watch metadata), and the reference list is generated programmatically from the verified records — so every citation resolves, every time.
 
 ## What you get
 
-Give it a topic or research question; it returns a compact, evidence-dense review — question, citation-free TL;DR, sections whose headings are the punchlines, bullet bodies with effect sizes and confidence intervals, tables where studies share dimensions, and a sources block with resolvable DOIs.
+Give it a topic or research question; it returns a compact, evidence-dense narrative review — question, citation-free abstract, introduction, thematic sections that build one argument, conclusion, useful comparison tables, and a sources block with resolvable DOIs. Ask for `bullets` when you want the earlier punchline-heading format.
 
-Example (excerpt from a real small-mode run):
+Example (excerpt from a real small bullet-mode run):
 
 > ## Does creatine reduce depressive symptoms?
 >
@@ -33,16 +33,17 @@ Every in-text citation is itself a link to the paper, every DOI in the sources b
 
 ## Sizes and styles
 
-A review has a **size** — `small` (default), `medium`, `large` — and a **style** — `bullets` (default), `prose`, `eli5`. They combine freely: "medium prose review of …", "eli5: …". Say nothing and you get a small bullets review. `image` mode additionally produces an illustration.
+A review has a **size** — `small` (default), `medium`, `large` — and a **style** — `prose` (default), `bullets`, `eli5`. They combine freely: "medium prose review of …", "small bullets review of …", "eli5: …". Say nothing and you get a small prose review. `image` mode additionally produces an illustration.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
-| Body length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
+| Prose body length (default) | 600–1,000 words | 1,500–2,500 words | 3,500–6,000 words |
+| Bullet body length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
 | Sections | 3–5 | 6–9 | 10–15 |
 | Sources | 10–20 | 30–60 | 70–150 |
 | Full texts read | 2–4 load-bearing papers | 8–15 | 25+ |
 
-Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** writes a narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be mechanism diagrams, evidence maps, timelines, comparisons, quantitative summaries and more. A capable image-generation model renders the complete figure, including all in-figure text, when available; deterministic SVG is the fallback. The modular figure system separates verified evidence, archetype, render context and journal-inspired profile, with Arial defined throughout. Its figure-native rules come from a reproducible analysis of 21 official-source *Nature Reviews Neuroscience* and *Nature Neuroscience* figures: article figures omit poster-like internal titles, use content-led topology and local labels, and reserve pale semantic colour for scientific structures and data. Every figure also has a stable ID, automatic number, clickable body reference, and a caption written in the review's bullets, prose, or ELI5 register with verified citations that enter the normal Sources block. Every result remains self-explanatory to a non-specialist, is placed after the section it supports, and flows automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
+Styles change only the writing, never the rigour — same searches, same verified sources, same citations. **Prose** is the default narrative article: an abstract, an introduction, thematic sections of flowing paragraphs, and a conclusion — the format the journal-styled PDF export was made for. **Bullets** is the explicit compact option with a TL;DR, punchline headings, and cited bullets. **ELI5** writes in very simple English, so a reader with no science background follows every sentence. **Image mode** (experimental) combines with any size and style and additionally produces scientific figures built from the verified findings — one at small, up to three at medium, up to five at large. Figures can be mechanism diagrams, evidence maps, timelines, comparisons, quantitative summaries and more. A capable image-generation model renders the complete figure, including all in-figure text, when available; deterministic SVG is the fallback. The modular figure system separates verified evidence, archetype, render context and journal-inspired profile, with Arial defined throughout. Its figure-native rules come from a reproducible analysis of 21 official-source *Nature Reviews Neuroscience* and *Nature Neuroscience* figures: article figures omit poster-like internal titles, use content-led topology and local labels, and reserve pale semantic colour for scientific structures and data. Every figure also has a stable ID, automatic number, clickable body reference, and a caption written in the review's bullets, prose, or ELI5 register with verified citations that enter the normal Sources block. Every result remains self-explanatory to a non-specialist, is placed after the section it supports, and flows automatically into the PDF export. The skill can also check an existing draft's claims and references against the literature.
 
 ## Ways to use it
 
@@ -50,13 +51,13 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 
 **Answer a research question**
 
-> Use the grounded skill: does intermittent fasting improve insulin sensitivity?
+> Use the grounded skill in bullet style: does intermittent fasting improve insulin sensitivity?
 
 → [output](examples/small-intermittent-fasting-insulin.md) · small · 16 verified sources
 
 **Get an overview of a field**
 
-> Use the grounded skill, medium mode: what's known about the gut microbiome's role in Parkinson's disease?
+> Use the grounded skill in medium bullet mode: what's known about the gut microbiome's role in Parkinson's disease?
 
 → [output](examples/medium-gut-microbiome-parkinsons.md) · medium · 45 verified sources (four retracted papers caught and excluded during search)
 
@@ -68,24 +69,24 @@ Name the skill in your prompt so it triggers reliably. Every prompt below has ac
 
 **Survey a field in depth**
 
-> Use the grounded skill in large image mode: which health benefits of the Mediterranean diet are actually supported?
+> Use the grounded skill in large bullet image mode: which health benefits of the Mediterranean diet are actually supported?
 
-→ [output](examples/large-mediterranean-diet.md) · large image · 97 verified sources, 13 sections, three end-to-end ImageGen figures and one exact quantitative SVG (the retracted original PREDIMED report is excluded and its corrected republication is used)
+→ [output](examples/large-mediterranean-diet.md) · large bullet image · 97 verified sources, 13 sections, three end-to-end ImageGen figures and one exact quantitative SVG (the retracted original PREDIMED report is excluded and its corrected republication is used)
 → the same illustrated review in **prose style**: [markdown](examples/prose-large-mediterranean-diet.md) · [journal-styled PDF](examples/prose-large-mediterranean-diet.pdf)
 
 **Settle a claim you've seen circulating**
 
 > I keep reading that blue light before bed ruins sleep. Use the grounded skill — what does the evidence actually show?
 
-→ [output](examples/small-blue-light-sleep.md) · small · 16 verified sources · also available [in prose style](examples/prose-small-blue-light-sleep.md)
+→ [output](examples/prose-small-blue-light-sleep.md) · default small prose · 16 verified sources · [journal-styled PDF](examples/prose-small-blue-light-sleep.pdf) · also available [in bullet style](examples/small-blue-light-sleep.md)
 
 **Produce figures**
 
 > Use the grounded skill, medium image mode: how do mRNA vaccines work?
 
-→ [output](examples/image-mrna-vaccines.md) · medium image · 47 verified sources plus two end-to-end ImageGen figures and one exact-geometry SVG fallback, all built from reusable evidence specs, archetypes and the Arial-based Nature Neuroscience-inspired system · [illustrated PDF](examples/image-mrna-vaccines.pdf)
+→ [output](examples/prose-image-mrna-vaccines.md) · default medium prose image · 47 verified sources plus two end-to-end ImageGen figures and one exact-geometry SVG fallback, all built from reusable evidence specs, archetypes and the Arial-based Nature Neuroscience-inspired system · [illustrated PDF](examples/image-mrna-vaccines.pdf) · also available [in bullet style](examples/image-mrna-vaccines.md)
 
-Practical notes: unless you say otherwise you get a **small** review (a fast, dense ~500-word answer) — say `medium` or `large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
+Practical notes: unless you say otherwise you get a **small prose** review (a focused 600–1,000-word narrative) — say `bullets` for the denser list format, or `medium`/`large` when the question genuinely has many sub-questions or you want field coverage. The review always arrives in the chat itself, not as a file; ask for a file ("save it as markdown") only if you want one. And if the skill can't verify a source, it drops the source rather than citing it — so a thin sources list on a fringe topic is the skill working as intended, not failing.
 
 ## How it works
 
@@ -93,7 +94,7 @@ Practical notes: unless you say otherwise you get a **small** review (a fast, de
 2. **Search** angle by angle via paginated OpenAlex + PubMed queries (`scripts/find_papers.py`), with database-specific syntax, automatic audit logging, explicit publication-type screening, and optional backward/forward citation chasing; preprints are excluded and retractions flagged.
 3. **Read** every abstract that might be cited; pull open-access full text (`scripts/fetch_fulltext.py`, Europe PMC) for the load-bearing papers.
 4. **Verify** every entry against Crossref (`scripts/verify_citations.py`) — DOI, title, year, article type, and retraction status. A failure is a hard stop: the source is fixed or removed before writing.
-5. **Write** the draft citing ledger keys, then render citations and the reference list from the verified metadata (`scripts/format_references.py`), which refuses to run on any unverified key.
+5. **Write** the draft in the selected style — prose by default — citing ledger keys, then render citations and the reference list from the verified metadata (`scripts/format_references.py`), which refuses to run on any unverified key.
 6. **Illustrate when requested** from a structured evidence-and-copy specification: `scripts/build_figure_prompt.py` combines a reusable figure archetype, article/standalone render context and Arial-based journal-style profile, then the finished render passes text, data, science, composition and style QA. Stable figure IDs and `{{figure:id}}` tokens let `format_references.py` assign numbers, create clickable references, verify caption sources, and reject incomplete figure blocks. A separate downloader can reproduce the private 21-figure reference corpus used to audit the profiles without bundling copyrighted pixels.
 
 If the agent's Python sandbox has no network access (e.g. ChatGPT's code interpreter, claude.ai), `references/no-script-fallback.md` runs the same pipeline through the agent's web-fetch tool against the same APIs — the verification standard is identical.
@@ -174,7 +175,7 @@ python3 scripts/qa_review_pdf.py review.pdf --markdown review.md --render-dir re
 
 PDF output uses the same canonical HTML/CSS as the HTML artifact and renders it with pinned WeasyPrint 69.0: no Chrome, browser profile, network request, approximate renderer, or silent font fallback is involved. All figures are embedded before rendering and only `data:` resource loads are allowed. Writes are atomic, fixed-date builds are byte-for-byte deterministic in the locked runtime, remote or escaping figure paths are refused, and missing figures are hard failures. SVG figures render directly without a raster companion. The finished PDF must embed Charter and Helvetica Neue or the build fails without replacing the previous artifact. `--columns 1` gives a single-column layout; `--html-sidecar` explicitly adds HTML beside a PDF; plain `--out review.html` remains HTML-only.
 
-The QA command strictly checks the PDF object structure, A4 pages, safe actions, metadata, DOI and figure links, masthead, page numbering, and independently rasterizes every page with Poppler. It writes page PNGs plus six-page contact sheets into a new or empty directory; inspect every page before delivery. This independent render is what catches the class of pagination/painting failure that prompted the browser-free exporter.
+The QA command strictly checks the PDF object structure, A4 pages, safe actions, metadata, DOI and figure links, masthead, page numbering, and independently rasterizes every page with Poppler. It writes page PNGs plus six-page contact sheets into a new or empty directory; inspect every page before delivery. Orphan headings, headings separated from their first table or figure, sparse spill pages, and preventable blank regions are release blockers even when structural checks pass. This independent render is what catches the class of pagination/painting failure that prompted the browser-free exporter.
 
 ## How it's tested
 

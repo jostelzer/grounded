@@ -184,6 +184,72 @@ class PdfExportTests(unittest.TestCase):
             self.assertEqual(inspection["expected_figures"], 0)
             self.assertGreaterEqual(inspection["external_links"], 1)
 
+    def test_auto_hyphenation_uses_ascii_hyphens(self):
+        from pypdf import PdfReader
+
+        paragraph = " ".join([
+            "Messenger RNA vaccination separates the information that defines "
+            "an antigen from the machinery that manufactures and delivers it. "
+            "The central tension is programmability, while formulation and "
+            "immune context determine what the message can accomplish."
+        ] * 30)
+        markdown = (
+            "## Hyphenation review\n\n**Abstract** — A short summary.\n\n"
+            "### Long technical prose\n\n" + paragraph + "\n\n"
+            "**Sources**\n\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            pdf = os.path.join(tmp, "hyphenation.pdf")
+            self.write_review(markdown, pdf, tmp)
+            extracted = "\n".join(
+                (page.extract_text() or "") for page in PdfReader(pdf).pages)
+            self.assertNotIn("\u2010", extracted)
+            self.assertIn("-\n", extracted)
+
+    def test_spanning_table_and_figure_stay_with_their_headings_in_pdf(self):
+        from pypdf import PdfReader
+
+        filler = "\n\n".join([
+            "A deliberately repeated evidence paragraph fills the preceding "
+            "columns so the next display block reaches a page boundary. "
+            "The claim remains compact, cited, and suitable for pagination testing."
+        ] * 35)
+        markdown = (
+            "## Pagination review\n\n**Abstract** — A short summary.\n\n"
+            "### Setup\n\n" + filler + "\n\n"
+            "### Evidence certainty\n\n"
+            "| Outcome | Conclusion |\n"
+            "|---|---|\n"
+            "| Sleep | TABLE_PAYLOAD |\n\n" + filler + "\n\n"
+            "The pathway is summarized in [Figure 1](#fig-mechanism).\n\n"
+            "### Mechanism diagram\n\n"
+            '<a id="fig-mechanism"></a>\n'
+            "![A three-stage mechanism](figure.png)\n\n"
+            "**Figure 1. FIGURE_PAYLOAD.** The solid steps are observed; "
+            "the dashed step is inferred. "
+            "[Smith 2024](https://doi.org/10.1000/example)\n\n"
+            "**Sources**\n\n"
+            "**Smith 2024** A verified source. *Journal*. "
+            "https://doi.org/10.1000/example\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            pdf = os.path.join(tmp, "pagination.pdf")
+            self.write_review(markdown, pdf, tmp)
+            pages = [page.extract_text() or "" for page in PdfReader(pdf).pages]
+
+        def page_number(token):
+            matches = [index for index, text in enumerate(pages, 1) if token in text]
+            self.assertEqual(len(matches), 1, token)
+            return matches[0]
+
+        table_page = page_number("Evidence certainty")
+        self.assertGreater(table_page, 1)
+        self.assertEqual(table_page, page_number("TABLE_PAYLOAD"))
+        figure_page = page_number("Mechanism diagram")
+        self.assertGreater(figure_page, table_page)
+        self.assertEqual(figure_page, page_number("FIGURE_PAYLOAD"))
+
     @unittest.skipUnless(shutil.which("pdftoppm"), "Poppler is not installed")
     def test_independent_raster_qa_checks_every_page(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -228,8 +294,9 @@ class PdfExportTests(unittest.TestCase):
         from pypdf import PdfReader
 
         examples = (
-            ("image-mrna-vaccines.md", 7),
-            ("prose-large-mediterranean-diet.md", 14),
+            ("prose-small-blue-light-sleep.md", 2),
+            ("prose-image-mrna-vaccines.md", 6),
+            ("prose-large-mediterranean-diet.md", 11),
         )
         example_dir = os.path.join(ROOT, "examples")
         with tempfile.TemporaryDirectory() as tmp:
