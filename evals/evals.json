@@ -3,13 +3,13 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "Write me a small scientific review: does intermittent fasting improve glycaemic control in adults with type 2 diabetes compared with continuous calorie restriction?",
+      "prompt": "Write me a small scientific review, inline in chat: does intermittent fasting improve glycaemic control in adults with type 2 diabetes compared with continuous calorie restriction?",
       "expected_output": "A 600-1,000 word chat-native prose review with 10-20 verified peer-reviewed references, a citation-free Abstract, an Introduction posing one throughline, thematic sections of topic-sentence paragraphs that advance it, a cross-cutting Conclusion, head-to-head evidence with numbers, contrary evidence and safety where relevant, and in-text author-year citations hyperlinked to their DOIs plus a generated sources block with DOI links. No methods box or file.",
       "files": []
     },
     {
       "id": 1,
-      "prompt": "I'd like a medium-sized scientific review on creatine supplementation and cognitive performance in healthy adults — what's the evidence, who benefits, and what's still unresolved?",
+      "prompt": "I'd like a medium-sized scientific review right here in chat, on creatine supplementation and cognitive performance in healthy adults — what's the evidence, who benefits, and what's still unresolved?",
       "expected_output": "A 1,500-2,500 word chat-native prose review with 30-60 verified peer-reviewed references, a citation-free Abstract, an Introduction and 6-9 thematic sections organized around one throughline, at least one comparison table where studies share dimensions, explicit disagreement and limitations, a synthesizing Conclusion, and in-text author-year citations hyperlinked to their DOIs plus a generated sources block with DOI links.",
       "files": []
     },
@@ -22,18 +22,18 @@
     {
       "id": 3,
       "prompt": "Use the grounded skill: what does peer-reviewed research say about the causes and maintenance of chronic low-back pain?",
-      "expected_output": "Because neither a size nor a style was specified, the very first reply arrives within seconds and is a single short question (one or two lines) asking the user to pick a size (small/medium/large) and a style (scientific/popsci/bullets/ELI5), with the defaults marked. No searching, planning, or review writing happens before the user answers. The output format is not asked about.",
+      "expected_output": "Because no size, style, or output format was specified, the very first reply arrives within seconds and is a single short question (a few lines) asking the user to pick a size (small/medium/large), a style (scientific/popsci/bullets/ELI5), and an output format (inline chat/journal PDF/slides), with the defaults marked. No searching, planning, or review writing happens before the user answers.",
       "files": []
     },
     {
       "id": 4,
-      "prompt": "Give me a big scientific review of resistance training and bone mineral density after menopause.",
+      "prompt": "Give me a big scientific review, inline in chat, of resistance training and bone mineral density after menopause.",
       "expected_output": "A large-tier 3,500-6,000 word prose review with 70-150 verified peer-reviewed references, a citation-free Abstract, Introduction, 10-15 thematic sections that develop one throughline, a synthesizing Conclusion, multiple evidence tables where useful, citation chasing, opposing findings, generalisability, evidence quality, and research gaps. `Big` is treated exactly as the `large` alias.",
       "files": []
     },
     {
       "id": 5,
-      "prompt": "Write a small scientific review of medical image registration methods for longitudinal brain MRI.",
+      "prompt": "Write a small scientific review, inline in chat, of medical image registration methods for longitudinal brain MRI.",
       "expected_output": "A normal text-only small scientific review in inline chat with the default Abstract-to-Conclusion narrative structure. The word `image` appears as part of the scientific topic, not as a request for the journal PDF format, so no figures and no PDF are generated.",
       "files": []
     },
@@ -51,13 +51,13 @@
     },
     {
       "id": 8,
-      "prompt": "Use the grounded skill in small eli5 mode: does taking vitamin D actually prevent colds?",
+      "prompt": "Use the grounded skill in small eli5 mode, inline in chat: does taking vitamin D actually prevent colds?",
       "expected_output": "A small-tier step-by-step explanation in very simple English: a citation-free TL;DR, an opening paragraph anchored in something the reader already knows (a familiar fact, not an invented anecdote), then sections that each add exactly one new idea built only on earlier steps, with headings that read as the reader's own next questions, studies told as little stories with real details from the papers, the contrary evidence as its own honest step, and a closing hand-back the reader could repeat to a friend plus what scientists still need to find out. Flowing paragraphs throughout, no bullet-list body unless the user explicitly asks for bullets too. Everyday words, short sentences, no unexplained jargon, numbers explained in words. Same rigour as small - 10-20 verified peer-reviewed references, in-text author-year citations hyperlinked to their DOIs, contrary evidence included, and a generated sources block with DOI links. Uncertainty stated plainly, never dropped.",
       "files": []
     },
     {
       "id": 9,
-      "prompt": "Use the grounded skill, medium prose: does regular sauna use reduce cardiovascular risk?",
+      "prompt": "Use the grounded skill, medium prose in chat: does regular sauna use reduce cardiovascular risk?",
       "expected_output": "A narrative article of 1,500-2,500 body words: a citation-free Abstract answering the question, an Introduction motivating it, thematic sections of topic-sentence-led paragraphs where every empirical sentence carries an author-year DOI-linked citation, contrary evidence in explicit contrast paragraphs, a Conclusion synthesizing without new evidence, and a generated sources block with 30-60 verified peer-reviewed references. Same verification rigour as bullets; no filler; offers the journal-styled PDF export at the end.",
       "files": []
     },
@@ -69,13 +69,13 @@
     },
     {
       "id": 11,
-      "prompt": "Use the grounded skill in small bullet style: does dietary nitrate improve endurance performance?",
+      "prompt": "Use the grounded skill in small bullet style, inline in chat: does dietary nitrate improve endurance performance?",
       "expected_output": "An explicit bullet-style review with a citation-free TL;DR, punchline headings, bullet-only evidence bodies, and a generated Sources block. It does not use the default prose Abstract, Introduction, thematic paragraphs, or Conclusion. Search depth, verified peer-reviewed source counts, DOI-linked author-year citations, contrary evidence, and uncertainty remain unchanged.",
       "files": []
     },
     {
       "id": 12,
-      "prompt": "Use the grounded skill in small popsci style, like a Scientific American feature: is intermittent fasting actually better for weight loss?",
+      "prompt": "Use the grounded skill in small popsci style, inline in chat, like a Scientific American feature: is intermittent fasting actually better for weight loss?",
       "expected_output": "A small-tier magazine feature: an honest curiosity-driven headline recasting the question, a citation-free italic standfirst stating the question and the shape of the answer, a concrete cited lede drawn from a real study with no invented detail, a nut graf posing the throughline, evocative but honest crossheads, the contrary or null evidence given its own section as the story's turn, and a kicker that circles back and names what would settle the question. Jargon is named, glossed inline, and term-linked; numbers are human-scale with the exact statistic in parentheses; no hype vocabulary (breakthrough, game-changer, miracle); hedges from the sources survive. Same rigour as every style: 10-20 verified peer-reviewed references, every empirical sentence carrying an author-year DOI-linked citation, and a generated sources block.",
       "files": []
     },
@@ -88,7 +88,7 @@
     {
       "id": 14,
       "prompt": "Use the grounded skill in bullet style: does intermittent fasting improve insulin sensitivity?",
-      "expected_output": "The style (bullets) is specified but the size is not, so the very first reply arrives within seconds and is a single short question asking only for the size (small/medium/large, small marked as default) - it does not re-ask the style and does not ask about the output format. No searching or review writing happens before the user answers."
+      "expected_output": "The style (bullets) is specified but the size and output format are not, so the very first reply arrives within seconds and is a single short question asking only for the size (small/medium/large, small marked as default) and the output format (inline chat/journal PDF/slides, inline chat marked as default) - it does not re-ask the style. No searching or review writing happens before the user answers."
     }
   ]
 }

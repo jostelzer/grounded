@@ -4,7 +4,7 @@ Grounded is an agent skill that writes scientific literature reviews built **onl
 
 ## How to use
 
-Ask in plain language, naming a size and a style. If either is missing, Grounded asks you one quick question before it starts.
+Ask in plain language, naming a size, a style, and an output format. Whatever you leave out, Grounded asks you in one quick question before it starts.
 
 ### Answer a research question
 
