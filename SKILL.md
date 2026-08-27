@@ -30,12 +30,17 @@ The runtime check is a hard gate. If it fails, install the exact packages in `re
 The QA command is also mandatory before delivery. Its release manifest hashes the exact review, ledger, generated HTML, PDF, and every figure/spec/prompt. QA rehashes them, independently rebuilds the HTML, requires one canonical PDF, a visible terminal References heading, every expected DOI as both visible reference text and a URI annotation, canonical A4 metadata/fonts, and running furniture; it then rasterizes every page through Poppler and checks masthead, page number, body, clipping, column balance, and sparse terminal reference pages. Use a new or empty case-local `--render-dir` and inspect every generated page and contact sheet visually; the manifest records that one authoritative render set. A heading stranded at the bottom while its first paragraph/table/figure starts on the next page, an avoidably sparse spill page, or a large preventable blank region is release-blocking. Rebalance and rebuild without dropping evidence or shrinking type. `--columns 1` gives a single-column layout. For image PDFs, repeat `--figure-spec` and `--figure-prompt` once per figure. Full commands and contracts are in `references/quality-gates.md`. The review still goes in the chat as well.
 
 If the user explicitly asks for a **deck**, **slides**, a **presentation**, a
-**slide deck**, or a **journal club deck**, keep the full written review in the
-reply and build the deck PDF as an additional artifact. Never infer deck mode.
-Read `references/deck-guide.md` before storyboarding. Turn the verified synthesis
-into the selected style's size-appropriate arc, make every content-slide title a
-full-sentence cited claim, and create its full-bleed artwork with
-`render_context: slide`. Version 1 is 16:9 PDF only.
+**slide deck**, or a **journal club deck**, **the deck is the deliverable**: run
+the complete evidence pipeline, write the synthesis as an internal working
+draft, and deliver in chat the sharpened question, a 1–3 sentence plain answer,
+and the deck PDF — not a full styled review, unless the user explicitly asks
+for both. Never infer deck mode. Read `references/deck-guide.md` before
+storyboarding. Turn the verified synthesis into the selected style's
+size-appropriate arc, make every content-slide title a full-sentence cited
+claim, and create artwork with `render_context: slide` that carries the
+evidence itself — every slide must pass the guide's standalone test: claim,
+evidence, and firmness readable from that slide alone, with no presenter and no
+written review to lean on. Version 1 is 16:9 PDF only.
 
 ```bash
 python3 scripts/export_deck.py --check-pdf-runtime
@@ -46,14 +51,19 @@ python3 scripts/qa_deck_pdf.py review-deck.pdf --storyboard storyboard.json --le
 The exporter enforces the style arc, slide-count limits, verified DOI coverage,
 16:9 image geometry, data-URI-only assets, atomic writes, canonical fonts, and
 pinned WeasyPrint. Deck QA is mandatory: inspect every generated slide and
-contact sheet after the structural and Poppler gates pass. If no capable
-image-generation model is available, deliver the written review and state in one
-sentence that the deck could not be generated; do not fake it with text slides,
-SVG, or placeholders.
+contact sheet after the structural and Poppler gates pass, and apply the
+standalone test to each rendered content slide. If no capable image-generation
+model is available, the deck cannot exist — fall back to delivering the
+internal synthesis as a normal full review and state in one sentence that the
+deck could not be generated; do not fake it with text slides, SVG, or
+placeholders.
 
-The three explicit-only media/delivery modes are the standing exception:
-`image`, `mindmap`, and `deck` still deliver the written review in chat and add
-the requested media artifact. The media never replaces the review.
+The explicit-only media modes `image` and `mindmap` still deliver the written
+review in chat and add the requested media artifact — that media never replaces
+the review. `deck` is different: it is a delivery mode, and the deck replaces
+the delivered written review (chat carries the question, a 1–3 sentence plain
+answer, and the PDF). The evidence pipeline, verification, and citation
+standard never change in any mode.
 
 ## Defaults — do not ask, just do this
 
@@ -88,7 +98,7 @@ Style never changes search depth, source counts, citations, or verification. Sci
 
 - **Image** — only when the user explicitly asks for an `image`/`figures` as part of the output or names `image mode`. Do not infer it merely because an image might be helpful or because the research topic contains the word “image.” Combines with any size and style; the figure budget scales with size (small 1, medium up to 3, large up to 5 — caps, not quotas). Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`. For image generation, also read `references/figure-reference-analysis.md`, `references/figure-style-system.md`, `references/image-prompt-guide.md`, and `references/figure-captions.md`; build the prompt from a structured figure specification with `scripts/build_figure_prompt.py`. Place each figure after the section it supports, reference it from the body, and give it a style-matched caption with verified citations. Figures flow into the PDF export automatically.
 - **Mindmap** — only when the user explicitly asks for a `mindmap` as the output or names `mindmap mode`. Do not infer it merely because a diagram might be helpful. Run the **small** review pipeline, then create one rendered mindmap from the verified findings.
-- **Deck** — only for the explicit triggers `deck`, `slides`, “presentation”, “slide deck”, or “journal club deck”. Never infer it. Combines freely with every size and style, keeps the full written review in chat, and adds a verified 16:9 deck PDF. Follow `references/deck-guide.md`; generate one slide-context image per content slide, then run the canonical exporter and mandatory landscape QA.
+- **Deck** — only for the explicit triggers `deck`, `slides`, “presentation”, “slide deck”, or “journal club deck”. Never infer it. Combines freely with every size and style. The deck is the deliverable: chat carries the question, a 1–3 sentence plain answer, and the verified 16:9 PDF; the written synthesis stays an internal working draft. Every content slide must pass the standalone test — claim, evidence, and firmness readable from the slide alone. Follow `references/deck-guide.md`; generate one slide-context evidence image per content slide, then run the canonical exporter and mandatory landscape QA.
 
 If the user explicitly asks for several media modes, run one review at the selected tier and add only the named artifacts. Read `references/media-modes.md` for image or mindmap and `references/deck-guide.md` for deck before planning visuals. Media creation happens only after the evidence has been searched, read, verified, and synthesized.
 
@@ -162,13 +172,17 @@ Keep the validated author–year markdown as the review source: chat punctuation
 Skip this step unless the user explicitly requested image, mindmap, or deck mode. Follow the media references and build visuals only from the final verified synthesis. Save the figure spec and generated prompt; include directed `relationships` and local `abbreviations` where applicable. After generation, run `scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure-inspection.json`. It gates exact OCR text, relationship direction, abbreviations, prohibited effects, collisions, and effective PDF label size. Make one targeted repair; use a deterministic vector figure when text-heavy ImageGen output still cannot pass. Give every figure a stable ID, introduce it before the artwork, and end its style-matched caption with 2–5 verified citations.
 
 In deck mode, follow `references/deck-guide.md`. Use the same verified synthesis
-and figure pipeline, but set `render_context: slide` for every content image.
-Storyboard according to the selected style, keep claim titles and DOI citations
-in renderer chrome, build with `export_deck.py`, and run `qa_deck_pdf.py`. Inspect
-every slide raster. Deck mode does not permit the deterministic vector fallback:
-if a capable image model is unavailable or the images cannot pass QA, still
-deliver the written review and state in one sentence that the deck could not be
-generated.
+and figure pipeline, but set `render_context: slide` for every content image and
+make each image carry the evidence itself — comparisons, plotted numbers with
+intervals, labelled mechanisms, pictured study designs — so the slide passes
+the standalone test with no caption or body text to lean on. Storyboard
+according to the selected style, keep claim titles and DOI citations in
+renderer chrome, build with `export_deck.py`, and run `qa_deck_pdf.py`. Inspect
+every slide raster and apply the standalone test to each. Deck mode does not
+permit the deterministic vector fallback: if a capable image model is
+unavailable or the images cannot pass QA, fall back to delivering the internal
+synthesis as a normal full review and state in one sentence that the deck could
+not be generated.
 
 ## Rules that do not bend
 

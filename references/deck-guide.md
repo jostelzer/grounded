@@ -2,19 +2,43 @@
 
 Read this reference only when the user explicitly requests `deck`, `slides`, a
 `presentation`, a `slide deck`, or a `journal club deck`. Never infer deck mode
-because the topic is visual or because slides might be useful. Deck is a
-rendering layer over the completed Grounded review: angles, searching, reading,
-verification, evidence weighing, ledger construction, and the written synthesis
-do not change.
+because the topic is visual or because slides might be useful. Deck runs the
+complete Grounded evidence pipeline: angles, searching, reading, verification,
+evidence weighing, and ledger construction do not change. The synthesis is
+still written — as an internal working draft that drives the storyboard — but
+it is a working file, not the deliverable.
 
-The deliverable is the full written review in chat **plus** one verified PDF
-deck. The deck never replaces or abbreviates the written answer. Version 1 is
-16:9 PDF only: no 4:3 variant, PowerPoint, reveal.js, or browser renderer.
+**The deck is the deliverable.** The reader gets the slides, not a written
+review, so the slides must carry the entire answer. Deliver in chat: the
+sharpened question, a 1–3 sentence plain-language answer in the selected
+style's register (the TL;DR register), and the deck PDF. Do not paste a full
+styled review into the chat and do not treat the deck as figures attached to
+one; produce a delivered written review as well only when the user explicitly
+asks for both. Version 1 is 16:9 PDF only: no 4:3 variant, PowerPoint,
+reveal.js, or browser renderer.
+
+## The standalone test — the rule the whole mode hangs on
+
+A Grounded deck is read, not presented. Assume no presenter, no talk track, no
+chat context, and no other slide: a reader who opens the PDF at any content
+slide must be able to answer three questions from that slide alone —
+
+1. **What is claimed?** (the full-sentence title)
+2. **What is the evidence?** — who or what was studied, how many, what was
+   compared or measured, and what the numbers say (the artwork)
+3. **How firm is it?** — the uncertainty, visible in the artwork itself, with
+   the evidence chip as reinforcement, never as the only carrier.
+
+A slide that needs narration, the written synthesis, or a neighbouring slide to
+be understood is unfinished, no matter how attractive its artwork. Apply this
+test to every content slide before export and again on the rendered raster
+pages during QA; a failing slide is a release blocker.
 
 ## Evidence boundary
 
-- Start storyboarding only after the written review is complete and every cited
-  source has passed Crossref bibliographic verification and retraction screening.
+- Start storyboarding only after the internal written synthesis is complete and
+  every cited source has passed Crossref bibliographic verification and
+  retraction screening.
 - Build every slide from the final synthesis, including contrary findings,
   limitations, population boundaries, and uncertainty. Do not storyboard from
   preliminary search impressions.
@@ -25,12 +49,13 @@ deck. The deck never replaces or abbreviates the written answer. Version 1 is
   support for the slide's exact claim, not the topic as a whole.
 - Keep claim titles, citation labels, DOI links, evidence grades, and slide
   numbers as real HTML/PDF text. Never ask the image model to paint them.
-- Internal image text is limited to labels, values, units, intervals, legends,
-  and essential qualifiers under the normal figure QA contract. Numbers,
-  geometry, anatomy, arrows, and uncertainty must match the verified synthesis.
+- Internal image text is labels, values, units, intervals, legends, essential
+  qualifiers, and brief reading-guide annotations under the normal figure QA
+  contract. Numbers, geometry, anatomy, arrows, and uncertainty must match the
+  verified synthesis.
 - List only verified ledger keys in the storyboard. Normally `reference_keys`
-  contains every source cited in the written review; every per-slide citation
-  must be a member of that list.
+  contains every source cited in the internal synthesis; every per-slide
+  citation must be a member of that list.
 
 ## Slide budgets
 
@@ -161,6 +186,36 @@ Every content slide requires:
 
 ## Image specification
 
+**The artwork is the evidence, not an illustration of it.** Because the deck is
+the deliverable, each content slide's image must function as a complete,
+self-explanatory scientific figure — the kind a reader could study for thirty
+seconds and then explain to someone else. Atmospheric, decorative, or merely
+topical full-bleed artwork is a release failure however attractive: if the
+image tells the reader nothing the claim title didn't already say, it is
+decoration, and the slide fails the standalone test.
+
+Every content-slide image must therefore:
+
+- **show the evidence itself** — the comparison, the plotted numbers with units
+  and intervals, the mechanism with every part labelled, or the study design as
+  a simple pictured flow ("412 people got the drug → 405 got a dummy pill →
+  12 weeks → both groups measured"); pick the archetype that carries this, not
+  the prettiest one;
+- **define everything on the slide** — every axis, symbol, abbreviation, and
+  non-everyday term gets a local label, compact legend entry, or plain-word
+  gloss in the pixels; the reader has no caption, body text, or glossary to
+  fall back on;
+- **carry a brief reading-guide annotation where the encoding is not obvious**
+  — one short phrase telling the reader how to read the visual ("each dot is
+  one trial; whiskers show the range the true effect could be in"), placed
+  inside the image near what it explains;
+- **make the uncertainty visible in the artwork** — interval whiskers, dashed
+  hypothesized stages, a "based on 3 small studies" qualifier — not delegated
+  to the evidence chip alone;
+- **state the key numbers as numbers** — a slide whose claim contains a
+  quantity must show that quantity (with its interval where reported) in the
+  image, exactly matching the verified synthesis.
+
 Create one figure specification per content slide and run
 `scripts/build_figure_prompt.py` with `render_context: slide`. Reuse the normal
 style profile and the archetype that best carries the evidence. Slide context
@@ -172,15 +227,16 @@ The image can fill those zones with background colour or non-essential texture,
 but no label, value, arrow, legend, focal anatomy, or plotted mark may depend on
 them. Do not render a title banner, citation footer, evidence badge, masthead,
 slide number, journal logo, dashboard card, or presentation furniture. The
-image carries the visual story; the renderer carries the audit trail.
+image carries the evidence; the renderer carries the audit trail.
 
 Generate the complete image with a capable image-generation model and inspect
 it at full size and at its delivered PDF size. The normal text, data, science,
 composition, and style defects in `image-prompt-guide.md` remain release
-failures. Unlike ordinary image mode, deck mode has no deterministic SVG or
-placeholder fallback: every content slide is specifically an AI-generated
-image. If a capable image model is unavailable or a required render cannot pass
-QA, do not manufacture a text slide or reuse an unrelated figure.
+failures, and so does a failed standalone test. Unlike ordinary image mode,
+deck mode has no deterministic SVG or placeholder fallback: every content slide
+is specifically an AI-generated image. If a capable image model is unavailable
+or a required render cannot pass QA, do not manufacture a text slide or reuse
+an unrelated figure.
 
 ## Canonical page anatomy
 
@@ -228,15 +284,21 @@ Structural QA must pass all of these:
 Poppler raster QA must then inspect every landscape page for painted masthead,
 orange chip, counter, claim, image body, citation footer, evidence chip,
 reference text, consistent dimensions, and chrome clipping at both side edges.
-Inspect every individual PNG and every contact sheet visually. Text touching an
+Inspect every individual PNG and every contact sheet visually, and apply the
+standalone test to each rendered content slide: from that page alone, the
+claim, the evidence behind it (who or what, how many, what was compared, what
+the numbers say), and its firmness must all be readable. Text touching an
 edge, a clipped or covered label, a missing chrome element, a blank image, an
-unreadable reference column, a malformed DOI label, or any image defect under
-the figure QA contract blocks delivery. Repeat full-deck raster inspection after
-every layout or storyboard change.
+unreadable reference column, a malformed DOI label, any image defect under
+the figure QA contract, or a slide that fails the standalone test blocks
+delivery. Repeat full-deck raster inspection after every layout or storyboard
+change.
 
 ## Fallback
 
-If no capable image-generation model is available, deliver the full written
-review and add one sentence: “The deck could not be generated because a capable
-image-generation model was unavailable.” Do not provide a prompt, outline,
-placeholder deck, text-only substitute, SVG reconstruction, or unverified PDF.
+If no capable image-generation model is available, the deck cannot exist — so
+the deliverable falls back to the written review: deliver the internal
+synthesis as a normal full review in the selected style and size, and add one
+sentence: “The deck could not be generated because a capable image-generation
+model was unavailable.” Do not provide a prompt, outline, placeholder deck,
+text-only substitute, SVG reconstruction, or unverified PDF.

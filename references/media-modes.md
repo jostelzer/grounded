@@ -1,6 +1,6 @@
 # Experimental media modes
 
-Read this reference when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small scientific when none is named); mindmap mode uses the small pipeline and the selected writing style (scientific when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard. An explicitly requested `deck`, `slides`, presentation, slide deck, or journal club deck follows the same shared evidence boundary below but uses the complete workflow in `deck-guide.md`.
+Read this reference when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small scientific when none is named); mindmap mode uses the small pipeline and the selected writing style (scientific when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard. An explicitly requested `deck`, `slides`, presentation, slide deck, or journal club deck follows the same shared evidence boundary below but uses the complete workflow in `deck-guide.md` — and differs in delivery: the deck is the deliverable, with the written synthesis kept as an internal working draft rather than delivered in chat.
 
 Before creating media, also read `figure-reference-analysis.md`,
 `figure-style-system.md`, `image-prompt-guide.md`, and `figure-captions.md`.
@@ -21,7 +21,7 @@ an improvised prose prompt.
 
 ## Deck mode
 
-Deck is explicit-only, combines with every size and style, and adds a 16:9 PDF to the complete written review. Read `deck-guide.md` before planning it. Every content slide uses `render_context: slide`, a full-sentence cited claim in real-text chrome, one full-bleed generated image, and a `strong`/`mixed`/`limited` evidence grade. The canonical exporter adds title and two-column reference slides from the verified ledger; the dedicated QA inspects every landscape page and its live DOI links. Deck has no deterministic or text-slide fallback: when no capable image-generation model is available, deliver the written review and state in one sentence that the deck could not be generated.
+Deck is explicit-only, combines with every size and style, and is itself the deliverable: chat carries the question, a 1–3 sentence plain answer, and the verified 16:9 PDF, while the written synthesis stays an internal working draft. Read `deck-guide.md` before planning it. Every content slide uses `render_context: slide`, a full-sentence cited claim in real-text chrome, one generated image that carries the evidence itself, and a `strong`/`mixed`/`limited` evidence grade — and must pass the guide's standalone test: claim, evidence, and firmness readable from the slide alone. The canonical exporter adds title and two-column reference slides from the verified ledger; the dedicated QA inspects every landscape page and its live DOI links. Deck has no deterministic or text-slide fallback: when no capable image-generation model is available, fall back to delivering the internal synthesis as a normal full review and state in one sentence that the deck could not be generated.
 
 ## Image mode
 

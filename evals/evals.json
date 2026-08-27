@@ -78,6 +78,12 @@
       "prompt": "Use the grounded skill in popsci style, like a Scientific American feature: is intermittent fasting actually better for weight loss?",
       "expected_output": "A small-tier magazine feature: an honest curiosity-driven headline recasting the question, a citation-free italic standfirst stating the question and the shape of the answer, a concrete cited lede drawn from a real study with no invented detail, a nut graf posing the throughline, evocative but honest crossheads, the contrary or null evidence given its own section as the story's turn, and a kicker that circles back and names what would settle the question. Jargon is named, glossed inline, and term-linked; numbers are human-scale with the exact statistic in parentheses; no hype vocabulary (breakthrough, game-changer, miracle); hedges from the sources survive. Same rigour as every style: 10-20 verified peer-reviewed references, every empirical sentence carrying an author-year DOI-linked citation, and a generated sources block.",
       "files": []
+    },
+    {
+      "id": 13,
+      "prompt": "Use the grounded skill: give me a journal club deck on whether metformin slows aging.",
+      "expected_output": "The deck is the deliverable: the chat reply contains the sharpened question, a 1-3 sentence plain answer, and the verified 16:9 deck PDF - no full styled review pasted into chat (the synthesis remains an internal working draft). Every content slide passes the standalone test: from the slide alone a reader gets the claim (full-sentence cited title), the evidence behind it (who or what was studied, how many, what was compared, what the numbers say - shown in the image with units, intervals, local labels, plain-word glosses, and brief reading-guide annotations where the encoding is not obvious), and how firm it is (uncertainty visible in the artwork, with the evidence chip as reinforcement). No decorative or merely topical full-bleed images. Real-text chrome carries claim titles, live DOI citations, evidence grades, and counters; title and reference slides are pure text; slide budgets and the scientific journal-club arc are respected; all sources verified through Crossref.",
+      "files": []
     }
   ]
 }
