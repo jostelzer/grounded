@@ -86,6 +86,7 @@ This register applies to the **bullet and scientific styles**. Popsci and ELI5 r
 - **Calibrated strength**, per `evidence-weighing.md` — "probably", "may", "unclear" tied to actual evidence quality. No "proven", no bare "significant".
 - **No hedging filler**: drop "it is important to note", "interestingly", "it should be emphasised". But do not confuse filler with synthesis: a sentence that weighs or connects evidence ("Taken together, the effect appears only at high doses"; "This suggests the marker, not the mechanism, was at fault") is content, not filler. Filler tells the reader to pay attention; synthesis tells them what to conclude.
 - **Active and direct.** Name who found what.
+- **Unstack compound modifiers on repeat use.** Hyphenated noun stacks ("linoleic-acid-rich oils", "recovered-data analyses of older randomized trials") are precise once and exhausting on repetition: after the first use, prefer the unpacked form ("oils rich in linoleic acid", "the recovered trial data") or the short name established at first mention. Never chain three or more hyphenated modifiers before one noun.
 - Define an abbreviation once, at first use.
 
 ## Scientific style (default; alias: prose)
@@ -97,22 +98,35 @@ Structure:
 ```
 ## <The question>
 
-**Abstract** — <120–250 words, citation-free, plain language, answering the question:
-the finding, its size, its certainty, and the main caveat. This replaces the TL;DR.>
+**Abstract** — <120–180 words, citation-free, plain language, in exactly four moves:
+(1) the verdict, stated affirmatively in the first sentence; (2) the strongest
+supporting evidence, with at least one number (an effect size, interval, or count);
+(3) the strongest contrary evidence and, in a clause, why it does or does not
+overturn the verdict; (4) the boundary — where the verdict stops applying, and the
+practical line. An argument with a hierarchy, never a one-sentence-per-section
+inventory of the review. State the verdict on its own terms, not as a negation of
+the claim being examined ("X lowers LDL when it replaces Y", not "X is not
+supported as a hazard"). This replaces the TL;DR.>
 
 ### Introduction
 <Why the question matters, what is claimed or contested, and the scope — 1–3 paragraphs.
 This is the one style where scene-setting is content, not preamble. No methods narration.
 End by posing the throughline: the one tension or question the whole review turns on,
-and — if it helps the reader — the sub-questions the sections will answer in order.>
+and — if it helps the reader — the sub-questions the sections will answer in order.
+Pose the question the Conclusion will actually answer: if drafting reveals that the
+sections argue a different, better question than the Introduction posed, rewrite the
+Introduction to pose that one.>
 
-### <Short thematic heading, e.g. "Cardiovascular outcomes">
+### <Claim heading — a short full sentence stating what the section shows,
+e.g. "Blood lipids provide the clearest randomized signal">
 <Paragraphs. See rules below.>
 
 ### Conclusion
 <Name the cross-cutting pattern plainly — the one claim the sections demonstrated
 together — then what the evidence supports at what confidence, and the specific
-evidence that would settle what is open. No new evidence introduced here.>
+evidence that would settle what is open. No new evidence introduced here, and no
+re-summary: any sentence that could sit in the Abstract unchanged gets cut. The
+Conclusion answers the throughline in new words or it is not finished.>
 
 **Sources**
 <same generated sources block as always>
@@ -122,14 +136,15 @@ Narrative arc — what makes the article read as an argument rather than a list:
 
 - **Find the throughline before drafting.** One sentence naming the tension or pattern the whole review turns on ("the biology is solid, but the sleep effect appears only at high doses"). The Introduction poses it, every section advances it, the Conclusion answers it. If no single sentence covers the review, the plan is a taxonomy, not an argument — reorganize until it is one.
 - **Land every section.** After the evidence, one plain sentence saying what the section adds to the throughline, ideally handing off to the next section ("So the mechanism is real; whether it costs sleep is a separate question — the one the exposure trials answer next."). A section that stops on its last study is unfinished.
-- **Call back across sections.** When a pattern repeats, say so at its second appearance ("the same cohort-versus-trial gap seen for dementia"). One or two callbacks per review are what make it one text rather than stacked summaries.
+- **Call back across sections.** When a pattern repeats, say so at its second appearance ("the same cohort-versus-trial gap seen for dementia"). One or two callbacks per review are what make it one text rather than stacked summaries. The same discipline caps repetition: make each caveat or confounder fully once, where it bites hardest; every later appearance is a one-clause callback, never a restatement.
+- **Never name the machinery.** The argument's construction stays invisible: no "throughline", "narrative arc", "this section shows/adds", "as discussed above", or any sentence about the review's own structure. Advance the throughline; do not mention it.
 - **Interpretive sentences are content, not filler.** Roughly one citation-free sentence per paragraph that weighs or connects the evidence ("The mechanism is real, but the marker does not establish sleep loss."). These carry the argument; the banned-filler list bans throat-clearing, not judgment.
-- **Vary the rhythm, and keep it easy to read.** Not every sentence is finding + (design, n) + citation — follow a long evidence sentence with a short verdict sentence. Prefer two clear sentences over one packed one; plain words and short sentences outrank density everywhere the numbers allow it.
+- **Vary the rhythm, and keep it easy to read.** Not every sentence is finding + (design, n) + citation — follow a long evidence sentence with a short verdict sentence. Never more than two consecutive sentences in the same *study–verb–finding–citation* shape ("A meta-analysis of X found… A separate synthesis found… Another review found…" is an inventory, not prose): after two evidence sentences, the next sentence weighs, contrasts, or concludes. Prefer two clear sentences over one packed one; plain words and short sentences outrank density everywhere the numbers allow it.
 
 Paragraph craft:
 
 - **The register is that of a peer-reviewed narrative review** — objective, precise, and plain. Open sections with the finding, not with scene-setting flourishes; the Introduction motivates the question with facts (prevalence, contested claims, stakes), never with journalistic hooks. Calibrated verbs ("reduces", "is associated with", "may"), quantities over adjectives, no metaphors, no first person.
-- **The punchline moves from the heading into the topic sentence.** Headings become short thematic labels; every paragraph opens with the claim it defends, then weaves in the evidence — numbers, intervals, designs — with the same `Author 2026` DOI links inline.
+- **Headings are claim sentences.** Each section heading is a short full sentence stating what the section shows ("Blood lipids provide the clearest randomized signal"), calibrated to the evidence — the headings alone should read as the skeleton of the argument. Structural headings (Introduction, Conclusion) stay as labels. Every paragraph still opens with the claim it defends, then weaves in the evidence — numbers, intervals, designs — with the same `Author 2026` DOI links inline; the heading states the section's claim, the topic sentences carry the paragraphs' own.
 - One claim per paragraph, 3–6 sentences. A paragraph that needs eight sentences is two claims.
 - Transitions carry the argument between paragraphs and sections ("The picture changes in older adults…"), but every empirical sentence still carries its citation.
 - Contrary evidence gets its own paragraphs with explicit contrast ("Against this…", "The null results cluster where…").
@@ -288,7 +303,7 @@ Place every citation immediately after the sentence, clause, quotation, figure-c
 0. The review is in the reply, not in a file (unless a file was requested).
 1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited; in ELI5, citations sit naturally beside the sentence or short claim cluster they support. In chat/Markdown, every author–year link precedes terminal punctuation and no sentence begins with a citation.
 2. In bullet style, headings alone tell the argument; in scientific, popsci, and ELI5 styles, topic sentences and section landings advance one throughline.
-3. The Abstract (scientific), standfirst (popsci), or TL;DR (bullets/ELI5) has no citations; the Abstract and TL;DR answer the question in the first sentence, and the standfirst states the question and the shape of the answer.
+3. The Abstract (scientific), standfirst (popsci), or TL;DR (bullets/ELI5) has no citations; the Abstract and TL;DR answer the question in the first sentence, and the standfirst states the question and the shape of the answer. The scientific Abstract follows the four-move shape (verdict, supporting evidence with at least one number, contrary evidence weighed, boundary), states its verdict affirmatively, and never inventories the sections one sentence each.
 4. Opposing evidence appears, and is contrasted rather than blended.
 5. A table exists wherever several studies share dimensions.
 6. Numbers match sources; intervals included where reported.
@@ -296,7 +311,7 @@ Place every citation immediately after the sentence, clause, quotation, figure-c
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded.
 8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut 10% more.
-9b. In scientific style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly. In ELI5, the explanation is a staircase: it opens from something the reader already knows, each section adds one new idea built only on earlier steps with no forward references, the contrary evidence gets its own step, the closing hand-back passes the tell-a-friend test, and bullet-list bodies are absent unless the user requested them.
+9b. In scientific style, the review has an arc: the Introduction poses the tension the Conclusion actually answers, every section heading is a calibrated claim sentence, every section ends on a plain synthesis sentence rather than its last study — and most of those landings hand off to the next section, at least one cross-section callback appears, no caveat is restated in full more than once, no machinery word ("throughline", "narrative arc", "this section") appears in the text, no sentence chains more than four citations, and the Conclusion names the cross-cutting pattern without repeating the Abstract. In bullet style, a recurring cross-section pattern is named once explicitly. In ELI5, the explanation is a staircase: it opens from something the reader already knows, each section adds one new idea built only on earlier steps with no forward references, the contrary evidence gets its own step, the closing hand-back passes the tell-a-friend test, and bullet-list bodies are absent unless the user requested them.
 9c. In popsci style: the headline is honest; the lede is a concrete, cited close-up with no invented detail; the nut graf poses the throughline; the turn gets its own crosshead; the kicker circles back and looks forward; no hype vocabulary appears; and every hedge in the sources survives into the piece — the certainty matches the evidence exactly.
 10. In the journal PDF format, every required figure is rendered,
     evidence-grounded, legible, and inspected; has a unique stable ID; is

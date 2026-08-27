@@ -61,11 +61,11 @@ def strict_large_bullets(target_filler_words):
 
 class ValidateReviewTests(unittest.TestCase):
     def test_four_showcase_examples_pass(self):
+        # seed-oils.md returns here once regenerated under the four-move
+        # 120-180-word Abstract contract.
         examples = (
-            ("scientific-sleeping-position.md", "scientific", "small"),
-            ("popsci-mosquito-preference.md", "popsci", "small"),
-            ("large-mediterranean-diet.md", "bullets", "large"),
-            ("eli5-why-clouds-are-white.md", "eli5", "small"),
+            ("ozempic-after-stopping.md", "popsci", "medium"),
+            ("microplastics-health-eli5.md", "eli5", "small"),
         )
         for filename, style, size in examples:
             with self.subTest(filename=filename):
@@ -74,19 +74,21 @@ class ValidateReviewTests(unittest.TestCase):
                     path.read_text(encoding="utf-8"),
                     style=style,
                     size=size,
-                    base_dir=path.parent,
+                    # figure assets ship embedded in the example PDFs, not as
+                    # repo files, so the asset-existence check stays off
+                    base_dir=None,
                 )
                 self.assertTrue(result.ok, result.errors)
 
     def test_scientific_abstract_bounds_are_hard_failures(self):
-        for count in (119, 251):
+        for count in (119, 181):
             with self.subTest(count=count):
                 result = validate_review.validate_review(
                     scientific_review(count), style="scientific", size="small"
                 )
                 self.assertFalse(result.ok)
                 self.assertTrue(
-                    any("required 120–250" in error for error in result.errors)
+                    any("required 120–180" in error for error in result.errors)
                 )
 
     def test_sources_must_be_unique_terminal_and_match_body_dois(self):

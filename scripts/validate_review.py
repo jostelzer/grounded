@@ -447,9 +447,9 @@ def validate_review(
             errors.append("scientific style requires a citation-free Abstract")
         else:
             abstract_words = len(_words(abstract.group(1)))
-            if not 120 <= abstract_words <= 250:
+            if not 120 <= abstract_words <= 180:
                 errors.append(
-                    f"scientific Abstract is {abstract_words} words; required 120–250"
+                    f"scientific Abstract is {abstract_words} words; required 120–180"
                 )
             if _dois(abstract.group(1)):
                 errors.append("scientific Abstract must not contain citations")

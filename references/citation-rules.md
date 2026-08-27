@@ -40,7 +40,7 @@ Fabricated, misattributed, or retracted citations are the failure mode that dest
 - **Cite what the source actually says.** Check the abstract or full text for the specific claim; do not cite a paper for a point it mentions only in its introduction.
 - **Secondary citation** ("as reported in [2]") is acceptable only when the primary source is inaccessible; say so.
 - **Date-sensitive claims**: when citing a review for the state of the field, note its search date if a later major study changes the picture.
-- **Multiple citations**: list the strongest first (the large trial, the most recent meta-analysis); avoid citing eight papers for one sentence when two carry the point.
+- **Multiple citations**: list the strongest first (the large trial, the most recent meta-analysis). At most four citations on one sentence — a longer chain is a list wearing a sentence's clothing. If more sources genuinely need to appear, attribute specific findings to specific sources across several sentences, or line them up in a table with a citation per row.
 - **Self-consistency**: the same finding should carry the same citation everywhere it appears.
 
 ## Verification workflow
