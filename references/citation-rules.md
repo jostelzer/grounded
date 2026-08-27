@@ -5,7 +5,7 @@ Fabricated, misattributed, or retracted citations are the failure mode that dest
 ## The ledger is the only source of citations
 
 - `sources.json` holds every candidate source with its DOI, metadata, abstract, the query that found it, and a verification record.
-- A paper is citable only if it is in the ledger, its peer-review status is appropriate for the field, and `verify_citations.py` has marked it `verified` after checking both its Crossref bibliographic record and Crossref's publisher/Retraction Watch update metadata for retraction signals. Crossref type and index inclusion do not independently prove peer review.
+- A paper is citable only if it is in the ledger, its peer-review status is appropriate for the field, and `verify_citations.py` has marked it `verified` after checking both its Crossref bibliographic record and Crossref's publisher/Retraction Watch update metadata for integrity signals (retraction, withdrawal, removal, expression of concern). Crossref type and index inclusion do not independently prove peer review.
 - If you remember a paper that belongs in the review, find it with `find_papers.py` (search its title or distinctive phrases). If the index cannot find it, or the DOI does not verify, it is not cited. No exceptions for famous papers.
 - `format_references.py` builds the reference list from the Crossref metadata stored at verification. You never type an author list, journal, volume, or page by hand.
 
@@ -51,7 +51,7 @@ Fabricated, misattributed, or retracted citations are the failure mode that dest
 
 If a source fails verification: check the DOI for typos; search the title again to get the correct DOI; if it cannot be verified, remove the citation and, if the claim depended on it, the claim.
 
-The ledger keeps two distinct fields under `verification`: `bibliographic_status` and `retraction_status`. Both come from the same authoritative Crossref work record. `retraction_status` is `clear`, `flagged`, or `not_checked`; a citation is citable only when the bibliographic status is `verified` and retraction status is `clear`. The saved `retraction_signals` identify the Crossref relation (`updated-by`, `update-to`, or a defensive notice-title match), linked DOI, and metadata source.
+The ledger keeps two distinct fields under `verification`: `bibliographic_status` and `retraction_status`. Both come from the same authoritative Crossref work record. `retraction_status` is `clear`, `flagged`, or `not_checked`; it is `flagged` for retractions, withdrawals, removals, and expressions of concern, and a citation is citable only when the bibliographic status is `verified` and retraction status is `clear`. The saved `retraction_signals` identify the severity, the Crossref relation (`updated-by`, `update-to`, or a defensive notice-title match), linked DOI, and metadata source. Corrigenda and errata never flag the entry; they are saved separately as `correction_notices` and rendered as a linked "Correction:" note on the reference entry.
 
 ## Styles
 
@@ -67,4 +67,4 @@ The canonical GROUNDED journal PDF is not produced with `--style nature`; its re
 
 ## What to tell the reader
 
-Reviews carry no methods section, so the sources block with its DOIs is the audit trail — every line is resolvable. Say nothing when verification passed. Bibliographic failures, unavailable Crossref checks, and retraction flags are fixed or removed, not published with warning symbols.
+Reviews carry no methods section, so the sources block with its DOIs is the audit trail — every line is resolvable. Say nothing when verification passed. Bibliographic failures, unavailable Crossref checks, and integrity flags are fixed or removed, not published with warning symbols; the only annotation a reference entry may carry is the factual "Correction:" note for a recorded corrigendum or erratum.

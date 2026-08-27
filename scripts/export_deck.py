@@ -778,7 +778,7 @@ def build_html(
             f"<span>Verified sources {first}--{last}</span></div>"
             f'<div class="reference-grid {density}">{columns}</div>'
             '<footer class="reference-footer">'
-            "<span>Bibliography and retraction status verified via Crossref</span>"
+            "<span>Bibliography and integrity status verified via Crossref</span>"
             f"<span>{len(document.reference_keys)} sources · {document.size} deck</span>"
             "</footer></section>"
         )

@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """
-Verify that every source you intend to cite is real and bibliographically correct, then screen it for retraction signals.
+Verify that every source you intend to cite is real and bibliographically correct, then screen it for integrity signals.
 
 Checks each DOI against Crossref, whose REST metadata includes publisher updates and
-Retraction Watch records. Bibliographic verification and retraction screening are
+Retraction Watch records. Bibliographic verification and integrity screening are
 recorded separately. A citation passes only if:
   1. the DOI resolves in Crossref,
   2. the Crossref record is a journal article (or a flagged-acceptable type),
   3. the title in your ledger matches the registered title (fuzzy, to catch wrong-DOI errors),
   4. the year matches within 1 (online-first vs issue date),
-  5. Crossref's ``updated-by`` and ``update-to`` metadata contains no retraction signal.
+  5. Crossref's ``updated-by`` and ``update-to`` metadata contains no retraction,
+     withdrawal, removal, or expression-of-concern signal.
+Correction notices (corrigenda/errata) do not block, but are recorded on the entry
+as ``correction_notices`` and surfaced as warnings so the correction can be checked
+against the cited result.
 
 Usage:
   python3 verify_citations.py --ledger sources.json                 # verify all entries
@@ -87,23 +91,49 @@ def crossref(doi):
     return m, None
 
 
-def crossref_retraction_signals(m):
-    """Return normalized retraction signals from a Crossref work record.
+# Severity classes for Crossref update signals. Retractions, withdrawals, and
+# removals all mean the paper was pulled; an expression of concern means the
+# journal has formally cast doubt on it. Both block citation. Corrections
+# (corrigendum/erratum) are recorded but do not block.
+_RETRACTION_RE = re.compile(r"retract|withdraw|remov")
+_CONCERN_RE = re.compile(r"concern")
+_CORRECTION_RE = re.compile(r"corrigend|erratum|correction")
+
+
+def classify_update(relation_type, label):
+    """Map a Crossref update type/label pair to a severity, or None to ignore it."""
+    text = f"{relation_type} {label}"
+    if _RETRACTION_RE.search(text):
+        return "retraction"
+    if _CONCERN_RE.search(text):
+        return "concern"
+    if _CORRECTION_RE.search(text):
+        return "correction"
+    return None
+
+
+def crossref_update_signals(m):
+    """Return normalized integrity signals from a Crossref work record.
 
     Crossref exposes a retracted original through ``updated-by`` and exposes a
     retraction notice through ``update-to``. Records can originate with either the
     publisher or Crossref's integrated Retraction Watch data, so both directions and
-    all sources must be inspected.
+    all sources must be inspected. Each signal carries a ``severity`` of
+    'retraction' (retraction/withdrawal/removal), 'concern' (expression of
+    concern), or 'correction' (corrigendum/erratum); unrelated update types
+    (e.g. new versions) are ignored.
     """
     signals = []
     for field in ("updated-by", "update-to"):
         for update in m.get(field) or []:
             relation_type = str(update.get("type") or "").strip().lower()
             label = str(update.get("label") or "").strip().lower()
-            if not (relation_type.startswith("retract") or label.startswith("retract")):
+            severity = classify_update(relation_type, label)
+            if severity is None:
                 continue
             signals.append({
                 "relation": field,
+                "severity": severity,
                 "doi": norm_doi(update.get("DOI")),
                 "type": update.get("type"),
                 "label": update.get("label"),
@@ -121,6 +151,7 @@ def crossref_retraction_signals(m):
     ):
         signals.append({
             "relation": "title",
+            "severity": "retraction",
             "doi": norm_doi(m.get("DOI")),
             "type": "retraction-notice",
             "label": "Clear retraction-notice title",
@@ -179,13 +210,29 @@ def verify_one(entry):
             warnings.append("preprint / posted content — not peer reviewed; cite only if explicitly labelled as a preprint")
         else:
             bibliographic_issues.append(f"type '{ctype}' is not a journal article")
-    retraction_signals = crossref_retraction_signals(m)
-    if retraction_signals:
-        origins = sorted({signal["source"] for signal in retraction_signals})
-        relations = sorted({signal["relation"] for signal in retraction_signals})
+    update_signals = crossref_update_signals(m)
+    retraction_signals = [s for s in update_signals if s["severity"] in ("retraction", "concern")]
+    correction_notices = [s for s in update_signals if s["severity"] == "correction"]
+    if any(s["severity"] == "retraction" for s in retraction_signals):
+        origins = sorted({s["source"] for s in retraction_signals})
+        relations = sorted({s["relation"] for s in retraction_signals})
         retraction_issues.append(
-            "RETRACTED or retraction notice in Crossref metadata "
+            "RETRACTED, withdrawn, or removed per Crossref metadata "
             f"(relation: {', '.join(relations)}; source: {', '.join(origins)}) — do not cite as evidence"
+        )
+    elif retraction_signals:
+        origins = sorted({s["source"] for s in retraction_signals})
+        relations = sorted({s["relation"] for s in retraction_signals})
+        retraction_issues.append(
+            "EXPRESSION OF CONCERN in Crossref metadata "
+            f"(relation: {', '.join(relations)}; source: {', '.join(origins)}) — the journal has "
+            "formally cast doubt on this paper; do not cite as evidence"
+        )
+    if correction_notices:
+        notice_dois = ", ".join(sorted({s["doi"] for s in correction_notices if s["doi"]})) or "no DOI deposited"
+        warnings.append(
+            f"WARN: published correction ({notice_dois}) — check the correction does not "
+            "affect the result you cite"
         )
     retraction_status = "flagged" if retraction_signals else "clear"
     canonical = {
@@ -201,6 +248,7 @@ def verify_one(entry):
         "retraction_status": retraction_status,
         "retraction_sources": {"crossref": retraction_status},
         "retraction_signals": retraction_signals,
+        "correction_notices": correction_notices,
     }
     return ("failed" if hard_fail else "verified"), reasons, canonical, details
 
@@ -258,11 +306,12 @@ def main():
         with open(args.ledger, "w") as fh:
             json.dump(ledger, fh, indent=2, ensure_ascii=False)
     n = len(entries)
-    print(f"\n{n - failed}/{n} passed Crossref bibliographic and retraction checks.")
+    print(f"\n{n - failed}/{n} passed Crossref bibliographic and integrity checks.")
     if failed:
         print(f"{failed} FAILED — fix or remove before citing.")
     elif not failed:
-        print("Crossref retraction screening complete (publisher and Retraction Watch update metadata).")
+        print("Crossref integrity screening complete (retractions, withdrawals, expressions of "
+              "concern, and correction notices; publisher and Retraction Watch update metadata).")
     sys.exit(1 if failed else 0)
 
 

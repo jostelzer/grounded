@@ -167,7 +167,7 @@ Read every abstract you might cite. Pull load-bearing full texts into `fulltexts
 
 ### 4. Verify
 
-Run `scripts/verify_citations.py --ledger sources.json`. It uses the Crossref record for both bibliographic verification (DOI, title, year, and article type) and retraction screening. Crossref integrates publisher updates and Retraction Watch records; the verifier inspects both `updated-by` on a retracted original and `update-to` on a retraction notice. A mismatch, unavailable Crossref record, or retraction signal is a hard failure and the source is removed or fixed before writing. OpenAlex is not part of citation verification.
+Run `scripts/verify_citations.py --ledger sources.json`. It uses the Crossref record for both bibliographic verification (DOI, title, year, and article type) and integrity screening. Crossref integrates publisher updates and Retraction Watch records; the verifier inspects both `updated-by` on a flagged original and `update-to` on a notice. A mismatch, unavailable Crossref record, retraction, withdrawal, removal, or expression-of-concern signal is a hard failure and the source is removed or fixed before writing. A corrigendum/erratum does not block; it is saved as `correction_notices` and the reference entry gains a linked "Correction:" note — check the correction does not affect the result you cite. OpenAlex is not part of citation verification.
 
 ### 5. Write the draft
 
@@ -205,7 +205,7 @@ not be generated.
 ## Rules that do not bend
 
 - **Peer-reviewed literature only.** No preprints, blogs, news, or grey literature as evidence. Search eligibility and Crossref type are useful proxies, not a universal peer-review registry; check the venue or article when status is ambiguous, especially for conference proceedings and unfamiliar journals. If a preprint is the only source for something important, it may be mentioned once, labelled "(preprint, not peer reviewed)", and never load-bearing. Retracted papers are cited only to say they were retracted.
-- **Never claim a check you did not perform.** "Verified" means the DOI resolved in Crossref; title, year, and source type matched; and Crossref's publisher/Retraction Watch update metadata showed no retraction signal. If Crossref is unavailable, verification is incomplete and the citation does not pass. OpenAlex search availability is irrelevant to this check.
+- **Never claim a check you did not perform.** "Verified" means the DOI resolved in Crossref; title, year, and source type matched; and Crossref's publisher/Retraction Watch update metadata showed no retraction, withdrawal, removal, or expression-of-concern signal. If Crossref is unavailable, verification is incomplete and the citation does not pass. OpenAlex search availability is irrelevant to this check.
 - **No citation from memory.** If you remember a paper, find it with the search script and verify it; if it cannot be found, it does not exist for this review. This applies to "classic" papers too.
 - **Read before you cite.** Abstract minimum; full text for anything the argument leans on.
 - **Represent the whole literature, not the convenient part.** If studies disagree, say so and say why they might. If the best evidence is weak, say the evidence is weak. A review that only tells one side is advocacy.
@@ -217,7 +217,7 @@ not be generated.
 ## Bundled resources
 
 - `scripts/find_papers.py` and `scripts/audit_search.py` — paginated discovery, structured funnel records, publication screening, two-provider citation chasing, and tier coverage audit.
-- `scripts/verify_citations.py` — Crossref bibliographic and retraction verification using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
+- `scripts/verify_citations.py` — Crossref bibliographic and integrity verification (retractions, withdrawals, expressions of concern; corrections recorded) using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` and `scripts/audit_fulltexts.py` — open-access retrieval plus typed authenticity, duplicate, notes, and reading-evidence manifests.
 - `scripts/format_references.py` — resolves `[@key]` citations, normalizes default chat punctuation, and builds the reference list (Vancouver / APA / Nature).
 - `scripts/validate_review.py` — deterministic structure, strict-tier, chat citation placement, citation-reading, DOI parity, text-hygiene, and figure contracts.

@@ -939,7 +939,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
 
     if colophon is None:
         colophon = ("Agentically generated · every citation resolved and "
-                    "retraction-screened via Crossref")
+                    "integrity-screened via Crossref (retractions, expressions of concern)")
     plain_title = re.sub(r"<[^>]+>", "", title)
     return PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=CSS,
@@ -1106,7 +1106,6 @@ def main():
 
     if args.check_pdf_runtime:
         from weasyprint_export import require_runtime
-        import json
         print(json.dumps(require_runtime(), sort_keys=True))
         return
     if not args.src or not args.out:

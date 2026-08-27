@@ -28,7 +28,9 @@ Rules enforced:
     never from the model's memory.
   * Every entry ends with its DOI link so a reader can check it.
   * The verifier has already checked Crossref's publisher and Retraction Watch update metadata;
-    no service-status notes or per-reference warning symbols are added to the review.
+    no service-status notes or per-reference warning symbols are added to the review. The one
+    factual annotation allowed: when the verifier recorded a published correction
+    (corrigendum/erratum), the reference entry ends with a linked "Correction: <doi>." note.
   * Every Markdown image has a unique stable figure ID, a cited caption, and a
     body cross-reference; numbering and anchors are generated deterministically.
   * In default chat output, citation links follow the supported words and
@@ -188,6 +190,23 @@ def is_verified(entry):
         and verification.get("bibliographic_status") == "verified"
         and verification.get("retraction_status") == "clear"
     )
+
+
+def correction_note(entry):
+    """Factual note appended to a reference entry when a published correction exists.
+
+    Non-blocking by design: the verifier records corrigenda/errata in
+    ``verification.correction_notices`` without failing the citation, and the
+    reader gets a plain pointer to the correction notice.
+    """
+    notices = (entry.get("verification") or {}).get("correction_notices") or []
+    dois = sorted({n.get("doi") for n in notices if n.get("doi")})
+    if not notices:
+        return ""
+    if dois:
+        links = ", ".join(f"[{d}]({doi_href(d)})" for d in dois)
+        return f" Correction: {links}."
+    return " A published correction exists."
 
 
 def fix_case(name):
@@ -403,15 +422,16 @@ def main():
     if args.style == "bracket":
         entries = sorted(order, key=lambda k: ((by_key[k]["canonical"].get("authors_structured") or [{"family": ""}])[0]["family"].lower(), by_key[k]["canonical"].get("year") or 0))
         for k in entries:
-            refs.append(fmt_bracket(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")))
+            refs.append(fmt_bracket(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")) + correction_note(by_key[k]))
     elif args.style == "apa":
         entries = sorted(order, key=lambda k: ((by_key[k]["canonical"].get("authors_structured") or [{"family": ""}])[0]["family"].lower(), by_key[k]["canonical"].get("year") or 0))
         for k in entries:
-            refs.append(fmt_apa(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")))
+            refs.append(fmt_apa(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")) + correction_note(by_key[k]))
     else:
         for i, k in enumerate(order, 1):
             c, doi = by_key[k]["canonical"], by_key[k]["doi"]
-            refs.append(fmt_vancouver(i, c, doi) if args.style == "vancouver" else fmt_nature(i, c, doi))
+            base = fmt_vancouver(i, c, doi) if args.style == "vancouver" else fmt_nature(i, c, doi)
+            refs.append(base + correction_note(by_key[k]))
 
     out = body.rstrip() + "\n\n" + args.heading + "\n\n" + "\n\n".join(refs) + "\n"
 
