@@ -112,6 +112,47 @@ class ValidateReviewTests(unittest.TestCase):
             "unresolved citation key remains in the finished review", result.errors
         )
 
+    def test_chat_citations_follow_claims_and_precede_terminal_punctuation(self):
+        correct = validate_review.validate_review(
+            scientific_review(), style="scientific", size="small"
+        )
+        self.assertFalse(
+            any("chat citation" in error for error in correct.errors),
+            correct.errors,
+        )
+
+        after_period = scientific_review().replace(
+            f"evidence [Smith 2024](https://doi.org/{DOI}).",
+            f"evidence. [Smith 2024](https://doi.org/{DOI})",
+        )
+        result = validate_review.validate_review(
+            after_period, style="scientific", size="small"
+        )
+        self.assertTrue(any(
+            "chat citation follows sentence-ending punctuation" in error
+            for error in result.errors
+        ))
+
+        sentence_initial = scientific_review().replace(
+            f"The question has evidence [Smith 2024](https://doi.org/{DOI}).",
+            f"[Smith 2024](https://doi.org/{DOI}) reports evidence.",
+        )
+        result = validate_review.validate_review(
+            sentence_initial, style="scientific", size="small"
+        )
+        self.assertTrue(any(
+            "chat citation starts a sentence or block" in error
+            for error in result.errors
+        ))
+
+        citation_cell = (
+            "| Finding | Source |\n|---|---|\n"
+            f"| Supported | [Smith 2024](https://doi.org/{DOI}) |"
+        )
+        self.assertEqual(
+            validate_review._chat_citation_placement_errors(citation_cell), []
+        )
+
     def test_popsci_standfirst_is_immediately_after_headline_and_uncited(self):
         markdown = (
             "## A headline\n\nPreamble.\n\n*An italic aside.*\n\n"

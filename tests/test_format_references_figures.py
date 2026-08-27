@@ -24,6 +24,23 @@ def figure_block(figure_id="mechanism", citation="[@Paper2024]"):
 
 
 class FigureResolutionTests(unittest.TestCase):
+    def test_chat_citation_keys_move_before_sentence_punctuation(self):
+        cases = {
+            "The result held. [@Paper2024]":
+                "The result held [@Paper2024].",
+            "The result held! [@Paper2024; @Trial2023]":
+                "The result held [@Paper2024; @Trial2023]!",
+            "The authors called it ‘robust.’ [@Paper2024]":
+                "The authors called it ‘robust’ [@Paper2024].",
+            "The result held [@Paper2024].":
+                "The result held [@Paper2024].",
+        }
+        for source, expected in cases.items():
+            with self.subTest(source=source):
+                self.assertEqual(
+                    MODULE.normalize_chat_citation_punctuation(source), expected
+                )
+
     def test_doi_href_percent_encodes_markdown_and_url_delimiters(self):
         doi = "10.1175/1520-0469(2000)057<0803:rpoblc>2.0.co;2?x#y"
         self.assertEqual(
@@ -138,7 +155,11 @@ class FigureResolutionTests(unittest.TestCase):
                 rendered = stream.read()
         self.assertIn("[Figure 1](#fig-mechanism)", rendered)
         self.assertIn("**Figure 1. A transient signal builds memory.**", rendered)
-        self.assertIn("[Smith 2024](https://doi.org/10.1000/example)", rendered)
+        self.assertIn(
+            "one signalling step is inferred "
+            "[Smith 2024](https://doi.org/10.1000/example).",
+            rendered,
+        )
         self.assertIn("**Smith A (2024)** A verified figure source.", rendered)
 
 

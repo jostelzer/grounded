@@ -20,8 +20,8 @@ The register spectrum runs scientific → popsci → ELI5: a journal reader, a c
 **TL;DR** — <the answer in 1–3 sentences, plain language, no citations, no hedging padding>
 
 ### <Punchline of section 1 — a claim, stated concisely>
-- <evidence with numbers> [Author 2026](https://doi.org/…)
-- <evidence with numbers> [Author & Author 2025](https://doi.org/…)
+- <evidence with numbers> [Author 2026](https://doi.org/…).
+- <evidence with numbers> [Author & Author 2025](https://doi.org/…).
 
 ### <Punchline of section 2>
 - …
@@ -30,7 +30,7 @@ The register spectrum runs scientific → popsci → ELI5: a journal reader, a c
 **Author A, Author B, Author C (2026)** Title. *Journal*. https://doi.org/…
 ```
 
-In the chat review and source Markdown, in-text citations render as plain `Author 2026` links: the square brackets are markdown link syntax only and must never be visible. If the chat review shows a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong — every citation is a hyperlink whose visible text is just the author and year. The journal PDF/HTML is the presentation-only exception: `export_review.py` converts those same DOI links to linked superscript numbers and a matching first-citation-order reference list without changing the Markdown.
+In the chat review and source Markdown, in-text citations render as plain `Author 2026` links immediately after the supported words and before terminal punctuation: `claim [Author 2026](DOI).` The square brackets are markdown link syntax only and must never be visible. If the chat review shows `claim. [Author 2026](DOI)`, a citation-led sentence, a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong. The journal PDF/HTML is the presentation-only exception: `export_review.py` converts those same DOI links to linked superscript numbers after the punctuation and a matching first-citation-order reference list without changing the Markdown.
 
 Nothing before the question. No scope note, no assumptions paragraph, no audience statement, no size label, no date line, no "how this was produced" section.
 
@@ -188,7 +188,7 @@ The storytelling — how the magazines actually do it:
 - **One metaphor family, carried through.** A single well-chosen image (a thermostat, a relay race, a leaky bucket) may recur and evolve across the piece. Mixed metaphors read as decoration; a sustained one is structure. It must never smuggle in a claim the sources don't make.
 - **Rhythm and address.** Sentences vary: a long evidence sentence, then a short verdict. Rhetorical questions and second person are allowed — one or two of each per piece, at genuine hinge points, never as filler. First person plural ("we") only for the shared human situation, never for the analysis.
 - **The certainty survives the storytelling.** This is the rule that keeps popsci honest. Hedges stay hedged; a weak finding stays weak no matter how good the sentence feels; "scientists are still arguing about this" is a legitimate story beat, not a flaw to write around. Banned vocabulary: breakthrough, game-changer, revolutionary, holy grail, miracle, stunning, "scientists baffled".
-- **Citations unchanged.** Every empirical sentence carries its `Author 2026` DOI link, exactly as in every other style. This is the piece's quiet flex — magazine prose that can be checked line by line — so the links are worn lightly but never dropped.
+- **Citations unchanged.** Every empirical sentence carries its `Author 2026` DOI link immediately before terminal punctuation, exactly as in every other style. This is the piece's quiet flex — magazine prose that can be checked line by line — so the links are worn lightly but never dropped.
 - **Crossheads are evocative but honest.** A reader who skims only the headline and crossheads should come away with the true arc of the evidence, curiosity intact but never misled.
 - Tables remain allowed where studies line up; introduce each from the running text. Figure captions follow the popsci register in `figure-captions.md`.
 - The banned-filler list still applies: hooks are earned with concreteness, not with "In today's fast-paced world" or "Imagine a world where…" boilerplate.
@@ -248,7 +248,7 @@ The language — unchanged rules:
 - **Numbers stay, but say what they mean.** Not "SMD −0.34 (95% CI −0.68 to −0.00)" but "the people taking creatine improved a little more — about 2 points on a 52-point mood questionnaire, which is too small a change for most people to feel. And the studies were so different from each other that the real effect could be zero."
 - **Jargon is rewritten, not linked.** Term links are for standard modes; here the plain words replace the term entirely. If a term truly cannot be avoided (a scale's name, a drug class), name it once, explain it in the same sentence in plain words, and give it the usual verified term link.
 - **Honesty survives the simplification.** "We don't really know yet" instead of silently dropping uncertainty. Small studies are "too small to trust on their own", not omitted. Never round a weak finding up to a strong claim because the plain words feel less precise.
-- **Citations unchanged.** Every empirical claim still carries its author–year DOI links. Place links naturally at the end of the sentence or short claim cluster they support; do not collect them in a list-like citation dump.
+- **Citations unchanged.** Every empirical claim still carries its author–year DOI links. Place links naturally at the end of the sentence or short claim cluster they support, before terminal punctuation; do not collect them in a list-like citation dump.
 - **Figure captions stay ELI5 too.** Use a short flowing paragraph of everyday sentences, explain what
   the reader sees and what remains uncertain, and keep the usual verified
   citations. Refer to the picture directly: “You can see the steps in
@@ -274,7 +274,7 @@ Default **small scientific**: aim for something a reader takes in within a few m
 
 Write the draft with `[@key]` and let `format_references.py --style bracket` render each citation as an `[Author 2026](https://doi.org/…)` link and build the sources block. On the tool-only path, write the `[Author 2026](https://doi.org/…)` links directly, using the DOI from the verified Crossref record, and transcribe the sources block the same way.
 
-Place every citation after the sentence, clause, quotation, figure-caption claim, or table row it supports. Never make an author–year link the grammatical subject that opens a sentence. This matters especially for journal export: the renderer closes the preceding whitespace, moves terminal punctuation before the linked superscript, and rejects a citation that opens a sentence, paragraph, bullet, or caption. A DOI-only source cell in a comparison table is allowed.
+Place every citation immediately after the sentence, clause, quotation, figure-caption claim, or table row it supports and before terminal punctuation: `supported claim [Author 2026](DOI).` Never write `supported claim. [Author 2026](DOI)` or make an author–year link the grammatical subject that opens a sentence. `format_references.py --style bracket` normalizes punctuation misplaced before a draft key, and `validate_review.py` rejects misplaced finished links. For journal export, the renderer deliberately moves terminal punctuation before the linked superscript and separately rejects a citation that opens a sentence, paragraph, bullet, or caption. A DOI-only source cell in a comparison table is allowed.
 
 ## If verification could not be completed
 
@@ -286,7 +286,7 @@ Place every citation after the sentence, clause, quotation, figure-caption claim
 ## Quality gate
 
 0. The review is in the reply, not in a file (unless a file was requested).
-1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited; in ELI5, citations sit naturally beside the sentence or short claim cluster they support.
+1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited; in ELI5, citations sit naturally beside the sentence or short claim cluster they support. In chat/Markdown, every author–year link precedes terminal punctuation and no sentence begins with a citation.
 2. In bullet style, headings alone tell the argument; in scientific, popsci, and ELI5 styles, topic sentences and section landings advance one throughline.
 3. The Abstract (scientific), standfirst (popsci), or TL;DR (bullets/ELI5) has no citations; the Abstract and TL;DR answer the question in the first sentence, and the standfirst states the question and the shape of the answer.
 4. Opposing evidence appears, and is contrasted rather than blended.

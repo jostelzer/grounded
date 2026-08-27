@@ -41,7 +41,7 @@ Then add the figure and caption:
 ```markdown
 ![Specific alt text describing the visible layout and scientific point](mechanism.png)
 
-**Figure {#mechanism}. A transient RNA signal builds immune memory.** Delivery and temporary expression are observed; the dashed signalling stage is supported mainly by animal experiments. [@Pardi2024; @Li2022]
+**Figure {#mechanism}. A transient RNA signal builds immune memory.** Delivery and temporary expression are observed; the dashed signalling stage is supported mainly by animal experiments [@Pardi2024; @Li2022].
 ```
 
 The formatter produces clickable final Markdown:
@@ -52,7 +52,7 @@ The delivery-to-memory pathway and its evidence boundary are summarized in [Figu
 <a id="fig-mechanism"></a>
 ![Specific alt text describing the visible layout and scientific point](mechanism.png)
 
-**Figure 1. A transient RNA signal builds immune memory.** Delivery and temporary expression are observed; the dashed signalling stage is supported mainly by animal experiments. [Pardi & Krammer 2024](https://doi.org/...) [Li et al. 2022](https://doi.org/...)
+**Figure 1. A transient RNA signal builds immune memory.** Delivery and temporary expression are observed; the dashed signalling stage is supported mainly by animal experiments [Pardi & Krammer 2024](https://doi.org/...), [Li et al. 2022](https://doi.org/...).
 ```
 
 Caption citations pass through the same ledger verification as body citations
@@ -79,7 +79,7 @@ then explain the visual and its limitation. Keep the objective narrative-review
 register used in the body.
 
 ```markdown
-**Figure {#waning}. Protection wanes faster against infection than severe disease.** The aligned estimates separate outcome-specific decline from the mechanisms proposed to explain it. Equal visual areas do not encode magnitude, and the studies do not quantify how much each mechanism contributes. [@Feikin2022; @Tang2022]
+**Figure {#waning}. Protection wanes faster against infection than severe disease.** The aligned estimates separate outcome-specific decline from the mechanisms proposed to explain it. Equal visual areas do not encode magnitude, and the studies do not quantify how much each mechanism contributes [@Feikin2022; @Tang2022].
 ```
 
 ### Popsci
@@ -90,7 +90,7 @@ evidence boundary as part of the story. Human-scale numbers, no hype, citations
 unchanged.
 
 ```markdown
-**Figure {#waning}. The shield against infection thins in months; the shield against severe disease holds.** Follow the two rows from month one to month six: the drop is steep on top, shallow below. The rows are drawn the same size, so compare the slopes, not the areas — and all of this data predates Omicron. [@Feikin2022; @Tang2022]
+**Figure {#waning}. The shield against infection thins in months; the shield against severe disease holds.** Follow the two rows from month one to month six: the drop is steep on top, shallow below. The rows are drawn the same size, so compare the slopes, not the areas — and all of this data predates Omicron [@Feikin2022; @Tang2022].
 ```
 
 ### ELI5
@@ -101,7 +101,7 @@ the uncertainty; simplify the words, not the evidence. Do not switch back to a
 structured bullet caption unless the user explicitly asked for bullets.
 
 ```markdown
-**Figure {#waning}. The vaccine's infection shield gets weaker faster.** The top row is about catching the virus. The bottom row is about getting very sick. The rows are the same size on purpose, so their size is not the amount of protection. [@Feikin2022; @Tang2022]
+**Figure {#waning}. The vaccine's infection shield gets weaker faster.** The top row is about catching the virus. The bottom row is about getting very sick. The rows are the same size on purpose, so their size is not the amount of protection [@Feikin2022; @Tang2022].
 ```
 
 ## Reference placement

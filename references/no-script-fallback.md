@@ -83,7 +83,7 @@ The update entry's `source` may be `publisher` or `retraction-watch`; both are h
 
 ### B4. Format references by transcription
 
-Build each reference entry from the Crossref response you just fetched — authors, title, journal, year, volume, pages — transcribing the returned values, never recalling them. Follow the style layouts in `citation-rules.md`. Then check: the number of entries equals the number of distinct cited keys, and every entry ends with its DOI.
+Build each reference entry from the Crossref response you just fetched — authors, title, journal, year, volume, pages — transcribing the returned values, never recalling them. Follow the style layouts in `citation-rules.md`. In the chat review, put each author–year DOI link immediately after its supported claim and before terminal punctuation: `claim [Author 2026](DOI).`, never `claim. [Author 2026](DOI)` and never a citation-led sentence. Then check: the number of entries equals the number of distinct cited keys, and every entry ends with its DOI.
 
 If a Crossref record genuinely lacks volume or pages (common for online-first and article-number journals), give what exists plus the DOI and leave the rest out. Do not invent a volume to make an entry look complete.
 

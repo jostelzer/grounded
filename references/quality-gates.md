@@ -59,6 +59,12 @@ it never excuses short prose, missing sections/tables, or evidence padding.
 Mojibake, replacement characters, exposed scaffold labels, late figure
 introductions, and uncited figure captions are always hard failures.
 
+Default chat/Markdown citations are DOI-linked author–year labels immediately
+after the supported claim and before terminal punctuation: `claim [Author](DOI).`
+The formatter repairs a legacy `claim. [@key]` draft, while finished-review
+validation rejects punctuation-before-citation and citation-led sentences. A
+DOI-only source cell in a comparison table remains valid.
+
 ## Figure conformance
 
 Add directed `relationships` and local `abbreviations` to the figure spec when

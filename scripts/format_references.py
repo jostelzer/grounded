@@ -18,7 +18,8 @@ Then run:
     python3 format_references.py --ledger sources.json --draft review_draft.md --out review.md --style vancouver
     python3 format_references.py --ledger sources.json --draft review_draft.md --out review.md --style apa
 
-Styles: vancouver (numbered, order of first appearance; default), apa (author-year), nature (numbered, superscript).
+Styles: bracket (linked author-year; default), vancouver (numbered, order of
+first appearance), apa (author-year), nature (numbered, superscript).
 
 Rules enforced:
   * A key that is not in the ledger, or whose status is not 'verified', is a hard error. Run
@@ -30,6 +31,8 @@ Rules enforced:
     no service-status notes or per-reference warning symbols are added to the review.
   * Every Markdown image has a unique stable figure ID, a cited caption, and a
     body cross-reference; numbering and anchors are generated deterministically.
+  * In default chat output, citation links follow the supported words and
+    precede sentence-ending punctuation.
 
 Outputs the finished markdown and prints a citation count summary (refs used, refs in ledger unused).
 """
@@ -47,6 +50,29 @@ FIGURE_CAPTION_RE = re.compile(
     r"^\*\*Figure\s+\{#(?P<id>" + FIGURE_ID +
     r")\}\.\s*(?P<title>.+?)\*\*(?P<body>\s+.+)?$")
 FIGURE_TOKEN_RE = re.compile(r"\{\{figure:(?P<id>" + FIGURE_ID + r")\}\}")
+CITATION_KEY = r"\[@[^\]\n]+\]"
+CHAT_CITATION_AFTER_PUNCTUATION_RE = re.compile(
+    r"(?P<punct>[.!?])(?P<closer>[”’\"']?)(?P<space>[ \t]+)"
+    r"(?P<cites>" + CITATION_KEY +
+    r"(?:(?:,[ \t]*|[ \t]+)" + CITATION_KEY + r")*)"
+)
+
+
+def normalize_chat_citation_punctuation(text):
+    """Put sentence-ending punctuation after default chat citation keys.
+
+    Drafts occasionally arrive as ``claim. [@source]``. The default linked
+    author-year form reads as part of the sentence, so its correct Markdown is
+    ``claim [@source].`` The journal renderer deliberately reverses that visual
+    order later for its numeric superscripts.
+    """
+    return CHAT_CITATION_AFTER_PUNCTUATION_RE.sub(
+        lambda match: (
+            match.group("closer") + match.group("space")
+            + match.group("cites") + match.group("punct")
+        ),
+        text,
+    )
 
 
 def resolve_figures(text):
@@ -303,6 +329,8 @@ def main():
     ledger = json.load(open(args.ledger))
     by_key = {e["key"]: e for e in ledger["entries"]}
     text = open(args.draft).read()
+    if args.style == "bracket":
+        text = normalize_chat_citation_punctuation(text)
 
     text, figure_errors, _figures = resolve_figures(text)
 

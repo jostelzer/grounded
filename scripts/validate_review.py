@@ -3,8 +3,8 @@
 
 This validator covers the deterministic parts of the writing contract.  It is
 deliberately not a substitute for the semantic quality gate: evidence weighing,
-claim-level citation placement, narrative callbacks, and plain-language quality
-still require a careful read.
+whether a cited source supports its claim, narrative callbacks, and
+plain-language quality still require a careful read.
 """
 
 from __future__ import annotations
@@ -43,6 +43,14 @@ TECHNICAL_TERMS = (
     "SMD", "CI", "OR", "I²", "GRADE", "HAM-D", "PHQ-9", "mRNA",
     "hazard ratio", "odds ratio", "confidence interval",
 )
+DOI_MARKDOWN_LINK = (
+    r"\[[^\]\n]+\]\(https?://(?:dx\.)?doi\.org/"
+    r"(?:[^\s()]|\([^\s()]*\))+\)"
+)
+DOI_MARKDOWN_GROUP_RE = re.compile(
+    DOI_MARKDOWN_LINK + r"(?:,\s*" + DOI_MARKDOWN_LINK + r")*",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -77,6 +85,45 @@ def _dois(text: str) -> set[str]:
         unquote(re.sub(r"[).,;*_]+$", "", value)).lower()
         for value in re.findall(r"https?://doi\.org/([^\s<>\]]+)", text, re.I)
     }
+
+
+def _chat_citation_placement_errors(body: str) -> list[str]:
+    """Enforce claim-first author-year links with punctuation after the link."""
+    errors: list[str] = []
+    for match in DOI_MARKDOWN_GROUP_RE.finditer(body):
+        line_number = body.count("\n", 0, match.start()) + 1
+        line_start = body.rfind("\n", 0, match.start()) + 1
+        line_end = body.find("\n", match.end())
+        if line_end < 0:
+            line_end = len(body)
+        line = body[line_start:line_end]
+        relative_start = match.start() - line_start
+        relative_end = match.end() - line_start
+
+        if line.lstrip().startswith("|"):
+            cell_start = line.rfind("|", 0, relative_start) + 1
+            cell_end = line.find("|", relative_end)
+            if cell_end < 0:
+                cell_end = len(line)
+            prefix = line[cell_start:relative_start]
+            suffix = line[relative_end:cell_end]
+            if not prefix.strip() and not suffix.strip():
+                continue
+        else:
+            block_start = body.rfind("\n\n", 0, match.start()) + 2
+            prefix = body[block_start:match.start()]
+
+        if not re.search(r"[^\W_]", prefix, re.UNICODE):
+            errors.append(
+                f"chat citation starts a sentence or block at line {line_number}; "
+                "place it after the supported claim or quotation"
+            )
+        elif re.search(r"[.!?][”’\"']?\s*$", prefix):
+            errors.append(
+                f"chat citation follows sentence-ending punctuation at line "
+                f"{line_number}; put the citation before that punctuation"
+            )
+    return errors
 
 
 def _sentence_count(text: str) -> int:
@@ -321,6 +368,7 @@ def validate_review(
         errors.append("Sources must be the terminal review section")
     if re.search(r"\[@[^]]+\]", markdown):
         errors.append("unresolved citation key remains in the finished review")
+    errors.extend(_chat_citation_placement_errors(body))
 
     first_content = next(
         (line.strip() for line in markdown.splitlines() if line.strip()), ""
