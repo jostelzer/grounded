@@ -242,12 +242,13 @@ an unrelated figure.
 
 Every PDF page is landscape 16:9 and exactly one slide.
 
-- **Title slide:** GROUNDED masthead as the hero, deck title and optional scope
-  line, provenance, verified-reference count, compilation date, and `1 / total`.
+- **Title slide:** GROUNDED masthead as the hero, linked review descriptor, deck
+  title and optional scope line, verified-reference count, compilation date,
+  version, and `1 / total`.
 - **Content slide:** a full-page generated image below the chrome; top strip with
-  the earth-ground chip, GROUNDED identity, “No floating claims.”, style/role
-  kicker, total-aware counter, and the real-text claim title; bottom strip with
-  linked `Author 2024 · Author 2022` citations and the evidence chip.
+  the electricity-ground mark, GROUNDED identity, linked review descriptor,
+  style/role kicker, total-aware counter, version, and the real-text claim title;
+  bottom strip with linked `Author 2024 · Author 2022` citations and the evidence chip.
 - **Reference slides:** journal small type in two text columns, populated only
   from the verified ledger, with live DOI links and no generated body image.
 
@@ -274,7 +275,7 @@ Structural QA must pass all of these:
 1. strict, unencrypted PDF parsing and safe document actions;
 2. canonical 960 × 540 pt pages and the exact storyboard page count;
 3. Grounded metadata, pinned WeasyPrint producer, Charter, and Helvetica Neue;
-4. GROUNDED identity, tagline, and `N / total` on every slide;
+4. GROUNDED identity, linked review descriptor, version, and `N / total` on every slide;
 5. one painted raster body image on every content slide and none on title or
    reference bodies;
 6. the full-sentence claim and evidence grade as extractable content-slide text;

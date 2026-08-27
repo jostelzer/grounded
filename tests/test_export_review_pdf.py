@@ -106,6 +106,14 @@ class PdfExportTests(unittest.TestCase):
 
         self.assertIn('<img src="data:image/png;base64,', page)
         self.assertIn("<b>Style</b><span>ELI5</span>", page)
+        self.assertIn(
+            '<a class="descriptor" href="https://example.test/grounded">'
+            "Agentically generated scientific review</a>",
+            page,
+        )
+        self.assertIn('<span class="version">grounded v-test</span>', page)
+        self.assertNotIn('<div class="provenance">', page)
+        self.assertNotIn("No floating claims", page)
         self.assertNotIn("<svg viewBox=", page)
 
     def test_prose_style_alias_prints_as_scientific(self):
@@ -612,7 +620,7 @@ class PdfExportTests(unittest.TestCase):
                 for number, pdf_page in enumerate(reader.pages, 1):
                     text = pdf_page.extract_text() or ""
                     self.assertIn("G R O U N D E D", text)
-                    self.assertIn("NO FLOATING CLAIMS.", text)
+                    self.assertIn("AGENTICALLY GENERATED SCIENTIFIC REVIEW", text)
                     self.assertIn(f"{number} / {expected_pages}", text)
 
     def test_structured_table_uses_space_below_figure_three_safely(self):

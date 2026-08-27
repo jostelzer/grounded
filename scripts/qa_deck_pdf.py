@@ -115,8 +115,8 @@ def _page_text_failures(page_number: int, page_count: int, text: str) -> list[st
     failures = []
     if "GROUNDED" not in upper and "G R O U N D E D" not in upper:
         failures.append(f"page {page_number} is missing the GROUNDED identity")
-    if "NO FLOATING CLAIMS." not in upper:
-        failures.append(f"page {page_number} is missing the Grounded tagline")
+    if "AGENTICALLY GENERATED SCIENTIFIC REVIEW" not in upper:
+        failures.append(f"page {page_number} is missing the linked review descriptor")
     if not re.search(rf"\b{page_number}\s*/\s*{page_count}\b", normalized):
         failures.append(f"page {page_number} is missing its total-aware slide counter")
     return failures

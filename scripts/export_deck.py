@@ -432,14 +432,18 @@ def embed_slide_images(document: DeckDocument, base_dir: str) -> dict[str, str]:
     return embedded
 
 
-def _identity_strip(kicker: str, counter: str) -> str:
+def _identity_strip(
+    kicker: str, counter: str, repo_url: str, release: str
+) -> str:
     return (
         '<div class="strip">'
         f'<span class="chip">{_brand_logo_html()}</span>'
         '<span class="mark">GROUNDED</span>'
-        '<span class="tagline">No floating claims.</span>'
+        f'<a class="descriptor" href="{html.escape(repo_url, quote=True)}">'
+        'Agentically generated scientific review</a>'
         f'<span class="kicker">{html.escape(kicker)}</span>'
-        f'<span class="counter">{html.escape(counter)}</span>'
+        f'<span class="version">{html.escape(counter)}&nbsp;&nbsp;·&nbsp;&nbsp;'
+        f'grounded {html.escape(release)}</span>'
         "</div>"
     )
 
@@ -525,20 +529,21 @@ body { color: var(--ink); }
   display: flex; align-items: center; padding-left: .13in;
   font-size: 9.5pt; font-weight: 650; letter-spacing: .29em;
 }
-.strip .tagline {
+.strip .descriptor {
   display: flex; align-items: center; padding-left: .16in;
   color: var(--muted); font-size: 6.2pt; font-weight: 650;
-  letter-spacing: .12em; text-transform: uppercase;
+  letter-spacing: .10em; text-transform: uppercase; text-decoration: none;
 }
 .strip .kicker {
   display: flex; align-items: center; margin-left: auto; color: var(--accent);
   font-size: 6.4pt; font-weight: 750; letter-spacing: .14em;
   text-transform: uppercase;
 }
-.strip .counter {
-  display: flex; align-items: center; min-width: .82in; justify-content: flex-end;
-  color: var(--muted); font-size: 7pt; font-weight: 650;
-  letter-spacing: .08em; font-variant-numeric: tabular-nums;
+.strip .version {
+  display: flex; align-items: center; min-width: 1.56in; justify-content: flex-end;
+  color: var(--muted); font-size: 6.2pt; font-weight: 650;
+  letter-spacing: .08em; text-transform: uppercase;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .content-slide .slide-image {
   position: absolute; inset: 0; width: 100%; height: 100%; display: block;
@@ -586,10 +591,11 @@ body { color: var(--ink); }
   font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 25pt; font-weight: 620; letter-spacing: .31em;
 }
-.title-tagline {
+.title-descriptor {
   grid-column: 2; margin-top: -.17in; color: var(--muted);
   font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 7.5pt; font-weight: 680; letter-spacing: .15em; text-transform: uppercase;
+  font-size: 7.5pt; font-weight: 680; letter-spacing: .12em; text-transform: uppercase;
+  text-decoration: none;
 }
 .title-kicker {
   margin: .72in 0 .12in; color: var(--accent); font-size: 8pt; font-weight: 780;
@@ -613,6 +619,7 @@ body { color: var(--ink); }
 .title-meta b { color: var(--accent); }
 .title-meta a { color: inherit; text-decoration: none; border-bottom: .5pt solid var(--rule); }
 .title-meta .title-counter { margin-left: auto; color: var(--muted); font-size: 7.2pt; }
+.title-meta .title-version { color: var(--muted); font-size: 7.2pt; white-space: nowrap; }
 .reference-slide { padding-top: 0; }
 .reference-heading {
   height: .72in; margin: 0 .47in; display: flex; align-items: center;
@@ -691,12 +698,10 @@ def build_html(
     if release is None:
         release = detect_release(script_dir)
     if repo is None:
-        repo_label, repo_url = detect_repo(script_dir)
+        _repo_label, repo_url = detect_repo(script_dir)
     else:
-        repo_label = re.sub(r"^https?://", "", repo)
         repo_url = repo if repo.startswith("http") else f"https://{repo}"
     release = release or "dev"
-    repo_label = repo_label or "local build"
     repo_url = repo_url or "#"
 
     title_subtitle = (
@@ -704,28 +709,29 @@ def build_html(
         if document.subtitle
         else ""
     )
-    repo_markup = (
-        f'<a href="{html.escape(repo_url, quote=True)}">{html.escape(repo_label)}</a>'
+    descriptor_link = (
+        f'<a href="{html.escape(repo_url, quote=True)}">'
+        "Agentically generated scientific review</a>"
         if repo_url != "#"
-        else html.escape(repo_label)
+        else "Agentically generated scientific review"
     )
     title_slide = (
         '<section class="slide title-slide" data-slide-kind="title">'
         '<div class="title-hero">'
         f'<span class="title-chip">{_brand_logo_html()}</span>'
         '<span class="title-mark">GROUNDED</span>'
-        '<span class="title-tagline">No floating claims.</span>'
+        f'<a class="title-descriptor" href="{html.escape(repo_url, quote=True)}">'
+        'Agentically generated scientific review</a>'
         '</div><div class="title-rule"></div>'
         f'<div class="title-kicker">{html.escape(document.kicker)}</div>'
         f'<h1 class="deck-title">{html.escape(document.title)}</h1>'
         f"{title_subtitle}"
         '<div class="title-meta">'
-        "Agentically generated scientific review deck&nbsp;&nbsp;·&nbsp;&nbsp;"
-        f"<b>grounded</b> {html.escape(release)}&nbsp;&nbsp;·&nbsp;&nbsp;"
-        f"{repo_markup}&nbsp;&nbsp;·&nbsp;&nbsp;"
+        f"{descriptor_link}&nbsp;&nbsp;·&nbsp;&nbsp;"
         f"{len(document.reference_keys)} verified references&nbsp;&nbsp;·&nbsp;&nbsp;"
         f"{html.escape(_display_date(today, abbreviated=True))}"
         f'<span class="title-counter">1 / {document.total_slides}</span>'
+        f'<span class="title-version">grounded {html.escape(release)}</span>'
         "</div></section>"
     )
 
@@ -740,7 +746,7 @@ def build_html(
             f'<img class="slide-image" src="{images[slide.slide_id]}" '
             f'alt="{html.escape(slide.alt, quote=True)}">'
             '<header class="content-top">'
-            f'{_identity_strip(kicker, f"{index} / {document.total_slides}")}'
+            f'{_identity_strip(kicker, f"{index} / {document.total_slides}", repo_url, release)}'
             f'<h2 class="claim">{html.escape(slide.title)}</h2>'
             "</header>"
             '<footer class="content-footer">'
@@ -766,7 +772,7 @@ def build_html(
         )
         slide_html.append(
             '<section class="slide reference-slide" data-slide-kind="references">'
-            f'{_identity_strip("References", f"{absolute_page} / {document.total_slides}")}'
+            f'{_identity_strip("References", f"{absolute_page} / {document.total_slides}", repo_url, release)}'
             '<div class="reference-heading">'
             f"<h2>References {page_index} / {len(document.reference_pages)}</h2>"
             f"<span>Verified sources {first}--{last}</span></div>"
@@ -809,8 +815,8 @@ def parse_args(argv=None):
     parser.add_argument("--storyboard", help="deck storyboard JSON")
     parser.add_argument("--ledger", help="verified sources.json ledger")
     parser.add_argument("--out", help="output .pdf or .html path")
-    parser.add_argument("--release", help="version shown in the provenance line")
-    parser.add_argument("--repo", help="repository link in the provenance line")
+    parser.add_argument("--release", help="version shown at the right edge of each slide")
+    parser.add_argument("--repo", help="repository linked from the slide identity")
     parser.add_argument("--compiled-date", help="fixed YYYY-MM-DD compilation date")
     parser.add_argument(
         "--html-sidecar",

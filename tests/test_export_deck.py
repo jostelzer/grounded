@@ -118,7 +118,7 @@ class DeckExportTests(unittest.TestCase):
             self.assertIn("Claim 1 is supported.", page)
             self.assertIn("https://doi.org/10.1000/example", page)
             self.assertIn("data:image/png;base64,", page)
-            self.assertIn("grounded</b> v-test", page)
+            self.assertIn("grounded v-test</span>", page)
 
     def test_actual_pdf_is_deterministic_16_by_9_and_preserves_links(self):
         from pypdf import PdfReader

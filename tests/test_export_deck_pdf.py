@@ -194,7 +194,9 @@ class DeckHtmlTests(unittest.TestCase):
         self.assertIn("1 / 6", first)
         self.assertIn("6 / 6", first)
         self.assertIn("References 1 / 1", first)
-        self.assertIn("Agentically generated scientific review deck", first)
+        self.assertIn("Agentically generated scientific review</a>", first)
+        self.assertIn("grounded v-test</span>", first)
+        self.assertNotIn("No floating claims", first)
 
     def test_non_16_by_9_image_is_rejected(self):
         storyboard = DeckFixture.storyboard()

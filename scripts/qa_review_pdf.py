@@ -272,7 +272,10 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
         page_texts.append(text)
         if index == 1:
             first_page_text = text
-        if "G R O U N D E D" not in text or "NO FLOATING CLAIMS." not in text:
+        if (
+            "G R O U N D E D" not in text
+            or "AGENTICALLY GENERATED SCIENTIFIC REVIEW" not in text
+        ):
             failures.append(f"page {index} is missing the running masthead")
         if f"{index} / {len(reader.pages)}" not in text:
             failures.append(f"page {index} is missing its total-aware page number")

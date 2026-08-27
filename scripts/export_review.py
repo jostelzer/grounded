@@ -2,7 +2,7 @@
 """Export a finished review to journal-styled HTML or a deterministic PDF.
 
 Takes the markdown produced by format_references.py and typesets it in the
-GROUNDED journal identity: repeating masthead, provenance, metadata grid,
+GROUNDED journal identity: repeating masthead, metadata grid,
 two-column body, full-width tables and figures, numbered cited captions, and a
 compact reference list. Author-year DOI links in the source markdown become
 DOI-linked superscript numbers attached to the supported claim, while the
@@ -562,7 +562,7 @@ def to_html(md, base_dir=".", columns=2):
 
 # -------------------------------------------------------------------- css ---
 # GROUNDED — the journal identity of this skill. Swiss-modern: grotesk furniture,
-# serif body, one accent, the earth-ground chip. Tagline: "No floating claims."
+# serif body, one accent, and the packaged electricity-ground mark.
 
 ACCENT = "#ff4f1f"
 
@@ -614,7 +614,7 @@ body {
   text-align: justify; hyphens: auto; -webkit-hyphens: auto;
   hyphenate-character: "-";
 }
-.sans, .strip, .provenance, .kicker, h1, .metagrid, .lead, h2, thead th,
+.sans, .strip, .kicker, h1, .metagrid, .lead, h2, thead th,
 .tablabel, figcaption, .refs, footer.colophon {
   font-family: -apple-system, "Helvetica Neue", "Helvetica", Arial, sans-serif;
 }
@@ -635,21 +635,16 @@ body {
   display: flex; align-items: center; padding: 0 10px;
   font-weight: 600; font-size: 9.5pt; letter-spacing: .3em; color: var(--ink);
 }
-.strip .tagline {
+.strip .descriptor {
   display: flex; align-items: center; font-size: 6.3pt; font-weight: 600;
-  letter-spacing: .13em; text-transform: uppercase; color: var(--muted);
+  letter-spacing: .11em; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; border-bottom: 0;
 }
-.strip .issue {
+.strip .version {
   display: flex; align-items: center; margin-left: auto;
   font-size: 6.3pt; font-weight: 600; letter-spacing: .13em;
   text-transform: uppercase; color: var(--muted);
 }
-.provenance {
-  margin: 0 0 12px; font-size: 6.5pt; font-weight: 600; letter-spacing: .11em;
-  text-transform: uppercase; color: var(--faint); text-align: left;
-}
-.provenance a { color: var(--faint); border-bottom: none; }
-.provenance b { color: var(--accent); font-weight: 700; }
 .kicker {
   font-size: 7.5pt; font-weight: 800; letter-spacing: .24em;
   text-transform: uppercase; color: var(--accent); margin: 0 0 6px; text-align: left;
@@ -807,7 +802,7 @@ footer.colophon a { color: var(--faint); border-bottom: none; }
   .metagrid { grid-template-columns: repeat(2, 1fr); }
   .metagrid > div { border-bottom: 1px solid var(--rule); }
   .tablewrap { overflow-x: auto; }
-  .strip .tagline { display: none; }
+  .strip .descriptor { display: none; }
 }
 """
 
@@ -825,12 +820,11 @@ PAGE = """<!doctype html>
   <div class="strip">
     <span class="chip">{gnd}</span>
     <span class="mark">GROUNDED</span>
-    <span class="tagline">No floating claims.</span>
-    <span class="issue">{issue}</span>
+    <a class="descriptor" href="{repo_url}">Agentically generated scientific review</a>
+    <span class="version">grounded {version}</span>
   </div>
 </header>
 <main class="paper">
-<div class="provenance">Agentically generated scientific review&nbsp;&nbsp;·&nbsp;&nbsp;<b>grounded</b> {version}&nbsp;&nbsp;·&nbsp;&nbsp;<a href="{repo_url}">{repo_label}</a></div>
 <div class="kicker">{kicker}</div>
 <h1>{title}</h1>
 {metagrid}
@@ -909,20 +903,16 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     n_refs = len({urllib.parse.unquote(d).lower().rstrip(").,;*_")
                   for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
 
-    # masthead furniture: the export date, top right of every page
     today = _compiled_date(compiled_date)
-    issue = _display_date(today)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     if release is None:
         release = detect_release(script_dir)
     if repo is None:
-        repo_label, repo_url = detect_repo(script_dir)
+        _repo_label, repo_url = detect_repo(script_dir)
     else:
-        repo_label = re.sub(r"^https?://", "", repo)
         repo_url = repo if repo.startswith("http") else f"https://{repo}"
     release = release or "dev"
-    repo_label = repo_label or "local build"
     repo_url = repo_url or "#"
 
     # token estimate for the whole document (~4 chars per token)
@@ -953,9 +943,9 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     plain_title = re.sub(r"<[^>]+>", "", title)
     return PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=CSS,
-        gnd=_brand_logo_html(), issue=html.escape(issue),
+        gnd=_brand_logo_html(),
         version=html.escape(release), repo_url=html.escape(repo_url, quote=True),
-        repo_label=html.escape(repo_label), kicker=html.escape(kicker),
+        kicker=html.escape(kicker),
         title=title, metagrid=metagrid, lead=lead_html,
         cols=(" structured-flow" if structured_flow else
               (" cols" if columns == 2 else "")),
@@ -1096,8 +1086,8 @@ def main():
     )
     ap.add_argument("--kicker", default="Review", help="kicker label above the title (e.g. 'Review · Immunology')")
     ap.add_argument("--colophon", help="override the footer line")
-    ap.add_argument("--release", help="version shown in the provenance line (default: latest git tag)")
-    ap.add_argument("--repo", help="repository link in the provenance line (default: git origin remote)")
+    ap.add_argument("--release", help="version shown at the right edge of the masthead (default: latest git tag)")
+    ap.add_argument("--repo", help="repository linked from the masthead descriptor (default: git origin remote)")
     ap.add_argument("--compiled-date", help="fixed YYYY-MM-DD compilation date (default: today)")
     ap.add_argument("--html-sidecar", action="store_true",
                     help="also write HTML beside a PDF (off by default)")
