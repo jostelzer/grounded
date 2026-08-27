@@ -4,11 +4,12 @@
 <meta name="author" content="Grounded">
 <meta name="generator" content="Grounded">
 <meta name="description" content="Agentically generated scientific review">
-<meta name="dcterms.created" content="2026-08-26">
+<meta name="dcterms.created" content="2026-08-27">
 <title>Does blue light before bed ruin sleep?</title>
 <style>
 @page {
   size: A4; margin: 25mm 13mm 12mm 13mm;
+  @top-center { content: element(pageHeader); vertical-align: bottom; width: 100%; }
   /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
     font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #8a8a8a; }
@@ -31,7 +32,7 @@ body {
   font-family: -apple-system, "Helvetica Neue", "Helvetica", Arial, sans-serif;
 }
 .paper { width: 100%; max-width: 194mm; margin: 0 auto; }
-.running-header { position: fixed; top: -13mm; left: 0; right: 0; }
+.running-header { position: running(pageHeader); width: 100%; }
 .strip {
   display: flex; align-items: stretch; border-bottom: .5px solid var(--ink);
   break-inside: avoid;
@@ -90,9 +91,22 @@ h1 {
 .note { font-size: 7pt; color: var(--muted); margin: 8px 0 0;
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; text-align: left; }
 .body { counter-reset: sec; }
-/* Sequential fill avoids a last page made of two balanced half-height columns. */
-.body.cols { column-count: 2; column-gap: 8mm; column-fill: auto; }
-.spanning-section-start { column-span: all; break-inside: avoid; }
+/* Paged-media balancing fills earlier pages sequentially and balances the final
+   fragment, preventing a terminal reference page with one nearly empty column. */
+.body.cols { column-count: 2; column-gap: 8mm; column-fill: balance; }
+.column-run.final { column-count: 2; column-gap: 8mm; column-fill: balance; }
+.column-run { column-count: 2; column-gap: 8mm; column-fill: balance; }
+.compact-column-pair {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 8mm; break-inside: avoid;
+}
+.spanning-figure-start, .spanning-block,
+.spanning-reference-balanced { break-inside: avoid; }
+.spanning-table-start { break-inside: avoid; }
+.body.structured-flow > .spanning-table-start { break-inside: auto; }
+.body.cols > .spanning-figure-start, .body.cols > .spanning-table-start,
+.body.cols > .spanning-block { column-span: all; }
+.body.cols > .spanning-reference-balanced { column-span: all; }
 h2 {
   font-size: 9pt; font-weight: 600; line-height: 1.3; letter-spacing: 0;
   margin: 12px 0 4px; color: var(--ink);
@@ -102,10 +116,10 @@ h2::before {
   counter-increment: sec; content: counter(sec, decimal-leading-zero);
   color: var(--accent); margin-right: 7px; font-variant-numeric: tabular-nums;
 }
-.body > h2:first-child, .body.cols > h2:first-child { margin-top: 0; }
+.body > h2:first-child, .column-run > h2:first-child { margin-top: 0; }
 h2.refhead {
   border-top: 1px solid var(--ink); padding-top: 6px; margin-top: 16px;
-  column-span: all; font-size: 9pt;
+  font-size: 9pt;
 }
 h2.refhead::before { content: none; counter-increment: none; }
 h2.refhead small { font-weight: 600; font-size: 6.3pt; letter-spacing: .12em;
@@ -116,11 +130,22 @@ li { margin: 0 0 4.5px; break-inside: avoid; }
 a { color: inherit; text-decoration: none; border-bottom: .5px solid rgba(255,79,31,.55); }
 a[href^="#fig-"] { white-space: nowrap; }
 a:hover { border-bottom-color: var(--accent); }
+sup.citation {
+  margin-left: .08em; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: .72em; font-weight: 700; line-height: 0; vertical-align: super;
+  white-space: nowrap; font-variant-numeric: tabular-nums; text-align: left;
+}
+sup.citation a { color: var(--accent); border-bottom: 0; }
 code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; }
 strong { letter-spacing: 0; }
 /* Tables span the full page width (interrupting the columns, as journals do)
    and wrap their cell content — a table is never clipped or truncated. */
-.tablewrap { column-span: all; break-inside: avoid; margin: 9px 0 11px; overflow: visible; }
+.tablewrap { break-inside: avoid; margin: 9px 0 11px; overflow: visible; }
+.body.structured-flow > .spanning-table-start > .tablewrap { break-inside: auto; }
+.body.structured-flow > .fragmentable-table thead {
+  display: table-header-group;
+}
+.body.structured-flow > .fragmentable-table tr { break-inside: avoid; }
 .tablewrap table { width: 100%; border-collapse: collapse; font-size: 7.4pt; line-height: 1.4;
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
 thead th {
@@ -135,13 +160,27 @@ tbody td {
 }
 tbody tr:last-child td { border-bottom: 1px solid var(--ink); }
 .refs { font-size: 6.9pt; line-height: 1.2; color: #333; text-align: left; }
-.refs p { margin: 0 0 2.5px; padding-left: 1.2em; text-indent: -1.2em; break-inside: avoid-page; }
+.refs.balanced {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8mm;
+}
+.refs p { margin: 0 0 2.5px; padding-left: 2.25em; break-inside: avoid-page; }
+.refs .refno {
+  float: left; width: 2em; margin-left: -2.25em; color: var(--accent);
+  font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.refs p.last-reference::after {
+  content: "  \220E"; color: var(--accent); font-size: 1.2em; white-space: nowrap;
+}
 .refs.dense { font-size: 6.5pt; line-height: 1.08; }
 .refs.dense p { margin-bottom: .5px; }
 .refs a { border-bottom: none; color: var(--muted); word-break: break-all; }
 /* Figures, like tables, span the full page width and are never clipped. */
-figure { column-span: all; margin: 10px 0 12px; break-inside: avoid; }
-figure img { display: block; width: 100%; height: auto; }
+figure { margin: 10px 0 12px; break-inside: avoid; }
+figure img {
+  display: block; width: 100%; max-width: 100%; height: auto; max-height: 92mm;
+  object-fit: contain;
+  margin: 0 auto;
+}
 figcaption { font-size: 7.4pt; color: var(--muted); margin-top: 5px;
   text-align: left; line-height: 1.45; }
 figcaption a, figcaption .figno { white-space: nowrap; }
@@ -151,7 +190,7 @@ figcaption .figno::first-letter { color: var(--ink); }
 figcaption ul { margin: 4px 0 0; padding-left: 1.15em; }
 figcaption li { margin: 0 0 2px; break-inside: auto; }
 .tomb { text-align: right; color: var(--accent); font-size: 11pt;
-  margin: 0; line-height: 1; }
+  margin: 0; padding: 0; line-height: 1; }
 footer.colophon {
   /* Keep provenance furniture out of content flow so it cannot create a spill page. */
   position: fixed; bottom: -7mm; left: 0; right: 22mm;
@@ -173,7 +212,8 @@ footer.colophon a { color: var(--faint); border-bottom: none; }
   body { padding: 0; }
   .running-header { padding: 5mm 5mm 4mm; }
   .paper { padding: 0 5mm 8mm; }
-  .body.cols { column-count: 1; }
+  .body.cols, .column-run { column-count: 1; }
+  .compact-column-pair { grid-template-columns: 1fr; }
   h1 { font-size: 16pt; }
   .metagrid { grid-template-columns: repeat(2, 1fr); }
   .metagrid > div { border-bottom: 1px solid var(--rule); }
@@ -187,52 +227,52 @@ footer.colophon a { color: var(--faint); border-bottom: none; }
     <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#ff4f1f" stroke-width="2.4" stroke-linecap="round" fill="none"><path d="M12 3v8"/><path d="M4 11h16"/><path d="M7.5 15.5h9"/><path d="M10.5 20h3"/></g></svg></span>
     <span class="mark">GROUNDED</span>
     <span class="tagline">No floating claims.</span>
-    <span class="issue">26 August 2026</span>
+    <span class="issue">27 August 2026</span>
   </div>
 </header>
 <main class="paper">
-<div class="provenance">Agentically generated scientific review&nbsp;&nbsp;·&nbsp;&nbsp;<b>grounded</b> v2.0.0&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://github.com/jostelzer/grounded">github.com/jostelzer/grounded</a></div>
+<div class="provenance">Agentically generated scientific review&nbsp;&nbsp;·&nbsp;&nbsp;<b>grounded</b> v2.6.0&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://github.com/jostelzer/grounded">github.com/jostelzer/grounded</a></div>
 <div class="kicker">Review</div>
 <h1>Does blue light before bed ruin sleep?</h1>
-<div class="metagrid"><div><b>References</b><span><i>16</i> verified</span></div><div><b>Tokens</b><span>≈3.2k</span></div><div><b>Verification</b><span>Crossref</span></div><div><b>Compiled</b><span>26 Aug 2026</span></div></div>
+<div class="metagrid"><div><b>References</b><span><i>16</i> verified</span></div><div><b>Tokens</b><span>≈3.2k</span></div><div><b>Verification</b><span>Crossref</span></div><div><b>Compiled</b><span>27 Aug 2026</span></div></div>
 <p class="lead"><b>Abstract</b>Evening light rich in short wavelengths can suppress the hormonal signal of biological night and delay the body clock, but "ruins sleep" is too strong. Clear sleep effects in controlled experiments follow long, bright exposure close to bedtime; shorter or dimmer screen sessions often alter melatonin without altering whole-night sleep. Real-world screen use can still cost sleep, especially in bed, although light cannot be separated there from delayed bedtimes and engaging content. Blue-light filters sometimes improve perceived sleep, but randomized trials have not shown dependable objective benefits in healthy adults. The evidence therefore weakens at each step from circadian response to sleep loss to treatment. Reducing bright evening light may help sensitive people or those with sleep problems, but wavelength alone is neither a universal cause of major sleep loss nor an established stand-alone treatment target.</p>
 <div class="body cols">
 <h2>Introduction</h2>
-<p>The popular claim bundles three questions: does short-wavelength light change circadian biology, does that change impair sleep, and does filtering the light help? These are not interchangeable. A screen can suppress <a href="https://en.wikipedia.org/wiki/Melatonin">melatonin</a> or shift the body clock without shortening sleep, while screen use also bundles light with delayed bedtime, content, and interaction. <a href="https://doi.org/10.1152/japplphysiol.00165.2011">Cajochen et al. 2011</a>, <a href="https://doi.org/10.1093/sleep/zsac199">Blume et al. 2022</a> Evidence is strongest for the first question and weakest for the third. Across all three, the throughline is dose: brightness, duration, and timing act together.</p>
+<p>The popular claim bundles three questions: does short-wavelength light change circadian biology, does that change impair sleep, and does filtering the light help? These are not interchangeable. A screen can suppress <a href="https://en.wikipedia.org/wiki/Melatonin">melatonin</a> or shift the body clock without shortening sleep, while screen use also bundles light with delayed bedtime, content, and interaction.<sup class="citation" aria-label="References 1, 2"><a href="https://doi.org/10.1152/japplphysiol.00165.2011" role="doc-biblioref">1</a>,<a href="https://doi.org/10.1093/sleep/zsac199" role="doc-biblioref">2</a></sup> Evidence is strongest for the first question and weakest for the third. Across all three, the throughline is dose: brightness, duration, and timing act together.</p>
 <h2>Circadian mechanism</h2>
-<p>Short-wavelength light clearly changes circadian biology, and the response is graded. Narrow-band 469-nm light produced dose-dependent melatonin suppression in eight adults, while a synthesis of 19 laboratory datasets found that illumination weighted for <a href="https://en.wikipedia.org/wiki/Melanopsin">melanopsin</a> sensitivity best predicted responses across spectra, intensities, and durations. <a href="https://doi.org/10.1152/japplphysiol.01413.2009">West et al. 2011</a>, <a href="https://doi.org/10.1111/jpi.12655">Brown 2020</a> Five hours at a blue-enriched computer display likewise suppressed melatonin and sleepiness in 13 men, but subsequent sleep was not measured. <a href="https://doi.org/10.1152/japplphysiol.00165.2011">Cajochen et al. 2011</a></p>
-<p>That gap matters because melatonin suppression is not a proxy for sleep damage. In a preregistered crossover experiment (n=29), one hour of visually matched light at 123 versus 59 melanopic lux suppressed melatonin by about 14% yet changed neither sleepiness nor any <a href="https://en.wikipedia.org/wiki/Polysomnography">polysomnography</a> outcome. <a href="https://doi.org/10.1093/sleep/zsac199">Blume et al. 2022</a> The biology is real; whether it costs sleep is the question for exposure trials.</p>
+<p>Short-wavelength light clearly changes circadian biology, and the response is graded. Narrow-band 469-nm light produced dose-dependent melatonin suppression in eight adults, while a synthesis of 19 laboratory datasets found that illumination weighted for <a href="https://en.wikipedia.org/wiki/Melanopsin">melanopsin</a> sensitivity best predicted responses across spectra, intensities, and durations.<sup class="citation" aria-label="References 3, 4"><a href="https://doi.org/10.1152/japplphysiol.01413.2009" role="doc-biblioref">3</a>,<a href="https://doi.org/10.1111/jpi.12655" role="doc-biblioref">4</a></sup> Five hours at a blue-enriched computer display likewise suppressed melatonin and sleepiness in 13 men, but subsequent sleep was not measured.<sup class="citation" aria-label="References 1"><a href="https://doi.org/10.1152/japplphysiol.00165.2011" role="doc-biblioref">1</a></sup></p>
+<p>That gap matters because melatonin suppression is not a proxy for sleep damage. In a preregistered crossover experiment (n=29), one hour of visually matched light at 123 versus 59 melanopic lux suppressed melatonin by about 14% yet changed neither sleepiness nor any <a href="https://en.wikipedia.org/wiki/Polysomnography">polysomnography</a> outcome.<sup class="citation" aria-label="References 2"><a href="https://doi.org/10.1093/sleep/zsac199" role="doc-biblioref">2</a></sup> The biology is real; whether it costs sleep is the question for exposure trials.</p>
 <h2>Controlled screen exposure</h2>
 <p>Controlled screen trials show a dose-and-timing pattern rather than universal damage:</p>
-<div class="tablewrap"><table><thead><tr><th>Exposure</th><th>Design</th><th>Objective sleep result</th></tr></thead><tbody><tr><td>Maximum-brightness e-reader vs print, 4 h before bed for 5 evenings</td><td>Inpatient crossover, n=12</td><td>Sleep onset was <strong>9.9 min later</strong> and rapid-eye-movement sleep <strong>11.8 min shorter</strong>; total sleep and efficiency were unchanged. <a href="https://doi.org/10.1073/pnas.1418490112">Chang et al. 2015</a></td></tr><tr><td>Tablet vs print, 2 h after 6.5 h of bright daytime light</td><td>Crossover, n=14</td><td><strong>No difference</strong> in melatonin or recorded sleep. <a href="https://doi.org/10.1016/j.sleep.2016.06.016">Rångtell et al. 2016</a></td></tr><tr><td>Visually matched displays, 3.5 h across screen-like intensities</td><td>Crossover within four intensity groups, n=72 men</td><td>Lower melanopic light shortened sleep latency only at the brightest setting; latency and melatonin followed dose-response relationships, while sleep duration and architecture were unchanged. <a href="https://doi.org/10.1038/s42003-023-04598-4">Schöllhorn et al. 2023</a></td></tr><tr><td>Smartphone, night filter, or print for 90 min; stopped ~50 min before bed</td><td>Three-night crossover, 33 male adolescents and 35 male young adults</td><td>Whole-night sleep was unchanged; adults alone had slightly less early deep sleep without the filter. <a href="https://doi.org/10.1093/braincomms/fcae173">Höhn et al. 2024</a></td></tr></tbody></table></div>
-<p>The largest effect followed the longest, brightest, near-bedtime schedule; shorter or dimmer exposures were null or limited. <a href="https://doi.org/10.1073/pnas.1418490112">Chang et al. 2015</a>, <a href="https://doi.org/10.1016/j.sleep.2016.06.016">Rångtell et al. 2016</a>, <a href="https://doi.org/10.1038/s42003-023-04598-4">Schöllhorn et al. 2023</a> Even that largest effect was a ten-minute delay in falling asleep, not a ruined night. Spectrum acts alongside intensity, duration, timing, and prior daytime light—the dose logic predicted by the mechanism studies. <a href="https://doi.org/10.1016/j.sleep.2016.06.016">Rångtell et al. 2016</a>, <a href="https://doi.org/10.1038/s42003-023-04598-4">Schöllhorn et al. 2023</a> The smartphone trial also foreshadows the filter evidence: switching the filter on did not change the whole night. <a href="https://doi.org/10.1093/braincomms/fcae173">Höhn et al. 2024</a></p>
+<section class="spanning-block"><div class="tablewrap"><table><thead><tr><th>Exposure</th><th>Design</th><th>Objective sleep result</th></tr></thead><tbody><tr><td>Maximum-brightness e-reader vs print, 4 h before bed for 5 evenings</td><td>Inpatient crossover, n=12</td><td>Sleep onset was <strong>9.9 min later</strong> and rapid-eye-movement sleep <strong>11.8 min shorter</strong>; total sleep and efficiency were unchanged.<sup class="citation" aria-label="References 5"><a href="https://doi.org/10.1073/pnas.1418490112" role="doc-biblioref">5</a></sup></td></tr><tr><td>Tablet vs print, 2 h after 6.5 h of bright daytime light</td><td>Crossover, n=14</td><td><strong>No difference</strong> in melatonin or recorded sleep.<sup class="citation" aria-label="References 6"><a href="https://doi.org/10.1016/j.sleep.2016.06.016" role="doc-biblioref">6</a></sup></td></tr><tr><td>Visually matched displays, 3.5 h across screen-like intensities</td><td>Crossover within four intensity groups, n=72 men</td><td>Lower melanopic light shortened sleep latency only at the brightest setting; latency and melatonin followed dose-response relationships, while sleep duration and architecture were unchanged.<sup class="citation" aria-label="References 7"><a href="https://doi.org/10.1038/s42003-023-04598-4" role="doc-biblioref">7</a></sup></td></tr><tr><td>Smartphone, night filter, or print for 90 min; stopped ~50 min before bed</td><td>Three-night crossover, 33 male adolescents and 35 male young adults</td><td>Whole-night sleep was unchanged; adults alone had slightly less early deep sleep without the filter.<sup class="citation" aria-label="References 8"><a href="https://doi.org/10.1093/braincomms/fcae173" role="doc-biblioref">8</a></sup></td></tr></tbody></table></div></section>
+<p>The largest effect followed the longest, brightest, near-bedtime schedule; shorter or dimmer exposures were null or limited.<sup class="citation" aria-label="References 5, 6, 7"><a href="https://doi.org/10.1073/pnas.1418490112" role="doc-biblioref">5</a>,<a href="https://doi.org/10.1016/j.sleep.2016.06.016" role="doc-biblioref">6</a>,<a href="https://doi.org/10.1038/s42003-023-04598-4" role="doc-biblioref">7</a></sup> Even that largest effect was a ten-minute delay in falling asleep, not a ruined night. Spectrum acts alongside intensity, duration, timing, and prior daytime light—the dose logic predicted by the mechanism studies.<sup class="citation" aria-label="References 6, 7"><a href="https://doi.org/10.1016/j.sleep.2016.06.016" role="doc-biblioref">6</a>,<a href="https://doi.org/10.1038/s42003-023-04598-4" role="doc-biblioref">7</a></sup> The smartphone trial also foreshadows the filter evidence: switching the filter on did not change the whole night.<sup class="citation" aria-label="References 8"><a href="https://doi.org/10.1093/braincomms/fcae173" role="doc-biblioref">8</a></sup></p>
 <h2>Real-world exposure and individual differences</h2>
-<p>Outside the laboratory, behaviour becomes a second pathway. In 79 youths, screen use during the two hours before bed was not associated with total sleep, yet every additional 10 minutes of interactive use in bed was associated with 9 minutes less sleep (95% <a href="https://en.wikipedia.org/wiki/Confidence_interval">confidence interval</a>, 2–16 minutes less). <a href="https://doi.org/10.1001/jamapediatrics.2024.2914">Brosnan et al. 2024</a> The observational design could not separate light from delayed sleep, gaming, or multitasking. In real bedrooms, how and where a screen is used may matter more than screen use itself.</p>
-<p>Sensitivity also varies too widely for a universal threshold. Among 55 adults, the light level producing half-maximal melatonin suppression ranged from 6 to 350 lux, a more than fifty-fold spread. <a href="https://doi.org/10.1073/pnas.1901824116">Phillips et al. 2019</a> Home monitoring found 0%–87% suppression under an average home's light. <a href="https://doi.org/10.1038/s41598-020-75622-4">Cain et al. 2020</a> In a six-condition crossover (n=22), home-relevant spectra changed melatonin and sleep onset, but individual sensitivity was only moderately repeatable. <a href="https://doi.org/10.1111/j.1600-079x.2011.00970.x">Santhi et al. 2012</a> Averages therefore obscure the people advice is meant to help. Filters offer a direct test: remove the short wavelengths and see who sleeps better.</p>
+<p>Outside the laboratory, behaviour becomes a second pathway. In 79 youths, screen use during the two hours before bed was not associated with total sleep, yet every additional 10 minutes of interactive use in bed was associated with 9 minutes less sleep (95% <a href="https://en.wikipedia.org/wiki/Confidence_interval">confidence interval</a>, 2–16 minutes less).<sup class="citation" aria-label="References 9"><a href="https://doi.org/10.1001/jamapediatrics.2024.2914" role="doc-biblioref">9</a></sup> The observational design could not separate light from delayed sleep, gaming, or multitasking. In real bedrooms, how and where a screen is used may matter more than screen use itself.</p>
+<p>Sensitivity also varies too widely for a universal threshold. Among 55 adults, the light level producing half-maximal melatonin suppression ranged from 6 to 350 lux, a more than fifty-fold spread.<sup class="citation" aria-label="References 10"><a href="https://doi.org/10.1073/pnas.1901824116" role="doc-biblioref">10</a></sup> Home monitoring found 0%–87% suppression under an average home's light.<sup class="citation" aria-label="References 11"><a href="https://doi.org/10.1038/s41598-020-75622-4" role="doc-biblioref">11</a></sup> In a six-condition crossover (n=22), home-relevant spectra changed melatonin and sleep onset, but individual sensitivity was only moderately repeatable.<sup class="citation" aria-label="References 12"><a href="https://doi.org/10.1111/j.1600-079x.2011.00970.x" role="doc-biblioref">12</a></sup> Averages therefore obscure the people advice is meant to help. Filters offer a direct test: remove the short wavelengths and see who sleeps better.</p>
 <h2>Blue-light filters</h2>
-<p>That test does not establish blue-blocking glasses as a reliable treatment. A Cochrane review found three positive and three null randomized sleep trials (n=148) and rated the certainty very low. <a href="https://doi.org/10.1002/14651858.cd013244.pub2">Singh et al. 2023</a> A 2025 <a href="https://en.wikipedia.org/wiki/Actigraphy">actigraphy</a> meta-analysis (three crossover trials, n=49) estimated sleep onset 4.86 minutes earlier (95% interval −20.23 to +10.52) and total sleep 8.75 minutes longer (−35.31 to +52.82), with no improvement in sleep efficiency or wake after sleep onset. <a href="https://doi.org/10.3389/fneur.2025.1699303">Luna-Rangel et al. 2025</a> The wide intervals cannot rule benefit in or out.</p>
-<p>The split within these small trials echoes the exposure studies: little in healthy sleepers, a possible signal where sleep is disturbed. In 20 healthy adults, glasses improved selected self-reports but no objective outcome; total sleep was 433 minutes with the filter and 449 with clear lenses. <a href="https://doi.org/10.1016/j.sleh.2021.02.004">Bigalke et al. 2021</a> An insomnia pilot improved ratings and actigraphic total sleep after one week of amber lenses but included only 14 adults. <a href="https://doi.org/10.1016/j.jpsychires.2017.10.015">Shechter et al. 2018</a> That signal is worth testing, not treating as established.</p>
+<p>That test does not establish blue-blocking glasses as a reliable treatment. A Cochrane review found three positive and three null randomized sleep trials (n=148) and rated the certainty very low.<sup class="citation" aria-label="References 13"><a href="https://doi.org/10.1002/14651858.cd013244.pub2" role="doc-biblioref">13</a></sup> A 2025 <a href="https://en.wikipedia.org/wiki/Actigraphy">actigraphy</a> meta-analysis (three crossover trials, n=49) estimated sleep onset 4.86 minutes earlier (95% interval −20.23 to +10.52) and total sleep 8.75 minutes longer (−35.31 to +52.82), with no improvement in sleep efficiency or wake after sleep onset.<sup class="citation" aria-label="References 14"><a href="https://doi.org/10.3389/fneur.2025.1699303" role="doc-biblioref">14</a></sup> The wide intervals cannot rule benefit in or out.</p>
+<p>The split within these small trials echoes the exposure studies: little in healthy sleepers, a possible signal where sleep is disturbed. In 20 healthy adults, glasses improved selected self-reports but no objective outcome; total sleep was 433 minutes with the filter and 449 with clear lenses.<sup class="citation" aria-label="References 15"><a href="https://doi.org/10.1016/j.sleh.2021.02.004" role="doc-biblioref">15</a></sup> An insomnia pilot improved ratings and actigraphic total sleep after one week of amber lenses but included only 14 adults.<sup class="citation" aria-label="References 16"><a href="https://doi.org/10.1016/j.jpsychires.2017.10.015" role="doc-biblioref">16</a></sup> That signal is worth testing, not treating as established.</p>
 <h2>Conclusion</h2>
 <p>The same pattern runs from mechanism to treatment: the circadian response is reliable, whole-night effects cluster at long, bright, near-bedtime exposures, and interventions that change spectrum alone change little. "Blue light ruins sleep" therefore fails as a general claim but survives as a conditional one. Managing brightness, duration, timing, and screen use in bed is better supported than blaming wavelength alone. Large preregistered filter trials in unusually light-sensitive people and those with sleep disorders would settle the remaining question.</p>
-<h2 class="refhead">References <small>16 · verified via Crossref</small></h2><div class="refs">
-<p><strong>Bigalke JA, Greenlund IM, Nicevski JR, Carter JR (2021)</strong> Effect of evening blue light blocking glasses on subjective and objective sleep in healthy adults: A randomized control trial. <em>Sleep Health</em>. <a href="https://doi.org/10.1016/j.sleh.2021.02.004">https://doi.org/10.1016/j.sleh.2021.02.004</a></p>
-<p><strong>Blume C, Niedernhuber M, Spitschan M, Slawik HC, Meyer MP, Bekinschtein TA, Cajochen C (2022)</strong> Melatonin suppression does not automatically alter sleepiness, vigilance, sensory processing, or sleep. <em>Sleep</em>. <a href="https://doi.org/10.1093/sleep/zsac199">https://doi.org/10.1093/sleep/zsac199</a></p>
-<p><strong>Brosnan B, Haszard JJ, Meredith-Jones KA, Wickham SR, Galland BC, Taylor RW (2024)</strong> Screen Use at Bedtime and Sleep Duration and Quality Among Youths. <em>JAMA Pediatrics</em>. <a href="https://doi.org/10.1001/jamapediatrics.2024.2914">https://doi.org/10.1001/jamapediatrics.2024.2914</a></p>
-<p><strong>Brown TM (2020)</strong> Melanopic illuminance defines the magnitude of human circadian light responses under a wide range of conditions. <em>Journal of Pineal Research</em>. <a href="https://doi.org/10.1111/jpi.12655">https://doi.org/10.1111/jpi.12655</a></p>
-<p><strong>Cain SW, McGlashan EM, Vidafar P, Mustafovska J, Curran SPN, Wang X, Mohamed A, Kalavally V, Phillips AJK (2020)</strong> Evening home lighting adversely impacts the circadian system and sleep. <em>Scientific Reports</em>. <a href="https://doi.org/10.1038/s41598-020-75622-4">https://doi.org/10.1038/s41598-020-75622-4</a></p>
-<p><strong>Cajochen C, Frey S, Anders D, Späti J, Bues M, Pross A, Mager R, Wirz-Justice A, Stefani O (2011)</strong> Evening exposure to a light-emitting diodes (LED)-backlit computer screen affects circadian physiology and cognitive performance. <em>Journal of Applied Physiology</em>. <a href="https://doi.org/10.1152/japplphysiol.00165.2011">https://doi.org/10.1152/japplphysiol.00165.2011</a></p>
-<p><strong>Chang AM, Aeschbach D, Duffy JF, Czeisler CA (2015)</strong> Evening use of light-emitting eReaders negatively affects sleep, circadian timing, and next-morning alertness. <em>Proceedings of the National Academy of Sciences</em>. <a href="https://doi.org/10.1073/pnas.1418490112">https://doi.org/10.1073/pnas.1418490112</a></p>
-<p><strong>Höhn C, Hahn MA, Gruber G, Pletzer B, Cajochen C, Hoedlmoser K (2024)</strong> Effects of evening smartphone use on sleep and declarative memory consolidation in male adolescents and young adults. <em>Brain Communications</em>. <a href="https://doi.org/10.1093/braincomms/fcae173">https://doi.org/10.1093/braincomms/fcae173</a></p>
-<p><strong>Luna-Rangel FA, Gonzalez-Bedolla B, Salazar-Ortega MJ, Torres-Mancilla XM, Martinez-Cadena S (2025)</strong> Efficacy of blue-light blocking glasses on actigraphic sleep outcomes: a systematic review and meta-analysis of randomized controlled crossover trials. <em>Frontiers in Neurology</em>. <a href="https://doi.org/10.3389/fneur.2025.1699303">https://doi.org/10.3389/fneur.2025.1699303</a></p>
-<p><strong>Phillips AJK, Vidafar P, Burns AC, McGlashan EM, Anderson C, Rajaratnam SMW, Lockley SW, Cain SW (2019)</strong> High sensitivity and interindividual variability in the response of the human circadian system to evening light. <em>Proceedings of the National Academy of Sciences</em>. <a href="https://doi.org/10.1073/pnas.1901824116">https://doi.org/10.1073/pnas.1901824116</a></p>
-<p><strong>Rångtell FH, Ekstrand E, Rapp L, Lagermalm A, Liethof L, Búcaro MO, Lingfors D, Broman JE, Schiöth HB, Benedict C (2016)</strong> Two hours of evening reading on a self-luminous tablet vs. reading a physical book does not alter sleep after daytime bright light exposure. <em>Sleep Medicine</em>. <a href="https://doi.org/10.1016/j.sleep.2016.06.016">https://doi.org/10.1016/j.sleep.2016.06.016</a></p>
-<p><strong>Santhi N, Thorne HC, van der Veen DR, Johnsen S, Mills SL, Hommes V, Schlangen LJM, Archer SN, Dijk D (2012)</strong> The spectral composition of evening light and individual differences in the suppression of melatonin and delay of sleep in humans. <em>Journal of Pineal Research</em>. <a href="https://doi.org/10.1111/j.1600-079x.2011.00970.x">https://doi.org/10.1111/j.1600-079x.2011.00970.x</a></p>
-<p><strong>Schöllhorn I, Stefani O, Lucas RJ, Spitschan M, Slawik HC, Cajochen C (2023)</strong> Melanopic irradiance defines the impact of evening display light on sleep latency, melatonin and alertness. <em>Communications Biology</em>. <a href="https://doi.org/10.1038/s42003-023-04598-4">https://doi.org/10.1038/s42003-023-04598-4</a></p>
-<p><strong>Shechter A, Kim EW, St-Onge MP, Westwood AJ (2018)</strong> Blocking nocturnal blue light for insomnia: A randomized controlled trial. <em>Journal of Psychiatric Research</em>. <a href="https://doi.org/10.1016/j.jpsychires.2017.10.015">https://doi.org/10.1016/j.jpsychires.2017.10.015</a></p>
-<p><strong>Singh S, Keller PR, Busija L, McMillan P, Makrai E, Lawrenson JG, Hull CC, Downie LE (2023)</strong> Blue-light filtering spectacle lenses for visual performance, sleep, and macular health in adults. <em>Cochrane Database of Systematic Reviews</em>. <a href="https://doi.org/10.1002/14651858.cd013244.pub2">https://doi.org/10.1002/14651858.cd013244.pub2</a></p>
-<p><strong>West KE, Jablonski MR, Warfield B, Cecil KS, James M, Ayers MA, Maida J, Bowen C, Sliney DH, Rollag MD, Hanifin JP, Brainard GC (2011)</strong> Blue light from light-emitting diodes elicits a dose-dependent suppression of melatonin in humans. <em>Journal of Applied Physiology</em>. <a href="https://doi.org/10.1152/japplphysiol.01413.2009">https://doi.org/10.1152/japplphysiol.01413.2009</a></p></div>
-<div class="tomb">&#8718;</div>
+<h2 class="refhead">References <small>16 · verified via Crossref</small></h2>
+<div class="refs">
+<p data-reference-number="1"><span class="refno">1.</span> <strong>Cajochen C, Frey S, Anders D, Späti J, Bues M, Pross A, Mager R, Wirz-Justice A, Stefani O (2011)</strong> Evening exposure to a light-emitting diodes (LED)-backlit computer screen affects circadian physiology and cognitive performance. <em>Journal of Applied Physiology</em>. <a href="https://doi.org/10.1152/japplphysiol.00165.2011">https://doi.org/10.1152/japplphysiol.00165.2011</a></p>
+<p data-reference-number="2"><span class="refno">2.</span> <strong>Blume C, Niedernhuber M, Spitschan M, Slawik HC, Meyer MP, Bekinschtein TA, Cajochen C (2022)</strong> Melatonin suppression does not automatically alter sleepiness, vigilance, sensory processing, or sleep. <em>Sleep</em>. <a href="https://doi.org/10.1093/sleep/zsac199">https://doi.org/10.1093/sleep/zsac199</a></p>
+<p data-reference-number="3"><span class="refno">3.</span> <strong>West KE, Jablonski MR, Warfield B, Cecil KS, James M, Ayers MA, Maida J, Bowen C, Sliney DH, Rollag MD, Hanifin JP, Brainard GC (2011)</strong> Blue light from light-emitting diodes elicits a dose-dependent suppression of melatonin in humans. <em>Journal of Applied Physiology</em>. <a href="https://doi.org/10.1152/japplphysiol.01413.2009">https://doi.org/10.1152/japplphysiol.01413.2009</a></p>
+<p data-reference-number="4"><span class="refno">4.</span> <strong>Brown TM (2020)</strong> Melanopic illuminance defines the magnitude of human circadian light responses under a wide range of conditions. <em>Journal of Pineal Research</em>. <a href="https://doi.org/10.1111/jpi.12655">https://doi.org/10.1111/jpi.12655</a></p>
+<p data-reference-number="5"><span class="refno">5.</span> <strong>Chang AM, Aeschbach D, Duffy JF, Czeisler CA (2015)</strong> Evening use of light-emitting eReaders negatively affects sleep, circadian timing, and next-morning alertness. <em>Proceedings of the National Academy of Sciences</em>. <a href="https://doi.org/10.1073/pnas.1418490112">https://doi.org/10.1073/pnas.1418490112</a></p>
+<p data-reference-number="6"><span class="refno">6.</span> <strong>Rångtell FH, Ekstrand E, Rapp L, Lagermalm A, Liethof L, Búcaro MO, Lingfors D, Broman JE, Schiöth HB, Benedict C (2016)</strong> Two hours of evening reading on a self-luminous tablet vs. reading a physical book does not alter sleep after daytime bright light exposure. <em>Sleep Medicine</em>. <a href="https://doi.org/10.1016/j.sleep.2016.06.016">https://doi.org/10.1016/j.sleep.2016.06.016</a></p>
+<p data-reference-number="7"><span class="refno">7.</span> <strong>Schöllhorn I, Stefani O, Lucas RJ, Spitschan M, Slawik HC, Cajochen C (2023)</strong> Melanopic irradiance defines the impact of evening display light on sleep latency, melatonin and alertness. <em>Communications Biology</em>. <a href="https://doi.org/10.1038/s42003-023-04598-4">https://doi.org/10.1038/s42003-023-04598-4</a></p>
+<p data-reference-number="8"><span class="refno">8.</span> <strong>Höhn C, Hahn MA, Gruber G, Pletzer B, Cajochen C, Hoedlmoser K (2024)</strong> Effects of evening smartphone use on sleep and declarative memory consolidation in male adolescents and young adults. <em>Brain Communications</em>. <a href="https://doi.org/10.1093/braincomms/fcae173">https://doi.org/10.1093/braincomms/fcae173</a></p>
+<p data-reference-number="9"><span class="refno">9.</span> <strong>Brosnan B, Haszard JJ, Meredith-Jones KA, Wickham SR, Galland BC, Taylor RW (2024)</strong> Screen Use at Bedtime and Sleep Duration and Quality Among Youths. <em>JAMA Pediatrics</em>. <a href="https://doi.org/10.1001/jamapediatrics.2024.2914">https://doi.org/10.1001/jamapediatrics.2024.2914</a></p>
+<p data-reference-number="10"><span class="refno">10.</span> <strong>Phillips AJK, Vidafar P, Burns AC, McGlashan EM, Anderson C, Rajaratnam SMW, Lockley SW, Cain SW (2019)</strong> High sensitivity and interindividual variability in the response of the human circadian system to evening light. <em>Proceedings of the National Academy of Sciences</em>. <a href="https://doi.org/10.1073/pnas.1901824116">https://doi.org/10.1073/pnas.1901824116</a></p>
+<p data-reference-number="11"><span class="refno">11.</span> <strong>Cain SW, McGlashan EM, Vidafar P, Mustafovska J, Curran SPN, Wang X, Mohamed A, Kalavally V, Phillips AJK (2020)</strong> Evening home lighting adversely impacts the circadian system and sleep. <em>Scientific Reports</em>. <a href="https://doi.org/10.1038/s41598-020-75622-4">https://doi.org/10.1038/s41598-020-75622-4</a></p>
+<p data-reference-number="12"><span class="refno">12.</span> <strong>Santhi N, Thorne HC, van der Veen DR, Johnsen S, Mills SL, Hommes V, Schlangen LJM, Archer SN, Dijk D (2012)</strong> The spectral composition of evening light and individual differences in the suppression of melatonin and delay of sleep in humans. <em>Journal of Pineal Research</em>. <a href="https://doi.org/10.1111/j.1600-079x.2011.00970.x">https://doi.org/10.1111/j.1600-079x.2011.00970.x</a></p>
+<p data-reference-number="13"><span class="refno">13.</span> <strong>Singh S, Keller PR, Busija L, McMillan P, Makrai E, Lawrenson JG, Hull CC, Downie LE (2023)</strong> Blue-light filtering spectacle lenses for visual performance, sleep, and macular health in adults. <em>Cochrane Database of Systematic Reviews</em>. <a href="https://doi.org/10.1002/14651858.cd013244.pub2">https://doi.org/10.1002/14651858.cd013244.pub2</a></p>
+<p data-reference-number="14"><span class="refno">14.</span> <strong>Luna-Rangel FA, Gonzalez-Bedolla B, Salazar-Ortega MJ, Torres-Mancilla XM, Martinez-Cadena S (2025)</strong> Efficacy of blue-light blocking glasses on actigraphic sleep outcomes: a systematic review and meta-analysis of randomized controlled crossover trials. <em>Frontiers in Neurology</em>. <a href="https://doi.org/10.3389/fneur.2025.1699303">https://doi.org/10.3389/fneur.2025.1699303</a></p>
+<p data-reference-number="15"><span class="refno">15.</span> <strong>Bigalke JA, Greenlund IM, Nicevski JR, Carter JR (2021)</strong> Effect of evening blue light blocking glasses on subjective and objective sleep in healthy adults: A randomized control trial. <em>Sleep Health</em>. <a href="https://doi.org/10.1016/j.sleh.2021.02.004">https://doi.org/10.1016/j.sleh.2021.02.004</a></p>
+<p class="last-reference" data-reference-number="16"><span class="refno">16.</span> <strong>Shechter A, Kim EW, St-Onge MP, Westwood AJ (2018)</strong> Blocking nocturnal blue light for insomnia: A randomized controlled trial. <em>Journal of Psychiatric Research</em>. <a href="https://doi.org/10.1016/j.jpsychires.2017.10.015">https://doi.org/10.1016/j.jpsychires.2017.10.015</a></p></div>
 </div>
-<footer class="colophon"><span>Agentically generated · every citation resolved and retraction-screened via Crossref</span><span style="white-space:nowrap">grounded v2.0.0</span></footer>
+<footer class="colophon"><span>Agentically generated · every citation resolved and retraction-screened via Crossref</span><span style="white-space:nowrap">grounded v2.6.0</span></footer>
 </main>
 </body></html>

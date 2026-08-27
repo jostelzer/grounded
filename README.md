@@ -12,7 +12,7 @@ What makes it great:
 
 Give it a topic or research question; it returns a compact, evidence-dense narrative review — question, citation-free abstract, introduction, thematic sections that build one argument, conclusion, useful comparison tables, and a sources block with resolvable DOIs. Ask for `popsci` for a popular-science magazine feature, `bullets` for the punchline-heading format, or explicitly ask for a deck/slides/presentation to add a verified 16:9 PDF deck.
 
-Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper is screened for retraction. Technical terms and abbreviations link to a plain-language explainer on first use, so even the compact style stays readable for non-specialists. The four complete examples below show the same evidence standard in each writing style.
+Every in-text citation is itself a link to the paper, every DOI in the sources block resolves, and every cited paper is screened for retraction. Chat and Markdown use readable author–year links; the journal PDF pipeline typesets the same links as raised numbers and orders its reference list by first citation (its canonical HTML source matches the PDF). Technical terms and abbreviations link to a plain-language explainer on first use, so even the compact style stays readable for non-specialists. The four complete examples below show the same evidence standard in each writing style.
 
 ## Sizes and styles
 
@@ -32,7 +32,7 @@ Styles change only the writing, never the rigour — same searches, same verifie
 
 ## Four styles, four real examples
 
-Each prompt below was run through the complete Grounded pipeline. Every example includes its full Markdown review and a PDF rendered with the same canonical journal design.
+Each prompt below was run through the complete Grounded pipeline. Every example includes its full Markdown review with author–year DOI links and a PDF rendered with the same canonical journal design and linked superscript citation numbers.
 
 **Scientific — Is there actually a healthiest sleeping position?**
 
@@ -140,7 +140,7 @@ Give the agent the folder as a working directory or attached files, use `SKILL.m
 
 ## Export to PDF
 
-Ask for a PDF ("give me that as a PDF", "make it printable") and the skill typesets the review like a journal article — title block, summary lead, two-column body, hairline-ruled tables, references in small type, live DOI links throughout:
+Ask for a PDF ("give me that as a PDF", "make it printable") and the skill typesets the review like a journal article — title block, summary lead, two-column body, hairline-ruled tables, DOI-linked superscript citation numbers attached to the preceding claim, and a numbered reference list in first-citation order:
 
 ```bash
 python3 scripts/export_review.py --check-pdf-runtime
@@ -148,7 +148,7 @@ python3 scripts/export_review.py --in review.md --out review.pdf --pdf
 python3 scripts/qa_review_pdf.py review.pdf --markdown review.md --render-dir review-pdf-qa
 ```
 
-PDF output uses the same canonical HTML/CSS as the HTML artifact and renders it with pinned WeasyPrint 69.0: no Chrome, browser profile, network request, approximate renderer, or silent font fallback is involved. All figures are embedded before rendering and only `data:` resource loads are allowed. Writes are atomic, fixed-date builds are byte-for-byte deterministic in the locked runtime, remote or escaping figure paths are refused, and missing figures are hard failures. SVG figures render directly without a raster companion. The finished PDF must embed Charter and Helvetica Neue or the build fails without replacing the previous artifact. `--columns 1` gives a single-column layout; `--html-sidecar` explicitly adds HTML beside a PDF; plain `--out review.html` remains HTML-only.
+PDF output uses the same canonical HTML/CSS as the HTML artifact and renders it with pinned WeasyPrint 69.0: no Chrome, browser profile, network request, approximate renderer, or silent font fallback is involved. The source Markdown remains unchanged; during journal rendering, its author–year DOI links become raised numbers, punctuation moves before the number, whitespace closes against the supported claim or quotation, and sentence-initial citations are rejected. All figures are embedded before rendering and only `data:` resource loads are allowed. Writes are atomic, fixed-date builds are byte-for-byte deterministic in the locked runtime, remote or escaping figure paths are refused, and missing figures are hard failures. SVG figures render directly without a raster companion. The finished PDF must embed Charter and Helvetica Neue or the build fails without replacing the previous artifact. `--columns 1` gives a single-column layout; `--html-sidecar` explicitly adds HTML beside a PDF; plain `--out review.html` remains HTML-only.
 
 The QA command strictly checks the PDF object structure, A4 pages, safe actions, metadata, DOI and figure links, masthead, page numbering, and independently rasterizes every page with Poppler. It also fails on strongly under-filled non-final pages and severely unbalanced column endings. It writes page PNGs plus six-page contact sheets into a new or empty directory; inspect every page before delivery. Orphan headings, headings separated from their first table or figure, sparse spill pages, and preventable blank regions are release blockers even when structural checks pass. For release PDFs, pass `--release vX.Y.Z` to both export and QA so an artifact branded with an older tag cannot ship.
 
@@ -186,7 +186,7 @@ framing, stable figure numbering and cross-links, cited caption enforcement,
 visual-corpus manifest integrity and downloader validation, real WeasyPrint PDF
 generation, verified 16:9 deck generation, deterministic repeated builds,
 atomic failure handling, link and
-metadata inspection, exact writing-style validation, deterministic allowlisted
+metadata inspection, journal superscript numbering and placement, exact writing-style validation, deterministic allowlisted
 release packaging, release-version consistency, and independent Poppler raster
 regression checks for sparse pages, column imbalance, and landscape deck chrome. Install
 the pinned PDF requirements, then run `python3 -m unittest discover -s tests -v`.

@@ -254,6 +254,75 @@ class PdfExportTests(unittest.TestCase):
             self.assertEqual(inspection["expected_figures"], 0)
             self.assertGreaterEqual(inspection["external_links"], 1)
 
+    def test_journal_citations_are_linked_superscripts_in_first_use_order(self):
+        markdown = (
+            "## Citation review\n\n**Abstract** — A short summary.\n\n"
+            "The first claim cites beta "
+            "[Beta 2024](https://doi.org/10.1000/beta). "
+            "The next claim is complete. "
+            "[Alpha 2023](https://doi.org/10.1000/alpha) "
+            "Beta remains relevant "
+            "[Beta 2024](https://doi.org/10.1000/beta).\n\n"
+            "**Sources**\n\n"
+            "**Alpha A (2023)** Alpha source. *Journal*. "
+            "https://doi.org/10.1000/alpha\n\n"
+            "**Beta B (2024)** Beta source. *Journal*. "
+            "https://doi.org/10.1000/beta\n"
+        )
+
+        _title, _lead, body = export_review.to_html(markdown)
+
+        beta = (
+            '<sup class="citation" aria-label="References 1">'
+            '<a href="https://doi.org/10.1000/beta" '
+            'role="doc-biblioref">1</a></sup>'
+        )
+        alpha = (
+            '<sup class="citation" aria-label="References 2">'
+            '<a href="https://doi.org/10.1000/alpha" '
+            'role="doc-biblioref">2</a></sup>'
+        )
+        self.assertIn("first claim cites beta." + beta, body)
+        self.assertIn("next claim is complete." + alpha + " Beta", body)
+        self.assertEqual(body.count(beta), 2)
+        self.assertLess(
+            body.index('data-reference-number="1"'),
+            body.index('data-reference-number="2"'),
+        )
+        self.assertLess(body.index("Beta source"), body.index("Alpha source"))
+
+    def test_journal_rejects_citations_that_open_a_sentence(self):
+        bodies = (
+            "[Smith 2024](https://doi.org/10.1000/example) reported a result.",
+            "Earlier evidence differed. "
+            "[Smith 2024](https://doi.org/10.1000/example) reported a result.",
+        )
+        for body in bodies:
+            with self.subTest(body=body):
+                markdown = (
+                    "## Invalid citation review\n\n**Abstract** — Summary.\n\n"
+                    + body
+                    + "\n\n**Sources**\n\n"
+                    "**Smith S (2024)** Source. *Journal*. "
+                    "https://doi.org/10.1000/example\n"
+                )
+                with self.assertRaisesRegex(
+                        ValueError, "journal citation starts a sentence"):
+                    export_review.to_html(markdown)
+
+    def test_journal_allows_a_citation_only_table_cell(self):
+        markdown = (
+            "## Table citation review\n\n**Abstract** — Summary.\n\n"
+            "| Finding | Source |\n|---|---|\n"
+            "| A supported result | "
+            "[Smith 2024](https://doi.org/10.1000/example) |\n\n"
+            "**Sources**\n\n"
+            "**Smith S (2024)** Source. *Journal*. "
+            "https://doi.org/10.1000/example\n"
+        )
+        _title, _lead, body = export_review.to_html(markdown)
+        self.assertIn('<td><sup class="citation"', body)
+
     def test_sources_must_be_the_terminal_review_section(self):
         markdown = (
             "## Invalid review\n\n**Abstract** — A short summary.\n\n"
@@ -494,7 +563,7 @@ class PdfExportTests(unittest.TestCase):
         examples = (
             ("prose-small-blue-light-sleep.md", 2),
             ("prose-image-mrna-vaccines.md", 6),
-            ("prose-large-mediterranean-diet.md", 11),
+            ("prose-large-mediterranean-diet.md", 10),
         )
         example_dir = os.path.join(ROOT, "examples")
         with tempfile.TemporaryDirectory() as tmp:

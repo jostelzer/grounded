@@ -30,7 +30,7 @@ The register spectrum runs scientific → popsci → ELI5: a journal reader, a c
 **Author A, Author B, Author C (2026)** Title. *Journal*. https://doi.org/…
 ```
 
-In-text citations render as plain `Author 2026` links: the square brackets are markdown link syntax only and must never be visible in the finished text. If the delivered review shows a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong — every citation is a hyperlink whose visible text is just the author and year.
+In the chat review and source Markdown, in-text citations render as plain `Author 2026` links: the square brackets are markdown link syntax only and must never be visible. If the chat review shows a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong — every citation is a hyperlink whose visible text is just the author and year. The journal PDF/HTML is the presentation-only exception: `export_review.py` converts those same DOI links to linked superscript numbers and a matching first-citation-order reference list without changing the Markdown.
 
 Nothing before the question. No scope note, no assumptions paragraph, no audience statement, no size label, no date line, no "how this was produced" section.
 
@@ -274,6 +274,8 @@ Default **small scientific**: aim for something a reader takes in within a few m
 
 Write the draft with `[@key]` and let `format_references.py --style bracket` render each citation as an `[Author 2026](https://doi.org/…)` link and build the sources block. On the tool-only path, write the `[Author 2026](https://doi.org/…)` links directly, using the DOI from the verified Crossref record, and transcribe the sources block the same way.
 
+Place every citation after the sentence, clause, quotation, figure-caption claim, or table row it supports. Never make an author–year link the grammatical subject that opens a sentence. This matters especially for journal export: the renderer closes the preceding whitespace, moves terminal punctuation before the linked superscript, and rejects a citation that opens a sentence, paragraph, bullet, or caption. A DOI-only source cell in a comparison table is allowed.
+
 ## If verification could not be completed
 
 - A DOI, title, year, or source-type mismatch is a bibliographic failure. Fix or remove that source and any dependent claim before delivering the review. An unverified citation must never reach **Sources**.
@@ -308,7 +310,10 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
     stranded or separated from its first paragraph, table, or figure; no page
     may be an avoidably sparse spill; and no large preventable blank region may
     remain. Rebalance and rebuild without dropping evidence or reducing
-    legibility, then repeat the complete raster inspection.
+    legibility, then repeat the complete raster inspection. Journal citations
+    are linked superscript numbers attached to the preceding claim or quotation,
+    never the beginning of a sentence, and the numbered References list follows
+    first-citation order.
 12. Run the finished Markdown through `scripts/validate_review.py` with the
     selected style and size, the ledger, and the full-text manifest. Add
     `--strict-tier` whenever the user explicitly requested a size. Fix every

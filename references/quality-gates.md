@@ -93,3 +93,10 @@ visible reference text and as a URI annotation, applies terminal reference-page
 occupancy checks, rasterizes every page, and records exactly one authoritative
 render set in the manifest. Keep failed candidates in a case-local audit folder,
 never beside the canonical PDF.
+
+The journal build keeps author–year links in the source markdown but renders
+them as DOI-linked superscript numbers in first-citation order. Each number must
+close directly against the preceding supported claim or quotation, after its
+punctuation; a citation that opens a sentence, paragraph, bullet, or caption is
+a hard exporter failure. The terminal References list uses the same numbers and
+order. Inspect this explicitly in the HTML and page rasters as part of PDF QA.

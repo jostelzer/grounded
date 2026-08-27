@@ -4,8 +4,10 @@
 Takes the markdown produced by format_references.py and typesets it in the
 GROUNDED journal identity: repeating masthead, provenance, metadata grid,
 two-column body, full-width tables and figures, numbered cited captions, and a
-compact reference list. Citations and figure cross-references stay hyperlinked;
-DOIs stay resolvable.
+compact reference list. Author-year DOI links in the source markdown become
+DOI-linked superscript numbers attached to the supported claim, while the
+reference list follows first-citation order. Figure cross-references stay
+hyperlinked and DOIs stay resolvable.
 
     python3 export_review.py --in review.md --out review.html
     python3 export_review.py --in review.md --out review.pdf --pdf
@@ -33,19 +35,169 @@ from artifact_io import atomic_write_json, sha256_bytes, sha256_file
 # The skill emits a narrow, fixed subset: ##/### headings, **bold**, *italic*,
 # [text](url) links, - bullets, | tables |, and > blockquotes. Parse exactly that.
 
+INLINE_LINK_RE = re.compile(
+    r"\[([^\]]+)\]\((https?://(?:[^\s()]|\([^\s()]*\))+|#[A-Za-z][A-Za-z0-9_-]*)\)"
+)
+DOI_MARKDOWN_LINK = (
+    r"\[[^\]]+\]\(https?://(?:dx\.)?doi\.org/"
+    r"(?:[^\s()]|\([^\s()]*\))+\)"
+)
+DOI_MARKDOWN_GROUP_RE = re.compile(
+    DOI_MARKDOWN_LINK + r"(?:,\s*" + DOI_MARKDOWN_LINK + r")*",
+    re.IGNORECASE,
+)
+CITATION_MARKER_RE = re.compile(r"\ue000C(?P<number>\d+)\ue001")
+CITATION_MARKER_GROUP_RE = re.compile(
+    r"[ \t]*(?P<markers>\ue000C\d+\ue001"
+    r"(?:,\s*\ue000C\d+\ue001)*)(?P<punct>[.,;:!?]?)"
+)
 
-def inline(s):
+
+class JournalCitationIndex:
+    """Number DOI citations by first appearance for journal rendering only."""
+
+    def __init__(self):
+        self._number_by_doi = {}
+        self._href_by_number = {}
+
+    @staticmethod
+    def normalized_doi(href):
+        match = re.match(
+            r"^https?://(?:dx\.)?doi\.org/(.+)$",
+            html.unescape(href),
+            re.IGNORECASE,
+        )
+        if not match:
+            return None
+        return urllib.parse.unquote(match.group(1)).lower()
+
+    def number_for(self, href):
+        doi = self.normalized_doi(href)
+        if doi is None:
+            raise ValueError(f"not a DOI resolver URL: {href}")
+        if doi not in self._number_by_doi:
+            number = len(self._number_by_doi) + 1
+            self._number_by_doi[doi] = number
+            self._href_by_number[number] = html.unescape(href)
+        return self._number_by_doi[doi]
+
+    def marker_for(self, href):
+        return f"\ue000C{self.number_for(href)}\ue001"
+
+    def render_markers(self, rendered):
+        """Turn adjacent markers into one linked superscript citation cluster.
+
+        The journal puts sentence punctuation before the raised number and
+        removes the ordinary word space before it. This makes a citation read
+        as support for the preceding claim instead of the opening of the next
+        sentence.
+        """
+        def replace_group(match):
+            numbers = []
+            for token in CITATION_MARKER_RE.finditer(match.group("markers")):
+                number = int(token.group("number"))
+                if number not in numbers:
+                    numbers.append(number)
+            links = ",".join(
+                '<a href="%s" role="doc-biblioref">%d</a>' % (
+                    html.escape(self._href_by_number[number], quote=True), number
+                )
+                for number in numbers
+            )
+            label = ", ".join(str(number) for number in numbers)
+            citation = (
+                f'<sup class="citation" aria-label="References {label}">'
+                f"{links}</sup>"
+            )
+            return match.group("punct") + citation
+
+        return CITATION_MARKER_GROUP_RE.sub(replace_group, rendered)
+
+
+def _reference_doi(text):
+    urls = []
+    for match in re.finditer(
+            r"https?://(?:dx\.)?doi\.org/[^\s<>]+", text, re.IGNORECASE):
+        href = match.group(0).rstrip(".,;*_)")
+        doi = JournalCitationIndex.normalized_doi(href)
+        if doi and doi not in {item[0] for item in urls}:
+            urls.append((doi, href))
+    if len(urls) != 1:
+        raise ValueError("every Sources entry must contain exactly one DOI URL")
+    return urls[0][1]
+
+
+def _validate_journal_citation_placement(md):
+    """Reject citations that function as the first words of a sentence.
+
+    A DOI-only table cell is allowed because it labels the row rather than
+    opening a sentence. Citations after a completed sentence are valid: the
+    renderer closes the preceding whitespace and attaches the superscript to
+    that sentence.
+    """
+    body = re.split(r"(?m)^\*\*Sources\*\*\s*$", md, maxsplit=1)[0]
+    for match in DOI_MARKDOWN_GROUP_RE.finditer(body):
+        line_number = body.count("\n", 0, match.start()) + 1
+        line_start = body.rfind("\n", 0, match.start()) + 1
+        line_end = body.find("\n", match.end())
+        if line_end < 0:
+            line_end = len(body)
+        line = body[line_start:line_end]
+        relative_start = match.start() - line_start
+        relative_end = match.end() - line_start
+        is_table_row = line.lstrip().startswith("|")
+        if is_table_row:
+            cell_start = line.rfind("|", 0, relative_start) + 1
+            cell_end = line.find("|", relative_end)
+            if cell_end < 0:
+                cell_end = len(line)
+            cell_prefix = line[cell_start:relative_start]
+            cell_suffix = line[relative_end:cell_end]
+            if not cell_prefix.strip() and not cell_suffix.strip():
+                continue
+
+        block_start = body.rfind("\n\n", 0, match.start()) + 2
+        prefix = body[block_start:match.start()]
+        if not re.search(r"[^\W_]", prefix, re.UNICODE):
+            raise ValueError(
+                f"journal citation starts a sentence or block at line {line_number}; "
+                "place it after the supported claim or quotation"
+            )
+
+        if prefix.rstrip().endswith((".", "!", "?")):
+            block_end = body.find("\n\n", match.end())
+            if block_end < 0:
+                block_end = len(body)
+            tail = body[match.end():block_end].lstrip()
+            tail = tail.lstrip(",;: ")
+            first_word = re.search(r"[^\W_]", tail, re.UNICODE)
+            if first_word and first_word.group(0).islower():
+                raise ValueError(
+                    f"journal citation starts a sentence at line {line_number}; "
+                    "rewrite the sentence so the citation follows its claim"
+                )
+
+
+def inline(s, citations=None, in_references=False):
     """Inline markdown -> HTML. Escapes first, so source text can contain < or &."""
     s = html.escape(s, quote=False)
     # links before emphasis: link text may contain punctuation but not brackets
-    s = re.sub(r"\[([^\]]+)\]\((https?://(?:[^\s()]|\([^\s()]*\))+|#[A-Za-z][A-Za-z0-9_-]*)\)",
-               lambda m: f'<a href="{html.escape(m.group(2), quote=True)}">{m.group(1)}</a>', s)
+    def replace_link(match):
+        href = html.unescape(match.group(2))
+        if (citations is not None and not in_references
+                and JournalCitationIndex.normalized_doi(href) is not None):
+            return citations.marker_for(href)
+        return f'<a href="{html.escape(href, quote=True)}">{match.group(1)}</a>'
+
+    s = INLINE_LINK_RE.sub(replace_link, s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<![*\w])\*([^*]+)\*(?!\w)", r"<em>\1</em>", s)
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
     # bare urls (in the sources block) become links
     s = re.sub(r'(?<!["=>])(https?://[^\s<]+)(?![^<]*</a>)',
                lambda m: f'<a href="{html.escape(m.group(1), quote=True)}">{m.group(1)}</a>', s)
+    if citations is not None and not in_references:
+        s = citations.render_markers(s)
     return s
 
 
@@ -172,6 +324,8 @@ def image_data_uri(path, base_dir):
 
 def _to_html_document(md, base_dir=".", columns=2):
     """Convert Markdown and return title, lead, body, and explicit flow mode."""
+    _validate_journal_citation_placement(md)
+    citations = JournalCitationIndex()
     lines = md.split("\n")
     out, i = [], 0
     title, lead = None, None
@@ -205,13 +359,13 @@ def _to_html_document(md, base_dir=".", columns=2):
 
         # provenance header line the examples carry: "> Unedited example output..."
         if s.startswith(">"):
-            note = inline(s.lstrip("> ").strip())
+            note = inline(s.lstrip("> ").strip(), citations=citations)
             out.append(f'<p class="note">{note}</p>')
             i += 1
             continue
 
         if s.startswith("### "):
-            out.append(f"<h2>{inline(s[4:])}</h2>")
+            out.append(f"<h2>{inline(s[4:], citations=citations)}</h2>")
             i += 1
             continue
 
@@ -248,11 +402,13 @@ def _to_html_document(md, base_dir=".", columns=2):
             if caption_bullets:
                 has_tall_structured_caption = True
                 caption_list = "<ul>" + "".join(
-                    f"<li>{inline(item)}</li>" for item in caption_bullets) + "</ul>"
+                    f"<li>{inline(item, citations=citations)}</li>"
+                    for item in caption_bullets) + "</ul>"
             caption = (
                 f'<figcaption><b class="figno">Figure {n_figs}.</b> '
-                f'<b class="figtitle">{inline(cm.group(2))}</b>'
-                f'{inline(cm.group(3) or "")}{caption_list}</figcaption>')
+                f'<b class="figtitle">{inline(cm.group(2), citations=citations)}</b>'
+                f'{inline(cm.group(3) or "", citations=citations)}'
+                f'{caption_list}</figcaption>')
             i = k
             uri = image_data_uri(src, base_dir)
             append_spanning_block(
@@ -264,17 +420,17 @@ def _to_html_document(md, base_dir=".", columns=2):
 
         if s.startswith("## "):
             if title is None:
-                title = inline(s[3:])
+                title = inline(s[3:], citations=citations)
             else:
-                out.append(f"<h2>{inline(s[3:])}</h2>")
+                out.append(f"<h2>{inline(s[3:], citations=citations)}</h2>")
             i += 1
             continue
 
         if s.startswith("# "):
             if title is None:
-                title = inline(s[2:])
+                title = inline(s[2:], citations=citations)
             else:
-                out.append(f"<h2>{inline(s[2:])}</h2>")
+                out.append(f"<h2>{inline(s[2:], citations=citations)}</h2>")
             i += 1
             continue
 
@@ -286,8 +442,12 @@ def _to_html_document(md, base_dir=".", columns=2):
             while i < len(lines) and lines[i].strip().startswith("|"):
                 rows.append(split_row(lines[i].strip()))
                 i += 1
-            th = "".join(f"<th>{inline(c)}</th>" for c in head)
-            trs = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in rows)
+            th = "".join(
+                f"<th>{inline(c, citations=citations)}</th>" for c in head)
+            trs = "".join(
+                "<tr>" + "".join(
+                    f"<td>{inline(c, citations=citations)}</td>" for c in r
+                ) + "</tr>" for r in rows)
             append_spanning_block(
                 out,
                 f'<div class="tablewrap"><table><thead><tr>{th}</tr></thead>'
@@ -299,7 +459,8 @@ def _to_html_document(md, base_dir=".", columns=2):
         if s.startswith("- ") or s.startswith("* "):
             items = []
             while i < len(lines) and lines[i].strip()[:2] in ("- ", "* "):
-                items.append(f"<li>{inline(lines[i].strip()[2:])}</li>")
+                items.append(
+                    f"<li>{inline(lines[i].strip()[2:], citations=citations)}</li>")
                 i += 1
             out.append("<ul>" + "".join(items) + "</ul>")
             continue
@@ -315,44 +476,70 @@ def _to_html_document(md, base_dir=".", columns=2):
         # the TL;DR or Abstract becomes the journal "lead"; the Sources heading starts the refs
         m = re.match(r"^\*\*(TL;DR|Abstract)\*\*", text)
         if m:
-            lead = (m.group(1), inline(re.sub(r"^\*\*(TL;DR|Abstract)\*\*\s*[—–-]?\s*", "", text)))
+            lead = (
+                m.group(1),
+                inline(
+                    re.sub(r"^\*\*(TL;DR|Abstract)\*\*\s*[—–-]?\s*", "", text),
+                    citations=citations,
+                ),
+            )
             continue
         if re.match(r"^\*\*Sources\*\*\s*$", text):
             if in_sources:
                 raise ValueError("Sources must appear exactly once")
             in_sources = True
-            out.append('<section class="spanning-reference-head">'
-                       '<h2 class="refhead">References</h2></section>')
+            out.append('<h2 class="refhead">References</h2>')
             out.append('<div class="refs">')
             continue
-        out.append(f"<p>{inline(text)}</p>")
+        if in_sources:
+            reference_href = _reference_doi(text)
+            number = citations.number_for(reference_href)
+            rendered_reference = inline(
+                text, citations=citations, in_references=True)
+            out.append(
+                f'<p data-reference-number="{number}">'
+                f'<span class="refno">{number}.</span> {rendered_reference}</p>'
+            )
+        else:
+            out.append(f"<p>{inline(text, citations=citations)}</p>")
 
     if pending_figure_id is not None:
         raise ValueError("figure anchor is not followed by a figure")
-    if any(block == '<div class="refs">' for block in out):
-        out.append('<p class="tomb">&#8718;</p></div>')
+    reference_container = next(
+        (index for index, block in enumerate(out)
+         if block == '<div class="refs">'),
+        None,
+    )
+    if reference_container is not None:
+        references = out[reference_container + 1:]
+        references.sort(key=lambda entry: int(re.search(
+            r'data-reference-number="(\d+)"', entry).group(1)))
+        if references:
+            references[-1] = references[-1].replace(
+                "<p ", '<p class="last-reference" ', 1)
+        heading = out[reference_container - 1]
+        lengths = [len(re.sub(r"<[^>]+>", "", entry))
+                   for entry in references]
+        if (1 < len(references) <= 13 and sum(lengths) <= 4000 and
+                not has_tall_structured_caption):
+            split = min(range(1, len(references)), key=lambda position: abs(
+                sum(lengths[:position]) - sum(lengths) / 2))
+            left = "\n".join(references[:split])
+            right = "\n".join(references[split:])
+            reference_section = (
+                '<section class="spanning-reference-balanced">'
+                f'{heading}<div class="refs balanced"><div>{left}</div>'
+                f'<div>{right}</div></div></section>'
+            )
+            out[reference_container - 1:] = [reference_section]
+        else:
+            out[reference_container + 1:] = references
+            if references:
+                out[-1] += "</div>"
+            else:
+                out.append("</div>")
     else:
         out.append('<p class="tomb">&#8718;</p>')
-    for index, block in enumerate(out):
-        if block == '<div class="refs">':
-            entries = out[index + 1:-1]
-            lengths = [len(re.sub(r"<[^>]+>", "", entry))
-                       for entry in entries]
-            if (1 < len(entries) <= 13 and sum(lengths) <= 4000 and
-                    not has_tall_structured_caption):
-                heading = out[index - 1].removeprefix(
-                    '<section class="spanning-reference-head">').removesuffix(
-                        '</section>')
-                split = min(range(1, len(entries)), key=lambda position: abs(
-                    sum(lengths[:position]) - sum(lengths) / 2))
-                left = "\n".join(entries[:split])
-                right = "\n".join(entries[split:] + [out[-1]])
-                out[index - 1:] = [
-                    '<section class="spanning-reference-balanced">'
-                    f'{heading}<div class="refs balanced"><div>{left}</div>'
-                    f'<div>{right}</div></div></section>'
-                ]
-            break
     structured_flow = columns == 2 and has_tall_structured_caption
     body = arrange_page_flow(
         out, columns=columns,
@@ -470,8 +657,9 @@ h1 {
 .note { font-size: 7pt; color: var(--muted); margin: 8px 0 0;
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; text-align: left; }
 .body { counter-reset: sec; }
-/* Sequential fill avoids a last page made of two balanced half-height columns. */
-.body.cols { column-count: 2; column-gap: 8mm; column-fill: auto; }
+/* Paged-media balancing fills earlier pages sequentially and balances the final
+   fragment, preventing a terminal reference page with one nearly empty column. */
+.body.cols { column-count: 2; column-gap: 8mm; column-fill: balance; }
 .column-run.final { column-count: 2; column-gap: 8mm; column-fill: balance; }
 .column-run { column-count: 2; column-gap: 8mm; column-fill: balance; }
 .compact-column-pair {
@@ -479,12 +667,11 @@ h1 {
   column-gap: 8mm; break-inside: avoid;
 }
 .spanning-figure-start, .spanning-block,
-.spanning-reference-head, .spanning-reference-balanced { break-inside: avoid; }
+.spanning-reference-balanced { break-inside: avoid; }
 .spanning-table-start { break-inside: avoid; }
 .body.structured-flow > .spanning-table-start { break-inside: auto; }
 .body.cols > .spanning-figure-start, .body.cols > .spanning-table-start,
-.body.cols > .spanning-block,
-.body.cols > .spanning-reference-head { column-span: all; }
+.body.cols > .spanning-block { column-span: all; }
 .body.cols > .spanning-reference-balanced { column-span: all; }
 h2 {
   font-size: 9pt; font-weight: 600; line-height: 1.3; letter-spacing: 0;
@@ -509,6 +696,12 @@ li { margin: 0 0 4.5px; break-inside: avoid; }
 a { color: inherit; text-decoration: none; border-bottom: .5px solid rgba(255,79,31,.55); }
 a[href^="#fig-"] { white-space: nowrap; }
 a:hover { border-bottom-color: var(--accent); }
+sup.citation {
+  margin-left: .08em; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: .72em; font-weight: 700; line-height: 0; vertical-align: super;
+  white-space: nowrap; font-variant-numeric: tabular-nums; text-align: left;
+}
+sup.citation a { color: var(--accent); border-bottom: 0; }
 code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; }
 strong { letter-spacing: 0; }
 /* Tables span the full page width (interrupting the columns, as journals do)
@@ -536,7 +729,14 @@ tbody tr:last-child td { border-bottom: 1px solid var(--ink); }
 .refs.balanced {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8mm;
 }
-.refs p { margin: 0 0 2.5px; padding-left: 1.2em; text-indent: -1.2em; break-inside: avoid-page; }
+.refs p { margin: 0 0 2.5px; padding-left: 2.25em; break-inside: avoid-page; }
+.refs .refno {
+  float: left; width: 2em; margin-left: -2.25em; color: var(--accent);
+  font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.refs p.last-reference::after {
+  content: "  \220E"; color: var(--accent); font-size: 1.2em; white-space: nowrap;
+}
 .refs.dense { font-size: 6.5pt; line-height: 1.08; }
 .refs.dense p { margin-bottom: .5px; }
 .refs a { border-bottom: none; color: var(--muted); word-break: break-all; }
