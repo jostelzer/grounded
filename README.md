@@ -2,7 +2,7 @@
 
 Grounded is an agent skill that writes scientific literature reviews built **only on real, verified, peer-reviewed citations**. Every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref (including retraction screening), and the reference list is generated programmatically from the verified records — so every citation resolves, every time. It works with any LLM agent that can read files and run Python or fetch URLs.
 
-## How to use
+## Examples
 
 Ask in plain language, naming a size, a style, and an output format. Whatever you leave out, Grounded asks you in one quick question before it starts.
 
@@ -21,6 +21,16 @@ Ask in plain language, naming a size, a style, and an output format. Whatever yo
 ### Check a draft
 
 > Use the grounded skill to check this draft's claims and references against the literature.
+
+### Finished reviews
+
+Each example ran through the complete pipeline, with the full Markdown review and its journal-styled PDF:
+
+- **Popsci** — Why do mosquitoes bite some people more than others? → [Markdown](examples/popsci-mosquito-preference.md) · [PDF](examples/popsci-mosquito-preference.pdf) · small · 13 verified sources
+- **ELI5** — Why are clouds white, but rain clouds dark? → [Markdown](examples/eli5-why-clouds-are-white.md) · [PDF](examples/eli5-why-clouds-are-white.pdf) · small · 13 verified sources · one cited figure
+- **Scientific** — Which Mediterranean-diet benefits are genuinely supported? → [Markdown](examples/prose-large-mediterranean-diet.md) · [PDF](examples/prose-large-mediterranean-diet.pdf) · large · 97 verified sources · four figures (the retracted original PREDIMED report is excluded; its corrected republication is used)
+
+More finished outputs are in [examples/](examples/).
 
 ## Sizes and styles
 
@@ -46,16 +56,6 @@ Ask in plain language, naming a size, a style, and an output format. Whatever yo
 - **inline chat** (default) — the review is the reply itself, with every citation a clickable author–year DOI link and technical terms linked to plain-language explainers.
 - **journal PDF** — a journal-styled PDF (two-column body, superscript citations, numbered references) that **always includes generated scientific figures** built from the verified evidence: mechanism diagrams, evidence maps, timelines, plotted numbers with intervals.
 - **slides** (experimental) — say `deck`, `slides`, or `presentation` and the deliverable is a verified 16:9 PDF deck whose every slide stands alone: a full-sentence cited claim plus a generated image that carries the evidence, with live DOI links and evidence grades.
-
-## Real examples
-
-Each example ran through the complete pipeline, with the full Markdown review and its journal-styled PDF:
-
-- **Popsci** — Why do mosquitoes bite some people more than others? → [Markdown](examples/popsci-mosquito-preference.md) · [PDF](examples/popsci-mosquito-preference.pdf) · small · 13 verified sources
-- **ELI5** — Why are clouds white, but rain clouds dark? → [Markdown](examples/eli5-why-clouds-are-white.md) · [PDF](examples/eli5-why-clouds-are-white.pdf) · small · 13 verified sources · one cited figure
-- **Scientific** — Which Mediterranean-diet benefits are genuinely supported? → [Markdown](examples/prose-large-mediterranean-diet.md) · [PDF](examples/prose-large-mediterranean-diet.pdf) · large · 97 verified sources · four figures (the retracted original PREDIMED report is excluded; its corrected republication is used)
-
-More finished outputs are in [examples/](examples/).
 
 ## Installation
 
