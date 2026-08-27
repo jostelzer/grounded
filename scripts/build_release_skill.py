@@ -36,6 +36,10 @@ REFERENCE_FILES = (
     "quality-gates.md",
     "search-playbook.md",
     "sizes.md",
+    "style-bullets.md",
+    "style-eli5.md",
+    "style-popsci.md",
+    "style-scientific.md",
     "writing-guide.md",
 )
 SCRIPT_FILES = (
