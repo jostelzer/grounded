@@ -2,7 +2,7 @@
 
 The review is delivered **as the chat message itself** — not as a file, attachment, artifact, or canvas. Markdown renders in the conversation; a `.md` file does not preview in most clients and opens in a code editor with the formatting stripped, which makes good work look broken. Write it in the reply.
 
-Create a file only if the user asks, and even then also put the review in the chat. Image and mindmap modes add a rendered media artifact by design; they do not move the written review into a file.
+Create a file only if the user asks, and even then also put the review in the chat. The journal PDF format adds its rendered figures and PDF by design; it does not move the written review out of the chat.
 
 It is not a document with front matter or a report about itself. Every word earns its place.
 
@@ -34,7 +34,7 @@ In the chat review and source Markdown, in-text citations render as plain `Autho
 
 Nothing before the question. No scope note, no assumptions paragraph, no audience statement, no size label, no date line, no "how this was produced" section.
 
-In explicit image or mindmap mode, keep this written structure and insert each
+For the journal PDF format, keep this written structure and insert each
 rendered figure immediately after the section it supports. Every figure is
 referenced from the body and carries a verified, style-matched caption under
 `figure-captions.md`; use `media-modes.md` for the wider visual workflow.
@@ -298,7 +298,7 @@ Place every citation immediately after the sentence, clause, quotation, figure-c
 9. Read it once and cut 10% more.
 9b. In scientific style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly. In ELI5, the explanation is a staircase: it opens from something the reader already knows, each section adds one new idea built only on earlier steps with no forward references, the contrary evidence gets its own step, the closing hand-back passes the tell-a-friend test, and bullet-list bodies are absent unless the user requested them.
 9c. In popsci style: the headline is honest; the lede is a concrete, cited close-up with no invented detail; the nut graf poses the throughline; the turn gets its own crosshead; the kicker circles back and looks forward; no hype vocabulary appears; and every hedge in the sources survives into the piece — the certainty matches the evidence exactly.
-10. In image or mindmap mode, every requested visual is rendered,
+10. In the journal PDF format, every required figure is rendered,
     evidence-grounded, legible, and inspected; has a unique stable ID; is
     referenced from the relevant body text; and has a caption in the same
     scientific, popsci, bullet, or ELI5 register with 2–5 verified citations.

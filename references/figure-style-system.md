@@ -1,6 +1,6 @@
 # Journal-grade figure style system
 
-Use this system for every `image`, `mindmap`, or deck content image. It translates
+Use this system for every journal-PDF figure and deck content image. It translates
 top-journal figure conventions into a display-oriented Grounded review style;
 it is not an official Nature template and must not carry Nature branding. Read
 `figure-reference-analysis.md` for the 21-figure visual audit behind the rules.

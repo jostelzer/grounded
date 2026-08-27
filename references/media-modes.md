@@ -1,6 +1,6 @@
-# Experimental media modes
+# Figures for the journal PDF and slides formats
 
-Read this reference when the user explicitly requests `image` or `mindmap` as an output mode. Image mode runs the complete review pipeline at the requested size and style (small scientific when none is named); mindmap mode uses the small pipeline and the selected writing style (scientific when none is named). The media is an additional synthesis artifact; it never replaces the written review or relaxes the search, reading, citation, or verification standard. An explicitly requested `deck`, `slides`, presentation, slide deck, or journal club deck follows the same shared evidence boundary below but uses the complete workflow in `deck-guide.md` — and differs in delivery: the deck is the deliverable, with the written synthesis kept as an internal working draft rather than delivered in chat.
+Read this reference whenever the output format is the **journal PDF** (whose figures are mandatory and automatic — there is no separate image mode) or **slides**. The figures are an additional synthesis artifact created after the complete review pipeline has run at the selected size and style; they never replace the written review or relax the search, reading, citation, or verification standard. An explicitly requested `deck`, `slides`, presentation, slide deck, or journal club deck follows the same shared evidence boundary below but uses the complete workflow in `deck-guide.md` — and differs in delivery: the deck is the deliverable, with the written synthesis kept as an internal working draft rather than delivered in chat.
 
 Before creating media, also read `figure-reference-analysis.md`,
 `figure-style-system.md`, `image-prompt-guide.md`, and `figure-captions.md`.
@@ -19,13 +19,13 @@ an improvised prose prompt.
 - Prefer a capable image-generation model for the complete rendered artifact, including text. Supply exact copy and inspect every character; deterministic SVG or another renderer is the fallback when generation is unavailable or cannot pass QA.
 - If the required media tooling is unavailable or generation fails, still deliver the written review at its selected tier and state in one sentence that the visual could not be generated. Do not claim that media was created.
 
-## Deck mode
+## Slides
 
-Deck is explicit-only, combines with every size and style, and is itself the deliverable: chat carries the question, a 1–3 sentence plain answer, and the verified 16:9 PDF, while the written synthesis stays an internal working draft. Read `deck-guide.md` before planning it. Every content slide uses `render_context: slide`, a full-sentence cited claim in real-text chrome, one generated image that carries the evidence itself, and a `strong`/`mixed`/`limited` evidence grade — and must pass the guide's standalone test: claim, evidence, and firmness readable from the slide alone. The canonical exporter adds title and two-column reference slides from the verified ledger; the dedicated QA inspects every landscape page and its live DOI links. Deck has no deterministic or text-slide fallback: when no capable image-generation model is available, fall back to delivering the internal synthesis as a normal full review and state in one sentence that the deck could not be generated.
+The slides format is explicit-only, combines with every size and style, and is itself the deliverable: chat carries the question, a 1–3 sentence plain answer, and the verified 16:9 PDF, while the written synthesis stays an internal working draft. Read `deck-guide.md` before planning it. Every content slide uses `render_context: slide`, a full-sentence cited claim in real-text chrome, one generated image that carries the evidence itself, and a `strong`/`mixed`/`limited` evidence grade — and must pass the guide's standalone test: claim, evidence, and firmness readable from the slide alone. The canonical exporter adds title and two-column reference slides from the verified ledger; the dedicated QA inspects every landscape page and its live DOI links. Deck has no deterministic or text-slide fallback: when no capable image-generation model is available, fall back to delivering the internal synthesis as a normal full review and state in one sentence that the deck could not be generated.
 
-## Image mode
+## Journal-PDF figures
 
-Create polished, self-explanatory scientific figures that communicate the review's synthesis. Image mode combines with any size and style; the figure budget scales with the size:
+Create polished, self-explanatory scientific figures that communicate the review's synthesis. The journal PDF always carries figures, at any size and style; the figure budget scales with the size:
 
 | | Small | Medium | Large |
 |---|---|---|---|
@@ -153,37 +153,10 @@ short flowing paragraph in the magazine register; ELI5 uses a short flowing
 paragraph of everyday sentences. `scripts/format_references.py` and
 `scripts/export_review.py` validate the contract.
 
-## Mindmap mode
-
-Create one rendered, readable mindmap that exposes the structure of the evidence rather than merely decorating the topic.
-
-1. Put the sharpened research question at the root.
-2. Use 4–7 primary branches drawn from the review's actual angles and punchlines. Include the direct answer, mechanisms where relevant, moderators or populations, contrary/null findings, limitations, and open questions when supported.
-3. Keep node labels to roughly 2–7 words. Add only enough second-level nodes to preserve the major findings; do not reproduce the entire review in the map.
-4. Encode evidence strength consistently, with a small legend. A useful default is strong/consistent, mixed/moderate, and limited/uncertain. Do not imply that branch size equals effect size unless the data support that encoding.
-5. Prefer a capable image-generation model to render the complete map, including all node and legend text. Inspect every label and relationship. Use deterministic SVG, HTML/canvas, graph rendering, or visibly rendered Mermaid as fallback; never hand back raw diagram source.
-6. Give the map a stable figure ID, a style-matched cited caption, and a body
-   reference under the same `figure-captions.md` contract as every other figure.
-7. Inspect the rendered map. Fix overlaps, clipped nodes, unreadable labels,
-   weak contrast, confusing crossing edges, and any branch whose emphasis
-   misstates the literature.
-
-Deliver the small review using the selected writing style, reference the map from
-the relevant body passage, then insert:
-
-```text
-The evidence structure is summarized in {{figure:findings-map}}.
-
-<rendered mindmap>
-**Figure {#findings-map}. <plain-language evidence-map title>.** <how to read the evidence-strength encoding, the important uncertainty, and 2–5 ledger citations>
-```
-
-Use specific alt text that lists the root and primary branches.
-
 ## Final media quality gate
 
-1. The media mode was explicitly requested.
-2. The written review independently answers the question at the selected tier in image mode, or at small depth in mindmap mode.
+1. The journal PDF or slides format was explicitly requested.
+2. The written review independently answers the question at the selected tier.
 3. Every depicted scientific claim is supported by the verified review.
 4. Uncertainty and disagreement remain visible.
 5. The artifact is rendered and displayed, not supplied as instructions or source code.
@@ -192,6 +165,6 @@ Use specific alt text that lists the root and primary branches.
    that matches the review's scientific, popsci, bullets, or ELI5 register.
 8. The caption explains the synthesis, states its evidence boundary, and cites
    2–5 relevant verified sources that also appear in the Sources block.
-9. In image mode, every abbreviation and non-obvious concept is defined by a
+9. In every figure, every abbreviation and non-obvious concept is defined by a
    local label or a smaller but readable legend/key inside the image.
-10. In image mode, the figure can be understood without consulting the surrounding prose for terminology.
+10. Every figure can be understood without consulting the surrounding prose for terminology.

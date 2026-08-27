@@ -232,8 +232,8 @@ image carries the evidence; the renderer carries the audit trail.
 Generate the complete image with a capable image-generation model and inspect
 it at full size and at its delivered PDF size. The normal text, data, science,
 composition, and style defects in `image-prompt-guide.md` remain release
-failures, and so does a failed standalone test. Unlike ordinary image mode,
-deck mode has no deterministic SVG or placeholder fallback: every content slide
+failures, and so does a failed standalone test. Unlike journal-PDF figures,
+the slides format has no deterministic SVG or placeholder fallback: every content slide
 is specifically an AI-generated image. If a capable image model is unavailable
 or a required render cannot pass QA, do not manufacture a text slide or reuse
 an unrelated figure.

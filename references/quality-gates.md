@@ -1,7 +1,7 @@
 # Auditable quality gates
 
-These gates are mandatory for an explicitly requested size, image mode, or PDF
-release. Ordinary default-small chat answers retain advisory tier budgets, but
+These gates are mandatory for an explicitly requested size, a journal PDF (whose
+figures are mandatory), or a PDF release. Ordinary default-small chat answers retain advisory tier budgets, but
 the evidence, citation, and text-hygiene rules never become advisory.
 
 ## Search manifest
@@ -52,7 +52,7 @@ For an explicitly named tier, validate the final file with all evidence inputs:
 python3 scripts/validate_review.py review.md --style scientific --size large --strict-tier --ledger sources.json --fulltext-manifest fulltext-manifest.json --report validation.json
 ```
 
-Add `--image-mode` when requested. Strict mode makes word, source, section,
+Add `--image-mode` for journal-PDF reviews, whose figures are mandatory. Strict mode makes word, source, section,
 table, and figure-cap ranges plus the counted-full-text minimum hard errors. A
 structured thin-literature override may cover only genuine source/full-text shortfalls;
 it never excuses short prose, missing sections/tables, or evidence padding.

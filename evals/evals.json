@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "Write me a small review: does intermittent fasting improve glycaemic control in adults with type 2 diabetes compared with continuous calorie restriction?",
+      "prompt": "Write me a small scientific review: does intermittent fasting improve glycaemic control in adults with type 2 diabetes compared with continuous calorie restriction?",
       "expected_output": "A 600-1,000 word chat-native prose review with 10-20 verified peer-reviewed references, a citation-free Abstract, an Introduction posing one throughline, thematic sections of topic-sentence paragraphs that advance it, a cross-cutting Conclusion, head-to-head evidence with numbers, contrary evidence and safety where relevant, and in-text author-year citations hyperlinked to their DOIs plus a generated sources block with DOI links. No methods box or file.",
       "files": []
     },
@@ -15,14 +15,14 @@
     },
     {
       "id": 2,
-      "prompt": "Image mode: review how sleep deprivation affects immune function in healthy adults.",
-      "expected_output": "A complete small prose scientific review with 10-20 verified peer-reviewed sources, followed by one actually generated and displayed scientific illustration grounded only in the verified synthesis. The review has a citation-free Abstract, Introduction, thematic prose sections, and Conclusion. The illustration is independently understandable to an educated non-specialist, defines every abbreviation and non-obvious concept with local labels or a compact readable legend when needed, distinguishes established findings from uncertain mechanisms, has exact readable labels, useful alt text, and a concise prose caption with supporting review citations.",
+      "prompt": "Give me a small scientific review as a journal PDF: how does sleep deprivation affect immune function in healthy adults?",
+      "expected_output": "A complete small scientific review with 10-20 verified peer-reviewed sources, delivered in chat AND as the canonical journal-styled PDF. Because the journal PDF format was chosen, exactly one generated figure is created automatically (small tier budget: 1) from the verified synthesis - no explicit image request is needed and no separate image mode exists. The figure is independently understandable to an educated non-specialist, defines every abbreviation and non-obvious concept with local labels or a compact readable legend when needed, distinguishes established findings from uncertain mechanisms, has exact readable labels, useful alt text, and a concise prose caption with supporting review citations. The PDF is built with the canonical browser-free exporter and passes its mandatory QA.",
       "files": []
     },
     {
       "id": 3,
-      "prompt": "Mindmap mode: what does peer-reviewed research say about the causes and maintenance of chronic low-back pain?",
-      "expected_output": "A complete small prose scientific review with 10-20 verified peer-reviewed sources, followed by one actually rendered and displayed mindmap. The written review follows the default Abstract-to-Conclusion narrative structure. The root is the sharpened question; branches reflect the review's evidence angles, disagreements, moderators, limitations, and open questions; evidence strength is encoded with a legend; labels are legible; and the caption points back to verified sources.",
+      "prompt": "Use the grounded skill: what does peer-reviewed research say about the causes and maintenance of chronic low-back pain?",
+      "expected_output": "Because neither a size nor a style was specified, the very first reply arrives within seconds and is a single short question (one or two lines) asking the user to pick a size (small/medium/large) and a style (scientific/popsci/bullets/ELI5), with the defaults marked. No searching, planning, or review writing happens before the user answers. The output format is not asked about.",
       "files": []
     },
     {
@@ -33,8 +33,8 @@
     },
     {
       "id": 5,
-      "prompt": "Write a small review of medical image registration methods for longitudinal brain MRI.",
-      "expected_output": "A normal text-only small prose review with the default Abstract-to-Conclusion narrative structure. The word `image` appears as part of the scientific topic, not as an explicit output request, so image mode must not activate and no media artifact should be generated.",
+      "prompt": "Write a small scientific review of medical image registration methods for longitudinal brain MRI.",
+      "expected_output": "A normal text-only small scientific review in inline chat with the default Abstract-to-Conclusion narrative structure. The word `image` appears as part of the scientific topic, not as a request for the journal PDF format, so no figures and no PDF are generated.",
       "files": []
     },
     {
@@ -51,7 +51,7 @@
     },
     {
       "id": 8,
-      "prompt": "Use the grounded skill in eli5 mode: does taking vitamin D actually prevent colds?",
+      "prompt": "Use the grounded skill in small eli5 mode: does taking vitamin D actually prevent colds?",
       "expected_output": "A small-tier step-by-step explanation in very simple English: a citation-free TL;DR, an opening paragraph anchored in something the reader already knows (a familiar fact, not an invented anecdote), then sections that each add exactly one new idea built only on earlier steps, with headings that read as the reader's own next questions, studies told as little stories with real details from the papers, the contrary evidence as its own honest step, and a closing hand-back the reader could repeat to a friend plus what scientists still need to find out. Flowing paragraphs throughout, no bullet-list body unless the user explicitly asks for bullets too. Everyday words, short sentences, no unexplained jargon, numbers explained in words. Same rigour as small - 10-20 verified peer-reviewed references, in-text author-year citations hyperlinked to their DOIs, contrary evidence included, and a generated sources block with DOI links. Uncertainty stated plainly, never dropped.",
       "files": []
     },
@@ -63,27 +63,32 @@
     },
     {
       "id": 10,
-      "prompt": "Use the grounded skill, medium image mode: how does chronic stress affect the immune system?",
-      "expected_output": "A medium prose review (30-60 verified sources, citation-free Abstract, Introduction, 6-9 thematic sections, Conclusion, and 1-2 tables) plus up to three figures, each earned by a distinct visual story (e.g. a mechanism synthesis with local definitions, an evidence map, or a real-numbers effect summary using only values cited in the text), every character and value in every figure exact and inspected, each figure placed after the section it supports with alt text and a cited prose caption, and each rendered figure inspected before delivery.",
+      "prompt": "Use the grounded skill, medium scientific, as a journal PDF: how does chronic stress affect the immune system?",
+      "expected_output": "A medium scientific review (30-60 verified sources, citation-free Abstract, Introduction, 6-9 thematic sections, Conclusion, and 1-2 tables) delivered in chat and as the canonical journal-styled PDF, which automatically includes up to three figures (medium tier cap - earned, not padded), each carrying a distinct visual story (e.g. a mechanism synthesis with local definitions, an evidence map, or a real-numbers effect summary using only values cited in the text), every character and value in every figure exact and inspected, each figure placed after the section it supports with alt text and a cited prose caption, and each rendered figure inspected before delivery.",
       "files": []
     },
     {
       "id": 11,
-      "prompt": "Use the grounded skill in bullet style: does dietary nitrate improve endurance performance?",
+      "prompt": "Use the grounded skill in small bullet style: does dietary nitrate improve endurance performance?",
       "expected_output": "An explicit bullet-style review with a citation-free TL;DR, punchline headings, bullet-only evidence bodies, and a generated Sources block. It does not use the default prose Abstract, Introduction, thematic paragraphs, or Conclusion. Search depth, verified peer-reviewed source counts, DOI-linked author-year citations, contrary evidence, and uncertainty remain unchanged.",
       "files": []
     },
     {
       "id": 12,
-      "prompt": "Use the grounded skill in popsci style, like a Scientific American feature: is intermittent fasting actually better for weight loss?",
+      "prompt": "Use the grounded skill in small popsci style, like a Scientific American feature: is intermittent fasting actually better for weight loss?",
       "expected_output": "A small-tier magazine feature: an honest curiosity-driven headline recasting the question, a citation-free italic standfirst stating the question and the shape of the answer, a concrete cited lede drawn from a real study with no invented detail, a nut graf posing the throughline, evocative but honest crossheads, the contrary or null evidence given its own section as the story's turn, and a kicker that circles back and names what would settle the question. Jargon is named, glossed inline, and term-linked; numbers are human-scale with the exact statistic in parentheses; no hype vocabulary (breakthrough, game-changer, miracle); hedges from the sources survive. Same rigour as every style: 10-20 verified peer-reviewed references, every empirical sentence carrying an author-year DOI-linked citation, and a generated sources block.",
       "files": []
     },
     {
       "id": 13,
-      "prompt": "Use the grounded skill: give me a journal club deck on whether metformin slows aging.",
+      "prompt": "Use the grounded skill: give me a small scientific journal club deck on whether metformin slows aging.",
       "expected_output": "The deck is the deliverable: the chat reply contains the sharpened question, a 1-3 sentence plain answer, and the verified 16:9 deck PDF - no full styled review pasted into chat (the synthesis remains an internal working draft). Every content slide passes the standalone test: from the slide alone a reader gets the claim (full-sentence cited title), the evidence behind it (who or what was studied, how many, what was compared, what the numbers say - shown in the image with units, intervals, local labels, plain-word glosses, and brief reading-guide annotations where the encoding is not obvious), and how firm it is (uncertainty visible in the artwork, with the evidence chip as reinforcement). No decorative or merely topical full-bleed images. Real-text chrome carries claim titles, live DOI citations, evidence grades, and counters; title and reference slides are pure text; slide budgets and the scientific journal-club arc are respected; all sources verified through Crossref.",
       "files": []
+    },
+    {
+      "id": 14,
+      "prompt": "Use the grounded skill in bullet style: does intermittent fasting improve insulin sensitivity?",
+      "expected_output": "The style (bullets) is specified but the size is not, so the very first reply arrives within seconds and is a single short question asking only for the size (small/medium/large, small marked as default) - it does not re-ask the style and does not ask about the output format. No searching or review writing happens before the user answers."
     }
   ]
 }
