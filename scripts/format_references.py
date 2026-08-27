@@ -234,8 +234,53 @@ def initials_dotted(given):
     return " ".join(p[0].upper() + "." for p in parts if p)
 
 
-def fmt_vancouver(n, c, doi):
+INSTITUTION_HINT = re.compile(
+    r"\b(?:department|university|hospital|institute|center|centre|section|"
+    r"division|school|faculty|college|clinic|laboratory|ministry|group|"
+    r"consortium|investigators|committee|network|on behalf of)\b", re.I)
+
+
+def is_person(a):
+    """True for an author record naming a person rather than an institution.
+
+    Crossref author arrays sometimes interleave affiliations or group names
+    with the people (name-only records arrive with an empty given). Those
+    must never lead an in-text tag or an alphabetical sort.
+    """
+    family = (a.get("family") or "").strip()
+    if not family:
+        return False
+    if (a.get("given") or "").strip():
+        return True
+    return ("," not in family and len(family) <= 40
+            and not INSTITUTION_HINT.search(family))
+
+
+def person_authors(c):
+    """Authors eligible to lead in-text tags and sorting; all if none qualify."""
     au = c.get("authors_structured") or []
+    return [a for a in au if is_person(a)] or au
+
+
+def lead_family(c):
+    """Lowercased surname that alphabetizes this entry (first person author)."""
+    au = person_authors(c)
+    return ((au[0].get("family") or "") if au else "").lower()
+
+
+def listed_authors(c):
+    """Authors for the reference list: affiliation-shaped records are dropped;
+    genuine group authors (short, comma-free names) are kept."""
+    au = c.get("authors_structured") or []
+    kept = [a for a in au
+            if is_person(a)
+            or ("," not in (a.get("family") or "")
+                and 0 < len((a.get("family") or "").strip()) <= 60)]
+    return kept or au
+
+
+def fmt_vancouver(n, c, doi):
+    au = listed_authors(c)
     names = [f"{fix_case(a['family'])} {initials(a['given'])}".strip() for a in au]
     authors = ", ".join(names)
     title = clean_title(c.get("title", ""))
@@ -249,7 +294,7 @@ def fmt_vancouver(n, c, doi):
 
 
 def fmt_apa(c, doi, suffix=""):
-    au = c.get("authors_structured") or []
+    au = listed_authors(c)
     def one(a):
         return f"{fix_case(a['family'])}, {initials_dotted(a['given'])}".rstrip(", ").strip()
     if len(au) == 0:
@@ -272,7 +317,7 @@ def fmt_apa(c, doi, suffix=""):
 
 
 def fmt_nature(n, c, doi):
-    au = c.get("authors_structured") or []
+    au = listed_authors(c)
     names = [f"{fix_case(a['family'])}, {initials_dotted(a['given'])}".rstrip(", ") for a in au]
     title = clean_title(c.get("title", ""))
     journal = clean(c.get("journal") or c.get("journal_short") or "")
@@ -283,7 +328,7 @@ def fmt_nature(n, c, doi):
 
 def bracket_intext(c, suffix=""):
     """Author 2026 / Author & Author 2026 / Author et al. 2026 — rendered in text as a DOI link"""
-    au = c.get("authors_structured") or []
+    au = person_authors(c)
     year = f"{c.get('year') or 'n.d.'}{suffix}"
     if not au:
         return f"Anon. {year}"
@@ -299,7 +344,7 @@ def fmt_bracket(c, doi, suffix=""):
 
     The reference list names every author — "et al." lives only in the in-text tags.
     """
-    au = c.get("authors_structured") or []
+    au = listed_authors(c)
     names = ", ".join(f"{fix_case(a['family'])} {initials(a['given'])}".strip()
                       for a in au) or "Anon."
     year = f"{c.get('year') or 'n.d.'}{suffix}"
@@ -309,7 +354,7 @@ def fmt_bracket(c, doi, suffix=""):
 
 
 def apa_intext(c, suffix=""):
-    au = c.get("authors_structured") or []
+    au = person_authors(c)
     year = f"{c.get('year') or 'n.d.'}{suffix}"
     if not au:
         return f"Anon., {year}"
@@ -420,11 +465,11 @@ def main():
 
     refs = []
     if args.style == "bracket":
-        entries = sorted(order, key=lambda k: ((by_key[k]["canonical"].get("authors_structured") or [{"family": ""}])[0]["family"].lower(), by_key[k]["canonical"].get("year") or 0))
+        entries = sorted(order, key=lambda k: (lead_family(by_key[k]["canonical"]), by_key[k]["canonical"].get("year") or 0))
         for k in entries:
             refs.append(fmt_bracket(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")) + correction_note(by_key[k]))
     elif args.style == "apa":
-        entries = sorted(order, key=lambda k: ((by_key[k]["canonical"].get("authors_structured") or [{"family": ""}])[0]["family"].lower(), by_key[k]["canonical"].get("year") or 0))
+        entries = sorted(order, key=lambda k: (lead_family(by_key[k]["canonical"]), by_key[k]["canonical"].get("year") or 0))
         for k in entries:
             refs.append(fmt_apa(by_key[k]["canonical"], by_key[k]["doi"], suffix.get(k, "")) + correction_note(by_key[k]))
     else:

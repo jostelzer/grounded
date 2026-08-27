@@ -40,6 +40,7 @@ from export_review import (
 )
 from format_references import (
     bracket_intext,
+    lead_family,
     doi_href,
     fmt_bracket,
     is_verified,
@@ -360,12 +361,7 @@ def validate_storyboard(storyboard: dict, ledger: dict) -> DeckDocument:
         sorted(
             (by_key[key] for key in reference_keys),
             key=lambda entry: (
-                (
-                    (entry["canonical"].get("authors_structured") or [{"family": ""}])[
-                        0
-                    ].get("family")
-                    or ""
-                ).lower(),
+                lead_family(entry["canonical"]),
                 entry["canonical"].get("year") or 0,
                 (entry["canonical"].get("title") or "").lower(),
             ),
