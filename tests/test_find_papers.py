@@ -149,6 +149,10 @@ class PaginationTests(unittest.TestCase):
 
 
 class QueryAndPolicyTests(unittest.TestCase):
+    def test_angle_slug_is_stable_and_never_starts_with_a_digit(self):
+        self.assertEqual(find_papers.stable_angle_id("2024–2026 evidence"),
+                         "angle-2024-2026-evidence")
+
     def test_database_specific_queries_do_not_cross_services(self):
         plan = find_papers.build_query_plan(
             ["shared"], ["openalex syntax"], ['sleep[tiab] AND trial[pt]'],
@@ -247,6 +251,41 @@ class CitationChasingTests(unittest.TestCase):
         self.assertEqual(provenance["direction"], "backward")
         self.assertEqual(provenance["seed"], "Seed2020study")
 
+    def test_opencitations_fallback_completes_failed_openalex_directions(self):
+        class Fallback:
+            unavailable = None
+
+            def graph_dois(self, doi, direction):
+                suffix = "back" if direction == "backward" else "forward"
+                return [f"10.3000/{suffix}"], f"https://example.test/{direction}/{doi}"
+
+            def metadata(self, dois):
+                return [{
+                    "id": f"doi:{dois[0]}",
+                    "title": "Fallback journal article",
+                    "author": "Doe, Ada [orcid:0000-0000]",
+                    "pub_date": "2025-01-01",
+                    "venue": "Fallback Journal [issn:1234-5678]",
+                    "type": "journal article",
+                }]
+
+        client = FakeOpenAlexClient(lambda _url: None)
+        ledger = {"entries": [{
+            "key": "Seed2020study", "doi": "10.1000/seed"
+        }]}
+        results = find_papers.chase_citations(
+            client, ledger, ["Seed2020study"], direction="both",
+            limit=5, pool=10, page_size=5, chase_sort="recent",
+            fallback_client=Fallback(),
+        )
+        successful = [result for result in results if result.status == "ok"]
+        self.assertEqual(
+            {result.citation_direction for result in successful},
+            {"backward", "forward"},
+        )
+        self.assertTrue(all(result.database == "opencitations" for result in successful))
+        self.assertEqual(successful[0].hits[0]["_source"], "opencitations")
+
 
 class LoggingAndIntegrationTests(unittest.TestCase):
     def test_log_is_created_automatically_beside_ledger(self):
@@ -266,12 +305,16 @@ class LoggingAndIntegrationTests(unittest.TestCase):
                     ])
 
             log_path = Path(temp_dir) / "search_log.md"
+            manifest_path = Path(temp_dir) / "search-manifest.json"
             self.assertEqual(exit_code, 0)
             self.assertTrue(log_path.exists())
             log_text = log_path.read_text(encoding="utf-8")
             self.assertIn("| pubmed | keyword |", log_text)
             self.assertIn("sleep[tiab]", log_text)
             self.assertIn("| 12 | 1 | 1 | 1 | 0 | 1 |", log_text)
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertTrue(manifest["records"][0]["completed"])
+            self.assertEqual(manifest["records"][0]["angle_id"], "unassigned")
             ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
             self.assertEqual(len(ledger["entries"]), 1)
             self.assertEqual(

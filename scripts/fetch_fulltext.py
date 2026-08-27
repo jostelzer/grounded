@@ -24,6 +24,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
+from artifact_io import atomic_write_text
 from grounded_metadata import user_agent
 
 
@@ -116,7 +117,12 @@ def main():
         if args.sections:
             return
         if args.out:
-            open(args.out, "w").write(f"# {entry['title'] if entry else doi}\nDOI: {doi}\nSource: Europe PMC {pmcid}\n\n" + text)
+            atomic_write_text(
+                args.out,
+                f"# {entry['title'] if entry else doi}\n"
+                f"DOI: {doi}\n"
+                f"Source: https://europepmc.org/articles/{pmcid}\n\n{text}",
+            )
             print(f"Saved to {args.out}")
         else:
             print(text)

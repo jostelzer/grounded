@@ -108,6 +108,12 @@ Optional:
 
 Inspect the first render at full size and at its expected PDF width. Classify every defect:
 
+- Add a `relationships` list (`from`, `relation`, `to`) and an `abbreviations`
+  mapping to the spec whenever direction or local shorthand matters. Save the
+  visual inspection as JSON, then run `scripts/qa_figure.py`; its OCR/spec gate
+  makes missing copy, reversed arrows, unexpanded abbreviations, prohibited
+  effects, collisions, and too-small embedded labels separate failures.
+
 1. **Text defect:** misspelling, wrong font family, missing line, corrupted symbol.
 2. **Data defect:** wrong number, interval, scale, denominator, or geometry.
 3. **Science defect:** wrong anatomy, molecule, arrow, causal implication, or certainty.

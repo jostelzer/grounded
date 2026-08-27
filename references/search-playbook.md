@@ -28,7 +28,7 @@ Head-to-head studies; network meta-analyses; separate evidence bases for each; d
 
 ## 2. Build queries
 
-`find_papers.py` searches OpenAlex (all fields) and PubMed (biomedical). `--query` sends the same free text to both. Prefer `--openalex-query` and `--pubmed-query` when using database-specific syntax; PubMed tags such as `[tiab]` must not be sent to OpenAlex. Each database is paged independently up to `--limit` records (default 100), and each run is written to `search_log.md` automatically. Rules of thumb:
+`find_papers.py` searches OpenAlex (all fields) and PubMed (biomedical). `--query` sends the same free text to both. Prefer `--openalex-query` and `--pubmed-query` when using database-specific syntax; PubMed tags such as `[tiab]` must not be sent to OpenAlex. Each database is paged independently up to `--limit` records (default 100), and each run is written to both `search_log.md` and `search-manifest.json`. Rules of thumb:
 
 - **Three to six content words** per query, no Boolean operators needed for OpenAlex; PubMed accepts its own syntax if you want it (`"mindfulness"[tiab] AND adolescen*[tiab]`).
 - **Vary vocabulary across queries**: synonyms, the field's own jargon, the outcome named different ways, the intervention's brand or programme names, older terminology.
@@ -37,7 +37,7 @@ Head-to-head studies; network meta-analyses; separate evidence bases for each; d
 - **Then the classics**: `--sort cited` without a date filter to surface foundational papers in OpenAlex. PubMed has no equivalent citation-count sort.
 - **Then the newest**: `--from-year <two years ago>` to catch work newer than the latest reviews.
 - **Contradiction pass**: queries that name the null or the criticism explicitly; the index does not rank disagreement for you.
-- **Label every run with `--angle`** so the ledger shows coverage per angle.
+- **Label every run with `--angle`, stable `--angle-id`, and `--lane`** so coverage is machine-auditable. Use the `reviews`, `primary`, `foundational`, `recent`, and `contrary-null` lanes across a large funnel.
 - **Page deeply enough to test saturation**: increase `--limit` rather than treating repeated results in the first page as saturation. `--page-size` controls request batching, not the stopping limit.
 - **Give OpenAlex identity metadata**: use `OPENALEX_API_KEY`/`--openalex-api-key` where OpenAlex requires a key, or `OPENALEX_MAILTO`/`--mailto` for courtesy contact metadata. Requests are throttled and retried; a hard OpenAlex failure is logged and PubMed continues.
 
@@ -71,7 +71,7 @@ Run `find_papers.py --ledger sources.json --show` and read the table against you
 
 ## 6. Citation chasing (medium and large)
 
-For each central ledger paper, run `find_papers.py --ledger sources.json --chase <key> --chase-direction both --chase-limit 50`. Backward chasing fetches the seed's references; forward chasing searches works that cite it. Candidates are filtered, deduplicated, and stored with seed/direction provenance. Use `--chase-sort recent` for updates or the default `cited` for influential neighbors. Then search the exact title, distinctive abstract phrases, and `"<main finding> replication"` to catch records that the citation graph misses. For large reviews, do this for the 5–10 central papers.
+For each central ledger paper, run `find_papers.py --ledger sources.json --chase <key> --chase-direction both --chase-limit 50`. Backward chasing fetches the seed's references; forward chasing searches works that cite it. OpenAlex is tried first and OpenCitations Index/Meta is the default fallback; a direction counts when either provider completes it. Candidates are filtered, deduplicated, and stored with seed/direction/provider provenance. Use `--chase-sort recent` for updates or the default `cited` for influential neighbors. Then search the exact title, distinctive abstract phrases, and `"<main finding> replication"` to catch records that the citation graph misses. For large reviews, do this for 5–10 central papers and run `python3 scripts/audit_search.py search-manifest.json --size large`.
 
 ## 7. When the literature is thin
 
@@ -87,4 +87,4 @@ If searches return little: widen vocabulary; drop the date filter; search adjace
 
 ## 9. Log everything
 
-`search_log.md` is appended automatically beside `sources.json`. Every row records UTC time, database, method, angle, requested and API query, filters, sort, database-reported total, locally retrieved/accepted/new/updated counts, page count, exclusions, and status. Use `--search-log <path>` to relocate it or `--no-search-log` only for disposable experiments. It stays on disk for auditing and does not appear in the review.
+`search_log.md` and `search-manifest.json` are written automatically beside `sources.json`. Every structured record includes UTC time, provider/database, method and citation direction, stable angle ID, funnel lane, requested and API query, filters, sort, totals, retrieved/accepted/new/updated counts, page coverage, exclusions, status, and a separate `completed` boolean. Failed and rate-limited calls remain visible but do not satisfy `audit_search.py`. Relocate the files explicitly only when needed; disable them only for disposable experiments. They stay on disk and do not appear in the review.

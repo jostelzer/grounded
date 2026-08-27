@@ -32,11 +32,15 @@ REFERENCE_FILES = (
     "media-modes.md",
     "nature-figure-corpus.json",
     "no-script-fallback.md",
+    "quality-gates.md",
     "search-playbook.md",
     "sizes.md",
     "writing-guide.md",
 )
 SCRIPT_FILES = (
+    "artifact_io.py",
+    "audit_fulltexts.py",
+    "audit_search.py",
     "build_figure_prompt.py",
     "build_release_skill.py",
     "download_figure_references.py",
@@ -47,6 +51,7 @@ SCRIPT_FILES = (
     "format_references.py",
     "grounded_metadata.py",
     "qa_deck_pdf.py",
+    "qa_figure.py",
     "qa_review_pdf.py",
     "validate_review.py",
     "verify_citations.py",

@@ -197,7 +197,7 @@ The storytelling — how the magazines actually do it:
 
 ## ELI5 style
 
-In `eli5` mode only. Write a connected explanation in short, flowing paragraphs: question, citation-free TL;DR, plain-language thematic headings, narrative body, a closing synthesis, and Sources. The evidence pipeline, citations, and verification are unchanged; only the architecture, language, and jargon treatment change. Write for a smart reader with no science background at all. Do not use list bodies or structured bullet captions unless the user explicitly asks for bullets too; in that case use `bullets` as the structural style for validation and apply this plain-language register to it.
+In `eli5` mode only. Write a connected explanation in short, flowing paragraphs for a smart reader with no science background at all. The evidence pipeline, citations, and verification are unchanged; only the architecture, language, and jargon treatment change. The model is not a simplified review — it is a great explainer: a patient teacher building a staircase, where every new idea stands only on ideas the reader already has. Do not use list bodies or structured bullet captions unless the user explicitly asks for bullets too; in that case use `bullets` as the structural style for validation and apply this plain-language register to it.
 
 Structure:
 
@@ -206,28 +206,48 @@ Structure:
 
 **TL;DR** — <the answer in 1–3 short, citation-free sentences>
 
-### <Plain-language heading that advances the explanation>
-<One or more short, connected paragraphs. Each paragraph begins with its point,
-then explains the evidence and what it means in everyday words.>
+<The starting point: one short paragraph that begins where the reader already
+stands — something familiar they have seen, felt, or heard — and turns it into
+the question. Cited if it makes an empirical claim.>
 
-### <The next step, contrast, or limit>
-<Short flowing paragraphs that connect back to what the reader already knows.>
+### <Step 1 — a plain heading; a simple question is often best>
+<Short, connected paragraphs. Each step gives the reader exactly one new idea,
+built on the steps before it.>
 
-### <Closing synthesis in natural language>
-<Bring the parts together without adding new evidence.>
+### <Step 2, and so on — each heading is the reader's own next question>
+<…>
+
+### <The "but here's the thing" step>
+<The evidence that complicates or disagrees, as its own honest step.>
+
+### <The hand-back>
+<Bring the steps together and give the answer back in one or two sentences the
+reader could repeat to a friend. Then say, in plain words, what scientists
+still need to find out. No new evidence.>
 
 **Sources**
 <same generated sources block as always>
 ```
 
+The story flow — what makes it an explanation rather than a stack of simple facts:
+
+- **Start where the reader stands.** The opening paragraph anchors in something the reader already knows — the sniffle they get every winter, the powder tub at the gym, the label on the bottle — and turns that familiar thing into the question. Not an invented anecdote: an everyday observation or a verified fact, nothing more specific than the sources support.
+- **Build a staircase, not a pile.** Order the sections by what the reader needs to understand *next*, not by evidence category or by how a review would organize it. Each section adds exactly one new idea, and uses only ideas from earlier steps. If a sentence needs something not yet explained, the steps are in the wrong order — reorder rather than patch with a forward reference ("more on this later" is a broken staircase).
+- **Headings are the reader's own questions.** The best ELI5 headings are the questions a curious reader would actually ask next: "So does it work?", "Why do the studies disagree?", "Is it safe to try?". A reader skimming only the headings should see the path of the explanation. Plain statements are fine too; teaser headings are not.
+- **Tell the studies as little stories.** "Scientists gave 100 people the real pill and 100 people a dummy pill, and neither group knew which they got." A study told as a short story explains the method for free — the reader understands *why* the dummy pill matters without ever hearing the word "placebo". Use only real details from the paper: numbers of people, what was given, how long, what was measured.
+- **One helper picture, introduced and retired.** A single analogy may be the explanation's backbone ("think of your immune system as a security team"). Introduce it early, reuse it so each step lands somewhere familiar, and retire it honestly when it stops fitting — say where the picture breaks rather than stretching it. It must never smuggle in a claim the sources don't make.
+- **Answer the question the reader is holding.** After each step, the natural next question changes. Track it. If step 2 shows the pill works a little, the reader is now wondering "then why doesn't everyone take it?" — that is step 3, whether or not a review would put it there.
+- **The turn is a step, not a fine-print paragraph.** The evidence that disagrees gets its own honest step ("But here's the thing — the bigger the study, the smaller the effect"), told with the same patience as the good news.
+- **Hand the answer back.** The closing section passes the tell-a-friend test: one or two plain sentences the reader could actually say to someone else tomorrow and be right. Then what scientists still need to find out, in everyday words. If the honest summary is "nobody knows yet", hand back exactly that.
+
+The language — unchanged rules:
+
 - **Everyday words only.** "People in the study" not "participants"; "made-up pill" or "dummy pill" not "placebo"; "the studies disagree" not "heterogeneity". If a ten-year-old wouldn't know the word, don't use it.
 - **Short sentences.** One idea per sentence. No semicolons, no nested clauses.
 - **Paragraphs must flow.** Put related sentences together and use simple transitions so each section reads as an explanation, not a stack of facts. A paragraph is usually 2–4 sentences. Begin with the point, support it, then say what it means or lead into the next point.
-- **Headings guide rather than replace the prose.** Use plain headings that mark the steps of the explanation. The reader should understand the argument from the paragraphs, not have to reconstruct it from disconnected labels.
 - **Numbers stay, but say what they mean.** Not "SMD −0.34 (95% CI −0.68 to −0.00)" but "the people taking creatine improved a little more — about 2 points on a 52-point mood questionnaire, which is too small a change for most people to feel. And the studies were so different from each other that the real effect could be zero."
 - **Jargon is rewritten, not linked.** Term links are for standard modes; here the plain words replace the term entirely. If a term truly cannot be avoided (a scale's name, a drug class), name it once, explain it in the same sentence in plain words, and give it the usual verified term link.
 - **Honesty survives the simplification.** "We don't really know yet" instead of silently dropping uncertainty. Small studies are "too small to trust on their own", not omitted. Never round a weak finding up to a strong claim because the plain words feel less precise.
-- **Analogies are allowed, sparingly**, and must not smuggle in claims the sources don't make.
 - **Citations unchanged.** Every empirical claim still carries its author–year DOI links. Place links naturally at the end of the sentence or short claim cluster they support; do not collect them in a list-like citation dump.
 - **Figure captions stay ELI5 too.** Use a short flowing paragraph of everyday sentences, explain what
   the reader sees and what remains uncertain, and keep the usual verified
@@ -274,18 +294,25 @@ Write the draft with `[@key]` and let `format_references.py --style bracket` ren
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded.
 8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut 10% more.
-9b. In scientific style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly. In ELI5, sections use short flowing paragraphs, simple transitions, and a closing synthesis; bullet-list bodies are absent unless the user requested them.
+9b. In scientific style, the review has an arc: the Introduction poses one central tension, every section ends on a plain synthesis sentence rather than its last study, at least one cross-section callback appears, and the Conclusion names the cross-cutting pattern. In bullet style, a recurring cross-section pattern is named once explicitly. In ELI5, the explanation is a staircase: it opens from something the reader already knows, each section adds one new idea built only on earlier steps with no forward references, the contrary evidence gets its own step, the closing hand-back passes the tell-a-friend test, and bullet-list bodies are absent unless the user requested them.
 9c. In popsci style: the headline is honest; the lede is a concrete, cited close-up with no invented detail; the nut graf poses the throughline; the turn gets its own crosshead; the kicker circles back and looks forward; no hype vocabulary appears; and every hedge in the sources survives into the piece — the certainty matches the evidence exactly.
 10. In image or mindmap mode, every requested visual is rendered,
     evidence-grounded, legible, and inspected; has a unique stable ID; is
     referenced from the relevant body text; and has a caption in the same
     scientific, popsci, bullet, or ELI5 register with 2–5 verified citations.
+10b. Every generated figure passes `qa_figure.py`: exact copy, local
+    abbreviation expansions, directed relationships, prohibited effects,
+    collisions, and effective PDF label size all match its saved spec and
+    inspection. The body introduces the figure before the artwork.
 11. When a PDF is requested, inspect every rendered page. No heading may be
     stranded or separated from its first paragraph, table, or figure; no page
     may be an avoidably sparse spill; and no large preventable blank region may
     remain. Rebalance and rebuild without dropping evidence or reducing
     legibility, then repeat the complete raster inspection.
 12. Run the finished Markdown through `scripts/validate_review.py` with the
-    selected style and size. Fix every hard failure and review every word-budget
-    warning; this deterministic gate complements rather than replaces checks
+    selected style and size, the ledger, and the full-text manifest. Add
+    `--strict-tier` whenever the user explicitly requested a size. Fix every
+    hard failure, including mojibake/replacement characters and exposed drafting
+    labels, and review every remaining warning; this deterministic gate
+    complements rather than replaces checks
     1–11.

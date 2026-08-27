@@ -30,6 +30,35 @@ def scientific_review(abstract_words=120):
     )
 
 
+def strict_large_bullets(target_filler_words):
+    dois = [f"10.1000/source{index}" for index in range(70)]
+    sections = []
+    per_section = target_filler_words // 10
+    for section in range(10):
+        citations = ", ".join(
+            f"[Source {index}](https://doi.org/{dois[index]})"
+            for index in range(section * 7, section * 7 + 7)
+        )
+        sections.append(
+            f"### Finding {section + 1}\n\n- "
+            + " ".join(["evidence"] * per_section)
+            + f" {citations}."
+        )
+    tables = (
+        "\n\n| Study | Result |\n|---|---|\n| A | B |\n\n"
+        "| Boundary | Meaning |\n|---|---|\n| C | D |\n"
+    )
+    sources = "\n".join(
+        f"**Source {index} (2024)** A study. https://doi.org/{doi}"
+        for index, doi in enumerate(dois)
+    )
+    return (
+        "## What does the large evidence base show?\n\n"
+        "**TL;DR** — The evidence supports a conditional answer.\n\n"
+        + "\n\n".join(sections) + tables + "\n**Sources**\n\n" + sources + "\n"
+    )
+
+
 class ValidateReviewTests(unittest.TestCase):
     def test_four_showcase_examples_pass(self):
         examples = (
@@ -188,6 +217,66 @@ class ValidateReviewTests(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertEqual(completed.stdout, markdown)
         self.assertEqual(json.loads(completed.stderr)["status"], "pass")
+
+    def test_strict_large_tier_hard_fails_short_body_and_passes_complete_body(self):
+        manifest = {
+            "records": [
+                {"ledger_key": f"Key{index}", "status": "valid_fulltext", "counted": True}
+                for index in range(25)
+            ]
+        }
+        short = strict_large_bullets(1050)
+        short_result = validate_review.validate_review(
+            short, style="bullets", size="large", strict_tier=True,
+            fulltext_manifest=manifest,
+        )
+        self.assertFalse(short_result.ok)
+        self.assertTrue(any("body is" in error for error in short_result.errors))
+
+        complete = strict_large_bullets(2100)
+        complete_result = validate_review.validate_review(
+            complete, style="bullets", size="large", strict_tier=True,
+            fulltext_manifest=manifest,
+        )
+        self.assertTrue(complete_result.ok, complete_result.errors)
+
+    def test_citations_require_distinct_verification_and_reading_layers(self):
+        ledger = {
+            "entries": [{
+                "key": "Smith2024",
+                "doi": DOI,
+                "title": "A source",
+                "abstract": "",
+                "status": "verified",
+                "canonical": {"type": "journal-article"},
+                "verification": {
+                    "bibliographic_status": "verified",
+                    "retraction_status": "clear",
+                },
+            }]
+        }
+        result = validate_review.validate_review(
+            scientific_review(), style="scientific", size="small", ledger=ledger
+        )
+        self.assertTrue(any("reading evidence" in error for error in result.errors))
+        manifest = {"records": [{
+            "ledger_key": "Smith2024", "status": "valid_fulltext", "counted": True
+        }]}
+        result = validate_review.validate_review(
+            scientific_review(), style="scientific", size="small", ledger=ledger,
+            fulltext_manifest=manifest,
+        )
+        self.assertFalse(any("reading evidence" in error for error in result.errors))
+
+    def test_mojibake_and_scaffold_labels_are_hard_failures(self):
+        broken = scientific_review().replace(
+            "### Result", "Kicker: unfinished\n\n### Result"
+        ).replace("conditional", "conditional â€” maybe")
+        result = validate_review.validate_review(
+            broken, style="scientific", size="small"
+        )
+        self.assertTrue(any("mojibake" in error for error in result.errors))
+        self.assertTrue(any("scaffold" in error for error in result.errors))
 
 
 if __name__ == "__main__":

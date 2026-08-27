@@ -48,11 +48,13 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 from dataclasses import dataclass, field
 
+from artifact_io import atomic_write_json
 from grounded_metadata import user_agent as grounded_user_agent
 
 # Request pacing: OpenAlex's polite pool allows 10 req/s, NCBI allows 3 req/s without an API key.
 OPENALEX_MIN_INTERVAL = 0.15
 PUBMED_MIN_INTERVAL = 0.34
+OPENCITATIONS_MIN_INTERVAL = 0.35
 # A Retry-After longer than this is a spent request quota, not a burst limit: waiting it out
 # inside a run is pointless, so we stop asking and fall back to PubMed.
 MAX_RETRY_WAIT = 120.0
@@ -104,6 +106,7 @@ class SearchResult:
     pages: int = 0
     status: str = "ok"
     exclusions: Counter = field(default_factory=Counter)
+    citation_direction: str = None
 
     @property
     def retrieved(self):
@@ -160,12 +163,14 @@ def parse_retry_after(headers):
     return max(0.0, (when - datetime.datetime.now(datetime.timezone.utc)).total_seconds())
 
 
-def http_get(url, service, min_interval=0.0, retries=3, backoff=1.0, timeout=30):
+def http_get(url, service, min_interval=0.0, retries=3, backoff=1.0, timeout=30,
+             extra_headers=None):
     """GET with throttling and exponential backoff on 429/5xx, honouring Retry-After.
 
     Raises ServiceUnavailable when the service is out of reach for this run.
     """
     headers = {"User-Agent": user_agent(SERVICE_MAILTO.get(service))}
+    headers.update(extra_headers or {})
     req = urllib.request.Request(url, headers=headers)
     for attempt in range(retries + 1):
         throttle(service, min_interval)
@@ -611,6 +616,15 @@ def candidate_eligibility(
         hit["publication_eligibility"] = "journal-indexed candidate"
         return True, "eligible journal candidate"
 
+    if hit.get("_source") == "opencitations":
+        work_type = (hit.get("type") or "").lower().replace("_", " ").replace("-", " ")
+        if work_type not in {"journal article", "review", "article"}:
+            return False, f"OpenCitations type {work_type or 'missing'}"
+        if policy == "strict" and not hit.get("journal"):
+            return False, "OpenCitations venue missing"
+        hit["publication_eligibility"] = "OpenCitations journal-metadata candidate"
+        return True, "eligible OpenCitations candidate"
+
     publication_types = set(hit.get("pub_types") or [])
     excluded = publication_types & PUBMED_EXCLUDED_TYPES
     if excluded:
@@ -641,6 +655,158 @@ def filter_candidates(
 
 
 # ------------------------------------------------------------- citation chasing
+
+
+def _pid_doi(value):
+    match = re.search(r"(?:^|\s)doi:([^\s]+)", value or "", re.I)
+    return norm_doi(match.group(1)) if match else None
+
+
+def _opencitations_authors(value):
+    authors = []
+    for author in (value or "").split(";"):
+        author = re.sub(r"\s*\[[^]]*\]\s*$", "", author).strip()
+        if author:
+            authors.append(author)
+    return authors
+
+
+def parse_opencitations_metadata(record):
+    doi = _pid_doi(record.get("id"))
+    year_match = re.match(r"(\d{4})", record.get("pub_date") or "")
+    venue = re.sub(r"\s*\[[^]]*\]\s*$", "", record.get("venue") or "").strip()
+    return {
+        "doi": doi,
+        "pmid": None,
+        "openalex": None,
+        "title": (record.get("title") or "").strip(),
+        "authors": _opencitations_authors(record.get("author")),
+        "year": int(year_match.group(1)) if year_match else None,
+        "journal": venue,
+        "source_type": "journal" if venue else None,
+        "type": (record.get("type") or "").strip().lower(),
+        "abstract": "",
+        "cited_by_count": None,
+        "oa_url": None,
+        "is_retracted": False,
+        "is_preprint": "preprint" in (record.get("type") or "").lower(),
+        "peer_review_status": "not_independently_verified",
+        "_source": "opencitations",
+    }
+
+
+class OpenCitationsClient:
+    """Second citation-graph provider using the official Index and Meta APIs."""
+
+    def __init__(self, token=None, retries=3):
+        self.token = token
+        self.retries = retries
+        self.unavailable = None
+
+    @property
+    def enabled(self):
+        return self.unavailable is None
+
+    def fetch(self, url):
+        if not self.enabled:
+            return None
+        headers = {"authorization": self.token} if self.token else {}
+        try:
+            return http_get(
+                url, service="opencitations",
+                min_interval=OPENCITATIONS_MIN_INTERVAL,
+                retries=self.retries, extra_headers=headers,
+            )
+        except ServiceUnavailable as exc:
+            self.unavailable = exc.reason
+            sys.stderr.write(f"  {exc}\n")
+            return None
+
+    def graph_dois(self, doi, direction):
+        operation = "references" if direction == "backward" else "citations"
+        identifier = urllib.parse.quote("doi:" + doi, safe=":/")
+        url = f"https://api.opencitations.net/index/v2/{operation}/{identifier}"
+        raw = self.fetch(url)
+        if raw is None:
+            return None, url
+        try:
+            rows = json.loads(raw)
+        except json.JSONDecodeError:
+            self.unavailable = "unreadable Index JSON response"
+            return None, url
+        if isinstance(rows, list) and len(rows) == 1 and isinstance(rows[0], list):
+            rows = rows[0]
+        if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+            self.unavailable = "unexpected Index JSON shape"
+            return None, url
+        field = "cited" if direction == "backward" else "citing"
+        dois = ordered_unique([
+            _pid_doi(row.get(field)) for row in rows if _pid_doi(row.get(field))
+        ])
+        return dois, url
+
+    def metadata(self, dois):
+        output = []
+        for start in range(0, len(dois), 40):
+            chunk = dois[start:start + 40]
+            identifiers = "__".join("doi:" + doi for doi in chunk)
+            encoded = urllib.parse.quote(identifiers, safe=":/_")
+            url = f"https://api.opencitations.net/meta/v1/metadata/{encoded}"
+            raw = self.fetch(url)
+            if raw is None:
+                return None
+            try:
+                rows = json.loads(raw)
+            except json.JSONDecodeError:
+                self.unavailable = "unreadable Meta JSON response"
+                return None
+            if isinstance(rows, list) and len(rows) == 1 and isinstance(rows[0], list):
+                rows = rows[0]
+            if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+                self.unavailable = "unexpected Meta JSON shape"
+                return None
+            output.extend(rows)
+        return output
+
+
+def opencitations_citations(client, entry, seed_label, direction, limit, chase_sort):
+    doi = norm_doi(entry.get("doi"))
+    if not doi:
+        return SearchResult(
+            database="opencitations", query=seed_label, api_query=seed_label,
+            filters="citation seed", sort=chase_sort,
+            status="OpenCitations fallback requires a DOI",
+            citation_direction=direction,
+        )
+    dois, api_url = client.graph_dois(doi, direction)
+    if dois is None:
+        return SearchResult(
+            database="opencitations", query=seed_label, api_query=api_url,
+            filters=f"{direction} citation graph", sort=chase_sort,
+            status=client.unavailable or "OpenCitations Index unavailable",
+            citation_direction=direction,
+        )
+    records = client.metadata(dois[:max(limit * 3, limit)])
+    if records is None:
+        return SearchResult(
+            database="opencitations", query=seed_label, api_query=api_url,
+            filters=f"{direction} citation graph; {len(dois)} DOI(s)",
+            sort=chase_sort, total_matches=len(dois), pages=1,
+            status=client.unavailable or "OpenCitations Meta unavailable",
+            citation_direction=direction,
+        )
+    hits = rank_chase_hits(
+        [parse_opencitations_metadata(record) for record in records], chase_sort
+    )[:limit]
+    for hit in hits:
+        hit["_citation_direction"] = direction
+        hit["_citation_seed"] = seed_label
+    return SearchResult(
+        database="opencitations", query=seed_label, api_query=api_url,
+        filters=f"{direction} citation graph; metadata resolved {len(records)}/{len(dois)}",
+        sort=chase_sort, hits=hits, total_matches=len(dois), pages=1,
+        status="ok", citation_direction=direction,
+    )
 
 def ledger_seed(ledger, token):
     normalized_doi = norm_doi(token)
@@ -749,7 +915,7 @@ def backward_citations(
         api_query=f"referenced_works({seed_label})",
         filters=f"openalex IDs from seed; scanned {len(scanned_ids)}/{len(referenced_ids)}",
         sort=chase_sort, hits=hits, total_matches=len(referenced_ids),
-        pages=pages, status=status,
+        pages=pages, status=status, citation_direction="backward",
     )
 
 
@@ -781,12 +947,13 @@ def forward_citations(
         database="openalex", query=seed_label,
         api_query=f"cites:{seed_id}", filters=f"cites:{seed_id}",
         sort=chase_sort, hits=hits, total_matches=total,
-        pages=pages, status=status,
+        pages=pages, status=status, citation_direction="forward",
     )
 
 
 def chase_citations(
-        client, ledger, tokens, direction, limit, pool, page_size, chase_sort):
+        client, ledger, tokens, direction, limit, pool, page_size, chase_sort,
+        fallback_client=None, use_openalex=True):
     results = []
     for token in tokens:
         entry = ledger_seed(ledger, token)
@@ -800,22 +967,41 @@ def chase_citations(
             ))
             continue
         seed_label = entry.get("key") or token
-        seed_work = fetch_openalex_seed(client, entry)
-        if not seed_work:
-            results.append(SearchResult(
-                database="openalex", query=seed_label, api_query=token,
-                filters="citation seed", sort=chase_sort,
-                status="could not resolve citation seed in OpenAlex",
-            ))
-            continue
-        if direction in ("backward", "both"):
-            results.append(backward_citations(
-                client, seed_work, seed_label, limit, pool, page_size, chase_sort,
-            ))
-        if direction in ("forward", "both"):
-            results.append(forward_citations(
-                client, seed_work, seed_label, limit, page_size, chase_sort,
-            ))
+        requested_directions = [
+            item for item in ("backward", "forward")
+            if direction in (item, "both")
+        ]
+        provider_results = []
+        if use_openalex:
+            seed_work = fetch_openalex_seed(client, entry)
+            if not seed_work:
+                for requested in requested_directions:
+                    provider_results.append(SearchResult(
+                        database="openalex", query=seed_label, api_query=token,
+                        filters="citation seed", sort=chase_sort,
+                        status="could not resolve citation seed in OpenAlex",
+                        citation_direction=requested,
+                    ))
+            else:
+                if "backward" in requested_directions:
+                    provider_results.append(backward_citations(
+                        client, seed_work, seed_label, limit, pool, page_size, chase_sort,
+                    ))
+                if "forward" in requested_directions:
+                    provider_results.append(forward_citations(
+                        client, seed_work, seed_label, limit, page_size, chase_sort,
+                    ))
+            results.extend(provider_results)
+        completed_directions = {
+            result.citation_direction for result in provider_results
+            if result.status == "ok" and (result.pages > 0 or result.total_matches == 0)
+        }
+        if fallback_client is not None:
+            for requested in requested_directions:
+                if requested not in completed_directions:
+                    results.append(opencitations_citations(
+                        fallback_client, entry, seed_label, requested, limit, chase_sort,
+                    ))
     return results
 
 
@@ -959,6 +1145,62 @@ def append_search_log(
         )
 
 
+def stable_angle_id(value):
+    value = re.sub(r"[^a-z0-9]+", "-", (value or "").strip().lower()).strip("-")
+    if value and value[0].isdigit():
+        value = "angle-" + value
+    return value or "unassigned"
+
+
+def append_search_manifest(
+        path, result, angle, angle_id, lane, method, accepted, added, updated,
+        exclusions):
+    if not path:
+        return
+    target = os.path.abspath(path)
+    if os.path.exists(target):
+        with open(target, encoding="utf-8") as stream:
+            manifest = json.load(stream)
+        if manifest.get("schema_version") != 1 or not isinstance(
+                manifest.get("records"), list):
+            raise ValueError(f"unsupported search manifest: {target}")
+    else:
+        manifest = {"schema_version": 1, "records": []}
+    combined_exclusions = result.exclusions + exclusions
+    timestamp = datetime.datetime.now(datetime.timezone.utc).replace(
+        microsecond=0
+    ).isoformat()
+    direction = result.citation_direction
+    record = {
+        "timestamp": timestamp,
+        "database": result.database,
+        "provider": result.database,
+        "method": method,
+        "citation_direction": direction,
+        "angle": angle,
+        "angle_id": angle_id,
+        "lane": "citation-chase" if direction else lane,
+        "requested_query_or_seed": result.query,
+        "api_query": result.api_query,
+        "filters": result.filters,
+        "sort": result.sort,
+        "total_matches": result.total_matches,
+        "retrieved": result.retrieved,
+        "accepted": len(accepted),
+        "new": added,
+        "updated": updated,
+        "pages": result.pages,
+        "exclusions": dict(sorted(combined_exclusions.items())),
+        "status": result.status,
+        "completed": result.status == "ok" and (
+            result.pages > 0 or result.total_matches == 0
+        ),
+    }
+    manifest["records"].append(record)
+    manifest["updated_at"] = timestamp
+    atomic_write_json(target, manifest)
+
+
 def parse_sources(value):
     sources = ordered_unique([
         source.strip().lower() for source in value.split(",") if source.strip()
@@ -969,6 +1211,20 @@ def parse_sources(value):
     if not sources:
         raise ValueError("at least one source is required")
     return sources
+
+
+def parse_citation_providers(value):
+    providers = ordered_unique([
+        provider.strip().lower() for provider in value.split(",") if provider.strip()
+    ])
+    unknown = set(providers) - {"openalex", "opencitations"}
+    if unknown:
+        raise ValueError(
+            "unknown citation provider(s): " + ", ".join(sorted(unknown))
+        )
+    if not providers:
+        raise ValueError("at least one citation provider is required")
+    return providers
 
 
 def build_query_plan(shared_queries, openalex_queries, pubmed_queries, sources):
@@ -1007,6 +1263,10 @@ def process_result(result, ledger, args, method):
     append_search_log(
         args.search_log, result, args.angle, method, accepted,
         added, updated, exclusions,
+    )
+    append_search_manifest(
+        args.search_manifest, result, args.angle, args.angle_id, args.lane,
+        method, accepted, added, updated, exclusions,
     )
     total = result.total_matches if result.total_matches is not None else "?"
     print(
@@ -1050,6 +1310,16 @@ def build_parser():
         "--angle", default="",
         help="evidence angle stored in the ledger and search log",
     )
+    ap.add_argument(
+        "--angle-id",
+        help="stable machine ID for the evidence angle (default: slug of --angle)",
+    )
+    ap.add_argument(
+        "--lane",
+        choices=["reviews", "primary", "foundational", "recent", "contrary-null", "general"],
+        default="general",
+        help="search-funnel lane recorded in search-manifest.json",
+    )
     ap.add_argument("--from-year", type=int)
     ap.add_argument("--to-year", type=int)
     ap.add_argument(
@@ -1084,6 +1354,16 @@ def build_parser():
         help="optional OpenAlex API key (default: OPENALEX_API_KEY)",
     )
     ap.add_argument("--openalex-retries", type=int, default=3)
+    ap.add_argument(
+        "--citation-providers", default="openalex,opencitations",
+        help="ordered citation-graph providers (default: openalex,opencitations)",
+    )
+    ap.add_argument(
+        "--opencitations-token",
+        default=os.environ.get("OPENCITATIONS_TOKEN", "").strip() or None,
+        help="optional OpenCitations access token",
+    )
+    ap.add_argument("--opencitations-retries", type=int, default=3)
     ap.add_argument("--include-preprints", action="store_true")
     ap.add_argument(
         "--include-conference-papers", action="store_true",
@@ -1099,6 +1379,11 @@ def build_parser():
         help="automatic markdown log (default: search_log.md beside ledger)",
     )
     ap.add_argument("--no-search-log", action="store_true")
+    ap.add_argument(
+        "--search-manifest",
+        help="structured log (default: search-manifest.json beside ledger)",
+    )
+    ap.add_argument("--no-search-manifest", action="store_true")
     ap.add_argument(
         "--chase", action="append", default=[], metavar="KEY_OR_ID",
         help="ledger key, DOI, PMID, or OpenAlex ID to citation-chase",
@@ -1136,6 +1421,7 @@ def main(argv=None):
         ap.error("--from-year cannot be later than --to-year")
     try:
         sources = parse_sources(args.sources)
+        citation_providers = parse_citation_providers(args.citation_providers)
     except ValueError as exc:
         ap.error(str(exc))
 
@@ -1154,22 +1440,33 @@ def main(argv=None):
         ap.error("--openalex-query requires openalex in --sources")
     if args.pubmed_query and "pubmed" not in sources:
         ap.error("--pubmed-query requires pubmed in --sources")
-    if args.chase and "openalex" not in sources:
-        ap.error("--chase requires openalex in --sources")
-
     if args.no_search_log:
         args.search_log = None
     elif not args.search_log:
         ledger_directory = os.path.dirname(os.path.abspath(args.ledger))
         args.search_log = os.path.join(ledger_directory, "search_log.md")
+    if args.no_search_manifest:
+        args.search_manifest = None
+    elif not args.search_manifest:
+        ledger_directory = os.path.dirname(os.path.abspath(args.ledger))
+        args.search_manifest = os.path.join(ledger_directory, "search-manifest.json")
+    args.angle_id = args.angle_id or stable_angle_id(args.angle)
+    if not re.fullmatch(r"[a-z][a-z0-9-]*", args.angle_id):
+        ap.error("--angle-id must match [a-z][a-z0-9-]*")
 
     client = OpenAlexClient(
         mailto=args.mailto, retries=args.openalex_retries,
         api_key=args.openalex_api_key,
     )
+    opencitations_client = (
+        OpenCitationsClient(
+            token=args.opencitations_token, retries=args.opencitations_retries
+        )
+        if "opencitations" in citation_providers else None
+    )
     uses_openalex = (
-        "openalex" in sources and
-        bool(args.query or args.openalex_query or args.chase)
+        ("openalex" in sources and bool(args.query or args.openalex_query))
+        or ("openalex" in citation_providers and bool(args.chase))
     )
     if uses_openalex and not client.mailto and not client.api_key:
         sys.stderr.write(
@@ -1205,11 +1502,13 @@ def main(argv=None):
         results = chase_citations(
             client, ledger, args.chase, args.chase_direction,
             args.chase_limit, args.chase_pool, args.page_size, args.chase_sort,
+            fallback_client=opencitations_client,
+            use_openalex="openalex" in citation_providers,
         )
         for result in results:
             method = "citation"
-            if result.hits and result.hits[0].get("_citation_direction"):
-                method = result.hits[0]["_citation_direction"] + "-citation"
+            if result.citation_direction:
+                method = result.citation_direction + "-citation"
             process_result(result, ledger, args, method=method)
 
     if uses_openalex and not client.enabled:
@@ -1225,11 +1524,12 @@ def main(argv=None):
             "except to discuss the retraction: " +
             ", ".join(e["key"] for e in retracted)
         )
-    with open(args.ledger, "w", encoding="utf-8") as fh:
-        json.dump(ledger, fh, indent=2, ensure_ascii=False)
+    atomic_write_json(args.ledger, ledger)
     print(f"\nLedger: {len(ledger['entries'])} entries → {args.ledger}")
     if args.search_log:
         print(f"Search log → {args.search_log}")
+    if args.search_manifest:
+        print(f"Search manifest → {args.search_manifest}")
     return 0
 
 

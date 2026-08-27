@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote
 
+from artifact_io import atomic_write_json
 
 WORD_BUDGETS = {
     "scientific": {"small": (600, 1000), "medium": (1500, 2500), "large": (3500, 6000)},
@@ -24,6 +25,24 @@ WORD_BUDGETS = {
     "bullets": {"small": (350, 700), "medium": (900, 1600), "large": (2000, 4000)},
     "eli5": {"small": (350, 700), "medium": (900, 1600), "large": (2000, 4000)},
 }
+
+TIER_REQUIREMENTS = {
+    "small": {"sections": (3, 5), "sources": (10, 20), "tables": (0, 1),
+              "fulltexts": (2, None), "figure_cap": 1},
+    "medium": {"sections": (6, 9), "sources": (30, 60), "tables": (1, 2),
+               "fulltexts": (8, None), "figure_cap": 3},
+    "large": {"sections": (10, 15), "sources": (70, 150), "tables": (2, 4),
+              "fulltexts": (25, None), "figure_cap": 5},
+}
+
+MOJIBAKE = re.compile(r"(?:\ufffd|Ã.|Â(?=\s|[^\w])|â(?:€|€™|€œ|€\x9d|€“|€”))")
+SCAFFOLD_LABEL = re.compile(
+    r"^\s*(?:Kicker|Lede|Nut graf|Standfirst|Scaffold|Working title)\s*:", re.I | re.M
+)
+TECHNICAL_TERMS = (
+    "SMD", "CI", "OR", "I²", "GRADE", "HAM-D", "PHQ-9", "mRNA",
+    "hazard ratio", "odds ratio", "confidence interval",
+)
 
 
 @dataclass(frozen=True)
@@ -71,6 +90,130 @@ def _body_word_count(text: str) -> int:
     return len(_words(without_headings))
 
 
+def _table_count(text: str) -> int:
+    return len(re.findall(
+        r"^\s*\|?(?:\s*:?-{3,}:?\s*\|)+\s*:?-{3,}:?\s*\|?\s*$",
+        text,
+        re.M,
+    ))
+
+
+def _normalise_doi(value: str | None) -> str | None:
+    if not value:
+        return None
+    value = unquote(value).strip().lower()
+    value = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", value)
+    return re.sub(r"[).,;*_]+$", "", value) or None
+
+
+def _nontrivial_abstract(entry: dict[str, object]) -> bool:
+    return len(_words(str(entry.get("abstract") or ""))) >= 50
+
+
+def _fulltext_records(manifest: dict[str, object] | None) -> list[dict[str, object]]:
+    if not manifest:
+        return []
+    records = manifest.get("records", [])
+    return [record for record in records if isinstance(record, dict)] if isinstance(records, list) else []
+
+
+def _reading_and_verification_errors(
+    source_dois: set[str],
+    ledger: dict[str, object],
+    fulltext_manifest: dict[str, object] | None,
+) -> tuple[list[str], dict[str, object]]:
+    entries = ledger.get("entries", [])
+    if not isinstance(entries, list):
+        return ["ledger entries must be a list"], {}
+    by_doi = {
+        _normalise_doi(str(entry.get("doi") or "")): entry
+        for entry in entries if isinstance(entry, dict) and entry.get("doi")
+    }
+    valid_fulltext_keys = {
+        str(record.get("ledger_key"))
+        for record in _fulltext_records(fulltext_manifest)
+        if record.get("status") == "valid_fulltext"
+    }
+    missing_ledger: list[str] = []
+    missing_bibliographic: list[str] = []
+    missing_retraction: list[str] = []
+    ineligible_publication: list[str] = []
+    missing_reading: list[str] = []
+    for doi in sorted(source_dois):
+        entry = by_doi.get(doi)
+        if entry is None:
+            missing_ledger.append(doi)
+            continue
+        key = str(entry.get("key") or doi)
+        verification = entry.get("verification") or {}
+        canonical = entry.get("canonical") or {}
+        if (
+            entry.get("status") != "verified"
+            or not isinstance(verification, dict)
+            or verification.get("bibliographic_status") != "verified"
+        ):
+            missing_bibliographic.append(key)
+        if (
+            not isinstance(verification, dict)
+            or verification.get("retraction_status") != "clear"
+        ):
+            missing_retraction.append(key)
+        publication_type = canonical.get("type") if isinstance(canonical, dict) else None
+        if entry.get("is_preprint") or publication_type not in {
+            "journal-article", "journal-issue", "proceedings-article"
+        }:
+            ineligible_publication.append(key)
+        if not (_nontrivial_abstract(entry) or key in valid_fulltext_keys):
+            missing_reading.append(key)
+    errors = []
+    for label, values in (
+        ("cited DOI(s) absent from ledger", missing_ledger),
+        ("citation(s) missing bibliographic verification", missing_bibliographic),
+        ("citation(s) missing a clear retraction check", missing_retraction),
+        ("citation(s) without eligible publication metadata", ineligible_publication),
+        ("citation(s) missing abstract-or-full-text reading evidence", missing_reading),
+    ):
+        if values:
+            errors.append(f"{label}: " + ", ".join(values[:12]))
+    return errors, {
+        "ledger_citations": len(source_dois) - len(missing_ledger),
+        "reading_eligible": len(source_dois) - len(missing_ledger) - len(missing_reading),
+        "missing_reading_keys": missing_reading,
+    }
+
+
+def _thin_override(value: dict[str, object] | None) -> tuple[set[str], str | None]:
+    if value is None:
+        return set(), None
+    reason = value.get("reason")
+    evidence = value.get("saturation_evidence")
+    shortfalls = value.get("allowed_shortfalls")
+    if not isinstance(reason, str) or len(reason.split()) < 5:
+        raise ValueError("thin-literature override requires a substantive reason")
+    if not isinstance(evidence, list) or not evidence or not all(
+        isinstance(item, str) and item.strip() for item in evidence
+    ):
+        raise ValueError("thin-literature override requires saturation_evidence")
+    if not isinstance(shortfalls, list) or not shortfalls:
+        raise ValueError("thin-literature override requires allowed_shortfalls")
+    allowed = set(shortfalls)
+    if not allowed <= {"sources", "fulltexts"}:
+        raise ValueError("thin-literature override may cover only sources/fulltexts")
+    return allowed, reason
+
+
+def _tier_error(
+    name: str,
+    actual: int,
+    bounds: tuple[int, int | None],
+) -> str | None:
+    minimum, maximum = bounds
+    if actual < minimum or (maximum is not None and actual > maximum):
+        expected = f"{minimum}+" if maximum is None else f"{minimum}–{maximum}"
+        return f"strict tier requires {expected} {name}; found {actual}"
+    return None
+
+
 def _section_payload(markdown: str, heading: str) -> str | None:
     match = re.search(
         rf"^###\s+{re.escape(heading)}\s*$\n+(.*?)(?=^###\s+|^\*\*Sources\*\*\s*$|\Z)",
@@ -115,6 +258,24 @@ def _validate_figures(markdown: str, base_dir: Path | None) -> list[str]:
     if missing_references:
         errors.append("unreferenced figure anchor(s): " + ", ".join(missing_references))
 
+    for anchor in anchors:
+        anchor_position = markdown.find(f'<a id="{anchor}"></a>')
+        reference_position = markdown.find(f"](#{anchor})")
+        if reference_position > anchor_position >= 0:
+            errors.append(
+                f"figure {anchor} must be introduced in the body before its artwork"
+            )
+        next_anchor = markdown.find('<a id="fig-', anchor_position + 1)
+        next_heading = markdown.find("\n### ", anchor_position + 1)
+        sources_boundary = markdown.find("\n**Sources**", anchor_position + 1)
+        boundaries = [
+            value for value in (next_anchor, next_heading, sources_boundary)
+            if value >= 0
+        ]
+        block_end = min(boundaries) if boundaries else len(markdown)
+        if not _dois(markdown[anchor_position:block_end]):
+            errors.append(f"figure {anchor} caption contains no DOI citation")
+
     for _alt, source in images:
         if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", source):
             errors.append(f"figure assets must be local: {source}")
@@ -124,7 +285,11 @@ def _validate_figures(markdown: str, base_dir: Path | None) -> list[str]:
 
 
 def validate_review(
-    markdown: str, *, style: str, size: str, base_dir: Path | None = None
+    markdown: str, *, style: str, size: str, base_dir: Path | None = None,
+    strict_tier: bool = False, image_mode: bool = False,
+    ledger: dict[str, object] | None = None,
+    fulltext_manifest: dict[str, object] | None = None,
+    thin_literature_override: dict[str, object] | None = None,
 ) -> ValidationResult:
     """Return deterministic writing-contract errors, warnings, and metrics."""
     style = "scientific" if style == "prose" else style
@@ -135,6 +300,8 @@ def validate_review(
 
     errors: list[str] = []
     warnings: list[str] = []
+    if MOJIBAKE.search(markdown):
+        errors.append("review contains mojibake or a Unicode replacement character")
     sources_markers = list(re.finditer(r"^\*\*Sources\*\*\s*$", markdown, re.M))
     if len(sources_markers) != 1:
         errors.append("Sources must appear exactly once")
@@ -144,6 +311,9 @@ def validate_review(
         body, sources = markdown[: marker.start()], markdown[marker.end() :]
         if not sources.strip():
             errors.append("Sources must contain at least one verified reference")
+    scaffold = SCAFFOLD_LABEL.search(body)
+    if scaffold:
+        errors.append(f"exposed drafting scaffold label: {scaffold.group(0).strip()}")
 
     if sources.strip() and re.search(
         r"^#{1,6}\s+|^\*\*(?:Abstract|TL;DR)\*\*", sources, re.M
@@ -255,12 +425,66 @@ def validate_review(
     body_word_count = _body_word_count(body)
     minimum, maximum = WORD_BUDGETS[style][size]
     if not minimum <= body_word_count <= maximum:
-        warnings.append(
+        message = (
             f"body is {body_word_count} words; {size} {style} guidance is "
             f"{minimum}–{maximum}"
         )
+        (errors if strict_tier else warnings).append(message)
     if not body_dois:
         errors.append("finished review contains no DOI citations")
+
+    section_count = len(re.findall(r"^###\s+.+$", body, re.M))
+    table_count = _table_count(body)
+    figure_count = len(re.findall(r'^<a id="fig-', markdown, re.M))
+    fulltext_count = sum(
+        record.get("status") == "valid_fulltext" and bool(record.get("counted"))
+        for record in _fulltext_records(fulltext_manifest)
+    )
+    overridden, override_reason = _thin_override(thin_literature_override)
+    if strict_tier:
+        requirements = TIER_REQUIREMENTS[size]
+        checks = (
+            ("sections", section_count, requirements["sections"]),
+            ("sources", len(source_dois), requirements["sources"]),
+            ("tables", table_count, requirements["tables"]),
+            ("fulltexts", fulltext_count, requirements["fulltexts"]),
+        )
+        for name, actual, bounds in checks:
+            issue = _tier_error(name, actual, bounds)
+            if issue and name in overridden and actual < bounds[0]:
+                warnings.append(f"{issue}; accepted by thin-literature override: {override_reason}")
+            elif issue:
+                errors.append(issue)
+        if figure_count > requirements["figure_cap"]:
+            errors.append(
+                f"strict tier permits at most {requirements['figure_cap']} figures; "
+                f"found {figure_count}"
+            )
+        if image_mode and figure_count < 1:
+            errors.append("strict image mode requires at least one figure")
+
+    evidence_metrics: dict[str, object] = {}
+    if ledger is not None:
+        evidence_errors, evidence_metrics = _reading_and_verification_errors(
+            source_dois, ledger, fulltext_manifest
+        )
+        errors.extend(evidence_errors)
+
+    if style != "eli5":
+        missing_links = [
+            term for term in TECHNICAL_TERMS
+            if re.search(rf"\b{re.escape(term)}\b", body)
+            and not re.search(
+                rf"\[[^]]*\b{re.escape(term)}\b[^]]*\]\((?!https?://doi\.org/)",
+                body,
+                re.I,
+            )
+        ]
+        if missing_links:
+            warnings.append(
+                "technical term(s) may need a first-use explanatory link: "
+                + ", ".join(missing_links)
+            )
 
     metrics: dict[str, object] = {
         "style": style,
@@ -268,7 +492,12 @@ def validate_review(
         "body_words": body_word_count,
         "body_dois": len(body_dois),
         "source_dois": len(source_dois),
-        "figures": len(re.findall(r'^<a id="fig-', markdown, re.M)),
+        "figures": figure_count,
+        "sections": section_count,
+        "tables": table_count,
+        "valid_fulltexts": fulltext_count,
+        "strict_tier": strict_tier,
+        **evidence_metrics,
     }
     if abstract is not None:
         metrics["abstract_words"] = len(_words(abstract.group(1)))
@@ -287,6 +516,23 @@ def main() -> int:
     )
     parser.add_argument("--size", choices=("small", "medium", "large"), required=True)
     parser.add_argument(
+        "--strict-tier", action="store_true",
+        help="make all requested tier ranges release-blocking",
+    )
+    parser.add_argument(
+        "--image-mode", action="store_true",
+        help="with --strict-tier, require at least one figure",
+    )
+    parser.add_argument("--ledger", help="sources.json; gates every cited record")
+    parser.add_argument(
+        "--fulltext-manifest",
+        help="fulltext-manifest.json; supplies authentic full-text reading evidence",
+    )
+    parser.add_argument(
+        "--thin-literature-override",
+        help="structured JSON allowing only evidenced source/full-text shortfalls",
+    )
+    parser.add_argument(
         "--warnings-as-errors",
         action="store_true",
         help="fail when an approximate word-budget warning is present",
@@ -296,6 +542,9 @@ def main() -> int:
         action="store_true",
         help="on success, write the validated review to stdout and the JSON report to stderr",
     )
+    parser.add_argument(
+        "--report", help="atomically write the JSON validation report"
+    )
     args = parser.parse_args()
     try:
         review_path = None if args.review == "-" else Path(args.review).resolve()
@@ -304,16 +553,39 @@ def main() -> int:
             if review_path is None
             else review_path.read_text(encoding="utf-8")
         )
+        ledger = (
+            json.loads(Path(args.ledger).read_text(encoding="utf-8"))
+            if args.ledger else None
+        )
+        fulltext_manifest = (
+            json.loads(Path(args.fulltext_manifest).read_text(encoding="utf-8"))
+            if args.fulltext_manifest else None
+        )
+        thin_override = (
+            json.loads(Path(args.thin_literature_override).read_text(encoding="utf-8"))
+            if args.thin_literature_override else None
+        )
         result = validate_review(
             markdown,
             style=args.style,
             size=args.size,
             base_dir=review_path.parent if review_path is not None else None,
+            strict_tier=args.strict_tier,
+            image_mode=args.image_mode,
+            ledger=ledger,
+            fulltext_manifest=fulltext_manifest,
+            thin_literature_override=thin_override,
         )
     except (OSError, ValueError) as exc:
         print(f"Review validation failed: {exc}", file=sys.stderr)
         return 2
     report = json.dumps(result.as_dict(), indent=2, sort_keys=True)
+    if args.report:
+        try:
+            atomic_write_json(args.report, result.as_dict())
+        except OSError as exc:
+            print(f"Review validation report failed: {exc}", file=sys.stderr)
+            return 2
     passed = result.ok and not (args.warnings_as_errors and result.warnings)
     if args.pass_through:
         print(report, file=sys.stderr)

@@ -52,7 +52,7 @@
     {
       "id": 8,
       "prompt": "Use the grounded skill in eli5 mode: does taking vitamin D actually prevent colds?",
-      "expected_output": "A small-tier review written as flowing narrative text in very simple English: a citation-free TL;DR followed by plain-language headings and short connected paragraphs, with no bullet-list body unless the user explicitly asks for bullets too. Everyday words, short sentences, no unexplained jargon, and numbers explained in words. Same rigour as small - 10-20 verified peer-reviewed references, in-text author-year citations hyperlinked to their DOIs, contrary evidence included, and a generated sources block with DOI links. Uncertainty stated plainly, never dropped.",
+      "expected_output": "A small-tier step-by-step explanation in very simple English: a citation-free TL;DR, an opening paragraph anchored in something the reader already knows (a familiar fact, not an invented anecdote), then sections that each add exactly one new idea built only on earlier steps, with headings that read as the reader's own next questions, studies told as little stories with real details from the papers, the contrary evidence as its own honest step, and a closing hand-back the reader could repeat to a friend plus what scientists still need to find out. Flowing paragraphs throughout, no bullet-list body unless the user explicitly asks for bullets too. Everyday words, short sentences, no unexplained jargon, numbers explained in words. Same rigour as small - 10-20 verified peer-reviewed references, in-text author-year citations hyperlinked to their DOIs, contrary evidence included, and a generated sources block with DOI links. Uncertainty stated plainly, never dropped.",
       "files": []
     },
     {

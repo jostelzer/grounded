@@ -20,6 +20,24 @@
     "The drawn light paths are a teaching schematic, not tracks of measured individual photons; keep them thin, simple, and clearly representative.",
     "Do not imply that every color follows an identical route or that water droplets absorb most visible light."
   ],
+  "relationships": [
+    {
+      "from": "Sunlight",
+      "relation": "enters",
+      "to": "Clear water drops"
+    },
+    {
+      "from": "Clear water drops",
+      "relation": "redirect",
+      "to": "White glow"
+    },
+    {
+      "from": "Clear water drops",
+      "relation": "reduce light reaching",
+      "to": "cloud base"
+    }
+  ],
+  "abbreviations": {},
   "evidence_keys": [
     "Bohren1987multiple",
     "Kokhanovsky2004optical",

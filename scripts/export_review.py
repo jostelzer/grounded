@@ -19,10 +19,15 @@ remains Python-standard-library-only.
 import argparse
 import datetime
 import html
+import json
 import os
 import re
 import subprocess
 import sys
+import urllib.parse
+from pathlib import Path
+
+from artifact_io import atomic_write_json, sha256_bytes, sha256_file
 
 # ---------------------------------------------------------------- markdown ---
 # The skill emits a narrow, fixed subset: ##/### headings, **bold**, *italic*,
@@ -733,6 +738,125 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         colophon=html.escape(colophon))
 
 
+def _manifest_path_record(path, manifest_directory):
+    path = Path(path).resolve()
+    return {
+        "path": os.path.relpath(path, manifest_directory),
+        "bytes": path.stat().st_size,
+        "sha256": sha256_file(path),
+    }
+
+
+def validate_release_inputs(review_path, ledger_path, figure_specs=(), figure_prompts=()):
+    """Fail before rendering when release lineage inputs are incomplete."""
+    review_path = Path(review_path).resolve()
+    markdown = review_path.read_text(encoding="utf-8")
+    figure_sources = [
+        source for _alt, source in re.findall(
+            r"^!\[([^]]*)\]\(([^)\s]+)\)\s*$", markdown, re.M
+        )
+    ]
+    figures = [(review_path.parent / source).resolve() for source in figure_sources]
+    missing_files = [
+        str(path) for path in [*figures, *(Path(item) for item in figure_specs),
+                               *(Path(item) for item in figure_prompts)]
+        if not path.is_file()
+    ]
+    if missing_files:
+        raise ValueError("release lineage input does not exist: " + ", ".join(missing_files))
+    if len(figure_specs) != len(figures) or len(figure_prompts) != len(figures):
+        raise ValueError(
+            "release manifest requires one --figure-spec and --figure-prompt "
+            "for every rendered figure"
+        )
+    expected_dois = sorted({
+        urllib.parse.unquote(value).lower().rstrip(").,;*_")
+        for value in re.findall(r"https?://doi\.org/([^\s<>\]]+)", markdown, re.I)
+    })
+    ledger = json.loads(Path(ledger_path).read_text(encoding="utf-8"))
+    ledger_by_doi = {
+        re.sub(r"^https?://(?:dx\.)?doi\.org/", "", str(entry.get("doi") or "").lower()): entry
+        for entry in ledger.get("entries", []) if isinstance(entry, dict) and entry.get("doi")
+    }
+    missing_ledger = [doi for doi in expected_dois if doi not in ledger_by_doi]
+    if missing_ledger:
+        raise ValueError(
+            "release review DOI(s) are absent from the ledger: "
+            + ", ".join(missing_ledger[:5])
+        )
+    ineligible = []
+    for doi in expected_dois:
+        entry = ledger_by_doi[doi]
+        verification = entry.get("verification") or {}
+        if (
+            entry.get("status") != "verified"
+            or verification.get("bibliographic_status") != "verified"
+            or verification.get("retraction_status") != "clear"
+        ):
+            ineligible.append(str(entry.get("key") or doi))
+    if ineligible:
+        raise ValueError(
+            "release review cites ledger entries that are not fully verified: "
+            + ", ".join(ineligible[:5])
+        )
+    return markdown, figures, expected_dois, ledger_by_doi
+
+
+def write_release_manifest(
+        manifest_path, *, review_path, ledger_path, pdf_path, html_document,
+        release, columns, kicker, colophon, repo, compiled_date,
+        figure_specs=(), figure_prompts=()):
+    """Bind every release input to the exact HTML and canonical PDF."""
+    manifest_path = Path(manifest_path).resolve()
+    manifest_directory = manifest_path.parent
+    review_path = Path(review_path).resolve()
+    pdf_path = Path(pdf_path).resolve()
+    markdown, figures, expected_dois, ledger_by_doi = validate_release_inputs(
+        review_path, ledger_path, figure_specs, figure_prompts
+    )
+    inputs = {
+        "review": _manifest_path_record(review_path, manifest_directory),
+        "ledger": _manifest_path_record(ledger_path, manifest_directory),
+        "figures": [
+            _manifest_path_record(path, manifest_directory) for path in figures
+        ],
+        "figure_specs": [
+            _manifest_path_record(path, manifest_directory) for path in figure_specs
+        ],
+        "figure_prompts": [
+            _manifest_path_record(path, manifest_directory) for path in figure_prompts
+        ],
+    }
+    html_bytes = html_document.encode("utf-8")
+    manifest = {
+        "schema_version": 1,
+        "release": release,
+        "compiled_date": compiled_date,
+        "render": {
+            "columns": columns,
+            "kicker": kicker,
+            "colophon": colophon,
+            "repo": repo,
+            "html_bytes": len(html_bytes),
+            "html_sha256": sha256_bytes(html_bytes),
+        },
+        "inputs": inputs,
+        "artifact": {
+            "pdf": _manifest_path_record(pdf_path, manifest_directory),
+        },
+        "expected": {
+            "unique_dois": expected_dois,
+            "reference_entries": len(expected_dois),
+            "figures": len(figures),
+            "cited_ledger_keys": [
+                str(ledger_by_doi[doi].get("key") or doi) for doi in expected_dois
+            ],
+        },
+    }
+    atomic_write_json(manifest_path, manifest)
+    return manifest
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--in", dest="src", help="finished review markdown (from format_references.py)")
@@ -746,6 +870,15 @@ def main():
     ap.add_argument("--compiled-date", help="fixed YYYY-MM-DD compilation date (default: today)")
     ap.add_argument("--html-sidecar", action="store_true",
                     help="also write HTML beside a PDF (off by default)")
+    ap.add_argument(
+        "--release-manifest",
+        help="write immutable release lineage JSON (PDF only; requires --ledger)",
+    )
+    ap.add_argument("--ledger", help="verified sources.json for release lineage")
+    ap.add_argument("--figure-spec", action="append", default=[],
+                    help="figure specification JSON (repeat once per figure)")
+    ap.add_argument("--figure-prompt", action="append", default=[],
+                    help="saved generation prompt (repeat once per figure)")
     ap.add_argument("--check-pdf-runtime", action="store_true",
                     help="validate the canonical WeasyPrint runtime and exit")
     args = ap.parse_args()
@@ -766,10 +899,27 @@ def main():
     if want_pdf:
         from weasyprint_export import write_pdf
         release = args.release or detect_release(os.path.dirname(os.path.abspath(__file__))) or "dev"
+        if args.release_manifest:
+            if not args.ledger:
+                ap.error("--release-manifest requires --ledger")
+            try:
+                validate_release_inputs(
+                    args.src, args.ledger, args.figure_spec, args.figure_prompt
+                )
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                ap.error(str(exc))
+        compiled_date = args.compiled_date or datetime.date.today().isoformat()
+        if args.repo is None:
+            _repo_label, detected_repo = detect_repo(
+                os.path.dirname(os.path.abspath(__file__))
+            )
+            effective_repo = detected_repo or None
+        else:
+            effective_repo = args.repo
         page = build_html(
             md, columns=args.columns, kicker=args.kicker,
             colophon=args.colophon, base_dir=base_dir,
-            release=release, repo=args.repo, compiled_date=args.compiled_date,
+            release=release, repo=effective_repo, compiled_date=compiled_date,
         )
         result = write_pdf(page, args.out)
         if args.html_sidecar:
@@ -779,6 +929,23 @@ def main():
             suffix = f" and {html_side}"
         else:
             suffix = ""
+        if args.release_manifest:
+            write_release_manifest(
+                args.release_manifest,
+                review_path=args.src,
+                ledger_path=args.ledger,
+                pdf_path=args.out,
+                html_document=page,
+                release=release,
+                columns=args.columns,
+                kicker=args.kicker,
+                colophon=args.colophon,
+                repo=effective_repo,
+                compiled_date=compiled_date,
+                figure_specs=args.figure_spec,
+                figure_prompts=args.figure_prompt,
+            )
+            suffix += f" and {args.release_manifest}"
         print(
             f"Wrote {args.out} (via {result['renderer']}, sha256 {result['sha256']}){suffix}",
             file=sys.stderr,

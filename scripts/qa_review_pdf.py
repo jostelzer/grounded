@@ -19,6 +19,7 @@ import tempfile
 from pathlib import Path
 from urllib.parse import unquote
 
+from artifact_io import atomic_write_json, sha256_bytes, sha256_file
 
 A4_POINTS = (595.2756, 841.8898)
 
@@ -72,6 +73,146 @@ def _doi_urls(markdown: str) -> set[str]:
     return {"https://doi.org/" + doi for doi in dois}
 
 
+def _normalised_visible_text(value: str) -> str:
+    value = unquote(value).lower().replace("\u00ad", "")
+    return re.sub(r"\s+", "", value)
+
+
+def _visible_doi_occurrences(text: str, doi: str) -> int:
+    """Count a DOI despite PDF line wrapping and renderer-added hyphenation."""
+    text = unquote(text).lower().replace("\u00ad", "")
+    doi = unquote(doi).lower().replace("\u00ad", "")
+    separator = r"(?:\s*|-\s*)"
+    pattern = separator.join(re.escape(character) for character in doi)
+    return len(re.findall(pattern, text))
+
+
+def _manifest_record_path(manifest_path: Path, record: dict[str, object]) -> Path:
+    stored = record.get("path")
+    if not isinstance(stored, str) or not stored:
+        raise PdfQaError("release manifest contains a file without a path")
+    return (manifest_path.parent / stored).resolve()
+
+
+def _verify_file_record(manifest_path: Path, record: dict[str, object], label: str) -> Path:
+    path = _manifest_record_path(manifest_path, record)
+    if not path.is_file():
+        raise PdfQaError(f"release manifest {label} does not exist: {path}")
+    expected_hash = record.get("sha256")
+    actual_hash = sha256_file(path)
+    if actual_hash != expected_hash:
+        raise PdfQaError(
+            f"release manifest {label} hash changed: expected {expected_hash}, "
+            f"found {actual_hash}"
+        )
+    if record.get("bytes") != path.stat().st_size:
+        raise PdfQaError(f"release manifest {label} byte count changed")
+    return path
+
+
+def verify_release_manifest(
+        manifest_path: str, pdf_path: str, markdown_path: str | None = None
+        ) -> dict[str, object]:
+    """Verify all recorded inputs and independently rebuild the exact HTML."""
+    path = Path(manifest_path).resolve()
+    try:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise PdfQaError(f"release manifest cannot be read: {exc}") from exc
+    if manifest.get("schema_version") != 1:
+        raise PdfQaError("release manifest schema_version must be 1")
+    inputs = manifest.get("inputs")
+    artifact = manifest.get("artifact")
+    render = manifest.get("render")
+    if not isinstance(inputs, dict) or not isinstance(artifact, dict) or not isinstance(render, dict):
+        raise PdfQaError("release manifest is missing inputs, artifact, or render")
+    review_path = _verify_file_record(path, inputs.get("review") or {}, "review")
+    _verify_file_record(path, inputs.get("ledger") or {}, "ledger")
+    for category in ("figures", "figure_specs", "figure_prompts"):
+        records = inputs.get(category)
+        if not isinstance(records, list):
+            raise PdfQaError(f"release manifest {category} must be a list")
+        for index, record in enumerate(records, 1):
+            if not isinstance(record, dict):
+                raise PdfQaError(f"release manifest {category} record is invalid")
+            _verify_file_record(path, record, f"{category}[{index}]")
+    recorded_pdf = _verify_file_record(path, artifact.get("pdf") or {}, "PDF")
+    actual_pdf = Path(pdf_path).resolve()
+    if actual_pdf != recorded_pdf:
+        raise PdfQaError(
+            f"QA PDF {actual_pdf} is not manifest PDF {recorded_pdf}"
+        )
+    if markdown_path is not None and Path(markdown_path).resolve() != review_path:
+        raise PdfQaError("--markdown does not identify the manifest review")
+
+    canonical_pdfs = sorted(recorded_pdf.parent.glob("*.pdf"))
+    if canonical_pdfs != [recorded_pdf]:
+        names = ", ".join(item.name for item in canonical_pdfs)
+        raise PdfQaError(
+            "release scope must contain exactly one canonical PDF; found " + names
+        )
+
+    try:
+        import export_review
+        markdown = review_path.read_text(encoding="utf-8")
+        rebuilt = export_review.build_html(
+            markdown,
+            columns=int(render.get("columns")),
+            kicker=str(render.get("kicker")),
+            colophon=render.get("colophon"),
+            base_dir=str(review_path.parent),
+            release=str(manifest.get("release")),
+            repo=render.get("repo"),
+            compiled_date=str(manifest.get("compiled_date")),
+        )
+    except (OSError, TypeError, ValueError) as exc:
+        raise PdfQaError(f"manifest HTML cannot be rebuilt: {exc}") from exc
+    rebuilt_hash = sha256_bytes(rebuilt.encode("utf-8"))
+    if rebuilt_hash != render.get("html_sha256"):
+        raise PdfQaError(
+            "rebuilt HTML hash does not match the release manifest"
+        )
+    current_dois = sorted(url.removeprefix("https://doi.org/") for url in _doi_urls(markdown))
+    expected = manifest.get("expected") or {}
+    if current_dois != expected.get("unique_dois"):
+        raise PdfQaError("manifest DOI set does not match the current review")
+    return {
+        "manifest": manifest,
+        "manifest_path": path,
+        "review_path": review_path,
+        "markdown": markdown,
+        "columns": int(render.get("columns")),
+    }
+
+
+def record_qa_render_set(
+        manifest_context: dict[str, object], render_dir: str,
+        qa_result: dict[str, object]) -> None:
+    path: Path = manifest_context["manifest_path"]
+    manifest: dict[str, object] = manifest_context["manifest"]
+    destination = Path(render_dir).resolve()
+    existing = manifest.get("qa")
+    relative = os.path.relpath(destination, path.parent)
+    if isinstance(existing, dict) and existing.get("render_directory") != relative:
+        raise PdfQaError("release manifest already names a different authoritative QA render set")
+    files = [
+        {
+            "path": os.path.relpath(item, path.parent),
+            "bytes": item.stat().st_size,
+            "sha256": sha256_file(item),
+        }
+        for item in sorted(destination.glob("*.png"))
+    ]
+    manifest["qa"] = {
+        "status": "pass",
+        "render_directory": relative,
+        "dpi": qa_result.get("dpi"),
+        "rendered_pages": qa_result.get("rendered_pages"),
+        "files": files,
+    }
+    atomic_write_json(path, manifest)
+
+
 def _embedded_font_families(reader) -> set[str]:
     families = set()
     for page in reader.pages:
@@ -117,6 +258,7 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
                 external_uris.add(unquote(str(action["/URI"])).lower())
 
     first_page_text = ""
+    page_texts = []
     for index, page in enumerate(reader.pages, 1):
         width = float(page.mediabox.width)
         height = float(page.mediabox.height)
@@ -125,6 +267,7 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
                 f"page {index} is {width:.2f} x {height:.2f} pt instead of A4"
             )
         text = page.extract_text() or ""
+        page_texts.append(text)
         if index == 1:
             first_page_text = text
         if "G R O U N D E D" not in text or "NO FLOATING CLAIMS." not in text:
@@ -177,6 +320,49 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
                 f"PDF has {internal_links} internal figure links; expected at least "
                 f"{expected_figures}"
             )
+        reference_start_page = None
+        reference_offset = None
+        for index, text in enumerate(page_texts, 1):
+            match = re.search(r"(?mi)^References(?:\s+\d+\s*[·•].*)?\s*$", text)
+            if match:
+                reference_start_page = index
+                reference_offset = match.start()
+                break
+        if reference_start_page is None:
+            failures.append("PDF is missing a visible References heading")
+            reference_text = ""
+            reference_only_pages = []
+        else:
+            start_text = page_texts[reference_start_page - 1]
+            reference_text = start_text[reference_offset:] + "\n" + "\n".join(
+                page_texts[reference_start_page:]
+            )
+            preceding_words = re.findall(r"\b\w+\b", start_text[:reference_offset])
+            reference_only_pages = list(range(reference_start_page + 1, len(page_texts) + 1))
+            if len(preceding_words) <= 25:
+                reference_only_pages.insert(0, reference_start_page)
+        missing_visible = []
+        repeated_visible = []
+        for url in sorted(expected_dois):
+            doi = url.removeprefix("https://doi.org/")
+            occurrences = _visible_doi_occurrences(reference_text, doi)
+            if occurrences == 0:
+                missing_visible.append(url)
+            elif occurrences > 1:
+                repeated_visible.append(url)
+        if missing_visible:
+            failures.append(
+                f"{len(missing_visible)} DOI(s) are not visible in References: "
+                + ", ".join(missing_visible[:3])
+            )
+        if repeated_visible:
+            failures.append(
+                f"{len(repeated_visible)} DOI(s) appear more than once in References: "
+                + ", ".join(repeated_visible[:3])
+            )
+    else:
+        reference_start_page = None
+        reference_only_pages = []
 
     if failures:
         raise PdfQaError("; ".join(failures))
@@ -188,6 +374,9 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
         "expected_figures": expected_figures,
         "font_families": sorted(embedded_fonts),
         "release": embedded_release,
+        "reference_start_page": reference_start_page,
+        "reference_only_pages": reference_only_pages,
+        "visible_reference_dois": len(expected_dois) if markdown is not None else 0,
     }
 
 
@@ -243,7 +432,8 @@ def _page_layout_metrics(page) -> dict[str, float]:
 
 
 def _layout_failures(metrics: dict[str, float], page_number: int,
-                     page_count: int) -> list[str]:
+                     page_count: int, *, reference_page: bool = False,
+                     columns: int | None = None) -> list[str]:
     failures = []
     if (page_number < page_count and metrics["body_fill"] < 0.88 and
             metrics["active_rows"] > 0.05):
@@ -257,7 +447,39 @@ def _layout_failures(metrics: dict[str, float], page_number: int,
             f"page {page_number} has severely unbalanced column endings "
             f"(delta {metrics['column_bottom_delta']:.1%})"
         )
+    if reference_page and page_number == page_count:
+        if columns == 2:
+            low = min(metrics["left_active_rows"], metrics["right_active_rows"])
+            high = max(metrics["left_active_rows"], metrics["right_active_rows"])
+            if low < 0.03 and high < 0.65:
+                failures.append(
+                    f"final reference page has an empty column and only "
+                    f"{high:.1%} active-row use in the other"
+                )
+            if metrics["active_rows"] < 0.25:
+                failures.append(
+                    f"final two-column reference page is extremely sparse "
+                    f"({metrics['active_rows']:.1%} active rows)"
+                )
+        elif columns == 1 and metrics["active_rows"] < 0.30:
+            failures.append(
+                f"final one-column reference page is extremely sparse "
+                f"({metrics['active_rows']:.1%} active rows)"
+            )
     return failures
+
+
+def _layout_warnings(metrics: dict[str, float], page_number: int,
+                     page_count: int, *, reference_page: bool = False,
+                     columns: int | None = None) -> list[str]:
+    if not reference_page or page_number != page_count:
+        return []
+    threshold = 0.40 if columns == 2 else 0.45
+    if metrics["active_rows"] < threshold:
+        return [
+            f"final reference page is sparse ({metrics['active_rows']:.1%} active rows)"
+        ]
+    return []
 
 
 def _contact_sheets(page_paths: list[Path], output_dir: Path, Image, ImageDraw,
@@ -291,7 +513,10 @@ def _contact_sheets(page_paths: list[Path], output_dir: Path, Image, ImageDraw,
     return results
 
 
-def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dict[str, object]:
+def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120,
+                       reference_start_page: int | None = None,
+                       reference_only_pages: list[int] | None = None,
+                       columns: int | None = None) -> dict[str, object]:
     """Rasterize every page independently and enforce visual invariants."""
     Image, ImageDraw, ImageOps, _PdfReader = _load_runtime()
     renderer = shutil.which("pdftoppm")
@@ -326,6 +551,10 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
     dimensions = set()
     accent_counts = []
     layout_metrics = []
+    warnings = []
+    reference_page_set = (
+        set(reference_only_pages) if reference_only_pages is not None else None
+    )
     scale = (dpi / 75.0) ** 2
     for index, path in enumerate(page_paths, 1):
         with Image.open(path) as source:
@@ -353,7 +582,19 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
         accent_counts.append(accent)
         layout = _page_layout_metrics(page)
         layout_metrics.append({"page": index, **layout})
-        failures.extend(_layout_failures(layout, index, len(page_paths)))
+        reference_page = (
+            index in reference_page_set
+            if reference_page_set is not None
+            else bool(reference_start_page and index >= reference_start_page)
+        )
+        failures.extend(_layout_failures(
+            layout, index, len(page_paths), reference_page=reference_page,
+            columns=columns,
+        ))
+        warnings.extend(_layout_warnings(
+            layout, index, len(page_paths), reference_page=reference_page,
+            columns=columns,
+        ))
         if header_ink < 600 * scale:
             failures.append(f"page {index} masthead raster is missing or incomplete")
         if accent < 40 * scale:
@@ -379,32 +620,67 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120) -> dic
         "page_size_pixels": list(next(iter(dimensions))),
         "contact_sheets": contacts,
         "layout_metrics": layout_metrics,
+        "warnings": warnings,
     }
 
 
 def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
            render_dir: str | None = None, dpi: int = 120,
-           expected_release: str | None = None) -> dict[str, object]:
+           expected_release: str | None = None,
+           manifest_path: str | None = None) -> dict[str, object]:
     pdf_path = os.path.abspath(pdf_path)
     if not os.path.isfile(pdf_path):
         raise PdfQaError(f"PDF does not exist: {pdf_path}")
-    markdown = None
-    if markdown_path:
+    manifest_context = None
+    columns = None
+    if manifest_path:
+        if render_dir is None:
+            raise PdfQaError("release-manifest QA requires an explicit --render-dir")
+        if Path(render_dir).resolve() == Path(manifest_path).resolve().parent:
+            raise PdfQaError(
+                "authoritative QA renders must use a case-local subdirectory, "
+                "not the release directory itself"
+            )
+        manifest_context = verify_release_manifest(
+            manifest_path, pdf_path, markdown_path
+        )
+        markdown = manifest_context["markdown"]
+        markdown_path = str(manifest_context["review_path"])
+        columns = manifest_context["columns"]
+        if expected_release is None:
+            expected_release = str(manifest_context["manifest"].get("release"))
+    else:
+        markdown = None
+    if markdown_path and markdown is None:
         with open(markdown_path, encoding="utf-8") as stream:
             markdown = stream.read()
     structural = inspect_structure(pdf_path, markdown, expected_release)
     if render_dir is None:
         with tempfile.TemporaryDirectory(prefix="grounded-pdf-qa-") as temporary:
-            raster = render_and_inspect(pdf_path, temporary, dpi=dpi)
+            raster = render_and_inspect(
+                pdf_path, temporary, dpi=dpi,
+                reference_start_page=structural["reference_start_page"],
+                reference_only_pages=structural["reference_only_pages"],
+                columns=columns,
+            )
             raster["contact_sheets"] = []
     else:
-        raster = render_and_inspect(pdf_path, render_dir, dpi=dpi)
+        raster = render_and_inspect(
+            pdf_path, render_dir, dpi=dpi,
+            reference_start_page=structural["reference_start_page"],
+            reference_only_pages=structural["reference_only_pages"],
+            columns=columns,
+        )
     if raster["rendered_pages"] != structural["pages"]:
         raise PdfQaError(
             f"Poppler rendered {raster['rendered_pages']} pages but PDF contains "
             f"{structural['pages']}"
         )
-    return {"pdf": pdf_path, **structural, **raster, "status": "pass"}
+    result = {"pdf": pdf_path, **structural, **raster, "status": "pass"}
+    if manifest_context is not None:
+        record_qa_render_set(manifest_context, render_dir, result)
+        result["release_manifest"] = str(Path(manifest_path).resolve())
+    return result
 
 
 def main() -> int:
@@ -421,16 +697,27 @@ def main() -> int:
     parser.add_argument(
         "--release", help="required GROUNDED release label embedded on page 1"
     )
+    parser.add_argument(
+        "--manifest", help="release-manifest.json; verifies exact lineage and records QA"
+    )
+    parser.add_argument("--report", help="atomically write the JSON QA report")
     args = parser.parse_args()
     try:
         result = qa_pdf(
             args.pdf, markdown_path=args.markdown,
             render_dir=args.render_dir, dpi=args.dpi,
             expected_release=args.release,
+            manifest_path=args.manifest,
         )
     except PdfQaError as exc:
         print(f"PDF QA failed: {exc}", file=sys.stderr)
         return 2
+    if args.report:
+        try:
+            atomic_write_json(args.report, result)
+        except OSError as exc:
+            print(f"PDF QA report failed: {exc}", file=sys.stderr)
+            return 2
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
 

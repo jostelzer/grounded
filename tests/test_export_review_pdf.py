@@ -1,4 +1,6 @@
 import os
+import json
+import re
 import shutil
 import subprocess
 import sys
@@ -176,6 +178,65 @@ class PdfExportTests(unittest.TestCase):
             self.assertEqual(completed.returncode, 0, completed.stderr)
             self.assertTrue(os.path.isfile(pdf))
             self.assertFalse(os.path.exists(os.path.join(tmp, "review.html")))
+
+    def test_release_manifest_invalidates_if_markdown_changes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            review = os.path.join(tmp, "review.md")
+            ledger = os.path.join(tmp, "sources.json")
+            spec = os.path.join(tmp, "figure.json")
+            prompt = os.path.join(tmp, "figure.prompt.txt")
+            pdf = os.path.join(tmp, "review.pdf")
+            manifest = os.path.join(tmp, "release-manifest.json")
+            with open(review, "w", encoding="utf-8") as stream:
+                stream.write(self.markdown())
+            with open(ledger, "w", encoding="utf-8") as stream:
+                json.dump({"entries": [{
+                    "key": "Smith2024", "doi": "10.1000/example",
+                    "status": "verified",
+                    "verification": {
+                        "bibliographic_status": "verified",
+                        "retraction_status": "clear",
+                    },
+                }]}, stream)
+            with open(spec, "w", encoding="utf-8") as stream:
+                stream.write("{}\n")
+            with open(prompt, "w", encoding="utf-8") as stream:
+                stream.write("saved prompt\n")
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+            )
+            weasyprint_export.write_pdf(page, pdf)
+            export_review.write_release_manifest(
+                manifest, review_path=review, ledger_path=ledger, pdf_path=pdf,
+                html_document=page, release="v-test", columns=2,
+                kicker="Review", colophon=None, repo="example.test/grounded",
+                compiled_date="2026-08-26", figure_specs=[spec],
+                figure_prompts=[prompt],
+            )
+            context = qa_review_pdf.verify_release_manifest(manifest, pdf, review)
+            self.assertEqual(context["columns"], 2)
+            with open(review, "a", encoding="utf-8") as stream:
+                stream.write("\nChanged after rendering.\n")
+            with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "review hash changed"):
+                qa_review_pdf.verify_release_manifest(manifest, pdf, review)
+
+    def test_visible_references_heading_is_release_blocking(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            pdf = os.path.join(tmp, "review.pdf")
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+            )
+            without_heading = re.sub(
+                r'<h2 class="refhead">.*?</h2>', "", page, count=1,
+                flags=re.S,
+            )
+            weasyprint_export.write_pdf(without_heading, pdf)
+            with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "visible References"):
+                qa_review_pdf.inspect_structure(pdf, self.markdown())
 
     def test_single_column_review_without_figures(self):
         markdown = (
@@ -358,7 +419,10 @@ class PdfExportTests(unittest.TestCase):
 
         self.assertNotRegex(markdown, r"(?m)^[-*]\s+")
         self.assertNotIn("<ul>", page)
-        self.assertIn("<p>An ordinary warm cloud is made of tiny clear water drops.", page)
+        self.assertRegex(
+            page,
+            r"<p>An ordinary warm cloud is (?:made of|a crowd of) tiny clear water drops\.",
+        )
         self.assertIn("<div class=\"body cols\">", page)
 
     @unittest.skipUnless(shutil.which("pdftoppm"), "Poppler is not installed")
@@ -614,6 +678,16 @@ class FigureExportTests(unittest.TestCase):
             ),
             [],
         )
+
+        empty_column = Image.new("RGB", (1000, 1400), "white")
+        draw = ImageDraw.Draw(empty_column)
+        for y in range(150, 700, 8):
+            draw.line((70, y, 465, y), fill="black", width=2)
+        final_failures = qa_review_pdf._layout_failures(
+            qa_review_pdf._page_layout_metrics(empty_column), 4, 4,
+            reference_page=True, columns=2,
+        )
+        self.assertTrue(any("empty column" in failure for failure in final_failures))
 
 
 if __name__ == "__main__":
