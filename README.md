@@ -1,6 +1,19 @@
 # Grounded
 
-Grounded is an agent skill that writes scientific literature reviews built **only on real, verified, peer-reviewed citations**. Every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref (including retraction screening), and the reference list is generated programmatically from the verified records — so every citation resolves, every time. It works with any LLM agent that can read files and run Python or fetch URLs.
+Ever typed *"look into the scientific evidence on…"* and gotten a beautiful, confident answer?
+
+Two things can be wrong with it, and both are invisible:
+
+1. **The references don't exist.** Papers nobody wrote, DOIs that resolve to nothing, retracted studies quoted as settled fact.
+2. **The references exist — but don't say that.** A real paper, correctly formatted, attached to a claim its authors never made.
+
+You can't catch either without checking every reference by hand. Grounded is an agent skill that does exactly that, so you don't have to.
+
+It turns your question into a real literature review with **zero citations from memory**: every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref and screened for retractions, and every paper is read before it's cited. On request, it goes one level deeper and audits **every cited sentence against the paper's own text**, anchored to verbatim quotes that a deterministic checker string-matches against the source. A claim the source doesn't back gets downgraded or dropped — never decorated.
+
+**Real papers, actually saying what the review says they say.**
+
+Works with any LLM agent that can read files and run Python or fetch URLs — Claude, ChatGPT and friends.
 
 ## Examples
 
