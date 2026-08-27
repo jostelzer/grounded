@@ -22,7 +22,7 @@
     {
       "id": 3,
       "prompt": "Use the grounded skill: what does peer-reviewed research say about the causes and maintenance of chronic low-back pain?",
-      "expected_output": "Because no size, style, or output format was specified, the very first reply arrives within seconds and is a single short question (a few lines) asking the user to pick a size (small/medium/large), a style (scientific/popsci/bullets/ELI5), and an output format (inline chat/journal PDF/slides), with the defaults marked. No searching, planning, or review writing happens before the user answers.",
+      "expected_output": "Because no size, style, or output format was specified, the very first reply arrives within seconds and is a single short question (a few lines) asking the user to pick a size (small/medium/large), a style (scientific/popsci/bullets/ELI5), and an output format (inline chat/journal PDF), with the defaults marked. The experimental slides format is not offered in the question - it is hidden by default and runs only when the user explicitly asks for a deck, slides, or a presentation. No searching, planning, or review writing happens before the user answers.",
       "files": []
     },
     {
@@ -88,7 +88,7 @@
     {
       "id": 14,
       "prompt": "Use the grounded skill in bullet style: does intermittent fasting improve insulin sensitivity?",
-      "expected_output": "The style (bullets) is specified but the size and output format are not, so the very first reply arrives within seconds and is a single short question asking only for the size (small/medium/large, small marked as default) and the output format (inline chat/journal PDF/slides, inline chat marked as default) - it does not re-ask the style. No searching or review writing happens before the user answers."
+      "expected_output": "The style (bullets) is specified but the size and output format are not, so the very first reply arrives within seconds and is a single short question asking only for the size (small/medium/large, small marked as default) and the output format (inline chat/journal PDF, inline chat marked as default; the experimental slides format is not offered) - it does not re-ask the style. No searching or review writing happens before the user answers."
     }
   ]
 }

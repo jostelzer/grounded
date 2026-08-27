@@ -55,7 +55,7 @@ More finished outputs are in [examples/](examples/).
 
 - **inline chat** (default) — the review is the reply itself, with every citation a clickable author–year DOI link and technical terms linked to plain-language explainers.
 - **journal PDF** — a journal-styled PDF (two-column body, superscript citations, numbered references) that **always includes generated scientific figures** built from the verified evidence: mechanism diagrams, evidence maps, timelines, plotted numbers with intervals.
-- **slides** (experimental) — say `deck`, `slides`, or `presentation` and the deliverable is a verified 16:9 PDF deck whose every slide stands alone: a full-sentence cited claim plus a generated image that carries the evidence, with live DOI links and evidence grades.
+- **slides** (experimental, hidden by default — the skill never offers it; you have to ask) — say `deck`, `slides`, or `presentation` and the deliverable is a verified 16:9 PDF deck whose every slide stands alone: a full-sentence cited claim plus a generated image that carries the evidence, with live DOI links and evidence grades.
 
 ## Installation
 

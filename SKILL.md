@@ -1,6 +1,6 @@
 ---
 name: grounded
-description: Write a scientific review of a topic or research question at small, medium, or large size, in scientific style (flowing narrative prose, the default), popsci style (popular-science magazine storytelling), bullets, or ELI5 (very simple flowing prose), delivered as inline chat (the default), a journal-styled PDF that always includes generated figures, or a verified 16:9 slide deck, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, or explicitly asks for a deck, slides, presentation, slide deck, or journal club deck. Also use it to check a draft's claims or references against the literature.
+description: Write a scientific review of a topic or research question at small, medium, or large size, in scientific style (flowing narrative prose, the default), popsci style (popular-science magazine storytelling), bullets, or ELI5 (very simple flowing prose), delivered as inline chat (the default), a journal-styled PDF that always includes generated figures, or — only when the user explicitly asks for it — an experimental verified 16:9 slide deck, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, or explicitly asks for a deck, slides, presentation, slide deck, or journal club deck. Also use it to check a draft's claims or references against the literature.
 ---
 
 # Grounded — scientific reviews with no floating claims
@@ -9,15 +9,15 @@ The user gives a topic or question and may name a size, style, or output format;
 
 ## First: confirm size, style, and output format
 
-A review has three dimensions: a **size** (`small`, `medium`, `large`), a **style** (`scientific`, `popsci`, `bullets`, `eli5`), and an **output format** (`inline chat`, `journal PDF`, `slides`).
+A review has three dimensions: a **size** (`small`, `medium`, `large`), a **style** (`scientific`, `popsci`, `bullets`, `eli5`), and an **output format** (`inline chat`, `journal PDF`, and — hidden by default — the experimental `slides`).
 
-Unless the request names **all three**, your very first action — before any searching, planning, or other work — is to ask one short question for whatever is missing. Do it immediately, within seconds of being invoked, and keep it to a few lines listing the options with the default marked (size: small / medium / large; style: scientific / popsci / bullets / ELI5; format: inline chat / journal PDF / slides). If the environment has an interactive question tool, use it; otherwise ask in plain chat and wait for the answer. Ask only for the missing dimension(s) — whatever the request already names is settled and is not re-asked. If all three are named, skip the question entirely and start.
+Unless the request names **all three**, your very first action — before any searching, planning, or other work — is to ask one short question for whatever is missing. Do it immediately, within seconds of being invoked, and keep it to a few lines listing the options with the default marked (size: small / medium / large; style: scientific / popsci / bullets / ELI5; format: inline chat / journal PDF). **Do not list slides in the format question**: it is experimental and hidden by default, used only when the user explicitly asks for a deck, slides, or a presentation in their own words — an explicit request settles the format dimension like any other. If the environment has an interactive question tool, use it; otherwise ask in plain chat and wait for the answer. Ask only for the missing dimension(s) — whatever the request already names is settled and is not re-asked. If all three are named, skip the question entirely and start.
 
 If the user answers "you pick", "default", or similar — or the session is non-interactive and cannot ask — use small scientific in inline chat.
 
 ## Output formats
 
-There are exactly three output formats. **Inline chat** is the default; **journal PDF** and **slides** happen only when the user chooses them — in the original request or as the answer to the format question. Never infer them silently.
+There are exactly three output formats. **Inline chat** is the default; **journal PDF** happens only when the user chooses it — in the original request or as the answer to the format question. **Slides** is experimental and hidden by default: it is never offered in the format question and happens only when the user explicitly asks for a deck, slides, or a presentation themselves. Never infer journal PDF or slides silently.
 
 ### Inline chat (default)
 
@@ -43,11 +43,12 @@ The runtime check is a hard gate. If it fails, install the exact packages in `re
 
 The QA command is also mandatory before delivery. Its release manifest hashes the exact review, ledger, generated HTML, PDF, and every figure/spec/prompt. QA rehashes them, independently rebuilds the HTML, requires one canonical PDF, a visible terminal References heading, every expected DOI as both visible reference text and a URI annotation, canonical A4 metadata/fonts, and running furniture; it then rasterizes every page through Poppler and checks masthead, page number, body, clipping, column balance, and sparse terminal reference pages. Use a new or empty case-local `--render-dir` and inspect every generated page and contact sheet visually; the manifest records that one authoritative render set. A heading stranded at the bottom while its first paragraph/table/figure starts on the next page, an avoidably sparse spill page, or a large preventable blank region is release-blocking. Rebalance and rebuild without dropping evidence or shrinking type. The exporter prevents the smallest failure itself: when a final page would carry only the tail of the reference list, it re-renders once with reference leading tightened inside a bounded envelope (type size untouched) and keeps whichever render has no spill, noting the adjustment in the release manifest. `--ref-leading` sets that leading manually, `--figure-max-height` (60–120 mm) adjusts the figure cap, and `--columns 1` gives a single-column layout; QA failure messages state how far a sparse page is from its threshold and which lever closes it. For image PDFs, repeat `--figure-spec` and `--figure-prompt` once per figure. Full commands and contracts are in `references/quality-gates.md`. The review still goes in the chat as well.
 
-### Slides
+### Slides (experimental — explicit request only)
 
-If the user asks for a **deck**, **slides**, a **presentation**, a
-**slide deck**, or a **journal club deck** — or picks slides in the format
-question — **the deck is the deliverable**: run
+The slides format is experimental and never offered: it does not appear in the
+format question and is never suggested. It runs only when the user asks for a
+**deck**, **slides**, a **presentation**, a **slide deck**, or a **journal club
+deck** in their own words. Then **the deck is the deliverable**: run
 the complete evidence pipeline, write the synthesis as an internal working
 draft, and deliver in chat the sharpened question, a 1–3 sentence plain answer,
 and the deck PDF — not a full styled review, unless the user explicitly asks
@@ -77,7 +78,8 @@ placeholders.
 
 To summarize the three formats: **inline chat** delivers the review in the
 reply; **journal PDF** delivers the PDF (with its automatic figures) and still
-puts the review in the chat; **slides** replaces the delivered written review
+puts the review in the chat; **slides** (experimental, explicit request only)
+replaces the delivered written review
 with the deck (chat carries the question, a 1–3 sentence plain answer, and the
 PDF). There is no image mode and no mindmap mode. The evidence pipeline,
 verification, and citation standard never change in any format.
@@ -115,7 +117,7 @@ Style never changes search depth, source counts, citations, or verification. Sci
 
 - **Inline chat** — the default. The review is the reply itself; nothing extra is generated.
 - **Journal PDF** — when the user asks for a PDF, a printable/shareable version, or a journal-styled artifact, or picks it in the format question. It **always includes generated figures**; the figure budget scales with size (small 1, medium up to 3, large up to 5 — caps, not quotas). Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`. For figure generation, also read `references/figure-reference-analysis.md`, `references/figure-style-system.md`, `references/image-prompt-guide.md`, and `references/figure-captions.md`; build the prompt from a structured figure specification with `scripts/build_figure_prompt.py`. Place each figure after the section it supports, reference it from the body, and give it a style-matched caption with verified citations. Figures flow into the PDF export automatically.
-- **Slides** — for the explicit triggers `deck`, `slides`, “presentation”, “slide deck”, or “journal club deck”, or when picked in the format question. Never infer it silently. Combines freely with every size and style. The deck is the deliverable: chat carries the question, a 1–3 sentence plain answer, and the verified 16:9 PDF; the written synthesis stays an internal working draft. Every content slide must pass the standalone test — claim, evidence, and firmness readable from the slide alone. Follow `references/deck-guide.md`; generate one slide-context evidence image per content slide, then run the canonical exporter and mandatory landscape QA.
+- **Slides** — experimental and hidden by default: never offered in the format question, never suggested, and never inferred. Runs only on the explicit triggers `deck`, `slides`, “presentation”, “slide deck”, or “journal club deck” in the user's own words. Combines freely with every size and style. The deck is the deliverable: chat carries the question, a 1–3 sentence plain answer, and the verified 16:9 PDF; the written synthesis stays an internal working draft. Every content slide must pass the standalone test — claim, evidence, and firmness readable from the slide alone. Follow `references/deck-guide.md`; generate one slide-context evidence image per content slide, then run the canonical exporter and mandatory landscape QA.
 
 Figure and slide creation happens only after the evidence has been searched, read, verified, and synthesized.
 
