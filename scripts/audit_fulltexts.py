@@ -446,6 +446,30 @@ def main(argv: list[str] | None = None) -> int:
             f"Full-text audit failed: {counted} counted; required {args.minimum}",
             file=sys.stderr,
         )
+        incomplete = [
+            record for record in manifest.get("records", [])
+            if record.get("status") == "valid_fulltext"
+            and not record.get("counted")
+        ]
+        if incomplete:
+            missing = {
+                record.get("ledger_key"): [
+                    name for name, present in
+                    (record.get("notes", {}).get("signals") or {}).items()
+                    if not present
+                ]
+                for record in incomplete
+            }
+            details = "; ".join(
+                f"{key}: missing {', '.join(names) if names else 'notes entry'}"
+                for key, names in missing.items()
+            )
+            print(
+                "Valid texts without a counting note — each key needs one "
+                "notes.md bullet shaped `- `key` — ...` covering design, "
+                f"result, limitation, and synthesis use. {details}",
+                file=sys.stderr,
+            )
         return 2
     if counted < args.minimum:
         print(

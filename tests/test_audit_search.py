@@ -77,5 +77,73 @@ class SearchAuditTests(unittest.TestCase):
         self.assertTrue(any("override" in warning for warning in result["warnings"]))
 
 
+class MaximaAreAdvisoryTests(unittest.TestCase):
+    """Over-searching is over-diligence: minima stay hard errors, maxima
+    warn. Zero-accept and superseded queries never count toward a maximum."""
+
+    def small_manifest(self, extra=()):
+        records = [
+            record(f"angle-{n}", f"query {n} {q}", accepted=3)
+            for n in range(3) for q in range(2)
+        ]
+        records.extend(extra)
+        return {"schema_version": 1, "records": records}
+
+    def test_small_within_bounds_passes_clean(self):
+        result = audit_search.audit_search(self.small_manifest(), size="small")
+        self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertEqual(result["warnings"], [])
+
+    def test_extra_productive_query_warns_instead_of_failing(self):
+        extra = [record("angle-0", "query 0 extra", accepted=4)]
+        result = audit_search.audit_search(self.small_manifest(extra), size="small")
+        self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertTrue(any("angle-0" in w for w in result["warnings"]))
+
+    def test_zero_accept_query_does_not_count_toward_maximum(self):
+        extra = [record("angle-0", "query 0 empty", accepted=0)]
+        result = audit_search.audit_search(self.small_manifest(extra), size="small")
+        self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertEqual(result["warnings"], [])
+
+    def test_zero_accept_query_still_counts_toward_minimum(self):
+        records = [
+            record("angle-0", "query 0 empty", accepted=0),
+        ] + [
+            record(f"angle-{n}", f"query {n} 0", accepted=3) for n in range(1, 3)
+        ]
+        result = audit_search.audit_search(
+            {"schema_version": 1, "records": records}, size="small"
+        )
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_superseded_records_are_excluded_from_coverage(self):
+        extra = [record(
+            "angle-0", "query 0 extra", accepted=4,
+            superseded=True, superseded_reason="duplicate of the reviews query",
+        )]
+        result = audit_search.audit_search(self.small_manifest(extra), size="small")
+        self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertEqual(result["warnings"], [])
+        self.assertEqual(result["metrics"]["superseded_records"], 1)
+
+    def test_too_many_angles_warns_instead_of_failing(self):
+        records = [
+            record(f"angle-{n}", f"query {n}", accepted=2) for n in range(6)
+        ]
+        result = audit_search.audit_search(
+            {"schema_version": 1, "records": records}, size="small"
+        )
+        self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertTrue(any("at most" in w for w in result["warnings"]))
+
+    def test_below_minimum_is_still_a_hard_error(self):
+        records = [record("angle-0", "query 0", accepted=2)]
+        result = audit_search.audit_search(
+            {"schema_version": 1, "records": records}, size="small"
+        )
+        self.assertEqual(result["status"], "fail")
+
+
 if __name__ == "__main__":
     unittest.main()

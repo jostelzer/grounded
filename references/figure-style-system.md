@@ -32,17 +32,27 @@ At a 1,536 px-wide deliverable, use these visual targets:
 
 | Role | Target |
 |---|---:|
-| Smallest label or compact legend text | at least 18 px |
-| Body label | 20–22 px |
-| Local panel heading | 24–26 px |
-| Compact standalone title | 30–34 px |
-| Panel letter | 26–28 px bold, lower-case |
+| Smallest label or compact legend text | at least 26 px |
+| Body label | 27–31 px |
+| Local panel heading | 31–33 px |
+| Compact standalone title | 34–38 px |
+| Panel letter | 31–33 px bold, lower-case |
 
 These are chat-readable targets inspired by Nature's 5–7 pt figure-label range
-at double-column width. End-to-end raster generation cannot prove the embedded
+at double-column width, raised so the smallest OCR-measured word height clears
+`qa_figure.py`'s 6.5 pt effective-size gate at the true journal render width.
+End-to-end raster generation cannot prove the embedded
 font file; inspect visual conformance and reject any output that visibly uses a
 serif or display face. If editable embedded font metadata is a deliverable
 requirement, use the deterministic vector fallback.
+
+**Aspect ratio for journal-PDF figures.** The exporter renders figures at full
+content width (184 mm) but caps their height (92 mm by default), scaling tall
+figures down proportionally — which silently shrinks every label. Design
+journal figures at an aspect ratio of at least 2:1 (for example 1,536 × ≤768 px
+at the default cap) so the figure keeps the full content width; `qa_figure.py`
+evaluates label sizes at the true rendered width and will fail a tall figure
+whose labels drop below 6.5 pt on paper.
 
 ## Default profile
 

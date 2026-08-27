@@ -110,6 +110,36 @@ def _verify_file_record(manifest_path: Path, record: dict[str, object], label: s
     return path
 
 
+def _verify_figure_geometry(
+        figure_path: Path, record: dict[str, object],
+        figure_max_height_mm: float, label: str) -> None:
+    """Recompute the on-page geometry from the actual pixels.
+
+    The manifest's rendered_width_mm is what figure QA evaluated label sizes
+    against; drift between it and the file's true geometry means the labels
+    were judged at the wrong physical size.
+    """
+    try:
+        from PIL import Image
+        from grounded_metadata import rendered_figure_size_mm
+    except ImportError as exc:
+        raise PdfQaError(f"figure geometry check needs Pillow: {exc}") from exc
+    with Image.open(figure_path) as image:
+        pixel_width, pixel_height = image.size
+    expected_width, expected_height = rendered_figure_size_mm(
+        pixel_width, pixel_height, max_height_mm=figure_max_height_mm
+    )
+    recorded_width = float(record.get("rendered_width_mm") or 0.0)
+    recorded_height = float(record.get("rendered_height_mm") or 0.0)
+    if (abs(recorded_width - expected_width) > 0.5
+            or abs(recorded_height - expected_height) > 0.5):
+        raise PdfQaError(
+            f"release manifest {label} geometry drift: recorded "
+            f"{recorded_width:.1f}×{recorded_height:.1f} mm but the raster "
+            f"renders at {expected_width:.1f}×{expected_height:.1f} mm"
+        )
+
+
 def verify_release_manifest(
         manifest_path: str, pdf_path: str, markdown_path: str | None = None
         ) -> dict[str, object]:
@@ -135,7 +165,13 @@ def verify_release_manifest(
         for index, record in enumerate(records, 1):
             if not isinstance(record, dict):
                 raise PdfQaError(f"release manifest {category} record is invalid")
-            _verify_file_record(path, record, f"{category}[{index}]")
+            verified = _verify_file_record(path, record, f"{category}[{index}]")
+            if category == "figures" and "rendered_width_mm" in record:
+                _verify_figure_geometry(
+                    verified, record,
+                    float(render.get("figure_max_height_mm") or 92.0),
+                    f"{category}[{index}]",
+                )
     recorded_pdf = _verify_file_record(path, artifact.get("pdf") or {}, "PDF")
     actual_pdf = Path(pdf_path).resolve()
     if actual_pdf != recorded_pdf:
@@ -165,6 +201,8 @@ def verify_release_manifest(
             release=str(manifest.get("release")),
             repo=render.get("repo"),
             compiled_date=str(manifest.get("compiled_date")),
+            figure_max_height_mm=float(render.get("figure_max_height_mm") or 92.0),
+            ref_leading=render.get("ref_leading"),
         )
     except (OSError, TypeError, ValueError) as exc:
         raise PdfQaError(f"manifest HTML cannot be rebuilt: {exc}") from exc
@@ -453,6 +491,33 @@ def _layout_failures(metrics: dict[str, float], page_number: int,
             f"(delta {metrics['column_bottom_delta']:.1%})"
         )
     if reference_page and page_number == page_count:
+        def _sparse_remedy(threshold: float) -> str:
+            """Say how far from the threshold the page is and how to close it.
+
+            The distance turns the bare percentage into an actionable target:
+            either this page needs proportionally more reference material, or
+            the spill should be pulled back entirely (the exporter's bounded
+            auto-rebalance and --ref-leading do this without touching type
+            size; --columns 1, a --figure-max-height change, or content
+            rebalancing are the larger levers)."""
+            actual = metrics["active_rows"]
+            shortfall = threshold - actual
+            if actual > 0:
+                factor = threshold / actual
+                growth = (
+                    f"≈{factor:.1f}× the current reference material on this "
+                    "page"
+                )
+            else:
+                growth = "reference material on this page"
+            return (
+                f" — {shortfall:.1%} of the page short of the {threshold:.0%} "
+                f"threshold; either move {growth} here, or pull the spill "
+                "back onto the previous page (exporter auto-rebalance / "
+                "--ref-leading, --figure-max-height, --columns 1, or content "
+                "rebalancing)"
+            )
+
         if columns == 2:
             low = min(metrics["left_active_rows"], metrics["right_active_rows"])
             high = max(metrics["left_active_rows"], metrics["right_active_rows"])
@@ -460,16 +525,19 @@ def _layout_failures(metrics: dict[str, float], page_number: int,
                 failures.append(
                     f"final reference page has an empty column and only "
                     f"{high:.1%} active-row use in the other"
+                    + _sparse_remedy(0.25)
                 )
             if metrics["active_rows"] < 0.25:
                 failures.append(
                     f"final two-column reference page is extremely sparse "
                     f"({metrics['active_rows']:.1%} active rows)"
+                    + _sparse_remedy(0.25)
                 )
         elif columns == 1 and metrics["active_rows"] < 0.30:
             failures.append(
                 f"final one-column reference page is extremely sparse "
                 f"({metrics['active_rows']:.1%} active rows)"
+                + _sparse_remedy(0.30)
             )
     return failures
 

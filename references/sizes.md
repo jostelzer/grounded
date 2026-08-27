@@ -13,7 +13,7 @@ The **output format** — `inline chat` (default), `journal PDF`, or `slides` �
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
-| Scientific/popsci body words (default) | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
+| Scientific/popsci prose words (default) | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
 | Bullet body words | 350–700 | 900–1,600 | 2,000–4,000 |
 | ELI5 narrative body words | 350–700 | 900–1,600 | 2,000–4,000 |
 | Sections | 3–5 | 6–9 | 10–15 |

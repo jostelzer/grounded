@@ -137,6 +137,49 @@ def _body_word_count(text: str) -> int:
     return len(_words(without_headings))
 
 
+_TABLE_SEPARATOR_RE = re.compile(
+    r"^\s*\|?(?:\s*:?-{3,}:?\s*\|)+\s*:?-{3,}:?\s*\|?\s*$"
+)
+
+
+def _word_breakdown(text: str) -> dict[str, int]:
+    """Split the body word count into prose, tables, captions, and alt text.
+
+    The tier budget binds the prose alone: tables, figure captions, and alt
+    text are mandatory apparatus with their own compact caps, so adding a
+    required figure never forces prose cuts to stay inside the tier range.
+    """
+    without_headings = re.sub(r"^#{1,6}\s+.*$", "", text, flags=re.M)
+    alt_words = sum(
+        len(_words(match))
+        for match in re.findall(r"!\[([^\]]*)\]\([^)]+\)", without_headings)
+    )
+    no_images = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", without_headings)
+    table_words = 0
+    prose_lines: list[str] = []
+    for line in no_images.splitlines():
+        if line.lstrip().startswith("|"):
+            if not _TABLE_SEPARATOR_RE.match(line):
+                table_words += len(_words(line))
+        else:
+            prose_lines.append(line)
+    caption_words = 0
+    remaining: list[str] = []
+    for paragraph in re.split(r"\n\s*\n", "\n".join(prose_lines)):
+        if re.match(r"\s*\*\*Figure[\s{]", paragraph):
+            caption_words += len(_words(paragraph))
+        else:
+            remaining.append(paragraph)
+    prose_words = len(_words("\n\n".join(remaining)))
+    return {
+        "prose": prose_words,
+        "tables": table_words,
+        "captions": caption_words,
+        "alt_text": alt_words,
+        "total": prose_words + table_words + caption_words + alt_words,
+    }
+
+
 def _table_count(text: str) -> int:
     return len(re.findall(
         r"^\s*\|?(?:\s*:?-{3,}:?\s*\|)+\s*:?-{3,}:?\s*\|?\s*$",
@@ -337,6 +380,7 @@ def validate_review(
     ledger: dict[str, object] | None = None,
     fulltext_manifest: dict[str, object] | None = None,
     thin_literature_override: dict[str, object] | None = None,
+    legacy_word_count: bool = False,
 ) -> ValidationResult:
     """Return deterministic writing-contract errors, warnings, and metrics."""
     style = "scientific" if style == "prose" else style
@@ -470,20 +514,41 @@ def validate_review(
 
     errors.extend(_validate_figures(markdown, base_dir))
 
+    figure_count = len(re.findall(r'^<a id="fig-', markdown, re.M))
     body_word_count = _body_word_count(body)
+    breakdown = _word_breakdown(body)
     minimum, maximum = WORD_BUDGETS[style][size]
-    if not minimum <= body_word_count <= maximum:
+    tier_bound_count = body_word_count if legacy_word_count else breakdown["prose"]
+    tier_bound_label = "body" if legacy_word_count else "prose body"
+    if not minimum <= tier_bound_count <= maximum:
+        overage = (
+            f"trim {tier_bound_count - maximum} words"
+            if tier_bound_count > maximum
+            else f"add {minimum - tier_bound_count} words"
+        )
         message = (
-            f"body is {body_word_count} words; {size} {style} guidance is "
-            f"{minimum}–{maximum}"
+            f"{tier_bound_label} is {tier_bound_count} words; {size} {style} "
+            f"guidance is {minimum}–{maximum} — {overage}"
         )
         (errors if strict_tier else warnings).append(message)
+    if not legacy_word_count:
+        apparatus_caps = (
+            ("captions", breakdown["captions"], 80 * max(1, figure_count)),
+            ("alt_text", breakdown["alt_text"], 40 * max(1, figure_count)),
+            ("tables", breakdown["tables"], 120),
+        )
+        for name, actual, cap in apparatus_caps:
+            if actual > cap:
+                message = (
+                    f"{name} carry {actual} words; keep them within {cap} — "
+                    f"trim {actual - cap} words"
+                )
+                (errors if strict_tier else warnings).append(message)
     if not body_dois:
         errors.append("finished review contains no DOI citations")
 
     section_count = len(re.findall(r"^###\s+.+$", body, re.M))
     table_count = _table_count(body)
-    figure_count = len(re.findall(r'^<a id="fig-', markdown, re.M))
     fulltext_count = sum(
         record.get("status") == "valid_fulltext" and bool(record.get("counted"))
         for record in _fulltext_records(fulltext_manifest)
@@ -519,6 +584,25 @@ def validate_review(
         errors.extend(evidence_errors)
 
     if style != "eli5":
+        def _covered_by_adjacent_expansion(term: str) -> bool:
+            """An abbreviation whose expansion was already linked at first
+            use ("95% [confidence interval](...)" then "95% CI") is covered;
+            warning on the later shorthand is noise."""
+            if not term.isupper() or not 2 <= len(term) <= 6:
+                return False
+            first = re.search(rf"\b{re.escape(term)}\b", body)
+            if not first:
+                return False
+            preceding = body[:first.start()]
+            for link_text in re.findall(
+                    r"\[([^\]]+)\]\((?!https?://doi\.org/)", preceding):
+                initials = "".join(
+                    word[0] for word in re.findall(r"[A-Za-z]+", link_text)
+                ).upper()
+                if term in (initials, link_text.strip().upper()):
+                    return True
+            return False
+
         missing_links = [
             term for term in TECHNICAL_TERMS
             if re.search(rf"\b{re.escape(term)}\b", body)
@@ -527,6 +611,7 @@ def validate_review(
                 body,
                 re.I,
             )
+            and not _covered_by_adjacent_expansion(term)
         ]
         if missing_links:
             warnings.append(
@@ -538,6 +623,7 @@ def validate_review(
         "style": style,
         "size": size,
         "body_words": body_word_count,
+        "word_breakdown": breakdown,
         "body_dois": len(body_dois),
         "source_dois": len(source_dois),
         "figures": figure_count,
@@ -593,6 +679,13 @@ def main() -> int:
     parser.add_argument(
         "--report", help="atomically write the JSON validation report"
     )
+    parser.add_argument(
+        "--legacy-word-count",
+        action="store_true",
+        help="bind the tier word range to the whole body (prose + tables + "
+             "captions + alt text) as before v2.9, instead of prose alone "
+             "with separate apparatus caps",
+    )
     args = parser.parse_args()
     try:
         review_path = None if args.review == "-" else Path(args.review).resolve()
@@ -623,6 +716,7 @@ def main() -> int:
             ledger=ledger,
             fulltext_manifest=fulltext_manifest,
             thin_literature_override=thin_override,
+            legacy_word_count=args.legacy_word_count,
         )
     except (OSError, ValueError) as exc:
         print(f"Review validation failed: {exc}", file=sys.stderr)

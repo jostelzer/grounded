@@ -268,7 +268,7 @@ The first use of a technical abbreviation or specialist term is a markdown link 
 
 ## Length
 
-Default **small scientific**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words in the body plus the sources block. Popsci uses the same budgets. Explicit bullet style and small ELI5 use 350–700 words, but ELI5 spends that budget on connected paragraphs rather than list items. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
+Default **small scientific**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words of running prose plus the sources block (tables, figure captions, and alt text are budgeted separately by the validator). Popsci uses the same budgets. Explicit bullet style and small ELI5 use 350–700 words, but ELI5 spends that budget on connected paragraphs rather than list items. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
 
 ## Citing
 

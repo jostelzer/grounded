@@ -787,6 +787,104 @@ class FigureExportTests(unittest.TestCase):
         )
         self.assertTrue(any("empty column" in failure for failure in final_failures))
 
+    def test_release_input_errors_surface_as_messages_not_crashes(self):
+        """Regression: a branch-local `import json` in main() once shadowed the
+        module import, so every release-lineage validation error crashed with
+        UnboundLocalError instead of printing its message."""
+        with tempfile.TemporaryDirectory() as tmp:
+            review = os.path.join(tmp, "review.md")
+            with open(review, "w", encoding="utf-8") as stream:
+                stream.write(PdfExportTests.markdown())
+            PdfExportTests.make_image(os.path.join(tmp, "figure.png"))
+            ledger = os.path.join(tmp, "sources.json")
+            with open(ledger, "w", encoding="utf-8") as stream:
+                json.dump({"entries": []}, stream)
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    os.path.join(SCRIPTS, "export_review.py"),
+                    "--in", review,
+                    "--out", os.path.join(tmp, "review.pdf"),
+                    "--pdf",
+                    "--ledger", ledger,
+                    "--release-manifest", os.path.join(tmp, "release.json"),
+                ],
+                capture_output=True, text=True,
+            )
+            self.assertNotEqual(completed.returncode, 0)
+            self.assertNotIn("UnboundLocalError", completed.stderr)
+            self.assertNotIn("Traceback", completed.stderr)
+            self.assertIn("figure-spec", completed.stderr)
+
+    def test_bounded_leading_knob_and_its_envelope(self):
+        page_default = export_review._stylesheet(92)
+        page_tight = export_review._stylesheet(92, ref_leading=1.1)
+        self.assertIn("line-height: 1.2;", page_default)
+        self.assertIn("line-height: 1.1;", page_tight)
+        with self.assertRaises(ValueError):
+            export_review._stylesheet(92, ref_leading=1.0)
+        with self.assertRaises(ValueError):
+            export_review._stylesheet(92, ref_leading=1.5)
+
+    def test_terminal_spill_is_detected_and_auto_rebalanced(self):
+        """End to end: a review whose reference tail spills onto a final
+        page alone is re-rendered once with tightened (bounded) reference
+        leading, pulling the spill back; type size is untouched."""
+        fixture = os.path.join(ROOT, "tests", "fixtures", "spill-probe.md")
+        with open(fixture, encoding="utf-8") as stream:
+            markdown = stream.read()
+        with tempfile.TemporaryDirectory() as tmp:
+            plain = os.path.join(tmp, "plain.pdf")
+            page = export_review.build_html(
+                markdown, release="v-test", repo="example.test/g",
+                compiled_date="2026-08-27",
+            )
+            weasyprint_export.write_pdf(page, plain)
+            n_refs = export_review.count_unique_dois(markdown)
+            spill = export_review.count_terminal_reference_spill(plain, n_refs)
+            self.assertGreater(spill, 0)
+            self.assertLessEqual(spill, export_review.REBALANCE_MAX_SPILL)
+
+            src = os.path.join(tmp, "review.md")
+            with open(src, "w", encoding="utf-8") as stream:
+                stream.write(markdown)
+            out = os.path.join(tmp, "review.pdf")
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    os.path.join(SCRIPTS, "export_review.py"),
+                    "--in", src, "--out", out, "--pdf",
+                    "--release", "v-test", "--repo", "example.test/g",
+                    "--compiled-date", "2026-08-27",
+                ],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertIn("Rebalanced", completed.stderr)
+            self.assertEqual(
+                export_review.count_terminal_reference_spill(out, n_refs), 0
+            )
+
+    def test_no_spill_render_is_left_untouched(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            PdfExportTests.make_image(os.path.join(tmp, "figure.png"))
+            src = os.path.join(tmp, "review.md")
+            with open(src, "w", encoding="utf-8") as stream:
+                stream.write(PdfExportTests.markdown())
+            out = os.path.join(tmp, "review.pdf")
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    os.path.join(SCRIPTS, "export_review.py"),
+                    "--in", src, "--out", out, "--pdf",
+                    "--release", "v-test", "--repo", "example.test/g",
+                    "--compiled-date", "2026-08-27",
+                ],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertNotIn("Rebalanced", completed.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

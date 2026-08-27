@@ -80,6 +80,28 @@ def title_similarity(a, b):
     return len(a & b) / len(a | b)
 
 
+def best_title_similarity(ledger_title, message):
+    """Best similarity across title/subtitle framings.
+
+    Crossref registers title and subtitle as separate fields while indexes
+    such as PubMed often store one "Title: Subtitle" string (sometimes
+    truncated at the colon), so a correct DOI can look mismatched when only
+    the bare titles are compared. Compare the ledger title against the
+    registered title, the title joined with its subtitle, and the ledger
+    title with a trailing colon-delimited segment stripped, and keep the
+    best score.
+    """
+    cr_title = (message.get("title") or [""])[0]
+    candidates = [(ledger_title, cr_title)]
+    subtitle = (message.get("subtitle") or [""])[0]
+    if subtitle:
+        candidates.append((ledger_title, f"{cr_title}: {subtitle}"))
+    stripped = re.sub(r":[^:]*$", "", ledger_title or "").strip()
+    if stripped and stripped != (ledger_title or "").strip():
+        candidates.append((stripped, cr_title))
+    return max(title_similarity(a, b) for a, b in candidates)
+
+
 def crossref(doi):
     status, body = get("https://api.crossref.org/works/" + urllib.parse.quote(doi, safe=""))
     if status != 200:
@@ -197,7 +219,7 @@ def verify_one(entry):
         return "failed", [reason], {}, details
     ctype = m.get("type")
     cr_title = (m.get("title") or [""])[0]
-    sim = title_similarity(entry.get("title", ""), cr_title)
+    sim = best_title_similarity(entry.get("title", ""), m)
     if entry.get("title") and sim < 0.5:
         bibliographic_issues.append(f"title mismatch (similarity {sim:.2f}): ledger='{entry.get('title','')[:70]}' vs Crossref='{cr_title[:70]}'")
     y = cr_year(m)

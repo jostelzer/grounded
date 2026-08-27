@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="662" viewBox="0 0 1536 662">
+<rect width="1536" height="662" fill="#ffffff"/>
+<text x="768" y="58" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#111111" text-anchor="middle">Change in daily crying and fussing vs placebo (minutes/day)</text>
+<line x1="941.8" y1="104" x2="941.8" y2="540" stroke="#444444" stroke-width="2" stroke-dasharray="8,7"/>
+<text x="941.8" y="95" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#444444" text-anchor="middle">0 = no difference</text>
+<text x="40" y="178" font-family="Arial, Helvetica, sans-serif" font-size="33" font-weight="bold" fill="#111111">L. reuteri, 4 pooled trials</text>
+<text x="40" y="220" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#555555">n=345, effect driven by breastfed infants</text>
+<line x1="683.8" y1="192" x2="922.7" y2="192" stroke="#2166ac" stroke-width="4"/>
+<line x1="683.8" y1="178" x2="683.8" y2="206" stroke="#2166ac" stroke-width="4"/>
+<line x1="922.7" y1="178" x2="922.7" y2="206" stroke="#2166ac" stroke-width="4"/>
+<circle cx="803.3" cy="192" r="13" fill="#2166ac"/>
+<text x="745.0" y="156" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">-25.4 (95% CI -47.3 to -3.5)</text>
+<text x="40" y="313" font-family="Arial, Helvetica, sans-serif" font-size="33" font-weight="bold" fill="#111111">L. reuteri, largest single trial</text>
+<text x="40" y="355" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#555555">n=167, breastfed and formula fed</text>
+<line x1="985.5" y1="327" x2="1432.7" y2="327" stroke="#d95f02" stroke-width="4"/>
+<line x1="985.5" y1="313" x2="985.5" y2="341" stroke="#d95f02" stroke-width="4"/>
+<line x1="1432.7" y1="313" x2="1432.7" y2="341" stroke="#d95f02" stroke-width="4"/>
+<circle cx="1209.1" cy="327" r="13" fill="#d95f02"/>
+<text x="1209.1" y="291" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">+49 (95% CI +8 to +90)</text>
+<text x="40" y="448" font-family="Arial, Helvetica, sans-serif" font-size="33" font-weight="bold" fill="#111111">Lactase drops, 2 pooled trials</text>
+<text x="40" y="490" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#555555">no significant effect</text>
+<line x1="610.2" y1="462" x2="1080.9" y2="462" stroke="#5f6b72" stroke-width="4"/>
+<line x1="610.2" y1="448" x2="610.2" y2="476" stroke="#5f6b72" stroke-width="4"/>
+<line x1="1080.9" y1="448" x2="1080.9" y2="476" stroke="#5f6b72" stroke-width="4"/>
+<circle cx="845.3" cy="462" r="13" fill="#5f6b72"/>
+<text x="745.0" y="426" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">-17.7 (95% CI -60.8 to +25.5)</text>
+<line x1="560.0" y1="540" x2="1460.0" y2="540" stroke="#111111" stroke-width="2.5"/>
+<line x1="614.5" y1="540" x2="614.5" y2="552" stroke="#111111" stroke-width="2.5"/>
+<text x="614.5" y="584" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">-60</text>
+<line x1="778.2" y1="540" x2="778.2" y2="552" stroke="#111111" stroke-width="2.5"/>
+<text x="778.2" y="584" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">-30</text>
+<line x1="941.8" y1="540" x2="941.8" y2="552" stroke="#111111" stroke-width="2.5"/>
+<text x="941.8" y="584" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">0</text>
+<line x1="1105.5" y1="540" x2="1105.5" y2="552" stroke="#111111" stroke-width="2.5"/>
+<text x="1105.5" y="584" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">+30</text>
+<line x1="1269.1" y1="540" x2="1269.1" y2="552" stroke="#111111" stroke-width="2.5"/>
+<text x="1269.1" y="584" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">+60</text>
+<line x1="1432.7" y1="540" x2="1432.7" y2="552" stroke="#111111" stroke-width="2.5"/>
+<text x="1432.7" y="584" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#111111" text-anchor="middle">+90</text>
+<text x="750.9" y="623" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#2166ac" text-anchor="middle">less crying</text>
+<text x="1200.9" y="623" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#d95f02" text-anchor="middle">more crying</text>
+<text x="40" y="662" font-family="Arial, Helvetica, sans-serif" font-size="31" fill="#333333">dot = best estimate&#160;&#160;&#160;&#160;whisker = 95% CI&#160;&#160;&#160;&#160;CI = confidence interval</text>
+</svg>

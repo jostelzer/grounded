@@ -94,6 +94,11 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
   delivered size. Quote the exact copy in the generation prompt and request
   deliberate line wrapping.
 - Rasterize and *look* at the result if any renderer is available (`rsvg-convert`, `cairosvg`, a headless browser). Inspect at delivered size and at phone width.
+- Keep journal-PDF figures at an aspect ratio of at least 2:1. The exporter
+  caps figure height (92 mm by default, `--figure-max-height` to adjust within
+  60–120 mm) and scales taller figures down proportionally, shrinking every
+  label with them; `qa_figure.py` evaluates label legibility at the true
+  rendered width and fails figures whose labels fall below 6.5 pt on paper.
 
 **Don't:**
 

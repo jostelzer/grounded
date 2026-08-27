@@ -81,5 +81,76 @@ class FigureQaTests(unittest.TestCase):
         self.assertTrue(any("reversed relationship" in error for error in result["errors"]))
 
 
+class RenderedWidthTests(unittest.TestCase):
+    """Label legibility must be judged at the width the journal page will
+    actually render the raster at: the exporter's height cap scales tall
+    figures down, so their labels print smaller than a naive full-width
+    assumption."""
+
+    @staticmethod
+    def spec():
+        return {"exact_text": ["axis"], "render_context": "article"}
+
+    @staticmethod
+    def inspection(height_px=22.0):
+        return {
+            "ocr_text": "axis",
+            "minimum_label_height_px": height_px,
+            "relationships": [],
+            "detected_effects": [],
+            "text_collisions": [],
+        }
+
+    def make_image(self, width, height):
+        from PIL import Image
+
+        tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+        Image.new("RGB", (width, height), "white").save(tmp.name)
+        self.addCleanup(Path(tmp.name).unlink)
+        return tmp.name
+
+    def test_wide_figure_is_judged_at_full_content_width(self):
+        image = self.make_image(1536, 662)
+        result = qa_figure.audit_figure(
+            self.spec(), image, inspection=self.inspection()
+        )
+        self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertGreaterEqual(result["metrics"]["minimum_effective_label_pt"], 6.5)
+
+    def test_tall_figure_fails_and_names_the_rendered_width(self):
+        image = self.make_image(1000, 1500)
+        result = qa_figure.audit_figure(
+            self.spec(), image, inspection=self.inspection()
+        )
+        self.assertEqual(result["status"], "fail")
+        message = " ".join(result["errors"])
+        self.assertIn("mm rendered width", message)
+
+    def test_explicit_width_override_still_wins(self):
+        image = self.make_image(1000, 1500)
+        result = qa_figure.audit_figure(
+            self.spec(), image, inspection=self.inspection(height_px=40.0),
+            pdf_width_mm=170.0,
+        )
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+
+class ConfusableFoldingTests(unittest.TestCase):
+    """OCR cannot tell Arial capital-I from lowercase-l; the comparison fold
+    must treat them as equal without altering what the figure says."""
+
+    def test_ci_matches_cl_ocr(self):
+        self.assertEqual(qa_figure._normal("95% CI"), qa_figure._normal("95% Cl"))
+
+    def test_unicode_minus_matches_hyphen(self):
+        self.assertEqual(qa_figure._normal("\u221225.4"), qa_figure._normal("-25.4"))
+
+    def test_distinct_words_stay_distinct(self):
+        self.assertNotEqual(
+            qa_figure._normal("placebo"), qa_figure._normal("probiotic")
+        )
+        self.assertNotEqual(qa_figure._normal("-25.4"), qa_figure._normal("-47.3"))
+
+
 if __name__ == "__main__":
     unittest.main()

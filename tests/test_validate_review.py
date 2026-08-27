@@ -320,5 +320,112 @@ class ValidateReviewTests(unittest.TestCase):
         self.assertTrue(any("scaffold" in error for error in result.errors))
 
 
+class WordBreakdownTests(unittest.TestCase):
+    """The tier range binds prose alone; tables, captions, and alt text are
+    mandatory apparatus with their own caps, so a required figure never
+    forces prose cuts (see references/contracts.md)."""
+
+    @staticmethod
+    def review_with_figure(prose_words=700, caption_words=40, alt_words=10):
+        prose = " ".join(["evidence"] * prose_words)
+        caption = " ".join(["shown"] * caption_words)
+        alt = " ".join(["plot"] * alt_words)
+        return (
+            "## The headline\n\n"
+            "*The question, plainly. The shape of the answer.*\n\n"
+            f"The claim holds {prose} [Smith 2024](https://doi.org/{DOI}). "
+            "The figure appears in [Figure 1](#fig-main).\n\n"
+            "### The turn\n\n"
+            f"Contrary evidence exists [Smith 2024](https://doi.org/{DOI}).\n\n"
+            '<a id="fig-main"></a>\n'
+            f"![{alt}](figure.png)\n\n"
+            f"**Figure 1. The point.** {caption} "
+            f"[Smith 2024](https://doi.org/{DOI}).\n\n"
+            "**Sources**\n\n"
+            f"**Smith (2024)** A source. *Journal*. https://doi.org/{DOI}\n"
+        )
+
+    def validate(self, markdown, **kwargs):
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "figure.png").write_bytes(b"png")
+            return validate_review.validate_review(
+                markdown, style="popsci", size="small",
+                base_dir=Path(tmp), **kwargs,
+            )
+
+    def test_breakdown_metric_reports_components(self):
+        result = self.validate(self.review_with_figure())
+        breakdown = result.metrics["word_breakdown"]
+        self.assertGreaterEqual(breakdown["prose"], 700)
+        self.assertGreaterEqual(breakdown["captions"], 40)
+        self.assertGreaterEqual(breakdown["alt_text"], 10)
+        self.assertEqual(
+            breakdown["total"],
+            breakdown["prose"] + breakdown["tables"]
+            + breakdown["captions"] + breakdown["alt_text"],
+        )
+
+    def test_caption_words_do_not_break_the_prose_tier(self):
+        markdown = self.review_with_figure(prose_words=930, caption_words=60)
+        result = self.validate(markdown, strict_tier=True)
+        word_errors = [e for e in result.errors if "words" in e]
+        self.assertEqual(word_errors, [])
+
+    def test_oversized_caption_fails_its_own_cap(self):
+        markdown = self.review_with_figure(caption_words=120)
+        result = self.validate(markdown, strict_tier=True)
+        self.assertTrue(any("captions" in e for e in result.errors))
+
+    def test_word_failures_name_the_component_and_overage(self):
+        markdown = self.review_with_figure(prose_words=1200)
+        result = self.validate(markdown, strict_tier=True)
+        message = " ".join(result.errors)
+        self.assertIn("prose body", message)
+        self.assertIn("trim", message)
+
+    def test_legacy_flag_restores_single_bucket_behavior(self):
+        markdown = self.review_with_figure(prose_words=920, caption_words=70)
+        modern = self.validate(markdown, strict_tier=True)
+        legacy = self.validate(
+            markdown, strict_tier=True, legacy_word_count=True
+        )
+        self.assertFalse(any("words" in e for e in modern.errors))
+        self.assertTrue(any("body is" in e for e in legacy.errors))
+
+
+class TermLinkCoverageTests(unittest.TestCase):
+    def review(self, sentence):
+        return (
+            "## Does the test pass?\n\n"
+            "**Abstract** — " + " ".join(["answer"] * 120) + "\n\n"
+            "### Introduction\n\n"
+            f"{sentence} [Smith 2024](https://doi.org/{DOI}).\n\n"
+            "### Result\n\nThe evidence remains conditional.\n\n"
+            "### Conclusion\n\nThe answer depends on context.\n\n"
+            "**Sources**\n\n"
+            f"**Smith (2024)** A source. *Journal*. https://doi.org/{DOI}\n"
+        )
+
+    def test_abbreviation_after_linked_expansion_is_covered(self):
+        markdown = self.review(
+            "The effect was 4.0 (95% "
+            "[confidence interval](https://en.wikipedia.org/wiki/Confidence_interval)"
+            " 2.0–8.1), and later the 95% CI narrowed"
+        )
+        result = validate_review.validate_review(
+            markdown, style="scientific", size="small"
+        )
+        self.assertFalse(
+            any("CI" in w for w in result.warnings), result.warnings
+        )
+
+    def test_unexplained_abbreviation_still_warns(self):
+        markdown = self.review("The pooled SMD was 0.4")
+        result = validate_review.validate_review(
+            markdown, style="scientific", size="small"
+        )
+        self.assertTrue(any("SMD" in w for w in result.warnings))
+
+
 if __name__ == "__main__":
     unittest.main()

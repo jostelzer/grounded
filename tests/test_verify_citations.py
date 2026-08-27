@@ -95,6 +95,45 @@ class UpdateSignalTests(unittest.TestCase):
         self.assertEqual(signals, [])
 
 
+class TitleSubtitleMatchingTests(unittest.TestCase):
+    """Regression for the Szajewska 2023 false failure: Crossref registers
+    title and subtitle separately, while PubMed-derived ledgers store one
+    "Title: Subtitle" string."""
+
+    def verify(self, ledger_title, record):
+        entry = {"key": "Szajewska2023", "doi": "10.1000/original",
+                 "title": ledger_title, "year": 2020}
+        with mock.patch.object(VC, "crossref", return_value=(record, None)):
+            return VC.verify_one(entry)
+
+    def test_ledger_title_with_subtitle_passes_against_bare_crossref_title(self):
+        status, reasons, _c, _d = self.verify(
+            "Probiotics for the management of disorders: "
+            "Position paper of a special interest group on modifications",
+            work(title=["Probiotics for the management of disorders"]),
+        )
+        self.assertEqual(status, "verified", reasons)
+
+    def test_crossref_subtitle_field_is_considered(self):
+        status, reasons, _c, _d = self.verify(
+            "Probiotics for the management of disorders: "
+            "Position paper of a special interest group on modifications",
+            work(
+                title=["Probiotics for the management of disorders"],
+                subtitle=["Position paper of a special interest group on modifications"],
+            ),
+        )
+        self.assertEqual(status, "verified", reasons)
+
+    def test_genuinely_wrong_title_still_fails(self):
+        status, reasons, _c, _d = self.verify(
+            "Deep learning for protein folding: a benchmark",
+            work(title=["Probiotics for the management of disorders"]),
+        )
+        self.assertEqual(status, "failed")
+        self.assertTrue(any("title mismatch" in r for r in reasons))
+
+
 class VerifyOneTests(unittest.TestCase):
     def verify(self, record):
         entry = {"key": "Smith2020", "doi": "10.1000/original",

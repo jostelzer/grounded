@@ -1,0 +1,170 @@
+USE CASE
+scientific-educational
+
+ASSET
+Complete publication-grade scientific figure rendered end to end, including every label and all typography.
+
+PURPOSE
+Show the exact reported effects of the leading colic interventions on daily crying and fussing time versus placebo, including the contradictory results for Lactobacillus reuteri DSM 17938.
+
+CAPTION CONTEXT — DO NOT RENDER INSIDE THE ARTWORK
+Title: What moves the needle on colic crying
+
+STYLE PROFILE
+Nature-inspired quantitative figure
+A figure-native quantitative composition whose exact geometry, scales, uncertainty, and denominators are the visual focus.
+
+FRAMING
+Context: article
+Do not render the title or subtitle inside the artwork; the surrounding article caption supplies them.
+
+TYPOGRAPHY — HARD REQUIREMENT
+- Render every character in Arial throughout; Helvetica is the only acceptable visual fallback.
+- Text colour: #1A1A1A. Minimum readable text at 1,536 px width: 18 px; body 20 px; local headings 24 px; compact standalone title 31 px; panel letters 27 px.
+- Use Arial throughout; Helvetica is the only acceptable visual fallback.
+- Use sentence case and black or near-black labels.
+- Use bold only for panel letters and short panel headings.
+- Never use serif, condensed, outlined, beveled, or shadowed type.
+
+CANVAS
+- Background: #FFFFFF
+- Aspect: 3:2 landscape unless the data require another ratio
+- Margin: 7% clear outer margin
+- Density: Compact, aligned panels with enough room for axes and uncertainty
+
+PALETTE
+black #1A1A1A, grey #767676, light grey #D9D9D9, blue #497FA6, pale blue #AFCFE0, muted green #669E83, pale green #BDD8C8, muted orange #C88F43, salmon #CA756B, lavender #A79AC4
+
+VISUAL LANGUAGE
+- Use black axes and tick marks, explicit units, exact uncertainty marks, and direct labels where space permits.
+- Use colour-blind-safe solid colours only to distinguish datasets.
+- Use no background gridlines; if a reference line is scientifically necessary, keep it thin and light grey.
+- Use simple panel boundaries only when they clarify different denominators or scales.
+- Keep all non-data illustration subordinate to the plotted evidence.
+
+ARCHETYPE
+quantitative — Show verified numerical estimates, uncertainty, scales, and denominators with geometry that is mathematically faithful.
+
+COMPOSITION
+- Use a standard plot form appropriate to the values: dot-and-whisker, line, bar, or scatter.
+- Label axes and units and include tick marks; do not use background gridlines.
+- Use direct labels or a compact key with black text and coloured swatches.
+- Keep incompatible scales or denominators in clearly separated panels.
+
+EVIDENCE-BACKED STORY
+- The individual-participant meta-analysis of four double-blind trials reported 25.4 minutes per day less crying and fussing with L. reuteri DSM 17938, driven by breastfed infants.
+- The largest single trial, which uniquely included formula-fed infants, reported 49 minutes per day more crying and fussing in the probiotic group.
+- Pooled lactase-drop trials reported no significant effect.
+- All three estimates carry wide 95% confidence intervals; populations and feeding modes differ, so the rows must be read as separate experiments, not one pooled effect.
+
+DIRECTLY OBSERVED
+- All plotted values are the reported adjusted mean differences and 95% confidence intervals from the cited publications.
+- The Sung 2014 estimate is the trial's reported 49 minutes per day more crying or fussing in the probiotic group at one month.
+
+INFERRED, MODEL-SUPPORTED, MIXED, OR UNCERTAIN
+- The contrast between the pooled estimate and the largest trial reflects the breastfed versus formula-fed difference reported in the individual-participant meta-analysis.
+
+EXACT DATA — DO NOT ALTER
+{
+  "axis_minutes_per_day": [
+    -70,
+    95
+  ],
+  "rows": [
+    {
+      "95_percent_confidence_interval": [
+        -47.3,
+        -3.5
+      ],
+      "detail": "n=345, effect driven by breastfed infants",
+      "label": "L. reuteri, 4 pooled trials",
+      "mean_difference": -25.4,
+      "source_key": "Sung2018lactobacillus"
+    },
+    {
+      "95_percent_confidence_interval": [
+        8,
+        90
+      ],
+      "detail": "n=167, breastfed and formula fed",
+      "label": "L. reuteri, largest single trial",
+      "mean_difference": 49,
+      "source_key": "Sung2014treating"
+    },
+    {
+      "95_percent_confidence_interval": [
+        -60.8,
+        25.5
+      ],
+      "detail": "no significant effect",
+      "label": "Lactase drops, 2 pooled trials",
+      "mean_difference": -17.7,
+      "source_key": "KozowskaJalowska2024effect"
+    }
+  ]
+}
+
+TOPIC-SPECIFIC LAYOUT
+- Single open panel on a white landscape canvas: three horizontal dot-and-whisker rows over one shared linear minutes-per-day axis.
+- A dashed vertical reference line at zero labelled '0 = no difference'; directional cues 'less crying' left and 'more crying' right under the axis.
+- Row labels and study details in black Arial at the left; each exact estimate printed beside its dot.
+- Compact key at the bottom expanding the dot, whisker, and CI encodings.
+
+SCIENTIFIC CONSTRAINTS
+- Arial throughout; smallest text at least 26 px at a 1536 px canvas width.
+- Dot positions and whisker endpoints must be proportional to the supplied axis.
+- Do not pool the rows visually or imply one combined effect.
+- Keep the title outside the artwork because this is an article figure.
+
+EXACT IN-FIGURE TEXT MANIFEST — RENDER EVERY STRING VERBATIM IN ARIAL
+- "Change in daily crying and fussing vs placebo (minutes/day)"
+- "L. reuteri, 4 pooled trials"
+- "n=345, effect driven by breastfed infants"
+- "-25.4 (95% CI -47.3 to -3.5)"
+- "L. reuteri, largest single trial"
+- "n=167, breastfed and formula fed"
+- "+49 (95% CI +8 to +90)"
+- "Lactase drops, 2 pooled trials"
+- "no significant effect"
+- "-17.7 (95% CI -60.8 to +25.5)"
+- "0 = no difference"
+- "less crying"
+- "more crying"
+- "dot = best estimate"
+- "whisker = 95% CI"
+- "CI = confidence interval"
+- "-60"
+- "-30"
+- "+30"
+- "+60"
+- "+90"
+
+AVOID
+- serif typography
+- 3D charts
+- background gridlines
+- drop shadows
+- patterns
+- decorative icons
+- unlabelled axes
+- truncated axes that exaggerate effects
+- cross-panel comparisons across incompatible denominators
+- watermarks or journal branding
+- gradient
+- drop shadow
+- 3d
+- background gridlines
+- rounded cards
+- bar charts
+- decorative icons
+- serif or display lettering
+- large internal title
+
+ARCHETYPE QA
+- Every plotted coordinate is proportional to the supplied data.
+- Every confidence or credible interval has the supplied endpoints.
+- No axis, tick, value, unit, sample size, or denominator is invented or altered.
+- If image generation cannot satisfy exact geometry after one targeted correction, use an evidence-card comparison or the deterministic renderer fallback.
+
+FINAL CONTRACT
+Generate the complete final figure now. Do not leave blank text placeholders. Do not add text that is absent from the exact in-figure text manifest. Preserve every number, unit, interval, denominator, qualifier, and relationship exactly. No watermark, logo, masthead, or imitation journal branding.

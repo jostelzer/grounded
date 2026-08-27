@@ -72,10 +72,14 @@ def audit_search(
             errors.append(message)
 
     completed = [record for record in records if record.get("completed") is True]
+    superseded_count = sum(
+        1 for record in completed if record.get("superseded") is True
+    )
     keyword = [
         record for record in completed
         if not record.get("citation_direction")
         and record.get("method") == "keyword"
+        and record.get("superseded") is not True
     ]
     by_angle: dict[str, list[dict[str, Any]]] = defaultdict(list)
     labels: dict[str, set[str]] = defaultdict(set)
@@ -89,27 +93,47 @@ def audit_search(
         errors.append("angle ID(s) map to multiple labels: " + ", ".join(ambiguous))
 
     requirement = REQUIREMENTS[size]
-    if not _bounds(len(by_angle), requirement["angles"]):
+    angle_minimum, angle_maximum = requirement["angles"]
+    if len(by_angle) < angle_minimum:
         issue(
             "angles",
             f"{size} search requires {_expected(requirement['angles'])} completed angles; "
             f"found {len(by_angle)}",
-            shortfall=len(by_angle) < requirement["angles"][0],
+        )
+    elif angle_maximum is not None and len(by_angle) > angle_maximum:
+        # Over-searching is over-diligence, not an evidence-quality problem:
+        # minima stay hard errors, maxima advise.
+        warnings.append(
+            f"{size} search suggests at most {angle_maximum} angles; "
+            f"found {len(by_angle)}"
         )
     query_counts: dict[str, int] = {}
     for angle_id, angle_records in sorted(by_angle.items()):
-        queries = {
-            str(record.get("requested_query_or_seed") or "").strip().lower()
-            for record in angle_records
-            if str(record.get("requested_query_or_seed") or "").strip()
-        }
+        accepted_by_query: dict[str, int] = {}
+        for record in angle_records:
+            query = str(record.get("requested_query_or_seed") or "").strip().lower()
+            if not query:
+                continue
+            accepted_by_query[query] = (
+                accepted_by_query.get(query, 0) + int(record.get("accepted") or 0)
+            )
+        queries = set(accepted_by_query)
+        # A completed query that accepted nothing was real effort (it counts
+        # toward the minimum) but adds no redundancy (it never counts toward
+        # the maximum).
+        productive = {q for q, count in accepted_by_query.items() if count > 0}
         query_counts[angle_id] = len(queries)
-        if not _bounds(len(queries), requirement["queries"]):
+        query_minimum, query_maximum = requirement["queries"]
+        if len(queries) < query_minimum:
             issue(
                 "queries",
                 f"angle {angle_id} requires {_expected(requirement['queries'])} "
                 f"distinct completed queries; found {len(queries)}",
-                shortfall=len(queries) < requirement["queries"][0],
+            )
+        elif query_maximum is not None and len(productive) > query_maximum:
+            warnings.append(
+                f"angle {angle_id} suggests at most {query_maximum} distinct "
+                f"productive queries; found {len(productive)}"
             )
 
     lanes = {str(record.get("lane")) for record in keyword}
@@ -144,6 +168,7 @@ def audit_search(
             "size": size,
             "attempted_records": len(records),
             "completed_records": len(completed),
+            "superseded_records": superseded_count,
             "failed_or_incomplete_records": len(failed),
             "completed_angles": len(by_angle),
             "completed_queries_by_angle": query_counts,

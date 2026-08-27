@@ -1,0 +1,103 @@
+{
+  "figure_id": "colic-treatments",
+  "profile": "nature-data",
+  "archetype": "quantitative",
+  "render_context": "article",
+  "purpose": "Show the exact reported effects of the leading colic interventions on daily crying and fussing time versus placebo, including the contradictory results for Lactobacillus reuteri DSM 17938.",
+  "title": "What moves the needle on colic crying",
+  "story": [
+    "The individual-participant meta-analysis of four double-blind trials reported 25.4 minutes per day less crying and fussing with L. reuteri DSM 17938, driven by breastfed infants.",
+    "The largest single trial, which uniquely included formula-fed infants, reported 49 minutes per day more crying and fussing in the probiotic group.",
+    "Pooled lactase-drop trials reported no significant effect.",
+    "All three estimates carry wide 95% confidence intervals; populations and feeding modes differ, so the rows must be read as separate experiments, not one pooled effect."
+  ],
+  "data": {
+    "axis_minutes_per_day": [-70, 95],
+    "rows": [
+      {
+        "label": "L. reuteri, 4 pooled trials",
+        "detail": "n=345, effect driven by breastfed infants",
+        "mean_difference": -25.4,
+        "95_percent_confidence_interval": [-47.3, -3.5],
+        "source_key": "Sung2018lactobacillus"
+      },
+      {
+        "label": "L. reuteri, largest single trial",
+        "detail": "n=167, breastfed and formula fed",
+        "mean_difference": 49,
+        "95_percent_confidence_interval": [8, 90],
+        "source_key": "Sung2014treating"
+      },
+      {
+        "label": "Lactase drops, 2 pooled trials",
+        "detail": "no significant effect",
+        "mean_difference": -17.7,
+        "95_percent_confidence_interval": [-60.8, 25.5],
+        "source_key": "KozowskaJalowska2024effect"
+      }
+    ]
+  },
+  "observed": [
+    "All plotted values are the reported adjusted mean differences and 95% confidence intervals from the cited publications.",
+    "The Sung 2014 estimate is the trial's reported 49 minutes per day more crying or fussing in the probiotic group at one month."
+  ],
+  "inferred": [
+    "The contrast between the pooled estimate and the largest trial reflects the breastfed versus formula-fed difference reported in the individual-participant meta-analysis."
+  ],
+  "evidence_keys": [
+    "Sung2018lactobacillus",
+    "Sung2014treating",
+    "KozowskaJalowska2024effect"
+  ],
+  "relationships": [],
+  "abbreviations": {
+    "CI": "confidence interval"
+  },
+  "layout_notes": [
+    "Single open panel on a white landscape canvas: three horizontal dot-and-whisker rows over one shared linear minutes-per-day axis.",
+    "A dashed vertical reference line at zero labelled '0 = no difference'; directional cues 'less crying' left and 'more crying' right under the axis.",
+    "Row labels and study details in black Arial at the left; each exact estimate printed beside its dot.",
+    "Compact key at the bottom expanding the dot, whisker, and CI encodings."
+  ],
+  "constraints": [
+    "Arial throughout; smallest text at least 26 px at a 1536 px canvas width.",
+    "Dot positions and whisker endpoints must be proportional to the supplied axis.",
+    "Do not pool the rows visually or imply one combined effect.",
+    "Keep the title outside the artwork because this is an article figure."
+  ],
+  "avoid": [
+    "gradient",
+    "drop shadow",
+    "3d",
+    "background gridlines",
+    "rounded cards",
+    "bar charts",
+    "decorative icons",
+    "serif or display lettering",
+    "large internal title"
+  ],
+  "exact_text": [
+    "What moves the needle on colic crying",
+    "Change in daily crying and fussing vs placebo (minutes/day)",
+    "L. reuteri, 4 pooled trials",
+    "n=345, effect driven by breastfed infants",
+    "-25.4 (95% CI -47.3 to -3.5)",
+    "L. reuteri, largest single trial",
+    "n=167, breastfed and formula fed",
+    "+49 (95% CI +8 to +90)",
+    "Lactase drops, 2 pooled trials",
+    "no significant effect",
+    "-17.7 (95% CI -60.8 to +25.5)",
+    "0 = no difference",
+    "less crying",
+    "more crying",
+    "dot = best estimate",
+    "whisker = 95% CI",
+    "CI = confidence interval",
+    "-60",
+    "-30",
+    "+30",
+    "+60",
+    "+90"
+  ]
+}

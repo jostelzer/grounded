@@ -31,6 +31,9 @@ import urllib.parse
 from pathlib import Path
 
 from artifact_io import atomic_write_json, sha256_bytes, sha256_file
+from grounded_metadata import (
+    FIGURE_MAX_HEIGHT_MM, PAGE_CONTENT_WIDTH_MM, rendered_figure_size_mm,
+)
 
 # ---------------------------------------------------------------- markdown ---
 # The skill emits a narrow, fixed subset: ##/### headings, **bold**, *italic*,
@@ -884,11 +887,87 @@ def _display_date(value, abbreviated=False):
     return f"{value.day} {month} {value.year}"
 
 
+FIGURE_MAX_HEIGHT_ANCHOR = "max-height: 92mm;"
+REF_LEADING_ANCHOR = ".refs { font-size: 6.9pt; line-height: 1.2;"
+REF_MARGIN_ANCHOR = ".refs p { margin: 0 0 2.5px;"
+DEFAULT_REF_LEADING = 1.2
+MIN_REF_LEADING = 1.1
+# Auto-rebalance triggers for terminal spill pages up to this many entries;
+# larger spills need content-level rebalancing, which QA reports precisely.
+REBALANCE_MAX_SPILL = 8
+
+
+def _stylesheet(figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
+    """Canonical CSS with the figure height cap and reference leading applied.
+
+    Both knobs are bounded so a layout rebalance can never distort the
+    journal identity: the figure cap stays within 60-120 mm and the
+    reference leading within 1.1-1.2 line-height at unchanged type size.
+    """
+    if not 60 <= float(figure_max_height_mm) <= 120:
+        raise ValueError("figure max height must be between 60 and 120 mm")
+    if FIGURE_MAX_HEIGHT_ANCHOR not in CSS:
+        raise AssertionError("figure height anchor missing from canonical CSS")
+    css = CSS.replace(
+        FIGURE_MAX_HEIGHT_ANCHOR,
+        f"max-height: {float(figure_max_height_mm):g}mm;",
+    )
+    if ref_leading is not None:
+        ref_leading = float(ref_leading)
+        if not MIN_REF_LEADING <= ref_leading <= DEFAULT_REF_LEADING:
+            raise ValueError(
+                f"reference leading must stay within {MIN_REF_LEADING}-"
+                f"{DEFAULT_REF_LEADING}; type size never changes"
+            )
+        if REF_LEADING_ANCHOR not in css or REF_MARGIN_ANCHOR not in css:
+            raise AssertionError("reference anchors missing from canonical CSS")
+        css = css.replace(
+            REF_LEADING_ANCHOR,
+            f".refs {{ font-size: 6.9pt; line-height: {ref_leading:g};",
+        )
+        css = css.replace(REF_MARGIN_ANCHOR, ".refs p { margin: 0 0 1px;")
+    return css
+
+
+def count_terminal_reference_spill(pdf_path, reference_count):
+    """Return how many reference entries sit alone on a terminal spill page.
+
+    A spill page is a final page that carries only the tail of the numbered
+    reference list (no References heading, no body). Returns 0 when the last
+    page is not a spill page. Used to trigger the bounded auto-rebalance and
+    testable on any rendered review PDF.
+    """
+    from pypdf import PdfReader
+
+    reader = PdfReader(str(pdf_path))
+    if len(reader.pages) < 2 or reference_count < 1:
+        return 0
+    last_text = reader.pages[-1].extract_text() or ""
+    if re.search(r"\bReferences\b", last_text):
+        return 0
+    numbers = {
+        int(match) for match in re.findall(r"(?m)^\s*(\d{1,3})\.\s*$", last_text)
+        if 0 < int(match) <= reference_count
+    }
+    if not numbers or max(numbers) != reference_count:
+        return 0
+    return len(numbers)
+
+
+def count_unique_dois(md):
+    # inline citation URLs percent-encode parens, sources-block URLs don't;
+    # normalize both forms before deduplicating
+    return len({urllib.parse.unquote(d).lower().rstrip(").,;*_")
+                for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
+
+
 def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
-               release=None, repo=None, compiled_date=None, style="scientific"):
+               release=None, repo=None, compiled_date=None, style="scientific",
+               figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
     import urllib.parse
 
     style = _normalized_style(style)
+    css = _stylesheet(figure_max_height_mm, ref_leading=ref_leading)
     title, lead, body, structured_flow = _to_html_document(
         md, base_dir=base_dir, columns=columns
     )
@@ -898,10 +977,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         label = "Abstract" if lead[0] == "Abstract" else "Summary"
         lead_html = f'<p class="lead"><b>{label}</b>{lead[1]}</p>'
 
-    # inline citation URLs percent-encode parens, sources-block URLs don't;
-    # normalize both forms before deduplicating
-    n_refs = len({urllib.parse.unquote(d).lower().rstrip(").,;*_")
-                  for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
+    n_refs = count_unique_dois(md)
 
     today = _compiled_date(compiled_date)
 
@@ -942,7 +1018,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                     "integrity-screened via Crossref (retractions, expressions of concern)")
     plain_title = re.sub(r"<[^>]+>", "", title)
     return PAGE.format(
-        title_text=plain_title, compiled_iso=today.isoformat(), css=CSS,
+        title_text=plain_title, compiled_iso=today.isoformat(), css=css,
         gnd=_brand_logo_html(),
         version=html.escape(release), repo_url=html.escape(repo_url, quote=True),
         kicker=html.escape(kicker),
@@ -1017,10 +1093,37 @@ def validate_release_inputs(review_path, ledger_path, figure_specs=(), figure_pr
     return markdown, figures, expected_dois, ledger_by_doi
 
 
+def _figure_manifest_record(path, manifest_directory, figure_max_height_mm):
+    """Path record plus the geometry the journal page renders this raster at.
+
+    Recording the true rendered width closes the gap where a height-capped
+    figure silently displays narrower than the width its label sizes were
+    QA'd against.
+    """
+    record = _manifest_path_record(path, manifest_directory)
+    try:
+        from PIL import Image
+    except ImportError:
+        return record
+    with Image.open(path) as image:
+        pixel_width, pixel_height = image.size
+    rendered_width, rendered_height = rendered_figure_size_mm(
+        pixel_width, pixel_height, max_height_mm=figure_max_height_mm
+    )
+    record.update({
+        "pixel_width": pixel_width,
+        "pixel_height": pixel_height,
+        "rendered_width_mm": round(rendered_width, 2),
+        "rendered_height_mm": round(rendered_height, 2),
+    })
+    return record
+
+
 def write_release_manifest(
         manifest_path, *, review_path, ledger_path, pdf_path, html_document,
         release, columns, kicker, colophon, repo, compiled_date,
-        figure_specs=(), figure_prompts=(), style="scientific"):
+        figure_specs=(), figure_prompts=(), style="scientific",
+        figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
     """Bind every release input to the exact HTML and canonical PDF."""
     manifest_path = Path(manifest_path).resolve()
     manifest_directory = manifest_path.parent
@@ -1033,7 +1136,8 @@ def write_release_manifest(
         "review": _manifest_path_record(review_path, manifest_directory),
         "ledger": _manifest_path_record(ledger_path, manifest_directory),
         "figures": [
-            _manifest_path_record(path, manifest_directory) for path in figures
+            _figure_manifest_record(path, manifest_directory, figure_max_height_mm)
+            for path in figures
         ],
         "figure_specs": [
             _manifest_path_record(path, manifest_directory) for path in figure_specs
@@ -1049,6 +1153,11 @@ def write_release_manifest(
         "compiled_date": compiled_date,
         "render": {
             "columns": columns,
+            "figure_max_height_mm": float(figure_max_height_mm),
+            "page_content_width_mm": PAGE_CONTENT_WIDTH_MM,
+            "ref_leading": (
+                float(ref_leading) if ref_leading is not None else None
+            ),
             "style": _normalized_style(style),
             "kicker": kicker,
             "colophon": colophon,
@@ -1100,6 +1209,21 @@ def main():
                     help="figure specification JSON (repeat once per figure)")
     ap.add_argument("--figure-prompt", action="append", default=[],
                     help="saved generation prompt (repeat once per figure)")
+    ap.add_argument(
+        "--ref-leading", type=float, default=None, metavar="LH",
+        help="reference-list line-height, bounded "
+             f"{MIN_REF_LEADING}-{DEFAULT_REF_LEADING} (type size never "
+             "changes); leave unset to let the exporter tighten it once, "
+             "within the same bounds, only to pull a small terminal reference "
+             "spill back onto the previous page",
+    )
+    ap.add_argument(
+        "--figure-max-height", type=float, default=FIGURE_MAX_HEIGHT_MM,
+        metavar="MM",
+        help="figure height cap on paper in mm, bounded 60-120 "
+             f"(default {FIGURE_MAX_HEIGHT_MM:g}); recorded in the release "
+             "manifest so QA evaluates the true rendered geometry",
+    )
     ap.add_argument("--check-pdf-runtime", action="store_true",
                     help="validate the canonical WeasyPrint runtime and exit")
     args = ap.parse_args()
@@ -1140,9 +1264,50 @@ def main():
             md, columns=args.columns, kicker=args.kicker,
             colophon=args.colophon, base_dir=base_dir,
             release=release, repo=effective_repo, compiled_date=compiled_date,
-            style=args.style,
+            style=args.style, figure_max_height_mm=args.figure_max_height,
+            ref_leading=args.ref_leading,
         )
         result = write_pdf(page, args.out)
+        effective_ref_leading = args.ref_leading
+        rebalanced = False
+        if args.ref_leading is None:
+            try:
+                spill = count_terminal_reference_spill(
+                    args.out, count_unique_dois(md)
+                )
+            except Exception:
+                spill = 0
+            if 0 < spill <= REBALANCE_MAX_SPILL:
+                # A page carrying only the last 1-3 reference entries is the
+                # degenerate spill the raster QA rejects. Retry once with the
+                # reference leading tightened inside its bounded envelope;
+                # keep whichever render has no spill. Type size is untouched.
+                tightened = build_html(
+                    md, columns=args.columns, kicker=args.kicker,
+                    colophon=args.colophon, base_dir=base_dir,
+                    release=release, repo=effective_repo,
+                    compiled_date=compiled_date, style=args.style,
+                    figure_max_height_mm=args.figure_max_height,
+                    ref_leading=MIN_REF_LEADING,
+                )
+                candidate_path = args.out + ".rebalance.pdf"
+                try:
+                    candidate = write_pdf(tightened, candidate_path)
+                    if count_terminal_reference_spill(
+                            candidate_path, count_unique_dois(md)) == 0:
+                        os.replace(candidate_path, args.out)
+                        page, result = tightened, candidate
+                        effective_ref_leading = MIN_REF_LEADING
+                        rebalanced = True
+                        print(
+                            f"Rebalanced: {spill} spilled reference entr"
+                            f"{'y' if spill == 1 else 'ies'} pulled back by "
+                            f"tightening reference leading to {MIN_REF_LEADING:g}",
+                            file=sys.stderr,
+                        )
+                finally:
+                    if os.path.exists(candidate_path):
+                        os.remove(candidate_path)
         if args.html_sidecar:
             html_side = os.path.splitext(args.out)[0] + ".html"
             with open(html_side, "w", encoding="utf-8") as stream:
@@ -1166,6 +1331,8 @@ def main():
                 figure_specs=args.figure_spec,
                 figure_prompts=args.figure_prompt,
                 style=args.style,
+                figure_max_height_mm=args.figure_max_height,
+                ref_leading=effective_ref_leading,
             )
             suffix += f" and {args.release_manifest}"
         print(
@@ -1178,6 +1345,7 @@ def main():
             colophon=args.colophon, base_dir=base_dir,
             release=args.release, repo=args.repo,
             compiled_date=args.compiled_date, style=args.style,
+            figure_max_height_mm=args.figure_max_height,
         )
         with open(args.out, "w", encoding="utf-8") as stream:
             stream.write(page)

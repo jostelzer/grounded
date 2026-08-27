@@ -1152,6 +1152,49 @@ def stable_angle_id(value):
     return value or "unassigned"
 
 
+def supersede_manifest_records(path, query, *, reason, angle_id=None):
+    """Append a superseded marker to matching completed keyword records.
+
+    The record itself is never rewritten or removed: superseding adds
+    `superseded`, `superseded_reason`, and a timestamp so the manifest keeps
+    an honest history while `audit_search.py` stops counting the query
+    toward tier coverage.
+    """
+    target = os.path.abspath(path)
+    if not os.path.exists(target):
+        raise ValueError(f"search manifest not found: {target}")
+    with open(target, encoding="utf-8") as stream:
+        manifest = json.load(stream)
+    if manifest.get("schema_version") != 1 or not isinstance(
+            manifest.get("records"), list):
+        raise ValueError(f"unsupported search manifest: {target}")
+    wanted = query.strip().lower()
+    stamp = datetime.datetime.now(datetime.timezone.utc).replace(
+        microsecond=0
+    ).isoformat()
+    changed = 0
+    for record in manifest["records"]:
+        if record.get("completed") is not True:
+            continue
+        if record.get("method") != "keyword" or record.get("citation_direction"):
+            continue
+        if str(record.get("requested_query_or_seed") or "").strip().lower() != wanted:
+            continue
+        if angle_id and record.get("angle_id") != angle_id:
+            continue
+        if record.get("superseded") is True:
+            continue
+        record["superseded"] = True
+        record["superseded_reason"] = reason
+        record["superseded_at"] = stamp
+        changed += 1
+    if changed:
+        with open(target, "w", encoding="utf-8") as stream:
+            json.dump(manifest, stream, indent=2, sort_keys=True)
+            stream.write("\n")
+    return changed
+
+
 def append_search_manifest(
         path, result, angle, angle_id, lane, method, accepted, added, updated,
         exclusions):
@@ -1403,6 +1446,17 @@ def build_parser():
     ap.add_argument("--chase-sort", choices=["cited", "recent"], default="cited")
     ap.add_argument("--show", action="store_true", help="print the ledger and exit")
     ap.add_argument(
+        "--supersede-query", metavar="QUERY",
+        help="mark completed manifest records for this exact requested query "
+             "as superseded (append-only: the records stay, with a reason) "
+             "and exit; combine with --angle-id to narrow the match",
+    )
+    ap.add_argument(
+        "--supersede-reason", metavar="REASON",
+        help="required with --supersede-query: why the query is retired "
+             "(at least five words)",
+    )
+    ap.add_argument(
         "--abstracts", action="store_true",
         help="print abstracts of newly added entries",
     )
@@ -1429,6 +1483,30 @@ def main(argv=None):
     if args.show:
         print_table(ledger["entries"])
         print(f"\n{len(ledger['entries'])} entries in {args.ledger}")
+        return 0
+
+    if args.supersede_query or args.supersede_reason:
+        if not (args.supersede_query and args.supersede_reason):
+            ap.error("--supersede-query and --supersede-reason go together")
+        if len(args.supersede_reason.split()) < 5:
+            ap.error("--supersede-reason needs a substantive reason (5+ words)")
+        manifest_path = args.search_manifest
+        if not manifest_path:
+            ledger_directory = os.path.dirname(os.path.abspath(args.ledger))
+            manifest_path = os.path.join(ledger_directory, "search-manifest.json")
+        try:
+            changed = supersede_manifest_records(
+                manifest_path, args.supersede_query,
+                reason=args.supersede_reason, angle_id=args.angle_id,
+            )
+        except (OSError, ValueError) as exc:
+            ap.error(str(exc))
+        if not changed:
+            ap.error(
+                "no completed keyword record matches that query"
+                + (f" in angle {args.angle_id}" if args.angle_id else "")
+            )
+        print(f"Superseded {changed} manifest record(s) → {manifest_path}")
         return 0
 
     has_search = bool(args.query or args.openalex_query or args.pubmed_query)

@@ -27,7 +27,21 @@ saturation.
 
 Retain each close-read paper in `fulltexts/` under its exact ledger key and give
 it one notes entry containing design/sample, result, limitation, and synthesis
-use. Then classify the corpus and write reading evidence back to the ledger:
+use. The audit parses a specific bullet shape from `notes.md` — a list item
+opening with the ledger key in backticks, followed by a dash and the note —
+and looks for all four signals inside it:
+
+```markdown
+- `Sung2014treating` — Design: double-blind placebo-controlled randomised
+  trial, 167 infants under 3 months. Result: found no benefit — the probiotic
+  group fussed 49 min/day more at 1 month (95% CI 8–90). Limitation: mostly
+  emergency-department recruitment. Synthesis use: the key contrary trial and
+  the narrative turn.
+```
+
+Continuation lines indented under the bullet belong to the same entry. A note
+missing any of the four signals leaves its full text uncounted. Then classify
+the corpus and write reading evidence back to the ledger:
 
 ```bash
 python3 scripts/audit_fulltexts.py --ledger sources.json --fulltext-dir fulltexts --notes notes.md --out fulltext-manifest.json --minimum 25 --update-ledger

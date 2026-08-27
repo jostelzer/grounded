@@ -1,0 +1,2135 @@
+{
+  "created": "2026-08-27",
+  "entries": [
+    {
+      "abstract": "To assess the occurrence of infantile colic in the community and the need for professional help; and to study the influences of potential determinants of infantile colic. Surveys were identified by a systematic search in Medline (1966-98) and Embase (1988-98). Retrieved publications were checked for references. Studies selected were community based, prospective, and retrospective surveys on the occurrence of infantile colic published in English, German, French, or Dutch. Occurrence rates were calculated as percentages. Methodological quality of the surveys was assessed by two assessors independently with a standardised criteria list containing items on method of data gathering, definition of colic, and drop out rate. Fifteen community based surveys were identified. The methodological quality varied considerably and was generally low. Even the two most methodologically sound prospective studies yielded widely varying cumulative incidence rates of 5-19%. Referral rates or the need to seek help because of crying were consistently lower than occurrence rates for prolonged crying as such. Gender, socioeconomic class, type of feeding, family history of atopy, and parental smoking were not shown to be associated with colic. Occurrence rates of infantile colic vary greatly according to methodological quality. A considerable number of parents reporting prolonged crying do not seek or need professional help.",
+      "authors": [
+        "P L Lucassen",
+        "W J Assendelft",
+        "J T van Eijk",
+        "J W Gubbels",
+        "A C Douwes",
+        "W J van Geldrop"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1136/adc.84.5.398",
+      "found_by": [
+        {
+          "angle": "definition, prevalence, natural course",
+          "method": "keyword",
+          "query": "infant colic definition prevalence systematic review",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Archives of disease in childhood",
+      "key": "Lucassen2001systematic",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "11316682",
+      "pub_types": [
+        "Journal Article",
+        "Systematic Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 204,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Systematic review of the occurrence of infantile colic in the community.",
+      "type": "review",
+      "year": 2001,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Systematic review of the occurrence of infantile colic in the community",
+        "authors_structured": [
+          {
+            "family": "Lucassen",
+            "given": "P L B J"
+          }
+        ],
+        "journal": "Archives of Disease in Childhood",
+        "journal_short": "",
+        "volume": "84",
+        "issue": "5",
+        "pages": "398-403",
+        "year": 2001,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "BMJ",
+        "url": "https://doi.org/10.1136/adc.84.5.398"
+      }
+    },
+    {
+      "abstract": "Infantile colic is typically defined as full-force crying for at least three hours per day, on at least three days per week, for at least three weeks. This condition appears to be more frequent in the first six weeks of life (prevalence range of 17% to 25%), depending on the specific location reported and definitions used, and it usually resolves by three months of age. The aetiopathogenesis of infantile colic is unclear but most likely multifactorial. A number of psychological, behavioural and biological components (food hypersensitivity, allergy or both; gut microflora and dysmotility) are thought to contribute to its manifestation. The role of diet as a component in infantile colic remains controversial. To assess the effects of dietary modifications for reducing colic in infants less than four months of age. In July 2018 we searched CENTRAL, MEDLINE, Embase , 17 other databases and 2 trials registers. We also searched Google, checked and handsearched references and contacted study authors. Randomised controlled trials (RCTs) and quasi-RCTs evaluating the effects of dietary modifications, alone or in combination, for colicky infants younger than four months of age versus another intervention or placebo. We used specific definitions for colic, age of onset and the methods for performing the intervention. We defined 'modified diet' as any diet altered to include or exclude certain components. We used standard methodological procedures expected by Cochrane. Our primary outcome was duration of crying, and secondary outcomes were response to intervention, frequency of crying episodes, parental/family quality of life, infant sleep duration, parental satisfaction and adverse effects. We included 15 RCTs involving 1121 infants (balanced numbers of boys and girls) aged 2 to 16 weeks. All studies were small and at high risk of bias across multiple design factors (e.g. selection, attrition). The studies covered a wide range of dietary interventions, and there was limited scope for meta-analysis. Using the GRADE approach, we assessed the quality of the evidence as very low.Low-allergen maternal diet versus a diet containing known potential allergens: one study (90 infants) found that 35/47 (74%) of infants responded to a low-allergen maternal diet, compared with 16/43 (37%) of infants on a diet containing known potential allergens.Low-allergen diet or soy milk formula versus dicyclomine hydrochloride: one study (120 infants) found that 10/15 (66.6%) breastfed babies responded to dicyclomine hydrochloride, compared with 24/45 (53.3%) formula-fed babies. There was little difference in response between breastfed babies whose mother changed their diet (10/16; 62.5%) and babies who received soy milk formula (29/44; 65.9%).Hydrolysed formula versus standard formula: two studies (64 infants) found no difference in duration of crying, reported as a dichotomous outcome: risk ratio 2.03, 95% confidence interval (CI) 0.81 to 5.10; very low-quality evidence. The author of one study confirmed there were no adverse effects. One study (43 infants) reported a greater reduction in crying time postintervention with hydrolysed formula (104 min/d, 95% CI 55 to 155) than with standard formula (3 min/d, 95% CI -63 to 67).Hydrolysed formula versus another hydrolysed formula: one study (22 infants) found that two types of hydrolysed formula were equally effective in resolving symptoms for babies who commenced with standard formula (Alimentum reduced crying to 2.21 h/d (standard deviation (SD) 0.40) and Nutramigen to 2.93 h/d (SD 0.70)).Hydrolysed formula or dairy- and soy-free maternal diet versus addition of parental education or counselling: one study (21 infants) found that crying time decreased to 2.03 h/d (SD 1.03) in the hydrolysed or dairy- and soy-free group compared with 1.08 h/d (SD 0.7) in the parent education or counselling group, nine days into the intervention.Partially hydrolysed, lower lactose, whey-based formulae containing oligosaccharide versus standard formula with simethicone: one study (267 infants) found that both groups experienced a decrease in colic episodes (secondary outcome) after seven days (partially hydrolysed formula: from 5.99 episodes (SD 1.84) to 2.47 episodes (SD 1.94); standard formula: from 5.41 episodes (SD 1.88) to 3.72 episodes (SD 1.98)). After two weeks the difference between the two groups was significant (partially hydrolysed: 1.76 episodes (SD 1.60); standard formula: 3.32 episodes (SD 2.06)). The study author confirmed there were no adverse effects.Lactase enzyme supplementation versus placebo: three studies (138 infants) assessed this comparison, but none reported data amenable to analysis for any outcome. There were no adverse effects in any of the studies.Extract of Foeniculum vulgare, Matricariae recutita, and Melissa officinalis versus placebo: one study (93 infants) found that average daily crying time was lower for infants given the extract (76.9 min/d (SD 23.5), than infants given placebo (169.9 min/d (SD 23.1), at the end of the one-week study. There were no adverse effects.Soy protein-based formula versus standard cows' milk protein-based formula: one study (19 infants) reported a mean crying time of 12.7 h/week (SD 16.4) in the soy formula group versus 17.3 h/week (SD 6.9) in the standard cows' milk group, and that 5/10 (50%) responded in the soy formula group versus 0/9 (0%) in the standard cows' milk group.Soy protein formula with polysaccharide versus standard soy protein formula: one study (27 infants) assessed this comparison but did not provide disaggregated data for the number of responders in each group after treatment.No study reported on our secondary outcomes of parental or family quality of life, infant sleep duration per 24 h, or parental satisfaction. Currently, evidence of the effectiveness of dietary modifications for the treatment of infantile colic is sparse and at significant risk of bias. The few available studies had small sample sizes, and most had serious limitations. There were insufficient studies, thus limiting the use of meta-analysis. Benefits reported for hydrolysed formulas were inconsistent.Based on available evidence, we are unable to recommend any intervention. Future studies of single interventions, using clinically significant outcome measures, and appropriate design and power are needed.",
+      "authors": [
+        "Morris Gordon",
+        "Elena Biagioli",
+        "Miriam Sorrenti",
+        "Carla Lingua",
+        "Lorenzo Moja",
+        "Shel Sc Banks",
+        "Simone Ceratto",
+        "Francesco Savino"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1002/14651858.cd011029.pub2",
+      "found_by": [
+        {
+          "angle": "definition, prevalence, natural course",
+          "method": "keyword",
+          "query": "infant colic definition prevalence systematic review",
+          "source": "pubmed"
+        },
+        {
+          "angle": "other interventions",
+          "method": "keyword",
+          "query": "infantile colic[tiab] AND (simethicone[tiab] OR \"manipulative therap*\"[tiab] OR diet*[tiab] OR treatment[tiab]) AND (systematic review[pt] OR meta-analysis[pt])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "The Cochrane database of systematic reviews",
+      "key": "Gordon2018dietary",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "30306546",
+      "pub_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 1015,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Dietary modifications for infantile colic.",
+      "type": "review",
+      "year": 2018,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Dietary modifications for infantile colic",
+        "authors_structured": [
+          {
+            "family": "Gordon",
+            "given": "Morris"
+          },
+          {
+            "family": "Biagioli",
+            "given": "Elena"
+          },
+          {
+            "family": "Sorrenti",
+            "given": "Miriam"
+          },
+          {
+            "family": "Lingua",
+            "given": "Carla"
+          },
+          {
+            "family": "Moja",
+            "given": "Lorenzo"
+          },
+          {
+            "family": "Banks",
+            "given": "Shel SC"
+          },
+          {
+            "family": "Ceratto",
+            "given": "Simone"
+          },
+          {
+            "family": "Savino",
+            "given": "Francesco"
+          }
+        ],
+        "journal": "Cochrane Database of Systematic Reviews",
+        "journal_short": "",
+        "volume": "2019",
+        "issue": "2",
+        "pages": null,
+        "year": 2018,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Wiley",
+        "url": "https://doi.org/10.1002/14651858.cd011029.pub2"
+      }
+    },
+    {
+      "abstract": "Lactobacillus reuteri DSM17938 has shown promise in managing colic, but conflicting study results have prevented a consensus on whether it is truly effective. Through an individual participant data meta-analysis, we sought to definitively determine if L reuteri DSM17938 effectively reduces crying and/or fussing time in infants with colic and whether effects vary by feeding type. We searched online databases (PubMed, Medline, Embase, the Cumulative Index to Nursing and Allied Health Literature, the Database of Abstracts of Reviews of Effects, and Cochrane), e-abstracts, and clinical trial registries. These were double-blind randomized controlled trials (published by June 2017) of L reuteri DSM17398 versus a placebo, delivered orally to infants with colic, with outcomes of infant crying and/or fussing duration and treatment success at 21 days. We collected individual participant raw data from included studies modeled simultaneously in multilevel generalized linear mixed-effects regression models. Four double-blind trials involving 345 infants with colic (174 probiotic and 171 placebo) were included. The probiotic group averaged less crying and/or fussing time than the placebo group at all time points (day 21 adjusted mean difference in change from baseline [minutes] -25.4 [95% confidence interval (CI): -47.3 to -3.5]). The probiotic group was almost twice as likely as the placebo group to experience treatment success at all time points (day 21 adjusted incidence ratio 1.7 [95% CI: 1.4 to 2.2]). Intervention effects were dramatic in breastfed infants (number needed to treat for day 21 success 2.6 [95% CI: 2.0 to 3.6]) but were insignificant in formula-fed infants. There were insufficient data to make conclusions for formula-fed infants with colic. L reuteri DSM17938 is effective and can be recommended for breastfed infants with colic. Its role in formula-fed infants with colic needs further research.",
+      "authors": [
+        "Valerie Sung",
+        "Frank D'Amico",
+        "Michael D Cabana",
+        "Kim Chau",
+        "Gideon Koren",
+        "Francesco Savino",
+        "Hania Szajewska",
+        "Girish Deshpande",
+        "Christophe Dupont",
+        "Flavia Indrio",
+        "Silja Mentula",
+        "Anna Partty",
+        "Daniel Tancredi"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1542/peds.2017-1811",
+      "found_by": [
+        {
+          "angle": "definition, prevalence, natural course",
+          "method": "keyword",
+          "query": "infant crying[tiab] AND (duration[tiab] OR \"crying curve\"[tiab] OR normal[tiab]) AND (cohort[tiab] OR diary[tiab] OR meta-analysis[pt])",
+          "source": "pubmed"
+        },
+        {
+          "angle": "probiotics for colic",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (probiotic*[tiab] OR \"Lactobacillus reuteri\"[tiab] OR \"Limosilactobacillus reuteri\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt])",
+          "source": "pubmed"
+        },
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (long-term[tiab] OR outcome*[tiab] OR follow-up[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Pediatrics",
+      "key": "Sung2018lactobacillus",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "29279326",
+      "pub_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, Non-U.S. Gov't",
+        "Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 297,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Lactobacillus reuteri to Treat Infant Colic: A Meta-analysis.",
+      "type": "review",
+      "year": 2018,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "<i>Lactobacillus reuteri</i>\n                    to Treat Infant Colic: A Meta-analysis",
+        "authors_structured": [
+          {
+            "family": "Sung",
+            "given": "Valerie"
+          },
+          {
+            "family": "D\u2019Amico",
+            "given": "Frank"
+          },
+          {
+            "family": "Cabana",
+            "given": "Michael D."
+          },
+          {
+            "family": "Chau",
+            "given": "Kim"
+          },
+          {
+            "family": "Koren",
+            "given": "Gideon"
+          },
+          {
+            "family": "Savino",
+            "given": "Francesco"
+          },
+          {
+            "family": "Szajewska",
+            "given": "Hania"
+          },
+          {
+            "family": "Deshpande",
+            "given": "Girish"
+          },
+          {
+            "family": "Dupont",
+            "given": "Christophe"
+          },
+          {
+            "family": "Indrio",
+            "given": "Flavia"
+          },
+          {
+            "family": "Mentula",
+            "given": "Silja"
+          },
+          {
+            "family": "Partty",
+            "given": "Anna"
+          },
+          {
+            "family": "Tancredi",
+            "given": "Daniel"
+          }
+        ],
+        "journal": "Pediatrics",
+        "journal_short": "",
+        "volume": "141",
+        "issue": "1",
+        "pages": null,
+        "year": 2018,
+        "type": "journal-article",
+        "article_number": "e20171811",
+        "publisher": "American Academy of Pediatrics (AAP)",
+        "url": "https://doi.org/10.1542/peds.2017-1811"
+      }
+    },
+    {
+      "abstract": "To quantify the extent to which maternal report of inconsolable infant crying, rather than colic (defined by Wessel's criteria of daily duration of fussing and crying >3 hours), is associated with maternal postpartum depressive symptoms. Participants were 587 mothers who were recruited shortly before or after delivery and followed longitudinally. At 5 to 6 weeks postpartum, mothers recorded the duration and mode (fussing, crying, or inconsolable crying) of their infant's distress by using the Baby's Day Diary. The Edinburgh Postnatal Depression Scale (EPDS) was administered at enrollment and at 8 weeks postpartum. Using regression models that included baseline EPDS scores and multiple confounders, we examined associations of colic and inconsolable crying with later maternal EPDS scores at 8 weeks postpartum. Sixty mothers (10%) met the EPDS threshold for \"possible depression\" (score \u22659) at 8 weeks postpartum. For mothers reporting >20 minutes of inconsolable crying per day, the adjusted odds ratio for an EPDS score \u22659 was 4.0 (95% confidence interval: 2.0-8.1), whereas the adjusted odds ratio for possible depression in mothers whose infants had colic was 2.0 (95% confidence interval: 1.1-3.7). These associations persisted after adjusting for baseline depression symptoms. Maternal report of inconsolable infant crying may have a stronger association with postpartum depressive symptoms than infant colic. Asking a mother about her ability to soothe her infant may be more relevant for potential intervention than questions about crying and fussing duration alone.",
+      "authors": [
+        "Jenny S Radesky",
+        "Barry Zuckerman",
+        "Michael Silverstein",
+        "Frederick P Rivara",
+        "Marilyn Barr",
+        "James A Taylor",
+        "Liliana J Lengua",
+        "Ronald G Barr"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1542/peds.2012-3316",
+      "found_by": [
+        {
+          "angle": "definition, prevalence, natural course",
+          "method": "keyword",
+          "query": "infant crying[tiab] AND (duration[tiab] OR \"crying curve\"[tiab] OR normal[tiab]) AND (cohort[tiab] OR diary[tiab] OR meta-analysis[pt])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Pediatrics",
+      "key": "Radesky2013inconsolable",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "23650295",
+      "pub_types": [
+        "Journal Article",
+        "Randomized Controlled Trial"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 239,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Inconsolable infant crying and maternal postpartum depressive symptoms.",
+      "type": "article",
+      "year": 2013,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Inconsolable Infant Crying and Maternal Postpartum Depressive Symptoms",
+        "authors_structured": [
+          {
+            "family": "Radesky",
+            "given": "Jenny S."
+          },
+          {
+            "family": "Zuckerman",
+            "given": "Barry"
+          },
+          {
+            "family": "Silverstein",
+            "given": "Michael"
+          },
+          {
+            "family": "Rivara",
+            "given": "Frederick P."
+          },
+          {
+            "family": "Barr",
+            "given": "Marilyn"
+          },
+          {
+            "family": "Taylor",
+            "given": "James A."
+          },
+          {
+            "family": "Lengua",
+            "given": "Liliana J."
+          },
+          {
+            "family": "Barr",
+            "given": "Ronald G."
+          }
+        ],
+        "journal": "Pediatrics",
+        "journal_short": "",
+        "volume": "131",
+        "issue": "6",
+        "pages": "e1857-e1864",
+        "year": 2013,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "American Academy of Pediatrics (AAP)",
+        "url": "https://doi.org/10.1542/peds.2012-3316"
+      }
+    },
+    {
+      "abstract": "Infant colic is a commonly reported phenomenon of excessive crying in infancy with an enigmatic and distressing character. Despite its frequent occurrence, little agreement has been reached on the definition, pathogenesis or the optimal management strategy for infant colic. This Review aims to delineate the definitional entanglement with the Rome IV criteria, which were published in 2016, as the leading, most recent diagnostic criteria. Moreover, neurogenic, gastrointestinal, microbial and psychosocial factors that might contribute to the pathophysiology of infant colic are explored. This Review underlines that a comprehensive medical history and physical examination in the absence of alarm symptoms serve as guidance for the clinician to a positive diagnosis. It also highlights that an important aspect of the management of infant colic is parental education and reassurance. Management strategies, including behavioural, dietary, pharmacological and alternative interventions, are also discussed. Owing to a lack of large, high-quality randomized controlled trials, none of these therapies are strongly recommended. Finally, the behavioural and somatic sequelae of infant colic into childhood are summarized.",
+      "authors": [
+        "Judith Zeevenhooven",
+        "Pamela D Browne",
+        "Monique P L'Hoir",
+        "Carolina de Weerth",
+        "Marc A Benninga"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1038/s41575-018-0008-7",
+      "found_by": [
+        {
+          "angle": "etiology and mechanism",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (microbiota[tiab] OR microbiome[tiab] OR pathogenesis[tiab] OR etiology[tiab]) AND review[pt]",
+          "source": "pubmed"
+        },
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "(infant colic[tiab] OR infant crying[tiab]) AND (\"shaken baby\"[tiab] OR abusive head trauma[tiab] OR maternal depression[tiab] OR parental[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Nature reviews. Gastroenterology & hepatology",
+      "key": "Zeevenhooven2018infant",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "29760502",
+      "pub_types": [
+        "Journal Article",
+        "Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 169,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Infant colic: mechanisms and management.",
+      "type": "review",
+      "year": 2018,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Infant colic: mechanisms and management",
+        "authors_structured": [
+          {
+            "family": "Zeevenhooven",
+            "given": "Judith"
+          },
+          {
+            "family": "Browne",
+            "given": "Pamela D."
+          },
+          {
+            "family": "L\u2019Hoir",
+            "given": "Monique P."
+          },
+          {
+            "family": "de Weerth",
+            "given": "Carolina"
+          },
+          {
+            "family": "Benninga",
+            "given": "Marc A."
+          }
+        ],
+        "journal": "Nature Reviews Gastroenterology &amp; Hepatology",
+        "journal_short": "Nat Rev Gastroenterol Hepatol",
+        "volume": "15",
+        "issue": "8",
+        "pages": "479-496",
+        "year": 2018,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Springer Science and Business Media LLC",
+        "url": "https://doi.org/10.1038/s41575-018-0008-7"
+      }
+    },
+    {
+      "abstract": "Probiotics, defined as live microorganisms that, when administered in adequate amounts, confer a health benefit on the host, are widely used despite uncertainty regarding their efficacy and discordant recommendations about their use. The European Society for Paediatric Gastroenterology, Hepatology and Nutrition (ESPGHAN) Special Interest Group on Gut Microbiota and Modifications provides updated recommendations for the use of probiotics for the management of selected pediatric gastrointestinal disorders. All systematic reviews and/or meta-analyses, as well as subsequently published randomized controlled trials (RCTs) (until December 2021), that compared the use of probiotics in all delivery vehicles and formulations, at any dose, with no probiotic (ie, placebo or no treatment), were eligible for inclusion. The recommendations were formulated only if at least 2 RCTs on a similar well-defined probiotic strain were available. The modified Delphi process was used to establish consensus on the recommendations. Recommendations for the use of specific probiotic strains were made for the management of acute gastroenteritis, prevention of antibiotic-associated diarrhea, nosocomial diarrhea and necrotizing enterocolitis, management of Helicobacter pylori infection, and management of functional abdominal pain disorders and infant colic. Despite evidence to support the use of specific probiotics in some clinical situations, further studies confirming the effect(s) and defining the type, dose, and timing of probiotics are still often required. The use of probiotics with no documented health benefits should be discouraged.",
+      "authors": [
+        "Hania Szajewska",
+        "Roberto Berni Canani",
+        "Magnus Domell\u00f6f",
+        "Alfredo Guarino",
+        "Iva Hojsak",
+        "Flavia Indrio",
+        "Andrea Lo Vecchio",
+        "Walter A Mihatsch",
+        "Alexis Mosca",
+        "Rok Orel",
+        "Silvia Salvatore",
+        "Raanan Shamir",
+        "Chris H P van den Akker",
+        "Johannes B van Goudoever",
+        "Yvan Vandenplas",
+        "Zvi Weizman"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1097/mpg.0000000000003633",
+      "found_by": [
+        {
+          "angle": "etiology and mechanism",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (microbiota[tiab] OR microbiome[tiab] OR pathogenesis[tiab] OR etiology[tiab]) AND review[pt]",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Journal of pediatric gastroenterology and nutrition",
+      "key": "Szajewska2023probiotics",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "36219218",
+      "pub_types": [
+        "Journal Article",
+        "Consensus Statement"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 225,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Probiotics for the Management of Pediatric Gastrointestinal Disorders",
+      "type": "article",
+      "year": 2023,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Probiotics for the Management of Pediatric Gastrointestinal Disorders",
+        "authors_structured": [
+          {
+            "family": "Szajewska",
+            "given": "Hania"
+          },
+          {
+            "family": "Berni Canani",
+            "given": "Roberto"
+          },
+          {
+            "family": "Domell\u00f6f",
+            "given": "Magnus"
+          },
+          {
+            "family": "Guarino",
+            "given": "Alfredo"
+          },
+          {
+            "family": "Hojsak",
+            "given": "Iva"
+          },
+          {
+            "family": "Indrio",
+            "given": "Flavia"
+          },
+          {
+            "family": "Lo Vecchio",
+            "given": "Andrea"
+          },
+          {
+            "family": "Mihatsch",
+            "given": "Walter A."
+          },
+          {
+            "family": "Mosca",
+            "given": "Alexis"
+          },
+          {
+            "family": "Orel",
+            "given": "Rok"
+          },
+          {
+            "family": "Salvatore",
+            "given": "Silvia"
+          },
+          {
+            "family": "Shamir",
+            "given": "Raanan"
+          },
+          {
+            "family": "van den Akker",
+            "given": "Chris H. P."
+          },
+          {
+            "family": "van Goudoever",
+            "given": "Johannes B."
+          },
+          {
+            "family": "Vandenplas",
+            "given": "Yvan"
+          },
+          {
+            "family": "Weizman",
+            "given": "Zvi"
+          },
+          {
+            "family": "ESPGHAN Special Interest Group on Gut Microbiota and Modifications",
+            "given": ""
+          },
+          {
+            "family": "Canani",
+            "given": "R. Berni"
+          },
+          {
+            "family": "Guarino",
+            "given": "A."
+          },
+          {
+            "family": "Dinleyci",
+            "given": "E. C."
+          },
+          {
+            "family": "Domell\u00f6f",
+            "given": "M."
+          },
+          {
+            "family": "Indrio",
+            "given": "F."
+          },
+          {
+            "family": "Hojsak",
+            "given": "I."
+          },
+          {
+            "family": "Gutiierez",
+            "given": "P."
+          },
+          {
+            "family": "Kolacek",
+            "given": "S."
+          },
+          {
+            "family": "Mihatsch",
+            "given": "W. A."
+          },
+          {
+            "family": "Mosca",
+            "given": "A."
+          },
+          {
+            "family": "Orel",
+            "given": "R."
+          },
+          {
+            "family": "Salvatore",
+            "given": "S."
+          },
+          {
+            "family": "Shamir",
+            "given": "R."
+          },
+          {
+            "family": "Szajewska",
+            "given": "H."
+          },
+          {
+            "family": "Vandenplas",
+            "given": "Y."
+          },
+          {
+            "family": "van den Akker",
+            "given": "C. H. P."
+          },
+          {
+            "family": "van Goudoever",
+            "given": "J. B."
+          },
+          {
+            "family": "Weizman",
+            "given": "Z."
+          }
+        ],
+        "journal": "Journal of Pediatric Gastroenterology and Nutrition",
+        "journal_short": "J. pediatr. gastroenterol. nutr.",
+        "volume": "76",
+        "issue": "2",
+        "pages": "232-247",
+        "year": 2023,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Wiley",
+        "url": "https://doi.org/10.1097/mpg.0000000000003633"
+      }
+    },
+    {
+      "abstract": "Infantile colic is a common paediatric condition which causes significant parental distress. Increased intestinal coliform colonization in addition to alteration in Lactobacillus abundance and distribution may play an important role in its pathogenesis. The objectives of this systematic review are to evaluate the efficacy of probiotic supplementation in the reduction of crying time and successful treatment of infantile colic. Literature searches were conducted of MEDLINE, EMBASE and the Cochrane Central Register of Controlled Trials. Only randomized controlled trials enrolling term, healthy infants with colic were included. A meta-analysis of included trials was performed utilizing the Cochrane Collaboration methodology. Three trials that enrolled 220 breastfed infants met inclusion criteria, of which 209 infants were available for analysis. Two of the studies were assessed as good quality. Lactobacillus reuteri (strains-American Type Culture Collection Strain 55730 and DSM 17 938) was the only species utilized in the therapeutic intervention. Two of the trials were industry funded. Probiotic supplementation compared to simethicone or placebo significantly and progressively shortened crying times to 7 days reaching a plateau at three weeks post initiation of therapy [mean difference -56.03 minutes; 95% CI (-59.92, -52.15)]. Similarly, probiotics compared to placebo significantly increased the treatment success of infantile colic with a relative risk (RR) of 0.06; 95% CI (0.01, 0.25) and a number needed to treat of 2. Although L. reuteri may be effective as a treatment strategy for crying in exclusively breastfed infants with colic, the evidence supporting probiotic use for the treatment of infant colic or crying in formula-fed infants remains unresolved. Results from larger rigorously designed studies will help draw more definitive conclusions.",
+      "authors": [
+        "Jasim Anabrees",
+        "Flavia Indrio",
+        "Bosco Paes",
+        "Khalid AlFaleh"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1186/1471-2431-13-186",
+      "found_by": [
+        {
+          "angle": "etiology and mechanism",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (microbiota[tiab] OR microbiome[tiab] OR pathogenesis[tiab] OR etiology[tiab]) AND review[pt]",
+          "source": "pubmed"
+        },
+        {
+          "angle": "probiotics for colic",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (probiotic*[tiab] OR \"Lactobacillus reuteri\"[tiab] OR \"Limosilactobacillus reuteri\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt])",
+          "source": "pubmed"
+        },
+        {
+          "angle": "other interventions",
+          "method": "keyword",
+          "query": "infantile colic[tiab] AND (simethicone[tiab] OR \"manipulative therap*\"[tiab] OR diet*[tiab] OR treatment[tiab]) AND (systematic review[pt] OR meta-analysis[pt])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "BMC pediatrics",
+      "key": "Anabrees2013probiotics",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "24238101",
+      "pub_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 273,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Probiotics for infantile colic: a systematic review.",
+      "type": "review",
+      "year": 2013,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Probiotics for infantile colic: a systematic review",
+        "authors_structured": [
+          {
+            "family": "Anabrees",
+            "given": "Jasim"
+          },
+          {
+            "family": "Indrio",
+            "given": "Flavia"
+          },
+          {
+            "family": "Paes",
+            "given": "Bosco"
+          },
+          {
+            "family": "AlFaleh",
+            "given": "Khalid"
+          }
+        ],
+        "journal": "BMC Pediatrics",
+        "journal_short": "BMC Pediatr",
+        "volume": "13",
+        "issue": "1",
+        "pages": null,
+        "year": 2013,
+        "type": "journal-article",
+        "article_number": "186",
+        "publisher": "Springer Science and Business Media LLC",
+        "url": "https://doi.org/10.1186/1471-2431-13-186"
+      }
+    },
+    {
+      "abstract": "About 1 in 4 infants comes forward with prolonged crying, agitation, or infant colic (IC) during the first three months of life and is referred for medical evaluation. The pathogenesis remains poorly understood, as do its implications for future health. The aim of this narrative review was to critically examine and discuss the available literature on long-term consequences of excessive crying and/or colic. Most studies display an association between IC and the onset of functional gastrointestinal disorders (FGIDs) years later, probably related to the presence of common etiopathogenetic factors (environmental, dietary, intestinal dysmotility, visceral hypersensitivity). Although allergic disease in first-degree relatives may be a risk factor for IC, the latter does not appear to be a risk factor for subsequent atopic disease in the individual. Overall, there seems to be a relationship between IC and subsequent headaches, of the migraine type. Similarly, behavioral problems in children with a history of IC appear to be associated with higher parental stress scores. However, the current evidence is based on associations, and currently, a causal relationship between excessive crying and IC and long-term consequences remains not documented.",
+      "authors": [
+        "Flavia Indrio",
+        "Vanessa Nadia Dargenio",
+        "Ruggiero Francavilla",
+        "Hania Szajewska",
+        "Yvan Vandenplas"
+      ],
+      "cited_by_count": null,
+      "doi": "10.3390/nu15030615",
+      "found_by": [
+        {
+          "angle": "etiology and mechanism",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (microbiota[tiab] OR microbiome[tiab] OR pathogenesis[tiab] OR etiology[tiab]) AND review[pt]",
+          "source": "pubmed"
+        },
+        {
+          "angle": "etiology and mechanism",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (migraine[tiab] OR gut-brain[tiab] OR inflammation[tiab] OR calprotectin[tiab])",
+          "source": "pubmed"
+        },
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (long-term[tiab] OR outcome*[tiab] OR follow-up[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Nutrients",
+      "key": "Indrio2023infantile",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "36771322",
+      "pub_types": [
+        "Journal Article",
+        "Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 185,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Infantile Colic and Long-Term Outcomes in Childhood: A Narrative Synthesis of the Evidence.",
+      "type": "review",
+      "year": 2023,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Infantile Colic and Long-Term Outcomes in Childhood: A Narrative Synthesis of the Evidence",
+        "authors_structured": [
+          {
+            "family": "Indrio",
+            "given": "Flavia"
+          },
+          {
+            "family": "Dargenio",
+            "given": "Vanessa Nadia"
+          },
+          {
+            "family": "Francavilla",
+            "given": "Ruggiero"
+          },
+          {
+            "family": "Szajewska",
+            "given": "Hania"
+          },
+          {
+            "family": "Vandenplas",
+            "given": "Yvan"
+          }
+        ],
+        "journal": "Nutrients",
+        "journal_short": "Nutrients",
+        "volume": "15",
+        "issue": "3",
+        "pages": "615",
+        "year": 2023,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "MDPI AG",
+        "url": "https://doi.org/10.3390/nu15030615"
+      }
+    },
+    {
+      "abstract": "Infant colic is a common and distressing disorder of early infancy. Its etiology is unknown, making treatment challenging. Several articles have suggested a link to migraine. The objective of this article was to perform a systematic review and, if appropriate, a meta-analysis of the studies on the relationship between infant colic and migraine. Studies were identified by searching PubMed and ScienceDirect and by hand-searching references and conference proceedings. For the primary analysis, studies specifically designed to measure the association between colic and migraine were included. For the secondary analysis, studies that collected data on colic and migraine but were designed for another primary research question were also included. Data were abstracted from the original studies, through communication with study authors, or both. Two authors independently abstracted data. The main outcome measure was the association between infant colic and migraine using both a fixed-effects model and a more conservative random-effects model. Three studies were included in the primary analysis; the odds ratio for the association between migraine and infant colic was 6.5 (4.6-8.9, p < 0.001) for the fixed-effects model and 5.6 (3.3-9.5, p = 0.004) for the random-effects model. In a sensitivity analysis wherein the study with the largest effect size was removed, the odds ratio was 3.6 (95% CI 1.7-7.6, p = 0.001) for both the fixed-effects model and random-effects model. In this meta-analysis, infant colic was associated with increased odds of migraine. If infant colic is a migrainous disorder, this would have important implications for treatment. The main limitation of this meta-analysis was the relatively small number of studies included.",
+      "authors": [
+        "Amy A Gelfand",
+        "Peter J Goadsby",
+        "I Elaine Allen"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1177/0333102414534326",
+      "found_by": [
+        {
+          "angle": "etiology and mechanism",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (microbiota[tiab] OR microbiome[tiab] OR pathogenesis[tiab] OR etiology[tiab]) AND review[pt]",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Cephalalgia : an international journal of headache",
+      "key": "Gelfand2015relationship",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "24853164",
+      "pub_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, N.I.H., Extramural",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 271,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "The relationship between migraine and infant colic: a systematic review and meta-analysis.",
+      "type": "review",
+      "year": 2015,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "The relationship between migraine and infant colic: A systematic review and meta-analysis",
+        "authors_structured": [
+          {
+            "family": "Gelfand",
+            "given": "Amy A"
+          },
+          {
+            "family": "Goadsby",
+            "given": "Peter J"
+          },
+          {
+            "family": "Allen",
+            "given": "I Elaine"
+          }
+        ],
+        "journal": "Cephalalgia",
+        "journal_short": "Cephalalgia",
+        "volume": "35",
+        "issue": "1",
+        "pages": "63-72",
+        "year": 2015,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "SAGE Publications",
+        "url": "https://doi.org/10.1177/0333102414534326"
+      }
+    },
+    {
+      "abstract": "To dissect potential confounding effects of breast milk and formula feeding on crying\u2009+\u2009fussing, fecal calprotectin, and gut microbiota in babies with colic. We hypothesized that infant colic is associated with gut inflammation linked to intestinal dysbiosis. A nested case-control design of 3 of our studies was used to analyze clinical and laboratory data at presentation, comparing babies with colic with controls. All investigators other than the biostatistician were blinded during data analysis. Subjects were recruited based on their age and crying + fussy time. We screened 65 infants, 37 with colic, as defined by Barr diary (crying\u2009+\u2009fussing time >3 hours daily), who were compared with 28 noncolicky infants. Fecal calprotectin was elevated in babies with colic. For each mode of infant feeding (breast milk, formula, or breast\u2009+\u2009formula), infants' fecal calprotectin was higher in babies with colic. Infants with colic had similar levels of fecal alpha diversity (richness) when compared with controls, and alpha diversity was lower in breast-fed babies. Beta diversity at the phylum level revealed significant differences in microbial population. A phylum difference resulted from reduced Actinobacteria (95% of which are Bifidobacilli) in babies with colic. Species significantly associated with colic were Acinetobacter and Lactobacillus iners. Colic is linked with gut inflammation (as determined by fecal calprotectin) and dysbiosis, independent of mode of feeding, with fewer Bifidobacilli. Clinicaltrials.gov: NCT01279265 and NCT01849991.",
+      "authors": [
+        "J Marc Rhoads",
+        "James Collins",
+        "Nicole Y Fatheree",
+        "S Shahrukh Hashmi",
+        "Christopher M Taylor",
+        "Meng Luo",
+        "Thomas K Hoang",
+        "Wallace A Gleason",
+        "Melissa R Van Arsdall",
+        "Fernando Navarro",
+        "Yuying Liu"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1016/j.jpeds.2018.07.042",
+      "found_by": [
+        {
+          "angle": "etiology and mechanism",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (migraine[tiab] OR gut-brain[tiab] OR inflammation[tiab] OR calprotectin[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "The Journal of pediatrics",
+      "key": "Rhoads2018infant",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "30177353",
+      "pub_types": [
+        "Journal Article",
+        "Research Support, N.I.H., Extramural"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 225,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Infant Colic Represents Gut Inflammation and Dysbiosis.",
+      "type": "article",
+      "year": 2018,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Infant Colic Represents Gut Inflammation and Dysbiosis",
+        "authors_structured": [
+          {
+            "family": "Rhoads",
+            "given": "J. Marc"
+          },
+          {
+            "family": "Collins",
+            "given": "James"
+          },
+          {
+            "family": "Fatheree",
+            "given": "Nicole Y."
+          },
+          {
+            "family": "Hashmi",
+            "given": "S. Shahrukh"
+          },
+          {
+            "family": "Taylor",
+            "given": "Christopher M."
+          },
+          {
+            "family": "Luo",
+            "given": "Meng"
+          },
+          {
+            "family": "Hoang",
+            "given": "Thomas K."
+          },
+          {
+            "family": "Gleason",
+            "given": "Wallace A."
+          },
+          {
+            "family": "Van Arsdall",
+            "given": "Melissa R."
+          },
+          {
+            "family": "Navarro",
+            "given": "Fernando"
+          },
+          {
+            "family": "Liu",
+            "given": "Yuying"
+          }
+        ],
+        "journal": "The Journal of Pediatrics",
+        "journal_short": "The Journal of Pediatrics",
+        "volume": "203",
+        "issue": null,
+        "pages": "55-61.e3",
+        "year": 2018,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Elsevier BV",
+        "url": "https://doi.org/10.1016/j.jpeds.2018.07.042"
+      }
+    },
+    {
+      "abstract": "To determine whether the probiotic Lactobacillus reuteri DSM 17938 reduces crying or fussing in a broad community based sample of breastfed infants and formula fed infants with colic aged less than 3 months. Double blind, placebo controlled randomised trial. Community based sample (primary and secondary level care centres) in Melbourne, Australia. 167 breastfed infants or formula fed infants aged less than 3 months meeting Wessel's criteria for crying or fussing: 85 were randomised to receive probiotic and 82 to receive placebo. Oral daily L reuteri (1 \u00d7 10(8) colony forming units) versus placebo for one month. The primary outcome was daily duration of cry or fuss at 1 month. Secondary outcomes were duration of cry or fuss; number of cry or fuss episodes; sleep duration of infant at 7, 14, and 21 days, and 1 and 6 months; maternal mental health (Edinburgh postnatal depression subscale); family functioning (paediatric quality of life inventory), parent quality adjusted life years (assessment of quality of life) at 1 and 6 months; infant functioning (paediatric quality of life inventory) at 6 months; infant faecal microbiota (microbial diversity, colonisation with Escherichia coli), and calprotectin levels at 1 month. In intention to treat analyses the two groups were compared using regression models adjusted for potential confounders. Of 167 infants randomised from August 2011 to August 2012, 127 (76%) were retained to primary outcome; of these, a subset was analysed for faecal microbial diversity, E coli colonisation, and calprotectin levels. Adherence was high. Mean daily cry or fuss time fell steadily in both groups. At 1 month, the probiotic group cried or fussed 49 minutes more than the placebo group (95% confidence interval 8 to 90 minutes, P=0.02); this mainly reflected more fussing, especially for formula fed infants. The groups were similar on all secondary outcomes. No study related adverse events occurred. L reuteri DSM 17938 did not benefit a community sample of breastfed infants and formula fed infants with colic. These findings differ from previous smaller trials of selected populations and do not support a general recommendation for the use of probiotics to treat colic in infants. Current Controlled Trials ISRCTN95287767.",
+      "authors": [
+        "Valerie Sung",
+        "Harriet Hiscock",
+        "Mimi L K Tang",
+        "Fiona K Mensah",
+        "Monica L Nation",
+        "Catherine Satzke",
+        "Ralf G Heine",
+        "Amanda Stock",
+        "Ronald G Barr",
+        "Melissa Wake"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1136/bmj.g2107",
+      "found_by": [
+        {
+          "angle": "probiotics for colic",
+          "method": "keyword",
+          "query": "\"Lactobacillus reuteri\"[tiab] AND colic[tiab] AND (randomized controlled trial[pt]) AND (formula[tiab] OR ineffective[tiab] OR \"no effect\"[tiab] OR \"did not\"[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "BMJ (Clinical research ed.)",
+      "key": "Sung2014treating",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "24690625",
+      "pub_types": [
+        "Clinical Trial, Phase III",
+        "Journal Article",
+        "Randomized Controlled Trial",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 356,
+        "fulltext_sha256": "920f545065a90a94b1007dfdb73f2877dc05d7758e3963eac612266546f04d24",
+        "fulltext_status": "valid_fulltext",
+        "notes_complete": true,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Treating infant colic with the probiotic Lactobacillus reuteri: double blind, placebo controlled randomised trial.",
+      "type": "article",
+      "year": 2014,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Treating infant colic with the probiotic Lactobacillus reuteri: double blind, placebo controlled randomised trial",
+        "authors_structured": [
+          {
+            "family": "Sung",
+            "given": "V."
+          },
+          {
+            "family": "Hiscock",
+            "given": "H."
+          },
+          {
+            "family": "Tang",
+            "given": "M. L. K."
+          },
+          {
+            "family": "Mensah",
+            "given": "F. K."
+          },
+          {
+            "family": "Nation",
+            "given": "M. L."
+          },
+          {
+            "family": "Satzke",
+            "given": "C."
+          },
+          {
+            "family": "Heine",
+            "given": "R. G."
+          },
+          {
+            "family": "Stock",
+            "given": "A."
+          },
+          {
+            "family": "Barr",
+            "given": "R. G."
+          },
+          {
+            "family": "Wake",
+            "given": "M."
+          }
+        ],
+        "journal": "BMJ",
+        "journal_short": "BMJ",
+        "volume": "348",
+        "issue": "apr01 2",
+        "pages": "g2107-g2107",
+        "year": 2014,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "BMJ",
+        "url": "https://doi.org/10.1136/bmj.g2107"
+      }
+    },
+    {
+      "abstract": "To conduct a systematic review of systematic reviews and national guidelines to assess the effectiveness of four treatment approaches (manual therapy, probiotics, proton pump inhibitors and simethicone) on colic symptoms including infant crying time, sleep distress and adverse events. We searched PubMed, Embase, Cochrane and Mantis for studies published between 2009 and 2019. Inclusion criteria were systematic reviews and guidelines that used evidence and expert panel opinion. Three reviewers independently selected articles by title, abstract and full paper review. Data were extracted by one reviewer and checked by a second. Selected studies were assessed for quality using modified standardised checklists by two authors. Meta-analysed data for our outcomes of interest were extracted and narrative conclusions were assessed. Thirty-two studies were selected. High-level evidence showed that probiotics were most effective for reducing crying time in breastfed infants (range -25 min to -65 min over 24 hours). Manual therapies had moderate to low-quality evidence showing reduced crying time (range -33 min to -76 min per 24 hours). Simethicone had moderate to low evidence showing no benefit or negative effect. One meta-analysis did not support the use of proton pump inhibitors for reducing crying time and fussing. Three national guidelines unanimously recommended the use of education, parental reassurance, advice and guidance and clinical evaluation of mother and baby. Consensus on other advice and treatments did not exist. The strongest evidence for the treatment of colic was probiotics for breastfed infants, followed by weaker but favourable evidence for manual therapy indicated by crying time. Both forms of treatment carried a low risk of serious adverse events. The guidance reviewed did not reflect these findings. CRD42019139074.",
+      "authors": [
+        "Julie Ellwood",
+        "Jerry Draper-Rodi",
+        "Dawn Carnes"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1136/bmjopen-2019-035405",
+      "found_by": [
+        {
+          "angle": "other interventions",
+          "method": "keyword",
+          "query": "infantile colic[tiab] AND (simethicone[tiab] OR \"manipulative therap*\"[tiab] OR diet*[tiab] OR treatment[tiab]) AND (systematic review[pt] OR meta-analysis[pt])",
+          "source": "pubmed"
+        },
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "(infant colic[tiab] OR infant crying[tiab]) AND (\"shaken baby\"[tiab] OR abusive head trauma[tiab] OR maternal depression[tiab] OR parental[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "BMJ open",
+      "key": "Ellwood2020comparison",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "32102827",
+      "pub_types": [
+        "Comparative Study",
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 271,
+        "fulltext_sha256": "bd71e6a4d1ca9bd997ef8be3b9363e40d2eaf22ac0e333d5bca8d577c0b686f2",
+        "fulltext_status": "valid_fulltext",
+        "notes_complete": true,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Comparison of common interventions for the treatment of infantile colic: a systematic review of reviews and guidelines.",
+      "type": "review",
+      "year": 2020,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Comparison of common interventions for the treatment of infantile colic: a systematic review of reviews and guidelines",
+        "authors_structured": [
+          {
+            "family": "Ellwood",
+            "given": "Julie"
+          },
+          {
+            "family": "Draper-Rodi",
+            "given": "Jerry"
+          },
+          {
+            "family": "Carnes",
+            "given": "Dawn"
+          }
+        ],
+        "journal": "BMJ Open",
+        "journal_short": "BMJ Open",
+        "volume": "10",
+        "issue": "2",
+        "pages": "e035405",
+        "year": 2020,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "BMJ",
+        "url": "https://doi.org/10.1136/bmjopen-2019-035405"
+      }
+    },
+    {
+      "abstract": "The aim of this review was to evaluate the evidence for interventions for infantile colic. This was a systematic review based on a literature search in December 2017 for articles published during 2007-2017 about preventive and treatment interventions for infantile colic in infants. The review included original randomised controlled trials (RCTs) and meta-analyses with at least 20 infants in each study group that were assessed according to GRADE criteria. The review found moderately strong evidence that administration of Lactobacillus reuteri DSM 17938 shortened the crying duration, with positive evidence from three out of four national contexts. There were four RCTs of acupuncture, all with no or minimal effect on crying duration. All studies reviewed with a follow-up until or beyond three months of age show a quite steep decline over time in crying duration in both treatment and control groups. Lactobacillus reuteri DSM 17938 is a promising treatment for infantile colic with moderately strong evidence in this review, but studies in more populations are needed. Acupuncture is not an effective treatment for infantile colic. Systematic support strategies to parents with infantile colic are important knowledge gaps.",
+      "authors": [
+        "Anders Hjern",
+        "Kristin Lindblom",
+        "Antonia Reuter",
+        "Sven-Arne Silfverdal"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1111/apa.15247",
+      "found_by": [
+        {
+          "angle": "other interventions",
+          "method": "keyword",
+          "query": "infantile colic[tiab] AND (simethicone[tiab] OR \"manipulative therap*\"[tiab] OR diet*[tiab] OR treatment[tiab]) AND (systematic review[pt] OR meta-analysis[pt])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Acta paediatrica (Oslo, Norway : 1992)",
+      "key": "Hjern2020systematic",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "32150292",
+      "pub_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 186,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "A systematic review of prevention and treatment of infantile colic.",
+      "type": "review",
+      "year": 2020,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "A systematic review of prevention and treatment of infantile colic",
+        "authors_structured": [
+          {
+            "family": "Hjern",
+            "given": "Anders"
+          },
+          {
+            "family": "Lindblom",
+            "given": "Kristin"
+          },
+          {
+            "family": "Reuter",
+            "given": "Antonia"
+          },
+          {
+            "family": "Silfverdal",
+            "given": "Sven\u2010Arne"
+          }
+        ],
+        "journal": "Acta Paediatrica",
+        "journal_short": "Acta Paediatrica",
+        "volume": "109",
+        "issue": "9",
+        "pages": "1733-1744",
+        "year": 2020,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Wiley",
+        "url": "https://doi.org/10.1111/apa.15247"
+      }
+    },
+    {
+      "abstract": "Infantile colic is a common disorder, affecting around one in six families, and in 2001 was reported to cost the UK National Health Service in excess of \u00a365 million per year (Morris 2001). Although it usually remits by six months of age, there is some evidence of longer-term sequelae for both children and parents.Manipulative therapies, such as chiropractic and osteopathy, have been suggested as interventions to reduce the severity of symptoms. To evaluate the results of studies designed to address efficacy or effectiveness of manipulative therapies (specifically, chiropractic, osteopathy and cranial manipulation) for infantile colic in infants less than six months of age. We searched following databases: CENTRAL (2012, Issue 4), MEDLINE (1948 to April Week 3 2012), EMBASE (1980 to 2012 Week 17), CINAHL (1938 to April 2012), PsycINFO (1806 to April 2012), Science Citation Index (1970 to April 2012), Social Science Citation Index (1970 to April 2012), Conference Proceedings Citation Index - Science (1990 to April 2012) and Conference Proceedings Citation Index - Social Science & Humanities (1970 to April 2012). We also searched all available years of LILACS, PEDro, ZETOC, WorldCat, TROVE, DART-Europe, ClinicalTrials.gov and ICTRP (May 2012), and contacted over 90 chiropractic and osteopathic institutions around the world. In addition, we searched CentreWatch, NRR Archive and UKCRN in December 2010. Randomised trials evaluating the effect of chiropractic, osteopathy or cranial osteopathy alone or in conjunction with other interventions for the treatment of infantile colic. In pairs, five of the review authors (a) assessed the eligibility of studies against the inclusion criteria, (b) extracted data from the included studies and (c) assessed the risk of bias for all included studies. Each article or study was assessed independently by two review authors. One review author entered the data into Review Manager software and the team's statistician (PP) reviewed the chosen analytical settings. We identified six studies for inclusion in our review, representing a total of 325 infants. There were three further studies that we could not find information about and we identified three other ongoing studies. Of the six included studies, five were suggestive of a beneficial effect and one found no evidence that manipulative therapies had any beneficial effect on the natural course of infantile colic. Tests for heterogeneity imply that there may be some underlying difference between this study and the other five.Five studies measured daily hours of crying and these data were combined, suggesting that manipulative therapies had a significant effect on infant colic - reducing average crying time by one hour and 12 minutes per day (mean difference (MD) -1.20; 95% confidence interval (CI) -1.89 to -0.51). This conclusion is sustained even when considering only studies with a low risk of selection bias (sequence generation and allocation concealment) (MD -1.24; 95% CI -2.16 to -0.33); those with a low risk of attrition bias (MD -1.95; 95% CI -2.96 to -0.94), or only those studies that have been published in the peer-reviewed literature (MD -1.01; 95% CI -1.78 to -0.24). However, when combining only those studies with a low risk of performance bias (parental 'blinding'), the improvement in daily crying hours was not statistically significant (MD -0.57; 95% CI -2.24 to 1.09).One study considered whether the reduction in crying time was clinically significant. This found that a greater proportion of parents of infants receiving a manipulative therapy reported clinically significant improvements than did parents of those receiving no treatment (reduction in crying to less than two hours: odds ratio (OR) 6.33; 95% CI 1.54 to 26.00; more than 30% reduction in crying: OR 3.70; 95% CI 1.15 to 11.86).Analysis of data from three studies that measured 'full recovery' from colic as reported by parents found that manipulative therapies did not result in significantly higher proportions of parents reporting recovery (OR 11.12; 95% CI 0.46 to 267.52).One study measured infant sleeping time and found manipulative therapy resulted in statistically significant improvement (MD 1.17; 95% CI 0.22 to 2.12).The quality of the studies was variable. There was a generally low risk of selection bias but only two of the six studies were evaluated as being at low risk of performance bias, three at low risk of detection bias and one at low risk of attrition bias.One of the studies recorded adverse events and none were encountered. However, with only a sample of 325 infants, we have too few data to reach any definitive conclusions about safety. The studies included in this meta-analysis were generally small and methodologically prone to bias, which makes it impossible to arrive at a definitive conclusion about the effectiveness of manipulative therapies for infantile colic.The majority of the included trials appeared to indicate that the parents of infants receiving manipulative therapies reported fewer hours crying per day than parents whose infants did not, based on contemporaneous crying diaries, and this difference was statistically significant. The trials also indicate that a greater proportion of those parents reported improvements that were clinically significant. However, most studies had a high risk of performance bias due to the fact that the assessors (parents) were not blind to who had received the intervention. When combining only those trials with a low risk of such performance bias, the results did not reach statistical significance. Further research is required where those assessing the treatment outcomes do not know whether or not the infant has received a manipulative therapy.There are inadequate data to reach any definitive conclusions about the safety of these interventions.",
+      "authors": [
+        "Dawn Dobson",
+        "Peter L B J Lucassen",
+        "Joyce J Miller",
+        "Arine M Vlieger",
+        "Philip Prescott",
+        "George Lewith"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1002/14651858.cd004796.pub2",
+      "found_by": [
+        {
+          "angle": "other interventions",
+          "method": "keyword",
+          "query": "infantile colic[tiab] AND (simethicone[tiab] OR \"manipulative therap*\"[tiab] OR diet*[tiab] OR treatment[tiab]) AND (systematic review[pt] OR meta-analysis[pt])",
+          "source": "pubmed"
+        },
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "(infant colic[tiab] OR infant crying[tiab]) AND (\"shaken baby\"[tiab] OR abusive head trauma[tiab] OR maternal depression[tiab] OR parental[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "The Cochrane database of systematic reviews",
+      "key": "Dobson2012manipulative",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "23235617",
+      "pub_types": [
+        "Journal Article",
+        "Meta-Analysis",
+        "Research Support, Non-U.S. Gov't",
+        "Systematic Review"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 935,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Manipulative therapies for infantile colic.",
+      "type": "review",
+      "year": 2012,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Manipulative therapies for infantile colic",
+        "authors_structured": [
+          {
+            "family": "Dobson",
+            "given": "Dawn"
+          },
+          {
+            "family": "Lucassen",
+            "given": "Peter LBJ"
+          },
+          {
+            "family": "Miller",
+            "given": "Joyce J"
+          },
+          {
+            "family": "Vlieger",
+            "given": "Arine M"
+          },
+          {
+            "family": "Prescott",
+            "given": "Philip"
+          },
+          {
+            "family": "Lewith",
+            "given": "George"
+          }
+        ],
+        "journal": "Cochrane Database of Systematic Reviews",
+        "journal_short": "",
+        "volume": "2012",
+        "issue": "12",
+        "pages": null,
+        "year": 2012,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Wiley",
+        "url": "https://doi.org/10.1002/14651858.cd004796.pub2"
+      }
+    },
+    {
+      "abstract": "5% to 40% of infants cry excessively, usually accompanied by fussiness and excessive of gas. There are no uniform criteria for treatment of infantile colic. Lactobacillus reuteri DSM 17938 has been used with promising results. The objective of this network-meta-analysis (NMA) is to compare the efficacy of L reuteri DSM 17938 with other interventions for infantile colic. RCTs, published between 1960 and 2015 for the treatment of infantile colic were included. Primary outcome was duration of crying after 21 to 28 days of treatment. Different databases were searched. Information was analyzed using control group as central axis. A random effect model was used. Hedges standard mean difference (SMD) and odds ratio (OR) were calculated. A SUCRA analysis was performed to evaluate superiority for each intervention. 32 RCTs were analyzed, including 2242 patients. Studies with L reuteri DSM 17938 versus Ctrl., Diet versus Ctrl. and Acupuncture versus Ctrl. were the most influential studies in the NMA. L reuteri DSM 17938 [WMD -51.3\u200ah (CI95% -72.2 to -30.5\u200ah), P .0001] and dietetic approaches [WMD -37.4\u200ah (CI95% -56.1 to -18.7\u200ah), P .0001] were superior compared to the other treatments. L reuteri DSM 17938 and some dietetic approaches are better to other interventions for treatment of infantile colic.",
+      "authors": [
+        "Pedro Guti\u00e9rrez-Castrell\u00f3n",
+        "Flavia Indrio",
+        "Alexis Bolio-Galvis",
+        "Carlos Jim\u00e9nez-Guti\u00e9rrez",
+        "Irma Jimenez-Escobar",
+        "Gabriel L\u00f3pez-Vel\u00e1zquez"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1097/md.0000000000009375",
+      "found_by": [
+        {
+          "angle": "other interventions",
+          "method": "keyword",
+          "query": "infantile colic[tiab] AND (simethicone[tiab] OR \"manipulative therap*\"[tiab] OR diet*[tiab] OR treatment[tiab]) AND (systematic review[pt] OR meta-analysis[pt])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Medicine",
+      "key": "GutirrezCastrelln2017efficacy",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "29390535",
+      "pub_types": [
+        "Journal Article",
+        "Systematic Review",
+        "Network Meta-Analysis"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 213,
+        "fulltext_sha256": "47519eee66d01a5289194a3671039501b745830012460b11ad6af8f7f09a470f",
+        "fulltext_status": "valid_fulltext",
+        "notes_complete": true,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Efficacy of Lactobacillus reuteri DSM 17938 for infantile colic: Systematic review with network meta-analysis.",
+      "type": "review",
+      "year": 2017,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Efficacy of Lactobacillus reuteri DSM 17938 for infantile colic",
+        "authors_structured": [
+          {
+            "family": "Guti\u00e9rrez-Castrell\u00f3n",
+            "given": "Pedro"
+          },
+          {
+            "family": "Indrio",
+            "given": "Flavia"
+          },
+          {
+            "family": "Bolio-Galvis",
+            "given": "Alexis"
+          },
+          {
+            "family": "Jim\u00e9nez-Guti\u00e9rrez",
+            "given": "Carlos"
+          },
+          {
+            "family": "Jimenez-Escobar",
+            "given": "Irma"
+          },
+          {
+            "family": "L\u00f3pez-Vel\u00e1zquez",
+            "given": "Gabriel"
+          }
+        ],
+        "journal": "Medicine",
+        "journal_short": "",
+        "volume": "96",
+        "issue": "51",
+        "pages": "e9375",
+        "year": 2017,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Ovid Technologies (Wolters Kluwer Health)",
+        "url": "https://doi.org/10.1097/md.0000000000009375"
+      }
+    },
+    {
+      "abstract": "Child abuse and neglect are important causes of child morbidity and death. We assessed potentially detrimental parental actions induced by infant crying in 3259 infants aged 1-6 months, in the Netherlands. In infants aged 6 months, 5.6% (95% CI 4.2-7.0) of parents reported having smothered, slapped, or shaken their baby at least once because of its crying. The risks of detrimental actions were highest for parents from non-industrialised countries, those with either no job or a job with short working hours, and those who judged their infant's crying to be excessive. Clinicians should be aware of the risks of abuse in children known to cry a lot and should target interventions at parents to help them cope with this crying.",
+      "authors": [
+        "Sijmen A Reijneveld",
+        "Marcel F van der Wal",
+        "Emily Brugman",
+        "Remy A Hira Sing",
+        "S Pauline Verloove-Vanhorick"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1016/s0140-6736(04)17191-2",
+      "found_by": [
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "(infant colic[tiab] OR infant crying[tiab]) AND (\"shaken baby\"[tiab] OR abusive head trauma[tiab] OR maternal depression[tiab] OR parental[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Lancet (London, England)",
+      "key": "Reijneveld2004infant",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "15474137",
+      "pub_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 123,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Infant crying and abuse.",
+      "type": "article",
+      "year": 2004,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Infant crying and abuse",
+        "authors_structured": [
+          {
+            "family": "Reijneveld",
+            "given": "Sijmen A"
+          },
+          {
+            "family": "van der Wal",
+            "given": "Marcel F"
+          },
+          {
+            "family": "Brugman",
+            "given": "Emily"
+          },
+          {
+            "family": "Hira Sing",
+            "given": "Remy A"
+          },
+          {
+            "family": "Verloove-Vanhorick",
+            "given": "S Pauline"
+          }
+        ],
+        "journal": "The Lancet",
+        "journal_short": "The Lancet",
+        "volume": "364",
+        "issue": "9442",
+        "pages": "1340-1342",
+        "year": 2004,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Elsevier BV",
+        "url": "https://doi.org/10.1016/s0140-6736(04)17191-2"
+      }
+    },
+    {
+      "abstract": "In 2006, a consensus concerning functional gastrointestinal intestinal disorders (FGIDs) in infants and toddlers was described. At that time little evidence regarding epidemiology, pathophysiology, diagnostic work-up, treatment strategies and follow-up was available. Consequently the criteria for the clinical entities were more experience than evidence based. In the past decade, new insights have been gained in the different FGIDs in these age groups. Based on those, further revisions have been made to the criteria. The description of infant colic has been expanded to include criteria for the general pediatrician and specific criteria for researchers. The greatest change was the addition of a paragraph regarding the neurobiology of pain in infants and toddlers, including the understanding of the neurodevelopment of nociception and of the wide array of factors that may impact the pain experience.",
+      "authors": [
+        "Marc A Benninga",
+        "Christophe Faure",
+        "Paul E Hyman",
+        "Ian St James Roberts",
+        "Neil L Schechter",
+        "Samuel Nurko"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1053/j.gastro.2016.02.016",
+      "found_by": [
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (long-term[tiab] OR outcome*[tiab] OR follow-up[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Gastroenterology",
+      "key": "Benninga2016childhood",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "27144631",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 132,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Childhood Functional Gastrointestinal Disorders: Neonate/Toddler.",
+      "type": "article",
+      "year": 2016,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Childhood Functional Gastrointestinal Disorders: Neonate/Toddler",
+        "authors_structured": [
+          {
+            "family": "Benninga",
+            "given": "Marc A."
+          },
+          {
+            "family": "Nurko",
+            "given": "Samuel"
+          },
+          {
+            "family": "Faure",
+            "given": "Christophe"
+          },
+          {
+            "family": "Hyman",
+            "given": "Paul E."
+          },
+          {
+            "family": "St. James Roberts",
+            "given": "Ian"
+          },
+          {
+            "family": "Schechter",
+            "given": "Neil L."
+          }
+        ],
+        "journal": "Gastroenterology",
+        "journal_short": "Gastroenterology",
+        "volume": "150",
+        "issue": "6",
+        "pages": "1443-1455.e2",
+        "year": 2016,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Elsevier BV",
+        "url": "https://doi.org/10.1053/j.gastro.2016.02.016"
+      }
+    },
+    {
+      "abstract": "To systematically review evidence on the efficacy and safety of using a lactase supplementation for managing infant colic. The MEDLINE, EMBASE, and Cochrane Library databases were searched (up to September 2023) for randomized controlled trials (RCTs) comparing oral lactase supplementation with placebo or no intervention in infants younger than 6 months old with infant colic. The risk of bias was assessed using the revised version of the Cochrane risk-of-bias tool. Outcomes measured were selected according to a standardized core outcome set. Five RCTs involving a total of 391 infants were identified. Three RCTs reported reduced crying duration, but one showed effect only in a compliant group (40.4%, p\u2009=\u20090.0052). A meta-analysis of two RCTs found no difference in crying duration and fussing time during 1 week of lactase treatment compared with placebo (mean difference [MD] -17.66\u2009min/day, 95% confidence interval [CI], -60.8 to 25.5; I2\u2009=\u200968% and MD 2.75, 95% CI, -58.2 to 57.2; I2\u2009=\u200980%, respectively). Other outcomes were assessed only in individual studies or not reported. The risk of bias was low in only one RCT, high in three, and raised some concerns in one. While individual trials have shown some promise, the overall evidence for the efficacy of lactase supplementation in treating infant colic remain inconclusive. Further well-designed RCTs are necessary to determine the effects of lactase on managing infant colic.",
+      "authors": [
+        "Anna Koz\u0142owska-Jalowska",
+        "Agata Str\u00f3\u017cyk",
+        "Andrea Horvath",
+        "Hania Szajewska"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1002/jpn3.12144",
+      "found_by": [
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (long-term[tiab] OR outcome*[tiab] OR follow-up[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Journal of pediatric gastroenterology and nutrition",
+      "key": "KozowskaJalowska2024effect",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "38426798",
+      "pub_types": [
+        "Systematic Review",
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't",
+        "Meta-Analysis"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 233,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Effect of lactase supplementation on infant colic: Systematic review of randomized controlled trials.",
+      "type": "review",
+      "year": 2024,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Effect of lactase supplementation on infant colic: Systematic review of randomized controlled trials",
+        "authors_structured": [
+          {
+            "family": "Koz\u0142owska\u2010Jalowska",
+            "given": "Anna"
+          },
+          {
+            "family": "Str\u00f3\u017cyk",
+            "given": "Agata"
+          },
+          {
+            "family": "Horvath",
+            "given": "Andrea"
+          },
+          {
+            "family": "Szajewska",
+            "given": "Hania"
+          }
+        ],
+        "journal": "Journal of Pediatric Gastroenterology and Nutrition",
+        "journal_short": "J. pediatr. gastroenterol. nutr.",
+        "volume": "78",
+        "issue": "5",
+        "pages": "1009-1016",
+        "year": 2024,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Wiley",
+        "url": "https://doi.org/10.1002/jpn3.12144"
+      }
+    },
+    {
+      "abstract": "To assess the prevalence of functional gastrointestinal disorders (FGIDs), health-related quality of life (HRQOL), and behavioural problems in a cohort of adolescents with a history of infant colic (IC), as defined by Wessel's criteria. 388 adolescents, aged 15-18\u2009years, who participated in a randomised controlled trial for infants with colic, were invited for our observational follow-up study. Prevalence of FGIDs was assessed with the Rome IV Questionnaire on Paediatric Gastrointestinal Disorders (RIV-QPGD), HRQOL through self-report of the Paediatric Quality of Life Inventory (PedsQL), and behavioural problems through parent-report of the child behaviour checklist (CBCL). Multivariable models were used to compare prevalence rates of FGIDs and HRQOL scores. 190 (49%) adolescents with a history of IC (cases) and 381 controls were included (median age 17.0 [IQR 16.0-17.0] and 16.0 [15.0-17.0] years, respectively). Cases had a significantly higher risk for postprandial distress syndrome compared to controls (aOR 2.49 (95%CI 1.18-5.25), p\u2009=\u20090.002). After multivariable regression, total, physical and school HRQOL scores were significantly lower in cases compared to controls (p\u2009=\u20090.003, 0.001, and 0.009). Adolescents with a history of IC demonstrate higher prevalence rates of postprandial distress syndrome compared to controls. However, conclusions should be made with caution due to attrition and information bias.",
+      "authors": [
+        "Judith Zeevenhooven",
+        "Lucas Zeevenhooven",
+        "Angela Biesbroek",
+        "Renske Schappin",
+        "Arine M Vlieger",
+        "Bregje E van Sleuwen",
+        "Monique P L'Hoir",
+        "Marc A Benninga"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1111/apa.17215",
+      "found_by": [
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (long-term[tiab] OR outcome*[tiab] OR follow-up[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Acta paediatrica (Oslo, Norway : 1992)",
+      "key": "Zeevenhooven2024functional",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "38535502",
+      "pub_types": [
+        "Journal Article",
+        "Observational Study",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 216,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Functional gastrointestinal disorders, quality of life, and behaviour in adolescents with history of infant colic.",
+      "type": "article",
+      "year": 2024,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Functional gastrointestinal disorders, quality of life, and behaviour in adolescents with history of infant colic",
+        "authors_structured": [
+          {
+            "family": "Zeevenhooven",
+            "given": "Judith"
+          },
+          {
+            "family": "Zeevenhooven",
+            "given": "Lucas"
+          },
+          {
+            "family": "Biesbroek",
+            "given": "Angela"
+          },
+          {
+            "family": "Schappin",
+            "given": "Renske"
+          },
+          {
+            "family": "Vlieger",
+            "given": "Arine M."
+          },
+          {
+            "family": "van Sleuwen",
+            "given": "Bregje E."
+          },
+          {
+            "family": "L'Hoir",
+            "given": "Monique P."
+          },
+          {
+            "family": "Benninga",
+            "given": "Marc A."
+          }
+        ],
+        "journal": "Acta Paediatrica",
+        "journal_short": "Acta Paediatrica",
+        "volume": "113",
+        "issue": "6",
+        "pages": "1435-1443",
+        "year": 2024,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Wiley",
+        "url": "https://doi.org/10.1111/apa.17215"
+      }
+    },
+    {
+      "abstract": "Infant colic is a condition of unknown cause which can result in carer distress and attachment difficulties. Recent studies have implicated the gut microbiota in infant colic, and certain probiotics have demonstrated possible efficacy. We aim to investigate whether the intestinal microbiota composition in infants with colic is associated with cry/fuss time at baseline, persistence of cry/fuss at 4-week follow-up, or child behavior at 2 years of age. Fecal samples from infants with colic (n = 118, 53% male) were analyzed using 16S rRNA sequencing. After examining the alpha and beta diversity of the clinical samples, we performed a differential abundance analysis of the 16S data to look for taxa that associate with baseline and future behavior, while adjusting for potential confounding variables. In addition, we used random forest classifiers to evaluate how well baseline gut microbiota can predict future crying time. Alpha diversity of the fecal microbiota was strongly influenced by birth mode, feed type, and child gender, but did not significantly associate with crying or behavioral outcomes. Several taxa within the microbiota (including Bifidobacterium, Clostridium, Lactobacillus, and Klebsiella) associate with colic severity, and the baseline microbiota composition can predict further crying at 4 weeks with up to 65% accuracy. The combination of machine learning findings with associative relationships demonstrates the potential prognostic utility of the infant fecal microbiota in predicting subsequent infant crying problems.",
+      "authors": [
+        "Amy Loughman",
+        "Thomas Quinn",
+        "Monica L Nation",
+        "Amy Reichelt",
+        "Robert J Moore",
+        "Thi Thu Hao Van",
+        "Valerie Sung",
+        "Mimi L K Tang"
+      ],
+      "cited_by_count": null,
+      "doi": "10.1017/s2040174420000227",
+      "found_by": [
+        {
+          "angle": "burden and outcomes",
+          "method": "keyword",
+          "query": "infant colic[tiab] AND (long-term[tiab] OR outcome*[tiab] OR follow-up[tiab])",
+          "source": "pubmed"
+        }
+      ],
+      "is_preprint": false,
+      "is_retracted": false,
+      "journal": "Journal of developmental origins of health and disease",
+      "key": "Loughman2021infant",
+      "oa_url": null,
+      "openalex": null,
+      "peer_review_status": "not_independently_verified",
+      "pmid": "32279681",
+      "pub_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't"
+      ],
+      "publication_eligibility": "PubMed journal-indexed candidate",
+      "reading_evidence": {
+        "abstract_word_count": 227,
+        "fulltext_sha256": null,
+        "fulltext_status": null,
+        "notes_complete": false,
+        "status": "eligible"
+      },
+      "source_type": "journal",
+      "status": "verified",
+      "title": "Infant microbiota in colic: predictive associations with problem crying and subsequent child behavior.",
+      "type": "article",
+      "year": 2021,
+      "verification": {
+        "checked": "2026-08-27",
+        "bibliographic_status": "verified",
+        "retraction_status": "clear",
+        "retraction_sources": {
+          "crossref": "clear"
+        },
+        "retraction_signals": [],
+        "reasons": []
+      },
+      "canonical": {
+        "title": "Infant microbiota in colic: predictive associations with problem crying and subsequent child behavior",
+        "authors_structured": [
+          {
+            "family": "Loughman",
+            "given": "Amy"
+          },
+          {
+            "family": "Quinn",
+            "given": "Thomas"
+          },
+          {
+            "family": "Nation",
+            "given": "Monica L."
+          },
+          {
+            "family": "Reichelt",
+            "given": "Amy"
+          },
+          {
+            "family": "Moore",
+            "given": "Robert J."
+          },
+          {
+            "family": "Van",
+            "given": "Thi Thu Hao"
+          },
+          {
+            "family": "Sung",
+            "given": "Valerie"
+          },
+          {
+            "family": "Tang",
+            "given": "Mimi L. K."
+          }
+        ],
+        "journal": "Journal of Developmental Origins of Health and Disease",
+        "journal_short": "J Dev Orig Health Dis",
+        "volume": "12",
+        "issue": "2",
+        "pages": "260-270",
+        "year": 2021,
+        "type": "journal-article",
+        "article_number": null,
+        "publisher": "Cambridge University Press (CUP)",
+        "url": "https://doi.org/10.1017/s2040174420000227"
+      }
+    }
+  ]
+}

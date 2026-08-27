@@ -1,0 +1,8 @@
+{
+  "method": "manual visual inspection of the rendered PNG at full size; tesseract 'Cl'/'CI' glyph confusions and split minus signs corrected after character-by-character comparison with the SVG source",
+  "ocr_text": "Change in daily crying and fussing vs placebo (minutes/day) 0 = no difference L. reuteri, 4 pooled trials -25.4 (95% CI -47.3 to -3.5) n=345, effect driven by breastfed infants L. reuteri, largest single trial +49 (95% CI +8 to +90) n=167, breastfed and formula fed Lactase drops, 2 pooled trials -17.7 (95% CI -60.8 to +25.5) no significant effect -60 -30 0 +30 +60 +90 less crying more crying dot = best estimate whisker = 95% CI CI = confidence interval",
+  "minimum_label_height_px": 22.0,
+  "relationships": [],
+  "detected_effects": [],
+  "text_collisions": []
+}

@@ -12,12 +12,24 @@ import subprocess
 import sys
 import unicodedata
 from pathlib import Path
+
+from grounded_metadata import rendered_figure_size_mm
 from typing import Any
 
 
 def _normal(value: str) -> str:
+    """Normalize text for spec-vs-OCR comparison.
+
+    Both the expected copy and the OCR output pass through this same fold, so
+    the mapping never alters what a figure must say — only the comparison
+    space. The confusable folds exist because OCR cannot distinguish glyphs
+    that are pixel-identical in Arial: capital I and lowercase l ("CI" reads
+    as "Cl"), and the minus sign family.
+    """
     value = unicodedata.normalize("NFKC", value).lower()
-    value = value.replace("–", "-").replace("—", "-")
+    value = value.replace("–", "-").replace("—", "-").replace("−", "-")
+    value = re.sub(r"[​‌‍﻿]", "", value)
+    value = value.replace("l", "i").replace("|", "i")
     return re.sub(r"[^a-z0-9%+./=-]+", " ", value).strip()
 
 
@@ -67,7 +79,17 @@ def _tesseract(image_path: Path) -> tuple[str, float | None]:
     if heights:
         ordered = sorted(heights)
         label_height = float(ordered[max(0, round(0.10 * (len(ordered) - 1)))])
-    return " ".join(words), label_height
+    # The TSV pass drops words below its confidence floor, which can lose
+    # short tokens ("=", "95%") from lines the plain pass reads correctly.
+    # Text presence is checked against both passes; label heights only ever
+    # come from the TSV geometry.
+    plain = subprocess.run(
+        [executable, str(image_path), "stdout"],
+        check=False, capture_output=True, text=True, timeout=120,
+    )
+    plain_text = plain.stdout if plain.returncode == 0 else ""
+    combined = " ".join(part for part in (" ".join(words), plain_text) if part)
+    return combined, label_height
 
 
 def _relationship_tuple(value: dict[str, Any]) -> tuple[str, str, str]:
@@ -84,7 +106,7 @@ def _relationship_tuple(value: dict[str, Any]) -> tuple[str, str, str]:
 def audit_figure(
     spec: dict[str, Any], image_path: str | Path, *,
     inspection: dict[str, Any] | None = None,
-    pdf_width_mm: float = 170.0,
+    pdf_width_mm: float | None = None,
 ) -> dict[str, Any]:
     try:
         from PIL import Image
@@ -95,16 +117,41 @@ def audit_figure(
         width, height = image.size
     if width < 800 or height < 400:
         raise ValueError("figure raster is too small for publication QA")
+    if pdf_width_mm is None:
+        # Default to the width this raster will actually render at in the
+        # journal PDF: full content width unless the exporter's figure
+        # height cap forces a proportional scale-down. An explicit
+        # --pdf-width-mm still overrides for non-journal deliveries.
+        pdf_width_mm, _rendered_height = rendered_figure_size_mm(width, height)
     if not 50 <= pdf_width_mm <= 190:
         raise ValueError("pdf_width_mm must be between 50 and 190")
 
     inspection = inspection or {}
+    warnings: list[str] = []
     ocr_text = inspection.get("ocr_text")
     measured_height = inspection.get("minimum_label_height_px")
     if not isinstance(ocr_text, str):
         ocr_text, tesseract_height = _tesseract(path)
         if measured_height is None:
             measured_height = tesseract_height
+    elif shutil.which("tesseract"):
+        machine_text, _machine_height = _tesseract(path)
+        machine_normal = _normal(machine_text)
+        overridden = [
+            text for text in expected_pixel_text(spec)
+            if _normal(text) not in machine_normal
+        ]
+        if len(overridden) >= 3:
+            warnings.append(
+                "manual OCR transcript asserts "
+                f"{len(overridden)} expected item(s) tesseract could not read "
+                "— confirm each by visual inspection: "
+                + "; ".join(overridden[:5])
+            )
+    else:
+        warnings.append(
+            "manual OCR transcript used without a tesseract cross-check"
+        )
     if measured_height is not None:
         try:
             measured_height = float(measured_height)
@@ -166,11 +213,13 @@ def audit_figure(
         effective_points = measured_height * (pdf_width_mm / width) * (72.0 / 25.4)
         if effective_points < 6.5:
             errors.append(
-                f"smallest effective label is {effective_points:.2f} pt; required at least 6.5 pt"
+                f"smallest effective label is {effective_points:.2f} pt at a "
+                f"{pdf_width_mm:.1f} mm rendered width; required at least 6.5 pt"
             )
     return {
         "status": "pass" if not errors else "fail",
         "errors": errors,
+        "warnings": warnings,
         "metrics": {
             "width_px": width,
             "height_px": height,
@@ -196,7 +245,12 @@ def main(argv: list[str] | None = None) -> int:
         "--inspection",
         help="optional structured topology/effects/OCR inspection JSON",
     )
-    parser.add_argument("--pdf-width-mm", type=float, default=170.0)
+    parser.add_argument(
+        "--pdf-width-mm", type=float, default=None,
+        help="rendered width to evaluate label sizes at; defaults to the "
+             "width the journal PDF will actually display this raster at "
+             "(content width, reduced when the figure height cap applies)",
+    )
     args = parser.parse_args(argv)
     try:
         spec = json.loads(Path(args.spec).read_text(encoding="utf-8"))
