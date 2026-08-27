@@ -33,6 +33,7 @@ from pathlib import Path
 from artifact_io import atomic_write_json, sha256_bytes, sha256_file
 from grounded_metadata import (
     FIGURE_MAX_HEIGHT_MM, PAGE_CONTENT_WIDTH_MM, rendered_figure_size_mm,
+    version as grounded_version,
 )
 
 # ---------------------------------------------------------------- markdown ---
@@ -841,13 +842,11 @@ PAGE = """<!doctype html>
 """
 
 
-def detect_release(script_dir):
-    """Latest git tag of the skill repo, e.g. ``vX.Y.Z``. Empty if unknown."""
+def detect_release(_script_dir=None):
+    """Canonical packaged release from ``VERSION``, e.g. ``vX.Y.Z``."""
     try:
-        r = subprocess.run(["git", "-C", script_dir, "describe", "--tags", "--abbrev=0"],
-                           capture_output=True, text=True, timeout=10)
-        return r.stdout.strip() if r.returncode == 0 else ""
-    except Exception:
+        return f"v{grounded_version()}"
+    except (OSError, RuntimeError):
         return ""
 
 
@@ -1195,7 +1194,11 @@ def main():
     )
     ap.add_argument("--kicker", default="Review", help="kicker label above the title (e.g. 'Review · Immunology')")
     ap.add_argument("--colophon", help="override the footer line")
-    ap.add_argument("--release", help="version shown at the right edge of the masthead (default: latest git tag)")
+    ap.add_argument(
+        "--release",
+        help="version shown at the right edge of the masthead "
+             "(default: packaged VERSION)",
+    )
     ap.add_argument("--repo", help="repository linked from the masthead descriptor (default: git origin remote)")
     ap.add_argument("--compiled-date", help="fixed YYYY-MM-DD compilation date (default: today)")
     ap.add_argument("--html-sidecar", action="store_true",

@@ -815,7 +815,11 @@ def parse_args(argv=None):
     parser.add_argument("--storyboard", help="deck storyboard JSON")
     parser.add_argument("--ledger", help="verified sources.json ledger")
     parser.add_argument("--out", help="output .pdf or .html path")
-    parser.add_argument("--release", help="version shown at the right edge of each slide")
+    parser.add_argument(
+        "--release",
+        help="version shown at the right edge of each slide "
+             "(default: packaged VERSION)",
+    )
     parser.add_argument("--repo", help="repository linked from the slide identity")
     parser.add_argument("--compiled-date", help="fixed YYYY-MM-DD compilation date")
     parser.add_argument(

@@ -422,7 +422,7 @@ def search_openalex(
         "select": OPENALEX_WORK_FIELDS,
     }
     if sort == "cited":
-        params["sort"] = "-cited_by_count"
+        params["sort"] = "cited_by_count:desc"
     raw_works, total, pages, status = fetch_openalex_pages(
         client, params, limit=limit, page_size=page_size,
     )
@@ -932,8 +932,8 @@ def forward_citations(
         "filter": f"cites:{seed_id}",
         "select": OPENALEX_WORK_FIELDS,
         "sort": (
-            "-publication_date" if chase_sort == "recent"
-            else "-cited_by_count"
+            "publication_date:desc" if chase_sort == "recent"
+            else "cited_by_count:desc"
         ),
     }
     raw_works, total, pages, status = fetch_openalex_pages(

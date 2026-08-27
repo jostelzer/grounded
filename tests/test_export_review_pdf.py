@@ -14,6 +14,7 @@ SCRIPTS = os.path.join(ROOT, "scripts")
 sys.path.insert(0, SCRIPTS)
 
 import export_review  # noqa: E402
+import grounded_metadata  # noqa: E402
 import qa_review_pdf  # noqa: E402
 import weasyprint_export  # noqa: E402
 
@@ -115,6 +116,23 @@ class PdfExportTests(unittest.TestCase):
         self.assertNotIn('<div class="provenance">', page)
         self.assertNotIn("No floating claims", page)
         self.assertNotIn("<svg viewBox=", page)
+
+    def test_default_release_uses_packaged_version(self):
+        unrelated_parent_tag = mock.Mock(returncode=0, stdout="v1.0\n")
+        with mock.patch.object(
+                export_review.subprocess, "run",
+                return_value=unrelated_parent_tag):
+            page = export_review.build_html(
+                "## Review\n\n**Abstract** — Summary.\n\n**Sources**\n",
+                release=None,
+                repo="example.test/grounded",
+                compiled_date="2026-08-26",
+            )
+        expected = f"v{grounded_metadata.version()}"
+        self.assertIn(
+            f'<span class="version">grounded {expected}</span>', page
+        )
+        self.assertNotIn('<span class="version">grounded v1.0</span>', page)
 
     def test_prose_style_alias_prints_as_scientific(self):
         page = export_review.build_html(
