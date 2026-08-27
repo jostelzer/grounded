@@ -40,6 +40,7 @@ REFERENCE_FILES = (
     "style-eli5.md",
     "style-popsci.md",
     "style-scientific.md",
+    "synthesis-guide.md",
     "writing-guide.md",
 )
 SCRIPT_FILES = (

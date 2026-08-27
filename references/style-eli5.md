@@ -2,6 +2,8 @@
 
 In `eli5` mode only. Write a connected explanation in short, flowing paragraphs for a smart reader with no science background at all. The evidence pipeline, citations, and verification are unchanged; only the architecture, language, and jargon treatment change. The model is not a simplified review — it is a great explainer: a patient teacher building a staircase, where every new idea stands only on ideas the reader already has. Do not use list bodies or structured bullet captions unless the user explicitly asks for bullets too; in that case use `bullets` as the structural style for validation and apply this plain-language register to it. The shared structure, citing, and quality-gate rules in `writing-guide.md` apply in full; ELI5 replaces the register rules as defined here.
 
+**From the synthesis** (`synthesis.md`, per `synthesis-guide.md`): the staircase is the dependency order — sort the claims so each stands only on claims from earlier steps, and the ordering problem is already solved. Each step renders one claim with the one number its budget allows, chosen from that claim's `numbers` field and translated into reader units. The helper picture is chosen for the hardest claim in the ledger; the turn step is the strongest contrary line, retold as the reader's own doubt.
+
 Structure:
 
 ```text

@@ -2,6 +2,8 @@
 
 Use only when the user explicitly asks for bullets, a list, or the compact structured format. Bullets share the scientific register in compact form; the shared structure, language, citing, and quality-gate rules in `writing-guide.md` apply in full.
 
+**From the synthesis** (`synthesis.md`, per `synthesis-guide.md`): this is the most direct rendering — punchline headings are synthesis claims, the bullets under each are that claim's evidence lines made concise, contrary lines become the paired contrast bullets, and the once-named cross-section pattern is a synthesis pattern entry.
+
 Structure:
 
 ```

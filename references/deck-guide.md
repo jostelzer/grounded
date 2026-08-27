@@ -5,8 +5,8 @@ Read this reference only when the user explicitly requests `deck`, `slides`, a
 because the topic is visual or because slides might be useful. Deck runs the
 complete Grounded evidence pipeline: angles, searching, reading, verification,
 evidence weighing, and ledger construction do not change. The synthesis is
-still written — as an internal working draft that drives the storyboard — but
-it is a working file, not the deliverable.
+still written — `synthesis.md`, the claims ledger in `synthesis-guide.md`,
+which drives the storyboard — but it is a working file, not the deliverable.
 
 **The deck is the deliverable.** The reader gets the slides, not a written
 review, so the slides must carry the entire answer. Deliver in chat: the
@@ -36,17 +36,20 @@ pages during QA; a failing slide is a release blocker.
 
 ## Evidence boundary
 
-- Start storyboarding only after the internal written synthesis is complete and
+- Start storyboarding only after `synthesis.md` is complete and
   every cited source has passed Crossref bibliographic verification and
   retraction screening.
-- Build every slide from the final synthesis, including contrary findings,
-  limitations, population boundaries, and uncertainty. Do not storyboard from
-  preliminary search impressions.
-- Every content-slide title is a full-sentence assertion or question and carries
+- Build every slide from the synthesis's claim and pattern entries, including
+  each claim's contrary lines, boundaries, and uncertainty. Do not storyboard
+  from preliminary search impressions or a fresh reading of the papers.
+- Every content-slide title is a full-sentence assertion or question — normally
+  a synthesis claim, worded as recorded — and carries
   at least one verified ledger citation in that slide's footer. A content slide
   with zero citations fails before rendering.
 - Use `strong`, `mixed`, or `limited` as the evidence grade. The grade describes
-  support for the slide's exact claim, not the topic as a whole.
+  support for the slide's exact claim, not the topic as a whole, and follows the
+  claim's recorded strength (strong → `strong`; moderate/limited → `mixed`/`limited`;
+  contested → `mixed`, with the contrary evidence visible in the artwork).
 - Keep claim titles, citation labels, DOI links, evidence grades, and slide
   numbers as real HTML/PDF text. Never ask the image model to paint them.
 - Internal image text is labels, values, units, intervals, legends, essential
@@ -54,7 +57,7 @@ pages during QA; a failing slide is a release blocker.
   contract. Numbers, geometry, anatomy, arrows, and uncertainty must match the
   verified synthesis.
 - List only verified ledger keys in the storyboard. Normally `reference_keys`
-  contains every source cited in the internal synthesis; every per-slide
+  contains every source cited in `synthesis.md`; every per-slide
   citation must be a member of that list.
 
 ## Slide budgets

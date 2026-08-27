@@ -19,6 +19,16 @@ Each style's full structure and craft rules live in its own guide — **read the
 
 The register spectrum runs scientific → popsci → ELI5: a journal reader, a curious educated adult, a smart reader with no science background. Bullets share the scientific register in compact form. This file holds everything the styles share: structure invariants, language, term links, length, citing, and the quality gate.
 
+## The synthesis comes first
+
+No styled prose is written until `synthesis.md` — the style-neutral claims ledger specified in `references/synthesis-guide.md` — is complete. Every style is an *arrangement* of that one ledger: a selection and ordering of its claims, retold in the style's register. The claims, their calibrated strength, their contrary evidence, and their boundaries are identical in every rendering; only the telling changes.
+
+Three consequences bind every style:
+
+- **Trace both ways.** Every load-bearing claim in the styled review corresponds to a claim in the synthesis and carries that claim's ledger keys; a claim recorded with contrary evidence brings that contrary evidence along. A synthesis claim cut for size is cut cleanly — its evidence is not cited elsewhere as if the claim were still made.
+- **Compose, never paraphrase.** The synthesis is structured fields precisely so the styled text cannot be a light rewording of it. Prose is born in the target register; if a styled sentence reads like a synthesis line with connective tissue, rewrite it.
+- **Numbers are rationed, not lost.** Full precision lives in the synthesis's `numbers` fields and the sources. Each style's own budget selects what its prose carries; whatever the prose drops remains recoverable in the synthesis, the parentheses, and the tables.
+
 ## Shared structure (every style)
 
 In the chat review and source Markdown, in-text citations render as plain `Author 2026` links immediately after the supported words and before terminal punctuation: `claim [Author 2026](DOI).` The square brackets are markdown link syntax only and must never be visible. If the chat review shows `claim. [Author 2026](DOI)`, a citation-led sentence, a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong. The journal PDF/HTML is the presentation-only exception: `export_review.py` converts those same DOI links to linked superscript numbers after the punctuation and a matching first-citation-order reference list without changing the Markdown.
@@ -111,6 +121,7 @@ Place every citation immediately after the sentence, clause, quotation, figure-c
 0. The review is in the reply, not in a file (unless a file was requested).
 1. Every empirical claim carries a citation; in bullet style, every empirical bullet is cited; in ELI5, citations sit naturally beside the sentence or short claim cluster they support. In chat/Markdown, every author–year link precedes terminal punctuation and no sentence begins with a citation.
 2. In bullet style, headings alone tell the argument; in scientific, popsci, and ELI5 styles, topic sentences and section landings advance one throughline.
+2b. The styled review renders `synthesis.md`: every load-bearing claim traces to a synthesis claim and carries its keys, every rendered claim's contrary evidence appears with it, no styled sentence paraphrases a synthesis line, and no cut claim's evidence is cited as if the claim were still made.
 3. The Abstract (scientific), standfirst (popsci), or TL;DR (bullets/ELI5) has no citations; the Abstract and TL;DR answer the question in the first sentence, and the standfirst states the question and the shape of the answer. The scientific Abstract follows the four-move shape (verdict, supporting evidence with at least one number, contrary evidence weighed, boundary), states its verdict affirmatively, and never inventories the sections one sentence each. The popsci standfirst sets stakes and shape without compressing the whole arc or giving away the turn.
 4. Opposing evidence appears, and is contrasted rather than blended.
 5. A table exists wherever several studies share dimensions.

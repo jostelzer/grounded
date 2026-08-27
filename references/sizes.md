@@ -19,6 +19,7 @@ The **output format** — `inline chat` (default), `journal PDF`, or `slides` �
 | Sections | 3–5 | 6–9 | 10–15 |
 | Evidence units per section | 2–4 | 3–5 | 3–6 |
 | Sources | 10–20 | 30–60 | 70–150 |
+| Synthesis claims | 5–12 | 10–25 | 20–45 |
 | Angles searched | 3–5 | 5–8 | 8–12 + citation chasing |
 | Queries per angle | 1–2 | 2–3 | 3–5 |
 | Full texts read | 2–4 load-bearing | 8–15 | 25+ |

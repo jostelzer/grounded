@@ -25,7 +25,7 @@ There are exactly three output formats. **Inline chat** is the default; **journa
 
 This is not a formatting preference — a markdown file is *worse* for the reader: chat clients cannot preview it, and on the user's machine it opens in a code editor with the formatting stripped, which looks broken. The review is meant to be read in the conversation, where the headings, tables and bold actually render.
 
-Working files are different. `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, and the draft are audit inputs: keep them if you have a filesystem, never present them as the main output, and mention them only if the user might want to audit. If there is no filesystem, hold the ledger in context and carry on.
+Working files are different. `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `synthesis.md`, and the draft are audit inputs: keep them if you have a filesystem, never present them as the main output, and mention them only if the user might want to audit. If there is no filesystem, hold the ledger in context and carry on.
 
 Produce a file **only** when the user asks for one ("save it", "give me a .md", "export to Word"). Then write the file *and* still put the review in the chat.
 
@@ -49,8 +49,9 @@ The slides format is experimental and never offered: it does not appear in the
 format question and is never suggested. It runs only when the user asks for a
 **deck**, **slides**, a **presentation**, a **slide deck**, or a **journal club
 deck** in their own words. Then **the deck is the deliverable**: run
-the complete evidence pipeline, write the synthesis as an internal working
-draft, and deliver in chat the sharpened question, a 1–3 sentence plain answer,
+the complete evidence pipeline through the `synthesis.md` claims ledger
+(`references/synthesis-guide.md`), storyboard from those claims, and deliver in
+chat the sharpened question, a 1–3 sentence plain answer,
 and the deck PDF — not a full styled review, unless the user explicitly asks
 for both. Never infer the slides format silently. Read `references/deck-guide.md` before
 storyboarding. Turn the verified synthesis into the selected style's
@@ -128,6 +129,7 @@ Figure and slide creation happens only after the evidence has been searched, rea
 | ELI5 narrative prose length | 350–700 words | 900–1,600 words | 2,000–4,000 words |
 | Sections | 3–5 | 6–9 | 10–15 |
 | Sources | 10–20 | 30–60 | 70–150 |
+| Synthesis claims | 5–12 | 10–25 | 20–45 |
 | Searches | 1–2 queries per angle, 3–5 angles | 2–3 per angle, 5–8 angles | 3–5 per angle, 8–12 angles, plus citation chasing |
 | Full texts read | The 2–4 load-bearing papers | 8–15 | 25+ |
 | Tables | 0–1 | 1–2 | 2–4 |
@@ -151,7 +153,7 @@ python3 -c "import urllib.request;print(urllib.request.urlopen('https://api.cros
 
 ## The pipeline
 
-Work through every step; the order matters because the later steps depend on the ledger built in the early ones. Keep all working files in one folder for the review (`<topic-slug>/`): `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `fulltext-manifest.json`, `review_draft.md`, and `review.md`, plus requested media. PDF releases add `release-manifest.json` and one authoritative QA render directory. See `references/quality-gates.md` for the machine-auditable contracts.
+Work through every step; the order matters because the later steps depend on the ledger built in the early ones. Keep all working files in one folder for the review (`<topic-slug>/`): `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `fulltext-manifest.json`, `synthesis.md`, `review_draft.md`, and `review.md`, plus requested media. PDF releases add `release-manifest.json` and one authoritative QA render directory. See `references/quality-gates.md` for the machine-auditable contracts.
 
 ### 1. Scope the question into angles
 
@@ -171,9 +173,13 @@ Read every abstract you might cite. Pull load-bearing full texts into `fulltexts
 
 Run `scripts/verify_citations.py --ledger sources.json`. It uses the Crossref record for both bibliographic verification (DOI, title, year, and article type) and integrity screening. Crossref integrates publisher updates and Retraction Watch records; the verifier inspects both `updated-by` on a flagged original and `update-to` on a notice. A mismatch, unavailable Crossref record, retraction, withdrawal, removal, or expression-of-concern signal is a hard failure and the source is removed or fixed before writing. A corrigendum/erratum does not block; it is saved as `correction_notices` and the reference entry gains a linked "Correction:" note — check the correction does not affect the result you cite. That note is the correction's only appearance: the notice is never cited in the body, never narrated in the running text, and never listed as its own source. OpenAlex is not part of citation verification.
 
-### 5. Write the draft
+### 5. Distill the synthesis
 
-Write the draft citing with ledger keys: `claim [@Kuyken2022effectiveness].`, or `claim [@a; @b].` for several. The citation key precedes sentence-ending punctuation; never write `claim. [@key]`. Follow the shared rules in `references/writing-guide.md` and the selected style's fixed layout in its own file (`references/style-scientific.md`, `style-popsci.md`, `style-bullets.md`, `style-eli5.md`) — read the style file before drafting. The default scientific review uses a citation-free four-move Abstract, an Introduction that poses one throughline, claim-headed sections of topic-sentence paragraphs that advance it, and a Conclusion that names the cross-cutting pattern. Popsci uses a magazine feature architecture told along one narrative spine — honest headline, citation-free standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, and a kicker — with a reporter's stance and a per-section numbers budget, per `references/style-popsci.md`. Explicit bullet style uses a citation-free TL;DR, punchline headings, and cited bullet bodies. ELI5 uses a citation-free TL;DR, then climbs a staircase: a familiar starting point, step-by-step sections that each add one idea built only on earlier steps (headings are often the reader's own next question), the contrary evidence as its own step, and a hand-back ending the reader could repeat to a friend; bullet bodies are wrong unless the user explicitly requested bullets too. In every style, order the argument deliberately, contrast opposing evidence, use a table wherever several studies share dimensions, report numbers with intervals, cite primary studies for findings, and use reviews for consensus.
+Before any styled prose, distill the verified evidence into `synthesis.md` — the style-neutral claims ledger specified in `references/synthesis-guide.md` (read it first): a verdict paragraph, the throughline, every load-bearing claim as an atomic calibrated sentence with its strength, exact numbers, supporting keys, contrary evidence, boundary, and dependencies, then the cross-claim patterns and open questions. Write it from `sources.json` and `notes.md` only. The synthesis is the single source that the styled review, the figures, the deck storyboard, and the claim audit all draw from; it is a working file, never delivered and never quoted verbatim. If drafting later reveals a wrong or missing claim, fix the synthesis first, then the draft.
+
+### 5b. Write the draft
+
+Compose the draft **from the synthesis claims** — arranged and told in the selected style, never paraphrased line by line — citing with ledger keys: `claim [@Kuyken2022effectiveness].`, or `claim [@a; @b].` for several. The citation key precedes sentence-ending punctuation; never write `claim. [@key]`. Follow the shared rules in `references/writing-guide.md` and the selected style's fixed layout in its own file (`references/style-scientific.md`, `style-popsci.md`, `style-bullets.md`, `style-eli5.md`) — read the style file before drafting. The default scientific review uses a citation-free four-move Abstract, an Introduction that poses one throughline, claim-headed sections of topic-sentence paragraphs that advance it, and a Conclusion that names the cross-cutting pattern. Popsci uses a magazine feature architecture told along one narrative spine — honest headline, citation-free standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, and a kicker — with a reporter's stance and a per-section numbers budget, per `references/style-popsci.md`. Explicit bullet style uses a citation-free TL;DR, punchline headings, and cited bullet bodies. ELI5 uses a citation-free TL;DR, then climbs a staircase: a familiar starting point, step-by-step sections that each add one idea built only on earlier steps (headings are often the reader's own next question), the contrary evidence as its own step, and a hand-back ending the reader could repeat to a friend; bullet bodies are wrong unless the user explicitly requested bullets too. In every style, order the argument deliberately, contrast opposing evidence, use a table wherever several studies share dimensions, report numbers with intervals, cite primary studies for findings, and use reviews for consensus.
 
 ### 6. Format and check
 
@@ -203,7 +209,7 @@ Verdicts you write must carry quotes copied verbatim from the packet passages; `
 
 ### 7. Create the figures or slides
 
-Skip this step for inline chat. For the journal PDF format the figures are mandatory (small 1, medium up to 3, large up to 5); for slides, build the deck. Follow the figure references and build visuals only from the final verified synthesis. Save the figure spec and generated prompt; include directed `relationships` and local `abbreviations` where applicable. After generation, run `scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure-inspection.json`. It gates exact OCR text, relationship direction, abbreviations, prohibited effects, collisions, and effective PDF label size. Make one targeted repair; use a deterministic vector figure when text-heavy ImageGen output still cannot pass. Give every figure a stable ID, introduce it before the artwork, and end its style-matched caption with 2–5 verified citations.
+Skip this step for inline chat. For the journal PDF format the figures are mandatory (small 1, medium up to 3, large up to 5); for slides, build the deck. Follow the figure references and build visuals only from the claim and pattern entries in `synthesis.md`, never from a fresh reading of the papers. Save the figure spec and generated prompt; include directed `relationships` and local `abbreviations` where applicable. After generation, run `scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure-inspection.json`. It gates exact OCR text, relationship direction, abbreviations, prohibited effects, collisions, and effective PDF label size. Make one targeted repair; use a deterministic vector figure when text-heavy ImageGen output still cannot pass. Give every figure a stable ID, introduce it before the artwork, and end its style-matched caption with 2–5 verified citations.
 
 For the slides format, follow `references/deck-guide.md`. Use the same verified synthesis
 and figure pipeline, but set `render_context: slide` for every content image and
@@ -255,6 +261,7 @@ not be generated.
 - `references/sizes.md` — what small, medium, and large mean for scope, search depth, structure, and effort.
 - `references/search-playbook.md` — generating angles, building queries, stopping rules, coverage checks, field notes.
 - `references/evidence-weighing.md` — how to judge and describe the strength of what you read.
+- `references/synthesis-guide.md` — the style-neutral claims ledger (`synthesis.md`) every style, figure, deck, and claim audit renders from: contract, claim rules, per-style arrangement, and the anti-paraphrase rule.
 - `references/writing-guide.md` — the shared writing core: structure invariants, language, term links, length, citing, the quality gate.
 - `references/style-scientific.md`, `references/style-popsci.md`, `references/style-bullets.md`, `references/style-eli5.md` — one guide per writing style: exact layout, narrative rules, and register.
 - `references/citation-rules.md` — keys, styles, in-text conventions, what may and may not be cited.
