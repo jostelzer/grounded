@@ -520,7 +520,7 @@ class PdfExportTests(unittest.TestCase):
         self.assertNotIn('<div class="body cols">', page)
 
     def test_eli5_showcase_exports_as_flowing_prose_not_bullets(self):
-        example_dir = os.path.join(ROOT, "examples")
+        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
         source = os.path.join(example_dir, "eli5-why-clouds-are-white.md")
         with open(source, encoding="utf-8") as stream:
             markdown = stream.read()
@@ -557,7 +557,7 @@ class PdfExportTests(unittest.TestCase):
     def test_running_masthead_paints_on_a_real_continuation_page(self):
         from pypdf import PdfReader
 
-        example_dir = os.path.join(ROOT, "examples")
+        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
         with tempfile.TemporaryDirectory() as tmp:
             for filename in (
                     "prose-small-blue-light-sleep.md",
@@ -612,7 +612,7 @@ class PdfExportTests(unittest.TestCase):
             ("prose-image-mrna-vaccines.md", 6),
             ("prose-large-mediterranean-diet.md", 10),
         )
-        example_dir = os.path.join(ROOT, "examples")
+        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
         with tempfile.TemporaryDirectory() as tmp:
             for filename, expected_pages in examples:
                 source = os.path.join(example_dir, filename)
@@ -644,7 +644,7 @@ class PdfExportTests(unittest.TestCase):
     def test_structured_table_uses_space_below_figure_three_safely(self):
         from pypdf import PdfReader
 
-        example_dir = os.path.join(ROOT, "examples")
+        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
         source = os.path.join(example_dir, "large-mediterranean-diet.md")
         with open(source, encoding="utf-8") as stream:
             markdown = stream.read()
