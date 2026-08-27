@@ -1,0 +1,873 @@
+{
+ "benchmark": "claim-verification-creatine-v1",
+ "description": "Gold labels for claim-level verification. 37 claim-citation pairs from a 43-source review of creatine and cognition, human-adjudicated against fetched evidence and machine-checked (quotes verified verbatim; numeric anchors enforced). Use with: verify_claims.py score --audit <candidate> --gold this-file.",
+ "created": "2026-08-27",
+ "claims": [
+  {
+   "adjudications": [
+    {
+     "doi": "10.1152/ajpregu.1999.277.3.r698",
+     "note": "",
+     "quote": [
+      "Oral consumption of 4 x 5 g creatine-monohydrate/day for 4 wk yielded a statistically significant increase (8.7% corresponding to 0.6 mM, P < 0.001) of the mean concentration of total creatine (tCr) when averaged across brain regions and subjects (n = 6)",
+      "The data revealed considerable intersubject variability (3.5-13.3%)"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In six healthy adults taking 20 g/day for four weeks, proton magnetic resonance spectroscopy detected a mean cerebral increase of 8.7%, with individual responses from 3.5% to 13.3% and marked regional variation.",
+   "dois": [
+    "10.1152/ajpregu.1999.277.3.r698"
+   ],
+   "id": "C001",
+   "location": "paragraph 1, sentence 2",
+   "numbers": [
+    "20",
+    "8.7%",
+    "3.5%",
+    "13.3%"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1016/j.bbr.2024.114982",
+     "note": "supports 'modest'; region-dependence not stated in this abstract",
+     "quote": [
+      "research has shown that creatine supplementation can induce increased brain concentrations of creatine, albeit to a limited extent"
+     ],
+     "tier": "abstract",
+     "verdict": "partial"
+    },
+    {
+     "doi": "10.1080/19390211.2026.2616440",
+     "note": "supports modest/inconsistent; region-dependence not explicit at abstract tier",
+     "quote": [
+      "There is evidence that CrS increases brain creatine, but this response may be dose and/or duration dependent"
+     ],
+     "tier": "abstract",
+     "verdict": "partial"
+    }
+   ],
+   "claim": "Reviews of later imaging studies reach the same general conclusion: brain creatine is modifiable, but increases are modest, region dependent, and inconsistent across protocols,.",
+   "dois": [
+    "10.1016/j.bbr.2024.114982",
+    "10.1080/19390211.2026.2616440"
+   ],
+   "id": "C002",
+   "location": "paragraph 1, sentence 3",
+   "numbers": []
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1017/s0007114513003802",
+     "note": "",
+     "quote": [
+      "vegetarians and omnivores had comparable brain total Cr content"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "Vegetarians consume little preformed creatine and commonly have lower muscle stores, yet a spectroscopy comparison found similar posterior-cingulate brain creatine in vegetarians and omnivores despite a large difference in dietary intake.",
+   "dois": [
+    "10.1017/s0007114513003802"
+   ],
+   "id": "C003",
+   "location": "paragraph 2, sentence 2",
+   "numbers": []
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1139/apnm-2016-0406",
+     "note": "",
+     "quote": [
+      "The sample comprised 67 healthy participants aged 10 to 12 years",
+      "a 7-day creatine supplementation protocol did not elicit improvements in brain creatine content or cognitive performance in healthy youth"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A seven-day randomized study in 67 children likewise found neither increased creatine in three brain regions nor better verbal learning or executive performance.",
+   "dois": [
+    "10.1139/apnm-2016-0406"
+   ],
+   "id": "C004",
+   "location": "paragraph 2, sentence 3",
+   "numbers": [
+    "67"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1523/jneurosci.3113-14.2015",
+     "note": "",
+     "quote": [
+      "which increased brain creatine on average by 9.2%",
+      "Hypoxia-induced decrements in cognitive performance, specifically attentional capacity, were restored when participants were creatine supplemented"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "During hypoxia, seven days of creatine raised brain creatine by 9.2% and restored attention that deteriorated under 10% oxygen.",
+   "dois": [
+    "10.1523/jneurosci.3113-14.2015"
+   ],
+   "id": "C005",
+   "location": "paragraph 3, sentence 2",
+   "numbers": [
+    "9.2%",
+    "10%"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1038/s41598-024-54249-9",
+     "note": "",
+     "quote": [
+      "creatine induces changes in PCr/Pi, ATP, tCr/tNAA, prevents a drop in pH level, and improves cognitive performance and processing speed"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "During overnight sleep deprivation, acute high-dose creatine altered cerebral high-energy-phosphate measures while attenuating deterioration on selected tasks.",
+   "dois": [
+    "10.1038/s41598-024-54249-9"
+   ],
+   "id": "C006",
+   "location": "paragraph 3, sentence 3",
+   "numbers": []
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1186/s12916-023-03146-5",
+     "note": "",
+     "quote": [
+      "it bordered on significance for BDS (p = 0.067",
+      "was 0.09 for RAPM and 0.17 for BDS",
+      "we included eight exploratory cognitive tests",
+      "There was no indication that creatine improved the performance of our exploratory cognitive tasks"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "The backward-digit effect was small and uncertain (Cohen's d=0.17; p=0.067), matrix reasoning changed by d=0.09, and eight exploratory tasks showed no benefit.",
+   "dois": [
+    "10.1186/s12916-023-03146-5"
+   ],
+   "id": "C007",
+   "location": "paragraph 4, sentence 3",
+   "numbers": [
+    "0.17",
+    "0.067",
+    "0.09"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1016/j.physbeh.2008.05.009",
+     "note": "",
+     "quote": [
+      "Twenty-two subjects (21+/-2 yr) ingested creatine (0.03 g/kg/day) or placebo for 6 weeks",
+      "There were no significant effects of group, no significant effects of time, and no significant group by time interactions for RT, CS, CSD, LRS, MP, RM, and MR"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A six-week trial in 22 rested young adults found no group difference across seven tests of reaction time, substitution, reasoning, mathematical processing, and memory.",
+   "dois": [
+    "10.1016/j.physbeh.2008.05.009"
+   ],
+   "id": "C008",
+   "location": "paragraph 5, sentence 1",
+   "numbers": [
+    "22"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.3390/brainsci13091276",
+     "note": "oxygenation showed only a nonsignificant trend (p = 0.06), consistent with the claim",
+     "quote": [
+      "thirty (M = 11, F = 19) participants were evenly randomized to receive supplementation with Cr (CR10:10 g/day or CR20:20 g/day) or a placebo (PLA:10 g/day) for 6 weeks",
+      "Creatine (independent of dosage) had no significant effect on the measures of cognitive performance"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A six-week dose-response trial in 30 healthy young adults found no improvement with either 10 or 20 g/day in memory, attention, processing speed, or prefrontal oxygenation.",
+   "dois": [
+    "10.3390/brainsci13091276"
+   ],
+   "id": "C009",
+   "location": "paragraph 5, sentence 2",
+   "numbers": [
+    "30",
+    "10",
+    "20"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1016/s0168-0102(02)00007-x",
+     "note": "",
+     "quote": [
+      "dietary supplement of creatine (8 g/day for 5 days) reduces mental fatigue when subjects repeatedly perform a simple mathematical calculation",
+      "task-evoked increase of cerebral oxygenated hemoglobin in the brains of subjects measured by near infrared spectroscopy was significantly reduced"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "Five days of 8 g/day reduced reported mental fatigue during repeated calculation and changed task-evoked cerebral oxygenation.",
+   "dois": [
+    "10.1016/s0168-0102(02)00007-x"
+   ],
+   "id": "C010",
+   "location": "paragraph 6, sentence 1",
+   "numbers": [
+    "8"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.3390/nu17243831",
+     "note": "",
+     "quote": [
+      "14 physically active men ingested 20 g/day of CrM or placebo (PL) for 7 days",
+      "improved cognitive performance on the DCT (d = 0.77; p = 0.013)",
+      "cognitive function was evaluated using the digit cancellation test (DCT)"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "Seven days of 20 g/day improved one digit-cancellation measure in a crossover study of 14 active men, but it also tested sleep, exercise, soreness, and recovery outcomes.",
+   "dois": [
+    "10.3390/nu17243831"
+   ],
+   "id": "C011",
+   "location": "paragraph 6, sentence 2",
+   "numbers": [
+    "20",
+    "14"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.3390/nu16060766",
+     "note": "",
+     "quote": [
+      "twelve resistance-trained male athletes were supplemented with 7 days of creatine nitrate (5 g/day), caffeine (400 mg/day), and a combination of creatine nitrate and caffeine",
+      "Creatine nitrate and caffeine that were co-ingested significantly enhanced cognitive function, as indicated by improved scores in the Stroop Word–Color Interference test (p = 0.04; effect size = 0.163)"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A 12-person study reported better Stroop interference only when creatine nitrate was co-administered with 400 mg caffeine, so the effect cannot be attributed to creatine.",
+   "dois": [
+    "10.3390/nu16060766"
+   ],
+   "id": "C012",
+   "location": "paragraph 6, sentence 3",
+   "numbers": [
+    "12",
+    "400"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1093/nutrit/nuac064",
+     "note": "NOTE: these are the original estimates; the authors' published reply (10.1093/nutrit/nuac111) corrected the overall effect to SMD 0.19 (ns) after fixing double counting",
+     "quote": [
+      "(standard mean difference [SMD] = 0.29, 95%CI, 0.04–0.53; I2 = 66%; P = 0.02)"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "The 2023 meta-analysis estimated an overall standardized mean difference of 0.29, roughly three-tenths of a standard deviation, but statistical heterogeneity was substantial at 66%.",
+   "dois": [
+    "10.1093/nutrit/nuac064"
+   ],
+   "id": "C013",
+   "location": "paragraph 7, sentence 1",
+   "numbers": [
+    "0.29",
+    "66%"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.3389/fnut.2024.1424972",
+     "note": "",
+     "quote": [
+      "Creatine supplementation showed significant positive effects on memory (SMD = 0.31, 95% CI: 0.18–0.44"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "The broad 2024 meta-analysis produced a similar estimate of 0.31 (95% confidence interval 0.18-0.44).",
+   "dois": [
+    "10.3389/fnut.2024.1424972"
+   ],
+   "id": "C014",
+   "location": "paragraph 7, sentence 2",
+   "numbers": [
+    "0.31",
+    "95%",
+    "0.18",
+    "0.44"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1093/nutrit/nuac064",
+     "note": "same correction caveat as C013: superseded by the authors' reply",
+     "quote": [
+      "Subgroup analyses revealed a significant improvement in memory in older adults (66–76 years) (SMD = 0.88; 95%CI, 0.22–1.55; I2 = 83%; P = 0.009) compared with their younger counterparts (11–31 years) (SMD = 0.03; 95%CI, −0.14 to 0.20; I2 = 0%; P = 0.72)"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "The memory meta-analysis reported no benefit in younger adults (standardized mean difference 0.03, 95% confidence interval -0.14 to 0.20) but a larger effect among adults aged 66-76 (standardized mean difference 0.88, 95% confidence interval 0.22-1.55); that subgroup had 83% statistical heterogeneity and derived from few studies.",
+   "dois": [
+    "10.1093/nutrit/nuac064"
+   ],
+   "id": "C015",
+   "location": "paragraph 7, sentence 3",
+   "numbers": [
+    "0.03",
+    "95%",
+    "0.14",
+    "0.20",
+    "66",
+    "76",
+    "0.88",
+    "0.22",
+    "1.55",
+    "83%"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1016/j.exger.2018.04.013",
+     "note": "",
+     "quote": [
+      "Six studies (281 individuals) met our inclusion criteria",
+      "there was evidence that short term memory and intelligence/reasoning may be improved by creatine administration"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A 2018 review found only six randomized trials with 281 healthy participants and judged short-term memory and reasoning potentially improved, while other domains were conflicting.",
+   "dois": [
+    "10.1016/j.exger.2018.04.013"
+   ],
+   "id": "C016",
+   "location": "paragraph 8, sentence 1",
+   "numbers": [
+    "281"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.2903/j.efsa.2024.9100",
+     "note": "",
+     "quote": [
+      "The Panel concludes that a cause-and-effect relationship has not been established between creatine supplementation and an improvement in cognitive function in one or more of its domains"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "The European Food Safety Authority's formal appraisal concluded that a causal relationship with improved cognitive function had not been established.",
+   "dois": [
+    "10.2903/j.efsa.2024.9100"
+   ],
+   "id": "C017",
+   "location": "paragraph 8, sentence 2",
+   "numbers": []
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1017/s0007114510004733",
+     "note": "",
+     "quote": [
+      "subjects consumed either a placebo or 20 g of creatine supplement for 5 d. Creatine supplementation did not influence measures of verbal fluency and vigilance. However, in vegetarians rather than in those who consume meat, creatine supplementation resulted in better memory"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 128 young women, five days of 20 g/day improved memory among vegetarians but not omnivores, although vigilance and verbal fluency were unchanged in both groups.",
+   "dois": [
+    "10.1017/s0007114510004733"
+   ],
+   "id": "C018",
+   "location": "paragraph 9, sentence 1",
+   "numbers": [
+    "128",
+    "20"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1098/rspb.2003.2492",
+     "note": "",
+     "quote": [
+      "Creatine supplementation had a significant positive effect (p < 0.0001) on both working memory (backward digit span) and intelligence (Raven's Advanced Progressive Matrices)"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "The 2003 trial deliberately enrolled vegetarians and found better working memory and reasoning after supplementation.",
+   "dois": [
+    "10.1098/rspb.2003.2492"
+   ],
+   "id": "C019",
+   "location": "paragraph 9, sentence 2",
+   "numbers": []
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1080/13825580600788100",
+     "note": "claim's n=32 is the sum of the reported groups (15+17); dose 20 g/day = 5 g four times daily [numeric anchor missing]",
+     "quote": [
+      "Group 1 (n = 15) were given 5 g four times a day of placebo for 1 week, followed by the same dosage of creatine for the second week. Group 2 (n = 17) were given placebo both weeks",
+      "Results showed a significant effect of creatine supplementation on all tasks except backward number recall"
+     ],
+     "tier": "abstract",
+     "verdict": "partial"
+    }
+   ],
+   "claim": "An early controlled study assigned 32 older adults to placebo or a placebo-to-creatine sequence and reported improvement on most number-generation, recall, and long-term-memory tasks after one week at 20 g/day.",
+   "dois": [
+    "10.1080/13825580600788100"
+   ],
+   "id": "C020",
+   "location": "paragraph 10, sentence 1",
+   "numbers": [
+    "32",
+    "20"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1371/journal.pone.0076301",
+     "note": "",
+     "quote": [
+      "after 12 weeks (POST-12) and after 24 weeks (POST-24) of creatine supplementation and/or strength training",
+      "Neither strength training nor creatine supplementation altered any parameter of cognitive performance"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "Fifty-six older women were randomized across creatine, placebo, resistance training plus creatine, and training plus placebo for 24 weeks; creatine did not improve memory, selective attention, inhibitory control, or any other cognitive parameter.",
+   "dois": [
+    "10.1371/journal.pone.0076301"
+   ],
+   "id": "C021",
+   "location": "paragraph 10, sentence 2",
+   "numbers": [
+    "24"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1007/s40520-021-01857-4",
+     "note": "",
+     "quote": [
+      "NHANES 2001-2002 round included a total of 1340 older adults",
+      "A bivariate model revealed a significant positive correlation between DSS scores and creatine intake across the whole sample (τb = 0.043; P = 0.02)"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 1,340 US adults aged at least 60 years, higher estimated dietary creatine was weakly associated with better digit-symbol performance after adjustment.",
+   "dois": [
+    "10.1007/s40520-021-01857-4"
+   ],
+   "id": "C022",
+   "location": "paragraph 11, sentence 1",
+   "numbers": [
+    "1340",
+    "60"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1177/02601060221102273",
+     "note": "",
+     "quote": [
+      "Forty-two participants (32 females, 10 males; > 60 yrs of age)",
+      "There was a significant correlation between the forward Corsi ( r = 0.703, P < 0.001), reverse Corsi ( r = 0.715, P < 0.001)"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 42 older adults, dietary creatine correlated strongly with forward and reverse visuospatial span.",
+   "dois": [
+    "10.1177/02601060221102273"
+   ],
+   "id": "C023",
+   "location": "paragraph 11, sentence 2",
+   "numbers": [
+    "42"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1093/nutrit/nuaf135",
+     "note": "",
+     "quote": [
+      "Six studies were included, with a total of 1542 participants (55.7% female)",
+      "Two studies were double-blind interventions in which participants were supplemented with creatine monohydrate",
+      "none of the studies that examined global cognition using the Mini Mental State Examination reported an association46,48 or change45 with creatine supplementation"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "The 2026 aging review identified six studies and 1,542 participants, but only two were supplementation interventions, the intervention results conflicted, and no study showed better global cognition.",
+   "dois": [
+    "10.1093/nutrit/nuaf135"
+   ],
+   "id": "C024",
+   "location": "paragraph 11, sentence 3",
+   "numbers": [
+    "1542"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1007/s00213-005-0269-z",
+     "note": "n=19 is the sum of the reported groups (creatine n=10, placebo n=9)",
+     "quote": [
+      "They took 5 g of creatine monohydrate or a placebo, dependent on their group, four times a time a day for 7 days",
+      "At 24 h, the creatine group demonstrated significantly less change in performance from 0 h (delta) in RMG, choice reaction time, balance and mood state"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 19 volunteers undergoing 24 hours of sleep deprivation plus intermittent exercise, seven days of 20 g/day creatine attenuated deterioration in random-movement generation, choice reaction time, balance, and mood.",
+   "dois": [
+    "10.1007/s00213-005-0269-z"
+   ],
+   "id": "C025",
+   "location": "paragraph 12, sentence 1",
+   "numbers": [
+    "19",
+    "24",
+    "20"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1016/j.physbeh.2006.08.024",
+     "note": "",
+     "quote": [
+      "the creatine group performed significantly (p < 0.05) better than the placebo group on the central executive task but only at 36 h"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A related 36-hour protocol found better performance only on a complex central-executive task at 36 hours.",
+   "dois": [
+    "10.1016/j.physbeh.2006.08.024"
+   ],
+   "id": "C026",
+   "location": "paragraph 12, sentence 2",
+   "numbers": [
+    "36"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1038/s41598-024-54249-9",
+     "note": "",
+     "quote": [
+      "single dose creatine (0.35 g/kg) or placebo during sub-total 21 h sleep deprivation",
+      "All 15 subjects completed the study"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 15 adults kept awake for 21 hours, a single 0.35 g/kg dose changed brain high-energy-phosphate measures and attenuated worsening on several cognitive scores and processing times.",
+   "dois": [
+    "10.1038/s41598-024-54249-9"
+   ],
+   "id": "C027",
+   "location": "paragraph 13, sentence 1",
+   "numbers": [
+    "15",
+    "21",
+    "0.35"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.3390/nu18081192",
+     "note": "",
+     "quote": [
+      "subjects received either 0.2 g/kg creatine or 0.2 g/kg placebo orally at 9:00 pm",
+      "there is still an improvement of up to 12%"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 29 adults, a lower single dose of 0.2 g/kg reduced deterioration on selected tasks by up to about 12%.",
+   "dois": [
+    "10.3390/nu18081192"
+   ],
+   "id": "C028",
+   "location": "paragraph 13, sentence 2",
+   "numbers": [
+    "29",
+    "0.2",
+    "12%"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1249/mss.0000000000002122",
+     "note": "",
+     "quote": [
+      "14 healthy participants (4 females, 10 males",
+      "after a 7-d creatine supplementation (CR; 20 g",
+      "Accuracy on the Stroop task was higher in CR compared with PLAC (+4.9%; P = 0.026)",
+      "Handgrip strength endurance was higher in CR compared with PLAC (P = 0.022)",
+      "MF impaired visuomotor response time (+4.4%; P = 0.022) and Flanker accuracy (-5.0%; P = 0.009) in both conditions"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In a 14-person crossover study, seven days of 20 g/day improved prolonged Stroop accuracy and handgrip endurance but did not prevent fatigue-related impairment in a shorter flanker or sport-specific visuomotor task.",
+   "dois": [
+    "10.1249/mss.0000000000002122"
+   ],
+   "id": "C029",
+   "location": "paragraph 13, sentence 3",
+   "numbers": [
+    "14",
+    "20"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1016/j.jad.2016.11.029",
+     "note": "",
+     "quote": [
+      "Eighteen (N=18) patients with bipolar depression",
+      "There was a statistically significant difference between the treatment groups of the change on the total scores after 6 weeks in the verbal fluency test, with improvement in the group receiving adjunctive treatment with creatine"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A six-week adjunctive trial in 18 patients with bipolar depression found improved verbal fluency but no difference on the other neuropsychological tests.",
+   "dois": [
+    "10.1016/j.jad.2016.11.029"
+   ],
+   "id": "C030",
+   "location": "paragraph 14, sentence 1",
+   "numbers": [
+    "18"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.4088/jcp.v68n0609",
+     "note": "",
+     "quote": [
+      "Twelve schizophrenia patients (DSM-IV criteria) were enrolled into a treatment study with creatine or placebo, and each treatment was administered for 3 months (dosage, 3-5 grams per day)",
+      "Creatine treatment was not superior to placebo in improving the scores of PANSS, CGI, or the neurocognitive measures administered"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "A 12-patient crossover study in schizophrenia found no improvement in symptoms or its cognitive battery with 3-5 g/day.",
+   "dois": [
+    "10.4088/jcp.v68n0609"
+   ],
+   "id": "C031",
+   "location": "paragraph 14, sentence 2",
+   "numbers": [
+    "12",
+    "3",
+    "5"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1002/acr.22020",
+     "note": "",
+     "quote": [
+      "16-week, randomized, double-blind, placebo-controlled, parallel-group trial was conducted",
+      "the creatine group presented higher muscle phosphorylcreatine content when compared with the placebo group (+80.3% versus -2.7%; P = 0.04)",
+      "no general changes were observed in aerobic conditioning, pain, cognitive function, quality of sleep, and quality of life"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In fibromyalgia, a 16-week randomized trial improved muscle phosphocreatine and strength but not cognitive function.",
+   "dois": [
+    "10.1002/acr.22020"
+   ],
+   "id": "C032",
+   "location": "paragraph 14, sentence 3",
+   "numbers": [
+    "16"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1002/trc2.70101",
+     "note": "",
+     "quote": [
+      "we investigated the feasibility of 20 g/day CrM for 8 weeks in 20 patients with AD",
+      "brain tCr increased by 11% (p < .001). Cognition improved on global (p = .02) and fluid (p = .004) composites"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In a single-arm pilot, 20 patients received 20 g/day for eight weeks; brain total creatine rose 11%, and several cognitive scores improved from baseline.",
+   "dois": [
+    "10.1002/trc2.70101"
+   ],
+   "id": "C033",
+   "location": "paragraph 15, sentence 1",
+   "numbers": [
+    "20",
+    "11%"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1001/jama.2015.120",
+     "note": "",
+     "quote": [
+      "included 1741 men and women with early (within 5 years of diagnosis) and treated (receiving dopaminergic therapy) Parkinson disease",
+      "The trial was terminated early for futility",
+      "The median follow-up time was 4 years"
+     ],
+     "tier": "abstract",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 1,741 patients with early treated Parkinson disease, 10 g/day creatine was stopped for futility after a median four years.",
+   "dois": [
+    "10.1001/jama.2015.120"
+   ],
+   "id": "C034",
+   "location": "paragraph 15, sentence 2",
+   "numbers": [
+    "1741",
+    "10"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1212/wnl.0000000000004209",
+     "note": "",
+     "quote": [
+      "placebo-controlled study of up to 40 g daily of creatine monohydrate",
+      "553 participants were randomized to creatine (275) or placebo (278)",
+      "Adverse events, mainly gastrointestinal, were significantly more common in participants on creatine"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In 553 patients with early Huntington disease, up to 40 g/day failed to slow functional decline and caused more gastrointestinal adverse events.",
+   "dois": [
+    "10.1212/wnl.0000000000004209"
+   ],
+   "id": "C035",
+   "location": "paragraph 15, sentence 3",
+   "numbers": [
+    "553",
+    "40"
+   ]
+  },
+  {
+   "adjudications": [
+    {
+     "doi": "10.1186/s12916-023-03146-5",
+     "note": "",
+     "quote": [
+      "Side effects were reported significantly more often for creatine than for placebo supplementation (p = 0.002, RR = 4.25)",
+      "No patients discontinued the study due to an adverse event"
+     ],
+     "tier": "fulltext",
+     "verdict": "supported"
+    }
+   ],
+   "claim": "In the 2023 healthy-adult crossover trial, negative side effects were more frequent during creatine than placebo (risk ratio 4.25), although no participant discontinued because of them.",
+   "dois": [
+    "10.1186/s12916-023-03146-5"
+   ],
+   "id": "C036",
+   "location": "paragraph 16, sentence 1",
+   "numbers": [
+    "4.25"
+   ]
+  }
+ ]
+}

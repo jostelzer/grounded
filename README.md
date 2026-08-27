@@ -75,6 +75,7 @@ More finished outputs are in [examples/](examples/).
 - **Every citation verified, every time.** Each entry is checked against Crossref — DOI, title, year, article type, and integrity status: retractions, withdrawals, removals, and expressions of concern (via publisher and Retraction Watch metadata), with published corrections noted on the reference. A failure is a hard stop: the source is fixed or removed before writing. No citation is ever recalled from memory.
 - **Evidence-led writing in the style you choose.** The draft is written from the verified ledger with a clear throughline, explicit contrasts, numbers with intervals, and tables where studies line up — then a deterministic validator checks structure, citation placement, and DOI parity before delivery.
 - **Verified visuals.** Journal-PDF figures and slide images are built only from the verified findings, with exact-text QA on every label and value; the PDF and deck exporters are deterministic, browser-free, and fail closed.
+- **Claim-level verification (experimental).** On request, every cited sentence is audited against the source's own text: evidence is fetched tier by tier (full text where available, abstract floor otherwise), and each verdict must carry a verbatim quote that the checker string-matches against the stored evidence — a quote it cannot find is rejected, and a numeric claim needs its number inside the quote. The result is a quote-anchored audit appendix with the evidence tier reported honestly per claim.
 
 ## License
 

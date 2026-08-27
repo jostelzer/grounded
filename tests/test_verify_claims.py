@@ -151,6 +151,46 @@ class QuoteEnforcementTests(unittest.TestCase):
         self.assertIn("supported", rendered)
 
 
+class ScoreTests(unittest.TestCase):
+    def doc(self, verdicts):
+        return {"review": "r.md", "claims": [{
+            "id": cid, "claim": "x", "location": "p", "dois": [doi],
+            "numbers": [],
+            "adjudications": [{"doi": doi, "verdict": v, "quote": "", "note": ""}],
+        } for (cid, doi), v in verdicts.items()]}
+
+    def run_score(self, cand, gold, min_agreement=None):
+        tmp = Path(tempfile.mkdtemp())
+        (tmp / "cand.json").write_text(json.dumps(self.doc(cand)))
+        (tmp / "gold.json").write_text(json.dumps(self.doc(gold)))
+        args = argparse.Namespace(audit=str(tmp / "cand.json"),
+                                  gold=str(tmp / "gold.json"),
+                                  min_agreement=min_agreement)
+        verify_claims.cmd_score(args)
+
+    def test_perfect_agreement_passes_threshold(self):
+        pairs = {("C001", "10.1/a"): "supported", ("C002", "10.1/b"): "partial"}
+        self.run_score(pairs, pairs, min_agreement=100)
+
+    def test_disagreement_fails_threshold(self):
+        gold = {("C001", "10.1/a"): "supported", ("C002", "10.1/b"): "partial"}
+        cand = {("C001", "10.1/a"): "supported", ("C002", "10.1/b"): "supported"}
+        with self.assertRaises(SystemExit):
+            self.run_score(cand, gold, min_agreement=90)
+
+    def test_no_overlap_errors(self):
+        with self.assertRaises(SystemExit):
+            self.run_score({("C009", "10.9/z"): "supported"},
+                           {("C001", "10.1/a"): "supported"})
+
+
+class SpelledNumberTests(unittest.TestCase):
+    def test_spelled_numbers_normalize(self):
+        self.assertEqual(verify_claims.spell_to_digits("Twenty-two subjects and forty-two more"),
+                         "22 subjects and 42 more")
+        self.assertEqual(verify_claims.spell_to_digits("Fifteen healthy adults"), "15 healthy adults")
+
+
 class PassageSelectionTests(unittest.TestCase):
     def test_windows_anchor_on_numbers(self):
         text = ("Filler. " * 200) + "The increase was 8.7% overall. " + ("More filler. " * 200)

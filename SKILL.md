@@ -185,6 +185,20 @@ Replace the style and size. When the user explicitly named the tier, add `--stri
 
 Keep the validated author–year markdown as the review source: chat punctuation follows the citation link. If journal PDF/HTML is requested, `export_review.py` performs the presentation-only conversion to DOI-linked superscript numbers, moves the punctuation before those raised numbers, orders the References section by first citation, closes whitespace so each number sits directly after its supported claim or quotation, and rejects sentence-initial citations. Do not run `format_references.py --style nature` as a substitute: that would also change the chat review and bypass the journal placement gate.
 
+### 6b. Claim audit (experimental; on request or when checking a draft)
+
+When the user asks for a claim-level audit, asks to check a draft's claims against the literature, or asks for a review with a verified-claims appendix, run the quote-anchored audit after the writing gate. Follow the rubric in `references/claim-verification.md`:
+
+```bash
+python3 scripts/verify_claims.py extract --review review.md --audit claims_audit.json
+python3 scripts/verify_claims.py fetch   --audit claims_audit.json --evidence evidence/
+python3 scripts/verify_claims.py packets --audit claims_audit.json --evidence evidence/
+# adjudicate each packet: write verdict + verbatim quote(s) into claims_audit.json
+python3 scripts/verify_claims.py check   --audit claims_audit.json --evidence evidence/ --appendix claims_appendix.md
+```
+
+Verdicts you write must carry quotes copied verbatim from the packet passages; `check` rejects any quote it cannot string-match against the stored evidence and downgrades the verdict — never argue with a downgrade, fix the quote or accept the lower verdict. A `contradicted` verdict is a hard stop: correct the review sentence, not the audit. Report the evidence-tier split honestly (full text vs abstract) whenever you deliver an audit; a claim verified only at abstract level is stated as exactly that.
+
 ### 7. Create the figures or slides
 
 Skip this step for inline chat. For the journal PDF format the figures are mandatory (small 1, medium up to 3, large up to 5); for slides, build the deck. Follow the figure references and build visuals only from the final verified synthesis. Save the figure spec and generated prompt; include directed `relationships` and local `abbreviations` where applicable. After generation, run `scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure-inspection.json`. It gates exact OCR text, relationship direction, abbreviations, prohibited effects, collisions, and effective PDF label size. Make one targeted repair; use a deterministic vector figure when text-heavy ImageGen output still cannot pass. Give every figure a stable ID, introduce it before the artwork, and end its style-matched caption with 2–5 verified citations.
@@ -219,6 +233,7 @@ not be generated.
 - `scripts/find_papers.py` and `scripts/audit_search.py` — paginated discovery, structured funnel records, publication screening, two-provider citation chasing, and tier coverage audit.
 - `scripts/verify_citations.py` — Crossref bibliographic and integrity verification (retractions, withdrawals, expressions of concern; corrections recorded) using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` and `scripts/audit_fulltexts.py` — open-access retrieval plus typed authenticity, duplicate, notes, and reading-evidence manifests.
+- `references/claim-verification.md` — the adjudication rubric for claim-level verification: verdict definitions, quote rules, abstention discipline, escalation policy, and a worked example. `evals/claim-benchmark-creatine.json` is the gold-labeled benchmark; measure a judge with `verify_claims.py score`.
 - `scripts/claim_evidence.py` and `scripts/verify_claims.py` (experimental) — claim-level verification: a tiered evidence store (Europe PMC full text → OpenAlex OA locations → abstract union floor, fail-closed on challenge pages) and an extract → fetch → packets → check pipeline that audits whether each cited sentence is supported by its source's own text. Verdicts of supported/partial/contradicted require a verbatim quote that the checker string-matches against the stored evidence (quotes it cannot find are rejected to unverifiable; numeric claims marked supported must carry a claim number inside the quote, with spelled-out numbers normalized). Output is a machine-readable audit plus a rendered appendix; a contradicted claim is a hard stop.
 - `scripts/format_references.py` — resolves `[@key]` citations, normalizes default chat punctuation, and builds the reference list (Vancouver / APA / Nature).
 - `scripts/validate_review.py` — deterministic structure, strict-tier, chat citation placement, citation-reading, DOI parity, text-hygiene, and figure contracts.

@@ -362,6 +362,48 @@ def cmd_check(args):
         sys.exit(1)
 
 
+def cmd_score(args):
+    """Score a candidate audit against a gold-labeled audit (same review).
+
+    Pairs are matched on (claim id, doi). Reports verdict agreement, the
+    confusion between gold and candidate verdicts, and coverage of the gold
+    set. Use this to measure a judge before trusting it at scale."""
+    candidate = json.loads(Path(args.audit).read_text())
+    gold = json.loads(Path(args.gold).read_text())
+
+    def pairs(doc):
+        return {(c["id"], a["doi"]): a.get("verdict", "pending")
+                for c in doc["claims"] for a in c["adjudications"]}
+
+    gold_pairs = pairs(gold)
+    cand_pairs = pairs(candidate)
+    matched = sorted(set(gold_pairs) & set(cand_pairs))
+    if not matched:
+        print("no overlapping (claim id, doi) pairs between audit and gold")
+        sys.exit(1)
+    agree = sum(1 for k in matched if gold_pairs[k] == cand_pairs[k])
+    confusion = {}
+    for k in matched:
+        if gold_pairs[k] != cand_pairs[k]:
+            key = f"gold={gold_pairs[k]} candidate={cand_pairs[k]}"
+            confusion.setdefault(key, []).append(k)
+    print(f"pairs matched: {len(matched)}/{len(gold_pairs)} of gold "
+          f"({len(cand_pairs)} in candidate)")
+    print(f"verdict agreement: {agree}/{len(matched)} "
+          f"({100.0 * agree / len(matched):.1f}%)")
+    for key, ks in sorted(confusion.items()):
+        print(f"  {key}: {len(ks)}  e.g. {ks[0][0]}/{ks[0][1]}")
+    missing = sorted(set(gold_pairs) - set(cand_pairs))
+    if missing:
+        print(f"gold pairs absent from candidate: {len(missing)} "
+              f"(first: {missing[0][0]}/{missing[0][1]})")
+    if args.min_agreement is not None:
+        rate = 100.0 * agree / len(matched)
+        if rate < args.min_agreement:
+            print(f"FAIL: agreement {rate:.1f}% below required {args.min_agreement}%")
+            sys.exit(1)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -393,6 +435,12 @@ def main():
     p.add_argument("--appendix")
     p.add_argument("--strict", action="store_true")
     p.set_defaults(fn=cmd_check)
+
+    p = sub.add_parser("score")
+    p.add_argument("--audit", required=True, help="candidate audit to evaluate")
+    p.add_argument("--gold", required=True, help="gold-labeled audit, e.g. evals/claim-benchmark-creatine.json")
+    p.add_argument("--min-agreement", type=float, help="fail below this agreement percentage")
+    p.set_defaults(fn=cmd_score)
 
     args = ap.parse_args()
     args.fn(args)
