@@ -19,6 +19,7 @@ from grounded_metadata import NAME
 
 
 TOP_LEVEL_FILES = ("SKILL.md", "VERSION", "LICENSE", "requirements-pdf.txt")
+ASSET_FILES = ("grounded-logo-512.png",)
 REFERENCE_FILES = (
     "citation-rules.md",
     "deck-guide.md",
@@ -78,6 +79,7 @@ def _git(root: Path, *arguments: str) -> str:
 
 def _release_files(root: Path) -> list[Path]:
     paths = [root / filename for filename in TOP_LEVEL_FILES]
+    paths.extend(root / "assets" / filename for filename in ASSET_FILES)
     paths.extend(root / "references" / filename for filename in REFERENCE_FILES)
     paths.extend(root / "scripts" / filename for filename in SCRIPT_FILES)
     missing = [str(path.relative_to(root)) for path in paths if not path.is_file()]

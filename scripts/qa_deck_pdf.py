@@ -158,8 +158,8 @@ def inspect_structure(
         failures.extend(_page_text_failures(page_number, document.total_slides, text))
         image_counts.append(_page_image_count(page, reader))
 
-    if image_counts[0] != 0:
-        failures.append("title slide contains a raster image")
+    if image_counts[0] != 1:
+        failures.append("title slide must contain exactly one packaged logo image")
 
     by_key = export_deck._ledger_index(ledger)
     for offset, slide in enumerate(document.slides, 1):
@@ -174,8 +174,10 @@ def inspect_structure(
             failures.append(
                 f"content slide {page_number} is missing evidence chip {slide.evidence}"
             )
-        if image_counts[page_index] < 1:
-            failures.append(f"content slide {page_number} has no raster body image")
+        if image_counts[page_index] < 2:
+            failures.append(
+                f"content slide {page_number} is missing its logo or raster body image"
+            )
         expected = {_expected_doi(by_key[key]) for key in slide.citations}
         missing = sorted(expected - page_uris[page_index])
         if missing:
@@ -188,8 +190,10 @@ def inspect_structure(
     for offset, entries in enumerate(document.reference_pages):
         page_index = first_reference + offset
         page_number = page_index + 1
-        if image_counts[page_index] != 0:
-            failures.append(f"reference slide {page_number} contains a raster image")
+        if image_counts[page_index] != 1:
+            failures.append(
+                f"reference slide {page_number} must contain exactly one packaged logo image"
+            )
         if "REFERENCES" not in page_text[page_index].upper():
             failures.append(f"reference slide {page_number} is missing its heading")
         expected = {_expected_doi(entry) for entry in entries}

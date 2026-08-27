@@ -186,7 +186,7 @@ class DeckHtmlTests(unittest.TestCase):
             )
         self.assertEqual(first, second)
         self.assertEqual(first.count('data-slide-kind="content"'), 4)
-        self.assertEqual(first.count("data:image/png;base64,"), 4)
+        self.assertEqual(first.count("data:image/png;base64,"), 10)
         self.assertNotIn('src="slide-1.png"', first)
         self.assertIn("Verified claim 1 is supported by the evidence.", first)
         self.assertIn("https://doi.org/10.1000/deck1", first)
@@ -255,9 +255,9 @@ class DeckPdfTests(unittest.TestCase):
         self.assertEqual(inspection["pages"], 6)
         self.assertEqual(inspection["content_slides"], 4)
         self.assertEqual(inspection["reference_slides"], 1)
-        self.assertEqual(inspection["image_counts"][0], 0)
-        self.assertTrue(all(count >= 1 for count in inspection["image_counts"][1:5]))
-        self.assertEqual(inspection["image_counts"][5], 0)
+        self.assertEqual(inspection["image_counts"][0], 1)
+        self.assertTrue(all(count >= 2 for count in inspection["image_counts"][1:5]))
+        self.assertEqual(inspection["image_counts"][5], 1)
 
     def test_structural_qa_rejects_missing_per_slide_doi_links(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -89,7 +89,7 @@ spec, and saved prompt. Repeat the figure arguments once per rendered figure;
 omit them for a text-only review.
 
 ```bash
-python3 scripts/export_review.py --in review.md --out review.pdf --pdf --ledger sources.json --release-manifest release-manifest.json --release vX.Y.Z --compiled-date YYYY-MM-DD --figure-spec figure.json --figure-prompt figure.prompt.txt
+python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --release-manifest release-manifest.json --release vX.Y.Z --compiled-date YYYY-MM-DD --figure-spec figure.json --figure-prompt figure.prompt.txt
 python3 scripts/qa_review_pdf.py review.pdf --manifest release-manifest.json --render-dir review-pdf-qa --report pdf-qa.json
 ```
 

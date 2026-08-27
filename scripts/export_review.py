@@ -19,6 +19,7 @@ remains Python-standard-library-only.
 """
 
 import argparse
+import base64
 import datetime
 import html
 import json
@@ -565,12 +566,32 @@ def to_html(md, base_dir=".", columns=2):
 
 ACCENT = "#ff4f1f"
 
-# The earth-ground symbol ⏚ drawn as inline SVG so it can never fall back to a
-# missing-glyph box in a PDF renderer. Accent-colored: it sits in an outline chip.
-GND_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#ff4f1f" '
-           'stroke-width="2.4" stroke-linecap="round" fill="none">'
-           '<path d="M12 3v8"/><path d="M4 11h16"/><path d="M7.5 15.5h9"/>'
-           '<path d="M10.5 20h3"/></g></svg>')
+STYLE_LABELS = {
+    "scientific": "Scientific",
+    "popsci": "Popsci",
+    "bullets": "Bullets",
+    "eli5": "ELI5",
+}
+BRAND_LOGO = Path(__file__).resolve().parents[1] / "assets" / "grounded-logo-512.png"
+
+
+def _normalized_style(style):
+    normalized = "scientific" if style == "prose" else style
+    if normalized not in STYLE_LABELS:
+        raise ValueError("style must be one of: " + ", ".join(STYLE_LABELS))
+    return normalized
+
+
+def _brand_logo_html():
+    """Return the packaged Grounded mark as a self-contained PNG image."""
+    try:
+        encoded = base64.b64encode(BRAND_LOGO.read_bytes()).decode("ascii")
+    except OSError as exc:
+        raise ValueError(f"packaged Grounded logo is unavailable: {BRAND_LOGO}") from exc
+    return (
+        '<img src="data:image/png;base64,' + encoded + '" '
+        'alt="" aria-hidden="true">'
+    )
 
 CSS = r"""
 @page {
@@ -598,16 +619,18 @@ body {
   font-family: -apple-system, "Helvetica Neue", "Helvetica", Arial, sans-serif;
 }
 .paper { width: 100%; max-width: 194mm; margin: 0 auto; }
-.running-header { position: running(pageHeader); width: 100%; }
+.running-header {
+  position: running(pageHeader); width: 100%; padding-bottom: 2.5mm;
+}
 .strip {
   display: flex; align-items: stretch; border-bottom: .5px solid var(--ink);
   break-inside: avoid;
 }
 .strip .chip {
-  background: none; border: 1.5px solid var(--accent);
-  display: flex; align-items: center; padding: 5px 8px; width: 32px;
+  background: none; display: flex; align-items: center; justify-content: center;
+  padding: 1px 4px; width: 40px;
 }
-.strip .chip svg { width: 14px; height: 14px; display: block; }
+.strip .chip img { width: 32px; height: 32px; display: block; }
 .strip .mark {
   display: flex; align-items: center; padding: 0 10px;
   font-weight: 600; font-size: 9.5pt; letter-spacing: .3em; color: var(--ink);
@@ -636,7 +659,7 @@ h1 {
   letter-spacing: -0.015em; max-width: 30em; text-align: left; hyphens: none;
 }
 .metagrid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(5, 1fr);
   border-top: .5px solid var(--ink); border-bottom: .5px solid var(--ink);
   margin: 0 0 12px; break-inside: avoid;
 }
@@ -868,9 +891,10 @@ def _display_date(value, abbreviated=False):
 
 
 def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
-               release=None, repo=None, compiled_date=None):
+               release=None, repo=None, compiled_date=None, style="scientific"):
     import urllib.parse
 
+    style = _normalized_style(style)
     title, lead, body, structured_flow = _to_html_document(
         md, base_dir=base_dir, columns=columns
     )
@@ -907,6 +931,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
 
     cells = [
         ("References", f"<i>{n_refs}</i> verified" if n_refs else "—"),
+        ("Style", STYLE_LABELS[style]),
         ("Tokens", tok),
         ("Verification", "Crossref"),
         ("Compiled", _display_date(today, abbreviated=True)),
@@ -928,7 +953,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     plain_title = re.sub(r"<[^>]+>", "", title)
     return PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=CSS,
-        gnd=GND_SVG, issue=html.escape(issue),
+        gnd=_brand_logo_html(), issue=html.escape(issue),
         version=html.escape(release), repo_url=html.escape(repo_url, quote=True),
         repo_label=html.escape(repo_label), kicker=html.escape(kicker),
         title=title, metagrid=metagrid, lead=lead_html,
@@ -1005,7 +1030,7 @@ def validate_release_inputs(review_path, ledger_path, figure_specs=(), figure_pr
 def write_release_manifest(
         manifest_path, *, review_path, ledger_path, pdf_path, html_document,
         release, columns, kicker, colophon, repo, compiled_date,
-        figure_specs=(), figure_prompts=()):
+        figure_specs=(), figure_prompts=(), style="scientific"):
     """Bind every release input to the exact HTML and canonical PDF."""
     manifest_path = Path(manifest_path).resolve()
     manifest_directory = manifest_path.parent
@@ -1034,6 +1059,7 @@ def write_release_manifest(
         "compiled_date": compiled_date,
         "render": {
             "columns": columns,
+            "style": _normalized_style(style),
             "kicker": kicker,
             "colophon": colophon,
             "repo": repo,
@@ -1063,6 +1089,11 @@ def main():
     ap.add_argument("--out", help="output path (.html or .pdf)")
     ap.add_argument("--pdf", action="store_true", help="render a PDF (implied by an .pdf --out)")
     ap.add_argument("--columns", type=int, choices=[1, 2], default=2, help="body columns on paper (default 2)")
+    ap.add_argument(
+        "--style", choices=("scientific", "prose", "popsci", "bullets", "eli5"),
+        default="scientific",
+        help="writing style printed in the PDF metadata grid (default scientific)",
+    )
     ap.add_argument("--kicker", default="Review", help="kicker label above the title (e.g. 'Review · Immunology')")
     ap.add_argument("--colophon", help="override the footer line")
     ap.add_argument("--release", help="version shown in the provenance line (default: latest git tag)")
@@ -1120,6 +1151,7 @@ def main():
             md, columns=args.columns, kicker=args.kicker,
             colophon=args.colophon, base_dir=base_dir,
             release=release, repo=effective_repo, compiled_date=compiled_date,
+            style=args.style,
         )
         result = write_pdf(page, args.out)
         if args.html_sidecar:
@@ -1144,6 +1176,7 @@ def main():
                 compiled_date=compiled_date,
                 figure_specs=args.figure_spec,
                 figure_prompts=args.figure_prompt,
+                style=args.style,
             )
             suffix += f" and {args.release_manifest}"
         print(
@@ -1155,7 +1188,7 @@ def main():
             md, columns=args.columns, kicker=args.kicker,
             colophon=args.colophon, base_dir=base_dir,
             release=args.release, repo=args.repo,
-            compiled_date=args.compiled_date,
+            compiled_date=args.compiled_date, style=args.style,
         )
         with open(args.out, "w", encoding="utf-8") as stream:
             stream.write(page)

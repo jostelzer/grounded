@@ -158,6 +158,7 @@ def verify_release_manifest(
         rebuilt = export_review.build_html(
             markdown,
             columns=int(render.get("columns")),
+            style=str(render.get("style") or "scientific"),
             kicker=str(render.get("kicker")),
             colophon=render.get("colophon"),
             base_dir=str(review_path.parent),
@@ -182,6 +183,7 @@ def verify_release_manifest(
         "review_path": review_path,
         "markdown": markdown,
         "columns": int(render.get("columns")),
+        "style": str(render.get("style") or "scientific"),
     }
 
 

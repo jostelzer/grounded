@@ -95,6 +95,27 @@ class PdfExportTests(unittest.TestCase):
             self.assertEqual(metadata["/CreationDate"], "D:20260826")
             self.assertEqual(metadata["/Producer"], "WeasyPrint 69.0")
 
+    def test_packaged_logo_and_writing_style_are_visible_furniture(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+                style="eli5",
+            )
+
+        self.assertIn('<img src="data:image/png;base64,', page)
+        self.assertIn("<b>Style</b><span>ELI5</span>", page)
+        self.assertNotIn("<svg viewBox=", page)
+
+    def test_prose_style_alias_prints_as_scientific(self):
+        page = export_review.build_html(
+            "## Review\n\n**Abstract** — Summary.\n\n**Sources**\n",
+            release="v-test", repo="example.test/grounded",
+            compiled_date="2026-08-26", style="prose",
+        )
+        self.assertIn("<b>Style</b><span>Scientific</span>", page)
+
     def test_render_failure_preserves_existing_pdf(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = os.path.join(tmp, "review.pdf")

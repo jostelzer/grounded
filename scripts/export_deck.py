@@ -30,7 +30,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from export_review import (
-    GND_SVG,
+    _brand_logo_html,
     _compiled_date,
     _display_date,
     detect_release,
@@ -435,7 +435,7 @@ def embed_slide_images(document: DeckDocument, base_dir: str) -> dict[str, str]:
 def _identity_strip(kicker: str, counter: str) -> str:
     return (
         '<div class="strip">'
-        f'<span class="chip">{GND_SVG}</span>'
+        f'<span class="chip">{_brand_logo_html()}</span>'
         '<span class="mark">GROUNDED</span>'
         '<span class="tagline">No floating claims.</span>'
         f'<span class="kicker">{html.escape(kicker)}</span>'
@@ -518,10 +518,9 @@ body { color: var(--ink); }
   border-bottom: .75pt solid var(--ink); background: #fff;
 }
 .strip .chip {
-  width: .36in; display: flex; align-items: center; justify-content: center;
-  border: 1.5pt solid var(--accent); border-bottom: 0;
+  width: .42in; display: flex; align-items: center; justify-content: center;
 }
-.strip .chip svg { width: .17in; height: .17in; display: block; }
+.strip .chip img { width: .32in; height: .32in; display: block; }
 .strip .mark {
   display: flex; align-items: center; padding-left: .13in;
   font-size: 9.5pt; font-weight: 650; letter-spacing: .29em;
@@ -581,9 +580,8 @@ body { color: var(--ink); }
 .title-hero { display: grid; grid-template-columns: .78in 1fr; column-gap: .25in; align-items: center; }
 .title-chip {
   width: .76in; height: .76in; display: flex; align-items: center; justify-content: center;
-  border: 2.5pt solid var(--accent);
 }
-.title-chip svg { width: .35in; height: .35in; display: block; }
+.title-chip img { width: .62in; height: .62in; display: block; }
 .title-mark {
   font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 25pt; font-weight: 620; letter-spacing: .31em;
@@ -714,7 +712,7 @@ def build_html(
     title_slide = (
         '<section class="slide title-slide" data-slide-kind="title">'
         '<div class="title-hero">'
-        f'<span class="title-chip">{GND_SVG}</span>'
+        f'<span class="title-chip">{_brand_logo_html()}</span>'
         '<span class="title-mark">GROUNDED</span>'
         '<span class="title-tagline">No floating claims.</span>'
         '</div><div class="title-rule"></div>'
