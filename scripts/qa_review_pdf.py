@@ -204,6 +204,8 @@ def verify_release_manifest(
             figure_max_height_mm=float(render.get("figure_max_height_mm") or 92.0),
             ref_leading=render.get("ref_leading"),
             imprint=str(render.get("imprint") or "end"),
+            edition=str(render.get("edition") or "journal"),
+            pull_quote=render.get("pull_quote"),
         )
     except (OSError, TypeError, ValueError) as exc:
         raise PdfQaError(f"manifest HTML cannot be rebuilt: {exc}") from exc
@@ -270,7 +272,9 @@ def _embedded_font_families(reader) -> set[str]:
 
 
 def inspect_structure(pdf_path: str, markdown: str | None = None,
-                      expected_release: str | None = None) -> dict[str, object]:
+                      expected_release: str | None = None,
+                      expected_fonts: tuple[str, ...] = ("Charter", "Helvetica-Neue"),
+                      ) -> dict[str, object]:
     """Inspect PDF objects, metadata, page geometry, links, and running furniture."""
     _Image, _ImageDraw, _ImageOps, PdfReader = _load_runtime()
     try:
@@ -342,9 +346,12 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
     if metadata.get("/Producer") != "WeasyPrint 69.0":
         failures.append("PDF producer is not the canonical WeasyPrint 69.0 renderer")
     embedded_fonts = _embedded_font_families(reader)
-    for family in ("Charter", "Helvetica-Neue"):
+    for family in expected_fonts:
         if not any(font.startswith(family) for font in embedded_fonts):
-            failures.append(f"PDF does not embed the canonical {family} family")
+            failures.append(
+                f"PDF does not embed the canonical {family} family for its "
+                "edition"
+            )
 
     expected_dois: set[str] = set()
     expected_figures = 0
@@ -728,7 +735,19 @@ def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
     if markdown_path and markdown is None:
         with open(markdown_path, encoding="utf-8") as stream:
             markdown = stream.read()
-    structural = inspect_structure(pdf_path, markdown, expected_release)
+    expected_fonts = ("Charter", "Helvetica-Neue")
+    if manifest_path:
+        edition = str(
+            (manifest_context["manifest"].get("render") or {}).get("edition")
+            or "journal"
+        )
+        try:
+            import export_review
+            expected_fonts = tuple(export_review.EDITIONS[edition]["fonts"])
+        except (ImportError, KeyError) as exc:
+            raise PdfQaError(f"unknown manifest edition {edition!r}") from exc
+    structural = inspect_structure(pdf_path, markdown, expected_release,
+                                   expected_fonts=expected_fonts)
     if render_dir is None:
         with tempfile.TemporaryDirectory(prefix="grounded-pdf-qa-") as temporary:
             raster = render_and_inspect(

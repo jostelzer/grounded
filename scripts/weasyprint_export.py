@@ -179,7 +179,7 @@ def _embedded_font_families(reader) -> set[str]:
     return families
 
 
-def _validate_rendered_pdf(path: str) -> None:
+def _validate_rendered_pdf(path: str, expected_fonts=CANONICAL_FONT_FAMILIES) -> None:
     try:
         from pypdf import PdfReader
 
@@ -196,12 +196,12 @@ def _validate_rendered_pdf(path: str) -> None:
             )
         embedded = _embedded_font_families(reader)
         missing = [
-            family for family in CANONICAL_FONT_FAMILIES
+            family for family in expected_fonts
             if not any(font.startswith(family) for font in embedded)
         ]
         if missing:
             raise PdfRuntimeError(
-                "canonical Grounded fonts are unavailable: " + ", ".join(missing)
+                "canonical edition fonts are unavailable: " + ", ".join(missing)
                 + ". Refusing to ship a fallback-font redesign."
             )
     except PdfRuntimeError:
@@ -210,8 +210,15 @@ def _validate_rendered_pdf(path: str) -> None:
         raise PdfRuntimeError(f"rendered PDF failed strict validation: {exc}") from exc
 
 
-def write_pdf(html_text: str, out_path: str) -> dict[str, object]:
-    """Render canonical HTML atomically and return build metadata."""
+def write_pdf(html_text: str, out_path: str,
+              expected_fonts=CANONICAL_FONT_FAMILIES) -> dict[str, object]:
+    """Render canonical HTML atomically and return build metadata.
+
+    ``expected_fonts`` names the font families the selected edition must
+    embed (default: the journal edition's Charter / Helvetica Neue). The
+    gate itself never weakens: a missing edition font is still a hard
+    failure, never a silent fallback redesign.
+    """
     runtime = require_runtime()
     target = Path(out_path).resolve()
     if not target.parent.is_dir():
@@ -229,7 +236,7 @@ def write_pdf(html_text: str, out_path: str) -> dict[str, object]:
             _render_with_python(html_text, rendered)
         if not os.path.isfile(rendered) or os.path.getsize(rendered) < 5:
             raise PdfRuntimeError("WeasyPrint did not produce a PDF")
-        _validate_rendered_pdf(rendered)
+        _validate_rendered_pdf(rendered, expected_fonts=expected_fonts)
         with open(rendered, "rb") as stream:
             digest = hashlib.sha256(stream.read()).hexdigest()
         os.replace(rendered, target)

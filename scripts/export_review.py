@@ -912,12 +912,15 @@ MIN_REF_LEADING = 1.1
 REBALANCE_MAX_SPILL = 8
 
 
-def _stylesheet(figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
-    """Canonical CSS with the figure height cap and reference leading applied.
+def _stylesheet(figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
+                edition="journal"):
+    """Canonical CSS with the figure cap, reference leading, and edition.
 
-    Both knobs are bounded so a layout rebalance can never distort the
-    journal identity: the figure cap stays within 60-120 mm and the
-    reference leading within 1.1-1.2 line-height at unchanged type size.
+    The layout knobs are bounded so a rebalance can never distort the page:
+    the figure cap stays within 60-120 mm and the reference leading within
+    1.1-1.2 line-height at unchanged type size. The edition overlay restyles
+    typography and furniture over the same semantic document; it never
+    touches the evidence contract (see references/contracts.md).
     """
     if not 60 <= float(figure_max_height_mm) <= 120:
         raise ValueError("figure max height must be between 60 and 120 mm")
@@ -941,6 +944,11 @@ def _stylesheet(figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
             f".refs {{ font-size: 6.9pt; line-height: {ref_leading:g};",
         )
         css = css.replace(REF_MARGIN_ANCHOR, ".refs p { margin: 0 0 1px;")
+    if edition not in EDITIONS:
+        raise ValueError(f"unknown edition: {edition}")
+    overlay = EDITIONS[edition]["css"]
+    if overlay:
+        css = css + "\n" + overlay
     return css
 
 
@@ -975,6 +983,241 @@ def count_terminal_reference_spill(pdf_path, reference_count):
     return 0
 
 
+SALON_CSS = """
+/* SALON edition - literary popsci: Didot display, Hoefler text, Optima
+   furniture, generous white space; house palette, orange used sparingly. */
+@page { margin: 27mm 20mm 16mm 20mm; }
+body { font-family: "Hoefler Text", Baskerville, Georgia, serif;
+  font-size: 9.2pt; line-height: 1.58; }
+.sans, .strip, .kicker, .metagrid, .lead, thead th,
+.tablabel, figcaption, .refs, footer.colophon {
+  font-family: Optima, Seravek, "Gill Sans", sans-serif;
+}
+.strip .mark { font-family: Optima, sans-serif; font-weight: 600;
+  letter-spacing: .44em; }
+.strip .descriptor, .strip .version { font-family: Optima, sans-serif; }
+.strip::after { top: -1.6mm; }
+.body.cols { column-gap: 10mm; }
+.column-run, .column-run.final { column-gap: 10mm; }
+.kicker { text-align: center; letter-spacing: .46em; font-weight: 600;
+  font-size: 7pt; margin: 6mm 0 5mm; }
+h1 { font-family: Didot, "Bodoni 72", serif; font-weight: 400;
+  font-size: 34pt; line-height: 1.1; text-align: center;
+  margin: 0 auto 7mm; }
+.metagrid { max-width: 150mm; margin: 0 auto 9mm;
+  border-top: .5px solid var(--rule); border-bottom: .5px solid var(--rule); }
+.metagrid > div { text-align: center; border-right: none; padding: 8px 8px 9px; }
+.metagrid b { letter-spacing: .22em; color: var(--faint); }
+.metagrid span { font-weight: 500; }
+.metagrid span i { color: var(--ink); }
+.body.cols > p:first-child {
+  column-span: all; font-family: Didot, serif; font-size: 12.5pt;
+  line-height: 1.6; text-align: center; color: #444; hyphens: none;
+  max-width: 82%; margin: 0 auto 10mm;
+}
+h2 { font-family: Optima, sans-serif; font-weight: 600; font-size: 8.5pt;
+  letter-spacing: .26em; text-transform: uppercase; text-align: center;
+  border-bottom: none; margin: 7mm 0 3.5mm; }
+h2::before { color: var(--accent); letter-spacing: .12em; }
+sup.citation, sup.citation a { color: #9a948a; }
+.dropcap { float: left; font-family: Didot, serif; font-size: 38pt;
+  line-height: .88; padding: 0 5pt 0 0; margin-top: 3.5pt;
+  color: var(--ink); }
+.pullquote { column-span: all; font-family: Didot, serif; font-style: italic;
+  font-size: 16pt; line-height: 1.45; text-align: center; color: #3d3d3d;
+  hyphens: none; margin: 9mm auto; max-width: 72%; break-inside: avoid; }
+.pullquote::before { content: "\u201c"; display: block;
+  font-family: Didot, serif; font-style: normal; font-size: 30pt;
+  line-height: .75; color: var(--accent); margin-bottom: 1.5mm; }
+.pullquote .pullref { display: block; margin-top: 3.5mm;
+  font-family: Optima, Seravek, "Gill Sans", sans-serif; font-style: normal;
+  font-size: 6.8pt; font-weight: 600; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--muted); }
+.pullquote .pullref a { color: var(--muted); border-bottom: none;
+  text-decoration: none; }
+h2.refhead::before { content: "\u2042"; display: block;
+  color: var(--accent); font-family: "Hoefler Text", Baskerville, serif;
+  font-size: 17pt; margin: 0 auto 4mm; letter-spacing: 0; }
+h2.refhead { text-align: center; letter-spacing: .32em; font-size: 9pt;
+  margin: 8mm 0 1.5mm; }
+h2.refhead small { display: block; float: none; text-align: center;
+  font-size: 5.8pt; letter-spacing: .2em; color: var(--faint);
+  margin-top: 1.6mm; text-transform: uppercase; }
+.refs { line-height: 1.35; }
+.refs p { margin-bottom: 4px; }
+figcaption { margin-top: 7px; line-height: 1.55; }
+figcaption .figno { color: var(--accent); letter-spacing: .08em; }
+.refs .refno { color: var(--accent); font-weight: 400; }
+figure { margin: 14px 0 16px; }
+table { margin-bottom: 14px; }
+td, thead th { padding: 6px 8px; }
+"""
+
+# Editions bind a writing style to a paper identity: an overlay on the
+# canonical CSS plus the font families the rendered PDF must embed. The
+# evidence contract (citations, reference order, atomic writes, QA) is
+# edition-invariant; see references/contracts.md.
+EDITIONS = {
+    "journal": {"css": "", "fonts": ("Charter", "Helvetica-Neue")},
+    "salon": {"css": SALON_CSS, "fonts": ("Didot", "Hoefler-Text", "Optima")},
+}
+DEFAULT_EDITION_BY_STYLE = {"popsci": "salon"}
+DROPCAP_MIN_CHARS = 200
+PULL_SENTINEL = "GROUNDED-PULL-QUOTE-SENTINEL"
+
+
+def resolve_edition(style, edition=None):
+    style = _normalized_style(style)
+    resolved = edition or DEFAULT_EDITION_BY_STYLE.get(style, "journal")
+    if resolved not in EDITIONS:
+        raise ValueError(f"unknown edition: {resolved}")
+    return resolved
+
+
+def _strip_markdown_links(text):
+    return re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+
+
+def _pull_quote_references(paragraph, pull):
+    """Citations attached to the pulled sentence, for the attribution line.
+
+    House style places a claim's citations inside its sentence, before the
+    closing punctuation, so the DOI links found between the start of the
+    pulled text and the end of its sentence are the quote's own support. A
+    pulled line with no citation is authorial synthesis and gets no
+    attribution. Best-effort: when the pulled text cannot be located as an
+    exact substring (unusual whitespace), the quote renders unattributed
+    rather than misattributed.
+    """
+    link_re = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
+    stripped_chars = []
+    raw_index = []
+    links = []
+    position = 0
+    for match in link_re.finditer(paragraph):
+        for i in range(position, match.start()):
+            stripped_chars.append(paragraph[i])
+            raw_index.append(i)
+        links.append((match.start(), match.group(1), match.group(2)))
+        for ch in match.group(1):
+            stripped_chars.append(ch)
+            raw_index.append(match.start())
+        position = match.end()
+    for i in range(position, len(paragraph)):
+        stripped_chars.append(paragraph[i])
+        raw_index.append(i)
+    stripped = "".join(stripped_chars)
+    start = stripped.find(pull)
+    if start < 0:
+        return []
+    end = start + len(pull)
+    # A pull that already carries terminal punctuation is a complete
+    # sentence: its own links are its support. Only an unterminated clause
+    # extends to the end of the sentence it was pulled from — never into
+    # the next sentence, which would misattribute.
+    if not re.search(r"[.!?][\u201d\u2019\"']*$", pull):
+        sentence_end = re.search(r"[.!?]", stripped[end:])
+        if sentence_end:
+            end += sentence_end.end()
+    raw_start = raw_index[start]
+    raw_end = raw_index[end - 1] + 1 if end - 1 < len(raw_index) else len(paragraph)
+    return [
+        (label, href) for link_start, label, href in links
+        if raw_start <= link_start < raw_end and "doi.org" in href
+    ]
+
+
+def insert_pull_quote_sentinel(md, pull_quote):
+    """Place the authored pull quote before the paragraph that contains it.
+
+    The pull quote is presentation, but it carries words, so it must be a
+    verbatim substring of the article body (links stripped) — never invented
+    or paraphrased. A quote that cannot be located verbatim is a hard error.
+    Returns the updated markdown and the quote's own citations (label, DOI
+    URL) for the attribution line.
+    """
+    pull = " ".join(pull_quote.split())
+    if not pull:
+        raise ValueError("pull quote is empty")
+    body, sep, tail = md.partition("\n**Sources**")
+    paragraphs = body.split("\n\n")
+    for index, paragraph in enumerate(paragraphs):
+        stripped = paragraph.lstrip()
+        if stripped.startswith(("#", "|", "![", "<a id=", "**Figure")):
+            continue
+        if pull in " ".join(_strip_markdown_links(paragraph).split()):
+            if index == 0 or stripped.startswith("*"):
+                raise ValueError(
+                    "pull quote must come from the article body, not the "
+                    "standfirst"
+                )
+            references = _pull_quote_references(paragraph, pull)
+            paragraphs.insert(index, PULL_SENTINEL)
+            return "\n\n".join(paragraphs) + sep + tail, references
+    raise ValueError(
+        "pull quote is not a verbatim passage of the article body: " + pull
+    )
+
+
+def _render_pull_quote_aside(page, pull_quote, references=()):
+    pull = " ".join(pull_quote.split())
+    # The oversized quotation mark above the aside carries the quotation
+    # signal; wrapping the text in additional quotes doubles up whenever the
+    # pulled sentence itself begins with a quoted word.
+    attribution = ""
+    if references:
+        linked = ", ".join(
+            f'<a href="{html.escape(href, quote=True)}">'
+            f"{html.escape(label, quote=False)}</a>"
+            for label, href in references
+        )
+        attribution = f'<span class="pullref">— {linked}</span>'
+    aside = (
+        '<aside class="pullquote">'
+        + html.escape(pull, quote=False)
+        + attribution
+        + "</aside>"
+    )
+    sentinel_paragraph = f"<p>{PULL_SENTINEL}</p>"
+    if sentinel_paragraph not in page:
+        raise ValueError("pull quote sentinel was lost during rendering")
+    return page.replace(sentinel_paragraph, aside, 1)
+
+
+def inject_drop_cap(page):
+    """Salon edition: set the opener's initial as a three-line drop cap.
+
+    Specimen-verified guards: only a plain capital letter opener, and only
+    when the paragraph is long enough to wrap the full cap. Anything else
+    (quote openers, digits, short paragraphs) renders without a cap rather
+    than improvising.
+    """
+    marker = '<div class="body cols">'
+    start = page.find(marker)
+    if start < 0:
+        return page
+    match = re.search(r"<p>(?!<em>)", page[start:])
+    if not match:
+        return page
+    position = start + match.start()
+    end = page.find("</p>", position)
+    if end < 0:
+        return page
+    text = re.sub(r"<[^>]+>", "", page[position + 3:end])
+    initial = text[:1]
+    if not (initial.isalpha() and initial.isupper()):
+        return page
+    if len(text) < DROPCAP_MIN_CHARS:
+        return page
+    if page[position + 3] != initial:
+        return page
+    return (
+        page[:position]
+        + f'<p><span class="dropcap">{initial}</span>'
+        + page[position + 4:]
+    )
+
+
 def count_unique_dois(md):
     # inline citation URLs percent-encode parens, sources-block URLs don't;
     # normalize both forms before deduplicating
@@ -986,7 +1229,7 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
                           colophon=None, base_dir=".", release=None, repo=None,
                           compiled_date=None, style="scientific",
                           figure_max_height_mm=FIGURE_MAX_HEIGHT_MM,
-                          ref_leading=None):
+                          ref_leading=None, edition=None, pull_quote=None):
     """Render the PDF, then walk the bounded rebalance ladder.
 
     A terminal page carrying only the reference tail and/or the book-style
@@ -996,17 +1239,21 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
     first spill-free render wins; otherwise the original stands and QA
     reports the levers.
     """
+    resolved_edition = resolve_edition(style, edition)
+    expected_fonts = EDITIONS[resolved_edition]["fonts"]
+
     def build(leading, imprint):
         return build_html(
             md, columns=columns, kicker=kicker, colophon=colophon,
             base_dir=base_dir, imprint=imprint, release=release, repo=repo,
             compiled_date=compiled_date, style=style,
             figure_max_height_mm=figure_max_height_mm, ref_leading=leading,
+            edition=resolved_edition, pull_quote=pull_quote,
         )
 
     from weasyprint_export import write_pdf
     page = build(ref_leading, "end")
-    result = write_pdf(page, out_path)
+    result = write_pdf(page, out_path, expected_fonts=expected_fonts)
     effective = {"ref_leading": ref_leading, "imprint": "end",
                  "rebalanced": False, "note": None, "spill": 0}
     if ref_leading is not None:
@@ -1031,7 +1278,8 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
     for leading, imprint, note in ladder:
         candidate_page = build(leading, imprint)
         try:
-            candidate = write_pdf(candidate_page, candidate_path)
+            candidate = write_pdf(candidate_page, candidate_path,
+                                  expected_fonts=expected_fonts)
             # Acceptable = out of the degenerate band: either nothing spills,
             # or the terminal page is a full reference continuation page
             # (sparseness there stays the raster QA's call).
@@ -1051,11 +1299,19 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
 def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                imprint="end",
                release=None, repo=None, compiled_date=None, style="scientific",
-               figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
+               figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
+               edition=None, pull_quote=None):
     import urllib.parse
 
     style = _normalized_style(style)
-    css = _stylesheet(figure_max_height_mm, ref_leading=ref_leading)
+    edition = resolve_edition(style, edition)
+    if pull_quote is not None and edition == "journal":
+        raise ValueError("pull quotes are a salon-edition device")
+    pull_references = ()
+    if pull_quote is not None:
+        md, pull_references = insert_pull_quote_sentinel(md, pull_quote)
+    css = _stylesheet(figure_max_height_mm, ref_leading=ref_leading,
+                      edition=edition)
     title, lead, body, structured_flow = _to_html_document(
         md, base_dir=base_dir, columns=columns
     )
@@ -1113,7 +1369,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         colophon = (f"{sources}every DOI resolved · "
                     "retraction-screened via Crossref")
     plain_title = re.sub(r"<[^>]+>", "", title)
-    return PAGE.format(
+    page = PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=css,
         gnd=_brand_logo_html(),
         version=html.escape(release), repo_url=html.escape(repo_url, quote=True),
@@ -1128,6 +1384,11 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
             f"{html.escape(colophon)}<br>Grounded {html.escape(release)}"
             f" · compiled {html.escape(_display_date(today))}</div>"
         ))
+    if pull_quote is not None:
+        page = _render_pull_quote_aside(page, pull_quote, pull_references)
+    if edition == "salon":
+        page = inject_drop_cap(page)
+    return page
 
 
 def _manifest_path_record(path, manifest_directory):
@@ -1225,7 +1486,7 @@ def write_release_manifest(
         release, columns, kicker, colophon, repo, compiled_date,
         figure_specs=(), figure_prompts=(), style="scientific",
         figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
-        imprint="end"):
+        imprint="end", edition="journal", pull_quote=None):
     """Bind every release input to the exact HTML and canonical PDF."""
     manifest_path = Path(manifest_path).resolve()
     manifest_directory = manifest_path.parent
@@ -1260,6 +1521,8 @@ def write_release_manifest(
             "ref_leading": (
                 float(ref_leading) if ref_leading is not None else None
             ),
+            "edition": edition,
+            "pull_quote": pull_quote,
             "imprint": imprint,
             "style": _normalized_style(style),
             "kicker": kicker,
@@ -1331,6 +1594,19 @@ def main():
              f"(default {FIGURE_MAX_HEIGHT_MM:g}); recorded in the release "
              "manifest so QA evaluates the true rendered geometry",
     )
+    ap.add_argument(
+        "--edition", choices=tuple(EDITIONS), default=None,
+        help="paper identity: 'journal' (canonical, default for scientific/"
+             "bullets/eli5) or 'salon' (literary edition, default for "
+             "popsci); the evidence contract is identical in every edition",
+    )
+    ap.add_argument(
+        "--pull-quote", metavar="TEXT",
+        help="salon edition only: one verbatim sentence from the article "
+             "body, set as the column-spanning pull quote before the "
+             "paragraph that contains it; a quote that is not verbatim body "
+             "text is a hard error",
+    )
     ap.add_argument("--check-pdf-runtime", action="store_true",
                     help="validate the canonical WeasyPrint runtime and exit")
     args = ap.parse_args()
@@ -1367,13 +1643,18 @@ def main():
             effective_repo = detected_repo or None
         else:
             effective_repo = args.repo
-        page, result, effective = render_pdf_rebalanced(
-            md, args.out, columns=args.columns, kicker=args.kicker,
-            colophon=args.colophon, base_dir=base_dir,
-            release=release, repo=effective_repo, compiled_date=compiled_date,
-            style=args.style, figure_max_height_mm=args.figure_max_height,
-            ref_leading=args.ref_leading,
-        )
+        try:
+            page, result, effective = render_pdf_rebalanced(
+                md, args.out, columns=args.columns, kicker=args.kicker,
+                colophon=args.colophon, base_dir=base_dir,
+                release=release, repo=effective_repo,
+                compiled_date=compiled_date,
+                style=args.style, figure_max_height_mm=args.figure_max_height,
+                ref_leading=args.ref_leading, edition=args.edition,
+                pull_quote=args.pull_quote,
+            )
+        except ValueError as exc:
+            ap.error(str(exc))
         effective_ref_leading = effective["ref_leading"]
         effective_imprint = effective["imprint"]
         if effective["rebalanced"]:
@@ -1410,6 +1691,8 @@ def main():
                 figure_max_height_mm=args.figure_max_height,
                 ref_leading=effective_ref_leading,
                 imprint=effective_imprint,
+                edition=resolve_edition(args.style, args.edition),
+                pull_quote=args.pull_quote,
             )
             suffix += f" and {args.release_manifest}"
         print(
@@ -1417,13 +1700,17 @@ def main():
             file=sys.stderr,
         )
     else:
-        page = build_html(
-            md, columns=args.columns, kicker=args.kicker,
-            colophon=args.colophon, base_dir=base_dir,
-            release=args.release, repo=args.repo,
-            compiled_date=args.compiled_date, style=args.style,
-            figure_max_height_mm=args.figure_max_height,
-        )
+        try:
+            page = build_html(
+                md, columns=args.columns, kicker=args.kicker,
+                colophon=args.colophon, base_dir=base_dir,
+                release=args.release, repo=args.repo,
+                compiled_date=args.compiled_date, style=args.style,
+                figure_max_height_mm=args.figure_max_height,
+                edition=args.edition, pull_quote=args.pull_quote,
+            )
+        except ValueError as exc:
+            ap.error(str(exc))
         with open(args.out, "w", encoding="utf-8") as stream:
             stream.write(page)
         print(f"Wrote {args.out}", file=sys.stderr)

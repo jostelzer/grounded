@@ -95,7 +95,8 @@ class GoldenColicPipelineTests(unittest.TestCase):
         self.assertEqual(result["status"], "pass", result["errors"])
 
     @unittest.skipUnless(has_pdf_runtime(), "pinned WeasyPrint runtime missing")
-    def test_export_produces_release_pdf(self):
+    def test_export_produces_release_pdf(self, extra_args=(),
+                                         expected_edition="salon"):
         out = os.path.join(self.tmp, "review.pdf")
         completed = run_script(
             "export_review.py",
@@ -109,6 +110,7 @@ class GoldenColicPipelineTests(unittest.TestCase):
             "--figure-prompt", os.path.join(self.tmp, "colic-treatments.prompt.txt"),
             "--release", "v-test", "--repo", "example.test/grounded",
             "--compiled-date", "2026-08-27",
+            *extra_args,
             cwd=self.tmp,
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
@@ -116,7 +118,38 @@ class GoldenColicPipelineTests(unittest.TestCase):
         manifest = json.load(
             open(os.path.join(self.tmp, "release-manifest.json"), encoding="utf-8")
         )
-        self.assertTrue(manifest)
+        self.assertEqual(manifest["render"]["edition"], expected_edition)
+
+    @unittest.skipUnless(
+        has_pdf_runtime() and shutil.which("pdftoppm"),
+        "WeasyPrint runtime or Poppler missing",
+    )
+    def test_journal_edition_export_still_passes(self):
+        self.test_export_produces_release_pdf(
+            extra_args=("--edition", "journal"),
+            expected_edition="journal",
+        )
+
+    @unittest.skipUnless(
+        has_pdf_runtime() and shutil.which("pdftoppm"),
+        "WeasyPrint runtime or Poppler missing",
+    )
+    def test_salon_pull_quote_export_passes_qa(self):
+        self.test_export_produces_release_pdf(
+            extra_args=(
+                "--pull-quote",
+                "benefit in breastfed infants, none in formula-fed",
+            ),
+        )
+        completed = run_script(
+            "qa_review_pdf.py",
+            os.path.join(self.tmp, "review.pdf"),
+            "--manifest", os.path.join(self.tmp, "release-manifest.json"),
+            "--render-dir", os.path.join(self.tmp, "qa-render-pull"),
+            "--report", os.path.join(self.tmp, "pdf-qa-pull.json"),
+            cwd=self.tmp,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
 
     @unittest.skipUnless(
         has_pdf_runtime() and shutil.which("pdftoppm"),

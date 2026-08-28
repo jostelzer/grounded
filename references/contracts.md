@@ -43,7 +43,11 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
 - `format_references.py`: `[@key]` citation syntax, chat citation placement
   rules, Sources block shape.
 - `export_review.py` / `export_deck.py`: flag set, release-manifest fields
-  (additive only), atomic write behavior.
+  (additive only), atomic write behavior. Editions (`--edition`, default
+  journal; popsci defaults to salon) are presentation profiles only: fonts,
+  furniture, and devices (drop cap, dinkus, `--pull-quote` with verbatim
+  check and sentence-scoped attribution) may vary per edition; citation
+  placement, reference order, and every gate may not.
 - `qa_review_pdf.py` / `qa_deck_pdf.py` / `qa_figure.py`: fail-closed
   behavior, report shapes (additive only).
 

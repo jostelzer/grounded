@@ -905,5 +905,91 @@ class FigureExportTests(unittest.TestCase):
             self.assertNotIn("Rebalanced", completed.stderr)
 
 
+class SalonEditionTests(unittest.TestCase):
+    """The salon edition (popsci default): literary typography and the
+    classical devices over the same semantic document, with the evidence
+    contract untouched (references/contracts.md)."""
+
+    FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic")
+
+    def build(self, **kwargs):
+        with open(os.path.join(self.FIXTURE, "review.md"), encoding="utf-8") as stream:
+            markdown = stream.read()
+        return export_review.build_html(
+            markdown, base_dir=self.FIXTURE, style="popsci",
+            release="v-test", repo="example.test/grounded",
+            compiled_date="2026-08-28", **kwargs,
+        )
+
+    def test_popsci_defaults_to_salon_with_devices(self):
+        page = self.build()
+        self.assertIn("SALON edition", page)
+        self.assertIn('<span class="dropcap">S</span>', page)
+        self.assertEqual(export_review.resolve_edition("popsci"), "salon")
+        self.assertEqual(export_review.resolve_edition("scientific"), "journal")
+
+    def test_journal_override_carries_no_salon_devices(self):
+        page = self.build(edition="journal")
+        self.assertNotIn("SALON edition", page)
+        self.assertNotIn("dropcap", page)
+
+    def test_drop_cap_guards_skip_short_and_quote_openers(self):
+        short = (
+            "## T\n\n*Standfirst one. Standfirst two.*\n\n"
+            "Colic ends by month four "
+            f"[Smith 2024](https://doi.org/{'10.1000/example'}).\n\n"
+            "**Sources**\n\n**Smith (2024)** A source. *Journal*. "
+            "https://doi.org/10.1000/example\n"
+        )
+        page = export_review.build_html(
+            short, style="popsci", release="v-test",
+            repo="example.test/grounded", compiled_date="2026-08-28",
+        )
+        self.assertNotIn('class="dropcap"', page)
+        quoted = short.replace(
+            "Colic ends by month four",
+            '"Colic" ends by month four ' + " ".join(["colic"] * 220),
+        )
+        page = export_review.build_html(
+            quoted, style="popsci", release="v-test",
+            repo="example.test/grounded", compiled_date="2026-08-28",
+        )
+        self.assertNotIn('class="dropcap"', page)
+
+    def test_pull_quote_is_verbatim_placed_and_attributed(self):
+        cited = self.build(
+            pull_quote="benefit in breastfed infants, none in formula-fed"
+        )
+        self.assertIn('<aside class="pullquote">', cited)
+        match = re.search(r'<span class="pullref">.*?</span>', cited)
+        self.assertIsNotNone(match)
+        self.assertIn("Sung et al. 2018", match.group(0))
+        self.assertIn("doi.org/10.1542/peds.2017-1811", match.group(0))
+
+    def test_authorial_pull_quote_gets_no_attribution(self):
+        page = self.build(
+            pull_quote='"Self-limiting" is cold comfort at 3 a.m.'
+        )
+        self.assertIn('<aside class="pullquote">', page)
+        self.assertNotIn('<span class="pullref">', page)
+
+    def test_invented_pull_quote_is_a_hard_error(self):
+        with self.assertRaises(ValueError):
+            self.build(pull_quote="This sentence appears nowhere.")
+
+    def test_pull_quote_requires_salon(self):
+        with self.assertRaises(ValueError):
+            self.build(edition="journal", pull_quote="colic ends")
+
+    def test_editions_registry_shape(self):
+        for name, profile in export_review.EDITIONS.items():
+            self.assertIn("css", profile)
+            self.assertTrue(profile["fonts"], name)
+        self.assertEqual(
+            export_review.EDITIONS["journal"]["fonts"],
+            ("Charter", "Helvetica-Neue"),
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
