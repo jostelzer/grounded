@@ -16,8 +16,8 @@ supporting evidence, with at least one number (an effect size, interval, or coun
 overturn the verdict; (4) the boundary — where the verdict stops applying, and the
 practical line. An argument with a hierarchy, never a one-sentence-per-section
 inventory of the review. State the verdict on its own terms, not as a negation of
-the claim being examined ("X lowers LDL when it replaces Y", not "X is not
-supported as a hazard"). This replaces the TL;DR.>
+the claim being examined ("X improves the outcome when it replaces Y", not "X
+is not supported as a hazard"). This replaces the TL;DR.>
 
 ### Introduction
 <Why the question matters, what is claimed or contested, and the scope — 1–3 paragraphs.
@@ -29,7 +29,7 @@ sections argue a different, better question than the Introduction posed, rewrite
 Introduction to pose that one.>
 
 ### <Claim heading — a short full sentence stating what the section shows,
-e.g. "Blood lipids provide the clearest randomized signal">
+e.g. "The randomized trials agree on direction but not on size">
 <Paragraphs. See rules below.>
 
 ### Conclusion
@@ -54,7 +54,7 @@ Narrative arc — what makes the article read as an argument rather than a list:
 Paragraph craft:
 
 - **The register is that of a peer-reviewed narrative review** — objective, precise, and plain. Open sections with the finding, not with scene-setting flourishes; the Introduction motivates the question with facts (prevalence, contested claims, stakes), never with journalistic hooks. Calibrated verbs ("reduces", "is associated with", "may"), quantities over adjectives, no metaphors, no first person.
-- **Headings are claim sentences.** Each section heading is a short full sentence stating what the section shows ("Blood lipids provide the clearest randomized signal"), calibrated to the evidence — the headings alone should read as the skeleton of the argument. Structural headings (Introduction, Conclusion) stay as labels. Every paragraph still opens with the claim it defends, then weaves in the evidence — numbers, intervals, designs — with the same `Author 2026` DOI links inline; the heading states the section's claim, the topic sentences carry the paragraphs' own.
+- **Headings are claim sentences.** Each section heading is a short full sentence stating what the section shows ("The randomized trials agree on direction but not on size"), calibrated to the evidence — the headings alone should read as the skeleton of the argument. Structural headings (Introduction, Conclusion) stay as labels. Every paragraph still opens with the claim it defends, then weaves in the evidence — numbers, intervals, designs — with the same `Author 2026` DOI links inline; the heading states the section's claim, the topic sentences carry the paragraphs' own.
 - One claim per paragraph, 3–6 sentences. A paragraph that needs eight sentences is two claims.
 - Transitions carry the argument between paragraphs and sections ("The picture changes in older adults…"), but every empirical sentence still carries its citation.
 - Contrary evidence gets its own paragraphs with explicit contrast ("Against this…", "The null results cluster where…").
@@ -72,19 +72,19 @@ The model for this style is the best-written narrative review you have read — 
 
 **Do:**
 
-- **Give every claim an agent.** Trials show, cohorts associate, oils lower, doses matter, the data cannot distinguish. When a sentence needs a verdict, let the evidence deliver it: "The trials point to a modest benefit at best" beats "The defensible inference is possible modest benefit."
+- **Give every claim an agent.** Trials show, cohorts associate, doses matter, the data cannot distinguish. When a sentence needs a verdict, let the evidence deliver it: "The trials show a small effect that fades by six months" beats "The supportable inference is limited transient efficacy."
 - **Let calibrated verbs carry the hedging.** "Probably lowers", "may reduce", "is associated with" — the uncertainty lives in the verb, once. Stacking abstraction-hedges ("is compatible with", "is aligned with", "weighs against") around the same claim builds fog, not caution.
-- **Earn short sentences and spend them at pressure points.** "Almost every nutrient does." "It would be wrong to call that proof of safety." The shortest sentences in a review are its best moments; a review with none is monotone. After two long evidence sentences, the reader needs a short one.
-- **Let a number be the subject sometimes.** "That 0.81 came from trials run before statins existed." Numbers as agents keep quantitative prose alive.
-- **Use "this/that" anaphora only with a solid referent.** "That distinction matters" works when the previous sentence made exactly one distinction. "This dependence is visible in both cohorts and trials", three sentences after two candidate dependencies, sends the reader backwards.
+- **Earn short sentences and spend them at pressure points.** "Neither trial measured sleep." "That is an assumption, not a result." The shortest sentences in a review are its best moments; a review with none is monotone. After two long evidence sentences, the reader needs a short one.
+- **Let a number be the subject sometimes.** "That hazard ratio rests on eleven events." Numbers as agents keep quantitative prose alive.
+- **Use "this/that" anaphora only with a solid referent.** "That gap matters" works when the previous sentence named exactly one gap. A "this dependence" three sentences after two candidate dependencies sends the reader backwards.
 
-**Don't — each ✗ is from a real draft; write the ✓ shape instead:**
+**Don't — each pair shows a shape to avoid and the shape to write:**
 
-- ✗ "Replacement is the second necessary coordinate." → ✓ "The second question is always what the oil replaces."
-- ✗ "A category-level verdict is therefore biologically underspecified." → ✓ "The category is too heterogeneous to test as a single exposure."
-- ✗ "The appropriate conclusion is uncertainty around small site-specific effects, not evidence for a general carcinogen." → ✓ "The evidence leaves room for small site-specific effects. It does not show a general carcinogen." (One antithesis per section — and this one earns it.)
-- ✗ "Lipidomics offers a mechanistic bridge." → ✓ "Lipidomics shows the same shift at the molecular level."
-- ✗ "The usable boundary is shown in Figure 3." → ✓ "Figure 3 marks where the risk actually begins: smoke, storage, and reuse."
+- ✗ "Adherence is the decisive coordinate of this literature." → ✓ "Most of these trials failed where adherence failed."
+- ✗ "A pooled verdict is therefore methodologically underdetermined." → ✓ "The trials are too heterogeneous to support a single pooled verdict."
+- ✗ "The appropriate conclusion is qualified optimism around short-term effects, not evidence of durable benefit." → ✓ "The short-term effects are real. Whether they last is unknown."
+- ✗ "Metabolomics offers a mechanistic bridge." → ✓ "The metabolite data show the same shift at the molecular level."
+- ✗ "The operative boundary is shown in Figure 2." → ✓ "Figure 2 marks where the effect disappears: below two sessions a week."
 - ✗ Three sections in a row landing on "…, not …". → ✓ Land one on the number, one on the consequence, one on the open question.
 
 The section-landing sentence deserves special care because it is where the tics concentrate: the landing is a *conclusion the section proved*, in whatever shape that conclusion naturally takes — not a slot to be filled by the antithesis machine.

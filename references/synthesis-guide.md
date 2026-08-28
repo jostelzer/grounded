@@ -48,7 +48,7 @@ Field labels, claim IDs (`C1`, `C2`, …), and pattern IDs (`P1`, …) are exact
 
 ## Claim rules
 
-- **Atomic.** One claim is one assertable sentence a reader could agree or disagree with. "X lowers LDL when it replaces Y" — yes. "X affects lipids and glucose" — two claims. If a claim needs "and", split it.
+- **Atomic.** One claim is one assertable sentence a reader could agree or disagree with. "X lowers relapse risk when it replaces Y" — yes. "X affects mood and sleep" — two claims. If a claim needs "and", split it.
 - **Calibrated in the sentence itself.** The strength lives in the verb ("lowers", "probably reduces", "is associated with", "may"), matched to the `strength` field per `evidence-weighing.md`. A claim whose wording outruns its strength field is wrong at the source, and every style inherits the error.
 - **Evidence-anchored.** Every evidence and contrary line carries ledger keys; a claim with no keys is not a claim, it is an opinion, and it does not enter the ledger. Speculation and mechanism-plausibility belong inside a claim's wording ("is biologically plausible but unproven in humans") or in Open — never as bare claims.
 - **Contrary evidence is recorded on the claim it opposes**, not pooled in a separate section. This is what guarantees no style can quietly drop it: whoever renders C4 renders C4's contrary line.

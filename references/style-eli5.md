@@ -65,22 +65,22 @@ The language — unchanged rules:
 
 ## The voice: how a good explainer actually sounds
 
-The model is someone explaining across a kitchen table — a favorite teacher, not a narrator. The test for **every sentence, not just the terms**, is the **say-it-aloud test**: would you actually say this sentence to a friend? "The repeated detections make exposure believable" fails that test even though no word in it is technical jargon — it is a researcher's sentence wearing simple words. The everyday-words rule covers the researcher's *ordinary* vocabulary too: exposure, detection, marker, identify, data, method, findings, reasonable-as-a-verdict. People across tables do not say those words; write what they do say.
+The model is someone explaining across a kitchen table — a favorite teacher, not a narrator. The test for **every sentence, not just the terms**, is the **say-it-aloud test**: would you actually say this sentence to a friend? "The repeated findings make the link believable" fails that test even though no word in it is technical jargon — it is a researcher's sentence wearing simple words. The everyday-words rule covers the researcher's *ordinary* vocabulary too: exposure, detection, marker, identify, data, method, findings, reasonable-as-a-verdict. People across tables do not say those words; write what they do say.
 
 **Do:**
 
 - **Let people and things do things.** Teams found, doctors tested, the pieces showed up, the numbers went up. Never let an abstraction act: "the study's uncertainty stretched from twice to ten times" has an abstraction performing gymnastics — a person says "the true number could be anywhere from double to ten times as many."
 - **Use contractions.** "It's", "don't", "can't" — this is spoken register; stiff contractions-free prose reads as a lecture.
-- **Ask the reader's question out loud when it helps.** "So does that prove the plastic did it? Not yet." The question-and-answer beat is native to this style and free rhythm.
+- **Ask the reader's question out loud when it helps.** "So does that prove the pill did it? Not yet." The question-and-answer beat is native to this style and free rhythm.
 - **Make the comparison the reader would make.** "Smaller than the width of a hair." "About as much as a grain of salt." Only comparisons that are faithful to the number — never decorative ones.
 - **Keep the warmth in the verbs and the patience in the pacing** — never in rounding a weak finding up. "We don't really know yet" is a complete, honest, warm sentence.
 
-**Don't — each ✗ is from a real draft; write the ✓ shape instead:**
+**Don't — each pair shows a shape to avoid and the shape to write:**
 
-- ✗ "The repeated detections make exposure believable." → ✓ "So many different teams have found the pieces that it's hard to doubt they're really in us."
-- ✗ "That makes the health question reasonable." → ✓ "So it's fair to ask whether they hurt us."
-- ✗ "Different teams used light, lasers, or heat to identify polymers." → ✓ "Different teams used light, lasers, or heat to work out which kind of plastic each piece was."
-- ✗ "The study's uncertainty stretched from about twice to ten times as many events." → ✓ "The true number could be anywhere from double to ten times as many."
-- ✗ "A systematic review therefore called harm to the gut 'suspected.'" → ✓ "Scientists who gathered all those studies decided the danger is 'suspected' — a real worry, but not proof."
+- ✗ "The repeated findings make the link believable." → ✓ "So many teams have seen the same thing that it's hard to call it a fluke."
+- ✗ "That makes the safety question reasonable." → ✓ "So it's fair to ask whether it's safe."
+- ✗ "Teams used questionnaires to characterize sleep quality." → ✓ "Teams asked people how well they'd been sleeping."
+- ✗ "The trial's uncertainty spanned a wide range." → ✓ "The true effect could be anywhere from tiny to quite big."
+- ✗ "A systematic review judged the benefit 'probable.'" → ✓ "Scientists who gathered all the studies decided the benefit is 'probable' — likely real, but not certain."
 
 One more spoken-voice rule: the devices stay invisible here too. Do not write "You can tell a friend:" before the hand-back — just write the sentence the reader could repeat; if it is truly plain, they will not need the label.
