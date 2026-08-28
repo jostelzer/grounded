@@ -61,9 +61,8 @@ def strict_large_bullets(target_filler_words):
 
 class ValidateReviewTests(unittest.TestCase):
     def test_four_showcase_examples_pass(self):
-        # seed-oils.md returns here once regenerated under the four-move
-        # 120-180-word Abstract contract.
         examples = (
+            ("seed-oils.md", "scientific", "large"),
             ("ozempic-after-stopping.md", "popsci", "medium"),
             ("microplastics-health-eli5.md", "eli5", "small"),
         )

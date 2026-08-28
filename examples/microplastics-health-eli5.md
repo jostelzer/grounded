@@ -1,37 +1,49 @@
 ## Are microplastics actually harming our health?
 
-**TL;DR** — They may be. The warning signs are real, but scientists cannot yet say how much ordinary exposure harms people or which illnesses it causes.
+**TL;DR** — They may be. We have good reasons to worry, but we still don't know whether the tiny amounts most of us meet cause a particular illness or how big that risk might be.
 
-Tiny plastic pieces can come from packaging, clothes, tyres, and larger plastic waste. They have been reported in human blood, stool, lungs, reproductive samples, and artery plaque. That makes the health question reasonable. But finding something in the body is not the same as proving it caused damage [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0).
+We use plastic every day. Tiny pieces can end up inside our bodies [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). So it's fair to ask a simple question: are they only passing through, or are they making us sick?
 
-### How do we know the pieces are really inside us?
+### First, do the pieces get into us?
 
-One careful review found 25 studies that measured tiny plastics in living people. Different teams used light, lasers, or heat to identify polymers. The repeated detections make exposure believable, even though the methods did not always agree on the amount [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+Yes, scientists have reported them in us. Across 25 human studies, teams found plastic in samples from our heart and blood system, gut, lungs, eyes, and parts involved in making babies [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). Another review found reports involving our kidneys and several other organs too [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0).
 
-### Have they been linked with illness?
+That tells us the pieces can reach many parts of the body. It doesn't tell us that they caused an illness there.
 
-Yes, but “linked” is the important word. In one study, doctors tested artery plaque removed from people who already had artery disease. People whose plaque contained plastic later had more heart attacks, strokes, or deaths. The study’s uncertainty stretched from about twice to ten times as many events. That is worrying, but it cannot show that plastic caused them [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Prattichizzo et al. 2024](https://doi.org/10.1093/eurheartj/ehae552).
+Scientists also don't know how long each piece stays. A bit that leaves quickly may matter differently from one that sits in tissue, and today's studies can't sort that out [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0).
 
-Another team found more plastic pieces in stool from people with bowel inflammation than from healthy people. The authors gave two possible stories: plastic might worsen illness, or illness might make plastic stay in the gut. A one-time snapshot cannot choose between them [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924).
+### Why are scientists worried?
 
-### Why are scientists worried anyway?
+In one lab story, a team put common plastic particles around human kidney cells and also gave them to mice. The cells showed signs of stress, while the mice developed swelling and damage in tiny kidney tubes [Wang et al. 2021](https://doi.org/10.1289/ehp7612). Other teams have seen cell damage and body alarm signals in gut cells and in several kinds of lab test [Mattioda et al. 2023](https://doi.org/10.3390/biom13010140), [Mahmud et al. 2024](https://doi.org/10.3390/cells13211788), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662), [Talaie et al. 2025](https://doi.org/10.1016/j.toxlet.2025.06.021).
 
-In laboratory dishes and mice, some plastic particles can upset cells, start inflammation, and injure tissue. Kidney and gut experiments found several versions of that pattern, and broader reviews find it across other models too [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Mattioda et al. 2023](https://doi.org/10.3390/biom13010140), [Mahmud et al. 2024](https://doi.org/10.3390/cells13211788), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662), [Talaie et al. 2025](https://doi.org/10.1016/j.toxlet.2025.06.021). A systematic review therefore called harm to the gut, lungs, and reproductive system “suspected.” Yet most of that conclusion came from animal studies using simpler particles than people meet in daily life [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524).
+A careful review called harm to the gut, lungs, and reproductive system “suspected.” But only three human studies fed directly into that judgment, so most of the weight came from animals [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524). Lab tests show that harm can happen. A lab effect may happen only at an amount that never reaches our tissues in daily life. They don't tell us whether the amount you meet in ordinary life is enough to do it.
 
-You can see the missing link in [Figure 1](#fig-evidence-bridge).
+### What has happened in real people?
 
-<a id="fig-evidence-bridge"></a>
-![Three evidence levels show confirmed exposure, concerning human links, and laboratory harm, separated from the missing causal bridge.](figure-evidence-bridge.png)
+Doctors followed people after surgery to remove dangerous build-up from a neck artery. Those whose removed material contained plastic later had more heart attacks, strokes, or deaths. The true difference could have been anywhere from twice to ten times as large [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). This was a worrying clue, but everyone in the study already had serious artery disease and nobody was randomly given plastic [Prattichizzo et al. 2024](https://doi.org/10.1093/eurheartj/ehae552), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
-**Figure 1. The warning signs are stronger than the proof.** Plastic has been found in people. Human studies show concerning links, and laboratory studies show ways damage could happen. The dashed gap means scientists still need to prove that everyday exposure causes disease [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Wang et al. 2021](https://doi.org/10.1289/ehp7612).
+Teams have also found more plastic in stool from people with a sore, swollen gut than in stool from people without that illness. The illness itself might make plastic stay in the gut longer, so the arrow could point either way [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924). Seeing plastic and illness together is not the same as knowing which one came first.
 
 ### Wait — can we trust the measurements?
 
-Not equally. Reviews found that laboratories use different size limits, units, sample-cleaning steps, and checks for stray plastic from the room. Some methods count pieces, while others measure total plastic mass. This can change the answer and makes studies hard to compare [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298). Most human studies also took a single snapshot and could not fully separate plastic from diet, work, disease, and other differences between people [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+Not enough to compare them cleanly. A review of more than 200 studies found that labs often used different ways to stop stray plastic getting into samples and different checks for what their tests missed [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113). Other reviews found that labs disagreed about which sizes count, how samples should be cleaned, and whether to report the number or weight of the pieces [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
-### So what is the honest answer?
+If one lab counts a speck that another lab cannot see, their totals can look different even when both are careful. That makes a fair comparison hard [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298).
 
-You can tell a friend: “Microplastics may be hurting us, and the clues deserve attention, but human harm is not yet nailed down.” Scientists still need shared measurement rules and long studies that show exposure comes first, rises with dose, and is followed by disease.
+Many teams using different tools still report plastic inside us, so the broad picture is unlikely to be one big mistake. The exact amount is much shakier.
+
+### So what can we honestly say?
+
+Microplastics may be hurting us, and the warning signs are real. But nobody yet knows how much the plastic you meet in ordinary life changes your own chance of getting sick [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662).
+
+To answer that, scientists need to test the same way, measure people more than once, and watch them for years. They also need to learn whether lowering the amount inside us actually leaves us healthier [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+
+You can see why the last missing step matters in [Figure 1](#fig-evidence-path).
+
+<a id="fig-evidence-path"></a>
+![A left-to-right evidence path starts with plastic reported in human samples, splits into laboratory harm and human health links, and ends at a dashed unanswered link to everyday exposure causing illness.](figure-evidence-path.png)
+
+**Figure 1. The last step is still missing.** Teams report plastic inside us. Lab tests show ways it can hurt cells and animals, and human studies find worrying links. The dashed arrow means those pieces do not yet prove that everyday amounts make us ill [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113).
 
 **Sources**
 
