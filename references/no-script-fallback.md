@@ -87,6 +87,26 @@ Build each reference entry from the Crossref response you just fetched — autho
 
 If a Crossref record genuinely lacks volume or pages (common for online-first and article-number journals), give what exists plus the DOI and leave the rest out. Do not invent a volume to make an entry look complete.
 
+### B5. Figures when local scripts are unavailable
+
+The evidence boundary and `figure-generation-contract.md` still apply. If the
+host exposes a capable built-in image generator, use it for the authored visual
+layer of every non-quantitative journal figure, apply the review's scientific,
+popsci, bullets, or ELI5 art direction, and compare at least two candidates.
+Keep exact labels sparse in a fully generated figure; when the host offers a
+native text/shape overlay, use a hybrid composition for dense exact copy. Never
+resize width and height independently: circles remain circular and glyphs keep
+their natural proportions.
+
+Maintain the figure spec, prompt, inspection, and provenance as working records
+even when the scripts cannot run. Inspect the selected image at original and
+delivery size and reject weak composition, generic/cheap styling, incorrect
+science or copy, and any stretched shape or lettering. If the environment
+cannot create, inspect, and preserve a real image artifact—or cannot produce a
+PDF whose figure aspect can be checked—deliver the verified written review and
+say in one sentence that the visual/PDF could not be generated. Never claim the
+scripted quality gates or matrix check passed when they were unavailable.
+
 ## The honesty rules that matter most here
 
 These exist because the tempting failure mode is to *quietly downgrade* what "verified" means.

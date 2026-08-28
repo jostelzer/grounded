@@ -28,11 +28,11 @@ WORD_BUDGETS = {
 
 TIER_REQUIREMENTS = {
     "small": {"sections": (3, 5), "sources": (10, 20), "tables": (0, 1),
-              "fulltexts": (2, None), "figure_cap": 1},
+              "fulltexts": (2, None), "figure_target": 2, "figure_cap": 2},
     "medium": {"sections": (6, 9), "sources": (30, 60), "tables": (1, 2),
-               "fulltexts": (8, None), "figure_cap": 3},
+               "fulltexts": (8, None), "figure_target": 3, "figure_cap": 5},
     "large": {"sections": (10, 15), "sources": (70, 150), "tables": (2, 4),
-              "fulltexts": (25, None), "figure_cap": 5},
+              "fulltexts": (25, None), "figure_target": 5, "figure_cap": 8},
 }
 
 MOJIBAKE = re.compile(r"(?:\ufffd|Ã.|Â(?=\s|[^\w])|â(?:€|€™|€œ|€\x9d|€“|€”))")
@@ -631,6 +631,13 @@ def validate_review(
             )
         if image_mode and figure_count < 1:
             errors.append("strict image mode requires at least one figure")
+        elif image_mode and figure_count < requirements["figure_target"]:
+            warnings.append(
+                f"{size} journal-PDF visual target is "
+                f"{requirements['figure_target']} distinct figures; found "
+                f"{figure_count}. Fewer is acceptable only when the synthesis "
+                "has no additional evidence story that benefits from a visual"
+            )
 
     evidence_metrics: dict[str, object] = {}
     if ledger is not None:
@@ -684,6 +691,12 @@ def validate_review(
         "body_dois": len(body_dois),
         "source_dois": len(source_dois),
         "figures": figure_count,
+        "journal_figure_target": (
+            TIER_REQUIREMENTS[size]["figure_target"] if image_mode else None
+        ),
+        "journal_figure_cap": (
+            TIER_REQUIREMENTS[size]["figure_cap"] if image_mode else None
+        ),
         "sections": section_count,
         "tables": table_count,
         "valid_fulltexts": fulltext_count,

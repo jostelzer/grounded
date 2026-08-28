@@ -586,20 +586,47 @@ def _normalized_style(style):
     return normalized
 
 
-def _brand_logo_html():
-    """Return the packaged Grounded mark as a self-contained PNG image."""
+def _brand_logo_data_uri():
+    """Return the packaged Grounded mark as a self-contained PNG URI."""
     try:
         encoded = base64.b64encode(BRAND_LOGO.read_bytes()).decode("ascii")
     except OSError as exc:
         raise ValueError(f"packaged Grounded logo is unavailable: {BRAND_LOGO}") from exc
+    return "data:image/png;base64," + encoded
+
+
+def _brand_logo_html():
+    """Return the packaged Grounded mark as a self-contained PNG image."""
     return (
-        '<img src="data:image/png;base64,' + encoded + '" '
+        '<img src="' + _brand_logo_data_uri() + '" '
         'alt="" aria-hidden="true">'
     )
 
 CSS = r"""
 @page {
   size: A4; margin: 25mm 13mm 12mm 13mm;
+  @top-left {
+    content: "G R O U N D E D";
+    width: 42%; vertical-align: bottom; padding: 0 0 3.4mm 42px;
+    border-bottom: .5px solid #141414;
+    background: url("__GROUNDED_LOGO_DATA_URI__") no-repeat left calc(100% - 1.4mm) / 32px 32px;
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 9.5pt;
+    font-weight: 600; letter-spacing: .12em; color: #141414;
+  }
+  @top-center {
+    content: "AGENTICALLY GENERATED SCIENTIFIC REVIEW";
+    width: 38%; vertical-align: bottom; padding: 0 0 3.4mm;
+    border-bottom: .5px solid #141414;
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 6.3pt;
+    font-weight: 600; letter-spacing: .11em; color: #6b6b6b;
+  }
+  @top-right {
+    content: __GROUNDED_RELEASE__;
+    width: 20%; vertical-align: bottom; padding: 0 0 3.4mm;
+    border-bottom: .5px solid #141414;
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 6.3pt;
+    font-weight: 600; letter-spacing: .13em; color: #6b6b6b;
+  }
   /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
     /* Sit the folio on the colophon stamp's baseline (one footer line). */
@@ -625,37 +652,17 @@ body {
 }
 .paper { width: 100%; max-width: 194mm; margin: 0 auto; }
 .running-header {
-  width: 100%; height: 0; padding: 0;
+  position: absolute; width: 0; height: 0; overflow: hidden;
 }
 .strip {
-  display: block; position: static; width: 100%; height: 0;
-  break-inside: avoid;
+  display: block; width: 0; height: 0; overflow: hidden;
 }
-.strip::after {
-  content: ""; position: fixed; top: -3.4mm; left: 0; right: 0;
-  border-bottom: .5px solid var(--ink);
-}
-.strip .chip {
-  background: none; display: block; position: fixed;
-  top: -10.5mm; left: 0; width: 40px; text-align: center;
-}
+.strip::after { content: none; }
+.strip .chip { display: none; }
 .strip .chip img { width: 32px; height: 32px; display: block; margin: 0 auto; }
-.strip .mark {
-  display: block; position: fixed; top: -10.5mm; left: 50px;
-  line-height: 33px;
-  font-weight: 600; font-size: 9.5pt; letter-spacing: .3em; color: var(--ink);
-}
-.strip .descriptor {
-  display: block; position: fixed; top: -10.5mm; left: 205px;
-  line-height: 33px; font-size: 6.3pt; font-weight: 600;
-  letter-spacing: .11em; text-transform: uppercase; color: var(--muted);
-  text-decoration: none; border-bottom: 0;
-}
+.strip .mark, .strip .descriptor { display: none; }
 .strip .version {
-  display: block; position: fixed; top: -10.5mm; right: 0;
-  line-height: 33px; text-align: right;
-  font-size: 6.3pt; font-weight: 600; letter-spacing: .13em;
-  text-transform: uppercase; color: var(--muted);
+  display: block; font-size: 0; line-height: 0;
 }
 .kicker {
   font-size: 7.5pt; font-weight: 800; letter-spacing: .24em;
@@ -805,12 +812,24 @@ footer.colophon {
   body { padding: 10mm 0; background: #f2f2f2; }
   .paper { background: #fff; box-shadow: 0 2px 18px rgba(0,0,0,.12);
     padding: 0 10mm 12mm; }
-  .running-header { position: static; height: auto; padding: 10mm 10mm 5mm;
+  .running-header { position: static; width: 100%; height: auto; overflow: visible;
+    padding: 10mm 10mm 5mm;
     max-width: 194mm; margin: 0 auto; background: #fff; }
-  .strip { position: relative; height: 34px; border-bottom: .5px solid var(--ink); }
+  .strip { position: relative; width: 100%; height: 34px; overflow: visible;
+    border-bottom: .5px solid var(--ink); }
   .strip::after { content: none; }
-  .strip .chip { position: absolute; top: 1px; }
-  .strip .mark, .strip .descriptor, .strip .version { position: absolute; top: 0; }
+  .strip .chip { background: none; display: block; position: absolute;
+    top: 1px; left: 0; width: 40px; text-align: center; }
+  .strip .mark { display: block; position: absolute; top: 0; left: 50px;
+    line-height: 33px; font-weight: 600; font-size: 9.5pt;
+    letter-spacing: .3em; color: var(--ink); }
+  .strip .descriptor { display: block; position: absolute; top: 0; left: 205px;
+    line-height: 33px; font-size: 6.3pt; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--muted);
+    text-decoration: none; border-bottom: 0; }
+  .strip .version { display: block; position: absolute; top: 0; right: 0;
+    line-height: 33px; text-align: right; font-size: 6.3pt; font-weight: 600;
+    letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
 }
 @media screen and (max-width: 700px) {
   body { padding: 0; }
@@ -929,6 +948,10 @@ def _stylesheet(figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
     css = CSS.replace(
         FIGURE_MAX_HEIGHT_ANCHOR,
         f"max-height: {float(figure_max_height_mm):g}mm;",
+    )
+    css = css.replace(
+        "__GROUNDED_LOGO_DATA_URI__",
+        _brand_logo_data_uri(),
     )
     if ref_leading is not None:
         ref_leading = float(ref_leading)
@@ -1406,6 +1429,10 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         repo_url = repo if repo.startswith("http") else f"https://{repo}"
     release = release or "dev"
     repo_url = repo_url or "#"
+    css = css.replace(
+        "__GROUNDED_RELEASE__",
+        json.dumps(f"GROUNDED {release.upper()}"),
+    )
 
     # token estimate for the whole document (~4 chars per token)
     tokens = max(1, round(len(md) / 4))
@@ -1472,7 +1499,9 @@ def _manifest_path_record(path, manifest_directory):
     }
 
 
-def validate_release_inputs(review_path, ledger_path, figure_specs=(), figure_prompts=()):
+def validate_release_inputs(
+        review_path, ledger_path, figure_specs=(), figure_prompts=(),
+        figure_inspections=(), figure_provenances=()):
     """Fail before rendering when release lineage inputs are incomplete."""
     review_path = Path(review_path).resolve()
     markdown = review_path.read_text(encoding="utf-8")
@@ -1483,8 +1512,13 @@ def validate_release_inputs(review_path, ledger_path, figure_specs=(), figure_pr
     ]
     figures = [(review_path.parent / source).resolve() for source in figure_sources]
     missing_files = [
-        str(path) for path in [*figures, *(Path(item) for item in figure_specs),
-                               *(Path(item) for item in figure_prompts)]
+        str(path) for path in [
+            *figures,
+            *(Path(item) for item in figure_specs),
+            *(Path(item) for item in figure_prompts),
+            *(Path(item) for item in figure_inspections),
+            *(Path(item) for item in figure_provenances),
+        ]
         if not path.is_file()
     ]
     if missing_files:
@@ -1494,6 +1528,45 @@ def validate_release_inputs(review_path, ledger_path, figure_specs=(), figure_pr
             "release manifest requires one --figure-spec and --figure-prompt "
             "for every rendered figure"
         )
+    specs = [
+        json.loads(Path(item).read_text(encoding="utf-8"))
+        for item in figure_specs
+    ]
+    if any(not isinstance(spec, dict) for spec in specs):
+        raise ValueError("every figure specification must be a JSON object")
+    contract_v1 = any(spec.get("quality_contract_version") == 1 for spec in specs)
+    if contract_v1 or figure_inspections or figure_provenances:
+        if (len(figure_inspections) != len(figures)
+                or len(figure_provenances) != len(figures)):
+            raise ValueError(
+                "quality-contract release requires one --figure-inspection and "
+                "--figure-provenance for every rendered figure"
+            )
+    if contract_v1:
+        try:
+            import qa_figure
+        except ImportError as exc:
+            raise ValueError(f"cannot load figure QA for release: {exc}") from exc
+        for index, (spec, figure, inspection_path, provenance_path) in enumerate(
+                zip(specs, figures, figure_inspections, figure_provenances), 1):
+            if spec.get("quality_contract_version") != 1:
+                continue
+            if figure.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+                raise ValueError(
+                    f"quality-contract figure {index} must be a raster so aspect "
+                    "and pixel QA can be proved"
+                )
+            inspection = json.loads(
+                Path(inspection_path).read_text(encoding="utf-8"))
+            provenance = json.loads(
+                Path(provenance_path).read_text(encoding="utf-8"))
+            audit = qa_figure.audit_figure(
+                spec, figure, inspection=inspection, provenance=provenance)
+            if audit.get("status") != "pass":
+                raise ValueError(
+                    f"quality-contract figure {index} failed QA: "
+                    + "; ".join(audit.get("errors") or ["unknown failure"])
+                )
     expected_dois = sorted({
         urllib.parse.unquote(value).lower().rstrip(").,;*_")
         for value in re.findall(r"https?://doi\.org/([^\s<>\]]+)", markdown, re.I)
@@ -1556,7 +1629,8 @@ def _figure_manifest_record(path, manifest_directory, figure_max_height_mm):
 def write_release_manifest(
         manifest_path, *, review_path, ledger_path, pdf_path, html_document,
         release, columns, kicker, colophon, repo, compiled_date,
-        figure_specs=(), figure_prompts=(), style="scientific",
+        figure_specs=(), figure_prompts=(), figure_inspections=(),
+        figure_provenances=(), style="scientific",
         figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
         imprint="end", edition="journal", pull_quote=None):
     """Bind every release input to the exact HTML and canonical PDF."""
@@ -1565,7 +1639,8 @@ def write_release_manifest(
     review_path = Path(review_path).resolve()
     pdf_path = Path(pdf_path).resolve()
     markdown, figures, expected_dois, ledger_by_doi = validate_release_inputs(
-        review_path, ledger_path, figure_specs, figure_prompts
+        review_path, ledger_path, figure_specs, figure_prompts,
+        figure_inspections, figure_provenances
     )
     inputs = {
         "review": _manifest_path_record(review_path, manifest_directory),
@@ -1579,6 +1654,14 @@ def write_release_manifest(
         ],
         "figure_prompts": [
             _manifest_path_record(path, manifest_directory) for path in figure_prompts
+        ],
+        "figure_inspections": [
+            _manifest_path_record(path, manifest_directory)
+            for path in figure_inspections
+        ],
+        "figure_provenances": [
+            _manifest_path_record(path, manifest_directory)
+            for path in figure_provenances
         ],
     }
     html_bytes = html_document.encode("utf-8")
@@ -1651,6 +1734,10 @@ def main():
                     help="figure specification JSON (repeat once per figure)")
     ap.add_argument("--figure-prompt", action="append", default=[],
                     help="saved generation prompt (repeat once per figure)")
+    ap.add_argument("--figure-inspection", action="append", default=[],
+                    help="visual inspection JSON (repeat once per figure)")
+    ap.add_argument("--figure-provenance", action="append", default=[],
+                    help="generation provenance JSON (repeat once per figure)")
     ap.add_argument(
         "--ref-leading", type=float, default=None, metavar="LH",
         help="reference-list line-height, bounded "
@@ -1703,7 +1790,8 @@ def main():
                 ap.error("--release-manifest requires --ledger")
             try:
                 validate_release_inputs(
-                    args.src, args.ledger, args.figure_spec, args.figure_prompt
+                    args.src, args.ledger, args.figure_spec, args.figure_prompt,
+                    args.figure_inspection, args.figure_provenance
                 )
             except (OSError, ValueError, json.JSONDecodeError) as exc:
                 ap.error(str(exc))
@@ -1759,6 +1847,8 @@ def main():
                 compiled_date=compiled_date,
                 figure_specs=args.figure_spec,
                 figure_prompts=args.figure_prompt,
+                figure_inspections=args.figure_inspection,
+                figure_provenances=args.figure_provenance,
                 style=args.style,
                 figure_max_height_mm=args.figure_max_height,
                 ref_leading=effective_ref_leading,

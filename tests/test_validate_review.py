@@ -60,6 +60,15 @@ def strict_large_bullets(target_filler_words):
 
 
 class ValidateReviewTests(unittest.TestCase):
+    def test_journal_figure_budgets_raise_visual_coverage_without_padding(self):
+        self.assertEqual(
+            {
+                size: (requirements["figure_target"], requirements["figure_cap"])
+                for size, requirements in validate_review.TIER_REQUIREMENTS.items()
+            },
+            {"small": (2, 2), "medium": (3, 5), "large": (5, 8)},
+        )
+
     def test_four_showcase_examples_pass(self):
         examples = (
             ("seed-oils.md", "scientific", "large"),

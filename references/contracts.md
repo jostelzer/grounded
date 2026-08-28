@@ -51,6 +51,21 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
 - `qa_review_pdf.py` / `qa_deck_pdf.py` / `qa_figure.py`: fail-closed
   behavior, report shapes (additive only).
 
+## Additive interface changes
+
+- Figure quality contract v1 adds `--review-style` and `--render-route` to
+  `build_figure_prompt.py`, `--provenance` to `qa_figure.py`, and repeatable
+  `--figure-inspection` / `--figure-provenance` inputs to `export_review.py`.
+  Existing figure specs and CLI defaults remain valid; v1 specs opt into the
+  stricter candidate, visual-quality, provenance, aspect, and PDF-matrix gates.
+- Release-manifest schema 1 adds `figure_inspections` and
+  `figure_provenances` lists and figure QA reports add pixel/aspect/visual-
+  quality metrics. Existing fields retain their meaning.
+- Journal-PDF visual planning now targets 2 figures for small reviews, 3–4 for
+  medium, and 5–6 for large, with hard ceilings of 2/5/8. Falling below a
+  target warns rather than failing so the policy cannot force decorative
+  filler; exceeding the size ceiling remains a validation error.
+
 ## Fixtures
 
 `tests/fixtures/colic/` is the recorded golden run (small popsci journal PDF,

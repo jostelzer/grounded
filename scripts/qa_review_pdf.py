@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import shutil
@@ -140,6 +141,145 @@ def _verify_figure_geometry(
         )
 
 
+def _matrix_multiply(left, right):
+    """Compose two PDF affine matrices using column-vector geometry."""
+    a1, b1, c1, d1, e1, f1 = left
+    a2, b2, c2, d2, e2, f2 = right
+    return (
+        a1 * a2 + c1 * b2,
+        b1 * a2 + d1 * b2,
+        a1 * c2 + c1 * d2,
+        b1 * c2 + d1 * d2,
+        a1 * e2 + c1 * f2 + e1,
+        b1 * e2 + d1 * f2 + f1,
+    )
+
+
+def _painted_image_placements(reader) -> list[dict[str, object]]:
+    """Resolve every painted image through page/form transformation matrices."""
+    from pypdf.generic import ContentStream
+
+    identity = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+    placements: list[dict[str, object]] = []
+
+    def visit(stream, resources, ctm, page_number, active_forms):
+        if stream is None or resources is None:
+            return
+        resources = resources.get_object()
+        xobjects = resources.get("/XObject")
+        xobjects = xobjects.get_object() if xobjects else {}
+        state_stack = []
+        current = ctm
+        content = ContentStream(stream, reader)
+        for operands, operator in content.operations:
+            if operator == b"q":
+                state_stack.append(current)
+            elif operator == b"Q":
+                if state_stack:
+                    current = state_stack.pop()
+            elif operator == b"cm" and len(operands) == 6:
+                matrix = tuple(float(value) for value in operands)
+                current = _matrix_multiply(current, matrix)
+            elif operator == b"Do" and operands:
+                reference = xobjects.get(operands[0])
+                if reference is None:
+                    continue
+                obj = reference.get_object()
+                subtype = obj.get("/Subtype")
+                if subtype == "/Image":
+                    x_length = math.hypot(current[0], current[1])
+                    y_length = math.hypot(current[2], current[3])
+                    dot = current[0] * current[2] + current[1] * current[3]
+                    orthogonality = (
+                        abs(dot) / (x_length * y_length)
+                        if x_length and y_length else 1.0
+                    )
+                    placements.append({
+                        "page": page_number,
+                        "width_px": int(obj.get("/Width") or 0),
+                        "height_px": int(obj.get("/Height") or 0),
+                        "drawn_width_pt": x_length,
+                        "drawn_height_pt": y_length,
+                        "drawn_aspect_ratio": (
+                            x_length / y_length if y_length else None),
+                        "orthogonality_error": orthogonality,
+                    })
+                elif subtype == "/Form":
+                    marker = (
+                        getattr(reference, "idnum", None),
+                        getattr(reference, "generation", 0),
+                    )
+                    if marker in active_forms:
+                        continue
+                    raw_matrix = obj.get("/Matrix") or identity
+                    form_matrix = tuple(float(value) for value in raw_matrix)
+                    visit(
+                        obj,
+                        obj.get("/Resources") or resources,
+                        _matrix_multiply(current, form_matrix),
+                        page_number,
+                        active_forms | {marker},
+                    )
+
+    for page_number, page in enumerate(reader.pages, 1):
+        visit(page.get_contents(), page.get("/Resources"), identity,
+              page_number, set())
+    return placements
+
+
+def _verify_pdf_figure_aspects(
+        reader, figure_records: list[dict[str, object]] | None,
+        tolerance: float = 0.01) -> tuple[list[dict[str, object]], list[str]]:
+    """Compare intrinsic figure ratios with the actual PDF image CTMs."""
+    if not figure_records:
+        return [], []
+    expected: dict[tuple[int, int], int] = {}
+    for record in figure_records:
+        width = record.get("pixel_width")
+        height = record.get("pixel_height")
+        if isinstance(width, int) and isinstance(height, int) and width > 0 and height > 0:
+            expected[(width, height)] = expected.get((width, height), 0) + 1
+    if not expected:
+        return [], []
+
+    placements = _painted_image_placements(reader)
+    checks: list[dict[str, object]] = []
+    failures: list[str] = []
+    for dimensions, required_count in expected.items():
+        width, height = dimensions
+        matches = [
+            placement for placement in placements
+            if (placement["width_px"], placement["height_px"]) == dimensions
+        ]
+        if len(matches) < required_count:
+            failures.append(
+                f"PDF paints {len(matches)} image(s) at {width}×{height}px; "
+                f"release manifest requires {required_count}")
+            continue
+        intrinsic = width / height
+        for placement in matches:
+            drawn = placement["drawn_aspect_ratio"]
+            error = abs(float(drawn) / intrinsic - 1.0) if drawn else float("inf")
+            shear = float(placement["orthogonality_error"])
+            check = {
+                **placement,
+                "intrinsic_aspect_ratio": round(intrinsic, 6),
+                "relative_aspect_error": round(error, 6),
+                "status": "pass" if error <= tolerance and shear <= tolerance else "fail",
+            }
+            checks.append(check)
+            if error > tolerance:
+                failures.append(
+                    f"page {placement['page']} stretches {width}×{height}px figure: "
+                    f"intrinsic ratio {intrinsic:.4f}, painted ratio {float(drawn):.4f}, "
+                    f"error {error:.1%}")
+            if shear > tolerance:
+                failures.append(
+                    f"page {placement['page']} shears {width}×{height}px figure "
+                    f"(orthogonality error {shear:.3f})")
+    return checks, failures
+
+
 def verify_release_manifest(
         manifest_path: str, pdf_path: str, markdown_path: str | None = None
         ) -> dict[str, object]:
@@ -158,8 +298,10 @@ def verify_release_manifest(
         raise PdfQaError("release manifest is missing inputs, artifact, or render")
     review_path = _verify_file_record(path, inputs.get("review") or {}, "review")
     _verify_file_record(path, inputs.get("ledger") or {}, "ledger")
-    for category in ("figures", "figure_specs", "figure_prompts"):
-        records = inputs.get(category)
+    for category in (
+            "figures", "figure_specs", "figure_prompts",
+            "figure_inspections", "figure_provenances"):
+        records = inputs.get(category, [])
         if not isinstance(records, list):
             raise PdfQaError(f"release manifest {category} must be a list")
         for index, record in enumerate(records, 1):
@@ -225,6 +367,7 @@ def verify_release_manifest(
         "markdown": markdown,
         "columns": int(render.get("columns")),
         "style": str(render.get("style") or "scientific"),
+        "figure_records": inputs.get("figures") or [],
     }
 
 
@@ -274,6 +417,7 @@ def _embedded_font_families(reader) -> set[str]:
 def inspect_structure(pdf_path: str, markdown: str | None = None,
                       expected_release: str | None = None,
                       expected_fonts: tuple[str, ...] = ("Charter", "Helvetica-Neue"),
+                      figure_records: list[dict[str, object]] | None = None,
                       ) -> dict[str, object]:
     """Inspect PDF objects, metadata, page geometry, links, and running furniture."""
     _Image, _ImageDraw, _ImageOps, PdfReader = _load_runtime()
@@ -315,9 +459,13 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
         page_texts.append(text)
         if index == 1:
             first_page_text = text
+        # A margin-box descriptor can wrap in narrower editions. PDF text
+        # extraction preserves that visual line break even though the semantic
+        # label is unchanged, so compare after ordinary whitespace folding.
+        masthead_text = re.sub(r"\s+", " ", text)
         if (
-            "G R O U N D E D" not in text
-            or "AGENTICALLY GENERATED SCIENTIFIC REVIEW" not in text
+            "G R O U N D E D" not in masthead_text
+            or "AGENTICALLY GENERATED SCIENTIFIC REVIEW" not in masthead_text
         ):
             failures.append(f"page {index} is missing the running masthead")
         if f"{index} / {len(reader.pages)}" not in text:
@@ -356,6 +504,10 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
                 f"PDF does not embed the canonical {family} family for its "
                 "edition"
             )
+
+    figure_aspect_checks, aspect_failures = _verify_pdf_figure_aspects(
+        reader, figure_records)
+    failures.extend(aspect_failures)
 
     expected_dois: set[str] = set()
     expected_figures = 0
@@ -432,6 +584,7 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
         "reference_start_page": reference_start_page,
         "reference_only_pages": reference_only_pages,
         "visible_reference_dois": len(expected_dois) if markdown is not None else 0,
+        "figure_aspect_checks": figure_aspect_checks,
     }
 
 
@@ -753,8 +906,14 @@ def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
             expected_fonts = tuple(export_review.EDITIONS[edition]["fonts"])
         except (ImportError, KeyError) as exc:
             raise PdfQaError(f"unknown manifest edition {edition!r}") from exc
-    structural = inspect_structure(pdf_path, markdown, expected_release,
-                                   expected_fonts=expected_fonts)
+    structural = inspect_structure(
+        pdf_path, markdown, expected_release,
+        expected_fonts=expected_fonts,
+        figure_records=(
+            manifest_context.get("figure_records")
+            if manifest_context is not None else None
+        ),
+    )
     if render_dir is None:
         with tempfile.TemporaryDirectory(prefix="grounded-pdf-qa-") as temporary:
             raster = render_and_inspect(

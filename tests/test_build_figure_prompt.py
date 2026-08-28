@@ -18,6 +18,7 @@ class FigurePromptTests(unittest.TestCase):
     def setUpClass(cls):
         cls.profiles = MODULE.load_json(MODULE.DEFAULT_PROFILES)
         cls.archetypes = MODULE.load_json(MODULE.DEFAULT_ARCHETYPES)
+        cls.writing_styles = MODULE.load_json(MODULE.DEFAULT_WRITING_STYLES)
 
     def minimal_spec(self):
         return {
@@ -103,6 +104,71 @@ class FigurePromptTests(unittest.TestCase):
         prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
         self.assertIn("Aspect: square", prompt)
         self.assertEqual(self.profiles, original)
+
+    def test_dotted_style_override_is_applied(self):
+        spec = self.minimal_spec()
+        spec["style_overrides"] = {"canvas.aspect": "2:1 editorial landscape"}
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("Aspect: 2:1 editorial landscape", prompt)
+
+    def test_popsci_uses_distinct_premium_art_direction(self):
+        spec = self.minimal_spec()
+        spec["review_style"] = "popsci"
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("Premium editorial science illustration", prompt)
+        self.assertIn("Render every character in Optima throughout", prompt)
+        self.assertIn("serious long-form magazine", prompt)
+        self.assertIn("corporate infographic", prompt)
+        self.assertIn("Never resize, condense, expand, shear, or stretch", prompt)
+
+    def test_hybrid_route_reserves_exact_copy_for_overlay(self):
+        spec = self.minimal_spec()
+        spec["render_route"] = "hybrid"
+        spec["generated_text"] = ["A"]
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("AUTHORING ROUTE\nhybrid", prompt)
+        generated = prompt.split("TEXT THE IMAGE MODEL MAY RENDER", 1)[1].split(
+            "RESERVED DETERMINISTIC OVERLAY COPY", 1)[0]
+        reserved = prompt.split("RESERVED DETERMINISTIC OVERLAY COPY", 1)[1].split(
+            "AVOID", 1)[0]
+        self.assertIn('"A"', generated)
+        self.assertNotIn('"B"', generated)
+        self.assertIn('"B"', reserved)
+        self.assertIn("no placeholder glyphs, pseudo-text", prompt)
+
+    def test_quantitative_archetype_routes_deterministically(self):
+        spec = self.minimal_spec()
+        spec["archetype"] = "quantitative"
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("AUTHORING ROUTE\ndeterministic", prompt)
+
+    def test_quality_contract_requires_explicit_route_style_and_aspect(self):
+        spec = self.minimal_spec()
+        spec["quality_contract_version"] = 1
+        with self.assertRaisesRegex(ValueError, "explicit review_style and render_route"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+        spec["review_style"] = "eli5"
+        spec["render_route"] = "generated"
+        with self.assertRaisesRegex(ValueError, "target_aspect_ratio"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_complete_quality_contract_emits_rich_style_and_geometry_sections(self):
+        spec = self.minimal_spec()
+        spec.update({
+            "quality_contract_version": 1,
+            "review_style": "eli5",
+            "render_route": "generated",
+            "target_aspect_ratio": 2.0,
+            "visual_anchor": "A cell membrane shown as a selective kitchen sieve",
+        })
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("Warm explanatory illustration", prompt)
+        self.assertIn("DOMINANT VISUAL ANCHOR", prompt)
+        self.assertIn("EDITORIAL ART DIRECTION", prompt)
+        self.assertIn("CANDIDATE SELECTION STANDARD", prompt)
+        self.assertIn("GEOMETRY — HARD INVARIANTS", prompt)
+        self.assertIn("2:1 landscape", prompt)
 
     def test_structured_data_is_preserved(self):
         spec = self.minimal_spec()

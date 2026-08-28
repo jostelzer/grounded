@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import shutil
 import statistics
@@ -13,8 +14,18 @@ import sys
 import unicodedata
 from pathlib import Path
 
+from artifact_io import sha256_file
 from grounded_metadata import rendered_figure_size_mm
 from typing import Any
+
+
+VISUAL_QUALITY_DIMENSIONS = (
+    "composition",
+    "hierarchy",
+    "domain_specificity",
+    "style_fit",
+    "polish",
+)
 
 
 def _normal(value: str) -> str:
@@ -103,9 +114,126 @@ def _relationship_tuple(value: dict[str, Any]) -> tuple[str, str, str]:
         raise ValueError("relationships require from, relation, and to") from exc
 
 
+def _required_number(value: Any, field: str, *, minimum: float,
+                     maximum: float) -> float:
+    try:
+        result = float(value)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{field} must be numeric") from exc
+    if not math.isfinite(result) or not minimum <= result <= maximum:
+        raise ValueError(
+            f"{field} must be between {minimum:g} and {maximum:g}")
+    return result
+
+
+def _validate_provenance(
+    spec: dict[str, Any], image_path: Path,
+    provenance: dict[str, Any] | None,
+) -> list[str]:
+    """Return fail-closed provenance errors for quality-contract figures."""
+    errors: list[str] = []
+    contract_version = spec.get("quality_contract_version")
+    if provenance is None:
+        if contract_version == 1:
+            errors.append("quality contract v1 requires generation provenance")
+        return errors
+    if not isinstance(provenance, dict):
+        raise ValueError("figure provenance must be an object")
+    if provenance.get("schema_version") != 1:
+        errors.append("generation provenance schema_version must be 1")
+
+    generator_available = provenance.get("generator_available")
+    if not isinstance(generator_available, bool):
+        errors.append("generation provenance requires boolean generator_available")
+        generator_available = False
+    if generator_available:
+        generator = provenance.get("generator")
+        if not isinstance(generator, dict) or not str(generator.get("tool") or "").strip():
+            errors.append("available generator provenance requires generator.tool")
+
+    route = spec.get("render_route")
+    selected_route = provenance.get("selected_route")
+    if contract_version == 1 and route not in {"generated", "hybrid", "deterministic"}:
+        errors.append("quality contract v1 requires an explicit valid render_route")
+    if selected_route != route:
+        errors.append(
+            f"provenance selected_route {selected_route!r} does not match spec {route!r}")
+
+    selected_asset = provenance.get("selected_asset")
+    if not isinstance(selected_asset, str) or Path(selected_asset).name != image_path.name:
+        errors.append("provenance selected_asset does not identify the audited image")
+    expected_hash = provenance.get("selected_sha256")
+    actual_hash = sha256_file(image_path)
+    if expected_hash != actual_hash:
+        errors.append("provenance selected_sha256 does not match the audited image")
+
+    attempts = provenance.get("attempts")
+    if not isinstance(attempts, list):
+        errors.append("generation provenance attempts must be a list")
+        attempts = []
+    elif any(not isinstance(item, dict) for item in attempts):
+        errors.append("every generation provenance attempt must be an object")
+        attempts = [item for item in attempts if isinstance(item, dict)]
+    generate_attempts = [item for item in attempts if item.get("kind") == "generate"]
+    edit_attempts = [item for item in attempts if item.get("kind") == "edit"]
+    compose_attempts = [item for item in attempts if item.get("kind") == "compose"]
+
+    comparison = provenance.get("comparison")
+    compared = 0
+    if isinstance(comparison, dict):
+        value = comparison.get("candidates_compared")
+        if isinstance(value, int) and not isinstance(value, bool):
+            compared = value
+        else:
+            errors.append("comparison.candidates_compared must be an integer")
+        if not str(comparison.get("selection_rationale") or "").strip():
+            errors.append("comparison requires a non-empty selection_rationale")
+    else:
+        errors.append("generation provenance comparison must be an object")
+
+    if route in {"generated", "hybrid"}:
+        if not generator_available:
+            errors.append(f"{route} route requires an available image generator")
+        if len(generate_attempts) < 2:
+            errors.append(f"{route} route requires at least two generated candidates")
+        if compared < 2:
+            errors.append(f"{route} route requires comparison of at least two candidates")
+
+    if route == "hybrid":
+        hybrid = provenance.get("hybrid")
+        if not isinstance(hybrid, dict):
+            errors.append("hybrid route requires hybrid composition provenance")
+        else:
+            if not str(hybrid.get("compositor") or "").strip():
+                errors.append("hybrid provenance requires a compositor")
+            if not str(hybrid.get("base_asset") or "").strip():
+                errors.append("hybrid provenance requires a base_asset")
+            if hybrid.get("anisotropic_resize") is not False:
+                errors.append("hybrid composition must prove anisotropic_resize=false")
+        if not compose_attempts:
+            errors.append("hybrid route requires a compose attempt")
+
+    if route == "deterministic" and spec.get("archetype") != "quantitative":
+        if generator_available:
+            if len(generate_attempts) < 2:
+                errors.append(
+                    "non-quantitative deterministic fallback requires two generated candidates")
+            if not edit_attempts:
+                errors.append(
+                    "non-quantitative deterministic fallback requires a targeted edit")
+        if provenance.get("hybrid_considered") is not True:
+            errors.append(
+                "non-quantitative deterministic fallback requires hybrid_considered=true")
+        if not str(provenance.get("fallback_reason") or "").strip():
+            errors.append(
+                "non-quantitative deterministic fallback requires a concrete fallback_reason")
+    return errors
+
+
 def audit_figure(
     spec: dict[str, Any], image_path: str | Path, *,
     inspection: dict[str, Any] | None = None,
+    provenance: dict[str, Any] | None = None,
     pdf_width_mm: float | None = None,
 ) -> dict[str, Any]:
     try:
@@ -115,6 +243,16 @@ def audit_figure(
     path = Path(image_path)
     with Image.open(path) as image:
         width, height = image.size
+        if image.mode in {"RGBA", "LA"} or "transparency" in image.info:
+            rgba = image.convert("RGBA")
+            flattened = Image.new("RGBA", rgba.size, "white")
+            flattened.alpha_composite(rgba)
+            grey = flattened.convert("L")
+        else:
+            grey = image.convert("L")
+        from PIL import ImageStat
+        pixel_stddev = float(ImageStat.Stat(grey).stddev[0])
+        pixel_extrema = list(grey.getextrema())
     if width < 800 or height < 400:
         raise ValueError("figure raster is too small for publication QA")
     if pdf_width_mm is None:
@@ -126,7 +264,35 @@ def audit_figure(
     if not 50 <= pdf_width_mm <= 190:
         raise ValueError("pdf_width_mm must be between 50 and 190")
 
+    contract_version = spec.get("quality_contract_version")
+    if contract_version not in {None, 1}:
+        raise ValueError("quality_contract_version must be 1 when supplied")
+    errors: list[str] = []
+    if pixel_stddev < 2.0:
+        errors.append(
+            f"figure is blank or near-blank (pixel standard deviation {pixel_stddev:.2f})")
+
+    target_aspect = spec.get("target_aspect_ratio")
+    actual_aspect = width / height
+    aspect_error = None
+    if target_aspect is None:
+        if contract_version == 1:
+            errors.append("quality contract v1 requires target_aspect_ratio")
+    else:
+        target_aspect = _required_number(
+            target_aspect, "target_aspect_ratio", minimum=1.0, maximum=4.0)
+        tolerance = _required_number(
+            spec.get("aspect_ratio_tolerance", 0.03),
+            "aspect_ratio_tolerance", minimum=0.0, maximum=0.1)
+        aspect_error = abs(actual_aspect / target_aspect - 1.0)
+        if aspect_error > tolerance:
+            errors.append(
+                f"raster aspect {actual_aspect:.4f} differs from target "
+                f"{target_aspect:.4f} by {aspect_error:.1%}; stretching is forbidden")
+
     inspection = inspection or {}
+    if not isinstance(inspection, dict):
+        raise ValueError("figure inspection must be an object")
     warnings: list[str] = []
     ocr_text = inspection.get("ocr_text")
     measured_height = inspection.get("minimum_label_height_px")
@@ -142,12 +308,14 @@ def audit_figure(
             if _normal(text) not in machine_normal
         ]
         if len(overridden) >= 3:
-            warnings.append(
+            message = (
                 "manual OCR transcript asserts "
-                f"{len(overridden)} expected item(s) tesseract could not read "
-                "— confirm each by visual inspection: "
-                + "; ".join(overridden[:5])
-            )
+                f"{len(overridden)} expected item(s) tesseract could not read: "
+                + "; ".join(overridden[:5]))
+            if contract_version == 1:
+                errors.append(message)
+            else:
+                warnings.append(message + " — confirm each by visual inspection")
     else:
         warnings.append(
             "manual OCR transcript used without a tesseract cross-check"
@@ -161,7 +329,7 @@ def audit_figure(
     expected_text = expected_pixel_text(spec)
     normal_ocr = _normal(ocr_text)
     missing_text = [text for text in expected_text if _normal(text) not in normal_ocr]
-    errors = [f"missing expected text: {text}" for text in missing_text]
+    errors.extend(f"missing expected text: {text}" for text in missing_text)
 
     abbreviations = spec.get("abbreviations", {})
     if not isinstance(abbreviations, dict):
@@ -206,6 +374,31 @@ def audit_figure(
     for collision in collisions:
         errors.append(f"text collision: {collision}")
 
+    geometry_distortions = inspection.get("geometry_distortions")
+    if geometry_distortions is None:
+        if contract_version == 1:
+            errors.append("quality contract v1 inspection requires geometry_distortions")
+        geometry_distortions = []
+    if not isinstance(geometry_distortions, list):
+        raise ValueError("geometry_distortions must be a list")
+    for distortion in geometry_distortions:
+        errors.append(f"geometry distortion: {distortion}")
+
+    visual_quality = inspection.get("visual_quality")
+    if contract_version == 1:
+        if not isinstance(visual_quality, dict):
+            errors.append("quality contract v1 inspection requires visual_quality")
+            visual_quality = {}
+        for dimension in VISUAL_QUALITY_DIMENSIONS:
+            verdict = visual_quality.get(dimension)
+            if verdict != "pass":
+                errors.append(
+                    f"visual quality {dimension} must pass; found {verdict!r}")
+    elif visual_quality is not None and not isinstance(visual_quality, dict):
+        raise ValueError("visual_quality must be an object")
+
+    errors.extend(_validate_provenance(spec, path, provenance))
+
     effective_points = None
     if measured_height is None:
         errors.append("minimum label height could not be measured")
@@ -223,6 +416,15 @@ def audit_figure(
         "metrics": {
             "width_px": width,
             "height_px": height,
+            "actual_aspect_ratio": round(actual_aspect, 6),
+            "target_aspect_ratio": (
+                round(float(target_aspect), 6) if target_aspect is not None else None
+            ),
+            "aspect_ratio_relative_error": (
+                round(aspect_error, 6) if aspect_error is not None else None
+            ),
+            "pixel_standard_deviation": round(pixel_stddev, 3),
+            "pixel_extrema": pixel_extrema,
             "ocr_characters": len(ocr_text),
             "expected_text_items": len(expected_text),
             "missing_text_items": len(missing_text),
@@ -233,6 +435,9 @@ def audit_figure(
                 round(effective_points, 2) if effective_points is not None else None
             ),
             "missing_abbreviation_expansions": missing_expansions,
+            "geometry_distortions": len(geometry_distortions),
+            "visual_quality": visual_quality,
+            "render_route": spec.get("render_route"),
         },
     }
 
@@ -244,6 +449,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--inspection",
         help="optional structured topology/effects/OCR inspection JSON",
+    )
+    parser.add_argument(
+        "--provenance",
+        help="generation/composition provenance JSON; required by quality contract v1",
     )
     parser.add_argument(
         "--pdf-width-mm", type=float, default=None,
@@ -258,8 +467,12 @@ def main(argv: list[str] | None = None) -> int:
             json.loads(Path(args.inspection).read_text(encoding="utf-8"))
             if args.inspection else None
         )
+        provenance = (
+            json.loads(Path(args.provenance).read_text(encoding="utf-8"))
+            if args.provenance else None
+        )
         result = audit_figure(
-            spec, args.image, inspection=inspection,
+            spec, args.image, inspection=inspection, provenance=provenance,
             pdf_width_mm=args.pdf_width_mm,
         )
     except (OSError, ValueError, json.JSONDecodeError) as exc:

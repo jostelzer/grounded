@@ -26,7 +26,13 @@ not a row of generic cards.
 
 ## Font policy
 
-**Arial is the defined figure font. Helvetica is the only visual fallback.** State `Arial throughout` in every generation prompt. Reject serif, slab-serif, condensed display, handwritten, outlined, beveled, or shadowed lettering.
+Typography follows the review's writing style via
+`figure-writing-style-overlays.json`: scientific uses Arial with Helvetica as
+fallback; popsci uses Optima with Helvetica Neue; bullets uses Helvetica Neue
+with Arial; ELI5 uses Seravek with Helvetica Neue. These are identity choices,
+not permission for display typography. Every face uses its natural width and
+height. Reject slab-serif, condensed, expanded, handwritten, outlined, beveled,
+shadowed, sheared, horizontally scaled, or vertically scaled lettering.
 
 At a 1,536 px-wide deliverable, use these visual targets:
 
@@ -41,10 +47,11 @@ At a 1,536 px-wide deliverable, use these visual targets:
 These are chat-readable targets inspired by Nature's 5–7 pt figure-label range
 at double-column width, raised so the smallest OCR-measured word height clears
 `qa_figure.py`'s 6.5 pt effective-size gate at the true journal render width.
-End-to-end raster generation cannot prove the embedded
-font file; inspect visual conformance and reject any output that visibly uses a
-serif or display face. If editable embedded font metadata is a deliverable
-requirement, use the deterministic vector fallback.
+End-to-end raster generation cannot prove the embedded font file; inspect visual
+conformance and use the hybrid compositor when exact typography matters. It
+resolves a real font and draws labels at natural proportions without resizing
+the generated base. If editable embedded font metadata is a deliverable
+requirement, use a deterministic vector renderer for that layer.
 
 **Aspect ratio for journal-PDF figures.** The exporter renders figures at full
 content width (184 mm) but caps their height (92 mm by default), scaling tall
@@ -52,7 +59,10 @@ figures down proportionally — which silently shrinks every label. Design
 journal figures at an aspect ratio of at least 2:1 (for example 1,536 × ≤768 px
 at the default cap) so the figure keeps the full content width; `qa_figure.py`
 evaluates label sizes at the true rendered width and will fail a tall figure
-whose labels drop below 6.5 pt on paper.
+whose labels drop below 6.5 pt on paper. New specs declare the target ratio;
+figure QA compares it with the raster, and PDF QA independently compares the
+intrinsic ratio with the painted transformation matrix. Any anisotropic scale
+or shear is release-blocking.
 
 ## Default profile
 
@@ -61,7 +71,7 @@ Use `nature-neuroscience` from `figure-style-presets.json` unless the figure is 
 The shared visual grammar is:
 
 - white background and 6–8% outer margins;
-- black or near-black Arial text;
+- black or near-black natural-width text from the selected writing-style overlay;
 - a shared invisible grid, aligned panel edges, and white-space grouping;
 - restrained, colour-blind-safe semantic colour on data and biological
   structures, not prose or large background fields;
@@ -84,8 +94,10 @@ Change one layer at a time:
 2. **Archetype:** mechanism, anatomical mechanism, study overview, comparison,
    quantitative, evidence map, timeline, or mindmap.
 3. **Style profile:** Nature Neuroscience explanatory, Nature Reviews conceptual, or Nature data.
-4. **Render context:** `article`, `standalone`, or `slide` for a requested deck.
-5. **Overrides:** aspect ratio, palette subset, panel count, or content-specific constraints.
+4. **Writing-style overlay:** scientific, popsci, bullets, or ELI5 identity.
+5. **Render route:** generated, hybrid, or deterministic.
+6. **Render context:** `article`, `standalone`, or `slide` for a requested deck.
+7. **Overrides:** aspect ratio, palette subset, panel count, or content-specific constraints.
 
 Never bury evidence changes inside style overrides. If a user requests another journal or house style, add a new profile instead of mutating the default.
 
@@ -102,4 +114,7 @@ The system abstracts these current Nature requirements and examples:
   mechanism, comparison, study-overview, quantitative, cellular, timeline, and
   conceptual-synthesis roles. The copyrighted pixels stay outside the repository.
 
-Nature's production rules prefer editable vector artwork. This skill instead prioritizes end-to-end image generation because that is the requested authoring route; it therefore uses stricter rendered-text and data QA and keeps deterministic SVG/vector rendering as fallback.
+Nature's production rules prefer editable vector artwork. This skill prioritizes
+capable image generation for the authored scientific composition, combines it
+with deterministic overlays when exact text or geometry requires them, and uses
+strict pixel, provenance, visual-quality, and non-distortion QA.

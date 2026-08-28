@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
 
@@ -17,6 +18,7 @@ import export_review  # noqa: E402
 import grounded_metadata  # noqa: E402
 import qa_review_pdf  # noqa: E402
 import weasyprint_export  # noqa: E402
+from artifact_io import sha256_file  # noqa: E402
 
 
 class PdfExportTests(unittest.TestCase):
@@ -82,6 +84,39 @@ class PdfExportTests(unittest.TestCase):
                 )
             self.assertGreaterEqual(inspection["internal_links"], 1)
             self.assertEqual(inspection["expected_figures"], 1)
+            ratio_checked = qa_review_pdf.inspect_structure(
+                first, self.markdown(),
+                figure_records=[{"pixel_width": 1200, "pixel_height": 700}],
+            )
+            self.assertTrue(ratio_checked["figure_aspect_checks"])
+            self.assertTrue(all(
+                item["status"] == "pass"
+                for item in ratio_checked["figure_aspect_checks"]
+            ))
+
+    def test_pdf_matrix_gate_rejects_anisotropic_figure_placement(self):
+        from pypdf import PdfReader
+
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+            )
+            distorted = page.replace(
+                "height: auto; max-height: 92mm;\n  object-fit: contain;",
+                "height: 60mm; max-height: 60mm;\n  object-fit: fill;",
+                1,
+            )
+            self.assertNotEqual(distorted, page)
+            pdf = os.path.join(tmp, "distorted.pdf")
+            weasyprint_export.write_pdf(distorted, pdf)
+            _checks, failures = qa_review_pdf._verify_pdf_figure_aspects(
+                PdfReader(pdf, strict=True),
+                [{"pixel_width": 1200, "pixel_height": 700}],
+            )
+            self.assertTrue(failures)
+            self.assertIn("stretches 1200×700px figure", " ".join(failures))
 
     def test_metadata_uses_fixed_compilation_date(self):
         from pypdf import PdfReader
@@ -267,6 +302,98 @@ class PdfExportTests(unittest.TestCase):
             with open(review, "a", encoding="utf-8") as stream:
                 stream.write("\nChanged after rendering.\n")
             with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "review hash changed"):
+                qa_review_pdf.verify_release_manifest(manifest, pdf, review)
+
+    def test_quality_contract_manifest_hashes_inspection_and_provenance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            figure = os.path.join(tmp, "figure.png")
+            self.make_image(figure)
+            review = os.path.join(tmp, "review.md")
+            ledger = os.path.join(tmp, "sources.json")
+            spec = os.path.join(tmp, "figure.json")
+            prompt = os.path.join(tmp, "figure.prompt.txt")
+            inspection = os.path.join(tmp, "figure.inspection.json")
+            provenance = os.path.join(tmp, "figure.provenance.json")
+            pdf = os.path.join(tmp, "review.pdf")
+            manifest = os.path.join(tmp, "release-manifest.json")
+            with open(review, "w", encoding="utf-8") as stream:
+                stream.write(self.markdown())
+            with open(ledger, "w", encoding="utf-8") as stream:
+                json.dump({"entries": [{
+                    "key": "Smith2024", "doi": "10.1000/example",
+                    "status": "verified",
+                    "verification": {
+                        "bibliographic_status": "verified",
+                        "retraction_status": "clear",
+                    },
+                }]}, stream)
+            target_ratio = 1200 / 700
+            with open(spec, "w", encoding="utf-8") as stream:
+                json.dump({
+                    "quality_contract_version": 1,
+                    "review_style": "scientific",
+                    "render_route": "deterministic",
+                    "archetype": "quantitative",
+                    "target_aspect_ratio": target_ratio,
+                    "title": "Caption only",
+                    "render_context": "article",
+                    "exact_text": ["Caption only"],
+                    "relationships": [],
+                    "avoid": [],
+                }, stream)
+            with open(prompt, "w", encoding="utf-8") as stream:
+                stream.write("saved deterministic production brief\n")
+            with open(inspection, "w", encoding="utf-8") as stream:
+                json.dump({
+                    "ocr_text": "",
+                    "minimum_label_height_px": 32,
+                    "relationships": [],
+                    "detected_effects": [],
+                    "text_collisions": [],
+                    "geometry_distortions": [],
+                    "visual_quality": {
+                        "composition": "pass", "hierarchy": "pass",
+                        "domain_specificity": "pass", "style_fit": "pass",
+                        "polish": "pass",
+                    },
+                }, stream)
+            with open(provenance, "w", encoding="utf-8") as stream:
+                json.dump({
+                    "schema_version": 1,
+                    "generator_available": True,
+                    "generator": {"tool": "built-in-imagegen"},
+                    "selected_route": "deterministic",
+                    "selected_asset": "figure.png",
+                    "selected_sha256": sha256_file(figure),
+                    "attempts": [{"kind": "render", "asset": "figure.png"}],
+                    "comparison": {
+                        "candidates_compared": 1,
+                        "selection_rationale": "The exact plot geometry is the evidence.",
+                    },
+                    "hybrid_considered": False,
+                    "fallback_reason": None,
+                }, stream)
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+            )
+            weasyprint_export.write_pdf(page, pdf)
+            export_review.write_release_manifest(
+                manifest, review_path=review, ledger_path=ledger, pdf_path=pdf,
+                html_document=page, release="v-test", columns=2,
+                kicker="Review", colophon=None, repo="example.test/grounded",
+                compiled_date="2026-08-26", figure_specs=[spec],
+                figure_prompts=[prompt], figure_inspections=[inspection],
+                figure_provenances=[provenance],
+            )
+            content = json.loads(Path(manifest).read_text(encoding="utf-8"))
+            self.assertEqual(len(content["inputs"]["figure_inspections"]), 1)
+            self.assertEqual(len(content["inputs"]["figure_provenances"]), 1)
+            qa_review_pdf.verify_release_manifest(manifest, pdf, review)
+            with open(inspection, "a", encoding="utf-8") as stream:
+                stream.write("\n")
+            with self.assertRaisesRegex(
+                    qa_review_pdf.PdfQaError, "figure_inspections.*hash changed"):
                 qa_review_pdf.verify_release_manifest(manifest, pdf, review)
 
     def test_visible_references_heading_is_release_blocking(self):

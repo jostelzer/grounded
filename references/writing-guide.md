@@ -140,10 +140,13 @@ Place every citation immediately after the sentence, clause, quotation, figure-c
     evidence-grounded, legible, and inspected; has a unique stable ID; is
     referenced from the relevant body text; and has a caption in the same
     scientific, popsci, bullet, or ELI5 register with 2–5 verified citations.
-10b. Every generated figure passes `qa_figure.py`: exact copy, local
+10b. Every figure passes `qa_figure.py`: non-blank pixels, exact copy, local
     abbreviation expansions, directed relationships, prohibited effects,
-    collisions, and effective PDF label size all match its saved spec and
-    inspection. The body introduces the figure before the artwork.
+    collisions, effective PDF label size, target aspect, visual quality, and
+    generation-route provenance all match its saved spec, inspection, and
+    provenance. Natural font and shape proportions are preserved; PDF QA
+    independently proves that placement did not stretch or shear the raster.
+    The body introduces the figure before the artwork.
 11. When a PDF is requested, inspect every rendered page. No heading may be
     stranded or separated from its first paragraph, table, or figure; no page
     may be an avoidably sparse spill; and no large preventable blank region may

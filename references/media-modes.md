@@ -2,11 +2,12 @@
 
 Read this reference whenever the output format is the **journal PDF** (whose figures are mandatory and automatic — there is no separate image mode) or **slides**. The figures are an additional synthesis artifact created after the complete review pipeline has run at the selected size and style; they never replace the written review or relax the search, reading, citation, or verification standard. An explicitly requested `deck`, `slides`, presentation, slide deck, or journal club deck follows the same shared evidence boundary below but uses the complete workflow in `deck-guide.md` — and differs in delivery: the deck is the deliverable, with the synthesis (`synthesis.md`, per `synthesis-guide.md`) kept as a working file rather than delivered in chat.
 
-Before creating media, also read `figure-reference-analysis.md`,
-`figure-style-system.md`, `image-prompt-guide.md`, and `figure-captions.md`.
-They define the visual evidence base, Arial-based journal system, structured
-prompt workflow, and cited caption/cross-reference contract. Do not substitute
-an improvised prose prompt.
+Before creating media, also read `figure-generation-contract.md`,
+`figure-reference-analysis.md`, `figure-style-system.md`,
+`image-prompt-guide.md`, and `figure-captions.md`. They define the generator-
+first route, visual evidence base, style-aware figure system, structured prompt
+workflow, and cited caption/cross-reference contract. Do not substitute an
+improvised prose prompt.
 
 ## Shared evidence boundary
 
@@ -16,7 +17,7 @@ an improvised prose prompt.
 - Encode uncertainty visibly. Use restrained emphasis, dashed or muted elements, and labels such as `mixed`, `limited`, or `hypothesized` when the evidence requires them.
 - Keep citations in the written review and caption rather than filling the visual with DOI text.
 - Generate the actual media. Do not substitute a prompt, text outline, ASCII diagram, or unrendered diagram source.
-- Prefer a capable image-generation model for the complete rendered artifact, including text. Supply exact copy and inspect every character; deterministic SVG or another renderer is the fallback when generation is unavailable or cannot pass QA.
+- Prefer a capable built-in image-generation model for the visually rich layer. Use complete generation for text-light work and hybrid generation plus deterministic overlay when labels, numbers, or exact arrows are dense. Deterministic rendering is primary only when mathematical geometry is the evidence.
 - If the required media tooling is unavailable or generation fails, still deliver the written review at its selected tier and state in one sentence that the visual could not be generated. Do not claim that media was created.
 
 ## Slides
@@ -28,10 +29,19 @@ The slides format is explicit-only, combines with every size and style, and is i
 Create polished, self-explanatory scientific figures that communicate the review's synthesis. The journal PDF always carries figures, at any size and style; the figure budget scales with the size:
 
 | | Small | Medium | Large |
-|---|---|---|---|
-| Figures | 1 | up to 3 | up to 5 |
+|---|---:|---:|---:|
+| Normal target | 2 | 3–4 | 5–6 |
+| Hard ceiling | 2 | 5 | 8 |
 
-"Up to" is a cap, not a quota: every figure must be earned by a distinct visual story in the evidence. A medium review with one genuinely visual finding gets one figure. Never pad with a figure that restates a table or decorates a section.
+The target expresses the new visual ambition, while the ceiling prevents a
+review from becoming a picture stack. Plan visual coverage immediately after
+`synthesis.md`: normally Figure 1 is the whole-answer synthesis, then choose
+different jobs from mechanism, study design, exact quantitative result,
+comparison/moderator, and uncertainty/evidence boundary. Every figure must be
+earned by a distinct visual story. A review with only one genuinely visual
+finding may still use one; the validator warns below target but does not force
+padding. Never add a figure that merely restates a table, repeats another
+figure, or decorates a section.
 
 **What a figure can be — maximum flexibility within the rules.** Any figure that serves the evidence is allowed. Examples, not an exhaustive list:
 
@@ -59,25 +69,43 @@ it.
 
 Every figure must be understandable to an educated non-specialist without relying on the surrounding review to decode its terminology.
 
-### Preferred build: generate the complete figure end to end
+### Preferred build: generator-first, exact where it matters
 
-When a capable image-generation model is available, ask it to render the
-finished scientific figure as one complete artifact: illustration, composition,
-panel labels, arrows, exact numerical values, legend, uncertainty language, and
-any necessary local definitions. Do not automatically split the artwork and
-typography into separate stages. Create a figure-spec JSON, set
-`render_context: article`, select a profile from `figure-style-presets.json` and
-an archetype from `figure-archetypes.json`, then run
-`scripts/build_figure_prompt.py`. This keeps evidence, composition, framing, and
-art direction independently reusable. Use `render_context: standalone` only
-when there will be no adjacent title/caption; its compact title is still
-rendered end to end by the image model. Use `render_context: slide` only for a
-requested PDF deck built with `scripts/export_deck.py`; it creates 16:9 artwork
-with quiet chrome zones and keeps the claim and citations as real deck text.
+Probe the current agent's media capabilities before choosing a renderer. When a
+capable built-in image generator is available, use it for the visually authored
+portion of every non-quantitative figure. Create a quality-contract figure-spec
+JSON with `review_style`, `render_route`, `target_aspect_ratio`, and one dominant
+`visual_anchor`; set `render_context: article`, select a scientific profile and
+archetype, then run `scripts/build_figure_prompt.py`. The prompt builder combines
+the verified story with route-specific instructions and distinct scientific,
+popsci, bullets, or ELI5 art direction.
 
-The generated prompt must contain the figure's evidence-backed visual story and **all required text verbatim**. Quote titles, labels, numbers, units, confidence intervals, legend entries, and glossary definitions. State which relationships are observed, inferred, mixed, or uncertain and how that distinction must appear. For quantitative figures, supply every plotted value and scale explicitly; the model must not invent, interpolate, or relabel data. Arial is the defined font; visually reject serif, condensed, display, outlined, or shadowed lettering.
+Choose `generated` for text-light finished artwork, `hybrid` for rich artwork
+with exact labels/numbers/arrows added by `compose_hybrid_figure.py`, and
+`deterministic` from the start for exact plots or other mathematical geometry.
+Hybrid is the normal high-quality answer to a generator that illustrates
+beautifully but typesets dense copy poorly; it is not a fallback. The generated
+base must remain the meaningful scientific composition, not a token texture
+behind a generic vector diagram.
 
-After generation, inspect every word, number, symbol, arrow, plotted magnitude, and scientific relationship. A visually attractive result still fails if it misspells a label, changes a denominator, drops a confidence interval, reverses a relationship, invents anatomy, or implies unsupported certainty. Use targeted image edits or regenerate until it passes. If a capable image model is unavailable, or repeated generation cannot produce a fully correct and readable result, fall back to hand-authored SVG, matplotlib, graphviz, HTML/canvas, or another deterministic renderer.
+For generated and hybrid routes, make at least two meaningfully different
+candidates and compare evidence fidelity, hierarchy, domain specificity, style
+fit, polish, and legibility. Use a targeted edit for a local flaw and a fresh
+candidate for a broadly weak composition. Preserve the strongest generated
+composition with a deterministic overlay when dense copy is the only blocker.
+A non-quantitative pure deterministic fallback requires two generated
+candidates, one targeted edit, explicit hybrid consideration, and a concrete
+failure reason in provenance. Never ship the first technically valid result or
+prefer a visibly cheaper flowchart merely because OCR is easier.
+
+After composition, inspect every word, number, symbol, arrow, plotted magnitude,
+scientific relationship, and shape. A visually attractive result still fails if
+it changes evidence; a correct result still fails if it is generic, cheap, or
+stylistically wrong. Save the inspection and generation provenance and run
+`qa_figure.py` with both. No stage may scale width and height independently:
+circles remain circular and lettering keeps its natural proportions. Final PDF
+QA independently measures the image transformation matrix rather than trusting
+CSS intent.
 
 ### Composition dos and don'ts
 
@@ -91,8 +119,8 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
 - Give every arrow a meaning stated in the figure ("leads to", "measured by", "mixed evidence").
 - Encode uncertainty visibly and explain the encoding in the glossary — dashed outline, muted fill, an explicit `mixed` or `mouse evidence only` tag.
 - Keep all required in-figure copy short enough to remain readable at the
-  delivered size. Quote the exact copy in the generation prompt and request
-  deliberate line wrapping.
+  delivered size. Quote generator-rendered copy exactly; for hybrid figures,
+  reserve quiet zones and put dense exact copy in the overlay manifest.
 - Rasterize and *look* at the result if any renderer is available (`rsvg-convert`, `cairosvg`, a headless browser). Inspect at delivered size and at phone width.
 - Keep journal-PDF figures at an aspect ratio of at least 2:1. The exporter
   caps figure height (92 mm by default, `--figure-max-height` to adjust within
@@ -105,6 +133,9 @@ After generation, inspect every word, number, symbol, arrow, plotted magnitude, 
 - **Don't accept approximately correct text or data.** Every rendered word, number, unit, and symbol must match the supplied copy exactly.
 - **Don't place text over busy artwork.** Labels need quiet space or a plain backing plate.
 - **Don't let panels, icons, or captions overlap.** Bounding boxes must be disjoint. Overlap is not a style choice; it reads as a broken render.
+- **Don't stretch to fit.** Never set independent width and height scales, shear
+  a raster, condense lettering, or turn a circle into an ellipse. Wrap, move,
+  crop proportionally, or revise the composition instead.
 - **Don't drift into slide or dashboard design.** Article and standalone figures
   must not imitate presentation furniture. Slide-context artwork still excludes
   serif headlines, rounded UI cards, badges, decorative icons, drop shadows,
@@ -173,3 +204,6 @@ paragraph of everyday sentences. `scripts/format_references.py` and
 9. In every figure, every abbreviation and non-obvious concept is defined by a
    local label or a smaller but readable legend/key inside the image.
 10. Every figure can be understood without consulting the surrounding prose for terminology.
+11. The selected route and iteration history are recorded; all five visual-
+    quality dimensions pass, the raster matches its declared aspect, and final
+    PDF placement preserves that intrinsic ratio without shear.

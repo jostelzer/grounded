@@ -81,29 +81,37 @@ DOI-only source cell in a comparison table remains valid.
 
 ## Figure conformance
 
-Add directed `relationships` and local `abbreviations` to the figure spec when
-they apply. Save a structured visual inspection with observed relationships,
-detected effects, text collisions, and optionally OCR text/label height. If OCR
-is omitted, the checker runs Tesseract itself.
+Follow `figure-generation-contract.md`. Every new spec declares quality contract
+v1, writing style, render route, target aspect, and a domain-specific visual
+anchor. Add directed `relationships`, local `abbreviations`, and shape-specific
+geometry invariants when they apply. Save a structured inspection with observed
+relationships, detected effects, text collisions, geometry distortions, all
+five visual-quality verdicts, and optionally OCR text/label height. Save a
+separate provenance record containing capability, attempts, candidate
+comparison, selected hash, route, and hybrid/fallback details. If OCR is
+omitted, the checker runs Tesseract itself.
 
 ```bash
-python3 scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure-inspection.json
+python3 scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure.inspection.json --provenance figure.provenance.json
 ```
 
-The gate compares exact text, abbreviation expansions, relationship direction,
-prohibited effects named by the spec, collisions, raster size, and effective
-label size at PDF scale. Fix the pixels or use a deterministic vector figure
-when text-heavy ImageGen output cannot pass after one targeted repair.
+The gate verifies non-blank pixels, exact text, abbreviation expansions,
+relationship direction, prohibited effects, collisions, raster size, target
+aspect, natural geometry, effective label size at PDF scale, candidate count,
+selected hash, route rules, and composition/hierarchy/domain specificity/style
+fit/polish. Dense text is a reason to preserve the strongest generated base and
+use the hybrid compositor, not a reason to discard good art after one attempt.
 
 ## Immutable PDF lineage
 
 Create only one canonical PDF in the release directory. The exporter manifest
 binds the exact review, verified ledger, rebuilt HTML, PDF, and every figure,
-spec, and saved prompt. Repeat the figure arguments once per rendered figure;
-omit them for a text-only review.
+spec, saved prompt, visual inspection, and generation provenance. Repeat all
+four figure-lineage arguments once per rendered figure; omit them for a
+text-only review.
 
 ```bash
-python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --release-manifest release-manifest.json --release vX.Y.Z --compiled-date YYYY-MM-DD --figure-spec figure.json --figure-prompt figure.prompt.txt
+python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --release-manifest release-manifest.json --release vX.Y.Z --compiled-date YYYY-MM-DD --figure-spec figure.json --figure-prompt figure.prompt.txt --figure-inspection figure.inspection.json --figure-provenance figure.provenance.json
 python3 scripts/qa_review_pdf.py review.pdf --manifest release-manifest.json --render-dir review-pdf-qa --report pdf-qa.json
 ```
 
@@ -111,8 +119,10 @@ QA rehashes every input, independently rebuilds the HTML, checks the one-PDF
 scope, requires a visible terminal References heading, requires every DOI as
 visible reference text and as a URI annotation, applies terminal reference-page
 occupancy checks, rasterizes every page, and records exactly one authoritative
-render set in the manifest. Keep failed candidates in a case-local audit folder,
-never beside the canonical PDF.
+render set in the manifest. Before rasterization, it resolves every painted
+raster through page and form transformation matrices and fails if the painted
+ratio differs from the intrinsic figure ratio or if the axes are sheared. Keep
+failed candidates in a case-local audit folder, never beside the canonical PDF.
 
 The journal build keeps author–year links in the source markdown but renders
 them as DOI-linked superscript numbers in first-citation order. Each number must

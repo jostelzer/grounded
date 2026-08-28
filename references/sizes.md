@@ -9,7 +9,7 @@ Styles change the writing register and jargon treatment — never search depth, 
 - **Bullets** (explicit: "bullets", "list", "compact structured format"): question → TL;DR → punchline headings → cited bullets → sources. Body budget: small 350–700, medium 900–1,600, large 2,000–4,000 words. Layout in `style-bullets.md`.
 - **ELI5** (explicit: `eli5`, "explain like I'm five", very simple language): a step-by-step explanation in short paragraphs and very simple English at the chosen size (defaults small) — a familiar starting point, one new idea per section built on the steps before it, the contrary evidence as its own step, and a hand-back ending. It rewrites jargon instead of applying the normal term-link pattern. It is not a bullet format unless the user explicitly asks for bullets too. Rules in `style-eli5.md`.
 
-The **output format** — `inline chat` (default), `journal PDF`, or `slides` — is the third independent axis, included in the same ask-back when missing. The journal PDF always includes generated figures, with a size-scaled budget (small 1, medium up to 3, large up to 5 — caps, not quotas), per `media-modes.md`. Slides combines with any size and style and is itself the deliverable — a verified 16:9 PDF of standalone slides, with a 1–3 sentence plain answer in chat and the written synthesis kept as an internal working draft, per `deck-guide.md`.
+The **output format** — `inline chat` (default), `journal PDF`, or `slides` — is the third independent axis, included in the same ask-back when missing. The journal PDF always includes generated figures, with a size-scaled visual target and ceiling (small target 2/cap 2, medium target 3/cap 5, large target 5/cap 8), per `media-modes.md`. These are distinct evidence jobs, not illustration quotas; one is still valid when the synthesis genuinely contains only one visual story. Slides combines with any size and style and is itself the deliverable — a verified 16:9 PDF of standalone slides, with a 1–3 sentence plain answer in chat and the written synthesis kept as an internal working draft, per `deck-guide.md`.
 
 | | Small (default) | Medium | Large |
 |---|---|---|---|
@@ -24,7 +24,7 @@ The **output format** — `inline chat` (default), `journal PDF`, or `slides` �
 | Queries per angle | 1–2 | 2–3 | 3–5 |
 | Full texts read | 2–4 load-bearing | 8–15 | 25+ |
 | Tables | 0–1 | 1–2 | 2–4 |
-| Journal-PDF figures | 1 | up to 3 | up to 5 |
+| Journal-PDF figures | target 2, cap 2 | target 3, cap 5 | target 5, cap 8 |
 | Slides: content slides | 4–6 | 8–12 | 14–20 |
 | Slides: total | 6–8 | 10–15 | 18–25 (hard max 25) |
 

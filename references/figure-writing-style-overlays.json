@@ -1,0 +1,181 @@
+{
+  "scientific": {
+    "name": "Scientific journal figure",
+    "intent": "A publication-grade evidence figure whose scientific structure, exact relationships, and calibrated uncertainty are visually primary.",
+    "font": {
+      "family": "Arial",
+      "fallback": "Helvetica",
+      "text_color": "#161616",
+      "rules": [
+        "Use natural-width Arial lettering with no horizontal or vertical scaling.",
+        "Keep the hierarchy compact: panel letters, short local headings, body labels, and one small legend tier.",
+        "Use bold only for panel letters and concise local headings."
+      ]
+    },
+    "canvas": {
+      "background": "clean white",
+      "density": "High information density with deliberate white space and no ornamental emptiness"
+    },
+    "palette": {
+      "ink": "#161616",
+      "cool_blue": "#4E82AE",
+      "pale_blue": "#D3E5EF",
+      "muted_green": "#6F9E86",
+      "pale_green": "#D7E6DD",
+      "warm_signal": "#D28A67",
+      "uncertainty": "#9A93B5"
+    },
+    "art_direction": [
+      "Aim for the finish of a carefully art-directed review-journal figure, not a generic flowchart.",
+      "Use domain-native scientific forms as the visual anchor: anatomy, cells, instruments, study geometry, or plotted evidence.",
+      "Allow restrained material or biological depth only when it clarifies form; keep labels and data optically crisp.",
+      "Use fine, consistent keylines and purposeful alignment so every mark appears intentionally placed."
+    ],
+    "selection_standard": [
+      "Prefer the candidate with the clearest scientific topology and most exact local annotation.",
+      "Reject generic icons, empty decorative panels, or a diagram that could depict any topic after relabelling."
+    ],
+    "avoid": [
+      "stock infographic language",
+      "clip-art scientific symbols",
+      "fake microscopy texture",
+      "stretched circles or letterforms",
+      "uneven connector weights"
+    ]
+  },
+  "popsci": {
+    "name": "Premium editorial science illustration",
+    "intent": "A sophisticated magazine-quality science visual with one memorable focal idea, strong narrative flow, and restrained explanatory annotation.",
+    "font": {
+      "family": "Optima",
+      "fallback": "Helvetica Neue",
+      "text_color": "#20201F",
+      "rules": [
+        "Use natural-width Optima-style humanist sans lettering; never condense, expand, or shear it.",
+        "Keep in-image copy sparse and elegant; move explanation to the caption or deterministic overlay.",
+        "Use weight and scale sparingly so the illustration, not typography, carries the story."
+      ]
+    },
+    "canvas": {
+      "background": "warm paper white #FBFAF6",
+      "density": "One dominant editorial composition with supporting detail and generous breathing room"
+    },
+    "palette": {
+      "ink": "#20201F",
+      "deep_blue": "#315A70",
+      "mineral_blue": "#7399A9",
+      "sage": "#89A18B",
+      "terracotta": "#C77A5A",
+      "ochre": "#C5A25C",
+      "plum": "#83728D"
+    },
+    "art_direction": [
+      "Create premium editorial science art suitable for a serious long-form magazine, with a clear visual metaphor or scientific focal structure.",
+      "Use subtle tonal modelling, tactile material cues, and controlled depth to make the subject feel authored and specific without becoming photorealistic spectacle.",
+      "Build an eye path with scale, overlap, and negative space; do not line up equal boxes like presentation furniture.",
+      "Let one arresting scientific image carry the central claim while small annotations quietly explain it."
+    ],
+    "selection_standard": [
+      "Prefer the candidate with the strongest single visual idea and the most graceful eye path.",
+      "Reject anything that resembles a corporate infographic, stock vector pack, classroom worksheet, or generic AI poster."
+    ],
+    "avoid": [
+      "corporate infographic",
+      "equal dashboard cards",
+      "flat clip-art icons",
+      "oversized headline inside the pixels",
+      "synthetic glossy 3D",
+      "stretched circles or letterforms",
+      "decorative pseudo-data"
+    ]
+  },
+  "bullets": {
+    "name": "Decisive analytical brief visual",
+    "intent": "A compact, high-clarity figure that can be understood in seconds while retaining exact evidence boundaries and professional finish.",
+    "font": {
+      "family": "Helvetica Neue",
+      "fallback": "Arial",
+      "text_color": "#171717",
+      "rules": [
+        "Use natural-width Helvetica Neue-style lettering with no geometric distortion.",
+        "Use a strong but shallow hierarchy optimized for quick scanning.",
+        "Keep labels short; use deterministic overlay for dense copy or numbers."
+      ]
+    },
+    "canvas": {
+      "background": "clean white",
+      "density": "Compact and decisive with no dead zones, while preserving clear separation between findings"
+    },
+    "palette": {
+      "ink": "#171717",
+      "signal_blue": "#3977A7",
+      "support_green": "#6B987D",
+      "warning_orange": "#D47A45",
+      "limited_lavender": "#8A7DA6",
+      "pale_neutral": "#EEF0EF"
+    },
+    "art_direction": [
+      "Make the decision-relevant contrast visible immediately, using a crisp visual hierarchy and a small number of strong scientific marks.",
+      "Use alignment, scale, and restrained colour to separate findings; avoid decorative illustration that slows scanning.",
+      "Generated elements should add domain specificity or explanatory value, not merely ornament a deterministic chart.",
+      "Keep line work precise and spacing optically even, with a newsroom graphics-desk level of finish."
+    ],
+    "selection_standard": [
+      "Prefer the candidate that communicates the correct takeaway fastest without flattening uncertainty.",
+      "Reject busy illustration, tiny legends, weak alignment, or generic card grids."
+    ],
+    "avoid": [
+      "decorative scene setting",
+      "dense prose blocks",
+      "rounded KPI cards",
+      "oversized numerals without scale context",
+      "stretched circles or letterforms",
+      "weak grey-on-grey contrast"
+    ]
+  },
+  "eli5": {
+    "name": "Warm explanatory illustration",
+    "intent": "A friendly, concrete scientific explainer that makes one difficult idea graspable through spatial storytelling without becoming childish or imprecise.",
+    "font": {
+      "family": "Seravek",
+      "fallback": "Helvetica Neue",
+      "text_color": "#202321",
+      "rules": [
+        "Use natural-width Seravek-style humanist sans lettering; never squeeze or stretch words to fit.",
+        "Use large, short labels and comfortable line spacing.",
+        "Prefer everyday words and deterministic overlay when exact wording matters."
+      ]
+    },
+    "canvas": {
+      "background": "soft warm white #FCFAF5",
+      "density": "Generous breathing room around one concrete helper picture and a small number of supporting elements"
+    },
+    "palette": {
+      "ink": "#202321",
+      "friendly_teal": "#5F8F8D",
+      "sky": "#9BC4CF",
+      "leaf": "#86A878",
+      "warm_orange": "#E58A4B",
+      "sun": "#E8C46A",
+      "soft_lavender": "#AAA0C1"
+    },
+    "art_direction": [
+      "Build one warm, memorable helper picture with tangible objects, gentle dimensionality, and an immediately understandable spatial relationship.",
+      "Use soft editorial illustration, subtle paper-like texture, and friendly but accurate forms; avoid both sterile flowcharts and cartoon baby graphics.",
+      "Guide the eye through the explanation with placement and action rather than many arrows or text boxes.",
+      "Keep uncertainty visible through an unfinished path, open gap, pale boundary, or other concrete visual device that a new reader can explain back."
+    ],
+    "selection_standard": [
+      "Prefer the candidate a non-specialist can understand and remember without the caption, while preserving the evidence boundary.",
+      "Reject clip art, emoji-like faces, classroom worksheet styling, or an abstract flowchart with labels swapped in."
+    ],
+    "avoid": [
+      "childish cartoon styling",
+      "generic school worksheet",
+      "sterile text-and-arrow flowchart",
+      "cute characters that trivialize harm",
+      "stretched circles or letterforms",
+      "unlabelled decorative objects"
+    ]
+  }
+}
