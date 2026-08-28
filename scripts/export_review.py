@@ -1092,6 +1092,36 @@ figcaption .figno { color: var(--accent); }
 .refs p { margin-bottom: 4px; }
 """
 
+BRIEF_CSS = """
+/* BRIEF edition - the condensed two-column brief for bullets: tight
+   disciplined columns, punchline headings, and a drawn double-chevron
+   marker (two CSS strokes - font-independent, machine-centered). */
+body { font-size: 8.8pt; line-height: 1.38; }
+.kicker { margin: 2mm 0 4px; }
+h1 { font-size: 21pt; font-weight: 600; line-height: 1.08;
+  letter-spacing: -.01em; margin: 0 0 8px; }
+.metagrid { margin-bottom: 8px; }
+.lead { border-top: 2px solid var(--ink); border-bottom: .5px solid var(--ink);
+  padding: 2.6mm 0 3mm; font-size: 9.3pt; line-height: 1.45;
+  font-weight: 500; max-width: 100%; margin: 0 0 10px; }
+.lead b { color: var(--accent); letter-spacing: .2em; }
+h2 { font-size: 9.5pt; font-weight: 700; margin: 10px 0 3px;
+  letter-spacing: 0; text-transform: none; line-height: 1.25; }
+h2::before { color: var(--accent); font-weight: 700; }
+ul { margin: 0 0 6px; padding-left: 0; list-style: none; }
+li { margin: 0 0 2.5px; padding-left: 5.6mm; position: relative; }
+li::before, li::after { content: ""; position: absolute; top: 0.3em;
+  width: 1.15mm; height: 1.15mm;
+  border-top: 0.5mm solid var(--accent);
+  border-right: 0.5mm solid var(--accent);
+  transform: rotate(45deg); }
+li::before { left: 0; }
+li::after { left: 1.5mm; }
+sup.citation, sup.citation a { color: #98a0a8; }
+figcaption .figno { color: var(--accent); }
+.refs .refno { color: var(--accent); }
+"""
+
 # Editions bind a writing style to a paper identity: an overlay on the
 # canonical CSS plus the font families the rendered PDF must embed. The
 # evidence contract (citations, reference order, atomic writes, QA) is
@@ -1100,8 +1130,10 @@ EDITIONS = {
     "journal": {"css": "", "fonts": ("Charter", "Helvetica-Neue")},
     "salon": {"css": SALON_CSS, "fonts": ("Didot", "Hoefler-Text", "Optima")},
     "primer": {"css": PRIMER_CSS, "fonts": ("Seravek", "Helvetica-Neue")},
+    "brief": {"css": BRIEF_CSS, "fonts": ("Charter", "Helvetica-Neue")},
 }
-DEFAULT_EDITION_BY_STYLE = {"popsci": "salon", "eli5": "primer"}
+DEFAULT_EDITION_BY_STYLE = {"popsci": "salon", "eli5": "primer",
+                            "bullets": "brief"}
 DROPCAP_MIN_CHARS = 200
 PULL_SENTINEL = "GROUNDED-PULL-QUOTE-SENTINEL"
 

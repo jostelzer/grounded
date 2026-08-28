@@ -1012,7 +1012,7 @@ class PrimerEditionTests(unittest.TestCase):
         page = self.build()
         self.assertIn("PRIMER edition", page)
         self.assertEqual(export_review.resolve_edition("eli5"), "primer")
-        self.assertEqual(export_review.resolve_edition("bullets"), "journal")
+        self.assertEqual(export_review.resolve_edition("bullets"), "brief")
 
     def test_journal_override_is_clean(self):
         page = self.build(edition="journal")
@@ -1028,6 +1028,44 @@ class PrimerEditionTests(unittest.TestCase):
         self.assertEqual(
             export_review.EDITIONS["primer"]["fonts"],
             ("Seravek", "Helvetica-Neue"),
+        )
+
+
+class BriefEditionTests(unittest.TestCase):
+    """The brief edition (bullets default): condensed two-column brief with
+    the drawn double-chevron marker; evidence contract untouched."""
+
+    FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-bullets")
+    EVIDENCE = os.path.join(ROOT, "tests", "fixtures", "colic")
+
+    def build(self, **kwargs):
+        with open(os.path.join(self.FIXTURE, "review.md"), encoding="utf-8") as stream:
+            markdown = stream.read()
+        return export_review.build_html(
+            markdown, base_dir=self.EVIDENCE, style="bullets",
+            release="v-test", repo="example.test/grounded",
+            compiled_date="2026-08-28", **kwargs,
+        )
+
+    def test_bullets_defaults_to_brief(self):
+        page = self.build()
+        self.assertIn("BRIEF edition", page)
+        self.assertEqual(export_review.resolve_edition("bullets"), "brief")
+
+    def test_journal_override_is_clean(self):
+        page = self.build(edition="journal")
+        self.assertNotIn("BRIEF edition", page)
+
+    def test_brief_carries_no_literary_devices(self):
+        page = self.build()
+        self.assertNotIn('class="dropcap"', page)
+        with self.assertRaises(ValueError):
+            self.build(pull_quote="Colic is common")
+
+    def test_brief_font_contract_matches_journal(self):
+        self.assertEqual(
+            export_review.EDITIONS["brief"]["fonts"],
+            ("Charter", "Helvetica-Neue"),
         )
 
 

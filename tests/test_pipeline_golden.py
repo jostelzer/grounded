@@ -240,5 +240,74 @@ class GoldenEli5PipelineTests(unittest.TestCase):
         self.assertEqual(report["status"], "pass")
 
 
+class GoldenBulletsPipelineTests(unittest.TestCase):
+    """The bullets golden run shares the colic evidence base with a
+    validated bullets rendition of the same claims, rendered in the brief
+    edition (drawn double-chevron markers)."""
+
+    BULLETS_FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-bullets")
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp(prefix="grounded-golden-bullets-")
+        for source in (FIXTURE, self.BULLETS_FIXTURE):
+            for name in os.listdir(source):
+                shutil.copy(os.path.join(source, name), self.tmp)
+        self.ledger = os.path.join(self.tmp, "sources.json")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_validator_passes_strict_bullets_small(self):
+        report_path = os.path.join(self.tmp, "validation.json")
+        completed = run_script(
+            "validate_review.py", os.path.join(self.tmp, "review.md"),
+            "--style", "bullets", "--size", "small",
+            "--ledger", self.ledger,
+            "--fulltext-manifest", os.path.join(self.tmp, "fulltext-manifest.json"),
+            "--strict-tier", "--image-mode",
+            "--report", report_path,
+            cwd=self.tmp,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        report = json.load(open(report_path, encoding="utf-8"))
+        self.assertEqual(report["status"], "pass", report["errors"])
+
+    @unittest.skipUnless(
+        has_pdf_runtime() and shutil.which("pdftoppm"),
+        "WeasyPrint runtime or Poppler missing",
+    )
+    def test_bullets_brief_export_passes_qa(self):
+        out = os.path.join(self.tmp, "review.pdf")
+        completed = run_script(
+            "export_review.py",
+            "--in", os.path.join(self.tmp, "review.md"),
+            "--out", out, "--pdf",
+            "--style", "bullets",
+            "--kicker", "Brief · Paediatrics",
+            "--ledger", self.ledger,
+            "--release-manifest", os.path.join(self.tmp, "release-manifest.json"),
+            "--figure-spec", os.path.join(self.tmp, "colic-treatments.figure.json"),
+            "--figure-prompt", os.path.join(self.tmp, "colic-treatments.prompt.txt"),
+            "--release", "v-test", "--repo", "example.test/grounded",
+            "--compiled-date", "2026-08-28",
+            cwd=self.tmp,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        manifest = json.load(
+            open(os.path.join(self.tmp, "release-manifest.json"), encoding="utf-8")
+        )
+        self.assertEqual(manifest["render"]["edition"], "brief")
+        completed = run_script(
+            "qa_review_pdf.py", out,
+            "--manifest", os.path.join(self.tmp, "release-manifest.json"),
+            "--render-dir", os.path.join(self.tmp, "qa-render"),
+            "--report", os.path.join(self.tmp, "pdf-qa.json"),
+            cwd=self.tmp,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+        report = json.load(open(os.path.join(self.tmp, "pdf-qa.json"), encoding="utf-8"))
+        self.assertEqual(report["status"], "pass")
+
+
 if __name__ == "__main__":
     unittest.main()
