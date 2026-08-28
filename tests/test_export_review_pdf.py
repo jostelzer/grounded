@@ -351,6 +351,8 @@ class PdfExportTests(unittest.TestCase):
                     "detected_effects": [],
                     "text_collisions": [],
                     "geometry_distortions": [],
+                    "duplicate_text": [],
+                    "unlisted_text": [],
                     "visual_quality": {
                         "composition": "pass", "hierarchy": "pass",
                         "domain_specificity": "pass", "style_fit": "pass",

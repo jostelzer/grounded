@@ -142,6 +142,8 @@ class QualityContractTests(unittest.TestCase):
             "detected_effects": [],
             "text_collisions": [],
             "geometry_distortions": [],
+            "duplicate_text": [],
+            "unlisted_text": [],
             "visual_quality": {
                 "composition": "pass",
                 "hierarchy": "pass",
@@ -216,6 +218,17 @@ class QualityContractTests(unittest.TestCase):
         inspection["visual_quality"]["polish"] = "cheap"
         result = self.audit(inspection=inspection)
         self.assertTrue(any("visual quality polish must pass" in error for error in result["errors"]))
+
+    def test_duplicate_and_unlisted_text_are_release_blocking(self):
+        inspection = self.inspection()
+        inspection["duplicate_text"] = ["Signal"]
+        inspection["unlisted_text"] = ["mystery label"]
+        result = self.audit(inspection=inspection)
+        self.assertTrue(any(
+            "duplicated rendered text: Signal" in error for error in result["errors"]))
+        self.assertTrue(any(
+            "unlisted rendered text: mystery label" in error
+            for error in result["errors"]))
 
     def test_single_passing_generated_candidate_is_releasable(self):
         result = self.audit()

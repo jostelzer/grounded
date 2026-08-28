@@ -134,7 +134,12 @@ Non-distortion is a hard invariant:
 
 The hybrid compositor never resizes its base image. Its output dimensions are
 identical to the generated input dimensions, and circles are drawn from one
-radius measured against the shorter canvas edge.
+radius measured against the shorter canvas edge. It also measures the original
+geometry of every deterministic text envelope. Every text overlay requires an
+explicit opaque background or a preceding opaque rectangle that fully contains
+that envelope. Unmasked hybrid text is rejected categorically, preventing a
+repair label from being painted over generated type without relying on any
+topic, example, OCR engine, pixel colour, or tuned image threshold.
 
 ## 6. Visual inspection record
 
@@ -147,6 +152,8 @@ For `quality_contract_version: 1`, `<figure-id>.inspection.json` contains:
   "relationships": [],
   "detected_effects": [],
   "text_collisions": [],
+  "duplicate_text": [],
+  "unlisted_text": [],
   "geometry_distortions": [],
   "visual_quality": {
     "composition": "pass",
@@ -159,8 +166,10 @@ For `quality_contract_version: 1`, `<figure-id>.inspection.json` contains:
 ```
 
 Each `pass` is a real visual judgment made after viewing the selected pixels at
-original size and expected PDF size. Empty or blank pixels cannot be rescued by
-a manually supplied OCR transcript.
+original size and expected PDF size. `duplicate_text` lists any label rendered
+more than its manifest count; `unlisted_text` lists meaningful copy absent from
+the manifest. Either list being non-empty is release-blocking. Empty or blank
+pixels cannot be rescued by a manually supplied OCR transcript.
 
 ## 7. Generation provenance record
 

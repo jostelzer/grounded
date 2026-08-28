@@ -45,7 +45,7 @@ eight independent modules:
 Generate the prompt with one command:
 
 ```bash
-python3 scripts/build_figure_prompt.py --spec examples/image-mrna-vaccines-mechanism.figure.json
+python3 scripts/build_figure_prompt.py --spec figure.json
 ```
 
 Use `--profile`, `--archetype`, `--review-style`, or `--render-route` to test a
@@ -115,9 +115,18 @@ Optional:
   compactly and include it in `exact_text`. In `slide` context, keep the title,
   citations, evidence chip, masthead, and slide counter out of the pixels.
 - Quote every required in-figure string through `exact_text`; spell difficult
-  labels exactly once rather than offering variants. The builder removes an
+  labels exactly once rather than offering variants. The generated prompt
+  contains one literal manifest only; surrounding instructions refer to that
+  manifest without repeating its strings. The builder removes an
   exact title/subtitle match from the in-figure manifest in `article` and
   `slide` contexts.
+- On a hybrid repair, never draw deterministic text directly over generated
+  text. Keep a correct generated label, or erase the complete old label with an
+  explicit opaque text background or preceding rectangle before drawing its
+  replacement. This applies even when the region appears blank: the compositor
+  categorically rejects every unmasked hybrid text item rather than guessing
+  from topic-specific pixels. Keep masks local and visually matched to the
+  reserved label zone; they are erasure regions, not cards or UI furniture.
 - Use the writing-style font policy: Arial/Helvetica for scientific, Optima/
   Helvetica Neue for popsci, Helvetica Neue/Arial for bullets, and Seravek/
   Helvetica Neue for ELI5. Always require natural-width glyphs and forbid

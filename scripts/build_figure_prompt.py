@@ -272,18 +272,16 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         "PURPOSE\n%s" % purpose,
     ]
     if selected_route == "generated":
-        direct_manifest = "\n".join(
-            "- %s" % json.dumps(item, ensure_ascii=False)
-            for item in generated_text)
         sections.append(
             "FIRST-PASS DIRECT-TEXT CONTRACT — EXECUTE IN THIS IMAGEGEN CALL\n"
             "Render the entire finished figure now, including all required typography "
             "as an integrated part of the artwork. Do not return a textless base, blank "
             "label zones, placeholders, pseudo-text, or a layout intended for later "
-            "typesetting. Render each quoted string below exactly once and verbatim; "
+            "typesetting. Render each quoted string in the single exact-text manifest "
+            "below exactly once and verbatim; "
             "preserve spelling, capitalization, punctuation, symbols, and numbers. Fit "
             "copy with natural line wrapping and placement, never squeezed or stretched "
-            "letterforms.\n%s" % direct_manifest)
+            "letterforms. Do not repeat the manifest copy elsewhere in the artwork.")
     if visual_anchor:
         sections.append(
             "DOMINANT VISUAL ANCHOR\n%s" % visual_anchor.strip())

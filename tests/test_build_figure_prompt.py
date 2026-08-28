@@ -143,6 +143,8 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("EXECUTE IN THIS IMAGEGEN CALL", prompt)
         self.assertIn("Do not return a textless base", prompt)
         self.assertIn("fully typeset final figure in this call", prompt)
+        self.assertEqual(prompt.count('- "A"'), 1)
+        self.assertEqual(prompt.count('- "B"'), 1)
 
     def test_generated_route_rejects_a_partial_text_manifest(self):
         spec = self.minimal_spec()

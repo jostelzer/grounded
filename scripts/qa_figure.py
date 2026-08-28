@@ -389,6 +389,28 @@ def audit_figure(
     for collision in collisions:
         errors.append(f"text collision: {collision}")
 
+    duplicate_text = inspection.get("duplicate_text")
+    unlisted_text = inspection.get("unlisted_text")
+    if contract_version == 1:
+        if duplicate_text is None:
+            errors.append("quality contract v1 inspection requires duplicate_text")
+            duplicate_text = []
+        if unlisted_text is None:
+            errors.append("quality contract v1 inspection requires unlisted_text")
+            unlisted_text = []
+    if duplicate_text is None:
+        duplicate_text = []
+    if unlisted_text is None:
+        unlisted_text = []
+    if not isinstance(duplicate_text, list):
+        raise ValueError("duplicate_text must be a list")
+    if not isinstance(unlisted_text, list):
+        raise ValueError("unlisted_text must be a list")
+    for text in duplicate_text:
+        errors.append(f"duplicated rendered text: {text}")
+    for text in unlisted_text:
+        errors.append(f"unlisted rendered text: {text}")
+
     geometry_distortions = inspection.get("geometry_distortions")
     if geometry_distortions is None:
         if contract_version == 1:
@@ -451,6 +473,8 @@ def audit_figure(
             ),
             "missing_abbreviation_expansions": missing_expansions,
             "geometry_distortions": len(geometry_distortions),
+            "duplicate_text_items": len(duplicate_text),
+            "unlisted_text_items": len(unlisted_text),
             "visual_quality": visual_quality,
             "render_route": spec.get("render_route"),
         },

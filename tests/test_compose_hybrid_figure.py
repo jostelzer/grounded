@@ -41,6 +41,7 @@ class HybridCompositorTests(unittest.TestCase):
                         "type": "text", "x": 0.58, "y": 0.35,
                         "max_width": 0.3, "text": "Exact natural-width label",
                         "size_px_at_1536": 42, "weight": "bold",
+                        "background": "#FBFAF6",
                     },
                 ]
             },
@@ -119,6 +120,74 @@ class HybridCompositorTests(unittest.TestCase):
             self.assertEqual(result["background_color"], "#FBFAF6")
             with Image.open(out).convert("RGB") as image:
                 self.assertEqual(image.getpixel((0, 0)), (251, 250, 246))
+
+    def test_unmasked_text_is_refused_even_in_apparently_quiet_space(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp) / "base.png"
+            self.make_base(base)
+            spec = self.spec()
+            del spec["overlay"]["items"][1]["background"]
+            with self.assertRaisesRegex(
+                    compose_hybrid_figure.HybridFigureError,
+                    "no explicit opaque mask"):
+                compose_hybrid_figure.compose(
+                    base, spec, Path(tmp) / "final.png")
+
+    def test_opaque_replacement_mask_allows_text_repair(self):
+        from PIL import Image, ImageDraw
+
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp) / "base.png"
+            self.make_base(base)
+            with Image.open(base).convert("RGB") as canvas:
+                draw = ImageDraw.Draw(canvas)
+                draw.rectangle((700, 205, 1060, 300), fill="#111111")
+                canvas.save(base)
+            spec = self.spec()
+            del spec["overlay"]["items"][1]["background"]
+            spec["overlay"]["items"].insert(1, {
+                "type": "rectangle", "x": 0.57, "y": 0.33,
+                "width": 0.32, "height": 0.19,
+                "fill": "#FBFAF6", "color": "#FBFAF6",
+            })
+            result = compose_hybrid_figure.compose(
+                base, spec, Path(tmp) / "final.png")
+            self.assertTrue(result["mask_checks"][0]["opaque_mask"])
+
+    def test_transparent_rectangle_cannot_claim_to_erase_base_text(self):
+        from PIL import Image, ImageDraw
+
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp) / "base.png"
+            self.make_base(base)
+            with Image.open(base).convert("RGB") as canvas:
+                draw = ImageDraw.Draw(canvas)
+                draw.rectangle((700, 205, 1060, 300), fill="#111111")
+                canvas.save(base)
+            spec = self.spec()
+            del spec["overlay"]["items"][1]["background"]
+            spec["overlay"]["items"].insert(1, {
+                "type": "rectangle", "x": 0.57, "y": 0.33,
+                "width": 0.32, "height": 0.19,
+                "fill": "#FBFAF600", "color": "#FBFAF600",
+            })
+            with self.assertRaisesRegex(
+                    compose_hybrid_figure.HybridFigureError,
+                    "no explicit opaque mask"):
+                compose_hybrid_figure.compose(
+                    base, spec, Path(tmp) / "final.png")
+
+    def test_transparent_text_background_cannot_claim_to_be_a_mask(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp) / "base.png"
+            self.make_base(base)
+            spec = self.spec()
+            spec["overlay"]["items"][1]["background"] = "#FBFAF600"
+            with self.assertRaisesRegex(
+                    compose_hybrid_figure.HybridFigureError,
+                    "background must be an opaque hex colour"):
+                compose_hybrid_figure.compose(
+                    base, spec, Path(tmp) / "final.png")
 
 
 if __name__ == "__main__":

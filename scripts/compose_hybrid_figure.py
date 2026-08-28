@@ -195,8 +195,24 @@ def _scaled_px(value: Any, width: int, field: str, *, minimum: float = 1.0,
     return max(1, round(reference * width / 1536.0))
 
 
+def _contains(outer: tuple[int, int, int, int],
+              inner: tuple[int, int, int, int]) -> bool:
+    return (outer[0] <= inner[0] and outer[1] <= inner[1]
+            and outer[2] >= inner[2] and outer[3] >= inner[3])
+
+
+def _fill_is_opaque(fill: Any) -> bool:
+    if not isinstance(fill, str) or not fill.strip():
+        return False
+    value = fill.strip()
+    if re.fullmatch(r"#[0-9A-Fa-f]{8}", value):
+        return value[-2:].lower() == "ff"
+    return bool(re.fullmatch(r"#[0-9A-Fa-f]{6}", value))
+
+
 def _draw_text(draw, item: dict[str, Any], canvas: tuple[int, int],
-               family: str, fallback: str, font_records: list[dict[str, Any]]) -> None:
+               family: str, fallback: str, font_records: list[dict[str, Any]],
+               *, opaque_masks: list[tuple[int, int, int, int]]) -> dict[str, Any]:
     width, height = canvas
     text = item.get("text")
     if not isinstance(text, str) or not text:
@@ -251,7 +267,19 @@ def _draw_text(draw, item: dict[str, Any], canvas: tuple[int, int],
             or top + total_height + padding > height):
         raise HybridFigureError(
             f"text overlay falls outside the canvas: {text!r}")
-    if background:
+    text_bounds = (left, top, left + max_width, top + total_height)
+    if background is not None and not _fill_is_opaque(background):
+        raise HybridFigureError(
+            f"text overlay {text!r} background must be an opaque hex colour")
+    mask_present = _fill_is_opaque(background) or any(
+        _contains(mask, text_bounds) for mask in opaque_masks)
+    if not mask_present:
+        raise HybridFigureError(
+            f"text overlay {text!r} has no explicit opaque mask. Unmasked hybrid "
+            "text is forbidden because the generated base may already contain text. "
+            "Keep a correct generated label, or erase the complete label region with "
+            "a text background or preceding opaque rectangle before replacement.")
+    if background is not None:
         draw.rectangle(
             (left - padding, top - padding,
              left + max_width + padding, top + total_height + padding),
@@ -271,6 +299,11 @@ def _draw_text(draw, item: dict[str, Any], canvas: tuple[int, int],
             fill=str(item.get("color", "#1A1A1A")),
         )
         cursor_y += line_height + spacing
+    return {
+        "text": text,
+        "bounds_px": list(text_bounds),
+        "opaque_mask": mask_present,
+    }
 
 
 def _line_geometry(item: dict[str, Any], canvas: tuple[int, int]):
@@ -343,18 +376,26 @@ def _draw_circle(draw, item: dict[str, Any], canvas: tuple[int, int]) -> None:
     )
 
 
-def _draw_rectangle(draw, item: dict[str, Any], canvas: tuple[int, int]) -> None:
+def _rectangle_bounds(item: dict[str, Any],
+                      canvas: tuple[int, int]) -> tuple[int, int, int, int]:
     width, height = canvas
     x, y = _point(item)
     box_width = _number(item.get("width"), "width", minimum=0.001, maximum=1.0)
     box_height = _number(item.get("height"), "height", minimum=0.001, maximum=1.0)
-    stroke = _scaled_px(item.get("stroke_px_at_1536", 3), width,
-                        "stroke_px_at_1536", minimum=1, maximum=40)
     left, top = round(x * width), round(y * height)
     if x + box_width > 1.0 or y + box_height > 1.0:
         raise HybridFigureError("rectangle overlay falls outside the canvas")
+    return (
+        left, top, left + round(box_width * width), top + round(box_height * height))
+
+
+def _draw_rectangle(draw, item: dict[str, Any], canvas: tuple[int, int]) -> None:
+    width, _height = canvas
+    stroke = _scaled_px(item.get("stroke_px_at_1536", 3), width,
+                        "stroke_px_at_1536", minimum=1, maximum=40)
+    bounds = _rectangle_bounds(item, canvas)
     draw.rectangle(
-        (left, top, left + round(box_width * width), top + round(box_height * height)),
+        bounds,
         fill=item.get("fill"), outline=str(item.get("color", "#1A1A1A")),
         width=stroke,
     )
@@ -456,6 +497,8 @@ def compose(base_path: str | Path, spec: dict[str, Any], output_path: str | Path
         raise HybridFigureError("writing-style overlay is missing font policy") from exc
     draw = ImageDraw.Draw(image)
     font_records: list[dict[str, Any]] = []
+    opaque_masks: list[tuple[int, int, int, int]] = []
+    mask_checks: list[dict[str, Any]] = []
     for index, item in enumerate(items, 1):
         if not isinstance(item, dict):
             raise HybridFigureError(f"overlay item {index} must be an object")
@@ -464,7 +507,9 @@ def compose(base_path: str | Path, spec: dict[str, Any], output_path: str | Path
             raise HybridFigureError(
                 f"overlay item {index} type must be one of: " + ", ".join(sorted(ITEM_TYPES)))
         if kind == "text":
-            _draw_text(draw, item, source_size, family, fallback, font_records)
+            mask_checks.append(_draw_text(
+                draw, item, source_size, family, fallback, font_records,
+                opaque_masks=opaque_masks))
         elif kind == "line":
             _draw_line(draw, item, source_size, arrow=False)
         elif kind == "arrow":
@@ -473,6 +518,8 @@ def compose(base_path: str | Path, spec: dict[str, Any], output_path: str | Path
             _draw_circle(draw, item, source_size)
         else:
             _draw_rectangle(draw, item, source_size)
+            if _fill_is_opaque(item.get("fill")):
+                opaque_masks.append(_rectangle_bounds(item, source_size))
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temporary_name = tempfile.mkstemp(
@@ -509,6 +556,7 @@ def compose(base_path: str | Path, spec: dict[str, Any], output_path: str | Path
         "pixel_variation_stddev": round(variation, 3),
         "overlay_items": len(items),
         "overlay_text_items": len(expected_overlay_text),
+        "mask_checks": mask_checks,
         "fonts": font_records,
         "status": "pass",
     }

@@ -362,7 +362,7 @@ def _to_html_document(md, base_dir=".", columns=2):
                 r"^!\[([^\]]*)\]\(([^)\s]+)\)$", s):
             raise ValueError("figure anchor is not followed by a figure")
 
-        # provenance header line the examples carry: "> Unedited example output..."
+        # Render an optional leading blockquote as a provenance or editorial note.
         if s.startswith(">"):
             note = inline(s.lstrip("> ").strip(), citations=citations)
             out.append(f'<p class="note">{note}</p>')
