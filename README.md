@@ -23,9 +23,9 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 Whatever you leave out, Grounded asks you in one quick question before it starts. Three real runs, unedited:
 
-- **"What happens to your body when you stop taking Ozempic?"** — popsci · medium → [PDF](examples/ozempic-after-stopping.pdf) · [Markdown](examples/ozempic-after-stopping.md) · 36 verified sources · a cited what-happens-when timeline figure
-- **"Are microplastics actually harming our health?"** — ELI5 · small → [PDF](examples/microplastics-health-eli5.pdf) · [Markdown](examples/microplastics-health-eli5.md) · 13 verified sources · one cited figure
-- **"Are seed oils really bad for you?"** — scientific · large → [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) · 80 verified sources · 8-page journal article
+- **"What happens to your body when you stop taking Ozempic?"** — popsci · medium → [PDF](examples/ozempic-after-stopping.pdf) · [Markdown](examples/ozempic-after-stopping.md) · 30 verified sources · two cited figures
+- **"Are microplastics actually harming our health?"** — ELI5 · small → [PDF](examples/microplastics-health-eli5.pdf) · [Markdown](examples/microplastics-health-eli5.md) · 14 verified sources · one cited figure
+- **"Are seed oils really bad for you?"** — scientific · large → [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) · 75 verified sources · 9-page journal article
 
 It can also audit text you already have:
 

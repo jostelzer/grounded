@@ -1,64 +1,64 @@
 ## Are microplastics actually harming our health?
 
-**TL;DR** — They may be harming us, and the warning signs are serious enough to study closely. But scientists still cannot say how much everyday exposure harms one person, or prove that plastic caused most of the illnesses seen so far.
+**TL;DR** — They may be. The warning signs are real, but scientists cannot yet say how much ordinary exposure harms people or which illnesses it causes.
 
-Think about dust. You breathe and swallow tiny bits of the world around you without noticing. Microplastics are tiny pieces shed from plastic things. Some are smaller than a grain of sand, and some are far smaller. The big question is not only “Are they inside us?” It is “What do they do once they get there?”
+Tiny plastic pieces can come from packaging, clothes, tyres, and larger plastic waste. They have been reported in human blood, stool, lungs, reproductive samples, and artery plaque. That makes the health question reasonable. But finding something in the body is not the same as proving it caused damage [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0).
 
-### Can plastic really get inside us?
+### How do we know the pieces are really inside us?
 
-Yes. Small studies have reported plastic material in blood, placentas, lungs, and brains. One study of 22 healthy people measured an average of 1.6 micrograms of plastic material in each millilitre of blood [Leslie et al. 2022](https://doi.org/10.1016/j.envint.2022.107199). Another found 12 tiny fragments in 4 of 6 placentas [Ragusa et al. 2021](https://doi.org/10.1016/j.envint.2020.106274). A lung study found 39 pieces in 11 of 13 tissue samples [Jenner et al. 2022](https://doi.org/10.1016/j.scitotenv.2022.154907). A later autopsy study found much more measured plastic in brain samples than in liver or kidney samples [Nihart et al. 2025b](https://doi.org/10.1038/s41591-024-03453-1). The publisher later fixed scale bars and supporting-image details, while saying the spectra data used for the result did not change [Nihart et al. 2025a](https://doi.org/10.1038/s41591-025-03675-x).
+One careful review found 25 studies that measured tiny plastics in living people. Different teams used light, lasers, or heat to identify polymers. The repeated detections make exposure believable, even though the methods did not always agree on the amount [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
-That tells us exposure is real. It does not tell us that the plastic made anyone ill.
+### Have they been linked with illness?
 
-### Have sick people been found to have more?
+Yes, but “linked” is the important word. In one study, doctors tested artery plaque removed from people who already had artery disease. People whose plaque contained plastic later had more heart attacks, strokes, or deaths. The study’s uncertainty stretched from about twice to ten times as many events. That is worrying, but it cannot show that plastic caused them [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Prattichizzo et al. 2024](https://doi.org/10.1093/eurheartj/ehae552).
 
-Sometimes. The clearest warning came from 257 people who needed surgery to clean a neck artery. Over about 34 months, heart attack, stroke, or death occurred in 20.0% of people whose removed artery gunk contained plastic, compared with 7.5% of those without detected plastic. The adjusted comparison was 4.53 times, with a plausible range from 2.00 to 10.27 times [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822).
-
-Other studies found more plastic in stool from people with inflamed bowel disease and links between more kinds of plastic in semen and poorer sperm measurements [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924), [Zhang et al. 2024](https://doi.org/10.1016/j.ebiom.2024.105369). Across 25 studies in living people, these kinds of links appeared in several body systems. But most studies were small snapshots and had a moderate or high chance of mixing up cause with coincidence [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). A pregnancy review found only 7 studies covering 96 people, which was far too little to settle the question [Hunt et al. 2024](https://doi.org/10.1111/1471-0528.17756).
-
-You can see the evidence boundary in [Figure 1](#fig-evidence-boundary).
-
-<a id="fig-evidence-boundary"></a>
-![A left-to-right evidence map showing plastic detected in human samples, health warning signs, and the unanswered questions that prevent causal conclusions](microplastics-evidence-boundary-v2.png)
-
-**Figure 1. Finding plastic is not the same as proving harm.** Human studies show that plastic material reaches several body parts. Some studies also find worrying health links. The dashed step means those links do not yet prove that plastic caused the illness, because dose, timing, other exposures, and measurement errors remain uncertain [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Lane et al. 2026](https://doi.org/10.1016/j.envint.2026.110429).
+Another team found more plastic pieces in stool from people with bowel inflammation than from healthy people. The authors gave two possible stories: plastic might worsen illness, or illness might make plastic stay in the gut. A one-time snapshot cannot choose between them [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924).
 
 ### Why are scientists worried anyway?
 
-In animal experiments, plastic particles can stir up inflammation, damage cells, and disrupt normal body signals. A careful review judged harm to the gut, lungs, and reproductive system to be suspected, not proven in people [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524). These experiments show that harm is possible. They do not reveal the danger from the much messier mix and dose that people meet in daily life.
+In laboratory dishes and mice, some plastic particles can upset cells, start inflammation, and injure tissue. Kidney and gut experiments found several versions of that pattern, and broader reviews find it across other models too [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Mattioda et al. 2023](https://doi.org/10.3390/biom13010140), [Mahmud et al. 2024](https://doi.org/10.3390/cells13211788), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662), [Talaie et al. 2025](https://doi.org/10.1016/j.toxlet.2025.06.021). A systematic review therefore called harm to the gut, lungs, and reproductive system “suspected.” Yet most of that conclusion came from animal studies using simpler particles than people meet in daily life [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524).
 
-### But here’s the thing: measuring tiny plastic is hard
+You can see the missing link in [Figure 1](#fig-evidence-bridge).
 
-Plastic is everywhere, including in lab air, clothing, tools, and containers. A sample can be polluted after it leaves the body. Different machines also see different particle sizes and report results in different units [Kutralam-Muniasamy et al. 2023](https://doi.org/10.1016/j.scitotenv.2022.159164). In a 2026 check of 133 datasets from 101 human studies, not one met every essential quality rule for sampling, particle identification, and contamination control [Lane et al. 2026](https://doi.org/10.1016/j.envint.2026.110429).
+<a id="fig-evidence-bridge"></a>
+![Three evidence levels show confirmed exposure, concerning human links, and laboratory harm, separated from the missing causal bridge.](figure-evidence-bridge.png)
 
-### What is the honest answer?
+**Figure 1. The warning signs are stronger than the proof.** Plastic has been found in people. Human studies show concerning links, and laboratory studies show ways damage could happen. The dashed gap means scientists still need to prove that everyday exposure causes disease [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Wang et al. 2021](https://doi.org/10.1289/ehp7612).
 
-Microplastics probably can harm living tissue, and early human findings are worrying. But we do not yet know the size of the health risk from ordinary daily exposure. Scientists need larger studies that follow healthy people for years, measure exposure the same way, and show that more exposure comes before more illness.
+### Wait — can we trust the measurements?
+
+Not equally. Reviews found that laboratories use different size limits, units, sample-cleaning steps, and checks for stray plastic from the room. Some methods count pieces, while others measure total plastic mass. This can change the answer and makes studies hard to compare [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298). Most human studies also took a single snapshot and could not fully separate plastic from diet, work, disease, and other differences between people [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+
+### So what is the honest answer?
+
+You can tell a friend: “Microplastics may be hurting us, and the clues deserve attention, but human harm is not yet nailed down.” Scientists still need shared measurement rules and long studies that show exposure comes first, rises with dose, and is followed by disease.
 
 **Sources**
 
 **Chartres N, Cooper CB, Bland G, Pelch KE, Gandhi SA, BakenRa A, Woodruff TJ (2024)** Effects of Microplastic Exposure on Human Digestive, Reproductive, and Respiratory Health: A Rapid Systematic Review. *Environmental Science & Technology*. https://doi.org/10.1021/acs.est.3c09524
 
-**Hunt K, Davies A, Fraser A, Burden C, Howell A, Buckley K, Harding S, Bakhbakhi D (2024)** Exposure to microplastics and human reproductive outcomes: A systematic review. *BJOG: An International Journal of Obstetrics & Gynaecology*. https://doi.org/10.1111/1471-0528.17756
+**Correia TR, Dias APL, Pinto RL, Pereira DB, Sousa AMFD, Calderari MRCM (2026)** Analytical challenges and advances in detecting microplastics in human tissue and organ samples. *Anais da Academia Brasileira de Ciências*. https://doi.org/10.1590/0001-3765202620251113
 
-**Jenner LC, Rotchell JM, Bennett RT, Cowen M, Tentzeris V, Sadofsky LR (2022)** Detection of microplastics in human lung tissue using μFTIR spectroscopy. *Science of The Total Environment*. https://doi.org/10.1016/j.scitotenv.2022.154907
+**Dmitrowicz A, Sacharczuk M, Skiba D (2026)** Micro- and nanoplastics in human biological materials: a systematic review of detection methods and methodological challenges. *Archives of Toxicology*. https://doi.org/10.1007/s00204-026-04392-1
 
-**Kutralam-Muniasamy G, Shruti VC, Pérez-Guevara F, Roy PD (2023)** Microplastic diagnostics in humans: “The 3Ps” Progress, problems, and prospects. *Science of The Total Environment*. https://doi.org/10.1016/j.scitotenv.2022.159164
+**Lee YH, Zheng CM, Wang YJ, Wang YL, Chiu HW (2025)** Effects of microplastics and nanoplastics on the kidney and cardiovascular system. *Nature Reviews Nephrology*. https://doi.org/10.1038/s41581-025-00971-0
 
-**Lane T, de Ruijter VN, Wardani I, Barchiesi M, Koelmans AA (2026)** A QA/QC screening framework to assess studies reporting microplastic presence in human organs, tissues, and bodily fluids. *Environment International*. https://doi.org/10.1016/j.envint.2026.110429
-
-**Leslie HA, van Velzen MJM, Brandsma SH, Vethaak AD, Garcia-Vallejo JJ, Lamoree MH (2022)** Discovery and quantification of plastic particle pollution in human blood. *Environment International*. https://doi.org/10.1016/j.envint.2022.107199
+**Mahmud F, Sarker DB, Jocelyn JA, Sang QXA (2024)** Molecular and Cellular Effects of Microplastics and Nanoplastics: Focus on Inflammation and Senescence. *Cells*. https://doi.org/10.3390/cells13211788
 
 **Marfella R, Prattichizzo F, Sardu C, Fulgenzi G, Graciotti L, Spadoni T, D’Onofrio N, Scisciola L, La Grotta R, Frigé C, Pellegrini V, Municinò M, Siniscalchi M, Spinetti F, Vigliotti G, Vecchione C, Carrizzo A, Accarino G, Squillante A, Spaziano G, Mirra D, Esposito R, Altieri S, Falco G, Fenti A, Galoppo S, Canzano S, Sasso FC, Matacchione G, Olivieri F, Ferraraccio F, Panarese I, Paolisso P, Barbato E, Lubritto C, Balestrieri ML, Mauro C, Caballero AE, Rajagopalan S, Ceriello A, D’Agostino B, Iovino P, Paolisso G (2024)** Microplastics and Nanoplastics in Atheromas and Cardiovascular Events. *New England Journal of Medicine*. https://doi.org/10.1056/nejmoa2309822
 
-**Nihart AJ, Garcia MA, El Hayek E, Liu R, Olewine M, Kingston JD, Castillo EF, Gullapalli RR, Howard T, Bleske B, Scott J, Gonzalez-Estrella J, Gross JM, Spilde M, Adolphi NL, Gallego DF, Jarrell HS, Dvorscak G, Zuluaga-Ruiz ME, West AB, Campen MJ (2025b)** Bioaccumulation of microplastics in decedent human brains. *Nature Medicine*. https://doi.org/10.1038/s41591-024-03453-1
+**Mattioda V, Benedetti V, Tessarolo C, Oberto F, Favole A, Gallo M, Martelli W, Crescio MI, Berio E, Masoero L, Benedetto A, Pezzolato M, Bozzetta E, Grattarola C, Casalone C, Corona C, Giorda F (2023)** Pro-Inflammatory and Cytotoxic Effects of Polystyrene Microplastics on Human and Murine Intestinal Cell Lines. *Biomolecules*. https://doi.org/10.3390/biom13010140
 
-**Nihart AJ, Garcia MA, El Hayek E, Liu R, Olewine M, Kingston JD, Castillo EF, Gullapalli RR, Howard T, Bleske B, Scott J, Gonzalez-Estrella J, Gross JM, Spilde M, Adolphi NL, Gallego DF, Jarrell HS, Dvorscak G, Zuluaga-Ruiz ME, West AB, Campen MJ (2025a)** Author Correction: Bioaccumulation of microplastics in decedent human brains. *Nature Medicine*. https://doi.org/10.1038/s41591-025-03675-x
+**Prattichizzo F, Ceriello A, Pellegrini V, La Grotta R, Graciotti L, Olivieri F, Paolisso P, D’Agostino B, Iovino P, Balestrieri ML, Rajagopalan S, Landrigan PJ, Marfella R, Paolisso G (2024)** Micro-nanoplastics and cardiovascular diseases: evidence and perspectives. *European Heart Journal*. https://doi.org/10.1093/eurheartj/ehae552
 
-**Ragusa A, Svelato A, Santacroce C, Catalano P, Notarstefano V, Carnevali O, Papa F, Rongioletti MCA, Baiocco F, Draghi S, D'Amore E, Rinaldo D, Matta M, Giorgini E (2021)** Plasticenta: First evidence of microplastics in human placenta. *Environment International*. https://doi.org/10.1016/j.envint.2020.106274
+**Scotton JW, Galvão AC, Stolf DO, Robazzi MLDCC, Robazza WDS (2026)** The invisible burden: A meta-analysis of methodological evolutions and the reassessment of microplastic concentrations in human tissues. *Environmental Pollution*. https://doi.org/10.1016/j.envpol.2026.128298
+
+**Talaie A, Alaee S, Hosseini E, Rezania S, Tamadon A (2025)** Toxicological effects of micro/nano-plastics on human reproductive health: A review. *Toxicology Letters*. https://doi.org/10.1016/j.toxlet.2025.06.021
 
 **Tran HAA, Ng JJ, Tang DH, Yong CT, Ho AFW (2026)** Health impacts of micro- and nanoplastics in humans: systematic review of in vivo evidence. *Environmental Health*. https://doi.org/10.1186/s12940-026-01282-y
 
+**Wang YL, Lee YH, Hsu YH, Chiu IJ, Huang CCY, Huang CC, Chia ZC, Lee CP, Lin YF, Chiu HW (2021)** The Kidney-Related Effects of Polystyrene Microplastics on Human Kidney Proximal Tubular Epithelial Cells HK-2 and Male C57BL/6 Mice. *Environmental Health Perspectives*. https://doi.org/10.1289/ehp7612
+
 **Yan Z, Liu Y, Zhang T, Zhang F, Ren H, Zhang Y (2022)** Analysis of Microplastics in Human Feces Reveals a Correlation between Fecal Microplastics and Inflammatory Bowel Disease Status. *Environmental Science & Technology*. https://doi.org/10.1021/acs.est.1c03924
 
-**Zhang C, Zhang G, Sun K, Ren J, Zhou J, Liu X, Lin F, Yang H, Cao J, Nie L, Zhang P, Zhang L, Wang Z, Guo H, Lin X, Duan S, Cao J, Huang H (2024)** Association of mixed exposure to microplastics with sperm dysfunction: a multi-site study in China. *eBioMedicine*. https://doi.org/10.1016/j.ebiom.2024.105369
+**Zhu X, Wang C, Duan X, Liang B, Genbo Xu E, Huang Z (2023)** Micro- and nanoplastics: A new cardiovascular risk factor? *Environment International*. https://doi.org/10.1016/j.envint.2022.107662
