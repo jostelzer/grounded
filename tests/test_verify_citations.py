@@ -41,6 +41,24 @@ def update(utype, label=None, doi="10.1000/notice"):
     return entry
 
 
+class AuthorRecordTests(unittest.TestCase):
+    def test_recorded_affiliations_are_kept_for_the_actors_field(self):
+        m = work(author=[
+            {"family": "Wharton", "given": "Sean",
+             "affiliation": [{"name": "McMaster University"}]},
+            {"family": "Jensen", "given": "Simon Birk Kjær",
+             "affiliation": []},
+            {"name": "STEP 4 Investigators"},
+        ])
+        authors = VC.cr_authors(m)
+        self.assertEqual(authors[0], {
+            "family": "Wharton", "given": "Sean",
+            "affiliation": "McMaster University",
+        })
+        self.assertNotIn("affiliation", authors[1])
+        self.assertEqual(authors[2], {"family": "STEP 4 Investigators", "given": ""})
+
+
 class ClassifyUpdateTests(unittest.TestCase):
     def test_severities(self):
         cases = {

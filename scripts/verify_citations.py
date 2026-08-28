@@ -191,13 +191,28 @@ def cr_year(m):
 
 
 def cr_authors(m):
+    """Structured authors from Crossref, keeping recorded affiliations.
+
+    The stored record is the only permitted source for names and
+    institutions in the written review — the writing rules forbid recalling
+    or guessing either, so what is not captured here cannot be used.
+    """
     out = []
     for a in m.get("author") or []:
         fam, giv = a.get("family"), a.get("given")
         if fam:
-            out.append({"family": fam, "given": giv or ""})
+            rec = {"family": fam, "given": giv or ""}
         elif a.get("name"):
-            out.append({"family": a["name"], "given": ""})
+            rec = {"family": a["name"], "given": ""}
+        else:
+            continue
+        affiliations = [
+            x.get("name") for x in a.get("affiliation") or []
+            if isinstance(x, dict) and x.get("name")
+        ]
+        if affiliations:
+            rec["affiliation"] = affiliations[0]
+        out.append(rec)
     return out
 
 

@@ -32,6 +32,12 @@ framings genuinely compete, list both and pick one before drafting begins.>
 - depends-on: <claim IDs this claim presupposes, e.g. C2, C3 — or "—">
 - numbers: <every figure any style might need, full precision with intervals and
   denominators — this field is the licensed home of precision>
+- actors: <optional, for styles that name people: the lead authors and any
+  recorded affiliations of this claim's decisive studies, copied verbatim from
+  the ledger's `authors_structured` — "Sean Wharton (Wharton et al. 2022,
+  affiliation: McMaster University)". This field is the ONLY channel through
+  which a person's given name or an institution may reach the prose; if it is
+  not recorded here from the ledger, the prose uses the surname or "researchers">
 
 ### C2. …
 
