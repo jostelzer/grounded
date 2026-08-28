@@ -35,3 +35,12 @@ The answer, immediately. One to three sentences. **No citations** — they belon
 - Bold a few decisive numbers or terms sparingly — enough to guide the eye, not enough to look shouty.
 - When the same pattern recurs across several sections, name it once explicitly — where it second appears or in a short closing synthesis section (see Ordering in `writing-guide.md`).
 - Word budgets: small 350–700, medium 900–1,600, large 2,000–4,000. Sources, angles, and search depth are unchanged from the chosen size.
+
+## The voice: compression without telegraphy
+
+Bullets are the scientific register at maximum density — but every bullet is still a grammatical sentence with an agent and a verb, not a telegram. "Largest RCT: null at 12 months" reads as notes; "The largest trial found no effect at 12 months (n=1,842)" reads as evidence. The universal rules in `writing-guide.md` apply unchanged: agents act, at most one "X, not Y" landing per section, no coinages.
+
+- **Front-load the finding, then qualify.** The first five words of a bullet carry its point; design and sample follow in the parenthesis, the interval follows the estimate.
+- **The heading asserts; the bullets prove.** Never restate the heading's claim inside a bullet — each bullet is a distinct piece of evidence for it.
+- **Compression comes from cutting connective tissue, not grammar.** Drop "It is worth noting that"; keep the subject and the verb.
+- **One number per bullet is the ideal; two is the limit.** A bullet carrying four statistics is a table row — move it to the table.

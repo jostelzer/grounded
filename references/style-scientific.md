@@ -65,3 +65,26 @@ Paragraph craft:
 - The banned-filler list still applies in full. Flowing means flowing, not padded: no "it is important to note", no throat-clearing, no restating the abstract in the conclusion.
 - Word budgets run ~1.5× the bullet tiers because connective tissue costs words: small 600–1,000, medium 1,500–2,500, large 3,500–6,000. Sources, angles, and search depth are unchanged from the chosen size.
 - Scientific reviews print beautifully — end the delivery by offering the journal-styled PDF (`scripts/export_review.py`), but the review itself still goes in the chat.
+
+## The voice: how a good journal article actually sounds
+
+The model for this style is the best-written narrative review you have read — *NEJM* review-article prose, not committee-report prose. Objective never means inert: the great reviews are direct, concrete, and quietly confident, and their authority comes from precision, not from abstraction. The universal rules in `writing-guide.md` (agents act, ration the antithesis, no coinages) bite hardest here, because this register is where the machine voice defaults.
+
+**Do:**
+
+- **Give every claim an agent.** Trials show, cohorts associate, oils lower, doses matter, the data cannot distinguish. When a sentence needs a verdict, let the evidence deliver it: "The trials point to a modest benefit at best" beats "The defensible inference is possible modest benefit."
+- **Let calibrated verbs carry the hedging.** "Probably lowers", "may reduce", "is associated with" — the uncertainty lives in the verb, once. Stacking abstraction-hedges ("is compatible with", "is aligned with", "weighs against") around the same claim builds fog, not caution.
+- **Earn short sentences and spend them at pressure points.** "Almost every nutrient does." "It would be wrong to call that proof of safety." The shortest sentences in a review are its best moments; a review with none is monotone. After two long evidence sentences, the reader needs a short one.
+- **Let a number be the subject sometimes.** "That 0.81 came from trials run before statins existed." Numbers as agents keep quantitative prose alive.
+- **Use "this/that" anaphora only with a solid referent.** "That distinction matters" works when the previous sentence made exactly one distinction. "This dependence is visible in both cohorts and trials", three sentences after two candidate dependencies, sends the reader backwards.
+
+**Don't — each ✗ is from a real draft; write the ✓ shape instead:**
+
+- ✗ "Replacement is the second necessary coordinate." → ✓ "The second question is always what the oil replaces."
+- ✗ "A category-level verdict is therefore biologically underspecified." → ✓ "The category is too heterogeneous to test as a single exposure."
+- ✗ "The appropriate conclusion is uncertainty around small site-specific effects, not evidence for a general carcinogen." → ✓ "The evidence leaves room for small site-specific effects. It does not show a general carcinogen." (One antithesis per section — and this one earns it.)
+- ✗ "Lipidomics offers a mechanistic bridge." → ✓ "Lipidomics shows the same shift at the molecular level."
+- ✗ "The usable boundary is shown in Figure 3." → ✓ "Figure 3 marks where the risk actually begins: smoke, storage, and reuse."
+- ✗ Three sections in a row landing on "…, not …". → ✓ Land one on the number, one on the consequence, one on the open question.
+
+The section-landing sentence deserves special care because it is where the tics concentrate: the landing is a *conclusion the section proved*, in whatever shape that conclusion naturally takes — not a slot to be filled by the antithesis machine.
