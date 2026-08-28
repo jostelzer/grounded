@@ -1,49 +1,54 @@
 ## Are microplastics actually harming our health?
 
-**TL;DR** — They may be. We have good reasons to worry, but we still don't know whether the tiny amounts most of us meet cause a particular illness or how big that risk might be.
+**TL;DR** - They might be, but we still can't measure the danger to you. Tiny plastic pieces turn up in our bodies, and lab work shows ways they could hurt living things. The missing step is proof that ordinary amounts cause illness in people.
 
-We use plastic every day. Tiny pieces can end up inside our bodies [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). So it's fair to ask a simple question: are they only passing through, or are they making us sick?
+Picture a jigsaw with one empty space in the middle. We already have some pieces around it. Scientists report plastic in our bodies, see harm in lab tests, and sometimes find more plastic alongside illness. But the missing middle says, “Did the plastic cause the illness?”
 
-### First, do the pieces get into us?
+### Which piece do we already have?
 
-Yes, scientists have reported them in us. Across 25 human studies, teams found plastic in samples from our heart and blood system, gut, lungs, eyes, and parts involved in making babies [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). Another review found reports involving our kidneys and several other organs too [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0).
+Reviews report tiny plastic pieces in blood and samples linked to our heart, gut, lungs, eyes, and reproduction, across 25 studies of living people [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). So the first jigsaw piece is real: plastic can get into us.
 
-That tells us the pieces can reach many parts of the body. It doesn't tell us that they caused an illness there.
+### Why are scientists worried about harm?
 
-Scientists also don't know how long each piece stays. A bit that leaves quickly may matter differently from one that sits in tissue, and today's studies can't sort that out [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0).
+Lab studies report cell stress, gut-cell damage, and kidney damage in mice [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Mattioda et al. 2023](https://doi.org/10.3390/biom13010140), [Mahmud et al. 2024](https://doi.org/10.3390/cells13211788), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662).
 
-### Why are scientists worried?
+That adds a second jigsaw piece: harm is possible.
 
-In one lab story, a team put common plastic particles around human kidney cells and also gave them to mice. The cells showed signs of stress, while the mice developed swelling and damage in tiny kidney tubes [Wang et al. 2021](https://doi.org/10.1289/ehp7612). Other teams have seen cell damage and body alarm signals in gut cells and in several kinds of lab test [Mattioda et al. 2023](https://doi.org/10.3390/biom13010140), [Mahmud et al. 2024](https://doi.org/10.3390/cells13211788), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662), [Talaie et al. 2025](https://doi.org/10.1016/j.toxlet.2025.06.021).
+### What happens when doctors watch people?
 
-A careful review called harm to the gut, lungs, and reproductive system “suspected.” But only three human studies fed directly into that judgment, so most of the weight came from animals [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524). Lab tests show that harm can happen. A lab effect may happen only at an amount that never reaches our tissues in daily life. They don't tell us whether the amount you meet in ordinary life is enough to do it.
+Doctors followed people who already needed fatty build-up removed from an artery in their neck. Those whose removed build-up contained plastic were later somewhere between twice and ten times as likely to have a heart attack, a stroke, or die [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). Heart researchers say this is a serious clue, but everyone in the study already had artery disease [Prattichizzo et al. 2024](https://doi.org/10.1093/eurheartj/ehae552).
 
-### What has happened in real people?
+That gives us a third piece, but it still does not fill the middle. Another team found more plastic in the poo of people with bowel illness. The illness itself might have made plastic stay around longer [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). You can see all three pieces and the empty space in [Figure 1](#fig-missing-piece).
 
-Doctors followed people after surgery to remove dangerous build-up from a neck artery. Those whose removed material contained plastic later had more heart attacks, strokes, or deaths. The true difference could have been anywhere from twice to ten times as large [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). This was a worrying clue, but everyone in the study already had serious artery disease and nobody was randomly given plastic [Prattichizzo et al. 2024](https://doi.org/10.1093/eurheartj/ehae552), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+<a id="fig-missing-piece"></a>
+![Three warm jigsaw pieces for plastic in us, possible lab harm, and human links surround an empty centre asking whether plastic causes illness.](microplastics-missing-piece.png)
 
-Teams have also found more plastic in stool from people with a sore, swollen gut than in stool from people without that illness. The illness itself might make plastic stay in the gut longer, so the arrow could point either way [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924). Seeing plastic and illness together is not the same as knowing which one came first.
+**Figure 1. The most important piece is still missing.** Plastic in our bodies, harm in lab tests, and worrying links in people all matter. None of them alone proves that ordinary amounts cause illness. The open centre keeps that uncertainty visible. The picture marks an evidence gap; it does not say that the clues are unimportant [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524).
 
-### Wait — can we trust the measurements?
+### Wait - do the pieces even fit together?
 
-Not enough to compare them cleanly. A review of more than 200 studies found that labs often used different ways to stop stray plastic getting into samples and different checks for what their tests missed [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113). Other reviews found that labs disagreed about which sizes count, how samples should be cleaned, and whether to report the number or weight of the pieces [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+This is where the picture gets shakier. A review checked more than 200 studies of human tissues and found that basic checks for stray plastic were often missing [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113). Teams also use different names, size limits, units, and ways of preparing samples. That can change the answer even before anyone asks about health [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
-If one lab counts a speck that another lab cannot see, their totals can look different even when both are careful. That makes a fair comparison hard [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298).
+Measurement matters because finding a piece still does not tell us what it did. If one team reports pieces and another reports weight, we cannot tell whether people carried similar amounts. Until units match, health links cannot be compared cleanly. Studies that look alike in a headline may still be asking different questions underneath, so combining them can give a tidy-looking answer that hides messy inputs [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298).
 
-Many teams using different tools still report plastic inside us, so the broad picture is unlikely to be one big mistake. The exact amount is much shakier.
+The problem is not just untidy paperwork. If dose scales differ, a larger health effect in one study cannot be matched to a smaller effect in another. The puzzle pieces may look similar while their edges are cut differently [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1).
 
-### So what can we honestly say?
+In [Figure 2](#fig-measuring-same-sample), one sample reaches several lab benches. Some teams count pieces. Others weigh plastic or ignore pieces below their chosen size. Their answers may not line up, even when they started with the same sample.
 
-Microplastics may be hurting us, and the warning signs are real. But nobody yet knows how much the plastic you meet in ordinary life changes your own chance of getting sick [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662).
+<a id="fig-measuring-same-sample"></a>
+![One sample splits toward three lab benches that count pieces, weigh plastic, or set a size cut-off, ending in answers that do not line up.](microplastics-measurement-methods.png)
 
-To answer that, scientists need to test the same way, measure people more than once, and watch them for years. They also need to learn whether lowering the amount inside us actually leaves us healthier [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+**Figure 2. The same sample can give different answers.** Follow the sample to each bench. Counting, weighing, and choosing a size cut-off are not the same job. Until teams agree on those basics, we cannot compare amounts cleanly. The mismatch warns us about methods; it does not say that one bench is automatically right. The result strips carry no scale. They show disagreement between methods, not the size of a measured difference [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
-You can see why the last missing step matters in [Figure 1](#fig-evidence-path).
+### What answer can we take home?
 
-<a id="fig-evidence-path"></a>
-![A left-to-right evidence path starts with plastic reported in human samples, splits into laboratory harm and human health links, and ends at a dashed unanswered link to everyday exposure causing illness.](figure-evidence-path.png)
+Microplastics may be hurting us, but scientists cannot yet say how much ordinary amounts raise your chance of getting sick. Not proved harmful does not mean proved safe. It means we need better human studies before anyone can give you a trustworthy number.
 
-**Figure 1. The last step is still missing.** Teams report plastic inside us. Lab tests show ways it can hurt cells and animals, and human studies find worrying links. The dashed arrow means those pieces do not yet prove that everyday amounts make us ill [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113).
+Clean lab plastic is not the same as the mixed, worn bits we meet in daily life. One careful review called harm “suspected,” yet only three human studies helped it reach that judgment [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Talaie et al. 2025](https://doi.org/10.1016/j.toxlet.2025.06.021).
+
+We do not know which size, shape, or plastic type matters most. Better studies must track exposure before illness and compare people the same way [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). That is how the jigsaw's empty middle gets filled.
+
+The jigsaw was only a helper. Our bodies are not flat pictures, and many things can lead to the same illness. Scientists need shared ways to measure plastic, long studies that begin with generally healthy people, and tests of whether lowering what gets into us actually improves health.
 
 **Sources**
 

@@ -30,15 +30,19 @@
 - The recurring pattern is an **exposure-outcome gap**: removing phones changes the school environment immediately, but better grades or mental health require more than reduced access during school hours [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
 - The most defensible near-term promise is **less phone access during school**, not better overall mental health or a sustained fall in total phone use [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
 - Schools should define the outcome they want, monitor enforcement and workarounds, and assess learning and belonging separately. Current evidence does not justify using reduced school-day access as a proxy for broader success [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
-- Read the figure as an evidence map, not a causal chain. The solid arrow identifies the direct outcome most consistently observed: lower access at school. The dashed arrows mark effects that remain mixed or uncertain; they do not mean benefits are impossible, but that grades, wellbeing, and lower total use are not yet dependable consequences of a ban [Böttger & Zierer 2024](https://doi.org/10.3390/educsci14080906), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
+- The policy differences hidden by the word “ban” are mapped in [Figure 2](#fig-policy-implementation).
 
 <a id="fig-policy-outcomes"></a>
-![An editorial school cutaway shows phones stored at the entrance and less phone use in class, followed by dashed evidence paths to grades, mental wellbeing, and total phone use, all labelled as mixed or without reliable improvement.](figure-policy-outcomes-v3.png)
+![A panoramic school day shows a pupil storing a phone, learning in class, and retrieving the phone outside the gate; labels distinguish reliable lower access from mixed grades and no reliable mental-health or total-use gain.](school-smartphone-bans-policy-outcomes.png)
 
-**Figure 1. Bans change access more reliably than outcomes.**
-- **Shows:** Restrictions consistently reduce phone use at school; downstream effects on grades, mental wellbeing, and total use are mixed or absent.
-- **Evidence boundary:** Most studies are observational or short natural experiments, so subgroup and long-term effects remain uncertain.
-- **Sources:** [Böttger & Zierer 2024](https://doi.org/10.3390/educsci14080906), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6)
+**Figure 1. Bans change access more reliably than outcomes.** Restrictions consistently reduce phone use at school, while effects on grades, mental wellbeing, and total use remain mixed or absent; most studies are observational or short natural experiments, so subgroup and long-term effects remain uncertain [Böttger & Zierer 2024](https://doi.org/10.3390/educsci14080906), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
+
+<a id="fig-policy-implementation"></a>
+![An axonometric school cutaway contrasts all-day locked storage, classroom-only limits, teaching exceptions, and pupil workarounds, with school rules ending at the gate.](school-smartphone-bans-policy-implementation.png)
+
+**Figure 2. The policy label hides the intervention pupils experience.** The same “phone ban” label can mean all-day storage, classroom limits, teaching exceptions, and workarounds, while school rules end at the gate; qualitative and systematic evidence explains why implementations differ but cannot rank individual components causally [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094), [Calderón-Garrido et al. 2022](https://doi.org/10.3991/ijet.v17i06.29181), [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
+
+Read the figures together: one separates immediate from downstream outcomes; the other separates policy label from implementation.
 
 **Sources**
 
