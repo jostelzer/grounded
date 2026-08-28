@@ -323,7 +323,11 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
         if f"{index} / {len(reader.pages)}" not in text:
             failures.append(f"page {index} is missing its total-aware page number")
 
-    release_match = re.search(r"\bGROUNDED\s+(V[^\s·]+)", first_page_text, re.I)
+    # pypdf sometimes concatenates adjacent masthead runs without a space
+    # ("...REVIEWGROUNDED V2.8.0"), so the label match must not require a
+    # word boundary before GROUNDED. The version token itself is still
+    # matched and compared exactly.
+    release_match = re.search(r"GROUNDED\s+(V[^\s·]+)", first_page_text, re.I)
     embedded_release = release_match.group(1).lower() if release_match else None
     if expected_release is not None:
         expected = expected_release.upper()
@@ -647,8 +651,11 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120,
             continue
         header_box = (int(0.04 * width), int(0.025 * height),
                       int(0.96 * width), int(0.085 * height))
+        # Wide enough to hold the chip under any edition's page margins
+        # (journal 13mm through primer 30mm); the gate still requires the
+        # orange chip to exist in the masthead band on every page.
         chip_box = (int(0.04 * width), int(0.025 * height),
-                    int(0.17 * width), int(0.085 * height))
+                    int(0.24 * width), int(0.085 * height))
         page_number_box = (int(0.78 * width), int(0.95 * height),
                            int(0.96 * width), int(0.99 * height))
         body_box = (int(0.04 * width), int(0.085 * height),

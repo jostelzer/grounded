@@ -1053,6 +1053,45 @@ table { margin-bottom: 14px; }
 td, thead th { padding: 6px 8px; }
 """
 
+PRIMER_CSS = """
+/* PRIMER edition - the friendly explainer for ELI5: humanist sans, big
+   type, one calm column, orange step badges, TL;DR as an answer card. */
+body { font-family: Seravek, "Gill Sans", "Helvetica Neue", sans-serif;
+  font-size: 10.5pt; line-height: 1.62; text-align: left; hyphens: none; }
+@page { margin: 27mm 30mm 16mm 30mm; }
+.paper { max-width: 150mm; }
+.body.cols, .column-run, .column-run.final { column-count: 1; }
+.kicker { letter-spacing: .3em; font-weight: 600; margin: 5mm 0 4mm; }
+h1 { font-family: Seravek, "Gill Sans", sans-serif; font-weight: 700;
+  font-size: 26pt; line-height: 1.18; letter-spacing: -.005em;
+  margin: 0 0 6mm; }
+.metagrid { border-top: .5px solid var(--rule);
+  border-bottom: .5px solid var(--rule); margin-bottom: 8mm; }
+.metagrid > div { border-right: none; padding: 7px 8px 8px; }
+.metagrid > div:first-child { padding-left: 0; }
+.metagrid b { letter-spacing: .18em; color: var(--faint); }
+.lead { background: #fff3ee; border-left: 3.5px solid var(--accent);
+  padding: 5mm 6mm; font-size: 11pt; line-height: 1.6; max-width: 100%;
+  font-weight: 400; margin: 0 0 9mm; }
+.lead b { color: var(--accent); font-size: 6.8pt; letter-spacing: .24em;
+  margin-bottom: 2mm; }
+h2 { font-family: Seravek, "Gill Sans", sans-serif; font-weight: 700;
+  font-size: 13.5pt; margin: 9mm 0 3mm; border-bottom: none;
+  letter-spacing: 0; text-transform: none; }
+h2::before { content: counter(sec); display: inline-block; width: 7mm;
+  height: 7mm; line-height: 7.15mm; text-align: center;
+  background: var(--accent); color: #fff; border-radius: 50%;
+  font-size: 10.5pt; font-weight: 600; margin-right: 2.8mm;
+  letter-spacing: 0; font-variant-numeric: lining-nums;
+  vertical-align: middle; margin-top: -1mm; }
+sup.citation, sup.citation a { color: #a9a29a; }
+figcaption { font-size: 8.2pt; line-height: 1.6; }
+figcaption .figno { color: var(--accent); }
+.refs .refno { color: var(--accent); }
+.refs { line-height: 1.4; }
+.refs p { margin-bottom: 4px; }
+"""
+
 # Editions bind a writing style to a paper identity: an overlay on the
 # canonical CSS plus the font families the rendered PDF must embed. The
 # evidence contract (citations, reference order, atomic writes, QA) is
@@ -1060,8 +1099,9 @@ td, thead th { padding: 6px 8px; }
 EDITIONS = {
     "journal": {"css": "", "fonts": ("Charter", "Helvetica-Neue")},
     "salon": {"css": SALON_CSS, "fonts": ("Didot", "Hoefler-Text", "Optima")},
+    "primer": {"css": PRIMER_CSS, "fonts": ("Seravek", "Helvetica-Neue")},
 }
-DEFAULT_EDITION_BY_STYLE = {"popsci": "salon"}
+DEFAULT_EDITION_BY_STYLE = {"popsci": "salon", "eli5": "primer"}
 DROPCAP_MIN_CHARS = 200
 PULL_SENTINEL = "GROUNDED-PULL-QUOTE-SENTINEL"
 
@@ -1305,7 +1345,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
 
     style = _normalized_style(style)
     edition = resolve_edition(style, edition)
-    if pull_quote is not None and edition == "journal":
+    if pull_quote is not None and edition != "salon":
         raise ValueError("pull quotes are a salon-edition device")
     pull_references = ()
     if pull_quote is not None:

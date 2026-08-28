@@ -991,5 +991,45 @@ class SalonEditionTests(unittest.TestCase):
         )
 
 
+class PrimerEditionTests(unittest.TestCase):
+    """The primer edition (eli5 default): friendly explainer typography —
+    single column, step badges, answer card — over the same semantic
+    document and evidence contract."""
+
+    FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-eli5")
+    EVIDENCE = os.path.join(ROOT, "tests", "fixtures", "colic")
+
+    def build(self, **kwargs):
+        with open(os.path.join(self.FIXTURE, "review.md"), encoding="utf-8") as stream:
+            markdown = stream.read()
+        return export_review.build_html(
+            markdown, base_dir=self.EVIDENCE, style="eli5",
+            release="v-test", repo="example.test/grounded",
+            compiled_date="2026-08-28", **kwargs,
+        )
+
+    def test_eli5_defaults_to_primer(self):
+        page = self.build()
+        self.assertIn("PRIMER edition", page)
+        self.assertEqual(export_review.resolve_edition("eli5"), "primer")
+        self.assertEqual(export_review.resolve_edition("bullets"), "journal")
+
+    def test_journal_override_is_clean(self):
+        page = self.build(edition="journal")
+        self.assertNotIn("PRIMER edition", page)
+
+    def test_primer_carries_no_literary_devices(self):
+        page = self.build()
+        self.assertNotIn('class="dropcap"', page)
+        with self.assertRaises(ValueError):
+            self.build(pull_quote="Every baby cries")
+
+    def test_primer_font_contract(self):
+        self.assertEqual(
+            export_review.EDITIONS["primer"]["fonts"],
+            ("Seravek", "Helvetica-Neue"),
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

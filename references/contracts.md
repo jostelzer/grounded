@@ -44,7 +44,7 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   rules, Sources block shape.
 - `export_review.py` / `export_deck.py`: flag set, release-manifest fields
   (additive only), atomic write behavior. Editions (`--edition`, default
-  journal; popsci defaults to salon) are presentation profiles only: fonts,
+  journal; popsci defaults to salon, eli5 to primer) are presentation profiles only: fonts,
   furniture, and devices (drop cap, dinkus, `--pull-quote` with verbatim
   check and sentence-scoped attribution) may vary per edition; citation
   placement, reference order, and every gate may not.
