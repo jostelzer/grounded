@@ -207,6 +207,62 @@ def _fulltext_records(manifest: dict[str, object] | None) -> list[dict[str, obje
     return [record for record in records if isinstance(record, dict)] if isinstance(records, list) else []
 
 
+_GIVEN_STOP = frozenset("""
+    The A An In On At By For From With When While After Before Then Both But
+    And Or However Although Though If As Since Because Their His Her Its These
+    Those This That Not No Later Recently First Second Third Finally Next Once
+    Only Even Most Many Some Each Every Another Other Between Among During
+    Under Over Across Against Around Through Toward Towards Until Within
+    Without Study Trial Professor Doctor Dr Team Whether Unlike Like Beyond
+    Meanwhile Yet Still Today Now Here There What Why How Who Whose Which
+    Suppose Imagine Consider Led Named Author Authors Investigator
+    Investigators
+""".split())
+
+
+def _author_name_errors(body: str, ledger: dict[str, object]) -> list[str]:
+    """Given names in the text must match the ledger's author records.
+
+    The popsci people rule invites named actors, which makes recalled or
+    guessed first names a fabrication risk. Every "Given Surname" pair whose
+    surname matches a recorded cited author's family name must carry that
+    author's recorded given name (or its first token) verbatim; surname-only
+    references are always safe and never flagged.
+    """
+    entries = ledger.get("entries", [])
+    if not isinstance(entries, list):
+        return []
+    givens_by_family: dict[str, set[str]] = {}
+    for entry in entries:
+        canonical = entry.get("canonical") if isinstance(entry, dict) else None
+        if not isinstance(canonical, dict):
+            continue
+        for author in canonical.get("authors_structured") or []:
+            if not isinstance(author, dict):
+                continue
+            family = str(author.get("family") or "").strip()
+            given = str(author.get("given") or "").strip()
+            if family and given and " " not in family:
+                allowed = givens_by_family.setdefault(family, set())
+                allowed.add(given)
+                allowed.add(given.split()[0])
+    errors = set()
+    # Same-line pairs only, with a lookahead so a word can serve as the
+    # surname of one candidate pair and the given name of the next.
+    pair = re.compile(r"\b([A-Z][a-zA-Z'’-]+)[ \t]+(?=([A-Z][a-zA-Z'’-]+)\b)")
+    for match in pair.finditer(body):
+        given, family = match.groups()
+        allowed = givens_by_family.get(family)
+        if not allowed or given in _GIVEN_STOP or given in givens_by_family:
+            continue
+        if given not in allowed:
+            errors.add(
+                f"author given name not in ledger record: “{given} {family}” "
+                f"(recorded: {', '.join(sorted(allowed))})"
+            )
+    return sorted(errors)
+
+
 def _reading_and_verification_errors(
     source_dois: set[str],
     ledger: dict[str, object],
@@ -582,6 +638,7 @@ def validate_review(
             source_dois, ledger, fulltext_manifest
         )
         errors.extend(evidence_errors)
+        errors.extend(_author_name_errors(body, ledger))
 
     if style != "eli5":
         def _covered_by_adjacent_expansion(term: str) -> bool:

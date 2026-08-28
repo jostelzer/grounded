@@ -311,6 +311,53 @@ class ValidateReviewTests(unittest.TestCase):
         )
         self.assertFalse(any("reading evidence" in error for error in result.errors))
 
+    def test_fabricated_author_given_names_are_hard_failures(self):
+        ledger = {
+            "entries": [{
+                "key": "Wharton2022", "doi": DOI, "title": "A source",
+                "abstract": "A nontrivial abstract " + "word " * 60,
+                "status": "verified",
+                "canonical": {
+                    "type": "journal-article",
+                    "authors_structured": [
+                        {"family": "Wharton", "given": "Sean"},
+                        {"family": "Jensen", "given": "Simon Birk Kjær"},
+                    ],
+                },
+                "verification": {
+                    "bibliographic_status": "verified",
+                    "retraction_status": "clear",
+                },
+            }]
+        }
+        fabricated = scientific_review().replace(
+            "The question has evidence",
+            "Scott Wharton and colleagues found evidence",
+        )
+        result = validate_review.validate_review(
+            fabricated, style="scientific", size="small", ledger=ledger
+        )
+        self.assertTrue(any(
+            "Scott Wharton" in error and "Sean" in error
+            for error in result.errors
+        ), result.errors)
+
+        for safe_actor in (
+            "Sean Wharton and colleagues found evidence",   # verbatim given
+            "Simon Jensen and colleagues found evidence",   # first token of given
+            "Wharton and colleagues found evidence",        # surname-only
+            "When Wharton looked, the team found evidence", # sentence opener
+        ):
+            safe = scientific_review().replace(
+                "The question has evidence", safe_actor
+            )
+            result = validate_review.validate_review(
+                safe, style="scientific", size="small", ledger=ledger
+            )
+            self.assertFalse(any(
+                "given name" in error for error in result.errors
+            ), (safe_actor, result.errors))
+
     def test_mojibake_and_scaffold_labels_are_hard_failures(self):
         broken = scientific_review().replace(
             "### Result", "Kicker: unfinished\n\n### Result"
