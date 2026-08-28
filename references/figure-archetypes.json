@@ -75,10 +75,11 @@
   "evidence-map": {
     "goal": "Show how evidence types, populations, outcomes, and limitations relate without pretending that study count alone equals evidence strength.",
     "composition": [
-      "Group studies or findings by the review's actual decision dimensions.",
-      "Use position and concise labels before colour.",
-      "Reserve a small explicit legend for evidence-strength or uncertainty encoding.",
-      "Keep review-level synthesis visually distinct from individual studies."
+      "Begin with one authored, domain-specific visual anchor or editorial metaphor that could not be reused for an unrelated topic by swapping labels.",
+      "Integrate studies or findings into that spatial composition using the review's actual decision dimensions; do not arrange generic icons, cards, or boxes into a stock flowchart.",
+      "Use position, material, direction, and concise labels before colour; connectors must feel native to the visual scene rather than presentation arrows.",
+      "Reserve a small explicit legend only when an evidence-strength or uncertainty encoding truly needs one.",
+      "Keep review-level synthesis visually distinct from individual studies while allowing null and mixed results to remain materially visible."
     ],
     "qa": [
       "Node size, colour, and position have defined meanings.",

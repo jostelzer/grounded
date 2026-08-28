@@ -119,7 +119,7 @@ class QualityContractTests(unittest.TestCase):
         return {
             "quality_contract_version": 1,
             "review_style": "popsci",
-            "render_route": "hybrid",
+            "render_route": "generated",
             "archetype": "mechanism",
             "target_aspect_ratio": 2.0,
             "render_context": "article",
@@ -167,25 +167,24 @@ class QualityContractTests(unittest.TestCase):
             "schema_version": 1,
             "generator_available": True,
             "generator": {"tool": "built-in-imagegen", "supports_edit": True},
-            "selected_route": "hybrid",
+            "selected_route": "generated",
             "selected_asset": Path(path).name,
             "selected_sha256": sha256_file(path),
             "attempts": [
-                {"kind": "generate", "asset": "one.png"},
-                {"kind": "generate", "asset": "two.png"},
-                {"kind": "compose", "asset": Path(path).name},
+                {
+                    "kind": "generate",
+                    "asset": Path(path).name,
+                    "text_mode": "direct",
+                    "outcome": "selected",
+                    "reason": "first candidate passed all quality gates",
+                },
             ],
             "comparison": {
-                "candidates_compared": 2,
-                "selection_rationale": "The second candidate has the strongest focal structure.",
-            },
-            "hybrid": {
-                "compositor": "compose_hybrid_figure.py",
-                "base_asset": "two.png",
-                "anisotropic_resize": False,
+                "candidates_compared": 1,
+                "selection_rationale": "The first candidate passed all quality gates.",
             },
             "fallback_reason": None,
-            "hybrid_considered": True,
+            "hybrid_considered": False,
         }
 
     def audit(self, *, size=(1600, 800), spec=None, inspection=None,
@@ -218,14 +217,77 @@ class QualityContractTests(unittest.TestCase):
         result = self.audit(inspection=inspection)
         self.assertTrue(any("visual quality polish must pass" in error for error in result["errors"]))
 
-    def test_single_generated_candidate_is_release_blocking(self):
+    def test_single_passing_generated_candidate_is_releasable(self):
+        result = self.audit()
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_multiple_candidates_require_a_real_comparison(self):
         def mutate(provenance):
-            provenance["attempts"] = provenance["attempts"][1:]
+            provenance["attempts"].append({
+                "kind": "generate", "asset": "alternate.png",
+                "text_mode": "direct", "outcome": "rejected",
+            })
             provenance["comparison"]["candidates_compared"] = 1
 
         result = self.audit(mutate_provenance=mutate)
-        self.assertTrue(any("two generated candidates" in error for error in result["errors"]))
-        self.assertTrue(any("comparison of at least two" in error for error in result["errors"]))
+        self.assertTrue(any(
+            "multiple candidates requires comparison of at least two" in error
+            for error in result["errors"]))
+
+    def test_comparison_cannot_claim_unrecorded_candidates(self):
+        def mutate(provenance):
+            provenance["comparison"]["candidates_compared"] = 2
+
+        result = self.audit(mutate_provenance=mutate)
+        self.assertTrue(any(
+            "exceeds recorded generated candidates" in error
+            for error in result["errors"]))
+
+    def test_hybrid_is_a_documented_last_resort(self):
+        spec = self.spec()
+        spec["render_route"] = "hybrid"
+
+        def mutate(provenance):
+            provenance["selected_route"] = "hybrid"
+            provenance["attempts"].extend([
+                {
+                    "kind": "edit", "asset": "direct-text-edit.png",
+                    "outcome": "rejected", "reason": "several labels still wrong",
+                },
+                {"kind": "compose", "asset": "figure.png", "outcome": "selected"},
+            ])
+            provenance["direct_text_attempted"] = True
+            provenance["fallback_reason"] = (
+                "Direct-text generation and one targeted edit left three exact labels wrong.")
+            provenance["hybrid_considered"] = True
+            provenance["hybrid"] = {
+                "compositor": "compose_hybrid_figure.py",
+                "base_asset": "direct-text-edit.png",
+                "anisotropic_resize": False,
+            }
+
+        result = self.audit(spec=spec, mutate_provenance=mutate)
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_hybrid_without_direct_text_attempt_fails(self):
+        spec = self.spec()
+        spec["render_route"] = "hybrid"
+
+        def mutate(provenance):
+            provenance["selected_route"] = "hybrid"
+            provenance["attempts"].append(
+                {"kind": "compose", "asset": "figure.png"})
+            provenance["hybrid"] = {
+                "compositor": "compose_hybrid_figure.py",
+                "base_asset": "candidate.png",
+                "anisotropic_resize": False,
+            }
+
+        result = self.audit(spec=spec, mutate_provenance=mutate)
+        self.assertTrue(any(
+            "direct_text_attempted=true" in error for error in result["errors"]))
+        self.assertTrue(any(
+            "concrete fallback_reason" in error for error in result["errors"]))
 
 
 class RenderedWidthTests(unittest.TestCase):

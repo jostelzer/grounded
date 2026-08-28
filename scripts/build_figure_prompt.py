@@ -80,16 +80,12 @@ def merge_writing_style(profile, overlay):
     return result
 
 
-def inferred_render_route(spec, archetype_name, rendered_text):
+def inferred_render_route(spec, archetype_name):
     explicit = spec.get("render_route")
     if explicit:
         return explicit
     if archetype_name == "quantitative":
         return "deterministic"
-    if archetype_name in {"comparison", "evidence-map", "timeline", "mindmap"}:
-        return "hybrid"
-    if len(rendered_text) > 8:
-        return "hybrid"
     return "generated"
 
 
@@ -184,14 +180,17 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         raise ValueError("exact_text must include at least one in-figure string")
 
     selected_route = render_route or inferred_render_route(
-        spec, selected_archetype, rendered_text)
+        spec, selected_archetype)
     if selected_route not in RENDER_ROUTES:
         raise ValueError("render_route must be one of: %s" % ", ".join(RENDER_ROUTES))
 
     generated_text = optional_string_list(spec, "generated_text")
     if any(item not in rendered_text for item in generated_text):
         raise ValueError("generated_text must be a subset of rendered exact_text")
-    if selected_route == "generated" and not generated_text:
+    if selected_route == "generated":
+        if generated_text and generated_text != rendered_text:
+            raise ValueError(
+                "generated figures must render every exact_text string directly")
         generated_text = list(rendered_text)
     if selected_route == "deterministic" and generated_text:
         raise ValueError("deterministic figures cannot declare generated_text")
@@ -255,11 +254,11 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
     route_asset = {
         "generated": (
             "Complete publication-grade scientific figure rendered end to end, "
-            "including the permitted labels and typography."),
+            "including every required label and all final typography directly in pixels."),
         "hybrid": (
-            "Premium generated scientific illustration layer for a final hybrid "
-            "figure. The exact typographic/data overlay is added deterministically "
-            "after generation."),
+            "Last-resort repair route: premium generated scientific illustration "
+            "retained after direct-text generation and targeted correction failed. "
+            "The remaining exact typographic/data layer is added deterministically."),
         "deterministic": (
             "Deterministic publication-grade scientific figure production brief. "
             "Do not use an image generator for exact plot or data geometry."),
@@ -272,6 +271,19 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             profile["name"], profile["intent"]),
         "PURPOSE\n%s" % purpose,
     ]
+    if selected_route == "generated":
+        direct_manifest = "\n".join(
+            "- %s" % json.dumps(item, ensure_ascii=False)
+            for item in generated_text)
+        sections.append(
+            "FIRST-PASS DIRECT-TEXT CONTRACT — EXECUTE IN THIS IMAGEGEN CALL\n"
+            "Render the entire finished figure now, including all required typography "
+            "as an integrated part of the artwork. Do not return a textless base, blank "
+            "label zones, placeholders, pseudo-text, or a layout intended for later "
+            "typesetting. Render each quoted string below exactly once and verbatim; "
+            "preserve spelling, capitalization, punctuation, symbols, and numbers. Fit "
+            "copy with natural line wrapping and placement, never squeezed or stretched "
+            "letterforms.\n%s" % direct_manifest)
     if visual_anchor:
         sections.append(
             "DOMINANT VISUAL ANCHOR\n%s" % visual_anchor.strip())
@@ -388,9 +400,11 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         "FINAL CONTRACT\n"
         + ({
             "generated": (
-                "Generate a genuinely polished final figure now. Do not leave blank text "
-                "placeholders or add unlisted copy. Preserve every number, unit, interval, "
-                "denominator, qualifier, relationship, font proportion, and geometric invariant."),
+                "Generate the genuinely polished, fully typeset final figure in this call. "
+                "Before returning it, visually verify every quoted manifest string character "
+                "by character. Do not leave blank text placeholders, pseudo-text, or add "
+                "unlisted copy. Preserve every number, unit, interval, denominator, qualifier, "
+                "relationship, font proportion, and geometric invariant."),
             "hybrid": (
                 "Generate the polished illustration layer now. Preserve every scientific "
                 "relationship and geometry invariant, leave the declared overlay zones quiet, "

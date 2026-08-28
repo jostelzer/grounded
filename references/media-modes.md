@@ -17,7 +17,7 @@ improvised prose prompt.
 - Encode uncertainty visibly. Use restrained emphasis, dashed or muted elements, and labels such as `mixed`, `limited`, or `hypothesized` when the evidence requires them.
 - Keep citations in the written review and caption rather than filling the visual with DOI text.
 - Generate the actual media. Do not substitute a prompt, text outline, ASCII diagram, or unrendered diagram source.
-- Prefer a capable built-in image-generation model for the visually rich layer. Use complete generation for text-light work and hybrid generation plus deterministic overlay when labels, numbers, or exact arrows are dense. Deterministic rendering is primary only when mathematical geometry is the evidence.
+- Prefer a capable built-in image-generation model for the complete finished non-quantitative figure. It renders all exact labels, numbers, legends, and arrows directly in the first image. Use a targeted ImageGen edit for a local defect and reserve hybrid overlay for documented direct-text failure. Deterministic rendering is primary only when mathematical geometry is the evidence.
 - If the required media tooling is unavailable or generation fails, still deliver the written review at its selected tier and state in one sentence that the visual could not be generated. Do not claim that media was created.
 
 ## Slides
@@ -80,22 +80,24 @@ archetype, then run `scripts/build_figure_prompt.py`. The prompt builder combine
 the verified story with route-specific instructions and distinct scientific,
 popsci, bullets, or ELI5 art direction.
 
-Choose `generated` for text-light finished artwork, `hybrid` for rich artwork
-with exact labels/numbers/arrows added by `compose_hybrid_figure.py`, and
-`deterministic` from the start for exact plots or other mathematical geometry.
-Hybrid is the normal high-quality answer to a generator that illustrates
-beautifully but typesets dense copy poorly; it is not a fallback. The generated
-base must remain the meaningful scientific composition, not a token texture
-behind a generic vector diagram.
+Choose `generated` for every non-quantitative finished figure and require the
+generator to integrate all exact typography directly. Choose `deterministic`
+from the start for exact plots or other mathematical geometry. Choose `hybrid`
+only after direct-text generation plus a targeted edit or alternate candidate
+fails, recording the concrete failure. The generated base must remain the
+meaningful scientific composition, not a token texture behind a generic vector
+diagram.
 
-For generated and hybrid routes, make at least two meaningfully different
-candidates and compare evidence fidelity, hierarchy, domain specificity, style
-fit, polish, and legibility. Use a targeted edit for a local flaw and a fresh
-candidate for a broadly weak composition. Preserve the strongest generated
-composition with a deterministic overlay when dense copy is the only blocker.
+Inspect the first complete candidate for evidence fidelity, hierarchy, domain
+specificity, style fit, polish, copy, and legibility. Select it immediately if
+all gates pass. Use a targeted ImageGen edit for a local flaw and generate a
+fresh candidate only for a broadly weak composition or multiple defects;
+compare candidates only when more than one exists. Preserve the strongest
+generated composition with a deterministic overlay only as the last text
+repair.
 A non-quantitative pure deterministic fallback requires two generated
 candidates, one targeted edit, explicit hybrid consideration, and a concrete
-failure reason in provenance. Never ship the first technically valid result or
+failure reason in provenance. Never ship a technically valid but visually weak result or
 prefer a visibly cheaper flowchart merely because OCR is easier.
 
 After composition, inspect every word, number, symbol, arrow, plotted magnitude,
@@ -119,8 +121,8 @@ CSS intent.
 - Give every arrow a meaning stated in the figure ("leads to", "measured by", "mixed evidence").
 - Encode uncertainty visibly and explain the encoding in the glossary — dashed outline, muted fill, an explicit `mixed` or `mouse evidence only` tag.
 - Keep all required in-figure copy short enough to remain readable at the
-  delivered size. Quote generator-rendered copy exactly; for hybrid figures,
-  reserve quiet zones and put dense exact copy in the overlay manifest.
+  delivered size. Quote all generator-rendered copy exactly. For a documented
+  hybrid fallback, reserve quiet zones only for the unresolved overlay copy.
 - Rasterize and *look* at the result if any renderer is available (`rsvg-convert`, `cairosvg`, a headless browser). Inspect at delivered size and at phone width.
 - Keep journal-PDF figures at an aspect ratio of at least 2:1. The exporter
   caps figure height (92 mm by default, `--figure-max-height` to adjust within

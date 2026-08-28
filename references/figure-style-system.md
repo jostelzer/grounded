@@ -47,11 +47,12 @@ At a 1,536 px-wide deliverable, use these visual targets:
 These are chat-readable targets inspired by Nature's 5–7 pt figure-label range
 at double-column width, raised so the smallest OCR-measured word height clears
 `qa_figure.py`'s 6.5 pt effective-size gate at the true journal render width.
-End-to-end raster generation cannot prove the embedded font file; inspect visual
-conformance and use the hybrid compositor when exact typography matters. It
-resolves a real font and draws labels at natural proportions without resizing
-the generated base. If editable embedded font metadata is a deliverable
-requirement, use a deterministic vector renderer for that layer.
+End-to-end raster generation cannot prove an embedded font file; inspect visual
+conformance and exact text directly. First repair a local typography defect with
+a targeted ImageGen edit. Use the hybrid compositor only after that direct-text
+route fails; it resolves a real font and draws labels at natural proportions
+without resizing the generated base. If editable embedded font metadata is a
+deliverable requirement, use a deterministic vector renderer for that layer.
 
 **Aspect ratio for journal-PDF figures.** The exporter renders figures at full
 content width (184 mm) but caps their height (92 mm by default), scaling tall
@@ -115,6 +116,7 @@ The system abstracts these current Nature requirements and examples:
   conceptual-synthesis roles. The copyrighted pixels stay outside the repository.
 
 Nature's production rules prefer editable vector artwork. This skill prioritizes
-capable image generation for the authored scientific composition, combines it
-with deterministic overlays when exact text or geometry requires them, and uses
-strict pixel, provenance, visual-quality, and non-distortion QA.
+capable image generation for the complete authored, directly typeset scientific
+composition, reserves deterministic overlays for failed direct-text repair and
+exact deterministic plots, and uses strict pixel, provenance, visual-quality,
+and non-distortion QA.

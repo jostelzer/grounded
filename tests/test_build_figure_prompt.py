@@ -136,6 +136,29 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn('"B"', reserved)
         self.assertIn("no placeholder glyphs, pseudo-text", prompt)
 
+    def test_generated_route_requires_imagegen_to_render_all_text_now(self):
+        prompt = MODULE.build_prompt(
+            self.minimal_spec(), self.profiles, self.archetypes)
+        self.assertIn("FIRST-PASS DIRECT-TEXT CONTRACT", prompt)
+        self.assertIn("EXECUTE IN THIS IMAGEGEN CALL", prompt)
+        self.assertIn("Do not return a textless base", prompt)
+        self.assertIn("fully typeset final figure in this call", prompt)
+
+    def test_generated_route_rejects_a_partial_text_manifest(self):
+        spec = self.minimal_spec()
+        spec["render_route"] = "generated"
+        spec["generated_text"] = ["A"]
+        with self.assertRaisesRegex(ValueError, "every exact_text string directly"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_text_bearing_comparison_defaults_to_direct_generation(self):
+        spec = self.minimal_spec()
+        spec["archetype"] = "comparison"
+        spec["exact_text"].extend([f"Outcome {index}" for index in range(12)])
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("AUTHORING ROUTE\ngenerated", prompt)
+        self.assertIn("FIRST-PASS DIRECT-TEXT CONTRACT", prompt)
+
     def test_quantitative_archetype_routes_deterministically(self):
         spec = self.minimal_spec()
         spec["archetype"] = "quantitative"

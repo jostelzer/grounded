@@ -87,8 +87,8 @@ anchor. Add directed `relationships`, local `abbreviations`, and shape-specific
 geometry invariants when they apply. Save a structured inspection with observed
 relationships, detected effects, text collisions, geometry distortions, all
 five visual-quality verdicts, and optionally OCR text/label height. Save a
-separate provenance record containing capability, attempts, candidate
-comparison, selected hash, route, and hybrid/fallback details. If OCR is
+separate provenance record containing capability, attempts, selected hash,
+route, any real multi-candidate comparison, and hybrid/fallback details. If OCR is
 omitted, the checker runs Tesseract itself.
 
 ```bash
@@ -97,10 +97,11 @@ python3 scripts/qa_figure.py --spec figure.json --image figure.png --inspection 
 
 The gate verifies non-blank pixels, exact text, abbreviation expansions,
 relationship direction, prohibited effects, collisions, raster size, target
-aspect, natural geometry, effective label size at PDF scale, candidate count,
-selected hash, route rules, and composition/hierarchy/domain specificity/style
-fit/polish. Dense text is a reason to preserve the strongest generated base and
-use the hybrid compositor, not a reason to discard good art after one attempt.
+aspect, natural geometry, effective label size at PDF scale, conditional
+iteration, selected hash, route rules, and composition/hierarchy/domain specificity/style
+fit/polish. One direct-text candidate is sufficient when every gate passes.
+Dense text alone does not pre-authorize hybrid composition: attempt complete
+ImageGen typography first, then a targeted edit for a local defect.
 
 ## Immutable PDF lineage
 

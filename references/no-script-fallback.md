@@ -91,10 +91,12 @@ If a Crossref record genuinely lacks volume or pages (common for online-first an
 
 The evidence boundary and `figure-generation-contract.md` still apply. If the
 host exposes a capable built-in image generator, use it for the authored visual
-layer of every non-quantitative journal figure, apply the review's scientific,
-popsci, bullets, or ELI5 art direction, and compare at least two candidates.
-Keep exact labels sparse in a fully generated figure; when the host offers a
-native text/shape overlay, use a hybrid composition for dense exact copy. Never
+layer and all final typography of every non-quantitative journal figure, and
+apply the review's scientific, popsci, bullets, or ELI5 art direction. Inspect
+the first complete direct-text candidate and keep it when every gate passes.
+Use a targeted image edit for a local defect and a second candidate only for a
+broad failure. Use a native text/shape overlay only as a documented last-resort
+hybrid after direct-text generation and repair fail. Never
 resize width and height independently: circles remain circular and glyphs keep
 their natural proportions.
 

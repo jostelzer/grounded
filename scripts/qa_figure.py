@@ -188,18 +188,33 @@ def _validate_provenance(
             errors.append("comparison.candidates_compared must be an integer")
         if not str(comparison.get("selection_rationale") or "").strip():
             errors.append("comparison requires a non-empty selection_rationale")
-    else:
+    elif comparison is not None:
         errors.append("generation provenance comparison must be an object")
 
     if route in {"generated", "hybrid"}:
         if not generator_available:
             errors.append(f"{route} route requires an available image generator")
-        if len(generate_attempts) < 2:
-            errors.append(f"{route} route requires at least two generated candidates")
-        if compared < 2:
-            errors.append(f"{route} route requires comparison of at least two candidates")
+        if not generate_attempts:
+            errors.append(f"{route} route requires a generated candidate")
+        if len(generate_attempts) > 1 and compared < 2:
+            errors.append(
+                f"{route} route with multiple candidates requires comparison of at least two")
+        if len(generate_attempts) == 1 and comparison is not None and compared < 1:
+            errors.append("single-candidate provenance requires candidates_compared=1")
+        if compared > len(generate_attempts):
+            errors.append(
+                "comparison.candidates_compared exceeds recorded generated candidates")
 
     if route == "hybrid":
+        if provenance.get("direct_text_attempted") is not True:
+            errors.append("hybrid fallback requires direct_text_attempted=true")
+        if not any(item.get("text_mode") == "direct" for item in generate_attempts):
+            errors.append("hybrid fallback requires a direct-text generate attempt")
+        if not str(provenance.get("fallback_reason") or "").strip():
+            errors.append("hybrid fallback requires a concrete fallback_reason")
+        if len(generate_attempts) < 2 and not edit_attempts:
+            errors.append(
+                "hybrid fallback requires a targeted edit or a second generated candidate")
         hybrid = provenance.get("hybrid")
         if not isinstance(hybrid, dict):
             errors.append("hybrid route requires hybrid composition provenance")

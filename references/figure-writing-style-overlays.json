@@ -99,7 +99,7 @@
       "rules": [
         "Use natural-width Helvetica Neue-style lettering with no geometric distortion.",
         "Use a strong but shallow hierarchy optimized for quick scanning.",
-        "Keep labels short; use deterministic overlay for dense copy or numbers."
+        "Keep labels short and render them directly as integrated typography; use deterministic overlay only after direct ImageGen text and targeted repair fail."
       ]
     },
     "canvas": {
@@ -116,7 +116,8 @@
     },
     "art_direction": [
       "Make the decision-relevant contrast visible immediately, using a crisp visual hierarchy and a small number of strong scientific marks.",
-      "Use alignment, scale, and restrained colour to separate findings; avoid decorative illustration that slows scanning.",
+      "Use one authored, domain-specific composition with editorial presence; clarity must not collapse into an icon-and-arrow worksheet or generic newsroom template.",
+      "Use alignment, scale, and restrained colour to separate findings; illustration must clarify the evidence rather than merely decorate it.",
       "Generated elements should add domain specificity or explanatory value, not merely ornament a deterministic chart.",
       "Keep line work precise and spacing optically even, with a newsroom graphics-desk level of finish."
     ],
@@ -128,6 +129,8 @@
       "decorative scene setting",
       "dense prose blocks",
       "rounded KPI cards",
+      "generic icon-and-arrow flowchart",
+      "stock vector pictograms",
       "oversized numerals without scale context",
       "stretched circles or letterforms",
       "weak grey-on-grey contrast"

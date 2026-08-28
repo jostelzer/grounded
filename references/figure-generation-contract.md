@@ -41,22 +41,25 @@ Record the result in `<figure-id>.provenance.json`; the schema is below.
 
 ### `generated`
 
-Use for text-light conceptual, mechanistic, anatomical, study-overview, and
-editorial explanatory artwork. The image generator renders the finished
-scientific composition. Keep in-pixel copy deliberately short.
+This is the default for every non-quantitative figure, including comparisons,
+evidence maps, timelines, and mind maps. The image generator renders the
+complete finished scientific composition and every required in-figure string
+directly in the pixels on the first call. Keep copy concise because concise
+figures read better, not because typography is deferred.
 
 ### `hybrid`
 
-This is the normal route for a visually rich figure that also contains exact
-labels, numbers, arrows, or a legend. Generate the scientific illustration and
-composition first, then add the exact typographic/data layer with
+Hybrid is a last-resort repair route. Use it only after a complete direct-text
+generation and either a targeted ImageGen edit or a genuinely different second
+candidate still leave exact copy unusable. Preserve the strongest authored
+composition, then add only the unresolved typographic/data layer with
 `scripts/compose_hybrid_figure.py` or an equally deterministic overlay.
 
-Hybrid is not a fallback or a lesser result. It is the preferred way to retain
-the generator's visual quality without asking a raster model to typeset a dense
-manifest perfectly. The generated base must remain visible and materially
-useful in the final artifact; a token background texture behind an otherwise
-deterministic diagram does not count as hybrid.
+The provenance must record `direct_text_attempted: true`, the direct-text
+attempt, the repair attempt, and a concrete `fallback_reason`. The generated
+base must remain visible and materially useful in the final artifact; a token
+background texture behind an otherwise deterministic diagram does not count as
+hybrid.
 
 ### `deterministic`
 
@@ -67,26 +70,30 @@ the iteration ladder below has failed and the provenance file records why.
 
 ## 3. Iterate for quality, not merely validity
 
-For a generated or hybrid conceptual figure:
+For a generated conceptual figure:
 
 1. Build the full structured prompt with `build_figure_prompt.py`.
-2. Generate a first composition and inspect it at original size and expected
-   PDF size.
-3. Make one targeted edit when the defect is local. Repeat the scientific and
-   geometry invariants in the edit request.
-4. If composition, hierarchy, or style is broadly weak, generate a genuinely
-   different second candidate from the same evidence specification.
-5. Compare at least two candidates side by side. Select for evidence fidelity,
-   visual hierarchy, domain specificity, style fit, polish, and legibility—in
-   that order. Do not select a visibly cheaper candidate merely because its OCR
-   is easier.
-6. If dense copy remains the only blocker, keep the strongest generated
-   composition and switch to the hybrid overlay route.
-7. A pure deterministic fallback for a non-quantitative figure requires at
+2. Generate the complete composition with all exact typography directly in the
+   image and inspect it at original size and expected PDF size.
+3. If every gate passes, select it immediately. A second candidate is not a
+   quota and a passing first candidate is not evidence of insufficient effort.
+4. Make one targeted ImageGen edit when the defect is local, repeating the
+   exact string plus scientific and geometry invariants while preserving the
+   rest of the composition.
+5. If composition, hierarchy, style, science, or several text elements are
+   broadly weak, generate a genuinely different second candidate from the same
+   evidence specification.
+6. Compare candidates only when multiple candidates exist. Select for evidence
+   fidelity, visual hierarchy, domain specificity, style fit, polish, and
+   legibility—in that order. Do not select a visibly cheaper candidate merely
+   because its OCR is easier.
+7. If exact copy remains the only blocker after direct generation and repair,
+   keep the strongest generated composition and switch to the hybrid route.
+8. A pure deterministic fallback for a non-quantitative figure requires at
    least two generated candidates, at least one targeted edit, explicit hybrid
    consideration, and a concrete failure reason.
 
-Never ship the first technically valid result when it is compositionally weak.
+Never ship a technically valid result when it is compositionally weak.
 Do not endlessly polish an unsupported or scientifically incorrect image;
 correctness remains the first gate.
 
@@ -167,40 +174,24 @@ For `quality_contract_version: 1`, `<figure-id>.provenance.json` contains:
     "tool": "built-in-imagegen",
     "supports_edit": true
   },
-  "selected_route": "hybrid",
+  "selected_route": "generated",
   "selected_asset": "figure.png",
   "selected_sha256": "<sha256>",
   "attempts": [
     {
       "kind": "generate",
-      "asset": "candidate-1.png",
-      "outcome": "rejected",
-      "reason": "weak hierarchy"
-    },
-    {
-      "kind": "generate",
-      "asset": "candidate-2.png",
-      "outcome": "selected-base",
-      "reason": "strongest composition"
-    },
-    {
-      "kind": "compose",
       "asset": "figure.png",
       "outcome": "selected",
-      "reason": "exact overlay added without rescaling"
+      "text_mode": "direct",
+      "reason": "first candidate passed science, copy, geometry, and visual-quality gates"
     }
   ],
   "comparison": {
-    "candidates_compared": 2,
-    "selection_rationale": "Candidate 2 has the clearest scientific focal structure and best style fit."
-  },
-  "hybrid": {
-    "compositor": "compose_hybrid_figure.py",
-    "base_asset": "candidate-2.png",
-    "anisotropic_resize": false
+    "candidates_compared": 1,
+    "selection_rationale": "The first complete direct-text candidate passed every gate."
   },
   "fallback_reason": null,
-  "hybrid_considered": true
+  "hybrid_considered": false
 }
 ```
 
@@ -208,6 +199,12 @@ Use `kind: edit` for a targeted image edit and `kind: render` for a purely
 deterministic candidate. Paths are case-local audit records; only the selected
 asset must appear in the final review. The release manifest hashes the selected
 figure, its specification, prompt, inspection, and provenance.
+
+For a hybrid selection, additionally record `direct_text_attempted: true`, a
+direct-text generate attempt (`text_mode: "direct"`), an edit attempt or second
+generated candidate, `fallback_reason`, one `compose` attempt, and the existing
+`hybrid` compositor/base/aspect record. `comparison` may be omitted when only
+one candidate exists; if retained, use `candidates_compared: 1`.
 
 ## 8. Release decision
 

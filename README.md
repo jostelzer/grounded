@@ -21,10 +21,11 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 > Use the grounded skill to tell me: what happens to your body when you stop taking Ozempic? Popsci, medium, journal PDF.
 
-Whatever you leave out, Grounded asks you in one quick question before it starts. Three real runs, unedited:
+Whatever you leave out, Grounded asks you in one quick question before it starts. Four real runs, unedited:
 
 - **"What happens to your body when you stop taking Ozempic?"** — popsci · medium → [PDF](examples/ozempic-after-stopping.pdf) · [Markdown](examples/ozempic-after-stopping.md) · 31 verified sources · one cited figure
 - **"Are microplastics actually harming our health?"** — ELI5 · small → [PDF](examples/microplastics-health-eli5.pdf) · [Markdown](examples/microplastics-health-eli5.md) · 14 verified sources · one cited figure
+- **"Do school smartphone bans improve grades and mental health?"** — bullets · small → [PDF](examples/school-smartphone-bans.pdf) · [Markdown](examples/school-smartphone-bans.md) · 11 verified sources · one cited figure
 - **"Are seed oils really bad for you?"** — scientific · large → [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) · 70 verified sources · two cited figures · 8-page journal article
 
 It can also audit text you already have:
@@ -76,7 +77,7 @@ The model does the reading and writing; deterministic scripts do the searching, 
 3. **Read** — every abstract that might be cited; open-access full texts (Europe PMC) for the load-bearing papers, behind an authenticity audit that rejects paywall stubs and challenge pages.
 4. **Verify** — `verify_citations.py` checks every DOI against Crossref: title, year, article type, and integrity status — retractions, withdrawals, removals, and expressions of concern via publisher and Retraction Watch update metadata. A failure is a hard stop: the source is fixed or dropped before a word is written. A thin source list on a fringe topic is the skill working, not failing.
 5. **Synthesize, write & validate** — the verified evidence is first distilled into a style-neutral claims ledger (every claim with its strength, exact numbers, contrary evidence, and boundaries); the styled review is then composed from those claims, citing ledger keys, never remembered references. Citations and the reference list are generated from the verified records, and a deterministic validator checks structure, citation placement, DOI parity, and figure contracts before delivery.
-6. **Render** — conceptual visuals use a capable built-in image generator by default, with rich scientific/popsci/bullets/ELI5 art direction and deterministic overlays for exact text; candidate comparison and visual-quality gates reject generic or cheap-looking output. The journal PDF is typeset with pinned WeasyPrint, then QA independently proves figures were not stretched and re-rasterizes every page with Poppler.
+6. **Render** — conceptual visuals use a capable built-in image generator by default, with rich scientific/popsci/bullets/ELI5 art direction and all exact text rendered directly in the finished image. The first candidate may ship when it passes; targeted edits or alternate candidates are conditional, while deterministic overlays are a documented last resort. Visual-quality gates reject generic or cheap-looking output. The journal PDF is typeset with pinned WeasyPrint, then QA independently proves figures were not stretched and re-rasterizes every page with Poppler.
 7. **Audit** (on request) — `verify_claims.py` re-checks each cited sentence against the source's own text. Every verdict must carry a verbatim quote that the checker string-matches against the stored evidence; a quote it can't find rejects the verdict, and a numeric claim must have its number inside the quote.
 
 No network in the agent's Python sandbox (ChatGPT's interpreter, claude.ai)? The same pipeline runs through the agent's web-fetch tool against the same APIs — the verification standard doesn't change.

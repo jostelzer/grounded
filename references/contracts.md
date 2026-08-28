@@ -57,7 +57,7 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   `build_figure_prompt.py`, `--provenance` to `qa_figure.py`, and repeatable
   `--figure-inspection` / `--figure-provenance` inputs to `export_review.py`.
   Existing figure specs and CLI defaults remain valid; v1 specs opt into the
-  stricter candidate, visual-quality, provenance, aspect, and PDF-matrix gates.
+  conditional-iteration, visual-quality, provenance, aspect, and PDF-matrix gates.
 - Release-manifest schema 1 adds `figure_inspections` and
   `figure_provenances` lists and figure QA reports add pixel/aspect/visual-
   quality metrics. Existing fields retain their meaning.

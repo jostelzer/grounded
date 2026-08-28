@@ -11,8 +11,8 @@ eight independent modules:
 4. **Writing-style overlay** — distinct scientific, popsci, bullets, or ELI5 art direction and typography.
 5. **Render route** — generated, hybrid, or deterministic production.
 6. **Render context** — article, standalone, or 16:9 deck-slide figure.
-7. **Text/overlay manifests** — what the generator may typeset and what must be added deterministically.
-8. **Quality and geometry contract** — what must be inspected, compared, and proved before release.
+7. **Direct-text/repair manifests** — every string ImageGen typesets now and any last-resort unresolved overlay copy.
+8. **Quality and geometry contract** — what must be inspected and proved before release.
 
 ## Minimal specification
 
@@ -22,7 +22,7 @@ eight independent modules:
   "profile": "nature-neuroscience",
   "archetype": "mechanism",
   "review_style": "scientific",
-  "render_route": "hybrid",
+  "render_route": "generated",
   "render_context": "article",
   "target_aspect_ratio": 2.0,
   "visual_anchor": "A recognizable cell cross-section with one lipid nanoparticle entering from the left",
@@ -38,16 +38,7 @@ eight independent modules:
     "Translate",
     "Signal",
     "Memory"
-  ],
-  "generated_text": [],
-  "overlay": {
-    "items": [
-      {"type": "text", "x": 0.05, "y": 0.16, "max_width": 0.18, "text": "Package", "size_px_at_1536": 30, "weight": "bold"},
-      {"type": "text", "x": 0.29, "y": 0.16, "max_width": 0.18, "text": "Translate", "size_px_at_1536": 30, "weight": "bold"},
-      {"type": "text", "x": 0.53, "y": 0.16, "max_width": 0.18, "text": "Signal", "size_px_at_1536": 30, "weight": "bold"},
-      {"type": "text", "x": 0.77, "y": 0.16, "max_width": 0.18, "text": "Memory", "size_px_at_1536": 30, "weight": "bold"}
-    ]
-  }
+  ]
 }
 ```
 
@@ -98,8 +89,9 @@ Optional:
 - `constraints`: scientific or production invariants.
 - `avoid`: topic-specific failure modes appended to the profile exclusions.
 - `style_overrides`: narrow profile changes such as `canvas.aspect` or a palette value. Do not use this field to change evidence.
-- `generated_text`: the subset of `exact_text` the image model may render. The
-  rest is reserved for the hybrid overlay. Omit it for a fully generated figure.
+- `generated_text`: hybrid-only subset of `exact_text` retained in the generated
+  base. Omit it for a generated figure: the builder requires ImageGen to render
+  every in-figure `exact_text` string directly.
 - `geometry_invariants`: topic-specific shape guarantees such as “the vessel
   cross-section remains circular” or “both axes use equal unit geometry.”
 - `art_direction`: topic-specific material, lighting, focal, or eye-path notes
@@ -112,10 +104,12 @@ Optional:
   scientific structure, material treatment, hierarchy, eye path, negative
   space, finish, and rejection standard. Richness must clarify the evidence,
   not invent unsupported detail.
-- On the `generated` route, ask for the complete text-light finished figure.
-  On the `hybrid` route, ask for the finished illustration layer and explicitly
-  reserve quiet copy zones with no pseudo-text. On `deterministic`, treat the
-  prompt as a production brief for mathematically faithful rendering.
+- On the `generated` route, ask for the complete, fully typeset finished figure
+  in the first ImageGen call. Explicitly prohibit a textless base, blank label
+  zones, placeholders, and pseudo-text. On the last-resort `hybrid` route,
+  reserve quiet zones only for copy that direct generation and repair could not
+  resolve. On `deterministic`, treat the prompt as a production brief for
+  mathematically faithful rendering.
 - In `article` context, treat `title` and `subtitle` as caption context and do
   not render them inside the artwork. In `standalone` context, render the title
   compactly and include it in `exact_text`. In `slide` context, keep the title,
@@ -175,11 +169,13 @@ Inspect every candidate at full size and at its expected PDF width. Classify eve
 Also reject poster framing: a hero title, oversized number, footer banner, or
 uniform card grid that is visually louder than the scientific representation.
 
-Generate at least two meaningfully different candidates. Use a targeted edit
-for a local defect and regenerate from the same specification when hierarchy or
-style is broadly wrong. Compare the candidates explicitly and save the reason
-for selection. If dense copy is the only blocker, compose the strongest base
-with the deterministic overlay. For an exact quantitative plot, use a
+Inspect the first complete direct-text candidate. Select it when all gates pass.
+Use a targeted ImageGen edit for a local defect and regenerate from the same
+specification only when hierarchy, style, science, or several text elements are
+broadly wrong. Compare candidates and save the selection reason only when more
+than one candidate exists. If exact copy remains the only blocker after direct
+generation and repair, compose the strongest base with the deterministic
+overlay and record why. For an exact quantitative plot, use a
 deterministic renderer directly; do not keep an attractive but mathematically
 false plot.
 
@@ -194,6 +190,6 @@ Accept only when:
 - the figure reads cleanly at normal chat width and in the exported PDF;
 - no forbidden style element from the selected profile remains.
 - composition, hierarchy, domain specificity, writing-style fit, and polish all pass;
-- at least two generated candidates were compared for a generated/hybrid route;
+- the first complete candidate passed, or any additional candidates were explicitly compared;
 - the raster matches `target_aspect_ratio`, no geometry distortion is reported,
   and PDF QA proves the intrinsic ratio was preserved during placement.
