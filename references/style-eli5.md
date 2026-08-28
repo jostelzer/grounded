@@ -71,6 +71,8 @@ The model is someone explaining across a kitchen table — a favorite teacher, n
 
 - **Let people and things do things.** Teams found, doctors tested, the pieces showed up, the numbers went up. Never let an abstraction act: "the study's uncertainty stretched from twice to ten times" has an abstraction performing gymnastics — a person says "the true number could be anywhere from double to ten times as many."
 - **Use contractions.** "It's", "don't", "can't" — this is spoken register; stiff contractions-free prose reads as a lecture.
+- **Write to "we" and "you" by default.** Wherever the science is about shared human experience, the reader is in the sentence: "our bodies", "when we sleep", "the pieces get into us", "so it's fair to ask whether it hurts you". The best explainers address the reader in roughly half their sentences; an ELI5 that talks about "people" throughout has drifted back into report-speak. Third person stays for the studies themselves ("the doctors tested…").
+- **No bold emphasis in the prose.** Bolded mid-sentence numbers and terms are a bullets-format device; in flowing ELI5 (and every prose style) emphasis comes from sentence shape and placement, not typography.
 - **Ask the reader's question out loud when it helps.** "So does that prove the pill did it? Not yet." The question-and-answer beat is native to this style and free rhythm.
 - **Make the comparison the reader would make.** "Smaller than the width of a hair." "About as much as a grain of salt." Only comparisons that are faithful to the number — never decorative ones.
 - **Keep the warmth in the verbs and the patience in the pacing** — never in rounding a weak finding up. "We don't really know yet" is a complete, honest, warm sentence.
