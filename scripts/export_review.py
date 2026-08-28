@@ -600,7 +600,6 @@ def _brand_logo_html():
 CSS = r"""
 @page {
   size: A4; margin: 25mm 13mm 12mm 13mm;
-  @top-center { content: element(pageHeader); vertical-align: bottom; width: 100%; }
   /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
     font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #8a8a8a; }
@@ -624,28 +623,35 @@ body {
 }
 .paper { width: 100%; max-width: 194mm; margin: 0 auto; }
 .running-header {
-  position: running(pageHeader); width: 100%; padding-bottom: 2.5mm;
+  width: 100%; height: 0; padding: 0;
 }
 .strip {
-  display: flex; align-items: stretch; border-bottom: .5px solid var(--ink);
+  display: block; position: static; width: 100%; height: 0;
   break-inside: avoid;
 }
-.strip .chip {
-  background: none; display: flex; align-items: center; justify-content: center;
-  padding: 1px 4px; width: 40px;
+.strip::after {
+  content: ""; position: fixed; top: -3.4mm; left: 0; right: 0;
+  border-bottom: .5px solid var(--ink);
 }
-.strip .chip img { width: 32px; height: 32px; display: block; }
+.strip .chip {
+  background: none; display: block; position: fixed;
+  top: -10.5mm; left: 0; width: 40px; text-align: center;
+}
+.strip .chip img { width: 32px; height: 32px; display: block; margin: 0 auto; }
 .strip .mark {
-  display: flex; align-items: center; padding: 0 10px;
+  display: block; position: fixed; top: -10.5mm; left: 50px;
+  line-height: 33px;
   font-weight: 600; font-size: 9.5pt; letter-spacing: .3em; color: var(--ink);
 }
 .strip .descriptor {
-  display: flex; align-items: center; font-size: 6.3pt; font-weight: 600;
+  display: block; position: fixed; top: -10.5mm; left: 205px;
+  line-height: 33px; font-size: 6.3pt; font-weight: 600;
   letter-spacing: .11em; text-transform: uppercase; color: var(--muted);
   text-decoration: none; border-bottom: 0;
 }
 .strip .version {
-  display: flex; align-items: center; margin-left: auto;
+  display: block; position: fixed; top: -10.5mm; right: 0;
+  line-height: 33px; text-align: right;
   font-size: 6.3pt; font-weight: 600; letter-spacing: .13em;
   text-transform: uppercase; color: var(--muted);
 }
@@ -793,8 +799,12 @@ footer.colophon a { color: var(--faint); border-bottom: none; }
   body { padding: 10mm 0; background: #f2f2f2; }
   .paper { background: #fff; box-shadow: 0 2px 18px rgba(0,0,0,.12);
     padding: 0 10mm 12mm; }
-  .running-header { position: static; padding: 10mm 10mm 5mm;
+  .running-header { position: static; height: auto; padding: 10mm 10mm 5mm;
     max-width: 194mm; margin: 0 auto; background: #fff; }
+  .strip { position: relative; height: 34px; border-bottom: .5px solid var(--ink); }
+  .strip::after { content: none; }
+  .strip .chip { position: absolute; top: 1px; }
+  .strip .mark, .strip .descriptor, .strip .version { position: absolute; top: 0; }
 }
 @media screen and (max-width: 700px) {
   body { padding: 0; }
