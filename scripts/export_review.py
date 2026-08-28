@@ -602,7 +602,9 @@ CSS = r"""
   size: A4; margin: 25mm 13mm 12mm 13mm;
   /* Margin-box page numbers appear in print engines that support CSS Paged Media. */
   @bottom-right { content: counter(page) " / " counter(pages);
-    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #8a8a8a; }
+    /* Sit the folio on the colophon stamp's baseline (one footer line). */
+    vertical-align: top; padding-top: 3.4mm;
+    font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7pt; color: #9a9a9a; }
 }
 :root {
   --ink: #141414; --muted: #6b6b6b; --faint: #9a9a9a; --rule: #e4e4e4;
@@ -786,15 +788,19 @@ figcaption li { margin: 0 0 2px; break-inside: auto; }
 .tomb { text-align: right; color: var(--accent); font-size: 11pt;
   margin: 0; padding: 0; line-height: 1; }
 footer.colophon {
-  /* Keep provenance furniture out of content flow so it cannot create a spill page. */
-  position: fixed; bottom: -7mm; left: 0; right: 22mm;
-  margin-top: 0; padding-top: 3px; border-top: .5px solid var(--ink);
-  font-size: 6.2pt; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--faint); display: flex; justify-content: space-between; gap: 12px;
-  text-align: left;
+  /* Per-page furniture is just the hairline and the folio; the verification
+     colophon appears once, book-style, after the references. Fixed so it
+     cannot create a spill page. */
+  position: fixed; bottom: -6.2mm; left: 0; right: 0; height: 0;
+  border-top: .5px solid var(--ink);
 }
-footer.colophon span:last-child { display: none; }
-footer.colophon a { color: var(--faint); border-bottom: none; }
+.endcolophon {
+  margin: 4.5mm auto 0; text-align: center; color: var(--faint);
+  font-size: 6.2pt; font-weight: 600; letter-spacing: .18em;
+  text-transform: uppercase; line-height: 1.75; break-inside: avoid;
+}
+.endcolophon .rule { width: 18mm; border-top: .5px solid var(--ink); margin: 0 auto 1.6mm; }
+.endcolophon a { color: var(--faint); border-bottom: none; }
 @media screen {
   body { padding: 10mm 0; background: #f2f2f2; }
   .paper { background: #fff; box-shadow: 0 2px 18px rgba(0,0,0,.12);
@@ -846,7 +852,7 @@ PAGE = """<!doctype html>
 <div class="body{cols}">
 {body}
 </div>
-<footer class="colophon"><span>{colophon}</span><span style="white-space:nowrap">grounded {version}</span></footer>
+{imprint}<footer class="colophon"></footer>
 </main>
 </body></html>
 """
@@ -958,9 +964,15 @@ def count_terminal_reference_spill(pdf_path, reference_count):
         int(match) for match in re.findall(r"(?m)^\s*(\d{1,3})\.\s*$", last_text)
         if 0 < int(match) <= reference_count
     }
-    if not numbers or max(numbers) != reference_count:
-        return 0
-    return len(numbers)
+    # The book-style imprint spilling onto its own terminal page is the same
+    # degenerate layout as a bare reference tail; count it so the rebalance
+    # (and its refhead fallback) can pull it back.
+    has_imprint = bool(re.search(r"(?i)grounded\s+\S+.{0,4}compiled", last_text))
+    if numbers and max(numbers) == reference_count:
+        return len(numbers)
+    if has_imprint and not numbers:
+        return 1
+    return 0
 
 
 def count_unique_dois(md):
@@ -970,7 +982,74 @@ def count_unique_dois(md):
                 for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
 
 
+def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
+                          colophon=None, base_dir=".", release=None, repo=None,
+                          compiled_date=None, style="scientific",
+                          figure_max_height_mm=FIGURE_MAX_HEIGHT_MM,
+                          ref_leading=None):
+    """Render the PDF, then walk the bounded rebalance ladder.
+
+    A terminal page carrying only the reference tail and/or the book-style
+    imprint is the degenerate spill the raster QA rejects. The ladder tries,
+    in order: tightened reference leading; the imprint folded into the
+    References heading (zero height); both. Type size is never touched. The
+    first spill-free render wins; otherwise the original stands and QA
+    reports the levers.
+    """
+    def build(leading, imprint):
+        return build_html(
+            md, columns=columns, kicker=kicker, colophon=colophon,
+            base_dir=base_dir, imprint=imprint, release=release, repo=repo,
+            compiled_date=compiled_date, style=style,
+            figure_max_height_mm=figure_max_height_mm, ref_leading=leading,
+        )
+
+    from weasyprint_export import write_pdf
+    page = build(ref_leading, "end")
+    result = write_pdf(page, out_path)
+    effective = {"ref_leading": ref_leading, "imprint": "end",
+                 "rebalanced": False, "note": None, "spill": 0}
+    if ref_leading is not None:
+        return page, result, effective
+    try:
+        spill = count_terminal_reference_spill(out_path, count_unique_dois(md))
+    except Exception:
+        spill = 0
+    effective["spill"] = spill
+    if not (0 < spill <= REBALANCE_MAX_SPILL):
+        return page, result, effective
+    ladder = (
+        (MIN_REF_LEADING, "end",
+         f"reference leading tightened to {MIN_REF_LEADING:g}"),
+        (None, "refhead",
+         "imprint folded into the References heading"),
+        (MIN_REF_LEADING, "refhead",
+         "imprint folded and reference leading tightened to "
+         f"{MIN_REF_LEADING:g}"),
+    )
+    candidate_path = str(out_path) + ".rebalance.pdf"
+    for leading, imprint, note in ladder:
+        candidate_page = build(leading, imprint)
+        try:
+            candidate = write_pdf(candidate_page, candidate_path)
+            # Acceptable = out of the degenerate band: either nothing spills,
+            # or the terminal page is a full reference continuation page
+            # (sparseness there stays the raster QA's call).
+            candidate_spill = count_terminal_reference_spill(
+                candidate_path, count_unique_dois(md))
+            if not (0 < candidate_spill <= REBALANCE_MAX_SPILL):
+                os.replace(candidate_path, out_path)
+                effective.update(ref_leading=leading, imprint=imprint,
+                                 rebalanced=True, note=note)
+                return candidate_page, candidate, effective
+        finally:
+            if os.path.exists(candidate_path):
+                os.remove(candidate_path)
+    return page, result, effective
+
+
 def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
+               imprint="end",
                release=None, repo=None, compiled_date=None, style="scientific",
                figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
     import urllib.parse
@@ -1015,16 +1094,24 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         f"<div><b>{h}</b><span>{v}</span></div>" for h, v in cells) + "</div>"
 
     if n_refs:
+        refhead_small = f"{n_refs} · verified via Crossref"
+        if imprint == "refhead":
+            # Fallback imprint: fold the release stamp into the References
+            # heading so the colophon costs zero page height.
+            refhead_small += f" · Grounded {html.escape(release)}"
         body = body.replace(
             '<h2 class="refhead">References</h2>',
-            f'<h2 class="refhead">References <small>{n_refs} · verified via Crossref</small></h2>')
+            f'<h2 class="refhead">References <small>{refhead_small}</small></h2>')
         if n_refs >= 80:
             body = body.replace('<div class="refs">', '<div class="refs dense">')
 
 
     if colophon is None:
-        colophon = ("Agentically generated · every citation resolved and "
-                    "integrity-screened via Crossref (retractions, expressions of concern)")
+        # The masthead carries identity and the pages stay quiet; this
+        # review's verification stamp closes the document book-style.
+        sources = f"{n_refs} sources · " if n_refs else ""
+        colophon = (f"{sources}every DOI resolved · "
+                    "retraction-screened via Crossref")
     plain_title = re.sub(r"<[^>]+>", "", title)
     return PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=css,
@@ -1035,7 +1122,12 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         cols=(" structured-flow" if structured_flow else
               (" cols" if columns == 2 else "")),
         body=body,
-        colophon=html.escape(colophon))
+        imprint=(
+            "" if imprint == "refhead" else
+            '<div class="endcolophon"><div class="rule"></div>'
+            f"{html.escape(colophon)}<br>Grounded {html.escape(release)}"
+            f" · compiled {html.escape(_display_date(today))}</div>"
+        ))
 
 
 def _manifest_path_record(path, manifest_directory):
@@ -1132,7 +1224,8 @@ def write_release_manifest(
         manifest_path, *, review_path, ledger_path, pdf_path, html_document,
         release, columns, kicker, colophon, repo, compiled_date,
         figure_specs=(), figure_prompts=(), style="scientific",
-        figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None):
+        figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
+        imprint="end"):
     """Bind every release input to the exact HTML and canonical PDF."""
     manifest_path = Path(manifest_path).resolve()
     manifest_directory = manifest_path.parent
@@ -1167,6 +1260,7 @@ def write_release_manifest(
             "ref_leading": (
                 float(ref_leading) if ref_leading is not None else None
             ),
+            "imprint": imprint,
             "style": _normalized_style(style),
             "kicker": kicker,
             "colophon": colophon,
@@ -1273,54 +1367,23 @@ def main():
             effective_repo = detected_repo or None
         else:
             effective_repo = args.repo
-        page = build_html(
-            md, columns=args.columns, kicker=args.kicker,
+        page, result, effective = render_pdf_rebalanced(
+            md, args.out, columns=args.columns, kicker=args.kicker,
             colophon=args.colophon, base_dir=base_dir,
             release=release, repo=effective_repo, compiled_date=compiled_date,
             style=args.style, figure_max_height_mm=args.figure_max_height,
             ref_leading=args.ref_leading,
         )
-        result = write_pdf(page, args.out)
-        effective_ref_leading = args.ref_leading
-        rebalanced = False
-        if args.ref_leading is None:
-            try:
-                spill = count_terminal_reference_spill(
-                    args.out, count_unique_dois(md)
-                )
-            except Exception:
-                spill = 0
-            if 0 < spill <= REBALANCE_MAX_SPILL:
-                # A page carrying only the last 1-3 reference entries is the
-                # degenerate spill the raster QA rejects. Retry once with the
-                # reference leading tightened inside its bounded envelope;
-                # keep whichever render has no spill. Type size is untouched.
-                tightened = build_html(
-                    md, columns=args.columns, kicker=args.kicker,
-                    colophon=args.colophon, base_dir=base_dir,
-                    release=release, repo=effective_repo,
-                    compiled_date=compiled_date, style=args.style,
-                    figure_max_height_mm=args.figure_max_height,
-                    ref_leading=MIN_REF_LEADING,
-                )
-                candidate_path = args.out + ".rebalance.pdf"
-                try:
-                    candidate = write_pdf(tightened, candidate_path)
-                    if count_terminal_reference_spill(
-                            candidate_path, count_unique_dois(md)) == 0:
-                        os.replace(candidate_path, args.out)
-                        page, result = tightened, candidate
-                        effective_ref_leading = MIN_REF_LEADING
-                        rebalanced = True
-                        print(
-                            f"Rebalanced: {spill} spilled reference entr"
-                            f"{'y' if spill == 1 else 'ies'} pulled back by "
-                            f"tightening reference leading to {MIN_REF_LEADING:g}",
-                            file=sys.stderr,
-                        )
-                finally:
-                    if os.path.exists(candidate_path):
-                        os.remove(candidate_path)
+        effective_ref_leading = effective["ref_leading"]
+        effective_imprint = effective["imprint"]
+        if effective["rebalanced"]:
+            spill = effective["spill"]
+            print(
+                f"Rebalanced: {spill} spilled terminal entr"
+                f"{'y' if spill == 1 else 'ies'} pulled back — "
+                + effective["note"],
+                file=sys.stderr,
+            )
         if args.html_sidecar:
             html_side = os.path.splitext(args.out)[0] + ".html"
             with open(html_side, "w", encoding="utf-8") as stream:
@@ -1346,6 +1409,7 @@ def main():
                 style=args.style,
                 figure_max_height_mm=args.figure_max_height,
                 ref_leading=effective_ref_leading,
+                imprint=effective_imprint,
             )
             suffix += f" and {args.release_manifest}"
         print(

@@ -619,11 +619,12 @@ class PdfExportTests(unittest.TestCase):
                 with open(source, encoding="utf-8") as stream:
                     markdown = stream.read()
                 output = os.path.join(tmp, filename.replace(".md", ".pdf"))
-                page = export_review.build_html(
-                    markdown, base_dir=example_dir, release="v2.0.0",
+                # The canonical render path includes the spill-rebalance
+                # ladder (leading, imprint fold), exactly as the CLI runs it.
+                export_review.render_pdf_rebalanced(
+                    markdown, output, base_dir=example_dir, release="v2.0.0",
                     compiled_date="2026-08-26",
                 )
-                weasyprint_export.write_pdf(page, output)
                 reader = PdfReader(output)
                 self.assertEqual(len(reader.pages), expected_pages)
                 inspection = qa_review_pdf.inspect_structure(output, markdown)

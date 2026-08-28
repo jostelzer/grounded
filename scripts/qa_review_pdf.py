@@ -203,6 +203,7 @@ def verify_release_manifest(
             compiled_date=str(manifest.get("compiled_date")),
             figure_max_height_mm=float(render.get("figure_max_height_mm") or 92.0),
             ref_leading=render.get("ref_leading"),
+            imprint=str(render.get("imprint") or "end"),
         )
     except (OSError, TypeError, ValueError) as exc:
         raise PdfQaError(f"manifest HTML cannot be rebuilt: {exc}") from exc
