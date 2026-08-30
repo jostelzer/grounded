@@ -18,12 +18,12 @@ High-oleic formulations make the category problem especially visible. Plant bree
 
 Study design also changes what “exposure” means. Controlled feeding fixes energy and the replacement nutrient, improving attribution but narrowing external validity; cohorts observe habitual intake embedded in meals, increasing relevance while reintroducing confounding and measurement error [Wu et al. 2022](https://doi.org/10.1039/d1fo03759e), [Chen et al. 2020](https://doi.org/10.1039/d0fo00875c), [Neuenschwander et al. 2023](https://doi.org/10.1186/s12916-023-03093-1). Agreement across those designs matters because their biases point in different directions. It supports a substitution conclusion but cannot convert an ingredient label into a dose-response curve. Neither stream licenses claims about oil consumed with excess energy or degraded through repeated heating.
 
-The whole answer is organized around those exposure distinctions in [Figure 1](#fig-whole-answer). Its central point is practical: the ingredient name alone does not identify the health contrast being tested.
+[Figure 1](#fig-whole-answer) makes one controlled comparison explicit rather than collapsing every use of an oil into one category. It shows the foods replaced, the replacement oil, the time window, and the measured marker before attaching any broader interpretation.
 
 <a id="fig-whole-answer"></a>
-![A wide scientific evidence map in which a central oil droplet branches to oil composition, replacement nutrient, food matrix, and heating history before converging on separate human-evidence conclusions.](seed-oils-whole-answer.png)
+![Panel A shows an equal-calorie replacement from a dairy-fat-rich diet of butter, cream, and high-fat cheese to a rapeseed-oil-rich diet; panel B plots endpoint LDL cholesterol after each three-week diet period, with directly labeled means and standard-deviation whiskers.](seed-oils-whole-answer.png)
 
-**Figure 1. Ordinary use and thermal abuse are different exposures.** The visual separates oil composition, the displaced nutrient, food context, and heating history before weighing human outcomes. Solid paths mark established comparisons; the muted dashed path marks uncertainty when oil is repeatedly degraded [Rosqvist & Niinistö 2024](https://doi.org/10.29219/fnr.v68.10487), [Neuenschwander et al. 2023](https://doi.org/10.1186/s12916-023-03093-1), [Hooper et al. 2018](https://doi.org/10.1002/14651858.cd011094.pub4), [Bhat et al. 2022](https://doi.org/10.3390/nu14071489).
+**Figure 1. A specified equal-calorie substitution lowered LDL cholesterol in a short controlled trial.** Panel A identifies the exchange: the dairy-fat-rich period included butter, cream, and high-fat cheese, while the replacement period used rapeseed oil. In panel B, the x-axis distinguishes the two three-week diet periods and the vertical y-axis gives endpoint LDL cholesterol in mmol/L. Points are reported least-squares means and whiskers are standard deviations: 4.91 ± 1.01 mmol/L after dairy fat and 3.95 ± 0.91 mmol/L after rapeseed oil in 20 adults with hyperlipidaemia. The whiskers describe participant variability, not confidence intervals for the paired treatment effect; this short marker trial does not establish a clinical-event effect [Iggman et al. 2011](https://doi.org/10.1111/j.1365-2796.2011.02383.x), [Chen et al. 2020](https://doi.org/10.1039/d0fo00875c), [Rosqvist & Niinistö 2024](https://doi.org/10.29219/fnr.v68.10487).
 
 ### Replacing saturated fat with unsaturated oils lowers LDL-related risk markers
 
@@ -51,9 +51,9 @@ Randomized outcome syntheses do not show a large cardiovascular hazard from incr
 The estimates in [Figure 2](#fig-event-estimates) explain why reasonable reviewers differ about benefit yet agree that a large class-wide hazard is implausible. The pooled coronary-event estimate favors substitution, whereas two recovered old trials sit nearer to or above the null for mortality. Their intervals and populations matter as much as their point estimates.
 
 <a id="fig-event-estimates"></a>
-![A wide log-scale dot-and-whisker plot comparing the pooled coronary-event estimate with Sydney and Minnesota mortality estimates, with an exact null line at 1.0.](seed-oils-coronary-estimates.png)
+![A compact two-panel log-scale forest plot places the pooled PUFA-substitution coronary-event estimate below the null in panel A and keeps Sydney all-cause mortality and Minnesota coronary mortality as separately labeled recovered-trial outcomes in panel B.](seed-oils-coronary-estimates.png)
 
-**Figure 2. Clinical-event estimates disagree more than lipid outcomes.** Exact log-scale positions show the pooled coronary-event benefit beside mortality estimates from the Sydney and Minnesota recovered trials. Different outcomes and trial contexts prevent a mechanical pooled verdict [Mozaffarian et al. 2010](https://doi.org/10.1371/journal.pmed.1000252), [Ramsden et al. 2013](https://doi.org/10.1136/bmj.e8707), [Ramsden et al. 2016](https://doi.org/10.1136/bmj.i1246), [Hooper et al. 2018](https://doi.org/10.1002/14651858.cd011094.pub4), [Abdelhamid et al. 2018](https://doi.org/10.1002/14651858.cd012345.pub2).
+**Figure 2. Clinical-event estimates disagree more than lipid outcomes.** The x-axis shows risk ratios or hazard ratios on a logarithmic scale, with 1.0 as the null; the y-axis lists each evidence source and its specific outcome. Points are estimates and horizontal whiskers are 95% confidence intervals. Panel A shows pooled coronary events. Panel B preserves Sydney all-cause mortality and Minnesota coronary mortality as distinct outcomes. Their outcome families, effect measures, populations, and old multifactorial interventions differ, so the estimates should not be mechanically pooled into one verdict [Mozaffarian et al. 2010](https://doi.org/10.1371/journal.pmed.1000252), [Ramsden et al. 2013](https://doi.org/10.1136/bmj.e8707), [Ramsden et al. 2016](https://doi.org/10.1136/bmj.i1246), [Hooper et al. 2018](https://doi.org/10.1002/14651858.cd011094.pub4), [Abdelhamid et al. 2018](https://doi.org/10.1002/14651858.cd012345.pub2).
 
 The clinical record thus supports at most a modest benefit from replacing saturated fat. Its more secure conclusion is narrower: randomized evidence does not reveal the large cardiovascular penalty claimed for ordinary seed-oil use.
 
@@ -94,9 +94,9 @@ Clinical relevance remains a separate step. These marker trials were not designe
 [Figure 3](#fig-inflammation-boundary) separates the observed human marker results from the proposed mediator pathway. The dashed transition is deliberate: pathway chemistry warrants study, but it has not produced a reproducible systemic inflammatory response in controlled human feeding.
 
 <a id="fig-inflammation-boundary"></a>
-![A wide scientific pathway showing dietary linoleic acid, regulated conversion, mediator pathways, and conventional human inflammatory markers, with dashed inferred links and a visible null marker result.](seed-oils-inflammation-boundary.png)
+![Panel A identifies dietary linoleic acid; panel B shows the fatty-acid chain passing through multiple intracellular enzyme steps into dashed context-dependent mediator branches that stop at an evidence boundary; panel C separately shows blood assays for CRP, IL-6, and TNF with the controlled-trial result “no consistent rise.”](seed-oils-inflammation-boundary.png)
 
-**Figure 3. Plausible signaling does not equal systemic inflammation.** Regulated conversion and mediator pathways remain biologically plausible, while controlled human studies do not show consistent rises in conventional inflammatory markers. Dashed arrows mark inferred or context-dependent steps [Johnson & Fritsche 2012](https://doi.org/10.1016/j.jand.2012.03.029), [Su et al. 2017](https://doi.org/10.1039/c7fo00433h), [Innes & Calder 2018](https://doi.org/10.1016/j.plefa.2018.03.004), [Calder et al. 2019](https://doi.org/10.1017/s0007114519000692).
+**Figure 3. Controlled human trials do not show a consistent systemic inflammatory response.** Panel A identifies the dietary linoleic-acid input. Panel B shows multiple regulated processing steps and dashed, context-dependent mediator branches; the dashed path stops at the evidence boundary because possible local signaling does not establish a systemic response. Panel C shows the conventional circulating markers measured in controlled feeding trials—CRP, IL-6, and TNF—which do not rise consistently on average. The figure does not exclude local signaling, susceptible subgroups, or unmeasured long-term outcomes [Johnson & Fritsche 2012](https://doi.org/10.1016/j.jand.2012.03.029), [Su et al. 2017](https://doi.org/10.1039/c7fo00433h), [Innes & Calder 2018](https://doi.org/10.1016/j.plefa.2018.03.004), [Calder et al. 2019](https://doi.org/10.1017/s0007114519000692).
 
 Inflammation therefore illustrates a recurring pattern: mechanisms define what could happen, whereas controlled human measurements show what did happen under the tested conditions.
 
@@ -141,26 +141,11 @@ Human outcome evidence for degraded frying oil remains limited. Reviews, occupat
 Heating is also a process rather than a single temperature. Oil volume, pan geometry, oxygen exposure, water released from food, cooling, storage, and replenishment all change degradation [Moumtaz et al. 2019](https://doi.org/10.1038/s41598-019-39767-1), [Bhat et al. 2022](https://doi.org/10.3390/nu14071489), [Soundararajan et al. 2024](https://doi.org/10.2174/0109298673250752230921090452). Visible smoke is a practical warning that the oil has exceeded an appropriate cooking range, but a universal household threshold cannot be inferred from the available experiments. Reuse adds time at temperature and preserves reaction products between cooking cycles. That cumulative history is the exposure of concern.
 
 <a id="fig-heat-gradient"></a>
-![A wide temperature-and-reuse diagram showing little trans-fat formation below 200 degrees C, an exact increase from 200 to 240 degrees C, and a separate repeated-reuse escalation.](seed-oils-heating-boundary.png)
+![Panel A plots estimated trans-fat increase against heating temperature, shading the below-200-degree-C region and attaching the exact 200–240-degree slope and interval; panel B uses text-free pan imagery to separate fresh controlled use from repeated reuse, accumulated oxidation products, and an evidence boundary before unquantified long-term human risk.](seed-oils-heating-boundary.png)
 
-**Figure 4. Heat and reuse change the exposure.** The exact temperature response applies to total trans-fat formation in the heating meta-analysis; the separate reuse path represents cumulative oxidation rather than a quantified chronic-disease risk. Fresh, controlled cooking and repeated degradation remain distinct [Bhat et al. 2022](https://doi.org/10.3390/nu14071489), [Moumtaz et al. 2019](https://doi.org/10.1038/s41598-019-39767-1), [Soundararajan et al. 2024](https://doi.org/10.2174/0109298673250752230921090452), [Ng et al. 2014](https://doi.org/10.1016/j.vph.2014.02.004).
+**Figure 4. Heat and reuse change the exposure.** In panel A, the x-axis is heating temperature and the y-axis is estimated total-trans-fat increase in percentage points from 200 degrees C. Little formation was reported below 200 degrees C; from 200–240 degrees C, the attached estimate is +0.38 percentage points per 10 degrees C with a 95% confidence interval of 0.20–0.55. Panel B is a separate pathway: repeated heat and reuse accumulate oxidation products, but the solid causal path stops at the evidence boundary because long-term human risk has not been quantified. One fresh, controlled cooking episode is not represented as an abused fryer [Bhat et al. 2022](https://doi.org/10.3390/nu14071489), [Moumtaz et al. 2019](https://doi.org/10.1038/s41598-019-39767-1), [Soundararajan et al. 2024](https://doi.org/10.2174/0109298673250752230921090452), [Ng et al. 2014](https://doi.org/10.1016/j.vph.2014.02.004).
 
 Heating chemistry therefore sets a sensible precautionary limit. It does not overturn the evidence on ordinary substitution with fresh oil.
-
-### The omega-6-to-omega-3 ratio can mislead
-
-A ratio cannot reveal whether its numerator rose, its denominator fell, or both changed. In UK Biobank, the highest versus lowest plasma omega-6-to-omega-3 ratio quintile was associated with all-cause-mortality hazard ratio 1.26 (95% confidence interval 1.15–1.38), even though omega-6 and omega-3 concentrations were each independently inversely associated with mortality [Zhang et al. 2024](https://doi.org/10.7554/elife.90132). Shared metabolic pathways make the ratio biologically interesting, but they do not repair this mathematical ambiguity [Innes & Calder 2018](https://doi.org/10.1016/j.plefa.2018.03.004).
-
-[Figure 5](#fig-ratio-trap) shows how the adverse ratio and favorable components can coexist. A high ratio may identify too little omega-3 rather than too much omega-6; the ratio alone cannot choose between those explanations.
-
-<a id="fig-ratio-trap"></a>
-![A wide paired quantitative schematic showing an adverse omega-6-to-omega-3 ratio estimate above two independently favorable component associations.](seed-oils-ratio-trap.png)
-
-**Figure 5. The ratio can reverse the component-level interpretation.** The reported ratio association is adverse, while omega-6 and omega-3 concentrations are each inversely associated with mortality. The ratio does not identify which component should change [Zhang et al. 2024](https://doi.org/10.7554/elife.90132), [Innes & Calder 2018](https://doi.org/10.1016/j.plefa.2018.03.004).
-
-This is a measurement problem with practical consequences. Evaluating both fatty-acid levels is more informative than treating the ratio as a diagnosis.
-
-The same arithmetic applies across individuals. Two people can share a ratio while having very different concentrations of both fatty acids, and an intervention can improve the denominator without changing the numerator. Ratio-only advice hides those paths. Component measures preserve them.
 
 ### Food matrix and processing alter what an oil label means
 
@@ -173,6 +158,21 @@ New molecular studies strengthen the substitution story without settling clinica
 Processing likewise bundles exposures that trials can separate only partially. Grinding, emulsification, starch refinement, sodium, energy density, flavor engineering, and portion size can travel with an oil ingredient but need not do so [Tindall et al. 2019](https://doi.org/10.1161/jaha.118.011512), [Neuenschwander et al. 2023](https://doi.org/10.1186/s12916-023-03093-1). A label-based observational analysis that lacks those details cannot assign their combined association to the oil alone. Controlled feeding isolates the fatty-acid contrast more cleanly, while whole-food trials preserve more of the matrix. Both designs are needed because each removes a different ambiguity.
 
 Taken together, the food evidence supports a simple direction rather than a universal product ranking. Replacing butter or other saturated animal fats with mostly unsaturated plant sources aligns with substitution cohorts and lipid trials; replacing unsaturated oil with butter generally does not [Neuenschwander et al. 2023](https://doi.org/10.1186/s12916-023-03093-1), [Iggman et al. 2011](https://doi.org/10.1111/j.1365-2796.2011.02383.x), [Sun et al. 2015](https://doi.org/10.3945/jn.115.210575). A modeled butter-to-olive-oil substitution was associated with cardiovascular hazard ratio 0.96 (95% confidence interval 0.95–0.98), but food context and equal calories remain part of that estimate [Neuenschwander et al. 2023](https://doi.org/10.1186/s12916-023-03093-1).
+
+### The omega-6-to-omega-3 ratio can mislead
+
+A ratio cannot reveal whether its numerator rose, its denominator fell, or both changed. In UK Biobank, the highest versus lowest plasma omega-6-to-omega-3 ratio quintile was associated with all-cause-mortality hazard ratio 1.26 (95% confidence interval 1.15–1.38), even though omega-6 and omega-3 concentrations were each independently inversely associated with mortality [Zhang et al. 2024](https://doi.org/10.7554/elife.90132). Shared metabolic pathways make the ratio biologically interesting, but they do not repair this mathematical ambiguity [Innes & Calder 2018](https://doi.org/10.1016/j.plefa.2018.03.004).
+
+The conflicting directions are visible in [Figure 5](#fig-ratio-trap).
+
+<a id="fig-ratio-trap"></a>
+![A two-panel log-scale forest plot shows the highest-versus-lowest omega-6-to-omega-3 ratio quintile above the null in panel A, while the separately measured omega-6 and omega-3 concentrations both fall below the null in panel B; all three all-cause-mortality hazard ratios and 95% confidence intervals are directly labeled.](seed-oils-ratio-trap.png)
+
+**Figure 5. The ratio can reverse the component-level interpretation.** The x-axis is the all-cause-mortality hazard ratio on a logarithmic scale and the y-axis lists the plasma measure and highest-versus-lowest quintile contrast. Points are estimates, horizontal whiskers are 95% confidence intervals, and 1.0 is the null. Panel A shows an adverse ratio association, 1.26 (1.15–1.38); panel B shows inverse associations for omega-6, 0.77 (0.70–0.85), and omega-3, 0.69 (0.63–0.76). These are UK Biobank cohort associations, not causal effects. Ratio arithmetic cannot identify which component should change [Zhang et al. 2024](https://doi.org/10.7554/elife.90132), [Innes & Calder 2018](https://doi.org/10.1016/j.plefa.2018.03.004).
+
+This is a measurement problem with practical consequences. Evaluating both fatty-acid levels is more informative than treating the ratio as a diagnosis.
+
+The same arithmetic applies across individuals. Two people can share a ratio while having very different concentrations of both fatty acids, and an intervention can improve the denominator without changing the numerator. Ratio-only advice hides those paths. Component measures preserve them.
 
 ### Conclusion
 

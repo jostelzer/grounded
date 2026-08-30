@@ -2,43 +2,43 @@
 
 **TL;DR** - They might be, but we still can't measure the danger to you. Tiny plastic pieces turn up in our bodies, and lab work shows ways they could hurt living things. The missing step is proof that ordinary amounts cause illness in people.
 
-Picture a jigsaw with one empty space in the middle. We already have some pieces around it. Scientists report plastic in our bodies, see harm in lab tests, and sometimes find more plastic alongside illness. But the missing middle says, “Did the plastic cause the illness?”
+Picture a path from everyday exposure to illness, with one broken link in the middle. We already have clues on both sides. Scientists report plastic in our bodies, see harm in lab tests, and sometimes find more plastic alongside illness. But the missing link asks, “Did the plastic cause the illness?”
 
-### Which piece do we already have?
+### Which clues do we already have?
 
-Reviews report tiny plastic pieces in blood and samples linked to our heart, gut, lungs, eyes, and reproduction, across 25 studies of living people [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). So the first jigsaw piece is real: plastic can get into us.
+Reviews report tiny plastic pieces in blood and samples linked to our heart, gut, lungs, eyes, and reproduction, across 25 studies of living people [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). So the first clue is real: plastic can get into us.
 
 ### Why are scientists worried about harm?
 
 Lab studies report cell stress, gut-cell damage, and kidney damage in mice [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Mattioda et al. 2023](https://doi.org/10.3390/biom13010140), [Mahmud et al. 2024](https://doi.org/10.3390/cells13211788), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662).
 
-That adds a second jigsaw piece: harm is possible.
+That adds a second clue: harm is possible.
 
 ### What happens when doctors watch people?
 
 Doctors followed people who already needed fatty build-up removed from an artery in their neck. Those whose removed build-up contained plastic were later somewhere between twice and ten times as likely to have a heart attack, a stroke, or die [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). Heart researchers say this is a serious clue, but everyone in the study already had artery disease [Prattichizzo et al. 2024](https://doi.org/10.1093/eurheartj/ehae552).
 
-That gives us a third piece, but it still does not fill the middle. Another team found more plastic in the poo of people with bowel illness. The illness itself might have made plastic stay around longer [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). You can see all three pieces and the empty space in [Figure 1](#fig-missing-piece).
+That gives us a third clue, but the causal path is still broken. Another team found more plastic in the poo of people with bowel illness. The illness itself might have made plastic stay around longer [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). [Figure 1](#fig-missing-piece) puts the three clues around the missing link so that association cannot quietly turn into proof.
 
 <a id="fig-missing-piece"></a>
-![Three warm jigsaw pieces for plastic in us, possible lab harm, and human links surround an empty centre asking whether plastic causes illness.](microplastics-missing-piece.png)
+![Everyday exposure begins a causal rail toward illness, but the rail is visibly broken at “cause not proven”; above it, a human sample and a cell dish show that microplastics are found in people and can cause harm in laboratory studies, while an arrowless arc below marks that they have also been seen alongside illness.](microplastics-missing-piece.png)
 
-**Figure 1. The most important piece is still missing.** Plastic in our bodies, harm in lab tests, and worrying links in people all matter. None of them alone proves that ordinary amounts cause illness. The open centre keeps that uncertainty visible. The picture marks an evidence gap; it does not say that the clues are unimportant [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524).
+**Figure 1. Three clues do not yet make a proven causal path.** We find microplastics in people, laboratory studies can show harm, and human studies can find plastic alongside illness. The broken rail marks what is still missing: proof that ordinary real-world exposure causes illness. The arrowless lower arc also keeps open the reverse possibility that illness changes where plastic is found. This evidence gap is not proof of safety [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524).
 
-### Wait - do the pieces even fit together?
+### Wait - do the measurements even line up?
 
 This is where the picture gets shakier. A review checked more than 200 studies of human tissues and found that basic checks for stray plastic were often missing [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113). Teams also use different names, size limits, units, and ways of preparing samples. That can change the answer even before anyone asks about health [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
 Measurement matters because finding a piece still does not tell us what it did. If one team reports pieces and another reports weight, we cannot tell whether people carried similar amounts. Until units match, health links cannot be compared cleanly. Studies that look alike in a headline may still be asking different questions underneath, so combining them can give a tidy-looking answer that hides messy inputs [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298).
 
-The problem is not just untidy paperwork. If dose scales differ, a larger health effect in one study cannot be matched to a smaller effect in another. The puzzle pieces may look similar while their edges are cut differently [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1).
+The problem is not just untidy paperwork. If dose scales differ, a larger health effect in one study cannot be matched to a smaller effect in another. Two studies may sound alike while measuring exposures in incompatible ways [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1).
 
-In [Figure 2](#fig-measuring-same-sample), one sample reaches several lab benches. Some teams count pieces. Others weigh plastic or ignore pieces below their chosen size. Their answers may not line up, even when they started with the same sample.
+In [Figure 2](#fig-measuring-same-sample), the same particles are followed through different measurement choices. A laboratory can count the pieces, weigh the plastic, or change which pieces survive a size cut-off. The answers may not line up even though the sample did not change.
 
 <a id="fig-measuring-same-sample"></a>
-![One sample splits toward three lab benches that count pieces, weigh plastic, or set a size cut-off, ending in answers that do not line up.](microplastics-measurement-methods.png)
+![One tray of large and small plastic particles branches to a combined count-and-weigh pathway and to a size-cutoff pathway; teal low-cutoff outlines include more of the exact same particles than the nested orange high-cutoff outlines, ending with “answers differ.”](microplastics-measurement-methods.png)
 
-**Figure 2. The same sample can give different answers.** Follow the sample to each bench. Counting, weighing, and choosing a size cut-off are not the same job. Until teams agree on those basics, we cannot compare amounts cleanly. The mismatch warns us about methods; it does not say that one bench is automatically right. The result strips carry no scale. They show disagreement between methods, not the size of a measured difference [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+**Figure 2. The same sample can give different answers.** The particle positions stay fixed so you can follow what each choice does. Counting pieces and weighing all plastic answer different questions. A low size cut-off also keeps more of those exact particles than a high cut-off. The drawing shows a method difference, not a measured numerical gap and not that one method is automatically right [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
 ### What answer can we take home?
 
@@ -46,9 +46,9 @@ Microplastics may be hurting us, but scientists cannot yet say how much ordinary
 
 Clean lab plastic is not the same as the mixed, worn bits we meet in daily life. One careful review called harm “suspected,” yet only three human studies helped it reach that judgment [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Talaie et al. 2025](https://doi.org/10.1016/j.toxlet.2025.06.021).
 
-We do not know which size, shape, or plastic type matters most. Better studies must track exposure before illness and compare people the same way [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). That is how the jigsaw's empty middle gets filled.
+We do not know which size, shape, or plastic type matters most. Better studies must track exposure before illness and compare people the same way [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). That is how the missing causal link gets tested.
 
-The jigsaw was only a helper. Our bodies are not flat pictures, and many things can lead to the same illness. Scientists need shared ways to measure plastic, long studies that begin with generally healthy people, and tests of whether lowering what gets into us actually improves health.
+The broken path is only a helper. Bodies are more complicated than a diagram, and many things can lead to the same illness. Scientists need shared ways to measure plastic, long studies that begin with generally healthy people, and tests of whether lowering what gets into us actually improves health.
 
 **Sources**
 
