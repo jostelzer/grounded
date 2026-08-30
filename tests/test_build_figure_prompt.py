@@ -30,6 +30,21 @@ class FigurePromptTests(unittest.TestCase):
             "exact_text": ["A clean mechanism", "A", "B"],
         }
 
+    def test_every_writing_style_declares_an_exact_white_canvas(self):
+        self.assertEqual(
+            set(self.writing_styles), {"scientific", "popsci", "bullets", "eli5"})
+        for name, style in self.writing_styles.items():
+            with self.subTest(style=name):
+                self.assertEqual(style["canvas"]["background"], "#FFFFFF")
+
+    def test_every_profile_has_a_phone_safe_generated_type_margin(self):
+        for name, profile in self.profiles.items():
+            with self.subTest(profile=name):
+                font = profile["font"]
+                self.assertGreaterEqual(font["minimum_px_at_1536_width"], 96)
+                self.assertGreaterEqual(font["body_px_at_1536_width"], 104)
+                self.assertGreaterEqual(font["panel_label_px_at_1536_width"], 116)
+
     def v2_generated_spec(self):
         spec = self.minimal_spec()
         spec.update({
@@ -105,6 +120,13 @@ class FigurePromptTests(unittest.TestCase):
                 "Equal visual weight around the transition keeps the optical centre stable."
             ),
             "final_display": "Journal article figure at its true proportional PDF size.",
+            "mobile_preview": {
+                "width_px": 390,
+                "minimum_label_height_px": 12,
+                "primary_labels": ["A", "B"],
+                "first_glance_path": ["Notice A", "Follow the transition", "Arrive at B"],
+                "explain_back_without_zoom": "A visibly leads to B.",
+            },
         }
         spec["communication_goal"].update({
             "visual_question": "How does the signal reach the response?",
@@ -152,6 +174,15 @@ class FigurePromptTests(unittest.TestCase):
             },
             "uncertainty_encodings": [],
             "cross_view_identity": [],
+            "representation_plan": {
+                "kind": "literal",
+                "evidence_native_anchor": "the specific signal and response structures",
+                "cognitive_translation_steps": 0,
+                "literal_rejected_reason": None,
+                "added_explanatory_value": "The literal pathway is the shortest explanation.",
+                "arranged_elements": False,
+                "arrangement_evidence_job": None,
+            },
             "quantitative_decision": {
                 "verified_numbers_available": False,
                 "numbers_carry_primary_message": False,
@@ -172,6 +203,24 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("VISUAL CONTENT BUDGET — HARD GATE", prompt)
         self.assertIn("decorative background props", prompt)
         self.assertIn("A — establish the signal", prompt)
+        self.assertIn("PHONE PREVIEW — HARD GATE", prompt)
+        self.assertIn("REPRESENTATION ECONOMY — HARD GATE", prompt)
+
+    def test_v3_rejects_nonwhite_canvas_override(self):
+        spec = self.v3_generated_spec()
+        spec["style_overrides"] = {"canvas": {"background": "#FBFAF6"}}
+        with self.assertRaisesRegex(ValueError, "exact #FFFFFF canvas"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_requires_phone_preview_label_floor(self):
+        spec = self.v3_generated_spec()
+        spec["layout_plan"]["mobile_preview"]["minimum_label_height_px"] = 8
+        with self.assertRaisesRegex(ValueError, "at least 12"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
 
     def test_v3_rejects_an_unclassified_or_competing_entity(self):
         spec = self.v3_generated_spec()
@@ -554,6 +603,8 @@ class FigurePromptTests(unittest.TestCase):
             },
         })
         spec["semantic_plan"]["panel_jobs"] = []
+        spec["layout_plan"]["mobile_preview"]["primary_labels"] = [
+            "Outcome", "Effect (points)"]
         decision = spec["semantic_plan"]["quantitative_decision"]
         decision.update({
             "verified_numbers_available": True,
@@ -580,6 +631,35 @@ class FigurePromptTests(unittest.TestCase):
                 spec, self.profiles, self.archetypes,
                 writing_styles=self.writing_styles)
 
+    def test_v3_generated_phone_labels_must_stay_short(self):
+        spec = self.v3_generated_spec()
+        spec["layout_plan"]["mobile_preview"]["primary_labels"] = [
+            "A", "Everyday exposure causes illness remains unproven"]
+        with self.assertRaisesRegex(ValueError, "at most four words"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_generated_phone_labels_reject_compound_policy_prose(self):
+        spec = self.v3_generated_spec()
+        spec["layout_plan"]["mobile_preview"]["primary_labels"] = [
+            "A", "During class: stored"]
+        with self.assertRaisesRegex(ValueError, "one idea without colon"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_generated_prompt_rejects_stock_asset_collage_and_mini_captions(self):
+        prompt = MODULE.build_prompt(
+            self.v3_generated_spec(), self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("VISUAL-LANGUAGE COHERENCE — HARD GATE", prompt)
+        self.assertIn("Render one authored plate", prompt)
+        self.assertIn("glossy stock symbols", prompt)
+        self.assertIn("MOBILE LABEL SIMPLICITY — HARD GATE", prompt)
+        self.assertIn("Move nuance to the external caption", prompt)
+        self.assertIn("existing exact-white canvas", prompt)
+
     def test_v3_sparse_wide_canvas_requires_real_horizontal_topology(self):
         spec = self.v3_generated_spec()
         spec["layout_plan"]["content_density"] = "sparse"
@@ -596,16 +676,51 @@ class FigurePromptTests(unittest.TestCase):
             "text": "Local note",
             "target": "the focal structure",
             "leader_line": True,
+            "placement_priority": "quiet-canvas-first",
         }]
         with self.assertRaisesRegex(ValueError, "background"):
             MODULE.build_prompt(
                 spec, self.profiles, self.archetypes,
                 writing_styles=self.writing_styles)
         spec["annotation_plan"]["callouts"][0]["background"] = "opaque-white"
+        with self.assertRaisesRegex(ValueError, "quiet_canvas_rejected_reason"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+        spec["annotation_plan"]["callouts"][0]["quiet_canvas_rejected_reason"] = (
+            "Moving the label would detach it from the small target.")
         prompt = MODULE.build_prompt(
             spec, self.profiles, self.archetypes,
             writing_styles=self.writing_styles)
         self.assertIn("backing: opaque-white", prompt)
+        self.assertIn("placement: quiet-canvas-first", prompt)
+
+    def test_v3_arranged_elements_require_a_declared_evidence_job(self):
+        spec = self.v3_generated_spec()
+        representation = spec["semantic_plan"]["representation_plan"]
+        representation["arranged_elements"] = True
+        representation["arrangement_evidence_job"] = None
+        with self.assertRaisesRegex(ValueError, "arrangement_evidence_job"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_justified_metaphor_assistance_is_explicit_in_the_prompt(self):
+        spec = self.v3_generated_spec()
+        representation = spec["semantic_plan"]["representation_plan"]
+        representation.update({
+            "kind": "metaphor-assisted",
+            "cognitive_translation_steps": 1,
+            "literal_rejected_reason": (
+                "The literal microscopic structure is not recognizable at report scale."),
+            "added_explanatory_value": (
+                "One familiar outline orients the literal evidence-native structure."),
+        })
+        prompt = MODULE.build_prompt(
+            spec, self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("metaphor-assisted", prompt)
+        self.assertIn("not recognizable at report scale", prompt)
 
     def test_v3_composite_keeps_generated_art_text_free_and_data_deterministic(self):
         spec = self.v3_generated_spec()
@@ -673,6 +788,8 @@ class FigurePromptTests(unittest.TestCase):
             },
         })
         spec["semantic_plan"]["panel_jobs"] = []
+        spec["layout_plan"]["mobile_preview"]["primary_labels"] = [
+            "Category", "Outcome (units)"]
         spec["semantic_plan"]["quantitative_decision"].update({
             "verified_numbers_available": True,
             "numbers_carry_primary_message": True,
@@ -684,6 +801,35 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("COMPOSITE INTEGRATION", prompt)
         self.assertIn("text-free", prompt)
         self.assertIn("EXACT DETERMINISTIC TEXT MANIFEST", prompt)
+
+    def test_v3_identity_hybrid_keeps_canonical_art_text_free(self):
+        spec = self.v3_generated_spec()
+        spec["render_route"] = "hybrid"
+        spec["generated_text"] = []
+        spec["overlay"] = {
+            "font_family": "Arial",
+            "font_fallback": "Helvetica",
+            "text_color": "#161616",
+            "labels": [
+                {"text": item, "x": 0.1, "y": 0.1 + index * 0.1,
+                 "anchor": "left", "size_px": 96}
+                for index, item in enumerate(spec["exact_text"])
+                if item != spec["title"]
+            ],
+        }
+        spec["semantic_plan"]["cross_view_identity"] = [{
+            "entity": "signal",
+            "views": ["source", "filtered"],
+            "invariant_features": ["position", "shape", "membership"],
+            "reason": "Only the declared filter may change visibility.",
+        }]
+        prompt = MODULE.build_prompt(
+            spec, self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("AUTHORING ROUTE\nhybrid", prompt)
+        self.assertIn("identity-preserving geometry layer", prompt)
+        self.assertIn("RESERVED DETERMINISTIC OVERLAY COPY", prompt)
+        self.assertNotIn("TEXT THE IMAGE MODEL MAY RENDER", prompt)
 
     def test_structured_data_is_preserved(self):
         spec = self.minimal_spec()

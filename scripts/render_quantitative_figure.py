@@ -61,7 +61,8 @@ def render(
     layouts = _layout(config, len(panels))
     style = _style(spec, config)
     fonts, font_records = _font_set(
-        style, config["width_px"], config["height_px"], config["supersample"])
+        style, config["width_px"], config["height_px"], config["supersample"],
+        mobile_readable=spec.get("quality_contract_version") == 3)
     supersample = config["supersample"]
     canvas = Image.new(
         "RGB",
@@ -107,7 +108,8 @@ def render(
             (cell["left"] + 22, (box["top"] + box["bottom"]) / 2),
             panel["y_axis"]["label"], fonts["axis"], style["ink_color"],
             supersample, text_layout=text_layout, panel_id=panel["id"],
-            role="y_axis_label", minimum_left_px=cell["left"] + 2)
+            role="y_axis_label", minimum_left_px=cell["left"] + 2,
+            maximum_height_px=cell["bottom"] - cell["top"] - 8)
         _draw_text(
             draw, ((box["left"] + box["right"]) / 2, box["bottom"] + 70),
             panel["x_axis"]["label"], fonts["axis"], style["ink_color"],
@@ -264,11 +266,33 @@ def render(
                              round((x + cap) * supersample), round(endpoint * supersample)),
                             fill=series["color"], width=3 * supersample)
                     intervals_manifest.append({
+                        "axis": "y",
                         "series_id": series["id"], "point_id": point["id"],
                         "low_value": point["y_interval"][0],
                         "high_value": point["y_interval"][1],
                         "x_px": _rounded(x), "low_y_px": _rounded(low_y),
                         "high_y_px": _rounded(high_y),
+                    })
+                if point["x_interval"] is not None:
+                    low_x = _map_x(point["x_interval"][0], x_domain, box)
+                    high_x = _map_x(point["x_interval"][1], x_domain, box)
+                    cap = 9
+                    draw.line(
+                        (round(low_x * supersample), round(y * supersample),
+                         round(high_x * supersample), round(y * supersample)),
+                        fill=series["color"], width=3 * supersample)
+                    for endpoint in (low_x, high_x):
+                        draw.line(
+                            (round(endpoint * supersample), round((y - cap) * supersample),
+                             round(endpoint * supersample), round((y + cap) * supersample)),
+                            fill=series["color"], width=3 * supersample)
+                    intervals_manifest.append({
+                        "axis": "x",
+                        "series_id": series["id"], "point_id": point["id"],
+                        "low_value": point["x_interval"][0],
+                        "high_value": point["x_interval"][1],
+                        "y_px": _rounded(y), "low_x_px": _rounded(low_x),
+                        "high_x_px": _rounded(high_x),
                     })
                 radius = series["marker_radius_px"] * supersample
                 center_x, center_y = round(x * supersample), round(y * supersample)
@@ -301,7 +325,8 @@ def render(
                     draw, x, y, series["label"], series["label_position"],
                     fonts["series"], series["color"], supersample,
                     box, cell, offset=series["marker_radius_px"] + 11,
-                    text_layout=text_layout, panel_id=panel["id"])
+                    text_layout=text_layout, panel_id=panel["id"],
+                    allow_reflow=spec.get("quality_contract_version") == 3)
                 rendered_text.append(series["label"])
             series_manifest.append({
                 "id": series["id"], "color": series["color"],
@@ -382,7 +407,11 @@ def render(
                 config["height_px"] if row == config["rows"] - 1
                 else cell["bottom"] + config["panel_gap_px"] / 2),
         }
-    _validate_text_layout(text_layout, text_bounds_by_panel)
+    _validate_text_layout(
+        text_layout, text_bounds_by_panel,
+        minimum_gap_px=(
+            config["width_px"] * 3.0 / 390.0
+            if spec.get("quality_contract_version") == 3 else 2.0))
     _validate_text_manifest(_expected_pixel_text(spec), rendered_text)
     if supersample > 1:
         canvas = canvas.resize(

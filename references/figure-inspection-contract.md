@@ -52,6 +52,14 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
     "misleading_or_ambiguous": [],
     "revision_needed": false
   },
+  "mobile_preview": {
+    "width_px": 390,
+    "readable_primary_labels": ["Primary label"],
+    "observed_first_glance_path": ["Start", "Comparison", "Conclusion"],
+    "observed_explain_back": "What the phone-sized pixels communicate.",
+    "explain_back_matches": true,
+    "requires_zoom": false
+  },
   "annotation": {
     "panel_labels": ["A", "B"],
     "callouts": [
@@ -60,7 +68,10 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
         "target": "the exact depicted structure",
         "leader_line_present": true,
         "leader_origin_attached_to_label": true,
-        "leader_endpoint_hits_target": true
+        "leader_endpoint_hits_target": true,
+        "background": "quiet-canvas",
+        "quiet_canvas_considered": true,
+        "text_on_quiet_canvas": true
       }
     ]
   },
@@ -78,6 +89,13 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
     "composition_optically_balanced": true,
     "callout_backings_legible": true,
     "font_system_consistent": true,
+    "absolute_white_canvas": true,
+    "visual_language_consistent": true,
+    "stock_asset_assemblage_absent": true,
+    "representation_serves_evidence": true,
+    "avoidable_cognitive_translation_added": false,
+    "arranged_object_lineup_present": false,
+    "arrangement_encodes_evidence": false,
     "composite_components_integrated": true,
     "anatomy_checked_at_original_size": true,
     "anatomical_context_sufficient": true,
@@ -99,12 +117,22 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
     "layout_balance_issues": [],
     "callout_backing_issues": [],
     "font_consistency_issues": [],
-    "composite_integration_issues": []
+    "composite_integration_issues": [],
+    "paper_integrity_issues": [],
+    "visual_language_issues": [],
+    "stock_asset_issues": [],
+    "representation_issues": []
   },
   "quantitative": {
     "axis_semantics_visible": true,
     "numeric_annotations_attached_to_referents": true,
-    "uncertainty_attached_to_estimate": true
+    "uncertainty_attached_to_estimate": true,
+    "uncertainty_graphically_visible": true,
+    "data_marks_visually_primary": true,
+    "annotations_clear_of_marks": true,
+    "y_axis_label_vertical": true,
+    "redundant_legend_absent": true,
+    "full_composition_balanced": true
   }
 }
 ```
@@ -127,6 +155,20 @@ or bracket must reach every member of that group. Record this as
 `leader_endpoint_hits_target: true`; any missing or false attestation is
 release-blocking. Empty or blank pixels cannot be rescued by a manually
 supplied OCR transcript.
+
+The mobile attestations come from a separately rendered proportional 390 px-wide
+preview, not from mentally extrapolating the native raster. The reader must be
+able to follow the planned first-glance path, read every declared primary label,
+and recover the explain-back sentence without zoom. `absolute_white_canvas`
+means the visible paper is `#FFFFFF`; pixel QA independently checks the outer
+frame so an off-white or textured page cannot pass by attestation alone.
+`visual_language_consistent` means the visible objects share abstraction,
+dimensionality, line treatment, perspective, lighting, and material finish.
+`stock_asset_assemblage_absent` rejects glossy symbol collages, emoji-like or
+app-style pictograms, and decorative badges even when their labels are correct.
+For a quantitative figure, an interval must be visible as an attached graphical
+extent, the data marks must remain more salient than their labels, and direct
+annotations must not touch or cross points, trajectories, axes, or each other.
 
 ## Generation provenance record
 
@@ -178,3 +220,11 @@ deterministic plot. Every generated, edited, or rendered candidate requires a
 matching post-generation review. Paths are case-local audit records; only the
 selected asset appears in the final review. The release manifest hashes the
 selected figure, its specification, prompt, inspection, and provenance.
+
+For a v3 non-quantitative hybrid used to preserve exact repeated identity, set
+`hybrid.fallback_mode` to `identity-preserving-composition`, declare a non-empty
+`semantic_plan.cross_view_identity`, and record
+`generated_asset_text_free: true`, `identity_geometry_deterministic: true`, and
+`anisotropic_resize: false`. At least two whole-image candidates, or one
+candidate plus a targeted edit, must document why the identity invariant could
+not be trusted to generation alone.

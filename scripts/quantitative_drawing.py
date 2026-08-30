@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+from itertools import combinations
+
 import math
 from typing import Any
 
@@ -66,21 +68,47 @@ def _draw_vertical_text(
     text_layout: list[dict[str, Any]] | None = None,
     panel_id: str | None = None, role: str | None = None,
     minimum_left_px: float | None = None,
+    maximum_height_px: float | None = None,
 ):
     """Draw an upright sans-serif axis title rotated 90 degrees counter-clockwise."""
     from PIL import Image, ImageDraw
 
     probe = ImageDraw.Draw(canvas)
-    bbox = probe.textbbox((0, 0), text, font=font, anchor="lt")
+    rendered_text = text
+    if maximum_height_px is not None:
+        maximum_width = maximum_height_px * supersample - 8 * supersample
+        words = text.split()
+        candidates = []
+        for line_count in range(1, min(3, len(words)) + 1):
+            for breaks in combinations(range(1, len(words)), line_count - 1):
+                indices = (0,) + breaks + (len(words),)
+                lines = [" ".join(words[indices[i]:indices[i + 1]])
+                         for i in range(line_count)]
+                widths = [
+                    probe.textbbox((0, 0), line, font=font, anchor="lt")[2]
+                    for line in lines
+                ]
+                if max(widths) <= maximum_width:
+                    candidates.append((line_count, max(widths), max(widths) - min(widths), lines))
+            if candidates:
+                break
+        if candidates:
+            _count, _maximum, _imbalance, lines = min(
+                candidates, key=lambda item: (item[0], item[1], item[2]))
+            rendered_text = "\n".join(lines)
+    bbox = probe.multiline_textbbox(
+        (0, 0), rendered_text, font=font, spacing=4 * supersample,
+        align="center")
     padding = 4 * supersample
-    width = bbox[2] - bbox[0]
-    height = bbox[3] - bbox[1]
+    width = round(bbox[2] - bbox[0])
+    height = round(bbox[3] - bbox[1])
     patch = Image.new(
         "RGBA", (width + 2 * padding, height + 2 * padding), (0, 0, 0, 0))
     patch_draw = ImageDraw.Draw(patch)
-    patch_draw.text(
-        (padding - bbox[0], padding - bbox[1]), text,
-        font=font, fill=fill, anchor="lt")
+    patch_draw.multiline_text(
+        (padding - bbox[0], padding - bbox[1]), rendered_text,
+        font=font, fill=fill, spacing=4 * supersample,
+        align="center")
     rotated = patch.rotate(90, expand=True)
     center_x = round(position[0] * supersample)
     center_y = round(position[1] * supersample)
@@ -215,10 +243,28 @@ def _draw_contrast_label(
 def _draw_series_label(
     draw, x, y, text, position, font, fill, supersample,
     plot_bounds: dict[str, float], panel_bounds: dict[str, float], offset: float,
-    text_layout: list[dict[str, Any]], panel_id: str,
+    text_layout: list[dict[str, Any]], panel_id: str, *,
+    allow_reflow: bool = False,
 ) -> None:
     """Direct-label a series, wrapping only when an edge forces a side flip."""
     if position not in {"above", "below"}:
+        anchor = "lm" if position == "right" else "rm"
+        label_x = x + offset if position == "right" else x - offset
+        box = draw.textbbox(
+            (round(label_x * supersample), round(y * supersample)),
+            text, font=font, anchor=anchor)
+        outside = (
+            box[0] < panel_bounds["left"] * supersample
+            or box[2] > panel_bounds["right"] * supersample)
+        if outside and allow_reflow:
+            fallback_position = (
+                "above" if y >= (plot_bounds["top"] + plot_bounds["bottom"]) / 2
+                else "below")
+            _draw_series_label(
+                draw, x, y, text, fallback_position, font, fill, supersample,
+                plot_bounds, panel_bounds, offset, text_layout, panel_id,
+                allow_reflow=allow_reflow)
+            return
         _label(
             draw, x, y, text, position, font, fill, supersample,
             offset=offset, horizontal_bounds=plot_bounds,
@@ -360,8 +406,9 @@ def _text_boxes_overlap(
 
 def _validate_text_layout(
     text_layout: list[dict[str, Any]], bounds_by_panel: dict[str, dict[str, float]],
+    *, minimum_gap_px: float = 2.0,
 ) -> None:
-    """Fail closed when deterministic copy clips or collides inside a panel."""
+    """Fail closed when deterministic copy clips or crowds inside a panel."""
     by_panel: dict[str, list[dict[str, Any]]] = {}
     for record in text_layout:
         panel_id = record["panel_id"]
@@ -383,9 +430,11 @@ def _validate_text_layout(
     for panel_id, records in by_panel.items():
         for index, first in enumerate(records):
             for second in records[index + 1:]:
-                if _text_boxes_overlap(first["bbox_px"], second["bbox_px"]):
+                if _text_boxes_overlap(
+                    first["bbox_px"], second["bbox_px"], gap_px=minimum_gap_px
+                ):
                     raise QuantitativeFigureError(
-                        f"text collision in panel {panel_id}: "
+                        f"text collision or sub-3px mobile clearance in panel {panel_id}: "
                         f"{first['text']!r} overlaps {second['text']!r}")
 
 

@@ -39,15 +39,20 @@ At a 1,536 px-wide deliverable, use these visual targets:
 
 | Role | Target |
 |---|---:|
-| Smallest label or compact legend text | at least 26 px |
-| Body label | 27–31 px |
-| Local panel heading | 31–33 px |
-| Compact standalone title | 34–38 px |
-| Panel letter | 31–33 px bold, uppercase A–D |
+| Smallest nominal font size requested from ImageGen | at least 96 px |
+| Body label requested from ImageGen | 104 px |
+| Local panel heading requested from ImageGen | 116 px |
+| Compact standalone title requested from ImageGen | 128 px |
+| Panel letter requested from ImageGen | 116 px bold, uppercase A–D |
 
-These are chat-readable targets inspired by Nature's 5–7 pt figure-label range
-at double-column width, raised so the smallest OCR-measured word height clears
-`qa_figure.py`'s 6.5 pt effective-size gate at the true journal render width.
+These ImageGen targets deliberately include a large safety margin because the
+visible glyph box is often much smaller than the requested font face. A measured 48 px glyph box at a
+1,536 px raster remains about 12 px when the figure is proportionally reduced
+to a 390 px-wide phone preview. The measured glyph box—not the requested size—
+is the release gate. Deterministic plotting derives its own nominal size from
+that measured floor and is not forced to use the ImageGen request sizes. The
+same delivered glyph box also clears `qa_figure.py`'s 6.5 pt effective-size gate
+at the true journal width.
 End-to-end raster generation cannot prove an embedded font file; inspect visual
 conformance and exact text directly. First repair a local typography defect with
 a targeted ImageGen edit. If several labels or the information flow fail, reduce
@@ -76,11 +81,22 @@ visual language, and exclusions without changing the evidence.
 
 The shared visual grammar is:
 
-- white background and 6–8% outer margins;
+- an exact `#FFFFFF` canvas in every writing style, with 6–8% outer margins;
+  warm palettes may colour the scientific objects but never tint or texture the
+  page itself;
 - black or near-black natural-width text from the selected writing-style overlay;
 - a shared invisible grid, aligned panel edges, and white-space grouping;
 - restrained, colour-blind-safe semantic colour on data and biological
   structures, not prose or large background fields;
+- one coherent representational language per figure: match abstraction,
+  dimensionality, line weight, perspective, lighting, and material finish
+  across every primary and supporting element. Reject stock-icon assemblages,
+  glossy sticker or emoji treatment, and decorative object-in-circle badges;
+  a boundary or frame is allowed only when it encodes real scientific scope,
+  grouping, sampling, or comparison;
+- short phone-first labels that each express one visible idea. Prefer a concrete
+  noun phrase or verb phrase; move qualifications and policy prose to the
+  caption rather than stacking clauses inside the artwork;
 - thin black or grey arrows, consistent keylines, and short leaders; use a
   coloured arrow only when pathway identity or direction is encoded;
 - morphologically recognizable scientific primitives rather than decorative
@@ -93,13 +109,45 @@ The shared visual grammar is:
   every review style, so body prose and captions can refer to stable sections;
 - concise explanatory callouts adjacent to their subject, with a thin leader
   line to the exact target whenever the target is not self-evident;
-- opaque white, lightly padded backing behind any callout text that overlaps
-  textured, illustrated, photographic, or otherwise busy pixels;
+- place callout text on existing quiet white canvas whenever the relationship
+  remains clear; use an opaque white, lightly padded backing over textured,
+  illustrated, photographic, or otherwise busy pixels only when moving the
+  label would break its spatial relationship to the referent;
+- verify the complete first-glance path at a 390 px-wide phone preview: the
+  primary labels remain readable without zoom and a non-specialist can still
+  reconstruct the explain-back sentence;
+- keep generated primary labels to at most four words and 28 characters so one
+  long heading cannot force ImageGen to shrink every label; move the fuller
+  qualification into the caption;
+- conserve label bandwidth: when a plotted series needs both an identity and a
+  principal value, prefer one direct label such as `Group −6.2%` over a series
+  label plus a separate point label; do not repeat the same decoding work in a
+  legend, annotation, and caption;
+- in quantitative panels, keep data marks more visually salient than their
+  annotations. Labels sit beside referents with a clear gap from points,
+  trajectories, axes, and one another; no label crosses a data line. If the
+  390 px type floor would overwhelm the plot, shorten copy or change panel
+  topology/aspect ratio rather than enlarging text inside the same cramped
+  layout;
+- keep at least 3 px of clear separation between independent text boxes in the
+  proportional 390 px preview; near-touching panel letters, axes, labels, and
+  annotations count as a collision even when their glyph boxes do not overlap;
+- render every stated confidence or credible interval as an attached whisker,
+  band, bracket, or equivalent graphical extent. Merely writing `95% CI`
+  beside an estimate does not show the interval;
 - an intuition-first path in every writing style: begin with a recognizable
   literal structure, add one unfamiliar step at a time, define necessary terms
   at their referents, and remove any mark that does not help a non-specialist
   explain the figure back without its caption;
-- uncertainty expressed with a dashed boundary, pale tint, qualifier, or exact interval—not vague visual mood.
+- uncertainty expressed with a dashed boundary, pale tint, qualifier, or exact interval—not vague visual mood;
+- prefer evidence-native scientific structures over novelty metaphors, craft
+  textures, product-still-life lineups, or asset-pack arrangements; a metaphor
+  is acceptable only when it reduces rather than adds cognitive translation.
+
+Generated near-white paper may be normalized only when it is connected to the
+canvas edge. Use `scripts/normalize_figure_canvas.py`; if subject pixels enter
+the five-percent safety band, change the composition rather than whitening or
+cropping them away.
 
 ## Adaptation controls
 

@@ -495,6 +495,13 @@ class CommunicationFirstContractTests(unittest.TestCase):
                 "The two primary entities share the optical centre and visual weight."
             ),
             "final_display": "Single-column article figure at final report width.",
+            "mobile_preview": {
+                "width_px": 390,
+                "minimum_label_height_px": 12,
+                "primary_labels": ["A", "Signal"],
+                "first_glance_path": ["Find signal", "Follow pathway", "Reach response"],
+                "explain_back_without_zoom": "The signal follows one pathway.",
+            },
         }
         spec["semantic_plan"] = {
             "entities": [
@@ -529,6 +536,15 @@ class CommunicationFirstContractTests(unittest.TestCase):
             },
             "uncertainty_encodings": [],
             "cross_view_identity": [],
+            "representation_plan": {
+                "kind": "literal",
+                "evidence_native_anchor": "the signal and response structures",
+                "cognitive_translation_steps": 0,
+                "literal_rejected_reason": None,
+                "added_explanatory_value": "The literal path needs no decoding step.",
+                "arranged_elements": False,
+                "arrangement_evidence_job": None,
+            },
             "quantitative_decision": {
                 "verified_numbers_available": False,
                 "numbers_carry_primary_message": False,
@@ -539,6 +555,15 @@ class CommunicationFirstContractTests(unittest.TestCase):
 
     def v3_inspection(self):
         inspection = copy.deepcopy(self.inspection())
+        inspection["minimum_label_height_px"] = 52
+        inspection["mobile_preview"] = {
+            "width_px": 390,
+            "readable_primary_labels": ["A", "Signal"],
+            "observed_first_glance_path": ["Find signal", "Follow pathway", "Reach response"],
+            "observed_explain_back": "The signal follows one pathway to the response.",
+            "explain_back_matches": True,
+            "requires_zoom": False,
+        }
         inspection["visual_quality"].update({
             "concept_coherence": "pass",
             "anatomical_integrity": "pass",
@@ -562,6 +587,13 @@ class CommunicationFirstContractTests(unittest.TestCase):
             "composition_optically_balanced": True,
             "callout_backings_legible": True,
             "font_system_consistent": True,
+            "absolute_white_canvas": True,
+            "visual_language_consistent": True,
+            "stock_asset_assemblage_absent": True,
+            "representation_serves_evidence": True,
+            "avoidable_cognitive_translation_added": False,
+            "arranged_object_lineup_present": False,
+            "arrangement_encodes_evidence": False,
             "anatomy_checked_at_original_size": True,
             "anatomical_context_sufficient": True,
             "uncertainty_encodings_explanatory": True,
@@ -583,6 +615,10 @@ class CommunicationFirstContractTests(unittest.TestCase):
             "callout_backing_issues": [],
             "font_consistency_issues": [],
             "composite_integration_issues": [],
+            "paper_integrity_issues": [],
+            "visual_language_issues": [],
+            "stock_asset_issues": [],
+            "representation_issues": [],
         }
         return inspection
 
@@ -663,6 +699,181 @@ class CommunicationFirstContractTests(unittest.TestCase):
         self.assertTrue(any("optically centred" in error for error in result["errors"]))
         self.assertTrue(any("content-fit or optical-balance issue" in error
                             for error in result["errors"]))
+
+    def test_v3_offwhite_canvas_and_phone_scale_are_release_blocking(self):
+        from PIL import Image, ImageDraw
+
+        with tempfile.TemporaryDirectory() as tmp:
+            image = Path(tmp) / "figure.png"
+            canvas = Image.new("RGB", (1600, 800), "#FBFAF6")
+            draw = ImageDraw.Draw(canvas)
+            draw.rectangle((200, 200, 1400, 600), fill="#315A70")
+            canvas.save(image)
+            spec = self.v3_spec()
+            inspection = self.v3_inspection()
+            inspection["minimum_label_height_px"] = 32
+            result = qa_figure.audit_figure(
+                spec, image, inspection=inspection,
+                provenance=self.provenance(image, spec=spec))
+        self.assertTrue(any("not exact #FFFFFF" in error for error in result["errors"]))
+        self.assertTrue(any("smallest mobile label" in error for error in result["errors"]))
+
+    def test_v3_every_writing_style_accepts_only_exact_white_paper(self):
+        for style in ("scientific", "popsci", "bullets", "eli5"):
+            with self.subTest(style=style):
+                spec = self.v3_spec()
+                spec["review_style"] = style
+                result = self.audit(spec=spec, inspection=self.v3_inspection())
+                self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_v3_transparency_is_release_blocking_even_if_it_flattens_white(self):
+        from PIL import Image, ImageDraw
+
+        with tempfile.TemporaryDirectory() as tmp:
+            image = Path(tmp) / "figure.png"
+            canvas = Image.new("RGBA", (1600, 800), (255, 255, 255, 255))
+            canvas.putpixel((0, 0), (255, 255, 255, 254))
+            draw = ImageDraw.Draw(canvas)
+            draw.ellipse((200, 200, 700, 600), fill="#7399A9")
+            canvas.save(image)
+            spec = self.v3_spec()
+            result = qa_figure.audit_figure(
+                spec, image, inspection=self.v3_inspection(),
+                provenance=self.provenance(image, spec=spec))
+        self.assertTrue(any("opaque canvas" in error for error in result["errors"]))
+
+    def test_v3_one_nonwhite_safety_band_pixel_is_release_blocking(self):
+        from PIL import Image, ImageDraw
+
+        with tempfile.TemporaryDirectory() as tmp:
+            image = Path(tmp) / "figure.png"
+            canvas = Image.new("RGB", (1600, 800), "white")
+            canvas.putpixel((0, 0), (254, 254, 254))
+            draw = ImageDraw.Draw(canvas)
+            draw.ellipse((200, 200, 700, 600), fill="#7399A9")
+            canvas.save(image)
+            spec = self.v3_spec()
+            result = qa_figure.audit_figure(
+                spec, image, inspection=self.v3_inspection(),
+                provenance=self.provenance(image, spec=spec))
+        self.assertTrue(any("not exact #FFFFFF" in error for error in result["errors"]))
+
+    @staticmethod
+    def add_callout(spec, *, background="quiet-canvas"):
+        spec["exact_text"].append("Local note")
+        callout = {
+            "text": "Local note",
+            "target": "response",
+            "leader_line": True,
+            "placement_priority": "quiet-canvas-first",
+            "background": background,
+        }
+        if background == "opaque-white":
+            callout["quiet_canvas_rejected_reason"] = (
+                "Every quiet placement would detach the note from its small target.")
+        spec["annotation_plan"]["callouts"] = [callout]
+        return spec
+
+    @staticmethod
+    def add_observed_callout(inspection, *, background="quiet-canvas"):
+        inspection["ocr_text"] += " Local note"
+        inspection["annotation"]["callouts"] = [{
+            "text": "Local note",
+            "target": "response",
+            "background": background,
+            "quiet_canvas_considered": True,
+            "text_on_quiet_canvas": background == "quiet-canvas",
+            "opaque_backing_present": background == "opaque-white",
+            "backing_necessary": background == "opaque-white",
+            "leader_line_present": True,
+            "leader_origin_attached_to_label": True,
+            "leader_endpoint_hits_target": True,
+        }]
+        return inspection
+
+    def test_v3_valid_quiet_canvas_callout_passes(self):
+        spec = self.add_callout(self.v3_spec())
+        inspection = self.add_observed_callout(self.v3_inspection())
+        result = self.audit(spec=spec, inspection=inspection)
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_v3_callout_must_actually_consider_quiet_canvas(self):
+        spec = self.add_callout(self.v3_spec())
+        inspection = self.add_observed_callout(self.v3_inspection())
+        inspection["annotation"]["callouts"][0]["quiet_canvas_considered"] = False
+        result = self.audit(spec=spec, inspection=inspection)
+        self.assertTrue(any("quiet canvas first" in error for error in result["errors"]))
+
+    def test_v3_opaque_callout_backing_must_be_necessary(self):
+        spec = self.add_callout(self.v3_spec(), background="opaque-white")
+        inspection = self.add_observed_callout(
+            self.v3_inspection(), background="opaque-white")
+        inspection["annotation"]["callouts"][0]["backing_necessary"] = False
+        result = self.audit(spec=spec, inspection=inspection)
+        self.assertTrue(any("not justified as necessary" in error
+                            for error in result["errors"]))
+
+    def test_v3_unplanned_arranged_object_lineup_fails(self):
+        inspection = self.v3_inspection()
+        inspection["integrity"]["arranged_object_lineup_present"] = True
+        inspection["integrity"]["arrangement_encodes_evidence"] = True
+        result = self.audit(spec=self.v3_spec(), inspection=inspection)
+        self.assertTrue(any("unplanned arranged-object lineup" in error
+                            for error in result["errors"]))
+
+    def test_v3_arrangement_that_does_not_encode_evidence_fails(self):
+        spec = self.v3_spec()
+        representation = spec["semantic_plan"]["representation_plan"]
+        representation["arranged_elements"] = True
+        representation["arrangement_evidence_job"] = (
+            "Position shows the supported order of the two states.")
+        inspection = self.v3_inspection()
+        inspection["integrity"]["arranged_object_lineup_present"] = True
+        inspection["integrity"]["arrangement_encodes_evidence"] = False
+        result = self.audit(spec=spec, inspection=inspection)
+        self.assertTrue(any("does not perform a declared evidence job" in error
+                            for error in result["errors"]))
+
+    def test_v3_avoidable_representation_translation_fails(self):
+        inspection = self.v3_inspection()
+        inspection["integrity"]["avoidable_cognitive_translation_added"] = True
+        result = self.audit(spec=self.v3_spec(), inspection=inspection)
+        self.assertTrue(any("avoidable cognitive translation" in error
+                            for error in result["errors"]))
+
+    def test_v3_mixed_stock_symbol_language_is_release_blocking(self):
+        inspection = self.v3_inspection()
+        inspection["integrity"]["visual_language_consistent"] = False
+        inspection["integrity"]["stock_asset_assemblage_absent"] = False
+        inspection["integrity"]["visual_language_issues"] = [
+            "primary objects mix glossy three-dimensional symbols with flat line art"
+        ]
+        inspection["integrity"]["stock_asset_issues"] = [
+            "isolated app-style pictograms read as an asset collage"
+        ]
+        result = self.audit(spec=self.v3_spec(), inspection=inspection)
+        self.assertTrue(any("abstraction, dimensionality" in error
+                            for error in result["errors"]))
+        self.assertTrue(any("glossy stock symbols" in error
+                            for error in result["errors"]))
+        self.assertTrue(any("visual-language coherence issue" in error
+                            for error in result["errors"]))
+        self.assertTrue(any("stock-asset assemblage issue" in error
+                            for error in result["errors"]))
+
+    def test_v3_justified_metaphor_assistance_can_pass(self):
+        spec = self.v3_spec()
+        representation = spec["semantic_plan"]["representation_plan"]
+        representation.update({
+            "kind": "metaphor-assisted",
+            "cognitive_translation_steps": 1,
+            "literal_rejected_reason": (
+                "The literal microscopic structure is not recognizable at report scale."),
+            "added_explanatory_value": (
+                "One familiar outline orients the literal evidence-native structure."),
+        })
+        result = self.audit(spec=spec, inspection=self.v3_inspection())
+        self.assertEqual(result["status"], "pass", result["errors"])
 
     def test_v3_callout_backing_and_font_consistency_are_release_blocking(self):
         inspection = self.v3_inspection()
@@ -753,6 +964,8 @@ class CommunicationFirstContractTests(unittest.TestCase):
         })
         spec["layout_plan"]["content_density"] = "moderate"
         spec["layout_plan"]["wide_canvas_required"] = False
+        spec["layout_plan"]["mobile_preview"]["primary_labels"] = [
+            "Category", "Outcome (unit)"]
         spec["semantic_plan"]["quantitative_decision"] = {
             "verified_numbers_available": True,
             "numbers_carry_primary_message": True,
@@ -762,11 +975,19 @@ class CommunicationFirstContractTests(unittest.TestCase):
         inspection = self.v3_inspection()
         inspection["ocr_text"] = "Category Outcome unit Group 1.0"
         inspection["annotation"] = {"panel_labels": [], "callouts": []}
+        inspection["mobile_preview"].update({
+            "readable_primary_labels": ["Category", "Outcome (unit)"],
+            "observed_first_glance_path": ["Recognize context", "Read estimate"],
+            "observed_explain_back": "The context and estimate form one comparison.",
+        })
         inspection["integrity"]["composite_components_integrated"] = True
         inspection["quantitative"] = {
             "axis_semantics_visible": True,
             "numeric_annotations_attached_to_referents": True,
             "uncertainty_attached_to_estimate": True,
+            "uncertainty_graphically_visible": True,
+            "data_marks_visually_primary": True,
+            "annotations_clear_of_marks": True,
             "y_axis_label_vertical": True,
             "redundant_legend_absent": True,
             "full_composition_balanced": True,
@@ -832,6 +1053,40 @@ class CommunicationFirstContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "encodes_magnitude=false"):
             self.audit(spec=spec, inspection=self.v3_inspection())
 
+    def test_v3_quantitative_text_only_interval_and_dominant_labels_fail(self):
+        spec, inspection = self.composite_v3_case()
+        inspection["quantitative"]["uncertainty_graphically_visible"] = False
+        inspection["quantitative"]["data_marks_visually_primary"] = False
+        inspection["quantitative"]["annotations_clear_of_marks"] = False
+
+        def mutate(provenance):
+            selected = provenance["selected_asset"]
+            provenance.update({
+                "selected_route": "composite",
+                "attempts": [
+                    {"kind": "generate", "asset": "orientation.png",
+                     "text_mode": "none", "outcome": "accepted-for-composition"},
+                    {"kind": "compose", "asset": selected,
+                     "tool": "deterministic-compositor", "outcome": "selected"},
+                ],
+                "comparison": {"candidates_compared": 1,
+                               "selection_rationale": "One candidate was audited."},
+                "composite": {
+                    "compositor": "deterministic-compositor",
+                    "generated_assets_text_free": True,
+                    "quantitative_layer_deterministic": True,
+                    "intrinsic_aspect_preserved": True,
+                },
+            })
+
+        result = self.audit(
+            spec=spec, inspection=inspection, provenance_mutator=mutate)
+        self.assertTrue(any("attached whisker" in error for error in result["errors"]))
+        self.assertTrue(any("overwhelmed by annotations" in error
+                            for error in result["errors"]))
+        self.assertTrue(any("clear gap from data marks" in error
+                            for error in result["errors"]))
+
     def test_v3_cross_view_identity_drift_fails(self):
         spec = self.v3_spec()
         spec["semantic_plan"]["cross_view_identity"] = [{
@@ -844,6 +1099,99 @@ class CommunicationFirstContractTests(unittest.TestCase):
         inspection["integrity"]["identity_drift"] = ["signal moved between views"]
         result = self.audit(spec=spec, inspection=inspection)
         self.assertTrue(any("cross-view identity was not confirmed" in error
+                            for error in result["errors"]))
+
+    def test_v3_identity_preserving_hybrid_is_a_narrow_audited_fallback(self):
+        spec = self.v3_spec()
+        spec["render_route"] = "hybrid"
+        spec["semantic_plan"]["cross_view_identity"] = [{
+            "entity": "signal",
+            "views": ["source view", "filtered view"],
+            "invariant_features": ["registered position", "membership", "shape"],
+            "reason": "Only the declared filter may change visibility.",
+        }]
+        inspection = self.v3_inspection()
+        inspection["integrity"]["cross_view_identity_preserved"] = [{
+            "entity": "signal", "preserved": True,
+        }]
+
+        def mutate(provenance):
+            goal = spec["communication_goal"]["reader_takeaway"]
+            provenance["selected_route"] = "hybrid"
+            provenance["attempts"] = [
+                {"kind": "generate", "asset": "canonical.png",
+                 "text_mode": "none", "outcome": "accepted-for-composition"},
+                {"kind": "edit", "asset": "identity-edit.png",
+                 "outcome": "rejected", "reason": "Repeated-view membership drifted."},
+                {"kind": "compose", "asset": "figure.png", "outcome": "selected"},
+            ]
+            provenance["comparison"] = {
+                "candidates_compared": 1,
+                "selection_rationale": "One canonical art layer was selected for exact duplication.",
+            }
+            provenance["fallback_reason"] = (
+                "Whole-image generation and one targeted edit changed repeated-view identity.")
+            provenance["hybrid"] = {
+                "fallback_mode": "identity-preserving-composition",
+                "compositor": "deterministic identity compositor",
+                "base_asset": "canonical.png",
+                "generated_asset_text_free": True,
+                "identity_geometry_deterministic": True,
+                "anisotropic_resize": False,
+            }
+            provenance["post_generation_reviews"] = [
+                {
+                    "asset": "canonical.png", "intended_takeaway": goal,
+                    "observed_takeaway": "The canonical source structure is clear.",
+                    "observed_explain_back": "This is the source structure.",
+                    "intuitive_without_caption": True, "unexplained_jargon": [],
+                    "intended_meaning_conveyed": False, "information_flow_clear": True,
+                    "issues": ["Repeated views are not yet composed."],
+                    "decision": "revise",
+                },
+                {
+                    "asset": "identity-edit.png", "intended_takeaway": goal,
+                    "observed_takeaway": "The filter is visible but identity changed.",
+                    "observed_explain_back": "The second view may not show the same specimen.",
+                    "intuitive_without_caption": False, "unexplained_jargon": [],
+                    "intended_meaning_conveyed": False, "information_flow_clear": False,
+                    "issues": ["Membership and positions drifted."],
+                    "decision": "regenerate",
+                },
+                {
+                    "asset": "figure.png", "intended_takeaway": goal,
+                    "observed_takeaway": goal,
+                    "observed_explain_back": spec["communication_goal"]["plain_language_explain_back"],
+                    "intuitive_without_caption": True, "unexplained_jargon": [],
+                    "intended_meaning_conveyed": True, "information_flow_clear": True,
+                    "issues": [], "decision": "accept",
+                },
+            ]
+
+        result = self.audit(
+            spec=spec, inspection=inspection, provenance_mutator=mutate)
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_v3_identity_hybrid_without_declared_cross_view_invariant_fails(self):
+        spec = self.v3_spec()
+        spec["render_route"] = "hybrid"
+
+        def mutate(provenance):
+            provenance["selected_route"] = "hybrid"
+            provenance["attempts"].append(
+                {"kind": "compose", "asset": "figure.png", "outcome": "selected"})
+            provenance["fallback_reason"] = "Generated identities drifted."
+            provenance["hybrid"] = {
+                "fallback_mode": "identity-preserving-composition",
+                "compositor": "deterministic compositor",
+                "base_asset": "figure.png",
+                "generated_asset_text_free": True,
+                "identity_geometry_deterministic": True,
+                "anisotropic_resize": False,
+            }
+
+        result = self.audit(spec=spec, provenance_mutator=mutate)
+        self.assertTrue(any("declared cross_view_identity" in error
                             for error in result["errors"]))
 
     def test_v2_first_candidate_can_pass_after_meaning_check(self):

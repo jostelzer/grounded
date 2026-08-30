@@ -147,6 +147,33 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             ],
         }
 
+    @staticmethod
+    def make_phone_readable(spec):
+        """Remove redundant plot copy while retaining the exact comparison."""
+        panel = spec["data"]["panels"][0]
+        panel["reference_lines"] = []
+        panel["events"] = []
+        panel["series"][0]["label"] = "Drug −6.2%"
+        panel["series"][1]["label"] = "Control +4.1%"
+        for series in panel["series"]:
+            series["points"][1]["label"] = None
+        panel["contrasts"][0].update({
+            "x": 5,
+            "x_offset_px": -20,
+            "label": "Δ −10.3",
+        })
+        removed = {
+            "Shared start", "Assignment", "Intervention", "Comparator",
+            "−6.2%", "+4.1%", "−10.3 points (95% CI −11.7 to −8.9)",
+        }
+        spec["exact_text"] = [
+            item for item in spec["exact_text"] if item not in removed
+        ]
+        spec["exact_text"].extend([
+            "Drug −6.2%", "Control +4.1%", "Δ −10.3",
+        ])
+        return spec
+
     def render_case(self, spec=None):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
@@ -179,8 +206,33 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         self.assertEqual(report["metrics"]["intervals_verified"], 2)
         self.assertGreater(report["metrics"]["raster_marks_probed"], 8)
 
+    def test_renderer_emits_and_audits_horizontal_intervals(self):
+        spec = copy.deepcopy(self.spec())
+        endpoint = spec["data"]["panels"][0]["series"][0]["points"][1]
+        endpoint.pop("y_interval")
+        endpoint["x_interval"] = [8.5, 10]
+        _spec, image, _geometry, manifest = self.render_case(spec)
+        horizontal = [
+            item for item in manifest["panels"][0]["intervals"]
+            if item.get("axis") == "x"
+        ]
+        self.assertEqual(len(horizontal), 1)
+        self.assertEqual(horizontal[0]["low_value"], 8.5)
+        self.assertEqual(horizontal[0]["high_value"], 10)
+        self.assertIn("low_x_px", horizontal[0])
+        self.assertIn("high_x_px", horizontal[0])
+        report = qa_quantitative_geometry.audit_geometry(spec, image, manifest)
+        self.assertEqual(report["status"], "pass", report["errors"])
+        self.assertEqual(report["metrics"]["intervals_verified"], 2)
+
+    def test_point_cannot_declare_horizontal_and_vertical_intervals(self):
+        spec = copy.deepcopy(self.spec())
+        spec["data"]["panels"][0]["series"][0]["points"][1]["x_interval"] = [8.5, 10]
+        with self.assertRaisesRegex(ValueError, "both x_interval and y_interval"):
+            self.render_case(spec)
+
     def test_v3_renderer_uses_explicit_clean_sans_typography(self):
-        spec = self.spec()
+        spec = self.make_phone_readable(self.spec())
         spec["quality_contract_version"] = 3
         spec["layout_plan"] = {
             "content_density": "moderate",
@@ -188,6 +240,13 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "aspect_ratio_rationale": "The trajectories and endpoint labels need a balanced landscape frame.",
             "balance_strategy": "External labels and marks balance around the plot centre.",
             "final_display": "Single-column article figure at final report width.",
+            "mobile_preview": {
+                "width_px": 390,
+                "minimum_label_height_px": 12,
+                "primary_labels": ["Follow-up time", "Change from shared start (%)"],
+                "first_glance_path": ["Find shared start", "Follow both paths", "Read contrast"],
+                "explain_back_without_zoom": "The groups began together and ended apart.",
+            },
         }
         spec["plot_design"]["typography"] = {
             "family": "Helvetica Neue",
@@ -202,6 +261,38 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         report = qa_quantitative_geometry.audit_geometry(
             spec, _image, manifest)
         self.assertEqual(report["status"], "pass", report["errors"])
+
+    @unittest.skipUnless(shutil.which("tesseract"), "Tesseract is unavailable")
+    def test_real_v3_render_meets_the_390px_phone_type_floor(self):
+        spec = self.make_phone_readable(self.spec())
+        spec["quality_contract_version"] = 3
+        spec["layout_plan"] = {
+            "content_density": "sparse",
+            "wide_canvas_required": True,
+            "aspect_ratio_rationale": "One comparison needs a compact landscape frame.",
+            "balance_strategy": "Labels and marks balance around the plot centre.",
+            "final_display": "Single-column article figure at final report width.",
+            "mobile_preview": {
+                "width_px": 390,
+                "minimum_label_height_px": 12,
+                "primary_labels": [
+                    "Follow-up time", "Change from shared start (%)"],
+                "first_glance_path": [
+                    "Find the shared start", "Follow the paths", "Read the gap"],
+                "explain_back_without_zoom": (
+                    "The groups began together and ended apart."),
+            },
+        }
+        spec["plot_design"]["typography"] = {
+            "family": "Helvetica Neue",
+            "fallback": "Arial",
+            "upright_natural_width": True,
+        }
+        _spec, image, _geometry, manifest = self.render_case(spec)
+        _ocr, measured_height = qa_figure._tesseract(image)
+        self.assertIsNotNone(measured_height)
+        delivered_height = measured_height * 390 / manifest["image"]["width_px"]
+        self.assertGreaterEqual(delivered_height, 12.0)
 
     def test_v3_renderer_rejects_display_or_flared_plot_type(self):
         spec = self.spec()
@@ -307,7 +398,7 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         self.assertEqual(panel["y_axis"]["label_location"], "outside-data-region")
 
     def test_v3_qa_rejects_axes_or_intervals_not_attached_to_their_meaning(self):
-        spec = self.spec()
+        spec = self.make_phone_readable(self.spec())
         spec["quality_contract_version"] = 3
         spec["communication_goal"].update({
             "visual_question": "How far apart were the groups at follow-up?",
@@ -319,6 +410,13 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "aspect_ratio_rationale": "The compact landscape frame fits the plotted relationship.",
             "balance_strategy": "The external y label and direct labels balance the data region.",
             "final_display": "Single-column article figure at final report width.",
+            "mobile_preview": {
+                "width_px": 390,
+                "minimum_label_height_px": 12,
+                "primary_labels": ["Follow-up time", "Change from shared start (%)"],
+                "first_glance_path": ["Find shared start", "Follow both paths", "Read contrast"],
+                "explain_back_without_zoom": "The groups began together and ended apart.",
+            },
         }
         spec["plot_design"].update({
             "typography": {
@@ -382,6 +480,15 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
                 "reader_interpretation": "the interval qualifies the between-group estimate",
             }],
             "cross_view_identity": [],
+            "representation_plan": {
+                "kind": "literal",
+                "evidence_native_anchor": "the plotted endpoints and their attached contrast",
+                "cognitive_translation_steps": 0,
+                "literal_rejected_reason": None,
+                "added_explanatory_value": "The plot directly encodes the reported values.",
+                "arranged_elements": False,
+                "arrangement_evidence_job": None,
+            },
             "quantitative_decision": {
                 "verified_numbers_available": True,
                 "numbers_carry_primary_message": True,
@@ -404,6 +511,11 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "composition_optically_balanced": True,
             "callout_backings_legible": True,
             "font_system_consistent": True,
+            "absolute_white_canvas": True,
+            "representation_serves_evidence": True,
+            "avoidable_cognitive_translation_added": False,
+            "arranged_object_lineup_present": False,
+            "arrangement_encodes_evidence": False,
             "anatomy_checked_at_original_size": True,
             "anatomical_context_sufficient": True,
             "uncertainty_encodings_explanatory": True,
@@ -417,6 +529,7 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "uncertainty_ambiguities": [], "quantitative_annotation_issues": [],
             "layout_balance_issues": [], "callout_backing_issues": [],
             "font_consistency_issues": [], "composite_integration_issues": [],
+            "paper_integrity_issues": [], "representation_issues": [],
         }
         inspection = {
             "ocr_text": " ".join(qa_figure.expected_pixel_text(selected_spec)),
@@ -435,12 +548,25 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
                 "observed_information_flow": goal["information_flow"],
                 "misleading_or_ambiguous": [], "revision_needed": False,
             },
+            "mobile_preview": {
+                "width_px": 390,
+                "readable_primary_labels": [
+                    "Follow-up time", "Change from shared start (%)"],
+                "observed_first_glance_path": [
+                    "Find shared start", "Follow both paths", "Read contrast"],
+                "observed_explain_back": "The groups began together and ended apart.",
+                "explain_back_matches": True,
+                "requires_zoom": False,
+            },
             "annotation": {"panel_labels": [], "callouts": []},
             "integrity": integrity,
             "quantitative": {
                 "axis_semantics_visible": False,
                 "numeric_annotations_attached_to_referents": True,
                 "uncertainty_attached_to_estimate": False,
+                "uncertainty_graphically_visible": False,
+                "data_marks_visually_primary": True,
+                "annotations_clear_of_marks": True,
                 "y_axis_label_vertical": True,
                 "redundant_legend_absent": True,
                 "full_composition_balanced": True,
@@ -585,6 +711,24 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         report = qa_quantitative_geometry.audit_geometry(spec, image, tampered)
         self.assertEqual(report["status"], "fail")
         self.assertTrue(any("text collision" in error for error in report["errors"]))
+
+    def test_v3_geometry_treats_sub_three_pixel_mobile_text_gap_as_collision(self):
+        geometry = {
+            "text_layout": [
+                {"panel_id": "main", "text": "A", "bbox_px": {
+                    "left": 20, "top": 20, "right": 60, "bottom": 60}},
+                {"panel_id": "main", "text": "Axis", "bbox_px": {
+                    "left": 20, "top": 66, "right": 100, "bottom": 106}},
+            ],
+            "rendered_text": ["A", "Axis"],
+        }
+        errors = []
+        count = qa_quantitative_geometry._audit_text_layout(
+            geometry,
+            {"main": {"left": 0, "right": 1200, "top": 0, "bottom": 600}},
+            (1200, 600), errors, quality_contract_version=3)
+        self.assertEqual(count, 2)
+        self.assertTrue(any("sub-3px mobile clearance" in error for error in errors))
 
     def test_geometry_qa_probes_the_real_raster_not_only_the_manifest(self):
         from PIL import Image, ImageDraw

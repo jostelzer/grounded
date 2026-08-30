@@ -58,6 +58,10 @@ classes are:
 - **cross-view identity** — repeated specimens or objects preserve registered
   positions, membership, and geometry so a threshold, filter, or state change
   is the only difference.
+- **identity-preserving fallback** — when repeated-view identity is itself the
+  evidence and generation repeatedly drifts, one text-free generated canonical
+  asset may be duplicated/masked/typeset deterministically under audited v3
+  hybrid provenance; aesthetic convenience alone never triggers this route.
 - **uncertainty semantics** — uncertainty is attached to the exact claim or
   quantity and tells the reader what cannot be concluded; a generic symbol or
   bare qualifier is insufficient.
@@ -77,10 +81,31 @@ classes are:
   data region, x-axis labels are horizontal below it, and conventional
   point-and-interval glyphs do not receive a redundant floating legend.
 - **annotation backing** — explanatory copy over non-quiet pixels uses an
-  opaque white backing plate with padding; callouts on clean white space remain
-  unboxed.
+  opaque white backing plate with padding only after quiet-canvas placement has
+  been considered and rejected for a stated spatial reason; callouts on clean
+  white space remain unboxed.
 - **font-system consistency** — panels, axes, values, callouts, and legends use
   one natural-width house sans-serif family within a figure.
+- **paper integrity** — the canvas is exact `#FFFFFF` in every writing style;
+  full-canvas tints and paper textures are forbidden even when the object
+  palette is warm.
+- **phone-scale comprehension** — at a 390 px preview, primary labels remain
+  readable without zoom and the first-glance path still yields the declared
+  explain-back sentence.
+- **representation economy** — prefer evidence-native scientific structures;
+  a metaphor or arranged-object treatment fails when it adds a decoding step
+  that a literal representation would avoid.
+- **visual-language coherence** — every element belongs to one authored visual
+  system: consistent abstraction, dimensionality, line treatment, lighting,
+  and material finish. A collage of glossy symbols, emoji-like objects, stock
+  pictograms, or mismatched illustration styles fails even when each object is
+  individually recognizable. Circles, badges, cards, and frames must encode a
+  declared scientific boundary or comparison, never merely make an isolated
+  object look like an icon.
+- **mobile label simplicity** — each primary label names one visible state,
+  change, comparison, or conclusion in a short phrase. Compound policy prose,
+  stacked qualifiers, unexplained shorthand, and labels that need punctuation
+  to hold multiple ideas move to the caption.
 
 ## Change the recipe, not the specimen
 

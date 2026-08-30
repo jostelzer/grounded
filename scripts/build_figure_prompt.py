@@ -15,6 +15,7 @@ DEFAULT_WRITING_STYLES = os.path.join(
     ROOT, "references", "figure-writing-style-overlays.json")
 
 from figure_contract import (
+    ABSOLUTE_WHITE,
     CALLOUT_BACKGROUNDS,
     CLEAN_SANS_FAMILIES,
     CONCEPT_SCORE_DIMENSIONS,
@@ -215,7 +216,7 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             raise ValueError(
                 "quality contract requires visual_anchor for generated visual content")
         if selected_route == "hybrid" and not isinstance(spec.get("overlay"), dict):
-            raise ValueError("quality contract v1 hybrid figures require overlay")
+            raise ValueError("quality-contract hybrid figures require overlay")
 
     communication_goal = None
     selected_concept = None
@@ -239,14 +240,29 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
                     validate_concept_plan(spec))
                 composite_plan = validate_composite_plan(spec)
         else:
-            if selected_route != "generated":
+            identity_hybrid = (
+                contract_version == 3
+                and selected_route == "hybrid"
+                and isinstance(spec.get("semantic_plan"), dict)
+                and bool(spec["semantic_plan"].get("cross_view_identity"))
+            )
+            if selected_route != "generated" and not identity_hybrid:
                 raise ValueError(
-                    "communication-first non-quantitative figures must use image generation")
+                    "communication-first non-quantitative figures must use image generation; "
+                    "v3 hybrid requires declared cross-view identity preservation")
             selected_concept, concept_evaluations, concept_rationale = (
                 validate_concept_plan(spec))
         if contract_version == 3:
             semantic_plan = validate_semantic_plan(spec, annotation_plan)
             layout_plan = validate_layout_plan(spec)
+            missing_mobile_labels = [
+                item for item in layout_plan["mobile_preview"]["primary_labels"]
+                if item not in rendered_text
+            ]
+            if missing_mobile_labels:
+                raise ValueError(
+                    "layout_plan.mobile_preview.primary_labels must appear in "
+                    "rendered exact_text: %s" % ", ".join(missing_mobile_labels))
 
     observed = optional_string_list(spec, "observed")
     inferred = optional_string_list(spec, "inferred")
@@ -284,6 +300,9 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
 
     font = profile["font"]
     canvas = copy.deepcopy(profile["canvas"])
+    if contract_version == 3 and str(canvas.get("background", "")).upper() != ABSOLUTE_WHITE:
+        raise ValueError(
+            "quality contract v3 requires an exact #FFFFFF canvas in every writing style")
     if render_context == "slide":
         if target_aspect is not None and abs(target_aspect - (16 / 9)) > 0.01:
             raise ValueError("slide target_aspect_ratio must be 16/9")
@@ -303,8 +322,9 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "including every required label and all final typography directly in pixels."),
         "hybrid": (
             "Last-resort repair route: premium generated scientific illustration "
-            "retained after direct-text generation and targeted correction failed. "
-            "The remaining exact typographic/data layer is added deterministically."),
+            "retained after whole-image generation and targeted correction failed a "
+            "hard typography or repeated-identity invariant. The exact typographic "
+            "and identity-preserving geometry layer is added deterministically."),
         "deterministic": (
             "Deterministic publication-grade scientific figure production brief. "
             "Do not use an image generator for exact plot or data geometry."),
@@ -336,6 +356,7 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             bullet_section("INTENDED INFORMATION FLOW", communication_goal["information_flow"]),
         ])
     if layout_plan:
+        mobile = layout_plan["mobile_preview"]
         sections.append(
             "CONTENT-FIT LAYOUT — HARD GATE\n"
             "Content density: %s. Wide canvas required by topology: %s. "
@@ -343,11 +364,28 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "Balance strategy: %s\nFinal display: %s\n"
             "Choose the canvas from the information topology, not a universal wide "
             "template. Reject dead gutters, lopsided visual weight, and padding added "
-            "merely to fill page width."
+            "merely to fill page width.\n"
+            "PHONE PREVIEW — HARD GATE\n"
+            "Inspect a separate proportional %d px-wide preview. The smallest label "
+            "must remain at least %.1f px high without zoom. Primary first-glance "
+            "labels: %s. First-glance path: %s. Explain-back at phone size: %s."
             % (layout_plan["content_density"],
                "yes" if layout_plan["wide_canvas_required"] else "no",
                layout_plan["aspect_ratio_rationale"],
-               layout_plan["balance_strategy"], layout_plan["final_display"]))
+               layout_plan["balance_strategy"], layout_plan["final_display"],
+               mobile["width_px"], mobile["minimum_label_height_px"],
+               ", ".join(mobile["primary_labels"]),
+               " → ".join(mobile["first_glance_path"]),
+               mobile["explain_back_without_zoom"]))
+        if selected_route == "generated":
+            sections.append(
+                "MOBILE LABEL SIMPLICITY — HARD GATE\n"
+                "Each primary label names exactly one visible state, change, "
+                "comparison, or conclusion in a short phrase. Do not typeset "
+                "miniature policy prose, stacked qualifications, noun piles, or "
+                "multi-clause copy. Move nuance to the external caption. Place "
+                "labels on existing exact-white canvas whenever possible; an opaque "
+                "white backing over artwork is fallback-only.")
     if semantic_plan:
         sections.extend([
             "ONE VISUAL THESIS — HARD GATE\n"
@@ -384,6 +422,30 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             % semantic_plan["grouping_rationale"],
             "QUANTITATIVE ROUTING DECISION\n%s" %
             semantic_plan["quantitative_decision"]["reason"],
+            "REPRESENTATION ECONOMY — HARD GATE\n"
+            "Selected kind: %s. Evidence-native anchor: %s. Cognitive translation "
+            "steps: %d. Added explanatory value: %s. Arranged elements: %s.%s%s\n"
+            "Prefer literal scientific structures. A metaphor, tactile motif, product-"
+            "still-life lineup, or arranged asset set is acceptable only when it shortens "
+            "the path from pixels to evidence. Reject any composition that first makes "
+            "the reader decode a visual device and then translate it back into the "
+            "scientific relationship."
+            % (
+                semantic_plan["representation_plan"]["kind"],
+                semantic_plan["representation_plan"]["evidence_native_anchor"],
+                semantic_plan["representation_plan"]["cognitive_translation_steps"],
+                semantic_plan["representation_plan"]["added_explanatory_value"],
+                ("yes" if semantic_plan["representation_plan"]["arranged_elements"]
+                 else "no"),
+                ((" Literal alternative rejected because: "
+                  + semantic_plan["representation_plan"]["literal_rejected_reason"])
+                 if semantic_plan["representation_plan"]["literal_rejected_reason"]
+                 else ""),
+                ((" Arrangement evidence job: "
+                  + semantic_plan["representation_plan"]["arrangement_evidence_job"])
+                 if semantic_plan["representation_plan"]["arrangement_evidence_job"]
+                 else ""),
+            ),
         ])
         if semantic_plan["panel_jobs"]:
             sections.append(bullet_section(
@@ -526,8 +588,10 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "nearby empty space. When a callout names multiple structures, branch the leader "
             "or use a quiet bracket that reaches every named member. Never use a vague floating "
             "label or a decorative connector. Any callout over illustrated, photographic, "
-            "textured, or otherwise busy pixels must sit on an opaque white backing plate "
-            "with restrained padding; callouts on quiet white canvas remain unboxed. Use the "
+            "textured, or otherwise busy pixels must first be moved to quiet white canvas "
+            "when that preserves the spatial relationship. An opaque white backing plate "
+            "with restrained padding is fallback-only; callouts on quiet white canvas remain "
+            "unboxed. Use the "
             "same declared house sans-serif family for panels, labels, axes, values, and legends." % (
                 panel_text, annotation_plan["rationale"]))
         if annotation_plan["callouts"]:
@@ -537,7 +601,11 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
                         item["text"], item["target"],
                         ("leader line required" if item["leader_line"]
                          else "direct adjacency; no leader line needed")
-                        + "; backing: " + item["background"])
+                        + "; placement: " + item["placement_priority"]
+                        + "; backing: " + item["background"]
+                        + (("; quiet-canvas rejection: "
+                            + item["quiet_canvas_rejected_reason"])
+                           if item["quiet_canvas_rejected_reason"] else ""))
                     for item in annotation_plan["callouts"]))
     if communication_goal:
         sections.append(
@@ -608,6 +676,14 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             canvas["background"], canvas["aspect"], canvas["margin"],
             canvas["density"]),
         "PALETTE\n%s" % format_palette(profile["palette"]),
+        "VISUAL-LANGUAGE COHERENCE — HARD GATE\n"
+        "Render one authored plate, not an assembly of recognizable assets. Every "
+        "primary and supporting element must share the same abstraction, "
+        "dimensionality, line treatment, perspective, lighting, and material finish. "
+        "Reject glossy stock symbols, emoji-like objects, app pictograms, sticker "
+        "cutouts, and mismatched illustration styles. A circle, badge, card, or frame "
+        "is allowed only when it encodes a declared scientific boundary, group, "
+        "sample, or comparison—never merely to decorate an isolated object.",
         bullet_section("VISUAL LANGUAGE", profile["visual_language"]),
         bullet_section("EDITORIAL ART DIRECTION", profile.get("art_direction", [])),
         bullet_section("CANDIDATE SELECTION STANDARD", profile.get("selection_standard", [])),

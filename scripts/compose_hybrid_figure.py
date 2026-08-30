@@ -30,7 +30,7 @@ from figure_typography import (
 
 ROOT = Path(__file__).resolve().parents[1]
 WRITING_STYLES = ROOT / "references" / "figure-writing-style-overlays.json"
-ITEM_TYPES = {"text", "line", "arrow", "circle", "rectangle"}
+ITEM_TYPES = {"text", "line", "arrow", "circle", "rectangle", "image_region"}
 
 
 class HybridFigureError(ValueError):
@@ -323,6 +323,66 @@ def _draw_rectangle(draw, item: dict[str, Any], canvas: tuple[int, int]) -> None
     )
 
 
+def _draw_image_region(image, item: dict[str, Any], canvas: tuple[int, int],
+                       base_directory: Path) -> dict[str, Any]:
+    """Paste one canonical raster crop with uniform scaling only."""
+    try:
+        from PIL import Image
+    except ImportError as exc:
+        raise HybridFigureError("Pillow is required for identity layers") from exc
+    asset = item.get("asset")
+    identity_key = item.get("identity_key")
+    if not isinstance(asset, str) or not asset.strip():
+        raise HybridFigureError("image_region requires a non-empty asset")
+    if not isinstance(identity_key, str) or not identity_key.strip():
+        raise HybridFigureError("image_region requires a non-empty identity_key")
+    asset_path = Path(asset)
+    if not asset_path.is_absolute():
+        asset_path = base_directory / asset_path
+    asset_path = asset_path.resolve()
+    if not asset_path.is_file():
+        raise HybridFigureError(f"image_region asset does not exist: {asset_path}")
+    source_x = _number(item.get("source_x", 0), "source_x")
+    source_y = _number(item.get("source_y", 0), "source_y")
+    source_width = _number(
+        item.get("source_width", 1), "source_width", minimum=0.001)
+    source_height = _number(
+        item.get("source_height", 1), "source_height", minimum=0.001)
+    if source_x + source_width > 1 or source_y + source_height > 1:
+        raise HybridFigureError("image_region source crop falls outside its asset")
+    destination_x, destination_y = _point(item)
+    scale = _number(item.get("scale", 1), "scale", minimum=0.05, maximum=4.0)
+    with Image.open(asset_path) as source:
+        rgba = source.convert("RGBA")
+    source_box = (
+        round(source_x * rgba.width),
+        round(source_y * rgba.height),
+        round((source_x + source_width) * rgba.width),
+        round((source_y + source_height) * rgba.height),
+    )
+    crop = rgba.crop(source_box)
+    output_size = (
+        max(1, round(crop.width * scale)),
+        max(1, round(crop.height * scale)),
+    )
+    if output_size != crop.size:
+        crop = crop.resize(output_size, Image.Resampling.LANCZOS)
+    left = round(destination_x * canvas[0])
+    top = round(destination_y * canvas[1])
+    if left + crop.width > canvas[0] or top + crop.height > canvas[1]:
+        raise HybridFigureError("image_region destination falls outside the canvas")
+    image.alpha_composite(crop, (left, top))
+    return {
+        "identity_key": identity_key.strip(),
+        "asset": str(asset_path),
+        "asset_sha256": sha256_file(asset_path),
+        "source_box_px": list(source_box),
+        "scale": scale,
+        "destination_box_px": [left, top, left + crop.width, top + crop.height],
+        "anisotropic_resize": False,
+    }
+
+
 def _pixel_variation(image) -> float:
     from PIL import ImageStat
     return float(ImageStat.Stat(image.convert("L")).stddev[0])
@@ -419,6 +479,7 @@ def compose(base_path: str | Path, spec: dict[str, Any], output_path: str | Path
         raise HybridFigureError("writing-style overlay is missing font policy") from exc
     draw = ImageDraw.Draw(image)
     font_records: list[dict[str, Any]] = []
+    identity_layers: list[dict[str, Any]] = []
     opaque_masks: list[tuple[int, int, int, int]] = []
     mask_checks: list[dict[str, Any]] = []
     for index, item in enumerate(items, 1):
@@ -438,10 +499,22 @@ def compose(base_path: str | Path, spec: dict[str, Any], output_path: str | Path
             _draw_line(draw, item, source_size, arrow=True)
         elif kind == "circle":
             _draw_circle(draw, item, source_size)
+        elif kind == "image_region":
+            identity_layers.append(_draw_image_region(
+                image, item, source_size, base_path.parent))
         else:
             _draw_rectangle(draw, item, source_size)
             if _fill_is_opaque(item.get("fill")):
                 opaque_masks.append(_rectangle_bounds(item, source_size))
+
+    identity_counts = Counter(
+        item["identity_key"] for item in identity_layers)
+    singletons = sorted(
+        identity for identity, count in identity_counts.items() if count < 2)
+    if singletons:
+        raise HybridFigureError(
+            "identity image regions must repeat each identity_key at least twice: "
+            + ", ".join(singletons))
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temporary_name = tempfile.mkstemp(
@@ -480,6 +553,8 @@ def compose(base_path: str | Path, spec: dict[str, Any], output_path: str | Path
         "overlay_text_items": len(expected_overlay_text),
         "mask_checks": mask_checks,
         "fonts": font_records,
+        "identity_layers": identity_layers,
+        "identity_keys_verified": sorted(identity_counts),
         "status": "pass",
     }
     if report_path:

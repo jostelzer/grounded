@@ -69,6 +69,7 @@ SCRIPT_FILES = (
     "find_papers.py",
     "format_references.py",
     "grounded_metadata.py",
+    "normalize_figure_canvas.py",
     "qa_deck_pdf.py",
     "qa_figure.py",
     "qa_quantitative_geometry.py",

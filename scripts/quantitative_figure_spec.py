@@ -188,6 +188,21 @@ def _render_config(spec: dict[str, Any], panel_count: int) -> dict[str, Any]:
             f"plot_design.render.plot_insets_px.{side}", 30, 240)
         for side in ("left", "right", "top", "bottom")
     }
+    if spec.get("quality_contract_version") == 3:
+        rows = math.ceil(panel_count / columns)
+        approximate_cell_width = (
+            width - 2 * margin - (columns - 1) * gap) / columns
+        approximate_cell_height = (
+            height - 2 * margin - (rows - 1) * gap) / rows
+        insets.update({
+            # The left gutter carries both a phone-readable vertical axis title
+            # and phone-readable tick labels.  Reserve them independent columns
+            # instead of letting either layer collide with the data region.
+            "left": max(insets["left"], round(approximate_cell_width * 0.22)),
+            "right": max(insets["right"], round(approximate_cell_width * 0.18)),
+            "top": max(insets["top"], round(approximate_cell_height * 0.16)),
+            "bottom": max(insets["bottom"], round(approximate_cell_height * 0.20)),
+        })
     background_override = supplied.get("background_color")
     ink_override = supplied.get("ink_color")
     reference_override = supplied.get("reference_color")
@@ -279,6 +294,9 @@ def _style(spec: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
             overlay.get("canvas", {}), "writing style canvas").get("background") or ""))
         match = HEX_COLOUR.search(description)
         background = match.group(0).upper() if match else "#FFFFFF"
+    if spec.get("quality_contract_version") == 3 and background != "#FFFFFF":
+        raise QuantitativeFigureError(
+            "quality contract v3 requires plot_design.render.background_color #FFFFFF")
     return {
         "review_style": review_style,
         "font_family": family,
@@ -289,7 +307,8 @@ def _style(spec: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _font_set(style: dict[str, Any], width: int, height: int, supersample: int):
+def _font_set(style: dict[str, Any], width: int, height: int, supersample: int,
+              *, mobile_readable: bool = False):
     # Keep physical type size stable across raster widths. The smallest role is
     # 30 px at 1,536 px. Its measured glyph box retains margin above the
     # journal's 6.5 pt final-width floor instead of merely sizing the font face
@@ -312,6 +331,22 @@ def _font_set(style: dict[str, Any], width: int, height: int, supersample: int):
         "value": max(23, round(34 * scale)),
         "note": max(20, round(30 * scale)),
     }
+    if mobile_readable:
+        # Pillow font sizes are nominal em sizes; measured sans-serif glyphs are
+        # about 72% of that height. Derive the native floor from the required
+        # 12 px glyph height at a 390 px phone preview, then keep a shallow role
+        # hierarchy above it.
+        mobile_nominal_floor = math.ceil(
+            (12.0 * width / 390.0) / 0.72)
+        sizes.update({
+            "panel_label": max(sizes["panel_label"], mobile_nominal_floor + 10),
+            "panel_title": max(sizes["panel_title"], mobile_nominal_floor + 8),
+            "axis": max(sizes["axis"], mobile_nominal_floor + 4),
+            "tick": max(sizes["tick"], mobile_nominal_floor),
+            "series": max(sizes["series"], mobile_nominal_floor + 2),
+            "value": max(sizes["value"], mobile_nominal_floor + 6),
+            "note": max(sizes["note"], mobile_nominal_floor),
+        })
     try:
         regular_path = resolve_font_path(style["font_family"], False)
         bold_path = resolve_font_path(style["font_family"], True)
@@ -478,28 +513,49 @@ def _normalize_panels(spec: dict[str, Any]) -> list[dict[str, Any]]:
                     raise QuantitativeFigureError(
                         f"{point_field}.label_position must be one of "
                         + ", ".join(sorted(LABEL_POSITIONS)))
-                interval = point.get("y_interval")
-                normalized_interval = None
-                if interval is not None:
-                    interval = _list(interval, f"{point_field}.y_interval", nonempty=True)
-                    if len(interval) != 2:
+                y_interval = point.get("y_interval")
+                x_interval = point.get("x_interval")
+                if y_interval is not None and x_interval is not None:
+                    raise QuantitativeFigureError(
+                        f"{point_field} cannot declare both x_interval and y_interval")
+                normalized_y_interval = None
+                if y_interval is not None:
+                    y_interval = _list(
+                        y_interval, f"{point_field}.y_interval", nonempty=True)
+                    if len(y_interval) != 2:
                         raise QuantitativeFigureError(
                             f"{point_field}.y_interval must contain [low, high]")
-                    low = _inside(_number(interval[0], f"{point_field}.y_interval[0]"),
+                    low = _inside(_number(y_interval[0], f"{point_field}.y_interval[0]"),
                                   y_domain, f"{point_field}.y_interval[0]")
-                    high = _inside(_number(interval[1], f"{point_field}.y_interval[1]"),
+                    high = _inside(_number(y_interval[1], f"{point_field}.y_interval[1]"),
                                    y_domain, f"{point_field}.y_interval[1]")
                     if not low <= y_value <= high:
                         raise QuantitativeFigureError(
                             f"{point_field}.y_interval must contain the point estimate")
-                    normalized_interval = [low, high]
+                    normalized_y_interval = [low, high]
+                normalized_x_interval = None
+                if x_interval is not None:
+                    x_interval = _list(
+                        x_interval, f"{point_field}.x_interval", nonempty=True)
+                    if len(x_interval) != 2:
+                        raise QuantitativeFigureError(
+                            f"{point_field}.x_interval must contain [low, high]")
+                    low = _inside(_number(x_interval[0], f"{point_field}.x_interval[0]"),
+                                  x_domain, f"{point_field}.x_interval[0]")
+                    high = _inside(_number(x_interval[1], f"{point_field}.x_interval[1]"),
+                                   x_domain, f"{point_field}.x_interval[1]")
+                    if not low <= x_value <= high:
+                        raise QuantitativeFigureError(
+                            f"{point_field}.x_interval must contain the point estimate")
+                    normalized_x_interval = [low, high]
                 normalized_point = {
                     "id": point_id,
                     "x": x_value,
                     "y": y_value,
                     "label": point_label,
                     "label_position": point_label_position,
-                    "y_interval": normalized_interval,
+                    "y_interval": normalized_y_interval,
+                    "x_interval": normalized_x_interval,
                 }
                 points.append(normalized_point)
                 point_lookup[(series_id, point_id)] = normalized_point

@@ -142,6 +142,18 @@ def _resolved_config(spec: dict[str, Any], panel_count: int) -> dict[str, Any]:
     if any(not 30 <= value <= 240 for value in insets.values()):
         raise QuantitativeGeometryQaError(
             "render.plot_insets_px values are outside the supported range")
+    if spec.get("quality_contract_version") == 3:
+        rows = math.ceil(panel_count / columns)
+        approximate_cell_width = (
+            width - 2 * margin - (columns - 1) * gap) / columns
+        approximate_cell_height = (
+            height - 2 * margin - (rows - 1) * gap) / rows
+        insets.update({
+            "left": max(insets["left"], round(approximate_cell_width * 0.22)),
+            "right": max(insets["right"], round(approximate_cell_width * 0.18)),
+            "top": max(insets["top"], round(approximate_cell_height * 0.16)),
+            "bottom": max(insets["bottom"], round(approximate_cell_height * 0.20)),
+        })
     return {
         "width_px": width,
         "height_px": height,
@@ -260,8 +272,10 @@ def _panel_manifest_map(manifest: dict[str, Any], errors: list[str]):
     return _unique_by(manifest.get("panels"), ("id",), "geometry.panels", errors)
 
 
-def _text_boxes_overlap(first: dict[str, float], second: dict[str, float]) -> bool:
-    half_gap = 1.0
+def _text_boxes_overlap(
+    first: dict[str, float], second: dict[str, float], *, gap_px: float,
+) -> bool:
+    half_gap = gap_px / 2
     return (
         min(first["right"] + half_gap, second["right"] + half_gap)
         - max(first["left"] - half_gap, second["left"] - half_gap) > 0
@@ -272,13 +286,16 @@ def _text_boxes_overlap(first: dict[str, float], second: dict[str, float]) -> bo
 
 def _audit_text_layout(
     geometry: dict[str, Any], panel_bounds: dict[str, dict[str, float]],
-    canvas: tuple[int, int], errors: list[str],
+    canvas: tuple[int, int], errors: list[str], *, quality_contract_version: int,
 ) -> int:
     records = geometry.get("text_layout")
     if not isinstance(records, list) or not records:
         errors.append("geometry text_layout must be a non-empty list")
         return 0
     normalized: list[tuple[str, str, dict[str, float]]] = []
+    minimum_gap_px = (
+        canvas[0] * 3.0 / 390.0
+        if quality_contract_version == 3 else 2.0)
     for index, record in enumerate(records):
         field = f"geometry.text_layout[{index}]"
         if not isinstance(record, dict):
@@ -321,9 +338,10 @@ def _audit_text_layout(
         normalized.append((panel_id, text, box))
     for index, (panel_id, text, box) in enumerate(normalized):
         for other_panel, other_text, other_box in normalized[index + 1:]:
-            if panel_id == other_panel and _text_boxes_overlap(box, other_box):
+            if panel_id == other_panel and _text_boxes_overlap(
+                    box, other_box, gap_px=minimum_gap_px):
                 errors.append(
-                    f"geometry text collision in panel {panel_id}: "
+                    f"geometry text collision or sub-3px mobile clearance in panel {panel_id}: "
                     f"{text!r} overlaps {other_text!r}")
     rendered_text = geometry.get("rendered_text")
     if isinstance(rendered_text, list):
@@ -527,9 +545,16 @@ def audit_geometry(
                 else:
                     marks_probed += 1
                 points_verified += 1
-                interval = point.get("y_interval")
+                y_interval = point.get("y_interval")
+                x_interval = point.get("x_interval")
+                if y_interval is not None and x_interval is not None:
+                    errors.append(
+                        f"point {series_id}/{point_id} declares both x_interval and y_interval")
+                interval = y_interval if y_interval is not None else x_interval
+                interval_axis = "y" if y_interval is not None else "x"
                 if interval is not None:
-                    interval = _items(interval, "point.y_interval", nonempty=True)
+                    interval = _items(
+                        interval, f"point.{interval_axis}_interval", nonempty=True)
                     low, high = _number(interval[0], "interval.low"), _number(
                         interval[1], "interval.high")
                     expected_intervals.add(key)
@@ -538,22 +563,42 @@ def audit_geometry(
                         errors.append(
                             f"panel {panel_id} is missing interval {series_id}/{point_id}")
                     else:
-                        low_y, high_y = (
-                            _y_pixel(low, y_domain, box),
-                            _y_pixel(high, y_domain, box),
-                        )
+                        recorded_axis = interval_record.get("axis")
+                        if recorded_axis is not None and recorded_axis != interval_axis:
+                            errors.append(
+                                f"interval {series_id}/{point_id} axis does not match the spec")
                         _same_value(interval_record.get("low_value"), low,
                                     f"interval {series_id}/{point_id} low_value", errors)
                         _same_value(interval_record.get("high_value"), high,
                                     f"interval {series_id}/{point_id} high_value", errors)
-                        _close(interval_record.get("x_px"), x_px,
-                               f"interval {series_id}/{point_id} x_px", errors)
-                        _close(interval_record.get("low_y_px"), low_y,
-                               f"interval {series_id}/{point_id} low_y_px", errors)
-                        _close(interval_record.get("high_y_px"), high_y,
-                               f"interval {series_id}/{point_id} high_y_px", errors)
-                        for label, endpoint in (("low", low_y), ("high", high_y)):
-                            if not _has_colour_near(image, x_px, endpoint, colour, radius=12):
+                        if interval_axis == "y":
+                            low_y, high_y = (
+                                _y_pixel(low, y_domain, box),
+                                _y_pixel(high, y_domain, box),
+                            )
+                            _close(interval_record.get("x_px"), x_px,
+                                   f"interval {series_id}/{point_id} x_px", errors)
+                            _close(interval_record.get("low_y_px"), low_y,
+                                   f"interval {series_id}/{point_id} low_y_px", errors)
+                            _close(interval_record.get("high_y_px"), high_y,
+                                   f"interval {series_id}/{point_id} high_y_px", errors)
+                            endpoints = ((x_px, low_y), (x_px, high_y))
+                        else:
+                            low_x, high_x = (
+                                _x_pixel(low, x_domain, box),
+                                _x_pixel(high, x_domain, box),
+                            )
+                            _close(interval_record.get("y_px"), y_px,
+                                   f"interval {series_id}/{point_id} y_px", errors)
+                            _close(interval_record.get("low_x_px"), low_x,
+                                   f"interval {series_id}/{point_id} low_x_px", errors)
+                            _close(interval_record.get("high_x_px"), high_x,
+                                   f"interval {series_id}/{point_id} high_x_px", errors)
+                            endpoints = ((low_x, y_px), (high_x, y_px))
+                        for label, (endpoint_x, endpoint_y) in zip(
+                                ("low", "high"), endpoints):
+                            if not _has_colour_near(
+                                    image, endpoint_x, endpoint_y, colour, radius=12):
                                 errors.append(
                                     f"raster is missing {label} interval cap for "
                                     f"{series_id}/{point_id}")
@@ -675,7 +720,8 @@ def audit_geometry(
     for unexpected in set(panel_records) - expected_panel_ids:
         errors.append(f"geometry has unexpected panel {unexpected[0]}")
     text_boxes_verified = _audit_text_layout(
-        geometry, panel_text_bounds, image.size, errors)
+        geometry, panel_text_bounds, image.size, errors,
+        quality_contract_version=int(spec.get("quality_contract_version", 1)))
     return {
         "status": "pass" if not errors else "fail",
         "errors": errors,

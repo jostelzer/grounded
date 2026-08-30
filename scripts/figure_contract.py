@@ -25,6 +25,13 @@ CONNECTOR_MEANINGS = {
 }
 CALLOUT_BACKGROUNDS = {"opaque-white", "quiet-canvas"}
 CONTENT_DENSITIES = {"sparse", "moderate", "dense"}
+REPRESENTATION_KINDS = {"literal", "metaphor-assisted"}
+ABSOLUTE_WHITE = "#FFFFFF"
+MOBILE_PREVIEW_WIDTH_PX = 390
+MINIMUM_MOBILE_LABEL_HEIGHT_PX = 12.0
+GENERATED_MOBILE_PRIMARY_MAX_WORDS = 4
+GENERATED_MOBILE_PRIMARY_MAX_CHARACTERS = 28
+GENERATED_MOBILE_PRIMARY_COMPOUND_PUNCTUATION = ":;()/"
 
 
 def inferred_render_route(spec, archetype_name):
@@ -143,6 +150,53 @@ def validate_layout_plan(spec):
         raise ValueError(
             "a sparse figure wider than 1.75:1 must prove horizontal topology "
             "with layout_plan.wide_canvas_required=true")
+    mobile = _required_object(
+        plan.get("mobile_preview"), "layout_plan.mobile_preview")
+    preview_width = mobile.get("width_px")
+    if preview_width != MOBILE_PREVIEW_WIDTH_PX:
+        raise ValueError(
+            "layout_plan.mobile_preview.width_px must be %d"
+            % MOBILE_PREVIEW_WIDTH_PX)
+    raw_minimum = mobile.get("minimum_label_height_px")
+    if isinstance(raw_minimum, bool):
+        raise ValueError(
+            "layout_plan.mobile_preview.minimum_label_height_px must be numeric")
+    try:
+        mobile_minimum = float(raw_minimum)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "layout_plan.mobile_preview.minimum_label_height_px must be numeric") from exc
+    if mobile_minimum < MINIMUM_MOBILE_LABEL_HEIGHT_PX:
+        raise ValueError(
+            "layout_plan.mobile_preview.minimum_label_height_px must be at least %.1f"
+            % MINIMUM_MOBILE_LABEL_HEIGHT_PX)
+    primary_labels = _nested_string_list(
+        mobile.get("primary_labels"),
+        "layout_plan.mobile_preview.primary_labels", nonempty=True)
+    if len(primary_labels) > 5:
+        raise ValueError(
+            "layout_plan.mobile_preview.primary_labels may contain at most five labels")
+    if spec.get("render_route") == "generated":
+        for label in primary_labels:
+            if (
+                len(label.split()) > GENERATED_MOBILE_PRIMARY_MAX_WORDS
+                or len(label) > GENERATED_MOBILE_PRIMARY_MAX_CHARACTERS
+            ):
+                raise ValueError(
+                    "generated mobile primary labels must use at most four words "
+                    "and 28 characters; shorten the label and move detail to the caption")
+            if any(mark in label for mark in
+                   GENERATED_MOBILE_PRIMARY_COMPOUND_PUNCTUATION):
+                raise ValueError(
+                    "generated mobile primary labels must express one idea without "
+                    "colon, semicolon, parentheses, or slash; move qualification to "
+                    "the caption")
+    first_glance_path = _nested_string_list(
+        mobile.get("first_glance_path"),
+        "layout_plan.mobile_preview.first_glance_path", nonempty=True)
+    if len(first_glance_path) > 5:
+        raise ValueError(
+            "layout_plan.mobile_preview.first_glance_path may contain at most five steps")
     return {
         "content_density": density,
         "wide_canvas_required": wide_required,
@@ -153,6 +207,15 @@ def validate_layout_plan(spec):
             plan.get("balance_strategy"), "layout_plan.balance_strategy"),
         "final_display": _required_nested_string(
             plan.get("final_display"), "layout_plan.final_display"),
+        "mobile_preview": {
+            "width_px": preview_width,
+            "minimum_label_height_px": mobile_minimum,
+            "primary_labels": primary_labels,
+            "first_glance_path": first_glance_path,
+            "explain_back_without_zoom": _required_nested_string(
+                mobile.get("explain_back_without_zoom"),
+                "layout_plan.mobile_preview.explain_back_without_zoom"),
+        },
     }
 
 
@@ -416,6 +479,62 @@ def validate_semantic_plan(spec, annotation_plan):
             "semantic_plan.quantitative_decision.reason"),
     }
 
+    representation = _required_object(
+        plan.get("representation_plan"), "semantic_plan.representation_plan")
+    representation_kind = _required_nested_string(
+        representation.get("kind"), "semantic_plan.representation_plan.kind")
+    if representation_kind not in REPRESENTATION_KINDS:
+        raise ValueError(
+            "semantic_plan.representation_plan.kind must be one of: %s"
+            % ", ".join(sorted(REPRESENTATION_KINDS)))
+    translation_steps = representation.get("cognitive_translation_steps")
+    if not isinstance(translation_steps, int) or isinstance(translation_steps, bool):
+        raise ValueError(
+            "semantic_plan.representation_plan.cognitive_translation_steps must be an integer")
+    if not 0 <= translation_steps <= 1:
+        raise ValueError(
+            "semantic_plan.representation_plan permits at most one cognitive translation step")
+    literal_rejected_reason = representation.get("literal_rejected_reason")
+    if representation_kind == "literal":
+        if translation_steps != 0:
+            raise ValueError(
+                "literal representation must use zero cognitive translation steps")
+        if literal_rejected_reason not in (None, ""):
+            raise ValueError(
+                "literal_rejected_reason is only valid for metaphor-assisted representation")
+        literal_rejected_reason = None
+    else:
+        literal_rejected_reason = _required_nested_string(
+            literal_rejected_reason,
+            "semantic_plan.representation_plan.literal_rejected_reason")
+    arranged_elements = representation.get("arranged_elements")
+    if not isinstance(arranged_elements, bool):
+        raise ValueError(
+            "semantic_plan.representation_plan.arranged_elements must be boolean")
+    arrangement_evidence_job = representation.get("arrangement_evidence_job")
+    if arranged_elements:
+        arrangement_evidence_job = _required_nested_string(
+            arrangement_evidence_job,
+            "semantic_plan.representation_plan.arrangement_evidence_job")
+    elif arrangement_evidence_job not in (None, ""):
+        raise ValueError(
+            "arrangement_evidence_job is only valid when arranged_elements=true")
+    else:
+        arrangement_evidence_job = None
+    normalized_representation = {
+        "kind": representation_kind,
+        "evidence_native_anchor": _required_nested_string(
+            representation.get("evidence_native_anchor"),
+            "semantic_plan.representation_plan.evidence_native_anchor"),
+        "cognitive_translation_steps": translation_steps,
+        "literal_rejected_reason": literal_rejected_reason,
+        "added_explanatory_value": _required_nested_string(
+            representation.get("added_explanatory_value"),
+            "semantic_plan.representation_plan.added_explanatory_value"),
+        "arranged_elements": arranged_elements,
+        "arrangement_evidence_job": arrangement_evidence_job,
+    }
+
     if spec.get("render_route") in {"deterministic", "composite"}:
         plot_design = _required_object(spec.get("plot_design"), "plot_design")
         typography = _required_object(
@@ -444,6 +563,7 @@ def validate_semantic_plan(spec, annotation_plan):
         "uncertainty_encodings": normalized_uncertainties,
         "cross_view_identity": normalized_cross_view,
         "quantitative_decision": normalized_quantitative,
+        "representation_plan": normalized_representation,
     }
 
 
@@ -689,13 +809,38 @@ def validate_annotation_plan(spec, rendered_text):
                 raise ValueError(
                     "annotation callout background must be one of: %s"
                     % ", ".join(sorted(CALLOUT_BACKGROUNDS)))
+            placement_priority = _required_nested_string(
+                callout.get("placement_priority"),
+                "annotation_plan.callouts[%d].placement_priority" % index)
+            if placement_priority != "quiet-canvas-first":
+                raise ValueError(
+                    "v3 annotation callouts must set placement_priority="
+                    "quiet-canvas-first")
+            quiet_canvas_rejected_reason = callout.get(
+                "quiet_canvas_rejected_reason")
+            if background == "opaque-white":
+                quiet_canvas_rejected_reason = _required_nested_string(
+                    quiet_canvas_rejected_reason,
+                    "annotation_plan.callouts[%d].quiet_canvas_rejected_reason"
+                    % index)
+            elif quiet_canvas_rejected_reason not in (None, ""):
+                raise ValueError(
+                    "quiet_canvas_rejected_reason is only valid for an opaque-white "
+                    "fallback")
         elif background is None:
             background = "quiet-canvas"
+            placement_priority = "quiet-canvas-first"
+            quiet_canvas_rejected_reason = None
+        else:
+            placement_priority = "quiet-canvas-first"
+            quiet_canvas_rejected_reason = None
         normalized_callouts.append({
             "text": text,
             "target": target,
             "leader_line": leader_line,
             "background": background,
+            "placement_priority": placement_priority,
+            "quiet_canvas_rejected_reason": quiet_canvas_rejected_reason,
         })
     rationale = _required_nested_string(
         plan.get("rationale"), "annotation_plan.rationale")

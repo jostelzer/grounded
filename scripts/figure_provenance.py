@@ -93,25 +93,56 @@ def validate_provenance(
                 "comparison.candidates_compared exceeds recorded generated candidates")
 
     if route == "hybrid":
-        if provenance.get("direct_text_attempted") is not True:
-            errors.append("hybrid fallback requires direct_text_attempted=true")
-        if not any(item.get("text_mode") == "direct" for item in generate_attempts):
-            errors.append("hybrid fallback requires a direct-text generate attempt")
         if not str(provenance.get("fallback_reason") or "").strip():
             errors.append("hybrid fallback requires a concrete fallback_reason")
-        if len(generate_attempts) < 2 and not edit_attempts:
-            errors.append(
-                "hybrid fallback requires a targeted edit or a second generated candidate")
         hybrid = provenance.get("hybrid")
+        fallback_mode = None
         if not isinstance(hybrid, dict):
             errors.append("hybrid route requires hybrid composition provenance")
         else:
+            fallback_mode = hybrid.get("fallback_mode")
+            if fallback_mode is None and contract_version in {1, 2}:
+                fallback_mode = "typography-repair"
+            if fallback_mode not in {
+                    "typography-repair", "identity-preserving-composition"}:
+                errors.append(
+                    "hybrid provenance requires fallback_mode typography-repair "
+                    "or identity-preserving-composition")
             if not str(hybrid.get("compositor") or "").strip():
                 errors.append("hybrid provenance requires a compositor")
             if not str(hybrid.get("base_asset") or "").strip():
                 errors.append("hybrid provenance requires a base_asset")
             if hybrid.get("anisotropic_resize") is not False:
                 errors.append("hybrid composition must prove anisotropic_resize=false")
+        if fallback_mode == "typography-repair":
+            if provenance.get("direct_text_attempted") is not True:
+                errors.append("hybrid fallback requires direct_text_attempted=true")
+            if not any(item.get("text_mode") == "direct" for item in generate_attempts):
+                errors.append("hybrid fallback requires a direct-text generate attempt")
+            if len(generate_attempts) < 2 and not edit_attempts:
+                errors.append(
+                    "hybrid fallback requires a targeted edit or a second generated candidate")
+        elif fallback_mode == "identity-preserving-composition":
+            cross_view = (
+                spec.get("semantic_plan", {}).get("cross_view_identity", [])
+                if isinstance(spec.get("semantic_plan"), dict) else [])
+            if contract_version != 3 or not cross_view:
+                errors.append(
+                    "identity-preserving hybrid requires v3 declared cross_view_identity")
+            if not any(item.get("text_mode") == "none" for item in generate_attempts):
+                errors.append(
+                    "identity-preserving hybrid requires a text-free generated canonical asset")
+            if len(generate_attempts) < 2 and not edit_attempts:
+                errors.append(
+                    "identity-preserving hybrid requires evidence that whole-image generation "
+                    "or targeted editing failed the identity invariant")
+            if isinstance(hybrid, dict):
+                if hybrid.get("generated_asset_text_free") is not True:
+                    errors.append(
+                        "identity-preserving hybrid must prove generated_asset_text_free=true")
+                if hybrid.get("identity_geometry_deterministic") is not True:
+                    errors.append(
+                        "identity-preserving hybrid must prove identity_geometry_deterministic=true")
         if not compose_attempts:
             errors.append("hybrid route requires a compose attempt")
 
@@ -154,8 +185,6 @@ def validate_provenance(
 
     if contract_version in {2, 3}:
         archetype = spec.get("archetype")
-        if route == "hybrid":
-            errors.append("communication-first contracts do not permit hybrid illustrations")
         if archetype == "quantitative":
             if route not in {"deterministic", "composite"}:
                 errors.append(
@@ -167,6 +196,17 @@ def validate_provenance(
             if route == "composite" and not compose_attempts:
                 errors.append(
                     "communication-first composite plots require a compose attempt")
+        elif route == "hybrid":
+            fallback_mode = (
+                provenance.get("hybrid", {}).get("fallback_mode")
+                if isinstance(provenance.get("hybrid"), dict) else None)
+            if not (
+                contract_version == 3
+                and fallback_mode == "identity-preserving-composition"
+            ):
+                errors.append(
+                    "communication-first non-quantitative hybrid is permitted only "
+                    "for a v3 identity-preserving composition fallback")
         elif route != "generated":
             errors.append(
                 "communication-first non-quantitative figures require image generation")

@@ -117,9 +117,9 @@ class HybridCompositorTests(unittest.TestCase):
             out = Path(tmp) / "final.png"
             result = compose_hybrid_figure.compose(base, self.spec(), out)
             self.assertTrue(result["alpha_composited"])
-            self.assertEqual(result["background_color"], "#FBFAF6")
+            self.assertEqual(result["background_color"], "#FFFFFF")
             with Image.open(out).convert("RGB") as image:
-                self.assertEqual(image.getpixel((0, 0)), (251, 250, 246))
+                self.assertEqual(image.getpixel((0, 0)), (255, 255, 255))
 
     def test_unmasked_text_is_refused_even_in_apparently_quiet_space(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -188,6 +188,60 @@ class HybridCompositorTests(unittest.TestCase):
                     "background must be an opaque hex colour"):
                 compose_hybrid_figure.compose(
                     base, spec, Path(tmp) / "final.png")
+
+    def test_identity_regions_repeat_one_canonical_crop_without_stretching(self):
+        from PIL import Image, ImageDraw
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            base = root / "base.png"
+            canonical = root / "canonical.png"
+            out = root / "final.png"
+            self.make_base(base)
+            asset = Image.new("RGBA", (80, 60), (0, 0, 0, 0))
+            draw = ImageDraw.Draw(asset)
+            draw.polygon([(5, 55), (40, 5), (75, 55)], fill="#008C8CFF")
+            asset.save(canonical)
+            spec = self.spec()
+            spec["overlay"]["items"][:0] = [
+                {"type": "image_region", "asset": "canonical.png",
+                 "identity_key": "specimen-1", "x": 0.08, "y": 0.08},
+                {"type": "image_region", "asset": "canonical.png",
+                 "identity_key": "specimen-1", "x": 0.38, "y": 0.08},
+            ]
+            result = compose_hybrid_figure.compose(base, spec, out)
+            self.assertEqual(result["identity_keys_verified"], ["specimen-1"])
+            self.assertEqual(len(result["identity_layers"]), 2)
+            first, second = result["identity_layers"]
+            self.assertEqual(first["asset_sha256"], second["asset_sha256"])
+            self.assertEqual(first["source_box_px"], second["source_box_px"])
+            self.assertEqual(first["scale"], second["scale"])
+            self.assertFalse(first["anisotropic_resize"])
+            with Image.open(out).convert("RGB") as final:
+                first_box = tuple(first["destination_box_px"])
+                second_box = tuple(second["destination_box_px"])
+                self.assertEqual(
+                    final.crop(first_box).tobytes(),
+                    final.crop(second_box).tobytes())
+
+    def test_identity_region_key_must_actually_repeat(self):
+        from PIL import Image
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            base = root / "base.png"
+            canonical = root / "canonical.png"
+            self.make_base(base)
+            Image.new("RGBA", (40, 40), "#008C8CFF").save(canonical)
+            spec = self.spec()
+            spec["overlay"]["items"].insert(0, {
+                "type": "image_region", "asset": "canonical.png",
+                "identity_key": "singleton", "x": 0.1, "y": 0.1,
+            })
+            with self.assertRaisesRegex(
+                    compose_hybrid_figure.HybridFigureError,
+                    "repeat each identity_key"):
+                compose_hybrid_figure.compose(base, spec, root / "final.png")
 
 
 if __name__ == "__main__":

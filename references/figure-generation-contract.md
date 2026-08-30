@@ -158,6 +158,12 @@ Every v3 figure declares a `semantic_plan` before layout:
   membership, geometry, or other invariant features must remain registered
   across thresholds, filters, or states. Only the declared transformation may
   change.
+- `representation_plan` declares whether the visual is literal or
+  metaphor-assisted, names its evidence-native anchor, allows at most one
+  cognitive translation step, and requires a reason when the literal option is
+  rejected. It also declares whether objects are arranged as a lineup or set;
+  such an arrangement is valid only when it performs a named evidence-encoding
+  job rather than serving as presentation furniture.
 - `anatomical_context` is required for every anatomical subject. It names the
   orientation landmarks and focal region that must survive simplification so a
   reader can locate the finding and understand where an instrument or mechanism
@@ -179,7 +185,10 @@ single composition may use no panels or callouts, but the rationale must say why
 Each callout also declares `background: opaque-white` when its text occupies
 illustrated, photographic, textured, or otherwise busy pixels, or
 `background: quiet-canvas` when clean white space already provides contrast.
-Opaque plates use restrained padding and never become decorative cards.
+Every callout sets `placement_priority: quiet-canvas-first`. An opaque plate is
+fallback-only: it also records why moving the label to quiet canvas would break
+the spatial relationship to its referent. Opaque plates use restrained padding
+and never become decorative cards.
 
 ## 5c. Fit the canvas to the information
 
@@ -193,6 +202,22 @@ horizontal sequence, several aligned panels, or dense categorical coverage.
 Inspect the full composition for optical centring, panel-weight balance, and
 dead space at native and final size. Passing a numeric aspect-ratio check does
 not rescue a lopsided or padded composition.
+
+The canvas is exact `#FFFFFF` in scientific, popsci, bullets, and ELI5 figures.
+Colour belongs to evidence-bearing objects, never to a full-page tint or paper
+texture. The layout plan also declares a 390 px phone preview, its primary
+labels, a first-glance path of at most five steps, a 12 px minimum rendered
+label height, and the explain-back sentence that must remain reconstructable
+without zoom. Inspect that preview as a separate release view; a large native
+raster does not rescue a figure that becomes cognitively opaque on a phone.
+For a generated figure, each primary phone label is at most four words and 28
+characters. Shorten the label rather than letting ImageGen shrink the whole
+type system; supporting detail belongs in the caption.
+For a generated asset whose only defect is an edge-connected near-white paper
+tint, `scripts/normalize_figure_canvas.py` may flatten alpha and normalize that
+paper to exact white. It must not erase content: any non-white content remaining
+inside the five-percent safety band is a composition failure and requires
+re-layout or regeneration.
 
 ## 5d. Apply physical and perceptual integrity gates
 
@@ -215,6 +240,12 @@ landmarks still locate the focal region unambiguously. When the same specimen
 appears in several views, compare registered features directly and reject any
 unexplained identity drift.
 
+Prefer a literal, evidence-native representation. A metaphor, tactile motif,
+or arranged-object composition is acceptable only when it shortens the reader's
+path from pixels to evidence. If the reader must first decode the visual device
+and then translate it back into the scientific relationship, the representation
+fails even when it is attractive.
+
 ## 5e. Bind quantitative semantics to their marks
 
 Every v3 deterministic figure declares `plot_design.axis_semantics` for every
@@ -231,6 +262,9 @@ must sit on, beside, or connect directly to the mark it describes. An interval
 key is omitted for a conventional point-and-whisker encoding when the caption
 already explains it. Add a compact legend only when two or more non-standard
 encodings genuinely require decoding; state why in `plot_design.legend_plan`.
+A forest plot encodes each confidence interval with the point's native
+`x_interval`; a vertical point-and-whisker plot uses `y_interval`. Do not fake
+an interval as a three-point trajectory merely to obtain a horizontal line.
 A contrast interval is
 attached to the contrast bracket or endpoint comparison it qualifies, never
 placed halfway along unrelated trajectories. Direct labels may replace a
@@ -261,6 +295,51 @@ For a generated conceptual figure:
    issues, and `decision: accept`.
 7. Compare candidates only when several exist. Never select a cheaper or more
    generic result merely because its text is easier to OCR.
+
+The selected image must also read as one authored plate. All scientific objects
+share a consistent level of abstraction, dimensionality, line treatment,
+perspective, lighting, and material finish. Reject a candidate when its meaning
+is assembled from glossy stock symbols, emoji-like objects, app pictograms,
+sticker-like cutouts, or other visibly mismatched assets. A circle, badge, card,
+or frame must encode a declared scientific boundary or grouping; it cannot be
+used simply to make an isolated object feel diagrammatic. This is a release
+gate under both `style_fit` and `polish`, not a subjective preference.
+
+Primary labels are phone-first wayfinding, not miniature captions. Each names
+one visible state, change, comparison, or conclusion in one short phrase.
+Compound prose, stacked qualifiers, and policy wording that requires multiple
+clauses belong in the external caption. Place the label directly on existing
+white canvas whenever possible. A white backing over artwork remains a
+documented fallback, never a default label style.
+
+For deterministic and composite figures, data marks remain more visually
+salient than labels. Direct annotations keep a clear gap from points,
+trajectories, axes, and one another, and no label crosses a data line. A stated
+interval is rendered as an attached whisker, band, bracket, or equivalent
+graphical extent rather than the words `95% CI` floating beside a point. When
+the 390 px type floor would crowd the evidence, shorten copy or change
+topology/aspect ratio instead of inflating annotations inside the same plot.
+Independent text boxes retain at least 3 px of clear separation in the
+proportional 390 px preview; near-touching type is treated as a collision.
+
+When a qualitative explanation depends on exact cross-view identity, whole-image
+generation may be unable to preserve the same specimen, membership, and
+geometry across repeated views. After at least two generated candidates or a
+generated candidate plus targeted edit fail that declared invariant, v3 may use
+the narrow `identity-preserving-composition` hybrid fallback. Generate one
+text-free canonical asset, then duplicate, mask, register, connect, and typeset
+it deterministically. Provenance must prove a declared `cross_view_identity`,
+text-free generated source, deterministic identity geometry, preserved aspect
+ratio, and every rejected attempt. This does not license hand-drawn substitute
+illustrations or deterministic rendering merely for convenience.
+
+The shared hybrid compositor represents each repeated canonical crop as an
+`image_region` overlay item. It requires `asset` and `identity_key`, normalized
+`source_x`, `source_y`, `source_width`, and `source_height`, normalized
+destination `x` and `y`, and one uniform `scale`. The same `identity_key` must
+occur at least twice. Its composition report records the resolved asset hash,
+source crop, destination box, scale, and `anisotropic_resize: false`; release
+QA rejects a missing identity repeat or any non-uniform resize.
 
 Never ship a technically valid result when it is compositionally weak.
 Do not endlessly polish an unsupported or scientifically incorrect image;
@@ -329,6 +408,9 @@ A figure is releasable only when all of the following are true:
   optically centred and balanced rather than padded to page width;
 - callouts over busy pixels have opaque white backing and every typographic role
   uses one consistent natural-width house sans-serif family;
+- the outer canvas is exact `#FFFFFF`, and the 390 px phone preview preserves
+  readable primary labels, the declared first-glance path, and the explain-back
+  sentence without zoom;
 - deterministic and composite figures label every plotted construct and attach intervals and
   numeric annotations directly to their graphical referents, while captions
   repeat the x- and y-axis meanings;

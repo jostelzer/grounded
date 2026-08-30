@@ -54,7 +54,14 @@ rather than retaining them as rendered copy:
     "wide_canvas_required": false,
     "aspect_ratio_rationale": "<why this topology earns the ratio>",
     "balance_strategy": "<how optical weight is centered>",
-    "final_display": "<intended delivered size>"
+    "final_display": "<intended delivered size>",
+    "mobile_preview": {
+      "width_px": 390,
+      "minimum_label_height_px": 12,
+      "primary_labels": ["<up to five first-glance labels>"],
+      "first_glance_path": ["<up to five ordered steps>"],
+      "explain_back_without_zoom": "<what remains clear on a phone>"
+    }
   },
   "concepts": [
     {
@@ -128,6 +135,15 @@ rather than retaining them as rendered copy:
     "information_priority": {},
     "uncertainty_encodings": [],
     "cross_view_identity": [],
+    "representation_plan": {
+      "kind": "<literal|metaphor-assisted>",
+      "evidence_native_anchor": "<literal scientific structure>",
+      "cognitive_translation_steps": 0,
+      "literal_rejected_reason": null,
+      "added_explanatory_value": "<why this is the shortest route to the evidence>",
+      "arranged_elements": false,
+      "arrangement_evidence_job": null
+    },
     "quantitative_decision": {
       "verified_numbers_available": false,
       "numbers_carry_primary_message": false,
@@ -151,6 +167,23 @@ structured `data` plus `plot_design`. Composite figures additionally supply
   qualifiers, panel letters, and callout copy.
 - `target_aspect_ratio` follows content topology. A sparse wide canvas requires
   an explicit horizontal-topology justification.
+- every writing style uses an exact `#FFFFFF` canvas; warm art direction colours
+  objects, never the page background.
+- `layout_plan.mobile_preview` fixes a 390 px release view, no-zoom label floor,
+  compact first-glance path, and explain-back check.
+- generated primary phone labels use at most four words and 28 characters;
+  preserve nuance in the caption instead of shrinking the figure's type.
+- each primary label carries one visible state, change, comparison, or
+  conclusion; compound policy prose and stacked qualifiers belong in the
+  caption. Put labels on natural exact-white canvas before considering a
+  backed callout.
+- every object shares one authored visual language across abstraction,
+  dimensionality, line treatment, perspective, lighting, and material finish.
+  Reject glossy stock-symbol, emoji, app-pictogram, sticker, or decorative-badge
+  assemblies even when the component objects are recognizable.
+- merge redundant plot copy before rendering: a direct series label may carry
+  its principal value, while detail that is not needed for first-glance decoding
+  belongs in the caption rather than in a second floating label.
 - `visual_anchor` is required for non-quantitative figures and names a concrete
   domain-native focal structure.
 - `semantic_plan` declares every meaningful object, connector, panel job,
@@ -191,7 +224,11 @@ structured `data` plus `plot_design`. Composite figures additionally supply
   boundary.
 - Use sequential A–D panel labels where sections are genuinely distinct.
   Callouts sit beside their referents, use thin leaders when adjacency is
-  ambiguous, and receive opaque white backing over busy pixels.
+  ambiguous, and first seek quiet white canvas. Opaque white backing over busy
+  pixels is fallback-only and requires a spatial justification.
+- Prefer evidence-native representation. Reject a metaphor or arranged-object
+  treatment when it adds a decoding step that a literal scientific structure
+  would avoid.
 - Use one natural-width house sans-serif family. Fit copy by editing, wrapping,
   or moving it—never by condensing, shearing, or stretching type.
 - Keep exact numerical evidence in structured `data`. Generated pixels never

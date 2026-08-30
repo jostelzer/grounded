@@ -142,6 +142,23 @@ def _required_number(value: Any, field: str, *, minimum: float,
     return result
 
 
+def _outer_frame_exact_white_share(image) -> float:
+    """Measure exact #FFFFFF paper on the clear five-percent safety band."""
+    rgb = image.convert("RGB")
+    width, height = rgb.size
+    band = max(1, round(min(width, height) * 0.05))
+    pixels = rgb.load()
+    total = 0
+    white = 0
+    for y in range(height):
+        for x in range(width):
+            if x < band or x >= width - band or y < band or y >= height - band:
+                total += 1
+                if pixels[x, y] == (255, 255, 255):
+                    white += 1
+    return white / total if total else 0.0
+
+
 def audit_figure(
     spec: dict[str, Any], image_path: str | Path, *,
     inspection: dict[str, Any] | None = None,
@@ -155,13 +172,17 @@ def audit_figure(
     path = Path(image_path)
     with Image.open(path) as image:
         width, height = image.size
+        alpha_minimum = 255
         if image.mode in {"RGBA", "LA"} or "transparency" in image.info:
             rgba = image.convert("RGBA")
+            alpha_minimum = rgba.getchannel("A").getextrema()[0]
             flattened = Image.new("RGBA", rgba.size, "white")
             flattened.alpha_composite(rgba)
-            grey = flattened.convert("L")
+            rgb = flattened.convert("RGB")
         else:
-            grey = image.convert("L")
+            rgb = image.convert("RGB")
+        grey = rgb.convert("L")
+        outer_frame_white_share = _outer_frame_exact_white_share(rgb)
         from PIL import ImageStat
         pixel_stddev = float(ImageStat.Stat(grey).stddev[0])
         pixel_extrema = list(grey.getextrema())
@@ -202,9 +223,17 @@ def audit_figure(
                     "communication-first quantitative plots require verified structured data")
         else:
             figure_contract.validate_concept_plan(spec)
-            if spec.get("render_route") != "generated":
+            raw_semantic = spec.get("semantic_plan")
+            identity_hybrid = (
+                contract_version == 3
+                and spec.get("render_route") == "hybrid"
+                and isinstance(raw_semantic, dict)
+                and bool(raw_semantic.get("cross_view_identity"))
+            )
+            if spec.get("render_route") != "generated" and not identity_hybrid:
                 errors.append(
-                    "communication-first non-quantitative figures require image generation")
+                    "communication-first non-quantitative figures require image generation; "
+                    "v3 permits hybrid only for declared cross-view identity preservation")
             if spec.get("data") is not None:
                 errors.append(
                     "known numbers that carry the figure belong in a quantitative deterministic plot")
@@ -224,6 +253,22 @@ def audit_figure(
             semantic_plan = figure_contract.validate_semantic_plan(
                 spec, annotation_plan)
             layout_plan = figure_contract.validate_layout_plan(spec)
+            missing_mobile_labels = [
+                item for item in layout_plan["mobile_preview"]["primary_labels"]
+                if item not in expected_pixel_text(spec)
+            ]
+            if missing_mobile_labels:
+                errors.append(
+                    "mobile primary labels are absent from rendered exact_text: %s"
+                    % ", ".join(missing_mobile_labels))
+            if alpha_minimum < 255:
+                errors.append(
+                    "quality contract v3 requires an opaque canvas; transparent pixels are forbidden")
+            if outer_frame_white_share != 1.0:
+                errors.append(
+                    "outer figure canvas is not exact #FFFFFF "
+                    f"({outer_frame_white_share:.3%} exact-white safety-band pixels; "
+                    "required 100%)")
     if pixel_stddev < 2.0:
         errors.append(
             f"figure is blank or near-blank (pixel standard deviation {pixel_stddev:.2f})")
@@ -434,6 +479,38 @@ def audit_figure(
         if communication.get("revision_needed") is not False:
             errors.append(
                 "selected figure communication inspection must set revision_needed=false")
+        if contract_version == 3:
+            mobile_observed = inspection.get("mobile_preview")
+            if not isinstance(mobile_observed, dict):
+                errors.append(
+                    "quality contract v3 inspection requires mobile_preview")
+                mobile_observed = {}
+            mobile_planned = layout_plan["mobile_preview"]
+            if mobile_observed.get("width_px") != mobile_planned["width_px"]:
+                errors.append(
+                    "mobile inspection must use the planned 390 px preview width")
+            readable = mobile_observed.get("readable_primary_labels")
+            if not isinstance(readable, list):
+                errors.append(
+                    "mobile inspection requires readable_primary_labels list")
+                readable = []
+            for label in mobile_planned["primary_labels"]:
+                if label not in readable:
+                    errors.append(
+                        f"mobile inspection did not confirm readable primary label: {label}")
+            mobile_flow = mobile_observed.get("observed_first_glance_path")
+            if not isinstance(mobile_flow, list) or not mobile_flow:
+                errors.append(
+                    "mobile inspection requires a non-empty observed_first_glance_path")
+            if not str(mobile_observed.get("observed_explain_back") or "").strip():
+                errors.append(
+                    "mobile inspection requires an independent observed_explain_back")
+            if mobile_observed.get("explain_back_matches") is not True:
+                errors.append(
+                    "mobile inspection must confirm explain_back_matches")
+            if mobile_observed.get("requires_zoom") is not False:
+                errors.append(
+                    "mobile inspection failed: primary labels must be readable without zoom")
 
         annotation = inspection.get("annotation")
         if not isinstance(annotation, dict):
@@ -464,12 +541,21 @@ def audit_figure(
             if observed.get("background") != planned["background"]:
                 errors.append(
                     f"callout backing does not match the plan: {planned['text']}")
+            if observed.get("quiet_canvas_considered") is not True:
+                errors.append(
+                    f"callout placement did not consider quiet canvas first: {planned['text']}")
             if (
                 planned["background"] == "opaque-white"
                 and observed.get("opaque_backing_present") is not True
             ):
                 errors.append(
                     f"busy-region callout lacks opaque white backing: {planned['text']}")
+            if (
+                planned["background"] == "opaque-white"
+                and observed.get("backing_necessary") is not True
+            ):
+                errors.append(
+                    f"opaque callout backing was not justified as necessary: {planned['text']}")
             if (
                 planned["background"] == "quiet-canvas"
                 and observed.get("text_on_quiet_canvas") is not True
@@ -528,10 +614,33 @@ def audit_figure(
                 "callout text must use quiet canvas or opaque white backing over busy pixels",
             "font_system_consistent":
                 "all typographic roles must use one consistent house sans-serif system",
+            "absolute_white_canvas":
+                "the visible paper must be exact #FFFFFF with no page tint or texture",
+            "visual_language_consistent":
+                "all elements must share one abstraction, dimensionality, line treatment, lighting, and material finish",
+            "stock_asset_assemblage_absent":
+                "the figure must not read as a collage of glossy stock symbols, emoji-like objects, app pictograms, or decorative badges",
+            "representation_serves_evidence":
+                "the chosen representation must shorten the path from pixels to evidence",
         }
         for field, message in required_true.items():
             if integrity.get(field) is not True:
                 errors.append(f"integrity inspection failed: {message}")
+        if integrity.get("avoidable_cognitive_translation_added") is not False:
+            errors.append(
+                "integrity inspection failed: the representation adds an avoidable "
+                "cognitive translation step")
+        arranged_present = integrity.get("arranged_object_lineup_present")
+        if not isinstance(arranged_present, bool):
+            errors.append(
+                "integrity inspection requires arranged_object_lineup_present boolean")
+        elif arranged_present:
+            if not semantic_plan["representation_plan"]["arranged_elements"]:
+                errors.append(
+                    "an unplanned arranged-object lineup appeared in the rendered figure")
+            if integrity.get("arrangement_encodes_evidence") is not True:
+                errors.append(
+                    "arranged-object composition does not perform a declared evidence job")
 
         issue_lists = {
             "anatomy_errors": "anatomical integrity error",
@@ -550,6 +659,10 @@ def audit_figure(
             "callout_backing_issues": "callout backing issue",
             "font_consistency_issues": "font-system inconsistency",
             "composite_integration_issues": "composite integration issue",
+            "paper_integrity_issues": "paper-integrity issue",
+            "visual_language_issues": "visual-language coherence issue",
+            "stock_asset_issues": "stock-asset assemblage issue",
+            "representation_issues": "representation-economy issue",
         }
         for field, label in issue_lists.items():
             values = integrity.get(field)
@@ -609,6 +722,12 @@ def audit_figure(
                     "every numeric annotation must visibly attach to its estimate, endpoint, or contrast",
                 "uncertainty_attached_to_estimate":
                     "every reported interval must be visually attached to the estimate it qualifies",
+                "uncertainty_graphically_visible":
+                    "a stated interval must appear as an attached whisker, band, bracket, or equivalent extent rather than text alone",
+                "data_marks_visually_primary":
+                    "data marks must remain visually primary instead of being overwhelmed by annotations",
+                "annotations_clear_of_marks":
+                    "direct labels must keep a clear gap from data marks, trajectories, axes, and one another",
                 "y_axis_label_vertical":
                     "the y-axis label must be vertical and outside the data region",
                 "redundant_legend_absent":
@@ -646,6 +765,7 @@ def audit_figure(
     errors.extend(validate_provenance(spec, path, provenance))
 
     effective_points = None
+    mobile_label_height = None
     if measured_height is None:
         errors.append("minimum label height could not be measured")
     else:
@@ -655,6 +775,14 @@ def audit_figure(
                 f"smallest effective label is {effective_points:.2f} pt at a "
                 f"{pdf_width_mm:.1f} mm rendered width; required at least 6.5 pt"
             )
+        if contract_version == 3:
+            mobile = layout_plan["mobile_preview"]
+            mobile_label_height = measured_height * mobile["width_px"] / width
+            if mobile_label_height < mobile["minimum_label_height_px"]:
+                errors.append(
+                    f"smallest mobile label is {mobile_label_height:.2f} px at a "
+                    f"{mobile['width_px']} px preview; required at least "
+                    f"{mobile['minimum_label_height_px']:.1f} px")
     return {
         "status": "pass" if not errors else "fail",
         "errors": errors,
@@ -671,6 +799,8 @@ def audit_figure(
             ),
             "pixel_standard_deviation": round(pixel_stddev, 3),
             "pixel_extrema": pixel_extrema,
+            "outer_frame_exact_white_share": round(outer_frame_white_share, 6),
+            "alpha_minimum": alpha_minimum,
             "ocr_characters": len(ocr_text),
             "expected_text_items": len(expected_text),
             "missing_text_items": len(missing_text),
@@ -680,12 +810,17 @@ def audit_figure(
             "minimum_effective_label_pt": (
                 round(effective_points, 2) if effective_points is not None else None
             ),
+            "minimum_mobile_label_px": (
+                round(mobile_label_height, 2)
+                if mobile_label_height is not None else None
+            ),
             "missing_abbreviation_expansions": missing_expansions,
             "geometry_distortions": len(geometry_distortions),
             "duplicate_text_items": len(duplicate_text),
             "unlisted_text_items": len(unlisted_text),
             "visual_quality": visual_quality,
             "communication": communication,
+            "mobile_preview": inspection.get("mobile_preview"),
             "annotation": inspection.get("annotation"),
             "integrity": integrity,
             "quantitative": inspection.get("quantitative"),
