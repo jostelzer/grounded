@@ -211,61 +211,47 @@ Verdicts you write must carry quotes copied verbatim from the packet passages; `
 
 ### 7. Create the figures or slides
 
-Skip this step for inline chat. For the journal PDF format figures are mandatory: plan toward 2 for small, 3–4 for medium, and 5–6 for large, never exceeding 2/5/8; fewer is valid only when `synthesis.md` contains fewer distinct visual stories. For slides, build the deck. Read and follow `references/figure-generation-contract.md` before producing any pixels. Build visuals only from the claim and pattern entries in `synthesis.md`, never from a fresh reading of the papers.
+Skip this step for inline chat. Journal PDFs require distinct synthesis-grounded
+figures: aim for 2/3–4/5–6 at small/medium/large, with hard ceilings of 2/5/8;
+use fewer only when the synthesis contains fewer visual stories. Slides follow
+the same evidence boundary.
 
-Every new figure uses `quality_contract_version: 3` and begins with communication, not composition. State one reader-facing `visual_question`, one `panel_thesis` explaining why every section belongs, one `reader_takeaway`, the evidence boundary, the indispensable visual elements, the ordered information flow, a recognizable visual starting point, and a one-sentence plain-language `plain_language_explain_back`. Declare a `semantic_plan`: every meaningful object and its role/evidence basis, every connector's source/target/meaning, each distinct panel job, the grouping rationale, anatomical subjects, vulnerable salience targets, and the quantitative-routing decision. Route every non-quantitative figure to a capable built-in image generator. When verified numbers carry the message, choose either a fully deterministic plot or a `composite` figure in which the values, axes, intervals, and typography remain deterministic while one or more generated, text-free visual anchors add genuine orientation. Generated components must never encode magnitude or replace plotted evidence. Use explicit clean upright sans-serif typography, collision-checked labels, conventional vertical y-axis labels, and bespoke publication design rather than library defaults. Contract v3 does not use legacy hybrid illustrations or deterministic non-quantitative fallbacks.
+Before producing pixels, read `references/media-modes.md` for format coverage
+and embedding, then `references/figure-generation-contract.md` for the
+communication-first v3 workflow. That workflow owns concept selection, evidence
+routing, semantic planning, annotations, non-distortion, generation, inspection,
+and release decisions; do not duplicate or improvise a parallel recipe here.
+Build only from claims and patterns already recorded in `synthesis.md`.
 
-The semantic plan also gives every entity a visual content priority. Primary
-entities dominate area, contrast, and first fixation; supporting entities may
-clarify but not compete; props, scenery, background furniture, and repeated
-motifs that fail a deletion test are omitted. Preserve registered identity when
-one specimen or object appears across filters, thresholds, or states. For every
-anatomical subject, retain enough orientation landmarks to locate the focal
-region and understand any depicted instrument or mechanism. Tie each
-uncertainty mark to the exact claim or quantity it qualifies and state what the
-reader cannot conclude; generic question marks, dashed halos, and bare
-`uncertain` labels fail.
+Use the route-specific references only when relevant:
 
-Choose the canvas from the amount and topology of information rather than a
-universal wide template. A sparse one-panel result should normally use a compact
-landscape or near-square canvas. In v3, sparse content wider than 1.75:1 must
-explicitly declare that horizontal topology requires it; a broad ratio is earned
-only by a genuinely horizontal sequence or several balanced panels. Record why
-the ratio fits the content, inspect the optical centre and unused space, and reject a composition
-that feels stretched, lopsided, or padded merely to fill page width.
+- generated or composite art: `references/image-prompt-guide.md` and
+  `references/figure-style-system.md`;
+- inspection/provenance records:
+  `references/figure-inspection-contract.md`;
+- captions and panel cross-references: `references/figure-captions.md`;
+- feedback intended to improve unseen figures:
+  `references/figure-feedback-generalization.md`;
+- slides: `references/deck-guide.md`.
 
-For each generated illustration, write exactly three genuinely different, detailed image concepts. For each, record its visual information flow, strengths, and risks; score all three from 1–5 for clarity, simplicity, completeness, elegance, and intuitiveness. Select the highest-scoring concept, with no selected dimension below 4, and pass only that concept to `scripts/build_figure_prompt.py` so rejected motifs cannot leak into the pixels. Apply an explain-back discipline inspired by Feynman: begin with something visually recognizable, bridge to the unfamiliar mechanism one step at a time, prefer literal domain-native structure over a clever metaphor, define every necessary term beside what it names, and remove anything the reader does not need to reconstruct the explanation. Use concise in-image copy: at most eight essential strings, eight words per string, and 32 words total. Explanatory prose, evidence qualifications, and citations belong in the caption. This keeps iteration focused on meaning and composition rather than repeated attempts to typeset paragraphs.
+Every new figure uses `quality_contract_version: 3`. Non-quantitative
+explanations use a capable built-in image generator; verified numbers that carry
+the message use deterministic plotting, optionally with generated text-free
+orientation anchors in a composite. Build prompts from the selected structured
+specification with `scripts/build_figure_prompt.py`, then inspect the actual
+pixels at native and final size and run:
 
-The panel and annotation system applies identically to scientific, popsci, bullets, and ELI5 figures. When a figure has distinct sections, label them sequentially with uppercase `A`, `B`, `C`, `D` so the review can refer to them precisely. Place explanatory text beside the structure it explains and, whenever the target is not self-evident, connect it with a thin leader line to the exact target. Any callout placed over textured, illustrated, photographic, or otherwise busy pixels sits on an opaque white backing plate with restrained padding; quiet white canvas needs no redundant box. A single continuous composition may omit panel labels or callouts only when `annotation_plan.rationale` explains why. Use one consistent house sans-serif family throughout each figure—including panels, callouts, axes, values, and legends—and match the selected review-style overlay.
+```bash
+python3 scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure.inspection.json --provenance figure.provenance.json
+```
 
-Generate the complete selected concept with its essential exact labels directly in the pixels. Then inspect it at original and final size, visually transcribe the rendered copy into `ocr_text`, and record in plain language what a reader would actually understand, the eye path they would follow, and the sentence they could explain back without reading the caption. Tesseract is a secondary cross-check: do not regenerate visibly correct type merely because machine OCR misses it, but never use the manual transcript to excuse garbled pixels. If the observed takeaway or explain-back differs from the declared target, the familiar starting point is invisible, any must-show element is missing, unexplained jargon remains, the caption is required to decode the figure, or the information flow is unclear, record the issue and make a targeted edit or regenerate. Also inspect every person or animal for extra, missing, duplicated, fused, or impossible anatomy; reject undeclared objects and ambiguous arrows; require related outcomes to share one visual unit; reject redundant panels; verify every salience target at final size; and reject weak typography. A failed review must be followed by another attempt. The selected asset must pass all fifteen v3 visual-quality dimensions and have empty anatomy, unexplained-object, ambiguous-connector, salience, redundancy, typography, and entity-specificity issue lists. Record panel labels, callout targets, and required leader lines in the inspection. Do not select a generic or cheap-looking candidate merely because its OCR is easier.
-
-Never resize artwork or lettering with independent width and height scales. Circles remain circles, squares remain squares, and font proportions remain natural; fit copy by wrapping, moving, shortening, or rethinking the concept. Record `duplicate_text`, `unlisted_text`, and `geometry_distortions` as explicit lists; any non-empty list is release-blocking. Run `python3 scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure.inspection.json --provenance figure.provenance.json`. Give every passing figure a stable ID, introduce it before the artwork, refer to relevant panels in the prose, and end its style-matched caption with 2–5 verified citations.
-
-For deterministic and composite figures, every panel declares the exact x- and
-y-axis semantics, and the caption repeats both constructs with units or
-categories. Render the y-axis label vertically outside the data region and the
-x-axis label horizontally below it. Every interval, difference, denominator,
-and endpoint number visibly attaches to the mark or contrast it qualifies.
-Common point-and-whisker uncertainty needs no in-plot legend when the caption
-explains it; add a legend only when multiple non-standard encodings make one
-necessary, and document why. Centre and balance the complete plot, not merely
-its axes box.
-
-When the user evaluates figures to improve future Grounded behavior, read and follow `references/figure-feedback-generalization.md`. Preserve the raw observation, translate it into an observable failure and topic-neutral rule, add the corresponding v3 contract or QA field, and add a minimal synthetic regression fixture. Do not publish a benchmark gallery, produce before/after boards, or canonize temporary test topics. Run focused checks and the complete suite. When visual sampling is useful, freeze the rule first, choose private replaceable topics, assign one independent owner per image, inspect only final candidates, and rotate the topics afterward. A change that repairs only the criticized specimen or leaks its subject into the shared recipe is rejected.
-
-For the slides format, follow `references/deck-guide.md`. Use the same verified synthesis
-and figure pipeline, but set `render_context: slide` for every content image and
-make each image carry the evidence itself — comparisons, plotted numbers with
-intervals, labelled mechanisms, pictured study designs — so the slide passes
-the standalone test with no caption or body text to lean on. Storyboard
-according to the selected style, keep claim titles and DOI citations in
-renderer chrome, build with `export_deck.py`, and run `qa_deck_pdf.py`. Inspect
-every slide raster and apply the standalone test to each. The slides format does
-not permit the deterministic vector fallback: if a capable image model is
-unavailable or the images cannot pass QA, fall back to delivering the internal
-synthesis as a normal full review and state in one sentence that the deck could
-not be generated.
+A failed meaning, information-flow, anatomy, typography, salience, connector,
+quantitative, or non-distortion gate requires revision and another inspection.
+Give each passing figure a stable ID, introduce it before the artwork, refer to
+relevant A–D panels in the prose, and end its style-matched caption with verified
+citations. For slides, build and inspect the deck under `references/deck-guide.md`;
+if capable image generation is unavailable or the visual gates cannot pass,
+deliver the verified synthesis as a normal review instead.
 
 ## Rules that do not bend
 
@@ -285,7 +271,7 @@ not be generated.
 - `scripts/find_papers.py` and `scripts/audit_search.py` — paginated discovery, structured funnel records, publication screening, two-provider citation chasing, and tier coverage audit.
 - `scripts/verify_citations.py` — Crossref bibliographic and integrity verification (retractions, withdrawals, expressions of concern; corrections recorded) using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` and `scripts/audit_fulltexts.py` — open-access retrieval plus typed authenticity, duplicate, notes, and reading-evidence manifests.
-- `references/claim-verification.md` — the adjudication rubric for claim-level verification: verdict definitions, quote rules, abstention discipline, escalation policy, and a worked example. `evals/claim-benchmark-creatine.json` is the gold-labeled benchmark; measure a judge with `verify_claims.py score`.
+- `references/claim-verification.md` — the adjudication rubric for claim-level verification: verdict definitions, quote rules, abstention discipline, escalation policy, and a worked example. Development benchmarks remain outside the release bundle.
 - `scripts/claim_evidence.py` and `scripts/verify_claims.py` (experimental) — claim-level verification: a tiered evidence store (Europe PMC full text → OpenAlex OA locations → abstract union floor, fail-closed on challenge pages) and an extract → fetch → packets → check pipeline that audits whether each cited sentence is supported by its source's own text. Verdicts of supported/partial/contradicted require a verbatim quote that the checker string-matches against the stored evidence (quotes it cannot find are rejected to unverifiable; numeric claims marked supported must carry a claim number inside the quote, with spelled-out numbers normalized). Output is a machine-readable audit plus a rendered appendix; a contradicted claim is a hard stop.
 - `scripts/format_references.py` — resolves `[@key]` citations, normalizes default chat punctuation, and builds the reference list (Vancouver / APA / Nature).
 - `scripts/validate_review.py` — deterministic structure, strict-tier, chat citation placement, citation-reading, DOI parity, text-hygiene, and figure contracts.
@@ -293,15 +279,15 @@ not be generated.
 - `scripts/export_deck.py` — explicit-only, verified 16:9 PDF deck export from a structured storyboard, local slide artwork, and the verified source ledger.
 - `scripts/qa_deck_pdf.py` — fail-closed structural and independent Poppler raster QA for every delivered deck PDF.
 - `scripts/qa_review_pdf.py` — exact release-lineage, intrinsic-vs-painted figure-aspect, visible-reference, terminal-page, and independent Poppler QA.
-- `scripts/qa_figure.py` — pixel-content, aspect, OCR/spec/topology/effective-label, visual-quality, and generation-provenance conformance.
-- `scripts/render_quantitative_figure.py`, `scripts/qa_quantitative_geometry.py`, and `scripts/figure_typography.py` — topic-neutral, style-aware rendering of exact fork/slope/trajectory figures plus independent data-to-pixel and raster-mark verification.
+- `scripts/figure_contract.py`, `scripts/figure_provenance.py`, and `scripts/qa_figure.py` — shared topic-neutral figure-spec validation, provenance validation, and pixel-level conformance.
+- `scripts/quantitative_figure_spec.py`, `scripts/quantitative_drawing.py`, `scripts/render_quantitative_figure.py`, `scripts/qa_quantitative_geometry.py`, and `scripts/figure_typography.py` — topic-neutral quantitative specification, drawing, rendering, plus intentionally independent data-to-pixel and raster-mark verification.
 - `references/figure-feedback-generalization.md` — the no-showcase protocol that converts visual criticism into v3 contract fields and topic-neutral executable regression fixtures without canonizing examples.
 - `scripts/build_release_skill.py` — deterministic allowlisted `.skill` packaging with version and commit provenance; excludes caches, examples, and scratch output by construction.
 - `VERSION` and `scripts/grounded_metadata.py` — one shared semantic version, repository identity, and network user-agent source for every script.
 - `requirements-pdf.txt` — pinned PDF export and QA packages; the exporter separately verifies the native print engine and canonical Charter/Helvetica Neue font resolution.
 - `scripts/build_figure_prompt.py` — composes a rich route-aware image-generation or production prompt from a structured evidence specification, journal profile, figure archetype, and writing-style overlay.
 - `scripts/compose_hybrid_figure.py` — legacy quality-contract-v1 compositor retained only to reproduce older releases; new v3 illustrations do not use it.
-- `references/figure-generation-contract.md` and `references/figure-writing-style-overlays.json` — communication-first three-concept planning, generator/plot routing, post-generation meaning checks, provenance, non-distortion, and scientific/popsci/bullets/ELI5 art-direction contracts.
+- `references/figure-generation-contract.md`, `references/figure-inspection-contract.md`, and `references/figure-writing-style-overlays.json` — communication-first planning/routing/iteration, auditable inspection and provenance schemas, non-distortion, and scientific/popsci/bullets/ELI5 art-direction contracts.
 - `scripts/download_figure_references.py` — downloads the official-source visual-analysis corpus to an explicit private directory and records provenance, dimensions, hashes, and byte counts; source pixels are never bundled.
 - `references/no-script-fallback.md` — the tool-only pipeline for sandboxes with no Python network access (claude.ai); read this whenever Step 0 fails.
 - `references/quality-gates.md` — structured search/full-text/figure/release manifests and strict commands.

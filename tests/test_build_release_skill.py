@@ -91,6 +91,19 @@ class ReleaseSkillTests(unittest.TestCase):
                 self.assertEqual(set(archive.namelist()), expected)
                 self.assertEqual(archive.namelist(), sorted(archive.namelist()))
                 self.assertNotIn("grounded/scripts/scratch.py", archive.namelist())
+                self.assertIn(
+                    "grounded/references/claim-verification.md",
+                    archive.namelist(),
+                )
+                self.assertIn("grounded/scripts/verify_claims.py", archive.namelist())
+                self.assertIn("grounded/scripts/figure_contract.py", archive.namelist())
+                self.assertIn(
+                    "grounded/references/figure-inspection-contract.md",
+                    archive.namelist(),
+                )
+                self.assertFalse(
+                    any(name.startswith("grounded/evals/") for name in archive.namelist())
+                )
                 self.assertIsNone(archive.testzip())
 
     def test_version_mismatch_fails_before_replacing_output(self):

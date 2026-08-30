@@ -529,12 +529,34 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
             )
         reference_start_page = None
         reference_offset = None
+        reference_heading = (
+            r"(?mi)^(?:References|R\s+E\s+F\s+E\s+R\s+E\s+N\s+C\s+E\s+S)"
+            r"(?:\s+\d+\s*[·•].*)?\s*$"
+        )
         for index, text in enumerate(page_texts, 1):
-            match = re.search(r"(?mi)^References(?:\s+\d+\s*[·•].*)?\s*$", text)
-            if match:
+            matches = list(re.finditer(reference_heading, text))
+            if matches:
+                match = matches[-1]
                 reference_start_page = index
                 reference_offset = match.start()
-                break
+        doi_pages = [
+            index
+            for index, text in enumerate(page_texts, 1)
+            if any(
+                _visible_doi_occurrences(
+                    text, url.removeprefix("https://doi.org/")
+                )
+                for url in expected_dois
+            )
+        ]
+        if (
+            doi_pages
+            and reference_start_page is not None
+            and reference_start_page < doi_pages[0]
+        ):
+            # A standalone metadata-grid label is not the terminal heading.
+            reference_start_page = None
+            reference_offset = None
         if reference_start_page is None:
             failures.append("PDF is missing a visible References heading")
             reference_text = ""
@@ -868,7 +890,8 @@ def render_and_inspect(pdf_path: str, output_dir: str, *, dpi: int = 120,
 def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
            render_dir: str | None = None, dpi: int = 120,
            expected_release: str | None = None,
-           manifest_path: str | None = None) -> dict[str, object]:
+           manifest_path: str | None = None,
+           expected_edition: str | None = None) -> dict[str, object]:
     pdf_path = os.path.abspath(pdf_path)
     if not os.path.isfile(pdf_path):
         raise PdfQaError(f"PDF does not exist: {pdf_path}")
@@ -901,11 +924,22 @@ def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
             (manifest_context["manifest"].get("render") or {}).get("edition")
             or "journal"
         )
+        if expected_edition is not None and expected_edition != edition:
+            raise PdfQaError(
+                f"requested edition {expected_edition!r} does not match "
+                f"manifest edition {edition!r}"
+            )
         try:
             import export_review
             expected_fonts = tuple(export_review.EDITIONS[edition]["fonts"])
         except (ImportError, KeyError) as exc:
             raise PdfQaError(f"unknown manifest edition {edition!r}") from exc
+    elif expected_edition is not None:
+        try:
+            import export_review
+            expected_fonts = tuple(export_review.EDITIONS[expected_edition]["fonts"])
+        except (ImportError, KeyError) as exc:
+            raise PdfQaError(f"unknown requested edition {expected_edition!r}") from exc
     structural = inspect_structure(
         pdf_path, markdown, expected_release,
         expected_fonts=expected_fonts,
@@ -959,6 +993,11 @@ def main() -> int:
     parser.add_argument(
         "--manifest", help="release-manifest.json; verifies exact lineage and records QA"
     )
+    parser.add_argument(
+        "--edition", choices=("journal", "salon", "primer", "brief"),
+        help="expected PDF edition when no manifest is available; with a manifest, "
+             "must match its recorded edition",
+    )
     parser.add_argument("--report", help="atomically write the JSON QA report")
     args = parser.parse_args()
     try:
@@ -967,6 +1006,7 @@ def main() -> int:
             render_dir=args.render_dir, dpi=args.dpi,
             expected_release=args.release,
             manifest_path=args.manifest,
+            expected_edition=args.edition,
         )
     except PdfQaError as exc:
         print(f"PDF QA failed: {exc}", file=sys.stderr)

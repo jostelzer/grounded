@@ -398,6 +398,36 @@ class PdfExportTests(unittest.TestCase):
                     qa_review_pdf.PdfQaError, "figure_inspections.*hash changed"):
                 qa_review_pdf.verify_release_manifest(manifest, pdf, review)
 
+    def test_v3_release_requires_inspection_and_provenance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            figure = os.path.join(tmp, "figure.png")
+            self.make_image(figure)
+            review = os.path.join(tmp, "review.md")
+            ledger = os.path.join(tmp, "sources.json")
+            spec = os.path.join(tmp, "figure.json")
+            prompt = os.path.join(tmp, "figure.prompt.txt")
+            Path(review).write_text(self.markdown(), encoding="utf-8")
+            Path(ledger).write_text(json.dumps({"entries": [{
+                "key": "Smith2024",
+                "doi": "10.1000/example",
+                "status": "verified",
+                "verification": {
+                    "bibliographic_status": "verified",
+                    "retraction_status": "clear",
+                },
+            }]}), encoding="utf-8")
+            Path(spec).write_text(
+                json.dumps({"quality_contract_version": 3}), encoding="utf-8"
+            )
+            Path(prompt).write_text("saved prompt\n", encoding="utf-8")
+            with self.assertRaisesRegex(
+                ValueError,
+                "quality-contract release requires one --figure-inspection",
+            ):
+                export_review.validate_release_inputs(
+                    review, ledger, [spec], [prompt]
+                )
+
     def test_visible_references_heading_is_release_blocking(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.make_image(os.path.join(tmp, "figure.png"))

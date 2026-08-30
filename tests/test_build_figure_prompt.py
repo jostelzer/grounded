@@ -2,11 +2,13 @@ import copy
 import importlib.util
 import json
 import os
+import sys
 import tempfile
 import unittest
 
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
 SCRIPT = os.path.join(ROOT, "scripts", "build_figure_prompt.py")
 SPEC = importlib.util.spec_from_file_location("build_figure_prompt", SCRIPT)
 MODULE = importlib.util.module_from_spec(SPEC)

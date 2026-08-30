@@ -14,8 +14,9 @@ import sys
 import unicodedata
 from pathlib import Path
 
-from artifact_io import atomic_write_json, sha256_file
-import build_figure_prompt
+from artifact_io import atomic_write_json
+import figure_contract
+from figure_provenance import validate_provenance
 from grounded_metadata import rendered_figure_size_mm
 from typing import Any
 
@@ -141,263 +142,6 @@ def _required_number(value: Any, field: str, *, minimum: float,
     return result
 
 
-def _validate_provenance(
-    spec: dict[str, Any], image_path: Path,
-    provenance: dict[str, Any] | None,
-) -> list[str]:
-    """Return fail-closed provenance errors for quality-contract figures."""
-    errors: list[str] = []
-    contract_version = spec.get("quality_contract_version")
-    if provenance is None:
-        if contract_version in {1, 2, 3}:
-            errors.append(
-                f"quality contract v{contract_version} requires generation provenance")
-        return errors
-    if not isinstance(provenance, dict):
-        raise ValueError("figure provenance must be an object")
-    expected_schema = 2 if contract_version in {2, 3} else 1
-    if provenance.get("schema_version") != expected_schema:
-        errors.append(
-            f"generation provenance schema_version must be {expected_schema}")
-
-    generator_available = provenance.get("generator_available")
-    if not isinstance(generator_available, bool):
-        errors.append("generation provenance requires boolean generator_available")
-        generator_available = False
-    if generator_available:
-        generator = provenance.get("generator")
-        if not isinstance(generator, dict) or not str(generator.get("tool") or "").strip():
-            errors.append("available generator provenance requires generator.tool")
-
-    route = spec.get("render_route")
-    selected_route = provenance.get("selected_route")
-    if contract_version in {1, 2, 3} and route not in {
-        "generated", "hybrid", "deterministic", "composite"
-    }:
-        errors.append("quality contract requires an explicit valid render_route")
-    if selected_route != route:
-        errors.append(
-            f"provenance selected_route {selected_route!r} does not match spec {route!r}")
-
-    selected_asset = provenance.get("selected_asset")
-    if not isinstance(selected_asset, str) or Path(selected_asset).name != image_path.name:
-        errors.append("provenance selected_asset does not identify the audited image")
-    expected_hash = provenance.get("selected_sha256")
-    actual_hash = sha256_file(image_path)
-    if expected_hash != actual_hash:
-        errors.append("provenance selected_sha256 does not match the audited image")
-
-    attempts = provenance.get("attempts")
-    if not isinstance(attempts, list):
-        errors.append("generation provenance attempts must be a list")
-        attempts = []
-    elif any(not isinstance(item, dict) for item in attempts):
-        errors.append("every generation provenance attempt must be an object")
-        attempts = [item for item in attempts if isinstance(item, dict)]
-    generate_attempts = [item for item in attempts if item.get("kind") == "generate"]
-    edit_attempts = [item for item in attempts if item.get("kind") == "edit"]
-    compose_attempts = [item for item in attempts if item.get("kind") == "compose"]
-
-    comparison = provenance.get("comparison")
-    compared = 0
-    if isinstance(comparison, dict):
-        value = comparison.get("candidates_compared")
-        if isinstance(value, int) and not isinstance(value, bool):
-            compared = value
-        else:
-            errors.append("comparison.candidates_compared must be an integer")
-        if not str(comparison.get("selection_rationale") or "").strip():
-            errors.append("comparison requires a non-empty selection_rationale")
-    elif comparison is not None:
-        errors.append("generation provenance comparison must be an object")
-
-    if route in {"generated", "hybrid", "composite"}:
-        if not generator_available:
-            errors.append(f"{route} route requires an available image generator")
-        if not generate_attempts:
-            errors.append(f"{route} route requires a generated candidate")
-        if len(generate_attempts) > 1 and compared < 2:
-            errors.append(
-                f"{route} route with multiple candidates requires comparison of at least two")
-        if len(generate_attempts) == 1 and comparison is not None and compared < 1:
-            errors.append("single-candidate provenance requires candidates_compared=1")
-        if compared > len(generate_attempts):
-            errors.append(
-                "comparison.candidates_compared exceeds recorded generated candidates")
-
-    if route == "hybrid":
-        if provenance.get("direct_text_attempted") is not True:
-            errors.append("hybrid fallback requires direct_text_attempted=true")
-        if not any(item.get("text_mode") == "direct" for item in generate_attempts):
-            errors.append("hybrid fallback requires a direct-text generate attempt")
-        if not str(provenance.get("fallback_reason") or "").strip():
-            errors.append("hybrid fallback requires a concrete fallback_reason")
-        if len(generate_attempts) < 2 and not edit_attempts:
-            errors.append(
-                "hybrid fallback requires a targeted edit or a second generated candidate")
-        hybrid = provenance.get("hybrid")
-        if not isinstance(hybrid, dict):
-            errors.append("hybrid route requires hybrid composition provenance")
-        else:
-            if not str(hybrid.get("compositor") or "").strip():
-                errors.append("hybrid provenance requires a compositor")
-            if not str(hybrid.get("base_asset") or "").strip():
-                errors.append("hybrid provenance requires a base_asset")
-            if hybrid.get("anisotropic_resize") is not False:
-                errors.append("hybrid composition must prove anisotropic_resize=false")
-        if not compose_attempts:
-            errors.append("hybrid route requires a compose attempt")
-
-    if route == "composite":
-        if not generator_available:
-            errors.append("composite route requires an available image generator")
-        if not generate_attempts:
-            errors.append("composite route requires a generated orientation asset")
-        if not compose_attempts:
-            errors.append("composite route requires a compose attempt")
-        composite = provenance.get("composite")
-        if not isinstance(composite, dict):
-            errors.append("composite route requires composite provenance")
-        else:
-            if not str(composite.get("compositor") or "").strip():
-                errors.append("composite provenance requires a compositor")
-            if composite.get("generated_assets_text_free") is not True:
-                errors.append("composite provenance must prove generated assets are text-free")
-            if composite.get("quantitative_layer_deterministic") is not True:
-                errors.append(
-                    "composite provenance must prove the quantitative layer is deterministic")
-            if composite.get("intrinsic_aspect_preserved") is not True:
-                errors.append(
-                    "composite provenance must prove generated asset aspect ratios are preserved")
-
-    if route == "deterministic" and spec.get("archetype") != "quantitative":
-        if generator_available:
-            if len(generate_attempts) < 2:
-                errors.append(
-                    "non-quantitative deterministic fallback requires two generated candidates")
-            if not edit_attempts:
-                errors.append(
-                    "non-quantitative deterministic fallback requires a targeted edit")
-        if provenance.get("hybrid_considered") is not True:
-            errors.append(
-                "non-quantitative deterministic fallback requires hybrid_considered=true")
-        if not str(provenance.get("fallback_reason") or "").strip():
-            errors.append(
-                "non-quantitative deterministic fallback requires a concrete fallback_reason")
-
-    if contract_version in {2, 3}:
-        archetype = spec.get("archetype")
-        if route == "hybrid":
-            errors.append("communication-first contracts do not permit hybrid illustrations")
-        if archetype == "quantitative":
-            if route not in {"deterministic", "composite"}:
-                errors.append(
-                    "communication-first quantitative figures require deterministic or composite plotting")
-            if route == "deterministic" and not any(
-                    item.get("kind") == "render" for item in attempts):
-                errors.append(
-                    "communication-first deterministic plots require a render attempt")
-            if route == "composite" and not compose_attempts:
-                errors.append(
-                    "communication-first composite plots require a compose attempt")
-        elif route != "generated":
-            errors.append(
-                "communication-first non-quantitative figures require image generation")
-
-        reviews = provenance.get("post_generation_reviews")
-        if not isinstance(reviews, list) or not reviews:
-            errors.append(
-                "communication-first contracts require post_generation_reviews for every candidate")
-            reviews = []
-        elif any(not isinstance(item, dict) for item in reviews):
-            errors.append("every post-generation review must be an object")
-            reviews = [item for item in reviews if isinstance(item, dict)]
-
-        authored_attempts = [
-            item for item in attempts
-            if item.get("kind") in {"generate", "edit", "render", "compose"}
-            and str(item.get("asset") or "").strip()
-        ]
-        attempt_assets = [str(item["asset"]) for item in authored_attempts]
-        reviewed_assets = [str(item.get("asset") or "") for item in reviews]
-        for asset in attempt_assets:
-            if asset not in reviewed_assets:
-                errors.append(
-                    f"candidate lacks a post-generation communication review: {asset}")
-        goal = spec.get("communication_goal")
-        intended_takeaway = (
-            str(goal.get("reader_takeaway") or "").strip()
-            if isinstance(goal, dict) else "")
-        for review in reviews:
-            asset = str(review.get("asset") or "").strip()
-            if not asset:
-                errors.append("post-generation review requires asset")
-                continue
-            if asset not in attempt_assets:
-                errors.append(
-                    f"post-generation review names an unrecorded candidate: {asset}")
-            if str(review.get("intended_takeaway") or "").strip() != intended_takeaway:
-                errors.append(
-                    f"post-generation review for {asset} must restate the declared reader takeaway")
-            if not str(review.get("observed_takeaway") or "").strip():
-                errors.append(
-                    f"post-generation review for {asset} requires observed_takeaway")
-            if not str(review.get("observed_explain_back") or "").strip():
-                errors.append(
-                    f"post-generation review for {asset} requires observed_explain_back")
-            intuitive = review.get("intuitive_without_caption") is True
-            unexplained_jargon = review.get("unexplained_jargon")
-            if not isinstance(unexplained_jargon, list):
-                errors.append(
-                    f"post-generation review unexplained_jargon must be a list for {asset}")
-                unexplained_jargon = []
-            meaning_pass = review.get("intended_meaning_conveyed") is True
-            flow_pass = review.get("information_flow_clear") is True
-            issues = review.get("issues")
-            if not isinstance(issues, list):
-                errors.append(f"post-generation review issues must be a list for {asset}")
-                issues = []
-            decision = review.get("decision")
-            if meaning_pass and flow_pass and intuitive and not unexplained_jargon:
-                if issues:
-                    errors.append(
-                        f"accepted post-generation review must have no unresolved issues: {asset}")
-                if decision != "accept":
-                    errors.append(
-                        f"passing post-generation review must use decision=accept: {asset}")
-            else:
-                if not issues:
-                    errors.append(
-                        f"failed post-generation review must name concrete issues: {asset}")
-                if decision not in {"revise", "regenerate"}:
-                    errors.append(
-                        f"failed post-generation review must decide revise or regenerate: {asset}")
-                try:
-                    position = attempt_assets.index(asset)
-                except ValueError:
-                    position = len(attempt_assets)
-                if position >= len(attempt_assets) - 1:
-                    errors.append(
-                        f"failed communication review was not followed by another attempt: {asset}")
-
-        selected_reviews = [
-            item for item in reviews if item.get("asset") == selected_asset]
-        if len(selected_reviews) != 1:
-            errors.append(
-                "selected asset requires exactly one post-generation communication review")
-        else:
-            selected_review = selected_reviews[0]
-            if (selected_review.get("intended_meaning_conveyed") is not True
-                    or selected_review.get("information_flow_clear") is not True
-                    or selected_review.get("intuitive_without_caption") is not True
-                    or selected_review.get("unexplained_jargon") != []
-                    or selected_review.get("decision") != "accept"):
-                errors.append(
-                    "selected asset failed the post-generation meaning, information-flow, "
-                    "or intuition gate")
-    return errors
-
-
 def audit_figure(
     spec: dict[str, Any], image_path: str | Path, *,
     inspection: dict[str, Any] | None = None,
@@ -442,22 +186,22 @@ def audit_figure(
     layout_plan = None
     composite_plan = None
     if contract_version in {2, 3}:
-        communication_goal = build_figure_prompt.validate_communication_goal(spec)
-        annotation_plan = build_figure_prompt.validate_annotation_plan(
+        communication_goal = figure_contract.validate_communication_goal(spec)
+        annotation_plan = figure_contract.validate_annotation_plan(
             spec, expected_pixel_text(spec))
         if spec.get("archetype") == "quantitative":
-            build_figure_prompt.validate_plot_design(spec)
+            figure_contract.validate_plot_design(spec)
             if spec.get("render_route") not in {"deterministic", "composite"}:
                 errors.append(
                     "communication-first quantitative figures require deterministic or composite plotting")
             if spec.get("render_route") == "composite":
-                build_figure_prompt.validate_concept_plan(spec)
-                composite_plan = build_figure_prompt.validate_composite_plan(spec)
+                figure_contract.validate_concept_plan(spec)
+                composite_plan = figure_contract.validate_composite_plan(spec)
             if spec.get("data") is None or spec.get("data") in ([], {}):
                 errors.append(
                     "communication-first quantitative plots require verified structured data")
         else:
-            build_figure_prompt.validate_concept_plan(spec)
+            figure_contract.validate_concept_plan(spec)
             if spec.get("render_route") != "generated":
                 errors.append(
                     "communication-first non-quantitative figures require image generation")
@@ -466,20 +210,20 @@ def audit_figure(
                     "known numbers that carry the figure belong in a quantitative deterministic plot")
             rendered_text = expected_pixel_text(spec)
             word_counts = [len(item.split()) for item in rendered_text]
-            if len(rendered_text) > build_figure_prompt.V2_GENERATED_MAX_STRINGS:
+            if len(rendered_text) > figure_contract.V2_GENERATED_MAX_STRINGS:
                 errors.append(
                     "communication-first generated illustrations have too many labels")
             if (word_counts and max(word_counts)
-                    > build_figure_prompt.V2_GENERATED_MAX_WORDS_PER_STRING):
+                    > figure_contract.V2_GENERATED_MAX_WORDS_PER_STRING):
                 errors.append(
                     "communication-first generated illustration has an overlong label")
-            if sum(word_counts) > build_figure_prompt.V2_GENERATED_MAX_WORDS:
+            if sum(word_counts) > figure_contract.V2_GENERATED_MAX_WORDS:
                 errors.append(
                     "communication-first generated illustration has too much in-pixel copy")
         if contract_version == 3:
-            semantic_plan = build_figure_prompt.validate_semantic_plan(
+            semantic_plan = figure_contract.validate_semantic_plan(
                 spec, annotation_plan)
-            layout_plan = build_figure_prompt.validate_layout_plan(spec)
+            layout_plan = figure_contract.validate_layout_plan(spec)
     if pixel_stddev < 2.0:
         errors.append(
             f"figure is blank or near-blank (pixel standard deviation {pixel_stddev:.2f})")
@@ -899,7 +643,7 @@ def audit_figure(
                 if composite.get(field) is not True:
                     errors.append("composite inspection failed: " + message)
 
-    errors.extend(_validate_provenance(spec, path, provenance))
+    errors.extend(validate_provenance(spec, path, provenance))
 
     effective_points = None
     if measured_height is None:
