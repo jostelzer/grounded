@@ -1152,8 +1152,8 @@ class SalonEditionTests(unittest.TestCase):
 
 class PrimerEditionTests(unittest.TestCase):
     """The primer edition (eli5 default): friendly explainer typography —
-    single column, step badges, answer card — over the same semantic
-    document and evidence contract."""
+    step badges, answer card — over the same semantic document and evidence
+    contract, in the canonical two-column measure."""
 
     FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-eli5")
     EVIDENCE = os.path.join(ROOT, "tests", "fixtures", "colic")
@@ -1188,6 +1188,35 @@ class PrimerEditionTests(unittest.TestCase):
             export_review.EDITIONS["primer"]["fonts"],
             ("Seravek", "Helvetica-Neue"),
         )
+
+    def test_primer_keeps_the_two_column_measure(self):
+        """The explainer reads in two columns like every other edition: a
+        phone can zoom one column to full width."""
+        self.assertNotIn("column-count", export_review.PRIMER_CSS)
+        self.assertIn(".body.cols, .column-run", export_review.PRIMER_CSS)
+
+    def test_primer_uses_explicit_column_runs(self):
+        """Primer's body type leaves little slack around a spanning display,
+        and WeasyPrint drops the rest of the document when it has to fragment
+        a column-span box. Explicit sibling runs express the same layout
+        without asking it to."""
+        self.assertEqual(
+            export_review.EDITIONS["primer"].get("column_runs"), "explicit")
+        page = self.build()
+        self.assertIn('class="body structured-flow"', page)
+
+    def test_primer_bounds_the_compact_pair_below_the_journal_budget(self):
+        """The pair cannot fragment, so primer's taller opening furniture and
+        larger type need a lower budget: an over-long pair is pushed whole to
+        the next page and strands the one it left."""
+        budget = export_review.EDITIONS["primer"]["compact_pair_max_chars"]
+        self.assertLess(budget, export_review.COMPACT_PAIR_MAX_CHARS)
+
+    def test_primer_keeps_every_reference_in_the_pdf(self):
+        """Regression: the two-column primer once rendered one page and
+        silently dropped the figure and the whole reference list."""
+        page = self.build()
+        self.assertEqual(page.count('class="refno"'), 19)
 
 
 class BriefEditionTests(unittest.TestCase):

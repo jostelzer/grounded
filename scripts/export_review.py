@@ -223,7 +223,13 @@ def append_spanning_block(out, block):
         out.append(f'<section class="spanning-block">{block}</section>')
 
 
-def arrange_page_flow(blocks, columns, use_structured_caption_flow=False):
+# Plain-text budget for the shrink-wrapped pair in arrange_page_flow,
+# calibrated on the journal body (9.5pt Charter in two 88mm columns).
+COMPACT_PAIR_MAX_CHARS = 6000
+
+
+def arrange_page_flow(blocks, columns, use_structured_caption_flow=False,
+                      compact_pair_max_chars=COMPACT_PAIR_MAX_CHARS):
     """Close column runs around displays with tall structured captions.
 
     WeasyPrint cannot reliably fragment ``column-span: all``: a display that
@@ -235,6 +241,11 @@ def arrange_page_flow(blocks, columns, use_structured_caption_flow=False):
     deliberately reserved for figures whose multi-line bullet captions make
     the span interruption tall enough to trigger that renderer defect; compact
     prose captions retain the proven sequential journal-column route.
+
+    ``compact_pair_max_chars`` bounds the shrink-wrapped pair below. The
+    pair cannot fragment, so the bound must stay under what the run can
+    still fit beside its display on one page; an edition with taller
+    opening furniture and larger body type sets a lower bound.
     """
     if columns != 2 or not use_structured_caption_flow or not any(
             block.startswith('<section class="spanning-') for block in blocks):
@@ -273,7 +284,8 @@ def arrange_page_flow(blocks, columns, use_structured_caption_flow=False):
                              for item in balance_blocks]
             candidates = [index for index in range(1, len(balance_blocks))
                           if not balance_blocks[index - 1].startswith("<h2")]
-            if (before_span and sum(plain_lengths) <= 6000 and
+            if (before_span and
+                    sum(plain_lengths) <= compact_pair_max_chars and
                     len(balance_blocks) > 1 and candidates):
                 total = sum(plain_lengths)
                 split = min(candidates, key=lambda index: abs(
@@ -327,8 +339,15 @@ def image_data_uri(path, base_dir):
         return f"data:{MIME[ext]};base64," + base64.b64encode(f.read()).decode()
 
 
-def _to_html_document(md, base_dir=".", columns=2):
-    """Convert Markdown and return title, lead, body, and explicit flow mode."""
+def _to_html_document(md, base_dir=".", columns=2,
+                      explicit_column_runs=False,
+                      compact_pair_max_chars=COMPACT_PAIR_MAX_CHARS):
+    """Convert Markdown and return title, lead, body, and explicit flow mode.
+
+    ``explicit_column_runs`` forces the sibling-run flow for editions whose
+    body type leaves too little slack around a spanning display; see
+    ``arrange_page_flow``.
+    """
     _validate_journal_citation_placement(md)
     citations = JournalCitationIndex()
     lines = md.split("\n")
@@ -526,7 +545,8 @@ def _to_html_document(md, base_dir=".", columns=2):
         lengths = [len(re.sub(r"<[^>]+>", "", entry))
                    for entry in references]
         if (1 < len(references) <= 13 and sum(lengths) <= 4000 and
-                not has_tall_structured_caption):
+                not has_tall_structured_caption and
+                not explicit_column_runs):
             split = min(range(1, len(references)), key=lambda position: abs(
                 sum(lengths[:position]) - sum(lengths) / 2))
             left = "\n".join(references[:split])
@@ -545,10 +565,12 @@ def _to_html_document(md, base_dir=".", columns=2):
                 out.append("</div>")
     else:
         out.append('<p class="tomb">&#8718;</p>')
-    structured_flow = columns == 2 and has_tall_structured_caption
+    structured_flow = columns == 2 and (
+        has_tall_structured_caption or explicit_column_runs)
     body = arrange_page_flow(
         out, columns=columns,
-        use_structured_caption_flow=structured_flow)
+        use_structured_caption_flow=structured_flow,
+        compact_pair_max_chars=compact_pair_max_chars)
     for figure_id in figure_ids:
         if f'href="#{figure_id}"' not in body:
             raise ValueError(
@@ -556,10 +578,13 @@ def _to_html_document(md, base_dir=".", columns=2):
     return title, lead, body, structured_flow
 
 
-def to_html(md, base_dir=".", columns=2):
+def to_html(md, base_dir=".", columns=2, explicit_column_runs=False,
+            compact_pair_max_chars=COMPACT_PAIR_MAX_CHARS):
     """Convert the review markdown to body HTML. Returns (title, lead, body)."""
     title, lead, body, _structured_flow = _to_html_document(
-        md, base_dir=base_dir, columns=columns
+        md, base_dir=base_dir, columns=columns,
+        explicit_column_runs=explicit_column_runs,
+        compact_pair_max_chars=compact_pair_max_chars,
     )
     return title, lead, body
 
@@ -1077,38 +1102,40 @@ td, thead th { padding: 6px 8px; }
 """
 
 PRIMER_CSS = """
-/* PRIMER edition - the friendly explainer for ELI5: humanist sans, big
-   type, one calm column, orange step badges, TL;DR as an answer card. */
+/* PRIMER edition - the friendly explainer for ELI5: humanist sans, orange
+   step badges, TL;DR as an answer card - set in the canonical two-column
+   measure so a phone can zoom a single column to full screen width. */
 body { font-family: Seravek, "Gill Sans", "Helvetica Neue", sans-serif;
-  font-size: 10.5pt; line-height: 1.62; text-align: left; hyphens: none; }
-@page { margin: 27mm 30mm 16mm 30mm; }
-.paper { max-width: 150mm; }
-.body.cols, .column-run, .column-run.final { column-count: 1; }
-.kicker { letter-spacing: .3em; font-weight: 600; margin: 5mm 0 4mm; }
+  font-size: 9.4pt; line-height: 1.5; text-align: left; hyphens: auto; }
+@page { margin: 25mm 15mm 13mm 15mm; }
+.body.cols, .column-run, .column-run.final { column-gap: 9mm; }
+.kicker { letter-spacing: .3em; font-weight: 600; margin: 0 0 4mm; }
 h1 { font-family: Seravek, "Gill Sans", sans-serif; font-weight: 700;
-  font-size: 26pt; line-height: 1.18; letter-spacing: -.005em;
-  margin: 0 0 6mm; }
+  font-size: 25pt; line-height: 1.16; letter-spacing: -.005em;
+  margin: 0 0 5mm; }
 .metagrid { border-top: .5px solid var(--rule);
-  border-bottom: .5px solid var(--rule); margin-bottom: 8mm; }
+  border-bottom: .5px solid var(--rule); margin-bottom: 5mm; }
 .metagrid > div { border-right: none; padding: 7px 8px 8px; }
 .metagrid > div:first-child { padding-left: 0; }
 .metagrid b { letter-spacing: .18em; color: var(--faint); }
 .lead { background: #fff3ee; border-left: 3.5px solid var(--accent);
-  padding: 5mm 6mm; font-size: 11pt; line-height: 1.6; max-width: 100%;
-  font-weight: 400; margin: 0 0 9mm; }
+  padding: 4mm 5mm; font-size: 10pt; line-height: 1.52; max-width: 100%;
+  font-weight: 400; margin: 0 0 6mm; }
 .lead b { color: var(--accent); font-size: 6.8pt; letter-spacing: .24em;
   margin-bottom: 2mm; }
 h2 { font-family: Seravek, "Gill Sans", sans-serif; font-weight: 700;
-  font-size: 13.5pt; margin: 9mm 0 3mm; border-bottom: none;
+  font-size: 11pt; line-height: 1.25; margin: 6mm 0 2mm; border-bottom: none;
   letter-spacing: 0; text-transform: none; }
-h2::before { content: counter(sec); display: inline-block; width: 7mm;
-  height: 7mm; line-height: 7.15mm; text-align: center;
+h2::before { content: counter(sec); display: inline-block; width: 5.6mm;
+  height: 5.6mm; line-height: 5.75mm; text-align: center;
   background: var(--accent); color: #fff; border-radius: 50%;
-  font-size: 10.5pt; font-weight: 600; margin-right: 2.8mm;
+  font-size: 8.4pt; font-weight: 600; margin-right: 2.1mm;
   letter-spacing: 0; font-variant-numeric: lining-nums;
-  vertical-align: middle; margin-top: -1mm; }
+  vertical-align: middle; margin-top: -.8mm; }
+p { margin: 0 0 5px; }
+li { margin: 0 0 5px; }
 sup.citation, sup.citation a { color: #a9a29a; }
-figcaption { font-size: 8.2pt; line-height: 1.6; }
+figcaption { font-size: 7.6pt; line-height: 1.5; }
 figcaption .figno { color: var(--accent); }
 .refs .refno { color: var(--accent); }
 .refs { line-height: 1.4; }
@@ -1152,7 +1179,12 @@ figcaption .figno { color: var(--accent); }
 EDITIONS = {
     "journal": {"css": "", "fonts": ("Charter", "Helvetica-Neue")},
     "salon": {"css": SALON_CSS, "fonts": ("Didot", "Hoefler-Text", "Optima")},
-    "primer": {"css": PRIMER_CSS, "fonts": ("Seravek", "Helvetica-Neue")},
+    # Primer sets the largest body type of any edition, so a spanning
+    # display rarely fits below its columns: it always takes the explicit
+    # sibling-run flow rather than asking WeasyPrint to fragment a
+    # column-span box (which silently drops the rest of the document).
+    "primer": {"css": PRIMER_CSS, "fonts": ("Seravek", "Helvetica-Neue"),
+               "column_runs": "explicit", "compact_pair_max_chars": 2600},
     "brief": {"css": BRIEF_CSS, "fonts": ("Charter", "Helvetica-Neue")},
 }
 DEFAULT_EDITION_BY_STYLE = {"popsci": "salon", "eli5": "primer",
@@ -1408,7 +1440,10 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     css = _stylesheet(figure_max_height_mm, ref_leading=ref_leading,
                       edition=edition)
     title, lead, body, structured_flow = _to_html_document(
-        md, base_dir=base_dir, columns=columns
+        md, base_dir=base_dir, columns=columns,
+        explicit_column_runs=EDITIONS[edition].get("column_runs") == "explicit",
+        compact_pair_max_chars=EDITIONS[edition].get(
+            "compact_pair_max_chars", COMPACT_PAIR_MAX_CHARS),
     )
     title = title or "Scientific review"
     lead_html = ""
