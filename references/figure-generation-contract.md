@@ -1,9 +1,10 @@
-# Generator-first figure production
+# Communication-first figure production
 
-Use this contract for every Grounded journal-PDF figure and deck content image.
-It turns "prefer image generation" into an auditable production route while
-preserving the evidence, exact-copy, and geometry guarantees elsewhere in the
-skill.
+Use quality contract v3 for every new Grounded journal-PDF figure and deck
+content image. It turns the visual into a tested explanation: decide what the
+reader should understand, compare three possible visual explanations, render
+the strongest one, then inspect what the image actually communicates. Contract
+v1 and v2 remain readable only so older releases can be reproduced.
 
 ## 0. Plan visual coverage from the synthesis
 
@@ -16,7 +17,27 @@ Fewer is valid when the verified synthesis genuinely contains fewer distinct
 visual stories. Never hit a target by repeating a table, recolouring the same
 topology, or adding decorative scene setting.
 
-## 1. Probe capability before choosing a renderer
+## 1. Write the communication contract before choosing a renderer
+
+For every figure, write a `communication_goal` with:
+
+- `visual_question`: the single reader-facing question this figure answers;
+- `panel_thesis`: why every section belongs in the same explanation;
+- `reader_takeaway`: the one sentence a reader should be able to say after one look;
+- `must_show`: the indispensable visual facts or relationships;
+- `information_flow`: the intended eye path, in order;
+- `evidence_boundary`: what the figure deliberately does not claim;
+- `familiar_starting_point`: the recognizable visual idea from which the new
+  concept can grow;
+- `plain_language_explain_back`: the one sentence a non-specialist should be
+  able to say without consulting the caption.
+
+Do this before describing a layout. The figure is not successful because it is
+attractive or contains the requested objects; it is successful only when the
+selected pixels produce the declared understanding without distorting the
+evidence.
+
+## 2. Route by evidence type
 
 At the start of media production, inspect the tools actually available in the
 current agent environment.
@@ -32,72 +53,219 @@ current agent environment.
 - Use the built-in generator before any API or CLI fallback. Copy the selected
   project asset into the review workspace; do not leave it only in a generator
   cache.
-- Exact quantitative plots may use a deterministic renderer from the start.
-  Their geometry is the evidence, so generation is not a quality upgrade.
+- If verified known numbers carry the message, use a deterministic
+  `quantitative` plot with structured `data` and a deliberate `plot_design`, or
+  use the `composite` route when a generated, text-free visual anchor adds
+  genuine orientation. In a composite, all axes, values, uncertainty, and
+  typography remain deterministic; generated pixels never encode magnitude.
+- Every other figure uses the capable built-in image generator. Quality
+  contract v3 has no hybrid illustration and no non-quantitative deterministic
+  fallback. If a generator is unavailable, do not fake an illustration.
 
 Record the result in `<figure-id>.provenance.json`; the schema is below.
 
-## 2. Choose one of three explicit routes
+## 3. Use one of three v3 routes
 
 ### `generated`
 
-This is the default for every non-quantitative figure, including comparisons,
-evidence maps, timelines, and mind maps. The image generator renders the
-complete finished scientific composition and every required in-figure string
-directly in the pixels on the first call. Keep copy concise because concise
-figures read better, not because typography is deferred.
-
-### `hybrid`
-
-Hybrid is a last-resort repair route. Use it only after a complete direct-text
-generation and either a targeted ImageGen edit or a genuinely different second
-candidate still leave exact copy unusable. Preserve the strongest authored
-composition, then add only the unresolved typographic/data layer with
-`scripts/compose_hybrid_figure.py` or an equally deterministic overlay.
-
-The provenance must record `direct_text_attempted: true`, the direct-text
-attempt, the repair attempt, and a concrete `fallback_reason`. The generated
-base must remain visible and materially useful in the final artifact; a token
-background texture behind an otherwise deterministic diagram does not count as
-hybrid.
+This is required for every non-quantitative figure, including qualitative
+comparisons, evidence maps, timelines, and mind maps. The image generator
+renders the complete selected concept and every essential in-figure string
+directly in the pixels. Limit generated copy to eight strings, eight words per
+string, and 32 words total. Put explanatory prose, qualifications, and citations
+in the caption so text repair does not become the production process.
 
 ### `deterministic`
 
-Use directly for forest plots, exact axes, dense tables-as-figures, or other
-artifacts whose primary content is mathematical geometry. For a non-quantitative
-figure, this route is allowed only when no capable generator exists, or after
-the iteration ladder below has failed and the provenance file records why.
+Use only for forest plots, exact axes, or other artifacts whose primary content
+is verified mathematical geometry. A v3 deterministic spec must use the
+`quantitative` archetype, carry non-empty structured `data`, and declare a
+`plot_design` with chart type, encoding, reader path, and style rationale. Use
+direct labels, restrained colour, intentional spacing, and profile-matched type;
+library-default axes, legends, palettes, gridlines, and margins are failures.
 
-## 3. Iterate for quality, not merely validity
+### `composite`
+
+Use only for a quantitative figure whose verified values remain the primary
+evidence but whose reader benefits from one or more generated visual anchors.
+Generate those anchors without text, scales, values, uncertainty, or
+proportional encodings, then integrate them into a deterministic plotting
+canvas without anisotropic scaling. The deterministic layer owns every label,
+panel letter, axis, estimate, interval, and legend. Record a `composite_plan`
+that names each generated asset, its orientation-only role, placement, and the
+balance rationale. If deleting the generated asset does not reduce orientation
+or comprehension, use the deterministic route instead.
+
+## 4. Propose and select three illustration concepts
+
+Before prompting ImageGen, create exactly three genuinely different concepts.
+Each concept records a detailed image description, its information flow,
+strengths, and risks. Score every concept from 1–5 for:
+
+1. clarity — can the main point be grasped correctly;
+2. simplicity — is every visual element earning its place;
+3. completeness — are all must-show elements and the evidence boundary present;
+4. elegance — is the explanation coherent, balanced, and visually refined;
+5. intuitiveness — can a non-specialist reconstruct the explanation from the
+   picture, starting from something recognizable and without hidden jargon.
+
+Select the highest combined score; the winner must score at least 4 in every
+dimension. Feed only the selected concept to the image prompt. Do not expose the
+two rejected descriptions to the generator, because their layouts and motifs
+can leak into a confused compromise.
+
+Use an explain-back discipline inspired by Feynman, not a decorative “Feynman
+style.” Prefer the most literal domain-native representation that works. Start
+from something the reader can recognize, add one conceptual step at a time,
+place every necessary term beside its referent, and remove anything that does
+not help reconstruct the explanation. Use a metaphor only when it improves both
+accuracy and comprehension; a clever but misleading analogy fails.
+
+## 5. Plan one semantic system before panels
+
+Every v3 figure declares a `semantic_plan` before layout:
+
+- `entities` lists every meaningful object, its specific depiction,
+  explanatory role, and evidence basis. Generic placeholders and undeclared
+  decorative objects are forbidden.
+- `connectors` lists every arrow or line by source, target, semantic meaning
+  (`causal`, `temporal`, `transfer`, `comparison`, `association`, or
+  `navigation`), and short label. If none is declared, no arrow or bracket may
+  appear.
+- `panel_jobs` assigns one distinct explanatory job to each labelled section.
+  Related outcomes belong in one visual unit; a panel that merely redraws the
+  previous result is invalid.
+- `grouping_rationale` explains why related information is together and why
+  genuinely different content is separate.
+- `anatomy_subjects` declares every depicted person or animal requiring an
+  original-size integrity check.
+- `salience_targets` identifies visually vulnerable must-show entities that
+  need deliberate contrast, size, and separation.
+- `quantitative_decision` states whether verified numbers exist, whether they
+  carry the primary message, and why the route follows. Primary known numbers
+  always use deterministic rendering.
+- `information_priority` classifies every entity as primary or supporting,
+  names non-essential elements to omit, and records a deletion test. Primary
+  entities must dominate area, contrast, and first fixation; background
+  scenery, props, repeated motifs, and decorative furniture that do not change
+  the explain-back sentence are forbidden.
+- `uncertainty_encodings` ties every uncertainty mark to a declared entity,
+  names the source of uncertainty, specifies the visual encoding, and states
+  what the reader should infer. A generic question mark, dashed halo, outcome
+  icon, or bare `uncertain` label does not communicate an evidence boundary.
+- `cross_view_identity` declares repeated specimens or objects whose positions,
+  membership, geometry, or other invariant features must remain registered
+  across thresholds, filters, or states. Only the declared transformation may
+  change.
+- `anatomical_context` is required for every anatomical subject. It names the
+  orientation landmarks and focal region that must survive simplification so a
+  reader can locate the finding and understand where an instrument or mechanism
+  applies.
+
+The caption title must name the actual subject or finding. A title that comments
+on figure construction or admits that the panels answer different questions is
+evidence that the concept should be split or reconceived.
+
+## 5b. Plan panels and explanatory callouts in every writing style
+
+Scientific, popsci, bullets, and ELI5 use the same reference system. Distinct
+sections receive sequential uppercase panel labels `A`, `B`, `C`, `D`. Put a
+short explanation beside the object it explains and use a thin leader line to
+the exact target whenever adjacency alone is ambiguous. Record panel labels,
+callout text, target, and whether a leader line is required in
+`annotation_plan`; all rendered labels also belong in `exact_text`. A continuous
+single composition may use no panels or callouts, but the rationale must say why.
+Each callout also declares `background: opaque-white` when its text occupies
+illustrated, photographic, textured, or otherwise busy pixels, or
+`background: quiet-canvas` when clean white space already provides contrast.
+Opaque plates use restrained padding and never become decorative cards.
+
+## 5c. Fit the canvas to the information
+
+Every v3 spec includes a `layout_plan` with content density, a boolean
+`wide_canvas_required`, aspect-ratio rationale, balance strategy, and the
+intended final display. Do not default to 2:1. A sparse single comparison
+normally earns a compact landscape or near-square canvas; a sparse figure
+wider than 1.75:1 is invalid unless `wide_canvas_required` is true because the
+content has genuinely horizontal topology. Wide canvases otherwise belong to a
+horizontal sequence, several aligned panels, or dense categorical coverage.
+Inspect the full composition for optical centring, panel-weight balance, and
+dead space at native and final size. Passing a numeric aspect-ratio check does
+not rescue a lopsided or padded composition.
+
+## 5d. Apply physical and perceptual integrity gates
+
+Inspect every depicted person or animal at original size. Extra, missing,
+duplicated, fused, or impossible limbs, hands, digits, facial features, or
+joints are release-blocking, even when anatomy is not the scientific subject.
+
+Inspect every connector without consulting the prompt: its source, target, and
+meaning must be evident. Reject decorative arrows, floating trajectories,
+unexplained brackets, and visual objects with no declared role. Inspect every
+salience target at final display size; pale-on-pale, too-small, overlapping, or
+otherwise effectively invisible evidence fails. Remove redundant sections:
+each panel must add comparison, consequence, uncertainty, mechanism, or
+synthesis rather than repeat another panel.
+
+Run a deletion test before rendering: remove each non-primary element in turn.
+If the declared explain-back sentence and evidence boundary remain intact, omit
+that element. Anatomical simplification is the exception only when the retained
+landmarks still locate the focal region unambiguously. When the same specimen
+appears in several views, compare registered features directly and reject any
+unexplained identity drift.
+
+## 5e. Bind quantitative semantics to their marks
+
+Every v3 deterministic figure declares `plot_design.axis_semantics` for every
+panel, using the exact rendered axis labels and a plain-language statement of
+what each dimension means. It also declares a `caption_axis_summary`, a
+`numeric_annotation_attachment`, and an `uncertainty_display` plan. The caption
+must repeat what the x- and y-axes encode, including units or categories.
+
+Render every y-axis label vertically outside the data region and every x-axis
+label horizontally below it. Centre the complete plot, including external axis
+labels and direct annotations, within its panel. Every interval, endpoint
+value, difference, denominator, and numeric qualifier
+must sit on, beside, or connect directly to the mark it describes. An interval
+key is omitted for a conventional point-and-whisker encoding when the caption
+already explains it. Add a compact legend only when two or more non-standard
+encodings genuinely require decoding; state why in `plot_design.legend_plan`.
+A contrast interval is
+attached to the contrast bracket or endpoint comparison it qualifies, never
+placed halfway along unrelated trajectories. Direct labels may replace a
+redundant legend, but they do not excuse an unnamed axis construct.
+
+## 6. Generate, analyze, and repeat for meaning
 
 For a generated conceptual figure:
 
-1. Build the full structured prompt with `build_figure_prompt.py`.
-2. Generate the complete composition with all exact typography directly in the
-   image and inspect it at original size and expected PDF size.
-3. If every gate passes, select it immediately. A second candidate is not a
-   quota and a passing first candidate is not evidence of insufficient effort.
-4. Make one targeted ImageGen edit when the defect is local, repeating the
-   exact string plus scientific and geometry invariants while preserving the
-   rest of the composition.
-5. If composition, hierarchy, style, science, or several text elements are
-   broadly weak, generate a genuinely different second candidate from the same
-   evidence specification.
-6. Compare candidates only when multiple candidates exist. Select for evidence
-   fidelity, visual hierarchy, domain specificity, style fit, polish, and
-   legibility—in that order. Do not select a visibly cheaper candidate merely
-   because its OCR is easier.
-7. If exact copy remains the only blocker after direct generation and repair,
-   keep the strongest generated composition and switch to the hybrid route.
-8. A pure deterministic fallback for a non-quantitative figure requires at
-   least two generated candidates, at least one targeted edit, explicit hybrid
-   consideration, and a concrete failure reason.
+1. Build the full prompt from the winning concept with `build_figure_prompt.py`.
+2. Generate the complete composition with all essential typography directly in
+   the image and inspect it at original size and expected PDF size.
+3. Before reading the prompt again, write what a reader would actually
+   understand, the eye path they would follow, and the sentence they could
+   explain back without the caption. Compare that observation with
+   `reader_takeaway`, `must_show`, `information_flow`, the familiar starting
+   point, and `plain_language_explain_back`.
+4. If meaning, evidence, copy, geometry, and every quality gate pass, select it.
+   A passing first candidate is valid.
+5. If the defect is local, make a targeted ImageGen edit. If the composition,
+   meaning, flow, science, or several labels are broadly wrong, regenerate the
+   selected concept or return to the three-concept decision and improve it.
+6. Record every candidate in `post_generation_reviews`. A failed review must
+   name concrete issues, decide `revise` or `regenerate`, and be followed by
+   another attempt. The selected asset must be reviewed exactly once with
+   `intended_meaning_conveyed: true`, `information_flow_clear: true`,
+   `intuitive_without_caption: true`, an empty `unexplained_jargon` list, no
+   issues, and `decision: accept`.
+7. Compare candidates only when several exist. Never select a cheaper or more
+   generic result merely because its text is easier to OCR.
 
 Never ship a technically valid result when it is compositionally weak.
 Do not endlessly polish an unsupported or scientifically incorrect image;
 correctness remains the first gate.
 
-## 4. Match the review's writing style
+## 7. Match the review's writing style
 
 `review_style` is required in new figure specifications and selects a writing-
 style overlay from `figure-writing-style-overlays.json`:
@@ -112,13 +280,13 @@ style overlay from `figure-writing-style-overlays.json`:
 The writing-style overlay changes art direction, finish, palette, and permitted
 typography. It never changes the evidence payload or certainty encoding.
 
-## 5. Prevent stretching at every stage
+## 8. Prevent stretching at every stage
 
 Non-distortion is a hard invariant:
 
 - Never resize a figure with independent width and height scales.
-- Preserve the source aspect ratio during generation, hybrid composition,
-  export, PDF placement, rasterization, and thumbnail creation.
+- Preserve the source aspect ratio during generation, plotting, export, PDF
+  placement, rasterization, and thumbnail creation.
 - Circles and circular anatomical structures remain circular; squares remain
   square; regular axes retain equal unit geometry where applicable.
 - Text uses natural font proportions. Never horizontally condense, expand,
@@ -131,19 +299,13 @@ Non-distortion is a hard invariant:
   `geometry_invariants`. `qa_figure.py` checks the delivered raster ratio and
   rejects reported geometry distortion. PDF QA independently compares the
   intrinsic figure ratio with the PDF image transformation.
+- The target ratio is content-driven, not a full-width quota. Compact figures
+  may render narrower on the journal page when their final effective label size
+  still passes; do not add empty horizontal space merely to preserve width.
 
-The hybrid compositor never resizes its base image. Its output dimensions are
-identical to the generated input dimensions, and circles are drawn from one
-radius measured against the shorter canvas edge. It also measures the original
-geometry of every deterministic text envelope. Every text overlay requires an
-explicit opaque background or a preceding opaque rectangle that fully contains
-that envelope. Unmasked hybrid text is rejected categorically, preventing a
-repair label from being painted over generated type without relying on any
-topic, example, OCR engine, pixel colour, or tuned image threshold.
+## 9. Visual inspection record
 
-## 6. Visual inspection record
-
-For `quality_contract_version: 1`, `<figure-id>.inspection.json` contains:
+For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
 
 ```json
 {
@@ -160,24 +322,116 @@ For `quality_contract_version: 1`, `<figure-id>.inspection.json` contains:
     "hierarchy": "pass",
     "domain_specificity": "pass",
     "style_fit": "pass",
-    "polish": "pass"
+    "polish": "pass",
+    "explanatory_value": "pass",
+    "information_flow": "pass",
+    "intuitiveness": "pass",
+    "concept_coherence": "pass",
+    "anatomical_integrity": "pass",
+    "connector_semantics": "pass",
+    "logical_grouping": "pass",
+    "salience": "pass",
+    "nonredundancy": "pass",
+    "typography": "pass"
+  },
+  "communication": {
+    "observed_takeaway": "A plain-language statement of what the pixels communicate.",
+    "observed_explain_back": "The sentence a non-specialist could say from the image alone.",
+    "explain_back_matches": true,
+    "intuitive_without_caption": true,
+    "familiar_starting_point_visible": true,
+    "requires_caption_to_understand": false,
+    "unexplained_jargon": [],
+    "intended_takeaway_conveyed": true,
+    "information_flow_clear": true,
+    "must_show_visible": ["..."],
+    "observed_information_flow": ["..."],
+    "misleading_or_ambiguous": [],
+    "revision_needed": false
+  },
+  "annotation": {
+    "panel_labels": ["A", "B"],
+    "callouts": [
+      {
+        "text": "Short explanation",
+        "target": "the exact depicted structure",
+        "leader_line_present": true,
+        "leader_origin_attached_to_label": true,
+        "leader_endpoint_hits_target": true
+      }
+    ]
+  },
+  "integrity": {
+    "title_matches_visual_question": true,
+    "panels_form_one_explanation": true,
+    "declared_entities_specific": true,
+    "all_objects_declared": true,
+    "all_connectors_semantic": true,
+    "related_content_grouped": true,
+    "panels_add_distinct_information": true,
+    "primary_entities_visually_dominant": true,
+    "nonessential_elements_absent": true,
+    "aspect_ratio_suits_content": true,
+    "composition_optically_balanced": true,
+    "callout_backings_legible": true,
+    "font_system_consistent": true,
+    "composite_components_integrated": true,
+    "anatomy_checked_at_original_size": true,
+    "anatomical_context_sufficient": true,
+    "uncertainty_encodings_explanatory": true,
+    "cross_view_identity_preserved": [],
+    "salience_targets_visible": ["entity-id"],
+    "anatomy_errors": [],
+    "unexplained_objects": [],
+    "ambiguous_connectors": [],
+    "salience_failures": [],
+    "redundant_sections": [],
+    "typography_issues": [],
+    "entity_specificity_issues": [],
+    "visual_clutter": [],
+    "anatomical_context_losses": [],
+    "identity_drift": [],
+    "uncertainty_ambiguities": [],
+    "quantitative_annotation_issues": [],
+    "layout_balance_issues": [],
+    "callout_backing_issues": [],
+    "font_consistency_issues": [],
+    "composite_integration_issues": []
+  },
+  "quantitative": {
+    "axis_semantics_visible": true,
+    "numeric_annotations_attached_to_referents": true,
+    "uncertainty_attached_to_estimate": true
   }
 }
 ```
 
 Each `pass` is a real visual judgment made after viewing the selected pixels at
-original size and expected PDF size. `duplicate_text` lists any label rendered
-more than its manifest count; `unlisted_text` lists meaningful copy absent from
-the manifest. Either list being non-empty is release-blocking. Empty or blank
-pixels cannot be rescued by a manually supplied OCR transcript.
+original size and expected PDF size. Visually transcribe the exact rendered copy
+into `ocr_text`; machine OCR is a secondary discrepancy warning, not an excuse
+for another generation when the pixels are plainly correct. Conversely, never
+use a manual transcript to certify garbled or absent lettering. Write
+`observed_takeaway` from the pixels, not by copying the prompt.
+`duplicate_text` lists any label rendered more than
+its manifest count; `unlisted_text` lists meaningful copy absent from the
+manifest. Either list being non-empty is release-blocking. A planned callout
+must point to its declared target, and every required leader line must actually
+be visible. The connector must visibly begin at or attach to its label rather
+than appear as a detached line elsewhere in the panel. Its endpoint must visibly terminate on the exact named referent
+rather than nearby empty space; when the callout names a group, the connector
+or bracket must reach every member of that group. Record this as
+`leader_origin_attached_to_label: true` and
+`leader_endpoint_hits_target: true`; any missing or false attestation is
+release-blocking. Empty or blank pixels cannot be rescued by a manually
+supplied OCR transcript.
 
-## 7. Generation provenance record
+## 10. Generation provenance record
 
-For `quality_contract_version: 1`, `<figure-id>.provenance.json` contains:
+For `quality_contract_version: 3`, provenance keeps schema version 2 and contains:
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generator_available": true,
   "generator": {
     "tool": "built-in-imagegen",
@@ -197,30 +451,57 @@ For `quality_contract_version: 1`, `<figure-id>.provenance.json` contains:
   ],
   "comparison": {
     "candidates_compared": 1,
-    "selection_rationale": "The first complete direct-text candidate passed every gate."
+    "selection_rationale": "The first complete candidate passed every gate."
   },
-  "fallback_reason": null,
-  "hybrid_considered": false
+  "post_generation_reviews": [
+    {
+      "asset": "figure.png",
+      "intended_takeaway": "The exact communication_goal.reader_takeaway string.",
+      "observed_takeaway": "What the inspector understood from the image.",
+      "observed_explain_back": "What the inspector could explain from the image alone.",
+      "intended_meaning_conveyed": true,
+      "information_flow_clear": true,
+      "intuitive_without_caption": true,
+      "unexplained_jargon": [],
+      "issues": [],
+      "decision": "accept"
+    }
+  ]
 }
 ```
 
-Use `kind: edit` for a targeted image edit and `kind: render` for a purely
-deterministic candidate. Paths are case-local audit records; only the selected
-asset must appear in the final review. The release manifest hashes the selected
-figure, its specification, prompt, inspection, and provenance.
+Use `kind: edit` for a targeted ImageGen edit and `kind: render` for a
+deterministic plot. Every generated, edited, or rendered candidate requires a
+matching post-generation review. Paths are case-local audit records; only the
+selected asset appears in the final review. The release manifest hashes the
+selected figure, its specification, prompt, inspection, and provenance.
 
-For a hybrid selection, additionally record `direct_text_attempted: true`, a
-direct-text generate attempt (`text_mode: "direct"`), an edit attempt or second
-generated candidate, `fallback_reason`, one `compose` attempt, and the existing
-`hybrid` compositor/base/aspect record. `comparison` may be omitted when only
-one candidate exists; if retained, use `candidates_compared: 1`.
-
-## 8. Release decision
+## 11. Release decision
 
 A figure is releasable only when all of the following are true:
 
 - scientific/data QA passes;
-- all five visual-quality dimensions pass;
+- all fifteen visual-quality dimensions pass, including coherent thesis,
+  anatomy, connector semantics, grouping, salience, non-redundancy, and typography;
+- every meaningful object is declared and specific, every anatomical subject
+  has been checked at original size, and every integrity issue list is empty;
+- primary entities visibly dominate, non-essential elements fail closed under
+  the deletion test, anatomical landmarks remain sufficient, repeated views
+  preserve identity, and uncertainty marks explain the exact claim they qualify;
+- the canvas ratio fits the information density and the complete composition is
+  optically centred and balanced rather than padded to page width;
+- callouts over busy pixels have opaque white backing and every typographic role
+  uses one consistent natural-width house sans-serif family;
+- deterministic and composite figures label every plotted construct and attach intervals and
+  numeric annotations directly to their graphical referents, while captions
+  repeat the x- and y-axis meanings;
+- composite figures keep every quantitative encoding and all text deterministic,
+  use generated assets only for orientation, and preserve each asset's intrinsic
+  aspect ratio;
+- the familiar starting point, declared takeaway, explain-back sentence,
+  must-show list, and information flow pass an independent post-generation
+  check without caption dependency or unexplained jargon;
+- panel labels and explanatory callouts match the annotation plan;
 - no geometry distortion is reported;
 - its raster aspect matches the declared target;
 - generation provenance satisfies the route rules;
@@ -228,3 +509,13 @@ A figure is releasable only when all of the following are true:
 - PDF placement preserves intrinsic aspect ratio.
 
 "Correct but cheap" is a failed visual-quality result, not an acceptable final.
+
+## 12. Generalize feedback without canonizing examples
+
+Follow `figure-feedback-generalization.md`. Translate every observation into an
+observable failure, topic-neutral rule, explicit v3 contract field, and
+synthetic executable regression fixture. Do not publish a benchmark gallery,
+produce before/after boards, or preserve temporary evaluation topics as
+templates. Visual samples, when useful, are private, replaceable, and inspected
+only as final candidates after the rule is frozen. A targeted edit may repair an
+ordinary candidate, but it never counts as the general feedback implementation.

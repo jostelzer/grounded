@@ -28,6 +28,215 @@ class FigurePromptTests(unittest.TestCase):
             "exact_text": ["A clean mechanism", "A", "B"],
         }
 
+    def v2_generated_spec(self):
+        spec = self.minimal_spec()
+        spec.update({
+            "quality_contract_version": 2,
+            "review_style": "scientific",
+            "render_route": "generated",
+            "target_aspect_ratio": 2.0,
+            "visual_anchor": "One domain-specific structure linking A to B",
+            "communication_goal": {
+                "reader_takeaway": "A visibly leads to B, within a limited evidence boundary.",
+                "must_show": ["A", "the transition", "B"],
+                "information_flow": ["Notice A", "Follow the transition", "Arrive at B"],
+                "evidence_boundary": "The direction is supported; its magnitude is not shown.",
+                "familiar_starting_point": "A visible path joining a starting point to an outcome.",
+                "plain_language_explain_back": "A travels along one path and produces B.",
+            },
+            "concepts": [
+                {
+                    "id": "pathway",
+                    "description": "A single continuous domain-native pathway with A at left and B at right.",
+                    "information_flow": ["A", "transition", "B"],
+                    "strengths": ["Immediate eye path", "Few visual elements"],
+                    "risks": ["Could imply an exact rate if overdecorated"],
+                },
+                {
+                    "id": "paired",
+                    "description": "Two aligned states separated by a restrained transition marker.",
+                    "information_flow": ["Compare states", "Read the connector"],
+                    "strengths": ["Simple comparison"],
+                    "risks": ["Less explicit process"],
+                },
+                {
+                    "id": "cutaway",
+                    "description": "A domain-native cutaway revealing the transition inside one structure.",
+                    "information_flow": ["See the whole", "Inspect the transition"],
+                    "strengths": ["Elegant integration"],
+                    "risks": ["Higher visual complexity"],
+                },
+            ],
+            "concept_selection": {
+                "selected_id": "pathway",
+                "selection_rationale": "It gives the clearest complete explanation with the least visual machinery.",
+                "evaluations": [
+                    {"id": "pathway", "clarity": 5, "simplicity": 5,
+                     "completeness": 4, "elegance": 5, "intuitiveness": 5,
+                     "assessment": "Best overall."},
+                    {"id": "paired", "clarity": 4, "simplicity": 5,
+                     "completeness": 3, "elegance": 4, "intuitiveness": 4,
+                     "assessment": "Too static."},
+                    {"id": "cutaway", "clarity": 3, "simplicity": 2,
+                     "completeness": 5, "elegance": 5, "intuitiveness": 3,
+                     "assessment": "Too complex."},
+                ],
+            },
+            "annotation_plan": {
+                "panel_labels": ["A", "B"],
+                "callouts": [],
+                "rationale": "Two distinct sections need stable references; direct labels are adjacent.",
+            },
+        })
+        return spec
+
+    def v3_generated_spec(self):
+        spec = self.v2_generated_spec()
+        spec["quality_contract_version"] = 3
+        spec["layout_plan"] = {
+            "content_density": "moderate",
+            "wide_canvas_required": False,
+            "aspect_ratio_rationale": (
+                "Two linked stages use a compact horizontal composition without dead gutters."
+            ),
+            "balance_strategy": (
+                "Equal visual weight around the transition keeps the optical centre stable."
+            ),
+            "final_display": "Journal article figure at its true proportional PDF size.",
+        }
+        spec["communication_goal"].update({
+            "visual_question": "How does the signal reach the response?",
+            "panel_thesis": (
+                "A establishes the specific signal and B shows the response it produces."
+            ),
+        })
+        spec["semantic_plan"] = {
+            "entities": [
+                {
+                    "id": "signal",
+                    "depiction": "one specific domain-native signal structure",
+                    "role": "the starting entity",
+                    "evidence_basis": "directly supported starting state",
+                },
+                {
+                    "id": "response",
+                    "depiction": "one specific domain-native response structure",
+                    "role": "the resulting entity",
+                    "evidence_basis": "directly supported response state",
+                },
+            ],
+            "connectors": [{
+                "from": "signal", "to": "response", "meaning": "causal",
+                "label": "activates",
+            }],
+            "panel_jobs": [
+                {"label": "A", "job": "establish the signal",
+                 "adds_distinct_information": True},
+                {"label": "B", "job": "show the resulting response",
+                 "adds_distinct_information": True},
+            ],
+            "grouping_rationale": (
+                "The two stages answer one question; no outcome is split into a duplicate panel."
+            ),
+            "anatomy_subjects": [],
+            "anatomical_context": [],
+            "salience_targets": ["signal", "response"],
+            "information_priority": {
+                "primary_entities": ["signal", "response"],
+                "supporting_entities": [],
+                "excluded_nonessential": ["decorative background props"],
+                "dominance_rationale": "The signal and response carry the complete explanation.",
+                "deletion_test": "Remove anything that does not change the signal-to-response explanation.",
+            },
+            "uncertainty_encodings": [],
+            "cross_view_identity": [],
+            "quantitative_decision": {
+                "verified_numbers_available": False,
+                "numbers_carry_primary_message": False,
+                "reason": "The supported message is a qualitative relationship.",
+            },
+        }
+        return spec
+
+    def test_v3_prompt_encodes_one_thesis_semantic_arrows_and_salience(self):
+        spec = self.v3_generated_spec()
+        prompt = MODULE.build_prompt(
+            spec, self.profiles, self.archetypes, writing_styles=self.writing_styles)
+        self.assertIn("ONE VISUAL THESIS — HARD GATE", prompt)
+        self.assertIn("Do not combine independent questions", prompt)
+        self.assertIn("DECLARED CONNECTORS — USE NO OTHERS", prompt)
+        self.assertIn("signal → response; meaning: causal", prompt)
+        self.assertIn("SALIENCE AT FINAL SIZE — HARD GATE", prompt)
+        self.assertIn("VISUAL CONTENT BUDGET — HARD GATE", prompt)
+        self.assertIn("decorative background props", prompt)
+        self.assertIn("A — establish the signal", prompt)
+
+    def test_v3_rejects_an_unclassified_or_competing_entity(self):
+        spec = self.v3_generated_spec()
+        spec["semantic_plan"]["information_priority"]["primary_entities"] = ["signal"]
+        with self.assertRaisesRegex(ValueError, "classify every entity"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_rejects_missing_visual_question(self):
+        spec = self.v3_generated_spec()
+        spec["communication_goal"].pop("visual_question")
+        with self.assertRaisesRegex(ValueError, "visual_question"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_rejects_an_undefined_or_decorative_connector(self):
+        spec = self.v3_generated_spec()
+        spec["semantic_plan"]["connectors"][0]["meaning"] = "decorative"
+        with self.assertRaisesRegex(ValueError, "connector meaning"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_rejects_panel_jobs_that_duplicate_or_miss_panels(self):
+        spec = self.v3_generated_spec()
+        spec["semantic_plan"]["panel_jobs"] = spec["semantic_plan"]["panel_jobs"][:1]
+        with self.assertRaisesRegex(ValueError, "panel_jobs labels"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_routes_primary_verified_numbers_deterministically(self):
+        spec = self.v3_generated_spec()
+        decision = spec["semantic_plan"]["quantitative_decision"]
+        decision["verified_numbers_available"] = True
+        decision["numbers_carry_primary_message"] = True
+        with self.assertRaisesRegex(ValueError, "require deterministic"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_human_subjects_trigger_explicit_anatomy_rejection(self):
+        spec = self.v3_generated_spec()
+        spec["semantic_plan"]["anatomy_subjects"] = ["one adult person"]
+        spec["semantic_plan"]["anatomical_context"] = [{
+            "subject": "one adult person",
+            "orientation_landmarks": ["head", "torso"],
+            "focal_region": "the depicted response region",
+            "context_rationale": "The landmarks locate the response on the body.",
+        }]
+        prompt = MODULE.build_prompt(
+            spec, self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("ANATOMICAL INTEGRITY — HARD GATE", prompt)
+        self.assertIn("extra, missing, duplicated, fused, or impossible body part", prompt)
+        self.assertIn("ANATOMICAL CONTEXT — ORIENT BEFORE SIMPLIFYING", prompt)
+
+    def test_v3_human_subject_without_orientation_context_is_rejected(self):
+        spec = self.v3_generated_spec()
+        spec["semantic_plan"]["anatomy_subjects"] = ["one adult person"]
+        with self.assertRaisesRegex(ValueError, "cover every anatomy subject"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
     def test_default_prompt_defines_arial_and_rejects_serif(self):
         prompt = MODULE.build_prompt(
             self.minimal_spec(), self.profiles, self.archetypes
@@ -37,6 +246,8 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("#1A1A1A", prompt)
         self.assertIn("Context: article", prompt)
         self.assertIn("figure-native", prompt)
+        self.assertIn("Nature Reviews-inspired conceptual synthesis", prompt)
+        self.assertNotIn("neuroscience or biomedical composition", prompt)
 
     def test_article_context_keeps_caption_title_out_of_render_manifest(self):
         prompt = MODULE.build_prompt(
@@ -97,6 +308,15 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("timeline —", prompt)
         self.assertNotIn("Nature Reviews-inspired conceptual synthesis", prompt)
 
+    def test_nature_reviews_profile_is_domain_general(self):
+        visual_language = " ".join(
+            self.profiles["nature-reviews"]["visual_language"]
+        )
+        self.assertIn("domain-specific structures", visual_language)
+        self.assertIn("study operations, or evidence marks", visual_language)
+        self.assertNotIn("Let biological structures", visual_language)
+        self.assertNotIn("clean cutaway anatomy", visual_language)
+
     def test_style_override_does_not_mutate_profile_catalog(self):
         original = copy.deepcopy(self.profiles)
         spec = self.minimal_spec()
@@ -116,7 +336,7 @@ class FigurePromptTests(unittest.TestCase):
         spec["review_style"] = "popsci"
         prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
         self.assertIn("Premium editorial science illustration", prompt)
-        self.assertIn("Render every character in Optima throughout", prompt)
+        self.assertIn("Render every character in Helvetica Neue throughout", prompt)
         self.assertIn("serious long-form magazine", prompt)
         self.assertIn("corporate infographic", prompt)
         self.assertIn("Never resize, condense, expand, shear, or stretch", prompt)
@@ -194,6 +414,274 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("CANDIDATE SELECTION STANDARD", prompt)
         self.assertIn("GEOMETRY — HARD INVARIANTS", prompt)
         self.assertIn("2:1 landscape", prompt)
+
+    def test_v2_selects_one_of_three_concepts_before_prompting(self):
+        spec = self.v2_generated_spec()
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("COMMUNICATION GOAL — THE RELEASE GATE", prompt)
+        self.assertIn("SELECTED CONCEPT — RENDER ONLY THIS CONCEPT", prompt)
+        self.assertIn(spec["concepts"][0]["description"], prompt)
+        self.assertNotIn(spec["concepts"][1]["description"], prompt)
+        self.assertNotIn(spec["concepts"][2]["description"], prompt)
+        self.assertIn(
+            "clarity 5/5; simplicity 5/5; completeness 4/5; elegance 5/5; "
+            "intuitiveness 5/5", prompt)
+        self.assertIn("INTUITION AND EXPLAIN-BACK TEST — ALL REVIEW STYLES", prompt)
+        self.assertIn("A travels along one path and produces B.", prompt)
+        self.assertIn("endpoint visibly lands on the named referent", prompt)
+        self.assertIn("visibly begins at the label", prompt)
+        self.assertIn("reaches every named member", prompt)
+
+    def test_v2_rejects_a_lower_scoring_selected_concept(self):
+        spec = self.v2_generated_spec()
+        spec["concept_selection"]["selected_id"] = "paired"
+        with self.assertRaisesRegex(ValueError, "highest combined"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_v2_requires_a_plain_language_explain_back_target(self):
+        spec = self.v2_generated_spec()
+        del spec["communication_goal"]["plain_language_explain_back"]
+        with self.assertRaisesRegex(ValueError, "plain_language_explain_back"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_v2_rejects_a_winner_that_is_not_intuitive(self):
+        spec = self.v2_generated_spec()
+        spec["concept_selection"]["evaluations"][0]["intuitiveness"] = 3
+        with self.assertRaisesRegex(ValueError, "at least 4"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_v2_generated_illustration_rejects_known_numeric_data(self):
+        spec = self.v2_generated_spec()
+        spec["data"] = {"estimate": 2.4, "unit": "points"}
+        with self.assertRaisesRegex(ValueError, "known numbers.*belong"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_v2_rejects_lowercase_panel_labels(self):
+        spec = self.v2_generated_spec()
+        spec["annotation_plan"]["panel_labels"] = ["a", "b"]
+        with self.assertRaisesRegex(ValueError, "uppercase prefix"):
+            MODULE.build_prompt(spec, self.profiles, self.archetypes)
+
+    def test_v2_quantitative_route_requires_real_data_and_polished_plot_design(self):
+        spec = self.minimal_spec()
+        spec.update({
+            "quality_contract_version": 2,
+            "review_style": "popsci",
+            "render_route": "deterministic",
+            "archetype": "quantitative",
+            "target_aspect_ratio": 2.0,
+            "communication_goal": {
+                "reader_takeaway": "The estimate is above the null but uncertain.",
+                "must_show": ["estimate", "interval", "null"],
+                "information_flow": ["Find the estimate", "Read the interval", "Compare with null"],
+                "evidence_boundary": "One verified estimate only.",
+                "familiar_starting_point": "A dot and its uncertainty line compared with a null line.",
+                "plain_language_explain_back": "The estimate is above the null, but the interval shows uncertainty.",
+            },
+            "annotation_plan": {
+                "panel_labels": [], "callouts": [],
+                "rationale": "A single plot needs neither panels nor anatomical callouts.",
+            },
+            "plot_design": {
+                "chart_type": "dot-and-whisker plot",
+                "encoding": "Position is the estimate; the line is the verified interval.",
+                "reader_path": ["Estimate", "Interval", "Null line"],
+                "style_rationale": "Direct labels and restrained colour minimize eye travel.",
+            },
+            "data": {"estimate": 1.4, "interval": [1.1, 1.8], "null": 1.0},
+        })
+        prompt = MODULE.build_prompt(spec, self.profiles, self.archetypes)
+        self.assertIn("DETERMINISTIC PLOT DESIGN", prompt)
+        self.assertIn("Do not emit library-default axes", prompt)
+
+    def test_v3_quantitative_route_binds_axes_intervals_and_caption_semantics(self):
+        spec = self.v3_generated_spec()
+        spec.update({
+            "archetype": "quantitative",
+            "render_route": "deterministic",
+            "exact_text": ["A clean mechanism", "Outcome", "Effect (points)"],
+            "annotation_plan": {
+                "panel_labels": [], "callouts": [],
+                "rationale": "One quantitative panel needs no panel letter.",
+            },
+            "data": {"panels": [{
+                "id": "main",
+                "x_axis": {"label": "Outcome"},
+                "y_axis": {"label": "Effect (points)"},
+                "series": [{"points": [{"y_interval": [1.0, 2.0]}]}],
+                "contrasts": [],
+            }]},
+            "plot_design": {
+                "chart_type": "direct-labelled dot and interval",
+                "encoding": "Position is the estimate and the whisker is its interval.",
+                "reader_path": ["Read outcome", "Find estimate", "Read interval"],
+                "style_rationale": "Direct attachment minimizes eye travel.",
+                "typography": {
+                    "family": "Arial", "fallback": "Helvetica",
+                    "upright_natural_width": True,
+                },
+                "axis_semantics": [{
+                    "panel_id": "main",
+                    "x_label": "Outcome",
+                    "x_meaning": "The x-axis names the measured outcome category.",
+                    "y_label": "Effect (points)",
+                    "y_meaning": "The y-axis shows the adjusted effect in score points.",
+                }],
+                "caption_axis_summary": (
+                    "The x-axis names the outcome; the y-axis shows adjusted score points."
+                ),
+                "numeric_annotation_attachment": (
+                    "Each value is placed beside its estimate mark."
+                ),
+                "uncertainty_display": {
+                    "present": True,
+                    "encoding": "Vertical whiskers show 95% confidence intervals.",
+                    "attachment": "Each whisker passes through its estimate dot.",
+                },
+                "axis_label_placement": {
+                    "x_orientation": "horizontal",
+                    "x_location": "below-data-region",
+                    "y_orientation": "vertical",
+                    "y_location": "outside-data-region",
+                },
+                "legend_plan": {
+                    "needed": False,
+                    "reason": "The conventional point-and-whisker is explained in the caption.",
+                    "placement": "none",
+                },
+            },
+        })
+        spec["semantic_plan"]["panel_jobs"] = []
+        decision = spec["semantic_plan"]["quantitative_decision"]
+        decision.update({
+            "verified_numbers_available": True,
+            "numbers_carry_primary_message": True,
+            "reason": "The exact estimate and interval carry the message.",
+        })
+        prompt = MODULE.build_prompt(
+            spec, self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("QUANTITATIVE SEMANTICS — HARD GATE", prompt)
+        self.assertIn("x-axis 'Outcome'", prompt)
+        self.assertIn("Every interval", prompt)
+        spec["plot_design"].pop("axis_semantics")
+        with self.assertRaisesRegex(ValueError, "axis_semantics"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_requires_content_fit_layout_plan(self):
+        spec = self.v3_generated_spec()
+        spec.pop("layout_plan")
+        with self.assertRaisesRegex(ValueError, "layout_plan"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_sparse_wide_canvas_requires_real_horizontal_topology(self):
+        spec = self.v3_generated_spec()
+        spec["layout_plan"]["content_density"] = "sparse"
+        spec["layout_plan"]["wide_canvas_required"] = False
+        with self.assertRaisesRegex(ValueError, "sparse figure wider than 1.75:1"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_callout_over_busy_pixels_requires_declared_backing(self):
+        spec = self.v3_generated_spec()
+        spec["exact_text"].append("Local note")
+        spec["annotation_plan"]["callouts"] = [{
+            "text": "Local note",
+            "target": "the focal structure",
+            "leader_line": True,
+        }]
+        with self.assertRaisesRegex(ValueError, "background"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+        spec["annotation_plan"]["callouts"][0]["background"] = "opaque-white"
+        prompt = MODULE.build_prompt(
+            spec, self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("backing: opaque-white", prompt)
+
+    def test_v3_composite_keeps_generated_art_text_free_and_data_deterministic(self):
+        spec = self.v3_generated_spec()
+        spec.update({
+            "archetype": "quantitative",
+            "render_route": "composite",
+            "visual_anchor": "Two text-free orientation objects above one compact comparison",
+            "exact_text": ["Category", "Outcome (units)"],
+            "annotation_plan": {
+                "panel_labels": [], "callouts": [],
+                "rationale": "One compact comparison needs no panel letter.",
+            },
+            "data": {"panels": [{
+                "id": "main",
+                "x_axis": {"label": "Category"},
+                "y_axis": {"label": "Outcome (units)"},
+                "series": [{"points": [{"y_interval": [1.0, 2.0]}]}],
+                "contrasts": [],
+            }]},
+            "plot_design": {
+                "chart_type": "paired point estimates",
+                "encoding": "Position shows the verified means; whiskers show uncertainty.",
+                "reader_path": ["Recognize anchors", "Compare means", "Read uncertainty"],
+                "style_rationale": "Compact centred evidence with subordinate orientation art.",
+                "typography": {"family": "Arial", "fallback": "Helvetica",
+                               "upright_natural_width": True},
+                "axis_semantics": [{
+                    "panel_id": "main", "x_label": "Category",
+                    "x_meaning": "The x-axis names the comparison categories.",
+                    "y_label": "Outcome (units)",
+                    "y_meaning": "The y-axis shows the measured outcome in units.",
+                }],
+                "caption_axis_summary": "Categories are on x; measured units are on y.",
+                "numeric_annotation_attachment": "Values sit beside their marks.",
+                "uncertainty_display": {
+                    "present": True, "encoding": "Whiskers show intervals.",
+                    "attachment": "Each whisker passes through its mean.",
+                },
+                "axis_label_placement": {
+                    "x_orientation": "horizontal", "x_location": "below-data-region",
+                    "y_orientation": "vertical", "y_location": "outside-data-region",
+                },
+                "legend_plan": {
+                    "needed": False,
+                    "reason": "The interval glyph is conventional and caption-defined.",
+                    "placement": "none",
+                },
+            },
+            "composite_plan": {
+                "generated_assets": [{
+                    "id": "anchor-pair",
+                    "purpose": "Orient the reader to the two compared categories.",
+                    "placement": "Above the corresponding deterministic marks.",
+                    "text_free": True,
+                    "encodes_magnitude": False,
+                }],
+                "deterministic_evidence_layer": (
+                    "All axes, means, intervals, values, and typography."
+                ),
+                "integration_strategy": (
+                    "Place the proportional text-free cutouts in reserved non-data space."
+                ),
+                "balance_rationale": "The anchors and plot share one compact vertical stack.",
+                "intrinsic_aspect_preserved": True,
+            },
+        })
+        spec["semantic_plan"]["panel_jobs"] = []
+        spec["semantic_plan"]["quantitative_decision"].update({
+            "verified_numbers_available": True,
+            "numbers_carry_primary_message": True,
+            "reason": "The exact means and intervals carry the message.",
+        })
+        prompt = MODULE.build_prompt(
+            spec, self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("COMPOSITE INTEGRATION", prompt)
+        self.assertIn("text-free", prompt)
+        self.assertIn("EXACT DETERMINISTIC TEXT MANIFEST", prompt)
 
     def test_structured_data_is_preserved(self):
         spec = self.minimal_spec()

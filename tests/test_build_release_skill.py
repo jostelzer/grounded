@@ -19,6 +19,7 @@ class ReleaseSkillTests(unittest.TestCase):
     def fixture(root: Path):
         (root / "references").mkdir()
         (root / "assets").mkdir()
+        (root / "evals").mkdir()
         (root / "scripts" / "__pycache__").mkdir(parents=True)
         (root / "examples").mkdir()
         (root / "tmp").mkdir()
@@ -33,6 +34,8 @@ class ReleaseSkillTests(unittest.TestCase):
             (root / "references" / filename).write_text("guide\n", encoding="utf-8")
         for filename in build_release_skill.ASSET_FILES:
             (root / "assets" / filename).write_bytes(b"png")
+        for filename in build_release_skill.EVAL_FILES:
+            (root / "evals" / filename).write_text("{}\n", encoding="utf-8")
         for filename in build_release_skill.SCRIPT_FILES:
             (root / "scripts" / filename).write_text("print('ok')\n", encoding="utf-8")
         (root / "scripts" / "scratch.py").write_text(
@@ -71,6 +74,10 @@ class ReleaseSkillTests(unittest.TestCase):
                     *(
                         f"grounded/assets/{filename}"
                         for filename in build_release_skill.ASSET_FILES
+                    ),
+                    *(
+                        f"grounded/evals/{filename}"
+                        for filename in build_release_skill.EVAL_FILES
                     ),
                     *(
                         f"grounded/references/{filename}"

@@ -17,7 +17,7 @@ improvised prose prompt.
 - Encode uncertainty visibly. Use restrained emphasis, dashed or muted elements, and labels such as `mixed`, `limited`, or `hypothesized` when the evidence requires them.
 - Keep citations in the written review and caption rather than filling the visual with DOI text.
 - Generate the actual media. Do not substitute a prompt, text outline, ASCII diagram, or unrendered diagram source.
-- Prefer a capable built-in image-generation model for the complete finished non-quantitative figure. It renders all exact labels, numbers, legends, and arrows directly in the first image. Use a targeted ImageGen edit for a local defect and reserve hybrid overlay for documented direct-text failure. Deterministic rendering is primary only when mathematical geometry is the evidence.
+- Use a capable built-in image-generation model for every non-quantitative figure. When verified known numbers carry the message, use deterministic plotting or a composite whose generated text-free anchors add real orientation while the plot owns all values and uncertainty. Before any route, declare the reader takeaway and information flow; for every generated component, compare exactly three detailed concepts and prompt only the strongest. After rendering, state what the pixels actually communicate and revise when meaning or flow is unclear.
 - If the required media tooling is unavailable or generation fails, still deliver the written review at its selected tier and state in one sentence that the visual could not be generated. Do not claim that media was created.
 
 ## Slides
@@ -69,35 +69,40 @@ it.
 
 Every figure must be understandable to an educated non-specialist without relying on the surrounding review to decode its terminology.
 
-### Preferred build: generator-first, exact where it matters
+### Required build: communication first, then generator or plot
 
 Probe the current agent's media capabilities before choosing a renderer. When a
-capable built-in image generator is available, use it for the visually authored
-portion of every non-quantitative figure. Create a quality-contract figure-spec
-JSON with `review_style`, `render_route`, `target_aspect_ratio`, and one dominant
-`visual_anchor`; set `render_context: article`, select a scientific profile and
-archetype, then run `scripts/build_figure_prompt.py`. The prompt builder combines
-the verified story with route-specific instructions and distinct scientific,
-popsci, bullets, or ELI5 art direction.
+capable built-in image generator is available, use it for every non-quantitative
+figure. Create a quality-contract v3 spec with `communication_goal`, including
+one visual question, one panel thesis, the familiar starting point, and plain-language explain-back sentence,
+`review_style`, `render_route`, `target_aspect_ratio`, one dominant
+`visual_anchor`, `annotation_plan`, and `semantic_plan`; set `render_context: article`, select a
+profile and archetype, then compare three detailed illustration concepts for
+clarity, simplicity, completeness, elegance, and intuitiveness. Run
+`scripts/build_figure_prompt.py` only after the winning concept is recorded. The
+builder exposes only that concept to ImageGen and combines it with distinct
+scientific, popsci, bullets, or ELI5 art direction.
 
-Choose `generated` for every non-quantitative finished figure and require the
-generator to integrate all exact typography directly. Choose `deterministic`
-from the start for exact plots or other mathematical geometry. Choose `hybrid`
-only after direct-text generation plus a targeted edit or alternate candidate
-fails, recording the concrete failure. The generated base must remain the
-meaningful scientific composition, not a token texture behind a generic vector
-diagram.
+Choose `generated` for every non-quantitative finished figure. Keep in-image
+copy to essential short labels and require the generator to integrate those
+labels directly. Choose `deterministic` only for a `quantitative` figure with
+verified structured values and an explicit polished plot design with clean
+upright sans-serif typography. Choose `composite` only when the same
+quantitative figure benefits materially from generated, text-free orientation
+art; the deterministic layer still owns all text, axes, values, intervals, and
+legends. Contract v3 does not use legacy hybrid illustrations or deterministic
+conceptual fallbacks.
 
-Inspect the first complete candidate for evidence fidelity, hierarchy, domain
-specificity, style fit, polish, copy, and legibility. Select it immediately if
-all gates pass. Use a targeted ImageGen edit for a local flaw and generate a
-fresh candidate only for a broadly weak composition or multiple defects;
-compare candidates only when more than one exists. Preserve the strongest
-generated composition with a deterministic overlay only as the last text
-repair.
-A non-quantitative pure deterministic fallback requires two generated
-candidates, one targeted edit, explicit hybrid consideration, and a concrete
-failure reason in provenance. Never ship a technically valid but visually weak result or
+Inspect every candidate for evidence fidelity, hierarchy, domain specificity,
+style fit, polish, explanatory value, information flow, copy, and legibility.
+Reject extra or impossible anatomy, undeclared objects, ambiguous connectors,
+clumsy splitting of related outcomes, redundant panels, invisible must-show
+elements, and weak typography.
+Write the observed takeaway, observed eye path, and the sentence a non-specialist
+could explain back without leaning on the prompt or caption.
+Use a targeted ImageGen edit for a local flaw and regenerate for a broadly weak
+composition or unclear meaning. A failed meaning/flow review must be followed by
+another attempt. Never ship a technically valid but visually weak result or
 prefer a visibly cheaper flowchart merely because OCR is easier.
 
 After composition, inspect every word, number, symbol, arrow, plotted magnitude,
@@ -119,21 +124,30 @@ CSS intent.
   invisible grid. Use white space and alignment before borders.
 - Prefer the clean 2D scientific-editorial language defined in `figure-style-system.md`; restrained biological shading is allowed only when it clarifies form.
 - Give every arrow a meaning stated in the figure ("leads to", "measured by", "mixed evidence").
+- Label distinct figure sections sequentially with uppercase `A`, `B`, `C`, `D`
+  in every review style, and use those labels in the body/caption when helpful.
+- Put concise explanatory callouts beside their targets; use a thin leader line
+  to the exact structure whenever adjacency alone could be ambiguous.
+- Start from a recognizable literal structure and reveal the unfamiliar idea
+  one conceptual step at a time. A metaphor is optional and must improve both
+  accuracy and comprehension; decorative analogies fail.
 - Encode uncertainty visibly and explain the encoding in the glossary — dashed outline, muted fill, an explicit `mixed` or `mouse evidence only` tag.
 - Keep all required in-figure copy short enough to remain readable at the
-  delivered size. Quote all generator-rendered copy exactly. For a documented
-  hybrid fallback, reserve quiet zones only for the unresolved overlay copy.
+  delivered size. Quote all generator-rendered copy exactly; keep prose and
+  evidence qualifications in the caption.
 - Rasterize and *look* at the result if any renderer is available (`rsvg-convert`, `cairosvg`, a headless browser). Inspect at delivered size and at phone width.
-- Keep journal-PDF figures at an aspect ratio of at least 2:1. The exporter
-  caps figure height (92 mm by default, `--figure-max-height` to adjust within
-  60–120 mm) and scales taller figures down proportionally, shrinking every
-  label with them; `qa_figure.py` evaluates label legibility at the true
-  rendered width and fails figures whose labels fall below 6.5 pt on paper.
+- Fit the aspect ratio to the visual topology and content density. Sparse
+  single comparisons should not be stretched across a broad canvas; genuinely
+  horizontal sequences and balanced multi-panel figures may be wide. The v3
+  contract requires an explicit topology justification when sparse content
+  exceeds 1.75:1. The
+  exporter caps figure height and scales proportionally, and `qa_figure.py`
+  evaluates label legibility at the true rendered size.
 
 **Don't:**
 
 - **Don't accept approximately correct text or data.** Every rendered word, number, unit, and symbol must match the supplied copy exactly.
-- **Don't place text over busy artwork.** Labels need quiet space or a plain backing plate.
+- **Don't place unbacked text over busy artwork.** Labels need quiet space or an opaque white backing plate with restrained padding.
 - **Don't let panels, icons, or captions overlap.** Bounding boxes must be disjoint. Overlap is not a style choice; it reads as a broken render.
 - **Don't stretch to fit.** Never set independent width and height scales, shear
   a raster, condense lettering, or turn a circle into an ellipse. Wrap, move,
@@ -206,6 +220,8 @@ paragraph of everyday sentences. `scripts/format_references.py` and
 9. In every figure, every abbreviation and non-obvious concept is defined by a
    local label or a smaller but readable legend/key inside the image.
 10. Every figure can be understood without consulting the surrounding prose for terminology.
-11. The selected route and iteration history are recorded; all five visual-
-    quality dimensions pass, the raster matches its declared aspect, and final
-    PDF placement preserves that intrinsic ratio without shear.
+11. The selected route and iteration history are recorded; all eight visual-
+    quality dimensions pass, including intuition and caption-independent
+    explain-back, the communication and annotation inspections pass,
+    the raster matches its declared aspect, and final PDF placement preserves
+    that intrinsic ratio without shear.

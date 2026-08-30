@@ -89,21 +89,27 @@ If a Crossref record genuinely lacks volume or pages (common for online-first an
 
 ### B5. Figures when local scripts are unavailable
 
-The evidence boundary and `figure-generation-contract.md` still apply. If the
-host exposes a capable built-in image generator, use it for the authored visual
-layer and all final typography of every non-quantitative journal figure, and
-apply the review's scientific, popsci, bullets, or ELI5 art direction. Inspect
-the first complete direct-text candidate and keep it when every gate passes.
-Use a targeted image edit for a local defect and a second candidate only for a
-broad failure. Use a native text/shape overlay only as a documented last-resort
-hybrid after direct-text generation and repair fail. Never
-resize width and height independently: circles remain circular and glyphs keep
-their natural proportions.
+The evidence boundary and `figure-generation-contract.md` still apply. State
+the reader takeaway, must-show elements, evidence boundary, and intended eye
+path before choosing a layout. For every non-quantitative figure, write three
+detailed concepts, score them for clarity, simplicity, completeness, elegance,
+and intuitiveness, and expose only the winner to a capable built-in image generator. Declare a familiar visual starting point and the one plain-language
+sentence a non-specialist should be able to explain back. Keep
+in-pixel text to essential short labels. Use deterministic rendering only for a
+polished plot of verified known numbers. Inspect what the selected pixels
+actually communicate; if meaning or flow is unclear, record the issue and edit
+or regenerate. The final image must make the starting point visible, define or
+replace all necessary jargon, and be explainable without its caption. A failed review cannot be the final candidate. Use uppercase
+`A`–`D` for distinct sections in every style and connect concise explanatory
+callouts to exact targets with thin leader lines when needed. Never resize width
+and height independently: circles remain circular and glyphs keep their natural
+proportions.
 
 Maintain the figure spec, prompt, inspection, and provenance as working records
 even when the scripts cannot run. Inspect the selected image at original and
-delivery size and reject weak composition, generic/cheap styling, incorrect
-science or copy, and any stretched shape or lettering. If the environment
+delivery size and reject weak composition, generic/cheap styling, low
+explanatory value, unclear information flow, incorrect science or copy, and any
+stretched shape or lettering. If the environment
 cannot create, inspect, and preserve a real image artifact—or cannot produce a
 PDF whose figure aspect can be checked—deliver the verified written review and
 say in one sentence that the visual/PDF could not be generated. Never claim the

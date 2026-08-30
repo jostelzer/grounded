@@ -20,12 +20,16 @@ from grounded_metadata import NAME
 
 TOP_LEVEL_FILES = ("SKILL.md", "VERSION", "LICENSE", "requirements-pdf.txt")
 ASSET_FILES = ("grounded-logo-512.png",)
+# Visual evaluation topics are deliberately private and replaceable. They are
+# never bundled as canonical templates in a public skill release.
+EVAL_FILES = ()
 REFERENCE_FILES = (
     "citation-rules.md",
     "deck-guide.md",
     "evidence-weighing.md",
     "figure-archetypes.json",
     "figure-captions.md",
+    "figure-feedback-generalization.md",
     "figure-generation-contract.md",
     "figure-reference-analysis.md",
     "figure-style-presets.json",
@@ -56,12 +60,15 @@ SCRIPT_FILES = (
     "export_deck.py",
     "export_review.py",
     "fetch_fulltext.py",
+    "figure_typography.py",
     "find_papers.py",
     "format_references.py",
     "grounded_metadata.py",
     "qa_deck_pdf.py",
     "qa_figure.py",
+    "qa_quantitative_geometry.py",
     "qa_review_pdf.py",
+    "render_quantitative_figure.py",
     "validate_review.py",
     "verify_citations.py",
     "weasyprint_export.py",
@@ -88,6 +95,7 @@ def _git(root: Path, *arguments: str) -> str:
 def _release_files(root: Path) -> list[Path]:
     paths = [root / filename for filename in TOP_LEVEL_FILES]
     paths.extend(root / "assets" / filename for filename in ASSET_FILES)
+    paths.extend(root / "evals" / filename for filename in EVAL_FILES)
     paths.extend(root / "references" / filename for filename in REFERENCE_FILES)
     paths.extend(root / "scripts" / filename for filename in SCRIPT_FILES)
     missing = [str(path.relative_to(root)) for path in paths if not path.is_file()]

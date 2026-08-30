@@ -16,13 +16,16 @@ import json
 import math
 import os
 import re
-import shutil
-import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any
 
 from artifact_io import atomic_write_json, sha256_file
+from figure_typography import (
+    FigureTypographyError,
+    load_font_face,
+    resolve_font_path,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,91 +61,6 @@ def _point(item: dict[str, Any], prefix: str = "") -> tuple[float, float]:
         _number(item.get(prefix + "x"), prefix + "x"),
         _number(item.get(prefix + "y"), prefix + "y"),
     )
-
-
-def _fontconfig_path(family: str, bold: bool) -> Path | None:
-    executable = shutil.which("fc-match")
-    if not executable:
-        return None
-    query = family + (":style=Bold" if bold else ":style=Regular")
-    completed = subprocess.run(
-        [executable, "-f", "%{file}", query], check=False,
-        capture_output=True, text=True, timeout=15,
-    )
-    path = Path(completed.stdout.strip()) if completed.returncode == 0 else None
-    return path if path and path.is_file() else None
-
-
-def _font_candidates(family: str, bold: bool) -> list[Path]:
-    suffix = " Bold" if bold else ""
-    filenames = {
-        "Arial": f"Arial{suffix}.ttf",
-        "Helvetica Neue": "HelveticaNeue.ttc",
-        "Helvetica": "Helvetica.ttc",
-        "Optima": "Optima.ttc",
-        "Seravek": "Seravek.ttc",
-    }
-    candidates = []
-    if family in filenames:
-        candidates.extend([
-            Path("/System/Library/Fonts") / filenames[family],
-            Path("/System/Library/Fonts/Supplemental") / filenames[family],
-            Path("/Library/Fonts/Microsoft") / filenames[family],
-        ])
-    matched = _fontconfig_path(family, bold)
-    if matched:
-        candidates.append(matched)
-    candidates.append(
-        ROOT / "assets" / "fonts" /
-        ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"))
-    return candidates
-
-
-def _resolve_font_path(family: str, bold: bool,
-                       explicit: str | None = None) -> Path:
-    if explicit:
-        path = Path(explicit).expanduser().resolve()
-        if not path.is_file():
-            raise HybridFigureError(f"font file does not exist: {path}")
-        return path
-    for candidate in _font_candidates(family, bold):
-        if candidate.is_file():
-            return candidate.resolve()
-    raise HybridFigureError(f"no usable font found for {family}")
-
-
-def _load_font_face(path: Path, size: int, bold: bool):
-    """Load the requested face from a TTF/OTF or multi-face TTC collection."""
-    try:
-        from PIL import ImageFont
-    except ImportError as exc:
-        raise HybridFigureError("Pillow is required for hybrid typography") from exc
-    candidates = []
-    for index in range(64):
-        try:
-            face = ImageFont.truetype(str(path), size=size, index=index)
-        except OSError:
-            break
-        _family, style = face.getname()
-        normalized = style.lower()
-        if bold and "bold" in normalized and "italic" not in normalized:
-            return face, index, style
-        if not bold and normalized == "regular":
-            return face, index, style
-        candidates.append((face, index, style))
-        if path.suffix.lower() not in {".ttc", ".otc"}:
-            break
-    if bold:
-        for face, index, style in candidates:
-            if "medium" in style.lower() and "italic" not in style.lower():
-                return face, index, style
-    elif candidates:
-        for face, index, style in candidates:
-            normalized = style.lower()
-            if "italic" not in normalized and "condensed" not in normalized:
-                return face, index, style
-    raise HybridFigureError(
-        f"font {path} has no {'bold' if bold else 'regular'} upright face")
 
 
 def _writing_style(spec: dict[str, Any]) -> dict[str, Any]:
@@ -228,14 +146,18 @@ def _draw_text(draw, item: dict[str, Any], canvas: tuple[int, int],
         raise HybridFigureError("text weight must be regular or bold")
     requested_family = str(item.get("font_family") or family)
     explicit = item.get("font_path")
-    font_path = _resolve_font_path(requested_family, bold, explicit)
     try:
-        font, face_index, face_style = _load_font_face(font_path, size, bold)
-    except HybridFigureError as exc:
-        if requested_family == fallback:
-            raise HybridFigureError(f"cannot load font {font_path}: {exc}") from exc
-        font_path = _resolve_font_path(fallback, bold)
-        font, face_index, face_style = _load_font_face(font_path, size, bold)
+        font_path = resolve_font_path(requested_family, bold, explicit)
+        font, face_index, face_style = load_font_face(font_path, size, bold)
+    except FigureTypographyError as exc:
+        if explicit or requested_family == fallback:
+            raise HybridFigureError(f"cannot load requested font: {exc}") from exc
+        try:
+            font_path = resolve_font_path(fallback, bold)
+            font, face_index, face_style = load_font_face(font_path, size, bold)
+        except FigureTypographyError as fallback_exc:
+            raise HybridFigureError(
+                f"cannot load fallback font: {fallback_exc}") from fallback_exc
         requested_family = fallback
     font_records.append({
         "family": requested_family,

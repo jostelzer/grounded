@@ -29,10 +29,12 @@
       "Aim for the finish of a carefully art-directed review-journal figure, not a generic flowchart.",
       "Use domain-native scientific forms as the visual anchor: anatomy, cells, instruments, study geometry, or plotted evidence.",
       "Allow restrained material or biological depth only when it clarifies form; keep labels and data optically crisp.",
-      "Use fine, consistent keylines and purposeful alignment so every mark appears intentionally placed."
+      "Use fine, consistent keylines and purposeful alignment so every mark appears intentionally placed.",
+      "Label distinct sections with uppercase A–D and connect concise explanatory callouts to exact targets with thin leader lines when needed."
     ],
     "selection_standard": [
       "Prefer the candidate with the clearest scientific topology and most exact local annotation.",
+      "Require a caption-independent plain-language explain-back with no hidden jargon.",
       "Reject generic icons, empty decorative panels, or a diagram that could depict any topic after relabelling."
     ],
     "avoid": [
@@ -47,13 +49,13 @@
     "name": "Premium editorial science illustration",
     "intent": "A sophisticated magazine-quality science visual with one memorable focal idea, strong narrative flow, and restrained explanatory annotation.",
     "font": {
-      "family": "Optima",
-      "fallback": "Helvetica Neue",
+      "family": "Helvetica Neue",
+      "fallback": "Arial",
       "text_color": "#20201F",
       "rules": [
-        "Use natural-width Optima-style humanist sans lettering; never condense, expand, or shear it.",
-        "Keep in-image copy sparse and elegant; move explanation to the caption or deterministic overlay.",
-        "Use weight and scale sparingly so the illustration, not typography, carries the story."
+        "Use clean natural-width Helvetica Neue-style sans lettering; never condense, expand, shear, outline, or shadow it.",
+        "Keep in-image copy sparse and elegant; move explanatory prose to the caption.",
+        "Use a shallow, consistent hierarchy with generous line spacing so the illustration, not typography, carries the story."
       ]
     },
     "canvas": {
@@ -73,10 +75,12 @@
       "Create premium editorial science art suitable for a serious long-form magazine, with a clear visual metaphor or scientific focal structure.",
       "Use subtle tonal modelling, tactile material cues, and controlled depth to make the subject feel authored and specific without becoming photorealistic spectacle.",
       "Build an eye path with scale, overlap, and negative space; do not line up equal boxes like presentation furniture.",
-      "Let one arresting scientific image carry the central claim while small annotations quietly explain it."
+      "Let one arresting scientific image carry the central claim while small annotations quietly explain it.",
+      "Label distinct sections with uppercase A–D and connect concise explanatory callouts to exact targets with thin leader lines when needed."
     ],
     "selection_standard": [
       "Prefer the candidate with the strongest single visual idea and the most graceful eye path.",
+      "Require a caption-independent plain-language explain-back with no hidden jargon.",
       "Reject anything that resembles a corporate infographic, stock vector pack, classroom worksheet, or generic AI poster."
     ],
     "avoid": [
@@ -99,7 +103,7 @@
       "rules": [
         "Use natural-width Helvetica Neue-style lettering with no geometric distortion.",
         "Use a strong but shallow hierarchy optimized for quick scanning.",
-        "Keep labels short and render them directly as integrated typography; use deterministic overlay only after direct ImageGen text and targeted repair fail."
+        "Keep labels short and render them directly as integrated typography; put explanatory prose in the caption."
       ]
     },
     "canvas": {
@@ -119,10 +123,12 @@
       "Use one authored, domain-specific composition with editorial presence; clarity must not collapse into an icon-and-arrow worksheet or generic newsroom template.",
       "Use alignment, scale, and restrained colour to separate findings; illustration must clarify the evidence rather than merely decorate it.",
       "Generated elements should add domain specificity or explanatory value, not merely ornament a deterministic chart.",
-      "Keep line work precise and spacing optically even, with a newsroom graphics-desk level of finish."
+      "Keep line work precise and spacing optically even, with a newsroom graphics-desk level of finish.",
+      "Label distinct sections with uppercase A–D and connect concise explanatory callouts to exact targets with thin leader lines when needed."
     ],
     "selection_standard": [
       "Prefer the candidate that communicates the correct takeaway fastest without flattening uncertainty.",
+      "Require a caption-independent plain-language explain-back with no hidden jargon.",
       "Reject busy illustration, tiny legends, weak alignment, or generic card grids."
     ],
     "avoid": [
@@ -146,7 +152,7 @@
       "rules": [
         "Use natural-width Seravek-style humanist sans lettering; never squeeze or stretch words to fit.",
         "Use large, short labels and comfortable line spacing.",
-        "Prefer everyday words and deterministic overlay when exact wording matters."
+        "Prefer everyday words and keep explanatory prose in the caption."
       ]
     },
     "canvas": {
@@ -166,10 +172,12 @@
       "Build one warm, memorable helper picture with tangible objects, gentle dimensionality, and an immediately understandable spatial relationship.",
       "Use soft editorial illustration, subtle paper-like texture, and friendly but accurate forms; avoid both sterile flowcharts and cartoon baby graphics.",
       "Guide the eye through the explanation with placement and action rather than many arrows or text boxes.",
-      "Keep uncertainty visible through an unfinished path, open gap, pale boundary, or other concrete visual device that a new reader can explain back."
+      "Keep uncertainty visible through an unfinished path, open gap, pale boundary, or other concrete visual device that a new reader can explain back.",
+      "Label distinct sections with uppercase A–D and connect concise explanatory callouts to exact targets with thin leader lines when needed."
     ],
     "selection_standard": [
       "Prefer the candidate a non-specialist can understand and remember without the caption, while preserving the evidence boundary.",
+      "Require a caption-independent plain-language explain-back with no hidden jargon.",
       "Reject clip art, emoji-like faces, classroom worksheet styling, or an abstract flowchart with labels swapped in."
     ],
     "avoid": [

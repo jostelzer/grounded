@@ -14,7 +14,8 @@ import sys
 import unicodedata
 from pathlib import Path
 
-from artifact_io import sha256_file
+from artifact_io import atomic_write_json, sha256_file
+import build_figure_prompt
 from grounded_metadata import rendered_figure_size_mm
 from typing import Any
 
@@ -25,6 +26,20 @@ VISUAL_QUALITY_DIMENSIONS = (
     "domain_specificity",
     "style_fit",
     "polish",
+)
+V2_VISUAL_QUALITY_DIMENSIONS = VISUAL_QUALITY_DIMENSIONS + (
+    "explanatory_value",
+    "information_flow",
+    "intuitiveness",
+)
+V3_VISUAL_QUALITY_DIMENSIONS = V2_VISUAL_QUALITY_DIMENSIONS + (
+    "concept_coherence",
+    "anatomical_integrity",
+    "connector_semantics",
+    "logical_grouping",
+    "salience",
+    "nonredundancy",
+    "typography",
 )
 
 
@@ -134,13 +149,16 @@ def _validate_provenance(
     errors: list[str] = []
     contract_version = spec.get("quality_contract_version")
     if provenance is None:
-        if contract_version == 1:
-            errors.append("quality contract v1 requires generation provenance")
+        if contract_version in {1, 2, 3}:
+            errors.append(
+                f"quality contract v{contract_version} requires generation provenance")
         return errors
     if not isinstance(provenance, dict):
         raise ValueError("figure provenance must be an object")
-    if provenance.get("schema_version") != 1:
-        errors.append("generation provenance schema_version must be 1")
+    expected_schema = 2 if contract_version in {2, 3} else 1
+    if provenance.get("schema_version") != expected_schema:
+        errors.append(
+            f"generation provenance schema_version must be {expected_schema}")
 
     generator_available = provenance.get("generator_available")
     if not isinstance(generator_available, bool):
@@ -153,8 +171,10 @@ def _validate_provenance(
 
     route = spec.get("render_route")
     selected_route = provenance.get("selected_route")
-    if contract_version == 1 and route not in {"generated", "hybrid", "deterministic"}:
-        errors.append("quality contract v1 requires an explicit valid render_route")
+    if contract_version in {1, 2, 3} and route not in {
+        "generated", "hybrid", "deterministic", "composite"
+    }:
+        errors.append("quality contract requires an explicit valid render_route")
     if selected_route != route:
         errors.append(
             f"provenance selected_route {selected_route!r} does not match spec {route!r}")
@@ -191,7 +211,7 @@ def _validate_provenance(
     elif comparison is not None:
         errors.append("generation provenance comparison must be an object")
 
-    if route in {"generated", "hybrid"}:
+    if route in {"generated", "hybrid", "composite"}:
         if not generator_available:
             errors.append(f"{route} route requires an available image generator")
         if not generate_attempts:
@@ -228,6 +248,28 @@ def _validate_provenance(
         if not compose_attempts:
             errors.append("hybrid route requires a compose attempt")
 
+    if route == "composite":
+        if not generator_available:
+            errors.append("composite route requires an available image generator")
+        if not generate_attempts:
+            errors.append("composite route requires a generated orientation asset")
+        if not compose_attempts:
+            errors.append("composite route requires a compose attempt")
+        composite = provenance.get("composite")
+        if not isinstance(composite, dict):
+            errors.append("composite route requires composite provenance")
+        else:
+            if not str(composite.get("compositor") or "").strip():
+                errors.append("composite provenance requires a compositor")
+            if composite.get("generated_assets_text_free") is not True:
+                errors.append("composite provenance must prove generated assets are text-free")
+            if composite.get("quantitative_layer_deterministic") is not True:
+                errors.append(
+                    "composite provenance must prove the quantitative layer is deterministic")
+            if composite.get("intrinsic_aspect_preserved") is not True:
+                errors.append(
+                    "composite provenance must prove generated asset aspect ratios are preserved")
+
     if route == "deterministic" and spec.get("archetype") != "quantitative":
         if generator_available:
             if len(generate_attempts) < 2:
@@ -242,6 +284,117 @@ def _validate_provenance(
         if not str(provenance.get("fallback_reason") or "").strip():
             errors.append(
                 "non-quantitative deterministic fallback requires a concrete fallback_reason")
+
+    if contract_version in {2, 3}:
+        archetype = spec.get("archetype")
+        if route == "hybrid":
+            errors.append("communication-first contracts do not permit hybrid illustrations")
+        if archetype == "quantitative":
+            if route not in {"deterministic", "composite"}:
+                errors.append(
+                    "communication-first quantitative figures require deterministic or composite plotting")
+            if route == "deterministic" and not any(
+                    item.get("kind") == "render" for item in attempts):
+                errors.append(
+                    "communication-first deterministic plots require a render attempt")
+            if route == "composite" and not compose_attempts:
+                errors.append(
+                    "communication-first composite plots require a compose attempt")
+        elif route != "generated":
+            errors.append(
+                "communication-first non-quantitative figures require image generation")
+
+        reviews = provenance.get("post_generation_reviews")
+        if not isinstance(reviews, list) or not reviews:
+            errors.append(
+                "communication-first contracts require post_generation_reviews for every candidate")
+            reviews = []
+        elif any(not isinstance(item, dict) for item in reviews):
+            errors.append("every post-generation review must be an object")
+            reviews = [item for item in reviews if isinstance(item, dict)]
+
+        authored_attempts = [
+            item for item in attempts
+            if item.get("kind") in {"generate", "edit", "render", "compose"}
+            and str(item.get("asset") or "").strip()
+        ]
+        attempt_assets = [str(item["asset"]) for item in authored_attempts]
+        reviewed_assets = [str(item.get("asset") or "") for item in reviews]
+        for asset in attempt_assets:
+            if asset not in reviewed_assets:
+                errors.append(
+                    f"candidate lacks a post-generation communication review: {asset}")
+        goal = spec.get("communication_goal")
+        intended_takeaway = (
+            str(goal.get("reader_takeaway") or "").strip()
+            if isinstance(goal, dict) else "")
+        for review in reviews:
+            asset = str(review.get("asset") or "").strip()
+            if not asset:
+                errors.append("post-generation review requires asset")
+                continue
+            if asset not in attempt_assets:
+                errors.append(
+                    f"post-generation review names an unrecorded candidate: {asset}")
+            if str(review.get("intended_takeaway") or "").strip() != intended_takeaway:
+                errors.append(
+                    f"post-generation review for {asset} must restate the declared reader takeaway")
+            if not str(review.get("observed_takeaway") or "").strip():
+                errors.append(
+                    f"post-generation review for {asset} requires observed_takeaway")
+            if not str(review.get("observed_explain_back") or "").strip():
+                errors.append(
+                    f"post-generation review for {asset} requires observed_explain_back")
+            intuitive = review.get("intuitive_without_caption") is True
+            unexplained_jargon = review.get("unexplained_jargon")
+            if not isinstance(unexplained_jargon, list):
+                errors.append(
+                    f"post-generation review unexplained_jargon must be a list for {asset}")
+                unexplained_jargon = []
+            meaning_pass = review.get("intended_meaning_conveyed") is True
+            flow_pass = review.get("information_flow_clear") is True
+            issues = review.get("issues")
+            if not isinstance(issues, list):
+                errors.append(f"post-generation review issues must be a list for {asset}")
+                issues = []
+            decision = review.get("decision")
+            if meaning_pass and flow_pass and intuitive and not unexplained_jargon:
+                if issues:
+                    errors.append(
+                        f"accepted post-generation review must have no unresolved issues: {asset}")
+                if decision != "accept":
+                    errors.append(
+                        f"passing post-generation review must use decision=accept: {asset}")
+            else:
+                if not issues:
+                    errors.append(
+                        f"failed post-generation review must name concrete issues: {asset}")
+                if decision not in {"revise", "regenerate"}:
+                    errors.append(
+                        f"failed post-generation review must decide revise or regenerate: {asset}")
+                try:
+                    position = attempt_assets.index(asset)
+                except ValueError:
+                    position = len(attempt_assets)
+                if position >= len(attempt_assets) - 1:
+                    errors.append(
+                        f"failed communication review was not followed by another attempt: {asset}")
+
+        selected_reviews = [
+            item for item in reviews if item.get("asset") == selected_asset]
+        if len(selected_reviews) != 1:
+            errors.append(
+                "selected asset requires exactly one post-generation communication review")
+        else:
+            selected_review = selected_reviews[0]
+            if (selected_review.get("intended_meaning_conveyed") is not True
+                    or selected_review.get("information_flow_clear") is not True
+                    or selected_review.get("intuitive_without_caption") is not True
+                    or selected_review.get("unexplained_jargon") != []
+                    or selected_review.get("decision") != "accept"):
+                errors.append(
+                    "selected asset failed the post-generation meaning, information-flow, "
+                    "or intuition gate")
     return errors
 
 
@@ -280,9 +433,53 @@ def audit_figure(
         raise ValueError("pdf_width_mm must be between 50 and 190")
 
     contract_version = spec.get("quality_contract_version")
-    if contract_version not in {None, 1}:
-        raise ValueError("quality_contract_version must be 1 when supplied")
+    if contract_version not in {None, 1, 2, 3}:
+        raise ValueError("quality_contract_version must be 1, 2, or 3 when supplied")
     errors: list[str] = []
+    communication_goal = None
+    annotation_plan = None
+    semantic_plan = None
+    layout_plan = None
+    composite_plan = None
+    if contract_version in {2, 3}:
+        communication_goal = build_figure_prompt.validate_communication_goal(spec)
+        annotation_plan = build_figure_prompt.validate_annotation_plan(
+            spec, expected_pixel_text(spec))
+        if spec.get("archetype") == "quantitative":
+            build_figure_prompt.validate_plot_design(spec)
+            if spec.get("render_route") not in {"deterministic", "composite"}:
+                errors.append(
+                    "communication-first quantitative figures require deterministic or composite plotting")
+            if spec.get("render_route") == "composite":
+                build_figure_prompt.validate_concept_plan(spec)
+                composite_plan = build_figure_prompt.validate_composite_plan(spec)
+            if spec.get("data") is None or spec.get("data") in ([], {}):
+                errors.append(
+                    "communication-first quantitative plots require verified structured data")
+        else:
+            build_figure_prompt.validate_concept_plan(spec)
+            if spec.get("render_route") != "generated":
+                errors.append(
+                    "communication-first non-quantitative figures require image generation")
+            if spec.get("data") is not None:
+                errors.append(
+                    "known numbers that carry the figure belong in a quantitative deterministic plot")
+            rendered_text = expected_pixel_text(spec)
+            word_counts = [len(item.split()) for item in rendered_text]
+            if len(rendered_text) > build_figure_prompt.V2_GENERATED_MAX_STRINGS:
+                errors.append(
+                    "communication-first generated illustrations have too many labels")
+            if (word_counts and max(word_counts)
+                    > build_figure_prompt.V2_GENERATED_MAX_WORDS_PER_STRING):
+                errors.append(
+                    "communication-first generated illustration has an overlong label")
+            if sum(word_counts) > build_figure_prompt.V2_GENERATED_MAX_WORDS:
+                errors.append(
+                    "communication-first generated illustration has too much in-pixel copy")
+        if contract_version == 3:
+            semantic_plan = build_figure_prompt.validate_semantic_plan(
+                spec, annotation_plan)
+            layout_plan = build_figure_prompt.validate_layout_plan(spec)
     if pixel_stddev < 2.0:
         errors.append(
             f"figure is blank or near-blank (pixel standard deviation {pixel_stddev:.2f})")
@@ -391,12 +588,14 @@ def audit_figure(
 
     duplicate_text = inspection.get("duplicate_text")
     unlisted_text = inspection.get("unlisted_text")
-    if contract_version == 1:
+    if contract_version in {1, 2, 3}:
         if duplicate_text is None:
-            errors.append("quality contract v1 inspection requires duplicate_text")
+            errors.append(
+                f"quality contract v{contract_version} inspection requires duplicate_text")
             duplicate_text = []
         if unlisted_text is None:
-            errors.append("quality contract v1 inspection requires unlisted_text")
+            errors.append(
+                f"quality contract v{contract_version} inspection requires unlisted_text")
             unlisted_text = []
     if duplicate_text is None:
         duplicate_text = []
@@ -413,8 +612,9 @@ def audit_figure(
 
     geometry_distortions = inspection.get("geometry_distortions")
     if geometry_distortions is None:
-        if contract_version == 1:
-            errors.append("quality contract v1 inspection requires geometry_distortions")
+        if contract_version in {1, 2, 3}:
+            errors.append(
+                f"quality contract v{contract_version} inspection requires geometry_distortions")
         geometry_distortions = []
     if not isinstance(geometry_distortions, list):
         raise ValueError("geometry_distortions must be a list")
@@ -422,17 +622,282 @@ def audit_figure(
         errors.append(f"geometry distortion: {distortion}")
 
     visual_quality = inspection.get("visual_quality")
-    if contract_version == 1:
+    if contract_version in {1, 2, 3}:
         if not isinstance(visual_quality, dict):
-            errors.append("quality contract v1 inspection requires visual_quality")
+            errors.append(
+                f"quality contract v{contract_version} inspection requires visual_quality")
             visual_quality = {}
-        for dimension in VISUAL_QUALITY_DIMENSIONS:
+        dimensions = (
+            V3_VISUAL_QUALITY_DIMENSIONS if contract_version == 3
+            else V2_VISUAL_QUALITY_DIMENSIONS if contract_version == 2
+            else VISUAL_QUALITY_DIMENSIONS)
+        for dimension in dimensions:
             verdict = visual_quality.get(dimension)
             if verdict != "pass":
                 errors.append(
                     f"visual quality {dimension} must pass; found {verdict!r}")
     elif visual_quality is not None and not isinstance(visual_quality, dict):
         raise ValueError("visual_quality must be an object")
+
+    communication = inspection.get("communication")
+    if contract_version in {2, 3}:
+        if not isinstance(communication, dict):
+            errors.append(
+                f"quality contract v{contract_version} inspection requires communication")
+            communication = {}
+        if not str(communication.get("observed_takeaway") or "").strip():
+            errors.append("communication inspection requires observed_takeaway")
+        if not str(communication.get("observed_explain_back") or "").strip():
+            errors.append("communication inspection requires observed_explain_back")
+        if communication.get("explain_back_matches") is not True:
+            errors.append("communication inspection must confirm explain_back_matches")
+        if communication.get("intuitive_without_caption") is not True:
+            errors.append("communication inspection must confirm intuitive_without_caption")
+        if communication.get("familiar_starting_point_visible") is not True:
+            errors.append(
+                "communication inspection must confirm familiar_starting_point_visible")
+        if communication.get("requires_caption_to_understand") is not False:
+            errors.append(
+                "communication inspection must set requires_caption_to_understand=false")
+        unexplained_jargon = communication.get("unexplained_jargon")
+        if not isinstance(unexplained_jargon, list):
+            errors.append("communication inspection requires unexplained_jargon list")
+            unexplained_jargon = []
+        for term in unexplained_jargon:
+            errors.append(f"unexplained figure jargon: {term}")
+        if communication.get("intended_takeaway_conveyed") is not True:
+            errors.append("communication inspection must confirm intended_takeaway_conveyed")
+        if communication.get("information_flow_clear") is not True:
+            errors.append("communication inspection must confirm information_flow_clear")
+        visible = communication.get("must_show_visible")
+        if not isinstance(visible, list):
+            errors.append("communication inspection requires must_show_visible list")
+            visible = []
+        for item in communication_goal["must_show"]:
+            if item not in visible:
+                errors.append(
+                    f"communication inspection did not confirm must-show item: {item}")
+        observed_flow = communication.get("observed_information_flow")
+        if not isinstance(observed_flow, list) or not observed_flow:
+            errors.append(
+                "communication inspection requires a non-empty observed_information_flow")
+        ambiguous = communication.get("misleading_or_ambiguous")
+        if not isinstance(ambiguous, list):
+            errors.append("communication inspection requires misleading_or_ambiguous list")
+            ambiguous = []
+        for item in ambiguous:
+            errors.append(f"misleading or ambiguous communication: {item}")
+        if communication.get("revision_needed") is not False:
+            errors.append(
+                "selected figure communication inspection must set revision_needed=false")
+
+        annotation = inspection.get("annotation")
+        if not isinstance(annotation, dict):
+            errors.append(
+                f"quality contract v{contract_version} inspection requires annotation")
+            annotation = {}
+        observed_panels = annotation.get("panel_labels")
+        if observed_panels != annotation_plan["panel_labels"]:
+            errors.append(
+                "observed panel labels do not match the planned uppercase A–D sequence")
+        observed_callouts = annotation.get("callouts")
+        if not isinstance(observed_callouts, list):
+            errors.append("annotation inspection requires callouts list")
+            observed_callouts = []
+        observed_by_text = {
+            item.get("text"): item for item in observed_callouts
+            if isinstance(item, dict) and isinstance(item.get("text"), str)
+        }
+        for planned in annotation_plan["callouts"]:
+            observed = observed_by_text.get(planned["text"])
+            if observed is None:
+                errors.append(
+                    f"planned explanatory callout was not observed: {planned['text']}")
+                continue
+            if observed.get("target") != planned["target"]:
+                errors.append(
+                    f"callout points to the wrong target: {planned['text']}")
+            if observed.get("background") != planned["background"]:
+                errors.append(
+                    f"callout backing does not match the plan: {planned['text']}")
+            if (
+                planned["background"] == "opaque-white"
+                and observed.get("opaque_backing_present") is not True
+            ):
+                errors.append(
+                    f"busy-region callout lacks opaque white backing: {planned['text']}")
+            if (
+                planned["background"] == "quiet-canvas"
+                and observed.get("text_on_quiet_canvas") is not True
+            ):
+                errors.append(
+                    f"unboxed callout is not on quiet canvas: {planned['text']}")
+            if planned["leader_line"] and observed.get("leader_line_present") is not True:
+                errors.append(
+                    f"required leader line is missing: {planned['text']}")
+            if (
+                planned["leader_line"]
+                and observed.get("leader_origin_attached_to_label") is not True
+            ):
+                errors.append(
+                    "leader line is visually detached from its label: "
+                    f"{planned['text']}"
+                )
+            if (
+                planned["leader_line"]
+                and observed.get("leader_endpoint_hits_target") is not True
+            ):
+                errors.append(
+                    "leader line does not terminate on every declared target: "
+                    f"{planned['text']}"
+                )
+
+    integrity = inspection.get("integrity")
+    if contract_version == 3:
+        if not isinstance(integrity, dict):
+            errors.append("quality contract v3 inspection requires integrity")
+            integrity = {}
+        required_true = {
+            "title_matches_visual_question":
+                "title must name the actual reader-facing subject or finding",
+            "panels_form_one_explanation":
+                "all panels must answer one visual question",
+            "declared_entities_specific":
+                "depicted entities must be specific enough to identify their role",
+            "all_objects_declared":
+                "every meaningful visual object must have a declared semantic role",
+            "all_connectors_semantic":
+                "every connector must have a declared source, target, and meaning",
+            "related_content_grouped":
+                "logically related content must share one visual unit",
+            "panels_add_distinct_information":
+                "every separate panel must add distinct information",
+            "primary_entities_visually_dominant":
+                "the primary message entities must dominate area, contrast, and first fixation",
+            "nonessential_elements_absent":
+                "props, scenery, and repeated motifs that fail the deletion test must be absent",
+            "aspect_ratio_suits_content":
+                "the canvas ratio must fit the information density and topology",
+            "composition_optically_balanced":
+                "the complete composition must be optically centred and balanced",
+            "callout_backings_legible":
+                "callout text must use quiet canvas or opaque white backing over busy pixels",
+            "font_system_consistent":
+                "all typographic roles must use one consistent house sans-serif system",
+        }
+        for field, message in required_true.items():
+            if integrity.get(field) is not True:
+                errors.append(f"integrity inspection failed: {message}")
+
+        issue_lists = {
+            "anatomy_errors": "anatomical integrity error",
+            "unexplained_objects": "unexplained visual object",
+            "ambiguous_connectors": "ambiguous connector",
+            "salience_failures": "must-show salience failure",
+            "redundant_sections": "redundant visual section",
+            "typography_issues": "typography issue",
+            "entity_specificity_issues": "entity-specificity issue",
+            "visual_clutter": "nonessential visual clutter",
+            "anatomical_context_losses": "insufficient anatomical context",
+            "identity_drift": "cross-view identity drift",
+            "uncertainty_ambiguities": "ambiguous uncertainty encoding",
+            "quantitative_annotation_issues": "detached quantitative annotation",
+            "layout_balance_issues": "content-fit or optical-balance issue",
+            "callout_backing_issues": "callout backing issue",
+            "font_consistency_issues": "font-system inconsistency",
+            "composite_integration_issues": "composite integration issue",
+        }
+        for field, label in issue_lists.items():
+            values = integrity.get(field)
+            if not isinstance(values, list):
+                errors.append(f"integrity inspection requires {field} list")
+                values = []
+            for value in values:
+                errors.append(f"{label}: {value}")
+
+        if semantic_plan["anatomy_subjects"]:
+            if integrity.get("anatomy_checked_at_original_size") is not True:
+                errors.append(
+                    "every depicted person or animal must be checked at original size "
+                    "for extra, missing, fused, duplicated, or impossible body parts")
+            if integrity.get("anatomical_context_sufficient") is not True:
+                errors.append(
+                    "anatomical context must retain enough orientation landmarks to locate "
+                    "the focal region and understand any instrument or mechanism")
+        if semantic_plan["uncertainty_encodings"]:
+            if integrity.get("uncertainty_encodings_explanatory") is not True:
+                errors.append(
+                    "uncertainty encoding must identify the exact uncertain claim or quantity "
+                    "and explain how it changes interpretation")
+        observed_identity = integrity.get("cross_view_identity_preserved")
+        if not isinstance(observed_identity, list):
+            errors.append(
+                "integrity inspection requires cross_view_identity_preserved list")
+            observed_identity = []
+        observed_identity = {
+            item.get("entity") for item in observed_identity
+            if isinstance(item, dict) and item.get("preserved") is True
+        }
+        for item in semantic_plan["cross_view_identity"]:
+            if item["entity"] not in observed_identity:
+                errors.append(
+                    "cross-view identity was not confirmed for entity: %s"
+                    % item["entity"])
+        salience_visible = integrity.get("salience_targets_visible")
+        if not isinstance(salience_visible, list):
+            errors.append("integrity inspection requires salience_targets_visible list")
+            salience_visible = []
+        for entity_id in semantic_plan["salience_targets"]:
+            if entity_id not in salience_visible:
+                errors.append(
+                    f"integrity inspection did not confirm salience target: {entity_id}")
+
+        if spec.get("render_route") in {"deterministic", "composite"}:
+            quantitative = inspection.get("quantitative")
+            if not isinstance(quantitative, dict):
+                errors.append(
+                    "quality contract v3 deterministic figures require quantitative inspection")
+                quantitative = {}
+            quantitative_checks = {
+                "axis_semantics_visible":
+                    "each plotted dimension must visibly name its construct and unit or category",
+                "numeric_annotations_attached_to_referents":
+                    "every numeric annotation must visibly attach to its estimate, endpoint, or contrast",
+                "uncertainty_attached_to_estimate":
+                    "every reported interval must be visually attached to the estimate it qualifies",
+                "y_axis_label_vertical":
+                    "the y-axis label must be vertical and outside the data region",
+                "redundant_legend_absent":
+                    "conventional point-and-interval marks must not have a redundant legend",
+                "full_composition_balanced":
+                    "the full plot, including external labels and annotations, must be balanced",
+            }
+            for field, message in quantitative_checks.items():
+                if quantitative.get(field) is not True:
+                    errors.append("quantitative inspection failed: " + message)
+
+        if spec.get("render_route") == "composite":
+            if integrity.get("composite_components_integrated") is not True:
+                errors.append(
+                    "integrity inspection failed: composite components must form one balanced explanation")
+            composite = inspection.get("composite")
+            if not isinstance(composite, dict):
+                errors.append(
+                    "quality contract v3 composite figures require composite inspection")
+                composite = {}
+            composite_checks = {
+                "generated_assets_text_free":
+                    "generated composite assets must contain no text",
+                "generated_assets_orientation_only":
+                    "generated composite assets must not encode magnitude",
+                "quantitative_layer_deterministic":
+                    "all values, axes, intervals, and typography must be deterministic",
+                "intrinsic_aspect_ratios_preserved":
+                    "generated assets must preserve their intrinsic aspect ratios",
+            }
+            for field, message in composite_checks.items():
+                if composite.get(field) is not True:
+                    errors.append("composite inspection failed: " + message)
 
     errors.extend(_validate_provenance(spec, path, provenance))
 
@@ -476,6 +941,11 @@ def audit_figure(
             "duplicate_text_items": len(duplicate_text),
             "unlisted_text_items": len(unlisted_text),
             "visual_quality": visual_quality,
+            "communication": communication,
+            "annotation": inspection.get("annotation"),
+            "integrity": integrity,
+            "quantitative": inspection.get("quantitative"),
+            "composite": inspection.get("composite"),
             "render_route": spec.get("render_route"),
         },
     }
@@ -499,6 +969,10 @@ def main(argv: list[str] | None = None) -> int:
              "width the journal PDF will actually display this raster at "
              "(content width, reduced when the figure height cap applies)",
     )
+    parser.add_argument(
+        "--report",
+        help="optional path for an atomically written JSON QA report",
+    )
     args = parser.parse_args(argv)
     try:
         spec = json.loads(Path(args.spec).read_text(encoding="utf-8"))
@@ -517,6 +991,8 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"Figure QA failed: {exc}", file=sys.stderr)
         return 2
+    if args.report:
+        atomic_write_json(args.report, result)
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result["status"] == "pass" else 2
 

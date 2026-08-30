@@ -50,7 +50,7 @@
       "Use pale semantic colour on scientific structures and data marks, not as large decorative fields.",
       "Choose panel topology from the anatomy, experiment, signal flow, geometry, or data instead of forcing equal presentation columns.",
       "Use anatomical or molecular detail only at the level supported by the evidence.",
-      "Use lower-case bold panel letters a, b, c when a multipart layout is necessary."
+      "Use uppercase bold panel letters A, B, C, D when a multipart layout is necessary."
     ],
     "avoid": [
       "serif typography",
@@ -117,11 +117,11 @@
       "lavender": "#BDB2D4"
     },
     "visual_language": [
-      "Use refined 2D editorial illustration with recognizable morphology, restrained depth, clean cutaway anatomy, and consistent line weights.",
+      "Use refined 2D editorial illustration with recognizable domain-specific structures, restrained depth, and consistent line weights; use a cutaway only when the subject and evidence genuinely require one.",
       "Organize complexity into content-led panels or layers aligned to a shared invisible grid.",
-      "Let biological structures carry the visual interest; keep the surrounding interface visually quiet.",
+      "Let literal domain structures, study operations, or evidence marks carry the visual interest; keep the surrounding interface visually quiet.",
       "Use direct local labels and short leaders; add one compact unboxed legend only when needed.",
-      "Use pale tinted regions only to define a real anatomical, molecular, or comparison group.",
+      "Use pale tinted regions only to define a real spatial, experimental, population, temporal, or comparison group.",
       "Use uncertainty styling that is subtle but explicit: dashed boundary, pale tint, or a short qualifier."
     ],
     "avoid": [

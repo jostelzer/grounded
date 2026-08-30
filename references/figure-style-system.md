@@ -28,9 +28,10 @@ not a row of generic cards.
 
 Typography follows the review's writing style via
 `figure-writing-style-overlays.json`: scientific uses Arial with Helvetica as
-fallback; popsci uses Optima with Helvetica Neue; bullets uses Helvetica Neue
+fallback; popsci uses Helvetica Neue with Arial; bullets uses Helvetica Neue
 with Arial; ELI5 uses Seravek with Helvetica Neue. These are identity choices,
-not permission for display typography. Every face uses its natural width and
+not permission for display typography. Deterministic plots always declare a
+clean upright sans-serif family explicitly. Every face uses its natural width and
 height. Reject slab-serif, condensed, expanded, handwritten, outlined, beveled,
 shadowed, sheared, horizontally scaled, or vertically scaled lettering.
 
@@ -42,32 +43,36 @@ At a 1,536 px-wide deliverable, use these visual targets:
 | Body label | 27–31 px |
 | Local panel heading | 31–33 px |
 | Compact standalone title | 34–38 px |
-| Panel letter | 31–33 px bold, lower-case |
+| Panel letter | 31–33 px bold, uppercase A–D |
 
 These are chat-readable targets inspired by Nature's 5–7 pt figure-label range
 at double-column width, raised so the smallest OCR-measured word height clears
 `qa_figure.py`'s 6.5 pt effective-size gate at the true journal render width.
 End-to-end raster generation cannot prove an embedded font file; inspect visual
 conformance and exact text directly. First repair a local typography defect with
-a targeted ImageGen edit. Use the hybrid compositor only after that direct-text
-route fails; it resolves a real font and draws labels at natural proportions
-without resizing the generated base. If editable embedded font metadata is a
-deliverable requirement, use a deterministic vector renderer for that layer.
+a targeted ImageGen edit. If several labels or the information flow fail, reduce
+non-essential copy or rethink the selected concept instead of accumulating text
+repair passes. Deterministic typography belongs to a verified quantitative plot,
+not a conceptual-illustration overlay.
 
-**Aspect ratio for journal-PDF figures.** The exporter renders figures at full
-content width (184 mm) but caps their height (92 mm by default), scaling tall
-figures down proportionally — which silently shrinks every label. Design
-journal figures at an aspect ratio of at least 2:1 (for example 1,536 × ≤768 px
-at the default cap) so the figure keeps the full content width; `qa_figure.py`
-evaluates label sizes at the true rendered width and will fail a tall figure
-whose labels drop below 6.5 pt on paper. New specs declare the target ratio;
-figure QA compares it with the raster, and PDF QA independently compares the
-intrinsic ratio with the painted transformation matrix. Any anisotropic scale
-or shear is release-blocking.
+**Aspect ratio for journal-PDF figures.** Choose the canvas from information
+density and topology. A sparse single comparison normally uses a compact
+landscape or near-square ratio; a genuinely horizontal sequence or several
+balanced panels may use a broad canvas. The exporter caps height at 92 mm by
+default and scales proportionally, so compact figures may render narrower than
+the 184 mm content width. `qa_figure.py` evaluates labels at that true display
+size and fails anything below 6.5 pt. Never add empty horizontal space merely
+to keep full width. New specs declare the target ratio and why it fits;
+figure QA compares it with the raster, while PDF QA checks the intrinsic ratio
+against the painted transformation. Any anisotropic scale or shear fails.
 
 ## Default profile
 
-Use `nature-neuroscience` from `figure-style-presets.json` unless the figure is predominantly quantitative (`nature-data`) or a multi-level conceptual synthesis (`nature-reviews`). Profiles control the typography, canvas, palette, visual language, and exclusions without changing the evidence.
+Use the domain-general `nature-reviews` profile from
+`figure-style-presets.json` by default. Use `nature-neuroscience` only when the
+subject is genuinely neural or biomedical, and `nature-data` when the figure is
+predominantly quantitative. Profiles control typography, canvas, palette,
+visual language, and exclusions without changing the evidence.
 
 The shared visual grammar is:
 
@@ -84,7 +89,16 @@ The shared visual grammar is:
   than a universal sequence of equally sized columns;
 - no dashboard cards, glossy 3D, cinematic light, drop shadows, ornamental gradients, grid backgrounds, or journal logos;
 - restrained anatomical shading only when it clarifies form;
-- lower-case bold panel letters for multi-panel figures;
+- uppercase bold panel letters `A`, `B`, `C`, `D` for multi-panel figures in
+  every review style, so body prose and captions can refer to stable sections;
+- concise explanatory callouts adjacent to their subject, with a thin leader
+  line to the exact target whenever the target is not self-evident;
+- opaque white, lightly padded backing behind any callout text that overlaps
+  textured, illustrated, photographic, or otherwise busy pixels;
+- an intuition-first path in every writing style: begin with a recognizable
+  literal structure, add one unfamiliar step at a time, define necessary terms
+  at their referents, and remove any mark that does not help a non-specialist
+  explain the figure back without its caption;
 - uncertainty expressed with a dashed boundary, pale tint, qualifier, or exact interval—not vague visual mood.
 
 ## Adaptation controls
@@ -96,7 +110,8 @@ Change one layer at a time:
    quantitative, evidence map, timeline, or mindmap.
 3. **Style profile:** Nature Neuroscience explanatory, Nature Reviews conceptual, or Nature data.
 4. **Writing-style overlay:** scientific, popsci, bullets, or ELI5 identity.
-5. **Render route:** generated, hybrid, or deterministic.
+5. **Render route:** generated illustration, deterministic quantitative plot,
+   or composite quantitative plot with generated text-free anchors.
 6. **Render context:** `article`, `standalone`, or `slide` for a requested deck.
 7. **Overrides:** aspect ratio, palette subset, panel count, or content-specific constraints.
 
@@ -115,8 +130,9 @@ The system abstracts these current Nature requirements and examples:
   mechanism, comparison, study-overview, quantitative, cellular, timeline, and
   conceptual-synthesis roles. The copyrighted pixels stay outside the repository.
 
-Nature's production rules prefer editable vector artwork. This skill prioritizes
-capable image generation for the complete authored, directly typeset scientific
-composition, reserves deterministic overlays for failed direct-text repair and
-exact deterministic plots, and uses strict pixel, provenance, visual-quality,
-and non-distortion QA.
+Nature's production rules prefer editable vector artwork. Grounded deliberately
+overrides the source corpus's lower-case panel convention with uppercase A–D for
+clear reader references. The skill uses capable image generation for complete
+non-quantitative compositions and deterministic rendering only for verified
+quantitative plots, with strict communication, pixel, provenance, visual-
+quality, and non-distortion QA.

@@ -38,6 +38,10 @@ source images into the skill by default.
 - A shared invisible grid and white space establish groups before boxes do.
   Panels are not automatically turned into equal rounded cards.
 
+Grounded quality contract v3 keeps the corpus's navigation principle but uses
+uppercase `A`–`D` as a house override so body prose can point readers to panels
+consistently across every writing style.
+
 ### Typography and annotation
 
 - Compact black or near-black sans-serif labels dominate. Bold is reserved for

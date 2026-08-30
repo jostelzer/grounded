@@ -82,26 +82,69 @@ DOI-only source cell in a comparison table remains valid.
 ## Figure conformance
 
 Follow `figure-generation-contract.md`. Every new spec declares quality contract
-v1, writing style, render route, target aspect, and a domain-specific visual
-anchor. Add directed `relationships`, local `abbreviations`, and shape-specific
-geometry invariants when they apply. Save a structured inspection with observed
-relationships, detected effects, text collisions, geometry distortions, all
-five visual-quality verdicts, and optionally OCR text/label height. Save a
+v3, its single visual question, panel thesis, communication goal, semantic
+object plan, writing style, route, target aspect, domain-specific visual anchor,
+and annotation plan. Generated illustrations contain exactly
+three evaluated concepts and only the selected concept enters the prompt;
+deterministic or composite figures require a quantitative archetype, verified
+structured data, and a polished plot design; composite figures additionally
+require text-free generated assets whose only role is orientation. Add directed `relationships`, local
+`abbreviations`, and shape-specific geometry invariants when they apply. Save a
+structured inspection with observed relationships, effects, collisions,
+distortions, all fifteen v3 visual-quality verdicts, an independent communication
+and explain-back check, uppercase A–D panel labels, and callout/leader-line
+observations, including whether every leader endpoint visibly hits every
+declared target and whether every leader visibly attaches to the label it
+explains. Save a
 separate provenance record containing capability, attempts, selected hash,
-route, any real multi-candidate comparison, and hybrid/fallback details. If OCR is
-omitted, the checker runs Tesseract itself.
+route, real candidate comparisons, and a post-generation meaning/flow review
+for every candidate. For v3, visually transcribe the selected copy into
+`ocr_text`; Tesseract remains a discrepancy warning rather than a reason to
+regenerate visibly correct text. A manual transcript never excuses garbled or
+missing pixels.
 
 ```bash
 python3 scripts/qa_figure.py --spec figure.json --image figure.png --inspection figure.inspection.json --provenance figure.provenance.json
 ```
 
-The gate verifies non-blank pixels, exact text, abbreviation expansions,
+The gate verifies non-blank pixels, concise exact text, abbreviation expansions,
 relationship direction, prohibited effects, collisions, raster size, target
-aspect, natural geometry, effective label size at PDF scale, conditional
-iteration, selected hash, route rules, and composition/hierarchy/domain specificity/style
-fit/polish. One direct-text candidate is sufficient when every gate passes.
-Dense text alone does not pre-authorize hybrid composition: attempt complete
-ImageGen typography first, then a targeted edit for a local defect.
+aspect, natural geometry, effective label size at PDF scale, concept selection,
+panel/callout fidelity, conditional meaning-driven iteration, selected hash,
+route rules, composition, hierarchy, domain specificity, style fit, polish,
+explanatory value, information flow, and intuitiveness. The communication gate
+also requires a visible familiar starting point, a matching plain-language
+explain-back sentence, no unexplained jargon, and no caption dependency. One generated candidate is sufficient
+when the independent meaning check and every other gate pass. A failed meaning
+or flow check must be followed by a targeted edit or regeneration.
+
+V3 additionally rejects a title that does not match the reader-facing visual
+question, panels that do not form one explanation, generic or undeclared
+objects, arrows without declared source/target/meaning, clumsy separation of
+related results, redundant sections, invisible must-show elements, anatomical
+errors, and weak typography. Every depicted person or animal is inspected at
+original size. Verified numbers that carry the primary message must route to a
+deterministic plot using explicit clean upright sans-serif typography.
+V3 also rejects visual clutter that fails the deletion test, insufficient
+anatomical orientation context, identity drift across repeated views, generic
+uncertainty symbols that do not identify what is uncertain, unnamed plotted
+constructs, incomplete caption axis summaries, and intervals or numeric
+annotations detached from their graphical referents. It also rejects an aspect
+ratio that does not fit the information density, optically unbalanced layouts,
+horizontal or in-plot y-axis titles, redundant legends for conventional
+point-and-interval marks, unbacked callout text over busy pixels, inconsistent
+font families, and composite art that carries data or is distorted.
+
+## Figure-feedback generalization gate
+
+When feedback is intended to improve future figures, follow
+`figure-feedback-generalization.md`. Abstract the visible defect into a
+topic-neutral rule, add the corresponding v3 contract or QA field, and add a
+minimal synthetic regression fixture that fails on the defect. Run the focused
+tests and the complete suite. Do not create public before/after boards, link
+temporary samples from the README, or treat evaluation topics as permanent
+templates. A single-example prompt edit or case-local exception is never an
+acceptable implementation.
 
 ## Immutable PDF lineage
 

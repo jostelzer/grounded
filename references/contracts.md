@@ -58,6 +58,20 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   `--figure-inspection` / `--figure-provenance` inputs to `export_review.py`.
   Existing figure specs and CLI defaults remain valid; v1 specs opt into the
   conditional-iteration, visual-quality, provenance, aspect, and PDF-matrix gates.
+- Figure quality contract v2 introduced the communication-first fields. It additively
+  requires a communication goal, three evaluated concepts for generated
+  illustrations, a quantitative plot design for verified known numbers, an
+  uppercase A–D panel/callout plan, post-generation meaning reviews, and
+  explanatory-value/information-flow/intuitiveness gates, including a familiar
+  starting point and caption-independent explain-back check. Contract v1 remains accepted so
+  existing release manifests and fixtures stay reproducible.
+- Figure quality contract v3 is the default for new figures. It adds a single
+  reader-facing visual question and panel thesis; a semantic plan for specific
+  entities, typed connectors, panel jobs, grouping, anatomy, salience, and
+  quantitative routing; original-size anatomical-integrity checks; and hard
+  gates for concept coherence, connector semantics, logical grouping,
+  non-redundancy, salience, and clean typography. Contracts v1 and v2 remain
+  accepted only so existing releases stay reproducible.
 - Release-manifest schema 1 adds `figure_inspections` and
   `figure_provenances` lists and figure QA reports add pixel/aspect/visual-
   quality metrics. Existing fields retain their meaning.

@@ -20,6 +20,13 @@ A caption is part of the evidence-bearing manuscript. It must:
 4. end with 2–5 citations from the verified review ledger;
 5. use the same language register as the review: scientific, popsci, bullets, or ELI5.
 
+For a quantitative figure, the explanatory body must explicitly say what the
+x-axis and y-axis represent, including units or categories, even when the
+artwork uses direct endpoint labels. It must also explain the interval encoding
+once. Do not make the reader infer axis semantics from tick labels. A
+conventional point-and-whisker needs no redundant in-plot legend when the
+caption already defines the estimate and interval.
+
 Do not use a caption as a source dump, repeat the surrounding section, or hide
 a scientific caveat that belongs in the image itself. Caption citations support
 what the figure depicts; they do not replace citations on empirical claims in
@@ -118,7 +125,8 @@ structured bullet caption unless the user explicitly asked for bullets.
 - In ELI5, use direct language: “You can see the steps in
   `{{figure:mechanism}}`.”
 - Refer to the whole figure as `{{figure:id}}`; refer to a panel as
-  “panel a of `{{figure:id}}`”. Panel letters remain lower-case.
+  “panel A of `{{figure:id}}`”. Panel letters use sequential uppercase A–D in
+  scientific, popsci, bullets, and ELI5 figures.
 
 ## Alt text and caption are different
 

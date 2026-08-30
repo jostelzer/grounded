@@ -1534,22 +1534,23 @@ def validate_release_inputs(
     ]
     if any(not isinstance(spec, dict) for spec in specs):
         raise ValueError("every figure specification must be a JSON object")
-    contract_v1 = any(spec.get("quality_contract_version") == 1 for spec in specs)
-    if contract_v1 or figure_inspections or figure_provenances:
+    quality_contract = any(
+        spec.get("quality_contract_version") in {1, 2} for spec in specs)
+    if quality_contract or figure_inspections or figure_provenances:
         if (len(figure_inspections) != len(figures)
                 or len(figure_provenances) != len(figures)):
             raise ValueError(
                 "quality-contract release requires one --figure-inspection and "
                 "--figure-provenance for every rendered figure"
             )
-    if contract_v1:
+    if quality_contract:
         try:
             import qa_figure
         except ImportError as exc:
             raise ValueError(f"cannot load figure QA for release: {exc}") from exc
         for index, (spec, figure, inspection_path, provenance_path) in enumerate(
                 zip(specs, figures, figure_inspections, figure_provenances), 1):
-            if spec.get("quality_contract_version") != 1:
+            if spec.get("quality_contract_version") not in {1, 2}:
                 continue
             if figure.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
                 raise ValueError(
