@@ -1581,6 +1581,8 @@ class RenderedWidthTests(unittest.TestCase):
             pdf_width_mm=170.0,
         )
         self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertEqual(result["metrics"]["evaluated_rendered_width_mm"], 170.0)
+        self.assertEqual(result["metrics"]["image_sha256"], sha256_file(image))
 
 
 class ConfusableFoldingTests(unittest.TestCase):

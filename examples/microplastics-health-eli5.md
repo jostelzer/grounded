@@ -1,81 +1,67 @@
 ## Are microplastics actually harming our health?
 
-**TL;DR** - They might be, but we still can't measure the danger to you. Tiny plastic pieces turn up in our bodies, and lab work shows ways they could hurt living things. The missing step is proof that ordinary amounts cause illness in people.
+**TL;DR** — They might be. Tiny plastic pieces get into our bodies, and they can hurt cells and animals in experiments. But we still don’t know how much the amounts we meet in daily life hurt people.
 
-Picture a path from everyday exposure to illness, with one broken link in the middle. We already have clues on both sides. Scientists report plastic in our bodies, see harm in lab tests, and sometimes find more plastic alongside illness. But the missing link asks, “Did the plastic cause the illness?”
+You already know that plastic doesn’t stay perfect forever. A bottle gets scratched. A food box turns cloudy. As plastic wears down, some pieces become tiny. Those tiny pieces are called microplastics. We can swallow or breathe them in [Kannan & Vimalkumar 2021](https://doi.org/10.3389/fendo.2021.724989). So it’s fair to ask what happens next.
 
-### Which clues do we already have?
+### How do we know the pieces get inside us?
 
-Reviews report tiny plastic pieces in blood and samples linked to our heart, gut, lungs, eyes, and reproduction, across 25 studies of living people [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). So the first clue is real: plastic can get into us.
+Scientists have reported tiny plastic pieces in blood and in samples from the lungs, gut, placenta, arteries, and other parts of the body. One review found reports from eight of our 12 main body systems [Roslan et al. 2024](https://doi.org/10.7189/jogh.14.04179), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). Finding a piece proves it got there. It doesn’t prove that it hurt you.
 
-### Why are scientists worried about harm?
-
-Lab studies report cell stress, gut-cell damage, and kidney damage in mice [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Mattioda et al. 2023](https://doi.org/10.3390/biom13010140), [Mahmud et al. 2024](https://doi.org/10.3390/cells13211788), [Zhu et al. 2023](https://doi.org/10.1016/j.envint.2022.107662).
-
-That adds a second clue: harm is possible.
-
-### What happens when doctors watch people?
-
-Doctors followed people who already needed fatty build-up removed from an artery in their neck. Those whose removed build-up contained plastic were later somewhere between twice and ten times as likely to have a heart attack, a stroke, or die [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). Heart researchers say this is a serious clue, but everyone in the study already had artery disease [Prattichizzo et al. 2024](https://doi.org/10.1093/eurheartj/ehae552).
-
-That gives us a third clue, but the causal path is still broken. Another team found more plastic in the poo of people with bowel illness. The illness itself might have made plastic stay around longer [Yan et al. 2022](https://doi.org/10.1021/acs.est.1c03924), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). [Figure 1](#fig-missing-piece) puts the three clues around the missing link so that association cannot quietly turn into proof.
+Think of the science as a detective board with four clues. The first clue is “plastic got in.” The next clues ask whether it can cause damage, whether sick people carry more of it, and whether the plastic itself made them sick. You can see that board in [Figure 1](#fig-missing-piece).
 
 <a id="fig-missing-piece"></a>
-![Everyday exposure begins a causal rail toward illness, but the rail is visibly broken at “cause not proven”; above it, a human sample and a cell dish show that microplastics are found in people and can cause harm in laboratory studies, while an arrowless arc below marks that they have also been seen alongside illness.](microplastics-missing-piece.png)
+![A vial containing a human sample, a dish of cells, and an artery-plaque specimen form a clue trail. The labels say “Found in people,” “Lab harm,” “Plastic beside illness,” and “Cause unproven.”](microplastics-missing-piece.png)
 
-**Figure 1. Three clues do not yet make a proven causal path.** We find microplastics in people, laboratory studies can show harm, and human studies can find plastic alongside illness. The broken rail marks what is still missing: proof that ordinary real-world exposure causes illness. The arrowless lower arc also keeps open the reverse possibility that illness changes where plastic is found. This evidence gap is not proof of safety [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Wang et al. 2021](https://doi.org/10.1289/ehp7612), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524).
+**Figure 1. The clues stop before proof.** You can see plastic in a person, damage in a lab dish, and plastic beside illness. The open space at the end is the missing answer: did the plastic cause the illness? Not knowing yet doesn’t mean the plastic is safe [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Nihart et al. 2025](https://doi.org/10.1038/s41591-024-03453-1).
 
-### Wait - do the measurements even line up?
+### Can the pieces hurt living things?
 
-This is where the picture gets shakier. A review checked more than 200 studies of human tissues and found that basic checks for stray plastic were often missing [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113). Teams also use different names, size limits, units, and ways of preparing samples. That can change the answer even before anyone asks about health [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+Yes, under some test conditions. A review gathered 28 animal experiments, and many found damage to breathing, digestion, or reproduction. Other lab work shows that very small pieces can set off the body’s alarm system and make cells struggle or die [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). That gives our detective a real second clue.
 
-Measurement matters because finding a piece still does not tell us what it did. If one team reports pieces and another reports weight, we cannot tell whether people carried similar amounts. Until units match, health links cannot be compared cleanly. Studies that look alike in a headline may still be asking different questions underneath, so combining them can give a tidy-looking answer that hides messy inputs [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298).
+But a lab test is a tidy setup. Scientists often choose one clean kind of plastic and give a chosen amount in a chosen way. That’s not the same as the worn, mixed pieces we meet through food, water, dust, and air [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Kannan & Vimalkumar 2021](https://doi.org/10.3389/fendo.2021.724989). The test shows what can happen. It can’t tell you how often it happens in everyday life.
 
-The problem is not just untidy paperwork. If dose scales differ, a larger health effect in one study cannot be matched to a smaller effect in another. Two studies may sound alike while measuring exposures in incompatible ways [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1).
+### What happened when doctors looked at sick people?
 
-In [Figure 2](#fig-measuring-same-sample), the same particles are followed through different measurement choices. A laboratory can count the pieces, weigh the plastic, or change which pieces survive a size cut-off. The answers may not line up even though the sample did not change.
+Doctors followed people who already needed clogged material removed from a blood tube in the neck. Those with plastic in that material later had about four times as many heart attacks, strokes, or deaths. That sounds scary. But everyone was already ill, and the plastic could have travelled with some other cause of poor health. The study can’t prove the plastic did it [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [de Oliveira Salerno et al. 2025](https://doi.org/10.1007/s11886-025-02320-w).
 
-<a id="fig-measuring-same-sample"></a>
-![One tray of large and small plastic particles branches to a combined count-and-weigh pathway and to a size-cutoff pathway; teal low-cutoff outlines include more of the exact same particles than the nested orange high-cutoff outlines, ending with “answers differ.”](microplastics-measurement-methods.png)
+Another team found more plastic in some brains from people with dementia. The team warned that the illness itself, age, or changes after death might explain the difference [Nihart et al. 2025](https://doi.org/10.1038/s41591-024-03453-1). So the third clue is worrying, but the last space on our detective board is still empty.
 
-**Figure 2. The same sample can give different answers.** The particle positions stay fixed so you can follow what each choice does. Counting pieces and weighing all plastic answer different questions. A low size cut-off also keeps more of those exact particles than a high cut-off. The drawing shows a method difference, not a measured numerical gap and not that one method is automatically right [Correia et al. 2026](https://doi.org/10.1590/0001-3765202620251113), [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
+### Wait — can we trust the measurements?
 
-### What answer can we take home?
+We can trust that careful teams found plastic. Comparing the amounts is harder. One lab counts pieces under a microscope. Another heats the sample and weighs what comes off. Labs also prepare samples differently and look for different sizes [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Roslan et al. 2024](https://doi.org/10.7189/jogh.14.04179).
 
-Microplastics may be hurting us, but scientists cannot yet say how much ordinary amounts raise your chance of getting sick. Not proved harmful does not mean proved safe. It means we need better human studies before anyone can give you a trustworthy number.
+Those choices can change the answer a lot. One recent comparison found that newer tools sometimes reported nearly 70 times as much plastic in organ samples as older ones [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298). That doesn’t make either team dishonest. It means you shouldn’t treat every body-plastic number as if it came from the same ruler. [Figure 2](#fig-measurement-methods) shows the mismatch.
 
-Clean lab plastic is not the same as the mixed, worn bits we meet in daily life. One careful review called harm “suspected,” yet only three human studies helped it reach that judgment [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524), [Talaie et al. 2025](https://doi.org/10.1016/j.toxlet.2025.06.021).
+<a id="fig-measurement-methods"></a>
+![One tissue sample branches left to a microscope and tally sheet labelled “Count pieces,” and right to a heating instrument and balance sheet labelled “Weigh plastic”; a comparison bracket below says “Results may differ.”](microplastics-measurement-methods.png)
 
-We do not know which size, shape, or plastic type matters most. Better studies must track exposure before illness and compare people the same way [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y), [Lee et al. 2025](https://doi.org/10.1038/s41581-025-00971-0). That is how the missing causal link gets tested.
+**Figure 2. Two honest tests can give different answers.** Counting pieces and weighing plastic aren’t the same job. This picture doesn’t pick a winner. It shows why scientists need shared rules before they can compare one person with another [Dmitrowicz et al. 2026](https://doi.org/10.1007/s00204-026-04392-1), [Roslan et al. 2024](https://doi.org/10.7189/jogh.14.04179), [Scotton et al. 2026](https://doi.org/10.1016/j.envpol.2026.128298), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
-The broken path is only a helper. Bodies are more complicated than a diagram, and many things can lead to the same illness. Scientists need shared ways to measure plastic, long studies that begin with generally healthy people, and tests of whether lowering what gets into us actually improves health.
+### So what should you tell a friend?
+
+Tiny plastic pieces get into us and may hurt us, but nobody can yet say how much everyday contact raises your chance of getting sick. “Not proved harmful” doesn’t mean “proved safe.”
+
+Now we can put away the detective board, because a real body isn’t four neat boxes. Scientists still need to measure plastic before illness starts, use the same kind of ruler, follow ordinary healthy people, and see whether lowering the amount also lowers illness.
 
 **Sources**
 
 **Chartres N, Cooper CB, Bland G, Pelch KE, Gandhi SA, BakenRa A, Woodruff TJ (2024)** Effects of Microplastic Exposure on Human Digestive, Reproductive, and Respiratory Health: A Rapid Systematic Review. *Environmental Science & Technology*. https://doi.org/10.1021/acs.est.3c09524
 
-**Correia TR, Dias APL, Pinto RL, Pereira DB, Sousa AMFD, Calderari MRCM (2026)** Analytical challenges and advances in detecting microplastics in human tissue and organ samples. *Anais da Academia Brasileira de Ciências*. https://doi.org/10.1590/0001-3765202620251113
+**de Oliveira Salerno PRV, Estrada-Mendizabal RJ, Lozada C, Ganatra S, Bassiony M, Aboukhatwa O, Carpenter C, Al-Kindi S (2025)** Microplastics and Cardiovascular Disease: Should Clinicians Be Paying Attention? *Current Cardiology Reports*. https://doi.org/10.1007/s11886-025-02320-w
 
 **Dmitrowicz A, Sacharczuk M, Skiba D (2026)** Micro- and nanoplastics in human biological materials: a systematic review of detection methods and methodological challenges. *Archives of Toxicology*. https://doi.org/10.1007/s00204-026-04392-1
 
-**Lee YH, Zheng CM, Wang YJ, Wang YL, Chiu HW (2025)** Effects of microplastics and nanoplastics on the kidney and cardiovascular system. *Nature Reviews Nephrology*. https://doi.org/10.1038/s41581-025-00971-0
+**Kannan K, Vimalkumar K (2021)** A Review of Human Exposure to Microplastics and Insights Into Microplastics as Obesogens. *Frontiers in Endocrinology*. https://doi.org/10.3389/fendo.2021.724989
 
-**Mahmud F, Sarker DB, Jocelyn JA, Sang QXA (2024)** Molecular and Cellular Effects of Microplastics and Nanoplastics: Focus on Inflammation and Senescence. *Cells*. https://doi.org/10.3390/cells13211788
+**Lee YH, Zheng CM, Wang YJ, Wang YL, Chiu HW (2025)** Effects of microplastics and nanoplastics on the kidney and cardiovascular system. *Nature Reviews Nephrology*. https://doi.org/10.1038/s41581-025-00971-0
 
 **Marfella R, Prattichizzo F, Sardu C, Fulgenzi G, Graciotti L, Spadoni T, D’Onofrio N, Scisciola L, La Grotta R, Frigé C, Pellegrini V, Municinò M, Siniscalchi M, Spinetti F, Vigliotti G, Vecchione C, Carrizzo A, Accarino G, Squillante A, Spaziano G, Mirra D, Esposito R, Altieri S, Falco G, Fenti A, Galoppo S, Canzano S, Sasso FC, Matacchione G, Olivieri F, Ferraraccio F, Panarese I, Paolisso P, Barbato E, Lubritto C, Balestrieri ML, Mauro C, Caballero AE, Rajagopalan S, Ceriello A, D’Agostino B, Iovino P, Paolisso G (2024)** Microplastics and Nanoplastics in Atheromas and Cardiovascular Events. *New England Journal of Medicine*. https://doi.org/10.1056/nejmoa2309822
 
-**Mattioda V, Benedetti V, Tessarolo C, Oberto F, Favole A, Gallo M, Martelli W, Crescio MI, Berio E, Masoero L, Benedetto A, Pezzolato M, Bozzetta E, Grattarola C, Casalone C, Corona C, Giorda F (2023)** Pro-Inflammatory and Cytotoxic Effects of Polystyrene Microplastics on Human and Murine Intestinal Cell Lines. *Biomolecules*. https://doi.org/10.3390/biom13010140
+**Nihart AJ, Garcia MA, El Hayek E, Liu R, Olewine M, Kingston JD, Castillo EF, Gullapalli RR, Howard T, Bleske B, Scott J, Gonzalez-Estrella J, Gross JM, Spilde M, Adolphi NL, Gallego DF, Jarrell HS, Dvorscak G, Zuluaga-Ruiz ME, West AB, Campen MJ (2025)** Bioaccumulation of microplastics in decedent human brains. *Nature Medicine*. https://doi.org/10.1038/s41591-024-03453-1 Correction: [10.1038/s41591-025-03675-x](https://doi.org/10.1038/s41591-025-03675-x).
 
-**Prattichizzo F, Ceriello A, Pellegrini V, La Grotta R, Graciotti L, Olivieri F, Paolisso P, D’Agostino B, Iovino P, Balestrieri ML, Rajagopalan S, Landrigan PJ, Marfella R, Paolisso G (2024)** Micro-nanoplastics and cardiovascular diseases: evidence and perspectives. *European Heart Journal*. https://doi.org/10.1093/eurheartj/ehae552
+**Roslan NS, Lee YY, Ibrahim YS, Tuan Anuar S, Yusof KMKK, Lai LA, Brentnall T (2024)** Detection of microplastics in human tissues and organs: A scoping review. *Journal of Global Health*. https://doi.org/10.7189/jogh.14.04179
 
 **Scotton JW, Galvão AC, Stolf DO, Robazzi MLDCC, Robazza WDS (2026)** The invisible burden: A meta-analysis of methodological evolutions and the reassessment of microplastic concentrations in human tissues. *Environmental Pollution*. https://doi.org/10.1016/j.envpol.2026.128298
 
-**Talaie A, Alaee S, Hosseini E, Rezania S, Tamadon A (2025)** Toxicological effects of micro/nano-plastics on human reproductive health: A review. *Toxicology Letters*. https://doi.org/10.1016/j.toxlet.2025.06.021
-
 **Tran HAA, Ng JJ, Tang DH, Yong CT, Ho AFW (2026)** Health impacts of micro- and nanoplastics in humans: systematic review of in vivo evidence. *Environmental Health*. https://doi.org/10.1186/s12940-026-01282-y
-
-**Wang YL, Lee YH, Hsu YH, Chiu IJ, Huang CCY, Huang CC, Chia ZC, Lee CP, Lin YF, Chiu HW (2021)** The Kidney-Related Effects of Polystyrene Microplastics on Human Kidney Proximal Tubular Epithelial Cells HK-2 and Male C57BL/6 Mice. *Environmental Health Perspectives*. https://doi.org/10.1289/ehp7612
-
-**Yan Z, Liu Y, Zhang T, Zhang F, Ren H, Zhang Y (2022)** Analysis of Microplastics in Human Feces Reveals a Correlation between Fecal Microplastics and Inflammatory Bowel Disease Status. *Environmental Science & Technology*. https://doi.org/10.1021/acs.est.1c03924
-
-**Zhu X, Wang C, Duan X, Liang B, Genbo Xu E, Huang Z (2023)** Micro- and nanoplastics: A new cardiovascular risk factor? *Environment International*. https://doi.org/10.1016/j.envint.2022.107662

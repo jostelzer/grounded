@@ -14,7 +14,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-from artifact_io import atomic_write_json
+from artifact_io import atomic_write_json, sha256_file
 import figure_contract
 from figure_provenance import validate_provenance
 from grounded_metadata import rendered_figure_size_mm
@@ -919,8 +919,10 @@ def audit_figure(
         "errors": errors,
         "warnings": warnings,
         "metrics": {
+            "image_sha256": sha256_file(path),
             "width_px": width,
             "height_px": height,
+            "evaluated_rendered_width_mm": round(pdf_width_mm, 2),
             "actual_aspect_ratio": round(actual_aspect, 6),
             "target_aspect_ratio": (
                 round(float(target_aspect), 6) if target_aspect is not None else None

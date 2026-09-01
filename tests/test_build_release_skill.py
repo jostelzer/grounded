@@ -97,8 +97,13 @@ class ReleaseSkillTests(unittest.TestCase):
                 )
                 self.assertIn("grounded/scripts/verify_claims.py", archive.namelist())
                 self.assertIn("grounded/scripts/figure_contract.py", archive.namelist())
+                self.assertIn("grounded/scripts/audit_production.py", archive.namelist())
                 self.assertIn(
                     "grounded/references/figure-inspection-contract.md",
+                    archive.namelist(),
+                )
+                self.assertIn(
+                    "grounded/references/production-workflow.md",
                     archive.namelist(),
                 )
                 self.assertFalse(

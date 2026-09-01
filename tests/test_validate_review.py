@@ -74,6 +74,7 @@ class ValidateReviewTests(unittest.TestCase):
             ("seed-oils.md", "scientific", "large"),
             ("ozempic-after-stopping.md", "popsci", "medium"),
             ("microplastics-health-eli5.md", "eli5", "small"),
+            ("school-smartphone-bans.md", "bullets", "small"),
         )
         for filename, style, size in examples:
             with self.subTest(filename=filename):
@@ -111,6 +112,40 @@ class ValidateReviewTests(unittest.TestCase):
         self.assertFalse(result.ok)
         self.assertTrue(any("missing from Sources" in error for error in result.errors))
         self.assertTrue(any("uncited DOI" in error for error in result.errors))
+
+    def test_recorded_correction_note_is_apparatus_not_an_uncited_source(self):
+        correction = "10.1000/correction"
+        markdown = scientific_review().replace(
+            f"https://doi.org/{DOI}\n",
+            f"https://doi.org/{DOI} Correction: "
+            f"[{correction}](https://doi.org/{correction}).\n",
+        )
+        ledger = {"entries": [{
+            "key": "Smith2024",
+            "doi": DOI,
+            "status": "verified",
+            "abstract": " ".join(["evidence"] * 50),
+            "canonical": {"type": "journal-article"},
+            "verification": {
+                "bibliographic_status": "verified",
+                "retraction_status": "clear",
+                "correction_notices": [{"doi": correction}],
+            },
+        }]}
+        result = validate_review.validate_review(
+            markdown, style="scientific", size="small", ledger=ledger
+        )
+        self.assertTrue(result.ok, result.errors)
+        self.assertEqual(result.metrics["source_dois"], 1)
+        self.assertEqual(result.metrics["correction_dois"], 1)
+
+        ledger["entries"][0]["verification"]["correction_notices"] = []
+        result = validate_review.validate_review(
+            markdown, style="scientific", size="small", ledger=ledger
+        )
+        self.assertTrue(any(
+            "correction DOI(s) are not recorded" in error for error in result.errors
+        ))
 
     def test_unresolved_citation_key_fails(self):
         result = validate_review.validate_review(

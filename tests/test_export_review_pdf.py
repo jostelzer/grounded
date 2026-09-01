@@ -441,6 +441,49 @@ class PdfExportTests(unittest.TestCase):
                     review, ledger, [spec], [prompt]
                 )
 
+    def test_release_accepts_recorded_correction_as_reference_apparatus(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            correction = "10.1000/correction"
+            review = Path(tmp) / "review.md"
+            ledger = Path(tmp) / "sources.json"
+            review.write_text(
+                "## Question?\n\nA finding "
+                "[Smith 2024](https://doi.org/10.1000/example).\n\n"
+                "**Sources**\n\n**Smith 2024** A source. "
+                "https://doi.org/10.1000/example Correction: "
+                f"[{correction}](https://doi.org/{correction}).\n",
+                encoding="utf-8",
+            )
+            entry = {
+                "key": "Smith2024",
+                "doi": "10.1000/example",
+                "status": "verified",
+                "verification": {
+                    "bibliographic_status": "verified",
+                    "retraction_status": "clear",
+                    "correction_notices": [{"doi": correction}],
+                },
+            }
+            ledger.write_text(json.dumps({"entries": [entry]}), encoding="utf-8")
+            _markdown, _figures, expected, by_doi = (
+                export_review.validate_release_inputs(review, ledger)
+            )
+            self.assertEqual(expected, ["10.1000/correction", "10.1000/example"])
+            self.assertEqual(set(by_doi), {"10.1000/example"})
+            _title, _lead, rendered = export_review.to_html(
+                review.read_text(encoding="utf-8")
+            )
+            self.assertIn(f'https://doi.org/{correction}', rendered)
+            self.assertEqual(rendered.count('data-reference-number="1"'), 1)
+            self.assertEqual(export_review.count_unique_dois(
+                review.read_text(encoding="utf-8")
+            ), 1)
+
+            entry["verification"]["correction_notices"] = []
+            ledger.write_text(json.dumps({"entries": [entry]}), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "not recorded"):
+                export_review.validate_release_inputs(review, ledger)
+
     def test_visible_references_heading_is_release_blocking(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.make_image(os.path.join(tmp, "figure.png"))
@@ -456,6 +499,22 @@ class PdfExportTests(unittest.TestCase):
             weasyprint_export.write_pdf(without_heading, pdf)
             with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "visible References"):
                 qa_review_pdf.inspect_structure(pdf, self.markdown())
+
+    def test_folded_reference_imprint_is_visible_when_pdf_extracts_metadata_first(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            pdf = os.path.join(tmp, "review.pdf")
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v4.0.0",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+                imprint="refhead",
+            )
+            weasyprint_export.write_pdf(page, pdf)
+            inspection = qa_review_pdf.inspect_structure(
+                pdf, self.markdown(), expected_release="v4.0.0"
+            )
+            self.assertEqual(inspection["visible_reference_dois"], 1)
+            self.assertIsNotNone(inspection["reference_start_page"])
 
     def test_single_column_review_without_figures(self):
         markdown = (

@@ -529,9 +529,16 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
             )
         reference_start_page = None
         reference_offset = None
+        reference_title = (
+            r"(?:References|R\s+E\s+F\s+E\s+R\s+E\s+N\s+C\s+E\s+S)"
+        )
+        reference_metadata = (
+            r"(?:\d+\s*[·•]\s*)?VERIFIED\s+VIA\s+CROSSREF"
+            r"(?:\s*[·•]\s*GROUNDED\s+.+?)?"
+        )
         reference_heading = (
-            r"(?mi)^(?:References|R\s+E\s+F\s+E\s+R\s+E\s+N\s+C\s+E\s+S)"
-            r"(?:\s+\d+\s*[·•].*)?\s*$"
+            rf"(?mi)^(?:{reference_metadata}\s*)?{reference_title}"
+            rf"(?:\s+{reference_metadata})?\s*$"
         )
         for index, text in enumerate(page_texts, 1):
             matches = list(re.finditer(reference_heading, text))

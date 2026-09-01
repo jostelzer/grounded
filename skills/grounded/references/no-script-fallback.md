@@ -115,6 +115,19 @@ PDF whose figure aspect can be checked—deliver the verified written review and
 say in one sentence that the visual/PDF could not be generated. Never claim the
 scripted quality gates or matrix check passed when they were unavailable.
 
+### B6. Multiple-review production without the stage script
+
+For two or more journal reviews, preserve the four boundaries in
+`production-workflow.md` manually even though `audit_production.py` cannot run.
+Keep every case isolated. Freeze and inspect evidence plus `synthesis.md` before
+drafting; complete the selected-style and visual-job checks before generating
+figures; inspect every figure at the physical width implied by the frozen PDF
+height cap; and build the complete PDF once with at most one ordinary repair.
+Record every unresolved issue and warning at its owning stage. One to three
+primary labels drive phone QA, supporting labels stay at publication scale, and
+definitions remain in captions. A manual check is reported as manual—never as a
+passing scripted gate.
+
 ## The honesty rules that matter most here
 
 These exist because the tempting failure mode is to *quietly downgrade* what "verified" means.

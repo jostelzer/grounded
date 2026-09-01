@@ -4,6 +4,21 @@ These gates are mandatory for an explicitly requested size, a journal PDF (whose
 figures are mandatory), or a PDF release. Reviews using the default medium tier retain advisory tier budgets, but
 the evidence, citation, and text-hygiene rules never become advisory.
 
+For a request that produces two or more journal reviews, use the staged
+`production.json` contract in `production-workflow.md`. It calls the gates below
+against their live inputs and stops before figures or release work when an
+earlier stage fails:
+
+```bash
+python3 scripts/audit_production.py production.json --stage evidence --report production-evidence.json
+python3 scripts/audit_production.py production.json --stage semantic --report production-semantic.json
+python3 scripts/audit_production.py production.json --stage figures --report production-figures.json
+python3 scripts/audit_production.py production.json --stage release --report production-release.json
+```
+
+The production gate requires exact warning adjudication and records normal
+iteration budgets, but never turns a failed underlying gate into a pass.
+
 ## Search manifest
 
 `find_papers.py` writes `search-manifest.json` beside the ledger. Give every run

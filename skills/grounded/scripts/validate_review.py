@@ -18,6 +18,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from artifact_io import atomic_write_json
+from citation_apparatus import correction_note_dois, ledger_correction_dois
 
 WORD_BUDGETS = {
     "scientific": {"small": (600, 1000), "medium": (1500, 2500), "large": (3500, 6000)},
@@ -480,7 +481,9 @@ def validate_review(
         errors.append("the review body must contain exactly one level-two title")
 
     body_dois = _dois(body)
-    source_dois = _dois(sources)
+    all_source_dois = _dois(sources)
+    correction_dois = correction_note_dois(sources)
+    source_dois = all_source_dois - correction_dois
     missing_sources = sorted(body_dois - source_dois)
     unused_sources = sorted(source_dois - body_dois)
     if missing_sources:
@@ -491,6 +494,20 @@ def validate_review(
         errors.append(
             "uncited DOI(s) present in Sources: " + ", ".join(unused_sources[:5])
         )
+    if ledger is not None:
+        recorded_corrections = ledger_correction_dois(ledger, source_dois)
+        unrecorded_corrections = sorted(correction_dois - recorded_corrections)
+        missing_correction_notes = sorted(recorded_corrections - correction_dois)
+        if unrecorded_corrections:
+            errors.append(
+                "correction DOI(s) are not recorded on a cited ledger entry: "
+                + ", ".join(unrecorded_corrections[:5])
+            )
+        if missing_correction_notes:
+            errors.append(
+                "cited source correction notice(s) missing from Sources: "
+                + ", ".join(missing_correction_notes[:5])
+            )
 
     abstract = re.search(
         r"^\*\*Abstract\*\*\s*[—–-]\s*(.+?)(?=\n\n|\Z)", body, re.M | re.S
@@ -690,6 +707,7 @@ def validate_review(
         "word_breakdown": breakdown,
         "body_dois": len(body_dois),
         "source_dois": len(source_dois),
+        "correction_dois": len(correction_dois),
         "figures": figure_count,
         "journal_figure_target": (
             TIER_REQUIREMENTS[size]["figure_target"] if image_mode else None

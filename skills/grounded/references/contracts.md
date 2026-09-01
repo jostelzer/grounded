@@ -50,6 +50,9 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   placement, reference order, and every gate may not.
 - `qa_review_pdf.py` / `qa_deck_pdf.py` / `qa_figure.py`: fail-closed
   behavior, report shapes (additive only).
+- `audit_production.py`: production-manifest schema 1, ordered stage names
+  (`evidence`, `semantic`, `figures`, `release`), live prerequisite validation,
+  exact warning acceptance, and exit-code semantics.
 
 ## Additive interface changes
 
@@ -79,6 +82,11 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   medium, and 5–6 for large, with hard ceilings of 2/5/8. Falling below a
   target warns rather than failing so the policy cannot force decorative
   filler; exceeding the size ceiling remains a validation error.
+- Production-manifest schema 1 additively composes the existing gates for
+  multi-review journal batches. It freezes the figure height cap before pixel
+  QA, binds live figure hashes and evaluated widths to release records, and
+  requires diagnosed exceptions only after normal local/full-document budgets
+  are exceeded. An exception records extra work and never waives a failed gate.
 
 ## Fixtures
 

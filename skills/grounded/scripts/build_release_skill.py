@@ -41,6 +41,7 @@ REFERENCE_FILES = (
     "media-modes.md",
     "nature-figure-corpus.json",
     "no-script-fallback.md",
+    "production-workflow.md",
     "quality-gates.md",
     "search-playbook.md",
     "sizes.md",
@@ -54,6 +55,7 @@ REFERENCE_FILES = (
 SCRIPT_FILES = (
     "artifact_io.py",
     "audit_fulltexts.py",
+    "audit_production.py",
     "audit_search.py",
     "build_figure_prompt.py",
     "build_release_skill.py",

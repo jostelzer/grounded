@@ -164,6 +164,14 @@ python3 -c "import urllib.request;print(urllib.request.urlopen('https://api.cros
 
 Work through every step; the order matters because the later steps depend on the ledger built in the early ones. Keep all working files in one folder for the review (`<topic-slug>/`): `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `fulltext-manifest.json`, `synthesis.md`, `review_draft.md`, and `review.md`, plus requested media. PDF releases add `release-manifest.json` and one authoritative QA render directory. See `references/quality-gates.md` for the machine-auditable contracts.
 
+When one request asks for **two or more journal reviews**, read
+`references/production-workflow.md` before Step 1. Use one isolated case folder
+and `production.json` per review, run the evidence and semantic gates before
+media, and run the figure and release gates only after their prerequisites pass.
+The staged workflow owns batch coordination, prompt packets, effort
+stratification, warning adjudication, bounded repair accounting, and exact-width
+figure-to-release matching; it does not weaken any gate below.
+
 ### 1. Scope the question into angles
 
 Before searching, write down the angles a thorough reviewer would cover — this is what "looking at all angles" means in practice. Typical angles for an empirical question: existing systematic reviews and meta-analyses; the largest or most rigorous primary studies; mechanism or theory; contradictory or null findings; different populations, settings, doses, or durations; measurement and methodological critiques; harms or unintended effects; historical origin of the claim; very recent work. For other question types see `references/search-playbook.md`. Write the angle list into `notes.md`; it becomes the skeleton of the review.
@@ -281,6 +289,7 @@ deliver the verified synthesis as a normal review instead.
 ## Bundled resources
 
 - `scripts/find_papers.py` and `scripts/audit_search.py` — paginated discovery, structured funnel records, publication screening, two-provider citation chasing, and tier coverage audit.
+- `scripts/audit_production.py` and `references/production-workflow.md` — fail-fast multi-review journal production: live evidence/synthesis/semantic/figure/release gates, compact stage reports, bounded iteration exceptions, and exact figure hash/width binding to the final PDF.
 - `scripts/verify_citations.py` — Crossref bibliographic and integrity verification (retractions, withdrawals, expressions of concern; corrections recorded) using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` and `scripts/audit_fulltexts.py` — open-access retrieval plus typed authenticity, duplicate, notes, and reading-evidence manifests.
 - `references/claim-verification.md` — the adjudication rubric for claim-level verification: verdict definitions, quote rules, abstention discipline, escalation policy, and a worked example. Development benchmarks remain outside the release bundle.

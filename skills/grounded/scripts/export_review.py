@@ -31,6 +31,7 @@ import urllib.parse
 from pathlib import Path
 
 from artifact_io import atomic_write_json, sha256_bytes, sha256_file
+from citation_apparatus import correction_note_dois, ledger_correction_dois
 from grounded_metadata import (
     FIGURE_MAX_HEIGHT_MM, PAGE_CONTENT_WIDTH_MM, REPOSITORY_URL,
     rendered_figure_size_mm, version as grounded_version,
@@ -120,9 +121,13 @@ class JournalCitationIndex:
 
 
 def _reference_doi(text):
+    # A correction DOI is linked apparatus on the corrected article's entry,
+    # not a second cited reference. Number the primary DOI preceding the
+    # formatter's explicit label while preserving the correction link below.
+    primary_text = re.split(r"\bCorrection:\s*", text, maxsplit=1, flags=re.I)[0]
     urls = []
     for match in re.finditer(
-            r"https?://(?:dx\.)?doi\.org/[^\s<>]+", text, re.IGNORECASE):
+            r"https?://(?:dx\.)?doi\.org/[^\s<>]+", primary_text, re.IGNORECASE):
         href = match.group(0).rstrip(".,;*_)")
         doi = JournalCitationIndex.normalized_doi(href)
         if doi and doi not in {item[0] for item in urls}:
@@ -1376,9 +1381,15 @@ def inject_drop_cap(page):
 
 def count_unique_dois(md):
     # inline citation URLs percent-encode parens, sources-block URLs don't;
-    # normalize both forms before deduplicating
-    return len({urllib.parse.unquote(d).lower().rstrip(").,;*_")
-                for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)})
+    # normalize both forms before deduplicating. Linked correction notices are
+    # visible reference apparatus, but not independent cited sources.
+    all_dois = {
+        urllib.parse.unquote(d).lower().rstrip(").,;*_")
+        for d in re.findall(r"https?://doi\.org/([^\s<>]+)", md)
+    }
+    source_split = re.split(r"^\*\*Sources\*\*\s*$", md, maxsplit=1, flags=re.M)
+    sources = source_split[1] if len(source_split) == 2 else ""
+    return len(all_dois - correction_note_dois(sources))
 
 
 def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
@@ -1718,14 +1729,32 @@ def validate_release_inputs(
         re.sub(r"^https?://(?:dx\.)?doi\.org/", "", str(entry.get("doi") or "").lower()): entry
         for entry in ledger.get("entries", []) if isinstance(entry, dict) and entry.get("doi")
     }
-    missing_ledger = [doi for doi in expected_dois if doi not in ledger_by_doi]
+    source_split = re.split(r"^\*\*Sources\*\*\s*$", markdown, maxsplit=1, flags=re.M)
+    sources = source_split[1] if len(source_split) == 2 else ""
+    correction_dois = correction_note_dois(sources)
+    cited_dois = sorted(set(expected_dois) - correction_dois)
+    cited_primary_dois = set(cited_dois) & set(ledger_by_doi)
+    recorded_corrections = ledger_correction_dois(ledger, cited_primary_dois)
+    unrecorded_corrections = sorted(correction_dois - recorded_corrections)
+    missing_correction_notes = sorted(recorded_corrections - correction_dois)
+    if unrecorded_corrections:
+        raise ValueError(
+            "release correction DOI(s) are not recorded on a cited ledger entry: "
+            + ", ".join(unrecorded_corrections[:5])
+        )
+    if missing_correction_notes:
+        raise ValueError(
+            "release review omits recorded correction notice DOI(s): "
+            + ", ".join(missing_correction_notes[:5])
+        )
+    missing_ledger = [doi for doi in cited_dois if doi not in ledger_by_doi]
     if missing_ledger:
         raise ValueError(
             "release review DOI(s) are absent from the ledger: "
             + ", ".join(missing_ledger[:5])
         )
     ineligible = []
-    for doi in expected_dois:
+    for doi in cited_dois:
         entry = ledger_by_doi[doi]
         verification = entry.get("verification") or {}
         if (
@@ -1739,7 +1768,8 @@ def validate_release_inputs(
             "release review cites ledger entries that are not fully verified: "
             + ", ".join(ineligible[:5])
         )
-    return markdown, figures, expected_dois, ledger_by_doi
+    cited_ledger_by_doi = {doi: ledger_by_doi[doi] for doi in cited_dois}
+    return markdown, figures, expected_dois, cited_ledger_by_doi
 
 
 def _figure_manifest_record(path, manifest_directory, figure_max_height_mm):
@@ -1834,10 +1864,16 @@ def write_release_manifest(
         },
         "expected": {
             "unique_dois": expected_dois,
-            "reference_entries": len(expected_dois),
+            "reference_entries": len([
+                doi for doi in expected_dois if doi in ledger_by_doi
+            ]),
+            "correction_notices": len([
+                doi for doi in expected_dois if doi not in ledger_by_doi
+            ]),
             "figures": len(figures),
             "cited_ledger_keys": [
-                str(ledger_by_doi[doi].get("key") or doi) for doi in expected_dois
+                str(ledger_by_doi[doi].get("key") or doi)
+                for doi in expected_dois if doi in ledger_by_doi
             ],
         },
     }
