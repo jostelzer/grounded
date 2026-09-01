@@ -813,7 +813,10 @@ tbody tr:last-child td { border-bottom: 1px solid var(--ink); }
 }
 .refs p { margin: 0 0 2.5px; padding-left: 2.25em; break-inside: avoid-page; }
 .refs .refno {
-  float: left; width: 2em; margin-left: -2.25em; color: var(--accent);
+  /* A float is displaced at a fragment boundary — the first entry's number
+     lands in the second entry's slot and overprints it. An inline-block
+     hangs the same 2em without entering float layout. */
+  display: inline-block; width: 2em; margin-left: -2.25em; color: var(--accent);
   font-weight: 700; font-variant-numeric: tabular-nums;
 }
 .refs p.last-reference::after {
