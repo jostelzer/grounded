@@ -1,3 +1,5 @@
+[![Four Grounded reviews rendered as journal PDFs: seed oils, microplastics, Ozempic and school smartphone bans](assets/grounded-banner.png)](#examples)
+
 # Grounded
 
 Ever typed *"look into the scientific evidence on…"* and gotten a beautiful, confident answer?
