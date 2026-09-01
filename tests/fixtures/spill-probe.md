@@ -82,20 +82,4 @@ The claim holds across studies evidence evidence evidence evidence evidence evid
 
 **Author38 A, Author B (2018)** A compact reference title number 38. *Journal of Tests*. https://doi.org/10.1000/ref38
 
-**Author39 A, Author B (2019)** A compact reference title number 39. *Journal of Tests*. https://doi.org/10.1000/ref39
-
-**Author40 A, Author B (2000)** A compact reference title number 40. *Journal of Tests*. https://doi.org/10.1000/ref40
-
-**Author41 A, Author B (2001)** A compact reference title number 41. *Journal of Tests*. https://doi.org/10.1000/ref41
-
-**Author42 A, Author B (2002)** A compact reference title number 42. *Journal of Tests*. https://doi.org/10.1000/ref42
-
-**Author43 A, Author B (2003)** A compact reference title number 43. *Journal of Tests*. https://doi.org/10.1000/ref43
-
-**Author44 A, Author B (2004)** A compact reference title number 44. *Journal of Tests*. https://doi.org/10.1000/ref44
-
-**Author45 A, Author B (2005)** A compact reference title number 45. *Journal of Tests*. https://doi.org/10.1000/ref45
-
-**Author46 A, Author B (2006)** A compact reference title number 46. *Journal of Tests*. https://doi.org/10.1000/ref46
-
 **Consortium A, Author B, Author C, Author D, Author E, Author F, Author G, Author H, Author I, Author J, Author K, Author L, Author M, Author N, Special Interest Group on Extended Reference Records (2023)** A deliberately long position-paper reference whose entry wraps across many rendered lines to unbalance terminal column fill. *Journal of Pediatric Gastroenterology and Nutrition*. https://doi.org/10.1000/reflong

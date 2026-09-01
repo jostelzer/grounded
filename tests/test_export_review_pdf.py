@@ -154,6 +154,12 @@ class PdfExportTests(unittest.TestCase):
             page,
         )
         self.assertNotIn('<b>Tokens</b>', page)
+        self.assertIn(
+            '<aside class="madewith"><b>Made with Grounded</b>', page)
+        self.assertIn(
+            '<a href="https://example.test/grounded">'
+            'example.test/grounded</a></p></aside>'
+            '<h2 class="refhead">References', page)
         self.assertNotIn('<div class="provenance">', page)
         self.assertNotIn("No floating claims", page)
         self.assertNotIn("<svg viewBox=", page)
@@ -733,7 +739,10 @@ class PdfExportTests(unittest.TestCase):
                         markdown = stream.read()
                     pdf = os.path.join(tmp, filename.replace(".md", ".pdf"))
                     render_dir = os.path.join(tmp, filename.replace(".md", ""))
-                    self.write_review(markdown, pdf, example_dir)
+                    # Render through the ladder, exactly as the CLI runs it.
+                    export_review.render_pdf_rebalanced(
+                        markdown, pdf, base_dir=example_dir,
+                        release="v-test", compiled_date="2026-08-26")
                     self.assertEqual(len(PdfReader(pdf).pages), 2)
                     raster = qa_review_pdf.render_and_inspect(
                         pdf, render_dir, dpi=120)
@@ -1057,6 +1066,41 @@ class FigureExportTests(unittest.TestCase):
             self.assertEqual(
                 export_review.count_terminal_reference_spill(out, n_refs), 0
             )
+
+    def test_made_with_band_is_style_keyed_and_compactable(self):
+        """The band speaks each style's register, and its compact rebalance
+        form keeps the link rather than dropping the band."""
+        markdown = (
+            "## Test review\n\n**TL;DR** \u2014 Test.\n\n"
+            "A claim with a source. [Smith 2024](https://doi.org/10.1000/example)\n\n"
+            "**Sources**\n\n"
+            "**Smith 2024** A verified source. *Journal*. "
+            "https://doi.org/10.1000/example\n"
+        )
+        openings = {
+            "scientific": "You can run this protocol yourself.",
+            "popsci": "You can point this at whatever you are curious about.",
+            "eli5": "You can make one of these too.",
+        }
+        for style, opening in openings.items():
+            with self.subTest(style=style):
+                page = export_review.build_html(
+                    markdown, style=style, release="v-test",
+                    repo="example.test/g", compiled_date="2026-08-27")
+                self.assertIn(opening, page)
+        bullets = export_review.build_html(
+            markdown, style="bullets", release="v-test",
+            repo="example.test/g", compiled_date="2026-08-27")
+        self.assertIn('<aside class="madewith"><b>Made with Grounded</b><ul>',
+                      bullets)
+
+        compact = export_review.build_html(
+            markdown, made_with="compact", release="v-test",
+            repo="example.test/g", compiled_date="2026-08-27")
+        self.assertIn('<aside class="madewith compact">', compact)
+        self.assertIn('<a href="https://example.test/g">example.test/g</a>',
+                      compact)
+        self.assertNotIn("You can run this protocol yourself.", compact)
 
     def test_no_spill_render_is_left_untouched(self):
         with tempfile.TemporaryDirectory() as tmp:

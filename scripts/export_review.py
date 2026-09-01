@@ -735,6 +735,7 @@ h1 {
 .body.cols > .spanning-figure-start, .body.cols > .spanning-table-start,
 .body.cols > .spanning-block { column-span: all; }
 .body.cols > .spanning-reference-balanced { column-span: all; }
+.body.cols > .madewith { column-span: all; }
 h2 {
   font-size: 9pt; font-weight: 600; line-height: 1.3; letter-spacing: 0;
   margin: 12px 0 4px; color: var(--ink);
@@ -752,6 +753,25 @@ h2.refhead {
 h2.refhead::before { content: none; counter-increment: none; }
 h2.refhead small { font-weight: 600; font-size: 6.3pt; letter-spacing: .12em;
   text-transform: uppercase; color: var(--muted); float: right; margin-top: 2px; }
+.madewith {
+  border-top: 1px solid var(--ink); margin: 14px 0 0; padding: 5px 0 7px;
+  break-inside: avoid; text-align: left; hyphens: none;
+  font-family: -apple-system, "Helvetica Neue", "Helvetica", Arial, sans-serif;
+}
+.madewith + h2.refhead { margin-top: 0; }
+.madewith.compact { padding: 4px 0 5px; }
+.madewith.compact b { margin-bottom: 0; }
+.madewith.compact b a { letter-spacing: 0; text-transform: none;
+  font-size: 7pt; margin-left: 6px; }
+.madewith b {
+  display: block; font-size: 5.8pt; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 2.5px;
+}
+.madewith p { margin: 0; font-size: 7pt; line-height: 1.45; color: var(--muted); }
+/* Marker styling is left to the edition, whose list rules the band inherits. */
+.madewith ul { margin: 0; font-size: 7pt; line-height: 1.45; color: var(--muted); }
+.madewith li { margin: 0 0 1px; }
+.madewith a { color: var(--ink); font-weight: 600; white-space: nowrap; }
 p { margin: 0 0 4.5px; orphans: 2; widows: 2; }
 ul { margin: 0 0 9px; padding-left: 1.05em; }
 li { margin: 0 0 4.5px; break-inside: avoid; }
@@ -998,6 +1018,12 @@ def _stylesheet(figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
     if overlay:
         css = css + "\n" + overlay
     return css
+
+
+def _pdf_page_count(pdf_path):
+    from pypdf import PdfReader
+
+    return len(PdfReader(str(pdf_path)).pages)
 
 
 def count_terminal_reference_spill(pdf_path, reference_count):
@@ -1369,10 +1395,11 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
     resolved_edition = resolve_edition(style, edition)
     expected_fonts = EDITIONS[resolved_edition]["fonts"]
 
-    def build(leading, imprint):
+    def build(leading, imprint, made_with="full"):
         return build_html(
             md, columns=columns, kicker=kicker, colophon=colophon,
-            base_dir=base_dir, imprint=imprint, release=release, repo=repo,
+            base_dir=base_dir, made_with=made_with,
+            imprint=imprint, release=release, repo=repo,
             compiled_date=compiled_date, style=style,
             figure_max_height_mm=figure_max_height_mm, ref_leading=leading,
             edition=resolved_edition, pull_quote=pull_quote,
@@ -1382,6 +1409,7 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
     page = build(ref_leading, "end")
     result = write_pdf(page, out_path, expected_fonts=expected_fonts)
     effective = {"ref_leading": ref_leading, "imprint": "end",
+                 "made_with": "full",
                  "rebalanced": False, "note": None, "spill": 0}
     if ref_leading is not None:
         return page, result, effective
@@ -1393,37 +1421,63 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
     if not (0 < spill <= REBALANCE_MAX_SPILL):
         return page, result, effective
     ladder = (
-        (MIN_REF_LEADING, "end",
+        (MIN_REF_LEADING, "end", "full",
          f"reference leading tightened to {MIN_REF_LEADING:g}"),
-        (None, "refhead",
+        (None, "refhead", "full",
          "imprint folded into the References heading"),
-        (MIN_REF_LEADING, "refhead",
+        (MIN_REF_LEADING, "refhead", "full",
          "imprint folded and reference leading tightened to "
          f"{MIN_REF_LEADING:g}"),
+        (MIN_REF_LEADING, "refhead", "compact",
+         "imprint folded, provenance band compacted, and reference leading "
+         f"tightened to {MIN_REF_LEADING:g}"),
     )
     candidate_path = str(out_path) + ".rebalance.pdf"
-    for leading, imprint, note in ladder:
-        candidate_page = build(leading, imprint)
-        try:
-            candidate = write_pdf(candidate_page, candidate_path,
-                                  expected_fonts=expected_fonts)
-            # Acceptable = out of the degenerate band: either nothing spills,
-            # or the terminal page is a full reference continuation page
-            # (sparseness there stays the raster QA's call).
-            candidate_spill = count_terminal_reference_spill(
-                candidate_path, count_unique_dois(md))
-            if not (0 < candidate_spill <= REBALANCE_MAX_SPILL):
-                os.replace(candidate_path, out_path)
-                effective.update(ref_leading=leading, imprint=imprint,
-                                 rebalanced=True, note=note)
-                return candidate_page, candidate, effective
-        finally:
-            if os.path.exists(candidate_path):
-                os.remove(candidate_path)
+    best_path = str(out_path) + ".rebalance-best.pdf"
+    plain_pages = _pdf_page_count(out_path)
+    best = None
+    try:
+        for leading, imprint, made_with, note in ladder:
+            candidate_page = build(leading, imprint, made_with)
+            try:
+                candidate = write_pdf(candidate_page, candidate_path,
+                                      expected_fonts=expected_fonts)
+                # Acceptable = out of the degenerate band: either nothing
+                # spills, or the terminal page is a full reference
+                # continuation page (sparseness there stays the raster QA's
+                # call).
+                candidate_spill = count_terminal_reference_spill(
+                    candidate_path, count_unique_dois(md))
+                if 0 < candidate_spill <= REBALANCE_MAX_SPILL:
+                    continue
+                # The spill count cannot see a terminal page holding a short
+                # reference tail that renders without standalone numbering, so
+                # prefer the shortest acceptable render and keep walking while
+                # a later rung can still drop a page.
+                candidate_pages = _pdf_page_count(candidate_path)
+                if best is None or candidate_pages < best[0]:
+                    os.replace(candidate_path, best_path)
+                    best = (candidate_pages, candidate_page, candidate,
+                            leading, imprint, made_with, note)
+                if candidate_pages < plain_pages:
+                    break
+            finally:
+                if os.path.exists(candidate_path):
+                    os.remove(candidate_path)
+        if best is not None:
+            _, candidate_page, candidate, leading, imprint, made_with, note = best
+            os.replace(best_path, out_path)
+            effective.update(ref_leading=leading, imprint=imprint,
+                             made_with=made_with, rebalanced=True, note=note)
+            return candidate_page, candidate, effective
+    finally:
+        if os.path.exists(best_path):
+            os.remove(best_path)
     return page, result, effective
 
 
 def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
+               made_with="full",
                imprint="end",
                release=None, repo=None, compiled_date=None, style="scientific",
                figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
@@ -1488,6 +1542,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
             refhead_small += f" · Grounded {html.escape(release)}"
         body = body.replace(
             '<h2 class="refhead">References</h2>',
+            _made_with_block(repo_url, style, made_with == "compact") +
             f'<h2 class="refhead">References <small>{refhead_small}</small></h2>')
         if n_refs >= 80:
             body = body.replace('<div class="refs">', '<div class="refs dense">')
@@ -1520,6 +1575,57 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     if edition == "salon":
         page = inject_drop_cap(page)
     return page
+
+
+# Voice-matched provenance copy. The band answers the two questions a reader
+# of a detached PDF cannot otherwise resolve — what produced this, and how do
+# I do it — so the invitation leads and the register follows the review's own.
+MADE_WITH_COPY = {
+    "scientific":
+        "<p>You can run this protocol yourself. Grounded is a free, "
+        "open-source skill for AI assistants: candidate literature is "
+        "retrieved by live search, source texts are read before citation, and "
+        "every DOI and retraction status is verified against Crossref. "
+        "{link}</p>",
+    "popsci":
+        "<p>You can point this at whatever you are curious about. Grounded is "
+        "a free, open-source skill for AI assistants: hand it a question, and "
+        "it goes and finds the real papers, reads them, and checks every "
+        "source against Crossref \u2014 which is how every claim in this "
+        "story was verified before it was written. {link}</p>",
+    "bullets":
+        "<ul><li>Free, open-source skill for AI assistants \u2014 ask a "
+        "question, get a cited review.</li>"
+        "<li>Every source from a live search; every DOI and retraction status "
+        "checked against Crossref.</li>"
+        "<li>Yours to run: {link}</li></ul>",
+    "eli5":
+        "<p>You can make one of these too. Grounded is a free skill \u2014 a "
+        "set of instructions you give to an AI helper so it knows how to do a "
+        "job properly. This one makes it go and find real science papers, "
+        "read them, and check that every single one is real before it writes "
+        "anything. {link}</p>",
+}
+
+
+def _made_with_block(repo_url, style, compact=False):
+    """End-matter provenance band closing the article before the references.
+
+    A reader who receives the PDF alone can otherwise tell only that the
+    review was agent-generated, with nothing to resolve: the running header is
+    a paged-media margin box and cannot carry a link.  The compact form is a
+    rebalance rung — it keeps both answers the band exists to give, what
+    produced this and where to get it, at a single line of page height.
+    """
+    label = re.sub(r"^https?://", "", repo_url)
+    link = (f'<a href="{html.escape(repo_url, quote=True)}">'
+            f"{html.escape(label)}</a>")
+    if compact:
+        return ('<aside class="madewith compact">'
+                f"<b>Made with Grounded {link}</b></aside>")
+    return ('<aside class="madewith"><b>Made with Grounded</b>'
+            + MADE_WITH_COPY[style].format(link=link)
+            + "</aside>")
 
 
 def _manifest_path_record(path, manifest_directory):
