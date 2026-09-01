@@ -1,44 +1,42 @@
 ## Do school smartphone bans improve grades and mental health?
 
-**TL;DR** — Bans usually reduce phone access during school. Better grades and mental health do not follow reliably: some studies find benefits, others find no change, and a few suggest social costs. Schools should treat a ban as a testable policy, not a guaranteed cure.
+**TL;DR** — They reliably reduce phone access during school. Grades sometimes improve, especially in particular settings or groups, but equally credible studies find no gain. Broad mental-health benefits have not been shown, so a ban is a school rule, not a stand-alone wellbeing treatment.
 
-### Bans change access more reliably than total use
+### Grades sometimes improve, but the average result is mixed
 
-- Across 30 English schools, restrictive policies cut reported school-time phone use by **0.67 hours per day**, yet overall weekday and weekend use did not differ [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
-- This gap matters: taking a phone away during lessons can remove an immediate distraction even when students shift their use to another time [Beland & Murphy 2016](https://doi.org/10.1016/j.labeco.2016.04.004), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
-- [Figure 1](#fig-policy-outcomes) separates the immediate change from the later outcomes, showing why less access should not be read as proof of better grades or wellbeing [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
+- An English policy study linked bans to a **0.07-standard-deviation** exam-score rise across 130,482 pupils, with the clearest gains among lower-achieving students [Beland & Murphy 2016](https://doi.org/10.1016/j.labeco.2016.04.004).
+- A Spanish regional analysis reported higher PISA performance after restrictions in one region, but the result did not repeat cleanly across both regions studied [Beneito & Vicente-Chirivella 2022](https://doi.org/10.1108/AEA-05-2021-0112).
+- A Swedish national replication found no academic effect and could reject even small gains, while a South Australian rollout found no policy-specific improvement in academic engagement after one month [Kessel et al. 2020](https://doi.org/10.1016/j.econedurev.2020.102009), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
 
-<a id="fig-policy-outcomes"></a>
-![A stored smartphone at a classroom doorway branches toward a schoolwork sheet with mixed direction marks and a group of students with mixed social and emotional cues. The labels read “Phone access falls,” “Grades vary,” “Wellbeing varies,” and “Not a guarantee.”](school-smartphone-bans-policy-outcomes.png)
+[Figure 1](#fig-whole-answer) keeps those results in proportion: the policy changes access first, while the two outcomes remain separate questions.
 
-**Figure 1. Phone access falls, but downstream benefits are not guaranteed.** Restrictive policies can change school-time access quickly. Academic and wellbeing studies then split across positive, null, and possibly adverse findings; the open bracket marks that a ban is not a universal benefit [Böttger & Zierer 2024](https://doi.org/10.3390/educsci14080906), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
+<a id="fig-whole-answer"></a>
+![A school entrance routes a locked phone toward two evidence paths: mixed grade results and no reliable overall wellbeing gain.](school-smartphone-bans-policy-outcomes.png)
 
-### Grade gains appear in some settings, not others
+**Figure 1. The rule is clearer than its downstream effects.** Schools can make phones less available during the day. Academic studies point in both directions, and recent wellbeing comparisons do not show a dependable overall benefit [Beland & Murphy 2016](https://doi.org/10.1016/j.labeco.2016.04.004), [Kessel et al. 2020](https://doi.org/10.1016/j.econedurev.2020.102009), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
 
-- A four-city English comparison linked bans to higher test scores, especially among previously low-achieving students, and a Spanish regional study found mathematics and science gains in one of two regions [Beland & Murphy 2016](https://doi.org/10.1016/j.labeco.2016.04.004), [Beneito & Vicente-Chirivella 2022](https://doi.org/10.1108/AEA-05-2021-0112).
-- A study covering **1,086 Swedish schools** found no improvement in grades or national mathematics tests, while the recent English school comparison also found no attainment advantage [Kessel et al. 2020](https://doi.org/10.1016/j.econedurev.2020.102009), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
-- A rapid review of five quantitative studies estimated a small average benefit across academic and social outcomes [Böttger & Zierer 2024](https://doi.org/10.3390/educsci14080906).
-- A 22-study scoping review found no randomized trials, widely differing policies and outcomes, and more than half of the evidence unpublished [Campbell et al. 2024](https://doi.org/10.1177/20556365241270394).
+### Wellbeing has not improved reliably
 
-### Mental-health and social findings are mixed too
+- In 30 English schools, restrictive policies reduced in-school phone time by **0.67 hours**, but wellbeing was essentially unchanged (adjusted difference −0.48 points) [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
+- The South Australian rollout found no policy-specific gain in school belonging, and a Dutch comparison of 24 schools found no wellbeing or bullying advantage for full rather than partial bans [King et al. 2024](https://doi.org/10.1556/2006.2024.00058), [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
+- A newer emulated Australian trial reported modest psychological effects, but its authors positioned bans as one component of broader adolescent support rather than a complete mental-health response [Baggio et al. 2025](https://doi.org/10.1016/j.chb.2025.108767).
 
-- An emulated South Australian trial of 1,062 students linked the ban to small reductions in distress and negative mood, without a gain in positive mood [Baggio et al. 2025](https://doi.org/10.1016/j.chb.2025.108767).
-- The 30-school English study found no difference in wellbeing, anxiety, or depression [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
-- A one-month South Australian study found no change in school belonging or academic engagement [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
-- Across 1,398 Dutch adolescents, full rather than classroom-only bans did not improve wellbeing or bullying and were linked to weaker teacher connectedness and, among girls, lower school belonging [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
-- Bullying also resists a simple verdict: recorded incidents fell in the Spanish study, while bullying declined in both Australian groups and did not differ between full and partial Dutch bans [Beneito & Vicente-Chirivella 2022](https://doi.org/10.1108/AEA-05-2021-0112), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058), [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
+### “A ban” is not one standard intervention
 
-### Implementation is part of the intervention
+- Full and classroom-only Dutch bans produced similar wellbeing outcomes; full bans were also associated with lower student–teacher connectedness and, for girls, lower school belonging [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
+- Interviews across seven English schools found positive and negative experiences shaped by enforcement, agency, relationships, learning needs, and what happened outside school [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094).
+- [Figure 2](#fig-implementation-chain) shows why the strongest link runs from a clear rule to less access; later links to grades or health depend on implementation and context.
 
-- Thirty English schools used different storage rules, exceptions, and enforcement; students, staff, and leaders also disagreed about support and compliance [Randhawa et al. 2025](https://doi.org/10.1080/15391523.2024.2363204).
-- In South Australia, **87%** initially reported following the rule, but older students and heavier social-media users were less compliant [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
-- A rule can look the same on paper while storage, exceptions, staff consistency, and student workarounds create a different school day [Randhawa et al. 2025](https://doi.org/10.1080/15391523.2024.2363204), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
-- [Figure 2](#fig-policy-implementation) follows the rule from paper through storage and enforcement to actual access, making those hidden policy differences visible [Randhawa et al. 2025](https://doi.org/10.1080/15391523.2024.2363204), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
+<a id="fig-implementation-chain"></a>
+![Class-only and all-day phone rules pass through enforcement and actual access before branching toward grades and wellbeing.](school-smartphone-bans-policy-implementation.png)
 
-<a id="fig-policy-implementation"></a>
-![A school phone rule moves left to right through a storage rack, a staff enforcement checkpoint, two different actual-access states, and split outcomes. The five labels read “Rule on paper,” “Storage,” “Enforcement,” “Actual access,” and “Outcomes differ.”](school-smartphone-bans-policy-implementation.png)
+**Figure 2. Policy labels do not reveal what pupils experience.** Scope, enforcement, exemptions, and out-of-school displacement sit between the written rule and its hoped-for outcomes [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094), [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6).
 
-**Figure 2. The rule works through storage and enforcement before outcomes can change.** Policies with the same “ban” label can create different access because storage, exceptions, staff consistency, and student compliance differ. The pathway shows why the rule on paper may differ from what students actually experience; it does not identify one best policy [Randhawa et al. 2025](https://doi.org/10.1080/15391523.2024.2363204), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058), [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
+### The evidence supports local goals, not universal promises
+
+- A preregistered scoping review found **22 studies** across 12 countries, no randomized school-policy trials, and major differences in ban definitions, samples, and outcomes [Campbell et al. 2024](https://doi.org/10.1177/20556365241270394).
+- A rapid review of five policy studies estimated a positive overall direction, but its small and heterogeneous evidence base limits how confidently that average can guide one school [Böttger & Zierer 2024](https://doi.org/10.3390/educsci14080906).
+- The practical pattern is consistent: measure the intended outcome directly. A school seeking fewer classroom interruptions should track use and disruption; one promising better grades or wellbeing should also track those outcomes, compliance, exclusions, and unintended effects.
 
 **Sources**
 
@@ -54,10 +52,10 @@
 
 **Goodyear VA, Randhawa A, Adab P, Al-Janabi H, Fenton S, Jones K, Michail M, Morrison B, Patterson P, Quinlan J, Sitch A, Twardochleb R, Wade M, Pallan M (2025)** School phone policies and their association with mental wellbeing, phone use, and social media use (SMART Schools): a cross-sectional observational study. *The Lancet Regional Health - Europe*. https://doi.org/10.1016/j.lanepe.2025.101211
 
+**Goodyear VA, Randhawa A, Adab P, Al-Janabi H, Fenton S, Michail M, Patterson P, Sitch A, Wade M, Pallan M (2026)** How school phone policies influence adolescent phone use and wellbeing (SMART Schools): a qualitative comparative case study. *Social Science & Medicine*. https://doi.org/10.1016/j.socscimed.2026.119094
+
 **Kessel D, Hardardottir HL, Tyrefors B (2020)** The impact of banning mobile phones in Swedish secondary schools. *Economics of Education Review*. https://doi.org/10.1016/j.econedurev.2020.102009
 
 **King DL, Radunz M, Galanis CR, Quinney B, Wade T (2024)** “Phones off while school's on”: Evaluating problematic phone use and the social, wellbeing, and academic effects of banning phones in schools. *Journal of Behavioral Addictions*. https://doi.org/10.1556/2006.2024.00058
-
-**Randhawa A, Pallan M, Twardochleb R, Adab P, Al-Janabi H, Fenton S, Jones K, Michail M, Patterson P, Sitch A, Wade M, Goodyear VA (2025)** Secondary school smartphone policies in England: a descriptive analysis of how schools rationalize, design, and implement restrictive and permissive phone policies. *Journal of Research on Technology in Education*. https://doi.org/10.1080/15391523.2024.2363204
 
 **Vanluydt E, van den Eijnden R, Vonk L, Putrik P, van Amelsvoort T, Delespaul P, Levels M, Huijts T (2026)** Disconnect To Reconnect: How Variations between Types of Smartphone Bans Influence Students’ Well-being and Social Connectedness in Dutch Secondary Education. *Journal of Youth and Adolescence*. https://doi.org/10.1007/s10964-025-02313-6

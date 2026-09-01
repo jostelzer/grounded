@@ -747,8 +747,12 @@ class OpenCitationsClient:
 
     def metadata(self, dois):
         output = []
-        for start in range(0, len(dois), 40):
-            chunk = dois[start:start + 40]
+        # OpenCitations Meta documents multi-ID requests but its live endpoint
+        # rejects larger batches (20 may return 500; 25+ returns 400). Keep the
+        # request comfortably within the observed service limit.
+        batch_size = 10
+        for start in range(0, len(dois), batch_size):
+            chunk = dois[start:start + batch_size]
             identifiers = "__".join("doi:" + doi for doi in chunk)
             encoded = urllib.parse.quote(identifiers, safe=":/_")
             url = f"https://api.opencitations.net/meta/v1/metadata/{encoded}"

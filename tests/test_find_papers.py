@@ -289,6 +289,24 @@ class CitationChasingTests(unittest.TestCase):
         self.assertTrue(all(result.database == "opencitations" for result in successful))
         self.assertEqual(successful[0].hits[0]["_source"], "opencitations")
 
+    def test_opencitations_metadata_batches_at_ten_identifiers(self):
+        client = find_papers.OpenCitationsClient()
+        urls = []
+
+        def fetch(url):
+            urls.append(url)
+            return "[]"
+
+        client.fetch = fetch
+        dois = [f"10.1000/example-{index}" for index in range(21)]
+        self.assertEqual(client.metadata(dois), [])
+        self.assertEqual(len(urls), 3)
+        batch_sizes = [
+            len(urllib.parse.unquote(url.split("/metadata/", 1)[1]).split("__"))
+            for url in urls
+        ]
+        self.assertEqual(batch_sizes, [10, 10, 1])
+
 
 class LoggingAndIntegrationTests(unittest.TestCase):
     def test_log_is_created_automatically_beside_ledger(self):
