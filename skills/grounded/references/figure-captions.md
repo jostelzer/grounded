@@ -27,6 +27,11 @@ once. Do not make the reader infer axis semantics from tick labels. A
 conventional point-and-whisker needs no redundant in-plot legend when the
 caption already defines the estimate and interval.
 
+Expand abbreviations and carry interpretation prose here rather than placing a
+glossary or caption-like heading inside the artwork. Quantitative panel headings
+are short local identifiers only; the caption owns definitions, axis summaries,
+and the meaning of the comparison.
+
 Do not use a caption as a source dump, repeat the surrounding section, or hide
 a scientific caveat that belongs in the image itself. Caption citations support
 what the figure depicts; they do not replace citations on empirical claims in

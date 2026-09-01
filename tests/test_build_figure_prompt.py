@@ -40,13 +40,16 @@ class FigurePromptTests(unittest.TestCase):
             with self.subTest(style=name):
                 self.assertEqual(style["canvas"]["background"], "#FFFFFF")
 
-    def test_every_profile_has_a_phone_safe_generated_type_margin(self):
+    def test_every_profile_has_a_compact_bounded_type_hierarchy(self):
         for name, profile in self.profiles.items():
             with self.subTest(profile=name):
                 font = profile["font"]
-                self.assertGreaterEqual(font["minimum_px_at_1536_width"], 96)
-                self.assertGreaterEqual(font["body_px_at_1536_width"], 104)
-                self.assertGreaterEqual(font["panel_label_px_at_1536_width"], 116)
+                self.assertGreaterEqual(font["minimum_px_at_1536_width"], 30)
+                self.assertLessEqual(font["body_px_at_1536_width"], 40)
+                self.assertLessEqual(
+                    font["primary_px_at_1536_width"],
+                    font["maximum_px_at_1536_width"])
+                self.assertLessEqual(font["maximum_px_at_1536_width"], 60)
 
     def v2_generated_spec(self):
         spec = self.minimal_spec()
@@ -125,9 +128,11 @@ class FigurePromptTests(unittest.TestCase):
             "final_display": "Journal article figure at its true proportional PDF size.",
             "mobile_preview": {
                 "width_px": 390,
-                "minimum_label_height_px": 12,
+                "minimum_primary_label_height_px": 10,
+                "all_labels_required_without_zoom": False,
                 "primary_labels": ["A", "B"],
                 "first_glance_path": ["Notice A", "Follow the transition", "Arrive at B"],
+                "supporting_detail_strategy": "Supporting annotations remain publication-sized and may require zoom.",
                 "explain_back_without_zoom": "A visibly leads to B.",
             },
         }
@@ -304,7 +309,7 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("explanatory job:", prompt)
         self.assertIn("Layer carries signal → signal", prompt)
         self.assertIn("Reserve the full outer 6–8%", prompt)
-        self.assertIn("glyph-line height of at least 48 px", prompt)
+        self.assertIn("glyph-line height of at least 40 px", prompt)
 
     def test_cutaway_suitability_fails_closed(self):
         spec = self.v3_cutaway_spec()
@@ -336,8 +341,31 @@ class FigurePromptTests(unittest.TestCase):
 
     def test_v3_requires_phone_preview_label_floor(self):
         spec = self.v3_generated_spec()
-        spec["layout_plan"]["mobile_preview"]["minimum_label_height_px"] = 8
-        with self.assertRaisesRegex(ValueError, "at least 12"):
+        spec["layout_plan"]["mobile_preview"]["minimum_primary_label_height_px"] = 8
+        with self.assertRaisesRegex(ValueError, "at least 10"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_phone_gate_applies_only_to_primary_wayfinding_labels(self):
+        spec = self.v3_generated_spec()
+        spec["layout_plan"]["mobile_preview"][
+            "all_labels_required_without_zoom"] = True
+        with self.assertRaisesRegex(ValueError, "only primary wayfinding labels"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_v3_rejects_poster_case_and_in_artwork_glossary_copy(self):
+        spec = self.v3_generated_spec()
+        spec["exact_text"].append("GROUP AVERAGE")
+        with self.assertRaisesRegex(ValueError, "all-caps display copy"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+        spec = self.v3_generated_spec()
+        spec["exact_text"].append("CI = confidence interval")
+        with self.assertRaisesRegex(ValueError, "abbreviation definitions"):
             MODULE.build_prompt(
                 spec, self.profiles, self.archetypes,
                 writing_styles=self.writing_styles)

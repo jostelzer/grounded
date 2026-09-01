@@ -39,6 +39,7 @@ from figure_contract import (
     validate_layout_plan,
     validate_plot_design,
     validate_semantic_plan,
+    validate_v3_rendered_copy,
 )
 
 
@@ -255,6 +256,7 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         if contract_version == 3:
             semantic_plan = validate_semantic_plan(spec, annotation_plan)
             layout_plan = validate_layout_plan(spec)
+            validate_v3_rendered_copy(spec, rendered_text)
             missing_mobile_labels = [
                 item for item in layout_plan["mobile_preview"]["primary_labels"]
                 if item not in rendered_text
@@ -366,15 +368,20 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "template. Reject dead gutters, lopsided visual weight, and padding added "
             "merely to fill page width.\n"
             "PHONE PREVIEW — HARD GATE\n"
-            "Inspect a separate proportional %d px-wide preview. The smallest label "
-            "must remain at least %.1f px high without zoom. Primary first-glance "
-            "labels: %s. First-glance path: %s. Explain-back at phone size: %s."
+            "Inspect a separate proportional %d px-wide preview. Only the declared "
+            "primary wayfinding labels must remain at least %.1f px high without zoom: "
+            "%s. Supporting labels follow publication scale and may require zoom; never "
+            "inflate the complete type system to make every annotation phone-readable. "
+            "Supporting-detail strategy: %s. First-glance path: %s. Explain-back at "
+            "phone size: %s. If that explanation needs supporting copy, simplify or split "
+            "the figure instead of enlarging all text."
             % (layout_plan["content_density"],
                "yes" if layout_plan["wide_canvas_required"] else "no",
                layout_plan["aspect_ratio_rationale"],
                layout_plan["balance_strategy"], layout_plan["final_display"],
-               mobile["width_px"], mobile["minimum_label_height_px"],
+               mobile["width_px"], mobile["minimum_primary_label_height_px"],
                ", ".join(mobile["primary_labels"]),
+               mobile["supporting_detail_strategy"],
                " → ".join(mobile["first_glance_path"]),
                mobile["explain_back_without_zoom"]))
         if selected_route == "generated":
@@ -520,8 +527,9 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
                 "several incompatible windows. Reserve the full outer 6–8%% of the canvas as "
                 "unoccupied exact-white safety margin before sizing the focal object and "
                 "callouts. At a 1,536 px-wide source, give every callout line a visibly measured "
-                "glyph-line height of at least 48 px so proportional reduction to 390 px remains "
-                "at least 12 px. Do not invent hidden layers or sacrifice the recognizable whole "
+                "glyph-line height of at least 40 px so proportional reduction to 390 px remains "
+                "about 10 px. Keep supporting labels at publication scale; do not enlarge every "
+                "annotation to the primary-label tier. Do not invent hidden layers or sacrifice the recognizable whole "
                 "merely to make room for labels."
                 % (cutaway["exterior_silhouette"], cutaway["cut_plane"],
                    ", ".join(cutaway["interior_entities"]),
@@ -538,6 +546,8 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "Selection rationale: %s\n"
             "Scores: clarity %d/5; simplicity %d/5; completeness %d/5; "
             "elegance %d/5; intuitiveness %d/5.\n"
+            "These scores are planning predictions, not evidence that the pixels pass. "
+            "The rendered candidate still requires an independent actual-pixel review.\n"
             "The other two concepts were planning alternatives. Do not blend, quote, or "
             "import motifs from them." % (
                 selected_concept["id"], selected_concept["description"],
@@ -644,7 +654,9 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             "arrow, label, or effect that does not help the reader reach the takeaway. The "
             "artwork must pass the explain-back sentence without depending on the article "
             "caption. If a non-specialist would need unexplained jargon or would describe a "
-            "different mechanism, the concept is not ready to render.")
+            "different mechanism, the concept is not ready to render. Mentally hide the labels: "
+            "the domain-native visual structure must still reveal the subject, relationship, "
+            "and reading direction. Text is wayfinding, never a substitute for the explanation.")
     if selected_route == "generated":
         sections.append(
             "FIRST-PASS DIRECT-TEXT CONTRACT — EXECUTE IN THIS IMAGEGEN CALL\n"
@@ -690,13 +702,18 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
             framing.get(
                 render_context,
                 "Keep the scientific content visually primary.")),
-        "TYPOGRAPHY — HARD REQUIREMENT\n"
+        "TYPOGRAPHY — COMPACT PUBLICATION HIERARCHY, HARD REQUIREMENT\n"
         "- Render every character in %s throughout; %s is the only acceptable visual fallback.\n"
-        "- Text colour: %s. Minimum readable text at 1,536 px width: %s px; body %s px; local headings %s px; compact standalone title %s px; panel letters %s px.\n%s" % (
+        "- Text colour: %s. At 1,536 px width: supporting minimum %s px; body %s px; "
+        "primary phone-wayfinding labels %s px; local headings %s px; compact standalone "
+        "title %s px; panel letters %s px. No text role may exceed %s px.\n"
+        "- These sizes form a restrained hierarchy. Do not promote ordinary labels to the "
+        "primary tier, scale every role together, or turn labels into poster headlines.\n%s" % (
             font["family"], font["fallback"], font["text_color"],
             font["minimum_px_at_1536_width"], font["body_px_at_1536_width"],
-            font["section_px_at_1536_width"], font["title_px_at_1536_width"],
-            font["panel_label_px_at_1536_width"],
+            font["primary_px_at_1536_width"], font["section_px_at_1536_width"],
+            font["title_px_at_1536_width"], font["panel_label_px_at_1536_width"],
+            font["maximum_px_at_1536_width"],
             "\n".join("- %s" % item for item in font["rules"])),
         "CANVAS\n- Background: %s\n- Aspect: %s\n- Margin: %s\n- Density: %s" % (
             canvas["background"], canvas["aspect"], canvas["margin"],
@@ -710,6 +727,12 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         "cutouts, and mismatched illustration styles. A circle, badge, card, or frame "
         "is allowed only when it encodes a declared scientific boundary, group, "
         "sample, or comparison—never merely to decorate an isolated object.",
+        "VISUAL EXPLANATION OVER TEXT — HARD GATE\n"
+        "The artwork must not become a headline plus isolated labelled objects. The "
+        "domain-native structure, state change, comparison, or mechanism must carry the "
+        "takeaway even when the labels are mentally hidden. Keep text subordinate in area "
+        "and salience; reject poster layouts, object inventories, and sparse icon tableaux "
+        "whose meaning lives primarily in words.",
         bullet_section("VISUAL LANGUAGE", profile["visual_language"]),
         bullet_section("EDITORIAL ART DIRECTION", profile.get("art_direction", [])),
         bullet_section("CANDIDATE SELECTION STANDARD", profile.get("selection_standard", [])),

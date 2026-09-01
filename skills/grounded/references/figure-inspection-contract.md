@@ -14,6 +14,12 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
 {
   "ocr_text": "...",
   "minimum_label_height_px": 28,
+  "typography_scale": {
+    "p90_label_height_px": 40,
+    "text_box_area_fraction": 0.08,
+    "display_headline_absent": true,
+    "labels_subordinate_to_visuals": true
+  },
   "relationships": [],
   "detected_effects": [],
   "text_collisions": [],
@@ -54,11 +60,13 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
   },
   "mobile_preview": {
     "width_px": 390,
+    "minimum_primary_label_height_px": 40,
     "readable_primary_labels": ["Primary label"],
     "observed_first_glance_path": ["Start", "Comparison", "Conclusion"],
     "observed_explain_back": "What the phone-sized pixels communicate.",
     "explain_back_matches": true,
-    "requires_zoom": false
+    "primary_labels_require_zoom": false,
+    "supporting_labels_inflated_for_phone": false
   },
   "annotation": {
     "panel_labels": ["A", "B"],
@@ -93,6 +101,10 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
     "visual_language_consistent": true,
     "stock_asset_assemblage_absent": true,
     "representation_serves_evidence": true,
+    "visual_explanation_survives_without_labels": true,
+    "text_subordinate_to_visuals": true,
+    "poster_layout_absent": true,
+    "object_inventory_absent": true,
     "avoidable_cognitive_translation_added": false,
     "cutaway_exterior_recognizable": true,
     "cut_plane_coherent": true,
@@ -126,6 +138,8 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
     "visual_language_issues": [],
     "stock_asset_issues": [],
     "representation_issues": [],
+    "typography_dominance_issues": [],
+    "visual_explanation_issues": [],
     "cutaway_integrity_issues": []
   },
   "quantitative": {
@@ -164,13 +178,24 @@ supplied OCR transcript.
 The mobile attestations come from a separately rendered proportional 390 px-wide
 preview, not from mentally extrapolating the native raster. The reader must be
 able to follow the planned first-glance path, read every declared primary label,
-and recover the explain-back sentence without zoom. `absolute_white_canvas`
+and recover the explain-back sentence without zoom. Supporting labels remain at
+compact publication scale and may require zoom or the caption; setting
+`supporting_labels_inflated_for_phone` to true is release-blocking.
+`typography_scale` records the robust upper label height and OCR word-box area
+from the actual pixels. QA uses the stricter of reported and machine-measured
+values, caps robust upper text height at 5.5% of the short canvas edge in
+article/slide context, and caps OCR text-box area at 20%. `absolute_white_canvas`
 means the visible paper is `#FFFFFF`; pixel QA independently checks the outer
 frame so an off-white or textured page cannot pass by attestation alone.
 `visual_language_consistent` means the visible objects share abstraction,
 dimensionality, line treatment, perspective, lighting, and material finish.
 `stock_asset_assemblage_absent` rejects glossy symbol collages, emoji-like or
 app-style pictograms, and decorative badges even when their labels are correct.
+`visual_explanation_survives_without_labels`, `text_subordinate_to_visuals`,
+`poster_layout_absent`, and `object_inventory_absent` are judged by mentally
+hiding the labels: the scientific subject, main relationship, and eye path must
+remain in the evidence-bearing visual structure rather than in a headline or
+inventory of isolated objects.
 For a quantitative figure, an interval must be visible as an attached graphical
 extent, the data marks must remain more salient than their labels, and direct
 annotations must not touch or cross points, trajectories, axes, or each other.

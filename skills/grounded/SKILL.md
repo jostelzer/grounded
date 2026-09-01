@@ -254,6 +254,11 @@ python3 scripts/qa_figure.py --spec figure.json --image figure.png --inspection 
 
 A failed meaning, information-flow, anatomy, typography, salience, connector,
 quantitative, or non-distortion gate requires revision and another inspection.
+Phone QA applies only to one to three primary wayfinding labels; keep supporting
+labels at publication scale and simplify or split a figure instead of enlarging
+its entire type system. Reject any candidate whose robust upper text scale or
+text area is poster-like, or whose explanation disappears when labels are
+mentally hidden.
 Give each passing figure a stable ID, introduce it before the artwork, refer to
 relevant A–D panels in the prose, and end its style-matched caption with verified
 citations. For slides, build and inspect the deck under `references/deck-guide.md`;

@@ -61,8 +61,7 @@ def render(
     layouts = _layout(config, len(panels))
     style = _style(spec, config)
     fonts, font_records = _font_set(
-        style, config["width_px"], config["height_px"], config["supersample"],
-        mobile_readable=spec.get("quality_contract_version") == 3)
+        style, config["width_px"], config["height_px"], config["supersample"])
     supersample = config["supersample"]
     canvas = Image.new(
         "RGB",

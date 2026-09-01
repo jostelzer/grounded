@@ -210,9 +210,11 @@ ends on the target without crossing unrelated layers. Keep the rendered copy
 phone-short; `explanatory_role` records the full semantic job so a terse label
 cannot become an unexplained anatomy tag. Allocate the 6–8% outer safety margin
 and the label lanes before scaling the focal object; at a 1,536 px source, the
-smallest visible callout line is at least 48 px high so it remains at least
-12 px at the 390 px release view. This preflight prevents repeated typography
-repairs after an otherwise good composition.
+smallest primary callout line is at least 40 px high so it remains about 10 px
+at the 390 px release view. Supporting labels remain at publication scale and
+may require zoom; never enlarge the complete type system to satisfy the
+primary-label gate. This preflight prevents repeated typography repairs after
+an otherwise good composition.
 
 ## 5c. Fit the canvas to the information
 
@@ -229,11 +231,14 @@ not rescue a lopsided or padded composition.
 
 The canvas is exact `#FFFFFF` in scientific, popsci, bullets, and ELI5 figures.
 Colour belongs to evidence-bearing objects, never to a full-page tint or paper
-texture. The layout plan also declares a 390 px phone preview, its primary
-labels, a first-glance path of at most five steps, a 12 px minimum rendered
-label height, and the explain-back sentence that must remain reconstructable
-without zoom. Inspect that preview as a separate release view; a large native
-raster does not rescue a figure that becomes cognitively opaque on a phone.
+texture. The layout plan also declares a 390 px phone preview, one to three
+primary wayfinding labels, a first-glance path of at most five steps, a 10 px
+minimum rendered height for those primary labels, and the explain-back sentence
+that must remain reconstructable without zoom. It explicitly records that not
+every supporting label is required without zoom and how the caption or zoom
+carries that detail. Inspect the preview as a separate release view; a large
+native raster does not rescue a figure that becomes cognitively opaque on a
+phone, but phone QA must not inflate supporting labels into display typography.
 For a generated figure, each primary phone label is at most four words and 28
 characters. Shorten the label rather than letting ImageGen shrink the whole
 type system; supporting detail belongs in the caption.
@@ -329,6 +334,12 @@ or frame must encode a declared scientific boundary or grouping; it cannot be
 used simply to make an isolated object feel diagrammatic. This is a release
 gate under both `style_fit` and `polish`, not a subjective preference.
 
+Mentally hide every label during the same review. The evidence-native visual
+structure must still reveal the subject, the principal relationship, and the
+intended reading direction. If the explanation collapses into a headline plus
+recognizable objects, a sparse icon tableau, or an inventory whose meaning
+exists mostly in words, reject the concept rather than polishing its text.
+
 Primary labels are phone-first wayfinding, not miniature captions. Each names
 one visible state, change, comparison, or conclusion in one short phrase.
 Compound prose, stacked qualifiers, and policy wording that requires multiple
@@ -341,8 +352,9 @@ salient than labels. Direct annotations keep a clear gap from points,
 trajectories, axes, and one another, and no label crosses a data line. A stated
 interval is rendered as an attached whisker, band, bracket, or equivalent
 graphical extent rather than the words `95% CI` floating beside a point. When
-the 390 px type floor would crowd the evidence, shorten copy or change
-topology/aspect ratio instead of inflating annotations inside the same plot.
+the primary 390 px label floor would crowd the evidence, shorten copy or change
+topology/aspect ratio instead of inflating axes, ticks, notes, and every
+annotation inside the same plot.
 Independent text boxes retain at least 3 px of clear separation in the
 proportional 390 px preview; near-touching type is treated as a collision.
 
@@ -437,8 +449,16 @@ A figure is releasable only when all of the following are true:
 - callouts over busy pixels have opaque white backing and every typographic role
   uses one consistent natural-width house sans-serif family;
 - the outer canvas is exact `#FFFFFF`, and the 390 px phone preview preserves
-  readable primary labels, the declared first-glance path, and the explain-back
-  sentence without zoom;
+  one to three readable primary labels, the declared first-glance path, and the
+  explain-back sentence without zoom, while supporting labels remain at compact
+  publication scale;
+- the robust upper text height and OCR text-box area remain below the
+  typography-dominance ceilings, all multiword labels use sentence case, and
+  abbreviation definitions or interpretive prose live in the caption rather
+  than inside the artwork;
+- the visual explanation survives a labels-hidden review: text remains
+  subordinate, and no poster layout or isolated object inventory substitutes
+  for evidence-bearing structure;
 - deterministic and composite figures label every plotted construct and attach intervals and
   numeric annotations directly to their graphical referents, while captions
   repeat the x- and y-axis meanings;

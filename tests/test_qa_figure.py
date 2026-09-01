@@ -1,4 +1,5 @@
 import copy
+import shutil
 import sys
 import tempfile
 import unittest
@@ -497,9 +498,11 @@ class CommunicationFirstContractTests(unittest.TestCase):
             "final_display": "Single-column article figure at final report width.",
             "mobile_preview": {
                 "width_px": 390,
-                "minimum_label_height_px": 12,
+                "minimum_primary_label_height_px": 10,
+                "all_labels_required_without_zoom": False,
                 "primary_labels": ["A", "Signal"],
                 "first_glance_path": ["Find signal", "Follow pathway", "Reach response"],
+                "supporting_detail_strategy": "Supporting annotations remain publication-sized and may require zoom.",
                 "explain_back_without_zoom": "The signal follows one pathway.",
             },
         }
@@ -555,14 +558,22 @@ class CommunicationFirstContractTests(unittest.TestCase):
 
     def v3_inspection(self):
         inspection = copy.deepcopy(self.inspection())
-        inspection["minimum_label_height_px"] = 52
+        inspection["minimum_label_height_px"] = 28
+        inspection["typography_scale"] = {
+            "p90_label_height_px": 40,
+            "text_box_area_fraction": 0.08,
+            "display_headline_absent": True,
+            "labels_subordinate_to_visuals": True,
+        }
         inspection["mobile_preview"] = {
             "width_px": 390,
+            "minimum_primary_label_height_px": 42,
             "readable_primary_labels": ["A", "Signal"],
             "observed_first_glance_path": ["Find signal", "Follow pathway", "Reach response"],
             "observed_explain_back": "The signal follows one pathway to the response.",
             "explain_back_matches": True,
-            "requires_zoom": False,
+            "primary_labels_require_zoom": False,
+            "supporting_labels_inflated_for_phone": False,
         }
         inspection["visual_quality"].update({
             "concept_coherence": "pass",
@@ -591,6 +602,10 @@ class CommunicationFirstContractTests(unittest.TestCase):
             "visual_language_consistent": True,
             "stock_asset_assemblage_absent": True,
             "representation_serves_evidence": True,
+            "visual_explanation_survives_without_labels": True,
+            "text_subordinate_to_visuals": True,
+            "poster_layout_absent": True,
+            "object_inventory_absent": True,
             "avoidable_cognitive_translation_added": False,
             "arranged_object_lineup_present": False,
             "arrangement_encodes_evidence": False,
@@ -619,6 +634,8 @@ class CommunicationFirstContractTests(unittest.TestCase):
             "visual_language_issues": [],
             "stock_asset_issues": [],
             "representation_issues": [],
+            "typography_dominance_issues": [],
+            "visual_explanation_issues": [],
         }
         return inspection
 
@@ -806,6 +823,62 @@ class CommunicationFirstContractTests(unittest.TestCase):
         self.assertTrue(any("salience target: response" in error for error in result["errors"]))
         self.assertTrue(any("typography issue" in error for error in result["errors"]))
 
+    def test_v3_billboard_type_and_text_heavy_artwork_fail_machine_bounds(self):
+        inspection = self.v3_inspection()
+        inspection["typography_scale"]["p90_label_height_px"] = 60
+        inspection["typography_scale"]["text_box_area_fraction"] = 0.25
+        result = self.audit(spec=self.v3_spec(), inspection=inspection)
+        self.assertTrue(any("typography dominates the artwork" in error
+                            for error in result["errors"]))
+        self.assertTrue(any("typography occupies too much" in error
+                            for error in result["errors"]))
+
+    @unittest.skipUnless(shutil.which("tesseract"), "Tesseract is unavailable")
+    def test_v3_machine_measurement_overrules_a_false_compact_type_attestation(self):
+        from PIL import Image, ImageDraw, ImageFont
+        from figure_typography import resolve_font_path
+
+        with tempfile.TemporaryDirectory() as tmp:
+            image = Path(tmp) / "billboard.png"
+            canvas = Image.new("RGB", (1600, 800), "white")
+            draw = ImageDraw.Draw(canvas)
+            font = ImageFont.truetype(str(resolve_font_path("Arial", False)), 120)
+            draw.text((300, 310), "Signal Response", fill="#1A1A1A", font=font)
+            canvas.save(image)
+            spec = self.v3_spec()
+            inspection = self.v3_inspection()
+            inspection["typography_scale"].update({
+                "p90_label_height_px": 30,
+                "text_box_area_fraction": 0.02,
+            })
+            result = qa_figure.audit_figure(
+                spec, image, inspection=inspection,
+                provenance=self.provenance(image, spec=spec))
+        self.assertTrue(any("typography dominates the artwork" in error
+                            for error in result["errors"]))
+
+    def test_v3_visual_explanation_cannot_be_a_poster_or_object_inventory(self):
+        inspection = self.v3_inspection()
+        inspection["integrity"]["visual_explanation_survives_without_labels"] = False
+        inspection["integrity"]["text_subordinate_to_visuals"] = False
+        inspection["integrity"]["poster_layout_absent"] = False
+        inspection["integrity"]["object_inventory_absent"] = False
+        inspection["integrity"]["visual_explanation_issues"] = [
+            "the meaning disappears when the headline labels are hidden"
+        ]
+        result = self.audit(spec=self.v3_spec(), inspection=inspection)
+        self.assertTrue(any("headline-plus-icons" in error
+                            for error in result["errors"]))
+        self.assertTrue(any("visual-explanation issue" in error
+                            for error in result["errors"]))
+
+    def test_v3_mobile_review_cannot_inflate_supporting_labels(self):
+        inspection = self.v3_inspection()
+        inspection["mobile_preview"]["supporting_labels_inflated_for_phone"] = True
+        result = self.audit(spec=self.v3_spec(), inspection=inspection)
+        self.assertTrue(any("supporting labels must remain" in error
+                            for error in result["errors"]))
+
     def test_v3_clutter_and_lost_anatomical_context_fail(self):
         inspection = self.v3_inspection()
         inspection["integrity"]["nonessential_elements_absent"] = False
@@ -841,11 +914,12 @@ class CommunicationFirstContractTests(unittest.TestCase):
             spec = self.v3_spec()
             inspection = self.v3_inspection()
             inspection["minimum_label_height_px"] = 32
+            inspection["mobile_preview"]["minimum_primary_label_height_px"] = 32
             result = qa_figure.audit_figure(
                 spec, image, inspection=inspection,
                 provenance=self.provenance(image, spec=spec))
         self.assertTrue(any("not exact #FFFFFF" in error for error in result["errors"]))
-        self.assertTrue(any("smallest mobile label" in error for error in result["errors"]))
+        self.assertTrue(any("smallest mobile primary label" in error for error in result["errors"]))
 
     def test_v3_every_writing_style_accepts_only_exact_white_paper(self):
         for style in ("scientific", "popsci", "bullets", "eli5"):

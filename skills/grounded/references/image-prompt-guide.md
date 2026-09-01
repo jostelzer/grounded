@@ -57,9 +57,11 @@ rather than retaining them as rendered copy:
     "final_display": "<intended delivered size>",
     "mobile_preview": {
       "width_px": 390,
-      "minimum_label_height_px": 12,
-      "primary_labels": ["<up to five first-glance labels>"],
+      "minimum_primary_label_height_px": 10,
+      "all_labels_required_without_zoom": false,
+      "primary_labels": ["<up to three first-glance labels>"],
       "first_glance_path": ["<up to five ordered steps>"],
+      "supporting_detail_strategy": "<how zoom or the caption carries compact supporting labels>",
       "explain_back_without_zoom": "<what remains clear on a phone>"
     }
   },
@@ -188,14 +190,19 @@ structured `data` plus `plot_design`. Composite figures additionally supply
   an explicit horizontal-topology justification.
 - every writing style uses an exact `#FFFFFF` canvas; warm art direction colours
   objects, never the page background.
-- `layout_plan.mobile_preview` fixes a 390 px release view, no-zoom label floor,
-  compact first-glance path, and explain-back check.
+- `layout_plan.mobile_preview` fixes a 390 px release view, a no-zoom floor for
+  one to three primary wayfinding labels, a compact first-glance path, and an
+  explain-back check. It explicitly forbids making every supporting label a
+  phone-scale primary label and records how zoom or the caption carries detail.
 - generated primary phone labels use at most four words and 28 characters;
   preserve nuance in the caption instead of shrinking the figure's type.
 - each primary label carries one visible state, change, comparison, or
   conclusion; compound policy prose and stacked qualifiers belong in the
   caption. Put labels on natural exact-white canvas before considering a
   backed callout.
+- multiword rendered labels use sentence case. Abbreviation definitions,
+  glossary lines, and interpretation prose belong in the external caption, not
+  in the artwork.
 - every object shares one authored visual language across abstraction,
   dimensionality, line treatment, perspective, lighting, and material finish.
   Reject glossy stock-symbol, emoji, app-pictogram, sticker, or decorative-badge
@@ -254,6 +261,9 @@ structured `data` plus `plot_design`. Composite figures additionally supply
   would avoid.
 - Use one natural-width house sans-serif family. Fit copy by editing, wrapping,
   or moving it—never by condensing, shearing, or stretching type.
+- Keep the visual explanation legible when labels are mentally hidden. Reject a
+  headline-plus-icons poster, sparse object inventory, or any composition whose
+  takeaway is carried mainly by words rather than evidence-native structure.
 - Keep exact numerical evidence in structured `data`. Generated pixels never
   invent or proportionally encode values.
 - Keep citations, DOI strings, journal branding, mastheads, logos, slide chrome,

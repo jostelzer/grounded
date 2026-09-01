@@ -39,20 +39,23 @@ At a 1,536 px-wide deliverable, use these visual targets:
 
 | Role | Target |
 |---|---:|
-| Smallest nominal font size requested from ImageGen | at least 96 px |
-| Body label requested from ImageGen | 104 px |
-| Local panel heading requested from ImageGen | 116 px |
-| Compact standalone title requested from ImageGen | 128 px |
-| Panel letter requested from ImageGen | 116 px bold, uppercase A–D |
+| Smallest supporting label requested from ImageGen | 32 px |
+| Body label requested from ImageGen | 36 px |
+| Primary phone-wayfinding label requested from ImageGen | 48 px |
+| Local panel heading requested from ImageGen | 44 px |
+| Compact standalone title requested from ImageGen | 52 px |
+| Panel letter requested from ImageGen | 44 px bold, uppercase A–D |
+| Maximum requested size for any role | 56 px |
 
-These ImageGen targets deliberately include a large safety margin because the
-visible glyph box is often much smaller than the requested font face. A measured 48 px glyph box at a
-1,536 px raster remains about 12 px when the figure is proportionally reduced
-to a 390 px-wide phone preview. The measured glyph box—not the requested size—
-is the release gate. Deterministic plotting derives its own nominal size from
-that measured floor and is not forced to use the ImageGen request sizes. The
-same delivered glyph box also clears `qa_figure.py`'s 6.5 pt effective-size gate
-at the true journal width.
+This is a compact publication hierarchy, not a scale-up ladder. Only the one to
+three declared primary wayfinding labels use the primary tier. Supporting
+labels remain publication-sized and may require zoom on a phone; making every
+label phone-sized produces poster typography and is forbidden. At final PDF
+width, the smallest delivered glyph still clears `qa_figure.py`'s 6.5 pt gate.
+At 390 px, only the declared primary labels must retain a measured 10 px glyph
+height and carry the first-glance path without zoom. QA also caps the robust
+upper text height and OCR text-box area, so readable type cannot dominate the
+scientific content.
 End-to-end raster generation cannot prove an embedded font file; inspect visual
 conformance and exact text directly. First repair a local typography defect with
 a targeted ImageGen edit. If several labels or the information flow fail, reduce
@@ -113,9 +116,10 @@ The shared visual grammar is:
   remains clear; use an opaque white, lightly padded backing over textured,
   illustrated, photographic, or otherwise busy pixels only when moving the
   label would break its spatial relationship to the referent;
-- verify the complete first-glance path at a 390 px-wide phone preview: the
-  primary labels remain readable without zoom and a non-specialist can still
-  reconstruct the explain-back sentence;
+- verify the complete first-glance path at a 390 px-wide phone preview: only the
+  one to three primary wayfinding labels must remain readable without zoom, and
+  a non-specialist can still reconstruct the explain-back sentence. Supporting
+  labels stay at publication scale and may require zoom or the caption;
 - keep generated primary labels to at most four words and 28 characters so one
   long heading cannot force ImageGen to shrink every label; move the fuller
   qualification into the caption;
@@ -126,9 +130,9 @@ The shared visual grammar is:
 - in quantitative panels, keep data marks more visually salient than their
   annotations. Labels sit beside referents with a clear gap from points,
   trajectories, axes, and one another; no label crosses a data line. If the
-  390 px type floor would overwhelm the plot, shorten copy or change panel
-  topology/aspect ratio rather than enlarging text inside the same cramped
-  layout;
+  primary phone labels would overwhelm the plot, shorten copy or change panel
+  topology/aspect ratio. Never enlarge axes, ticks, notes, and every annotation
+  together merely to satisfy the phone view;
 - keep at least 3 px of clear separation between independent text boxes in the
   proportional 390 px preview; near-touching panel letters, axes, labels, and
   annotations count as a collision even when their glyph boxes do not overlap;
@@ -143,6 +147,10 @@ The shared visual grammar is:
 - prefer evidence-native scientific structures over novelty metaphors, craft
   textures, product-still-life lineups, or asset-pack arrangements; a metaphor
   is acceptable only when it reduces rather than adds cognitive translation.
+- mentally hide the labels during visual review: the domain-native structure,
+  state change, comparison, or mechanism must still identify the subject and
+  reading direction. Reject headline-plus-icons posters, isolated object
+  inventories, and any composition whose explanation lives mainly in words.
 
 Generated near-white paper may be normalized only when it is connected to the
 canvas edge. Use `scripts/normalize_figure_canvas.py`; if subject pixels enter

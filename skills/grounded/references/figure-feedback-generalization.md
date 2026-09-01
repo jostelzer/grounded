@@ -48,7 +48,9 @@ classes are:
 - **quantitative routing** — verified values that carry the message use the
   deterministic route;
 - **typographic finish** — clean upright sans-serif type, restrained hierarchy,
-  collision-free placement, and no default-chart appearance.
+  collision-free placement, bounded upper size and text area, no display
+  headlines, and no default-chart appearance. Readability has both a minimum
+  and a maximum: labels fail when they become more salient than the evidence.
 - **visual content budget** — primary entities dominate; supporting entities
   clarify rather than compete; props, scenery, background furniture, and
   repeated motifs that do not change the explain-back sentence are removed.
@@ -89,9 +91,11 @@ classes are:
 - **paper integrity** — the canvas is exact `#FFFFFF` in every writing style;
   full-canvas tints and paper textures are forbidden even when the object
   palette is warm.
-- **phone-scale comprehension** — at a 390 px preview, primary labels remain
-  readable without zoom and the first-glance path still yields the declared
-  explain-back sentence.
+- **phone-scale comprehension** — at a 390 px preview, one to three primary
+  wayfinding labels remain readable without zoom and the first-glance path
+  still yields the declared explain-back sentence. Supporting labels stay at
+  compact publication scale and may require zoom or the caption; the phone gate
+  never enlarges the whole type system.
 - **representation economy** — prefer evidence-native scientific structures;
   a metaphor or arranged-object treatment fails when it adds a decoding step
   that a literal representation would avoid.
@@ -102,6 +106,10 @@ classes are:
   individually recognizable. Circles, badges, cards, and frames must encode a
   declared scientific boundary or comparison, never merely make an isolated
   object look like an icon.
+- **visual-over-text explanation** — mentally hiding labels must leave the
+  subject, main relationship, and reading direction visible. Headline-plus-icon
+  posters, sparse object inventories, and compositions whose meaning lives
+  mainly in words fail even when OCR and spelling are perfect.
 - **mobile label simplicity** — each primary label names one visible state,
   change, comparison, or conclusion in a short phrase. Compound policy prose,
   stacked qualifiers, unexplained shorthand, and labels that need punctuation

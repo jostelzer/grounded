@@ -96,6 +96,13 @@ objects, connector meaning, grouping, salience, typography, explanatory value,
 information flow, explain-back, quantitative attachment, geometry, aspect
 ratio, candidate lineage, or selected-image hash. Manual OCR transcription is
 an inspection record, not permission to accept garbled or absent pixels.
+Typography has both lower and upper machine gates: publication labels must
+clear the 6.5 pt floor, while robust upper glyph height and OCR text-box area
+must remain below the poster-dominance ceilings. Phone QA applies only to one to
+three declared primary wayfinding labels; supporting labels may require zoom or
+the caption and must not be inflated to satisfy the phone view. A labels-hidden
+inspection also rejects headline-plus-icons posters and object inventories whose
+meaning is carried mainly by text.
 
 Deterministic and composite figures additionally run
 `scripts/qa_quantitative_geometry.py` against the independently produced

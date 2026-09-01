@@ -242,9 +242,11 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "final_display": "Single-column article figure at final report width.",
             "mobile_preview": {
                 "width_px": 390,
-                "minimum_label_height_px": 12,
+                "minimum_primary_label_height_px": 10,
+                "all_labels_required_without_zoom": False,
                 "primary_labels": ["Follow-up time", "Change from shared start (%)"],
                 "first_glance_path": ["Find shared start", "Follow both paths", "Read contrast"],
+                "supporting_detail_strategy": "Axis ticks remain publication-sized and may require zoom.",
                 "explain_back_without_zoom": "The groups began together and ended apart.",
             },
         }
@@ -263,7 +265,7 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         self.assertEqual(report["status"], "pass", report["errors"])
 
     @unittest.skipUnless(shutil.which("tesseract"), "Tesseract is unavailable")
-    def test_real_v3_render_meets_the_390px_phone_type_floor(self):
+    def test_real_v3_render_does_not_inflate_every_label_for_phone(self):
         spec = self.make_phone_readable(self.spec())
         spec["quality_contract_version"] = 3
         spec["layout_plan"] = {
@@ -274,11 +276,13 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "final_display": "Single-column article figure at final report width.",
             "mobile_preview": {
                 "width_px": 390,
-                "minimum_label_height_px": 12,
+                "minimum_primary_label_height_px": 10,
+                "all_labels_required_without_zoom": False,
                 "primary_labels": [
                     "Follow-up time", "Change from shared start (%)"],
                 "first_glance_path": [
                     "Find the shared start", "Follow the paths", "Read the gap"],
+                "supporting_detail_strategy": "Axis ticks remain publication-sized and may require zoom.",
                 "explain_back_without_zoom": (
                     "The groups began together and ended apart."),
             },
@@ -292,7 +296,9 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         _ocr, measured_height = qa_figure._tesseract(image)
         self.assertIsNotNone(measured_height)
         delivered_height = measured_height * 390 / manifest["image"]["width_px"]
-        self.assertGreaterEqual(delivered_height, 12.0)
+        self.assertLess(delivered_height, 10.0)
+        self.assertLessEqual(
+            max(record["size_px"] for record in manifest["fonts"]), 36)
 
     def test_v3_renderer_rejects_display_or_flared_plot_type(self):
         spec = self.spec()
@@ -312,6 +318,16 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         with self.assertRaisesRegex(
             render_quantitative_figure.QuantitativeFigureError,
             "clean sans-serif"):
+            self.render_case(spec)
+
+    def test_panel_title_cannot_become_an_in_plot_caption_or_glossary(self):
+        spec = self.spec()
+        spec["data"]["panels"][0]["title"] = (
+            "CRP = C-reactive protein and the interpretation of every result")
+        spec["exact_text"].append(spec["data"]["panels"][0]["title"])
+        with self.assertRaisesRegex(
+            render_quantitative_figure.QuantitativeFigureError,
+            "move interpretation and definitions to the external caption"):
             self.render_case(spec)
 
     def test_compact_figure_scales_type_for_the_true_pdf_width(self):
@@ -412,9 +428,11 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "final_display": "Single-column article figure at final report width.",
             "mobile_preview": {
                 "width_px": 390,
-                "minimum_label_height_px": 12,
+                "minimum_primary_label_height_px": 10,
+                "all_labels_required_without_zoom": False,
                 "primary_labels": ["Follow-up time", "Change from shared start (%)"],
                 "first_glance_path": ["Find shared start", "Follow both paths", "Read contrast"],
+                "supporting_detail_strategy": "Axis ticks remain publication-sized and may require zoom.",
                 "explain_back_without_zoom": "The groups began together and ended apart.",
             },
         }
@@ -512,7 +530,13 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "callout_backings_legible": True,
             "font_system_consistent": True,
             "absolute_white_canvas": True,
+            "visual_language_consistent": True,
+            "stock_asset_assemblage_absent": True,
             "representation_serves_evidence": True,
+            "visual_explanation_survives_without_labels": True,
+            "text_subordinate_to_visuals": True,
+            "poster_layout_absent": True,
+            "object_inventory_absent": True,
             "avoidable_cognitive_translation_added": False,
             "arranged_object_lineup_present": False,
             "arrangement_encodes_evidence": False,
@@ -530,6 +554,8 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "layout_balance_issues": [], "callout_backing_issues": [],
             "font_consistency_issues": [], "composite_integration_issues": [],
             "paper_integrity_issues": [], "representation_issues": [],
+            "visual_language_issues": [], "stock_asset_issues": [],
+            "typography_dominance_issues": [], "visual_explanation_issues": [],
         }
         inspection = {
             "ocr_text": " ".join(qa_figure.expected_pixel_text(selected_spec)),
@@ -537,6 +563,12 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "relationships": [], "detected_effects": [], "text_collisions": [],
             "duplicate_text": [], "unlisted_text": [], "geometry_distortions": [],
             "visual_quality": {key: "pass" for key in qa_figure.V3_VISUAL_QUALITY_DIMENSIONS},
+            "typography_scale": {
+                "p90_label_height_px": 32,
+                "text_box_area_fraction": 0.12,
+                "display_headline_absent": True,
+                "labels_subordinate_to_visuals": True,
+            },
             "communication": {
                 "observed_takeaway": goal["reader_takeaway"],
                 "observed_explain_back": goal["plain_language_explain_back"],
@@ -550,13 +582,15 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             },
             "mobile_preview": {
                 "width_px": 390,
+                "minimum_primary_label_height_px": 34,
                 "readable_primary_labels": [
                     "Follow-up time", "Change from shared start (%)"],
                 "observed_first_glance_path": [
                     "Find shared start", "Follow both paths", "Read contrast"],
                 "observed_explain_back": "The groups began together and ended apart.",
                 "explain_back_matches": True,
-                "requires_zoom": False,
+                "primary_labels_require_zoom": False,
+                "supporting_labels_inflated_for_phone": False,
             },
             "annotation": {"panel_labels": [], "callouts": []},
             "integrity": integrity,

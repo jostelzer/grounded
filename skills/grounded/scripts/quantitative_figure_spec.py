@@ -25,6 +25,8 @@ GEOMETRY_SCHEMA_VERSION = 1
 HEX_COLOUR = re.compile(r"#[0-9A-Fa-f]{6}")
 LABEL_POSITIONS = {"above", "below", "left", "right"}
 CLEAN_SANS_FAMILIES = {"Arial", "Helvetica", "Helvetica Neue", "Inter", "Seravek"}
+MAX_PANEL_TITLE_WORDS = 7
+MAX_PANEL_TITLE_CHARACTERS = 56
 DEFAULT_RENDER = {
     "width_px": 1800,
     "outer_margin_px": 72,
@@ -70,6 +72,19 @@ def _string(value: Any, field: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise QuantitativeFigureError(f"{field} must be a non-empty string")
     return value.strip()
+
+
+def _panel_title(value: Any, field: str) -> str:
+    title = _string(value, field)
+    if ("\n" in title or "=" in title
+            or len(title.split()) > MAX_PANEL_TITLE_WORDS
+            or len(title) > MAX_PANEL_TITLE_CHARACTERS):
+        raise QuantitativeFigureError(
+            f"{field} must be one short local heading (at most "
+            f"{MAX_PANEL_TITLE_WORDS} words and {MAX_PANEL_TITLE_CHARACTERS} characters) "
+            "without abbreviation definitions; move interpretation and definitions "
+            "to the external caption")
+    return title
 
 
 def _number(value: Any, field: str) -> float:
@@ -307,8 +322,7 @@ def _style(spec: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _font_set(style: dict[str, Any], width: int, height: int, supersample: int,
-              *, mobile_readable: bool = False):
+def _font_set(style: dict[str, Any], width: int, height: int, supersample: int):
     # Keep physical type size stable across raster widths. The smallest role is
     # 30 px at 1,536 px. Its measured glyph box retains margin above the
     # journal's 6.5 pt final-width floor instead of merely sizing the font face
@@ -331,22 +345,6 @@ def _font_set(style: dict[str, Any], width: int, height: int, supersample: int,
         "value": max(23, round(34 * scale)),
         "note": max(20, round(30 * scale)),
     }
-    if mobile_readable:
-        # Pillow font sizes are nominal em sizes; measured sans-serif glyphs are
-        # about 72% of that height. Derive the native floor from the required
-        # 12 px glyph height at a 390 px phone preview, then keep a shallow role
-        # hierarchy above it.
-        mobile_nominal_floor = math.ceil(
-            (12.0 * width / 390.0) / 0.72)
-        sizes.update({
-            "panel_label": max(sizes["panel_label"], mobile_nominal_floor + 10),
-            "panel_title": max(sizes["panel_title"], mobile_nominal_floor + 8),
-            "axis": max(sizes["axis"], mobile_nominal_floor + 4),
-            "tick": max(sizes["tick"], mobile_nominal_floor),
-            "series": max(sizes["series"], mobile_nominal_floor + 2),
-            "value": max(sizes["value"], mobile_nominal_floor + 6),
-            "note": max(sizes["note"], mobile_nominal_floor),
-        })
     try:
         regular_path = resolve_font_path(style["font_family"], False)
         bold_path = resolve_font_path(style["font_family"], True)
@@ -417,7 +415,7 @@ def _normalize_panels(spec: dict[str, Any]) -> list[dict[str, Any]]:
             labels.append(panel_label)
         title = panel.get("title")
         if title is not None:
-            title = _string(title, f"{field}.title")
+            title = _panel_title(title, f"{field}.title")
         x_axis = _object(panel.get("x_axis"), f"{field}.x_axis")
         y_axis = _object(panel.get("y_axis"), f"{field}.y_axis")
         x_domain = _domain(x_axis, f"{field}.x_axis")

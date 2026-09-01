@@ -42,6 +42,10 @@ V3_VISUAL_QUALITY_DIMENSIONS = V2_VISUAL_QUALITY_DIMENSIONS + (
     "nonredundancy",
     "typography",
 )
+MAX_ARTICLE_P90_TEXT_HEIGHT_SHORT_EDGE_FRACTION = 0.055
+MAX_STANDALONE_P90_TEXT_HEIGHT_SHORT_EDGE_FRACTION = 0.07
+MAX_ARTICLE_TEXT_BOX_AREA_FRACTION = 0.20
+MAX_STANDALONE_TEXT_BOX_AREA_FRACTION = 0.24
 
 
 def _normal(value: str) -> str:
@@ -73,7 +77,9 @@ def expected_pixel_text(spec: dict[str, Any]) -> list[str]:
     return rendered
 
 
-def _tesseract(image_path: Path) -> tuple[str, float | None]:
+def _tesseract_metrics(
+    image_path: Path,
+) -> tuple[str, float | None, float | None, float | None]:
     executable = shutil.which("tesseract")
     if not executable:
         raise ValueError("Tesseract is required for figure OCR")
@@ -85,27 +91,33 @@ def _tesseract(image_path: Path) -> tuple[str, float | None]:
         raise ValueError("Tesseract OCR failed: " + (completed.stderr.strip() or "unknown error"))
     lines = completed.stdout.splitlines()
     if not lines:
-        return "", None
+        return "", None, None, None
     header = lines[0].split("\t")
     index = {name: position for position, name in enumerate(header)}
     words = []
     heights = []
+    text_box_area = 0
     for line in lines[1:]:
         fields = line.split("\t")
         try:
             text = fields[index["text"]].strip()
             confidence = float(fields[index["conf"]])
             height = int(fields[index["height"]])
+            width = int(fields[index["width"]])
         except (IndexError, KeyError, ValueError):
             continue
         if text and confidence >= 40:
             words.append(text)
             if len(re.sub(r"\W", "", text)) >= 2:
                 heights.append(height)
+                text_box_area += width * height
     label_height = None
+    p90_height = None
     if heights:
         ordered = sorted(heights)
         label_height = float(ordered[max(0, round(0.10 * (len(ordered) - 1)))])
+        p90_height = float(ordered[min(
+            len(ordered) - 1, round(0.90 * (len(ordered) - 1)))])
     # The TSV pass drops words below its confidence floor, which can lose
     # short tokens ("=", "95%") from lines the plain pass reads correctly.
     # Text presence is checked against both passes; label heights only ever
@@ -116,7 +128,20 @@ def _tesseract(image_path: Path) -> tuple[str, float | None]:
     )
     plain_text = plain.stdout if plain.returncode == 0 else ""
     combined = " ".join(part for part in (" ".join(words), plain_text) if part)
-    return combined, label_height
+    try:
+        from PIL import Image
+        with Image.open(image_path) as image:
+            canvas_area = image.width * image.height
+    except (ImportError, OSError):
+        canvas_area = 0
+    text_area_fraction = text_box_area / canvas_area if canvas_area else None
+    return combined, label_height, p90_height, text_area_fraction
+
+
+def _tesseract(image_path: Path) -> tuple[str, float | None]:
+    """Backward-compatible text/minimum-height helper used by renderer tests."""
+    text, label_height, _p90_height, _area_fraction = _tesseract_metrics(image_path)
+    return text, label_height
 
 
 def _relationship_tuple(value: dict[str, Any]) -> tuple[str, str, str]:
@@ -253,6 +278,8 @@ def audit_figure(
             semantic_plan = figure_contract.validate_semantic_plan(
                 spec, annotation_plan)
             layout_plan = figure_contract.validate_layout_plan(spec)
+            figure_contract.validate_v3_rendered_copy(
+                spec, expected_pixel_text(spec))
             missing_mobile_labels = [
                 item for item in layout_plan["mobile_preview"]["primary_labels"]
                 if item not in expected_pixel_text(spec)
@@ -297,12 +324,20 @@ def audit_figure(
     warnings: list[str] = []
     ocr_text = inspection.get("ocr_text")
     measured_height = inspection.get("minimum_label_height_px")
+    machine_text = None
+    machine_minimum_height = None
+    machine_p90_height = None
+    machine_text_area_fraction = None
+    if shutil.which("tesseract"):
+        (machine_text, machine_minimum_height, machine_p90_height,
+         machine_text_area_fraction) = _tesseract_metrics(path)
     if not isinstance(ocr_text, str):
-        ocr_text, tesseract_height = _tesseract(path)
+        if machine_text is None:
+            raise ValueError("Tesseract is required when ocr_text is not supplied")
+        ocr_text = machine_text
         if measured_height is None:
-            measured_height = tesseract_height
-    elif shutil.which("tesseract"):
-        machine_text, _machine_height = _tesseract(path)
+            measured_height = machine_minimum_height
+    elif machine_text is not None:
         machine_normal = _normal(machine_text)
         overridden = [
             text for text in expected_pixel_text(spec)
@@ -338,6 +373,8 @@ def audit_figure(
     missing_expansions = []
     for short, expansion in abbreviations.items():
         definition = f"{short} = {expansion}"
+        if contract_version == 3:
+            continue
         if _normal(definition) not in normal_ocr:
             missing_expansions.append(definition)
             errors.append(f"unexpanded local abbreviation: {definition}")
@@ -428,6 +465,62 @@ def audit_figure(
     elif visual_quality is not None and not isinstance(visual_quality, dict):
         raise ValueError("visual_quality must be an object")
 
+    typography_scale = inspection.get("typography_scale")
+    effective_p90_text_height = None
+    effective_text_area_fraction = None
+    mobile_primary_label_height = None
+    if contract_version == 3:
+        if not isinstance(typography_scale, dict):
+            errors.append(
+                "quality contract v3 inspection requires typography_scale")
+            typography_scale = {}
+        try:
+            reported_p90 = _required_number(
+                typography_scale.get("p90_label_height_px"),
+                "typography_scale.p90_label_height_px",
+                minimum=0.0, maximum=float(height),
+            )
+        except ValueError as exc:
+            errors.append(str(exc))
+            reported_p90 = 0.0
+        try:
+            reported_area = _required_number(
+                typography_scale.get("text_box_area_fraction"),
+                "typography_scale.text_box_area_fraction",
+                minimum=0.0, maximum=1.0,
+            )
+        except ValueError as exc:
+            errors.append(str(exc))
+            reported_area = 0.0
+        if typography_scale.get("display_headline_absent") is not True:
+            errors.append(
+                "typography scale inspection must confirm display_headline_absent")
+        if typography_scale.get("labels_subordinate_to_visuals") is not True:
+            errors.append(
+                "typography scale inspection must confirm labels_subordinate_to_visuals")
+        effective_p90_text_height = max(
+            reported_p90, machine_p90_height or 0.0)
+        effective_text_area_fraction = max(
+            reported_area, machine_text_area_fraction or 0.0)
+        standalone = spec.get("render_context", "article") == "standalone"
+        height_fraction_limit = (
+            MAX_STANDALONE_P90_TEXT_HEIGHT_SHORT_EDGE_FRACTION
+            if standalone else MAX_ARTICLE_P90_TEXT_HEIGHT_SHORT_EDGE_FRACTION)
+        area_fraction_limit = (
+            MAX_STANDALONE_TEXT_BOX_AREA_FRACTION
+            if standalone else MAX_ARTICLE_TEXT_BOX_AREA_FRACTION)
+        height_fraction = effective_p90_text_height / min(width, height)
+        if height_fraction > height_fraction_limit:
+            errors.append(
+                "typography dominates the artwork: the robust upper label height is "
+                f"{effective_p90_text_height:.1f} px ({height_fraction:.1%} of the "
+                f"short canvas edge; maximum {height_fraction_limit:.1%})")
+        if effective_text_area_fraction > area_fraction_limit:
+            errors.append(
+                "typography occupies too much of the artwork: OCR text boxes cover "
+                f"{effective_text_area_fraction:.1%} of the canvas; maximum "
+                f"{area_fraction_limit:.1%}")
+
     communication = inspection.get("communication")
     if contract_version in {2, 3}:
         if not isinstance(communication, dict):
@@ -498,6 +591,23 @@ def audit_figure(
                 if label not in readable:
                     errors.append(
                         f"mobile inspection did not confirm readable primary label: {label}")
+            try:
+                native_primary_height = _required_number(
+                    mobile_observed.get("minimum_primary_label_height_px"),
+                    "mobile_preview.minimum_primary_label_height_px",
+                    minimum=0.0, maximum=float(height),
+                )
+                mobile_primary_label_height = (
+                    native_primary_height * mobile_planned["width_px"] / width)
+                if (mobile_primary_label_height
+                        < mobile_planned["minimum_primary_label_height_px"]):
+                    errors.append(
+                        "smallest mobile primary label is "
+                        f"{mobile_primary_label_height:.2f} px at a "
+                        f"{mobile_planned['width_px']} px preview; required at least "
+                        f"{mobile_planned['minimum_primary_label_height_px']:.1f} px")
+            except ValueError as exc:
+                errors.append(str(exc))
             mobile_flow = mobile_observed.get("observed_first_glance_path")
             if not isinstance(mobile_flow, list) or not mobile_flow:
                 errors.append(
@@ -508,9 +618,13 @@ def audit_figure(
             if mobile_observed.get("explain_back_matches") is not True:
                 errors.append(
                     "mobile inspection must confirm explain_back_matches")
-            if mobile_observed.get("requires_zoom") is not False:
+            if mobile_observed.get("primary_labels_require_zoom") is not False:
                 errors.append(
                     "mobile inspection failed: primary labels must be readable without zoom")
+            if mobile_observed.get("supporting_labels_inflated_for_phone") is not False:
+                errors.append(
+                    "mobile inspection failed: supporting labels must remain at compact "
+                    "publication scale rather than being inflated for the phone preview")
 
         annotation = inspection.get("annotation")
         if not isinstance(annotation, dict):
@@ -622,6 +736,14 @@ def audit_figure(
                 "the figure must not read as a collage of glossy stock symbols, emoji-like objects, app pictograms, or decorative badges",
             "representation_serves_evidence":
                 "the chosen representation must shorten the path from pixels to evidence",
+            "visual_explanation_survives_without_labels":
+                "the domain-native visual structure must still communicate the subject and relationship when labels are mentally hidden",
+            "text_subordinate_to_visuals":
+                "labels must remain subordinate to evidence-bearing visuals in area and salience",
+            "poster_layout_absent":
+                "the figure must not use a headline-plus-icons or presentation-poster composition",
+            "object_inventory_absent":
+                "the figure must not substitute an isolated object inventory for a visual explanation",
         }
         for field, message in required_true.items():
             if integrity.get(field) is not True:
@@ -663,6 +785,8 @@ def audit_figure(
             "visual_language_issues": "visual-language coherence issue",
             "stock_asset_issues": "stock-asset assemblage issue",
             "representation_issues": "representation-economy issue",
+            "typography_dominance_issues": "typography-dominance issue",
+            "visual_explanation_issues": "visual-explanation issue",
         }
         if semantic_plan["cutaway_plan"]:
             issue_lists["cutaway_integrity_issues"] = "cutaway-integrity issue"
@@ -781,7 +905,6 @@ def audit_figure(
     errors.extend(validate_provenance(spec, path, provenance))
 
     effective_points = None
-    mobile_label_height = None
     if measured_height is None:
         errors.append("minimum label height could not be measured")
     else:
@@ -791,14 +914,6 @@ def audit_figure(
                 f"smallest effective label is {effective_points:.2f} pt at a "
                 f"{pdf_width_mm:.1f} mm rendered width; required at least 6.5 pt"
             )
-        if contract_version == 3:
-            mobile = layout_plan["mobile_preview"]
-            mobile_label_height = measured_height * mobile["width_px"] / width
-            if mobile_label_height < mobile["minimum_label_height_px"]:
-                errors.append(
-                    f"smallest mobile label is {mobile_label_height:.2f} px at a "
-                    f"{mobile['width_px']} px preview; required at least "
-                    f"{mobile['minimum_label_height_px']:.1f} px")
     return {
         "status": "pass" if not errors else "fail",
         "errors": errors,
@@ -826,15 +941,18 @@ def audit_figure(
             "minimum_effective_label_pt": (
                 round(effective_points, 2) if effective_points is not None else None
             ),
-            "minimum_mobile_label_px": (
-                round(mobile_label_height, 2)
-                if mobile_label_height is not None else None
+            "minimum_mobile_primary_label_px": (
+                round(mobile_primary_label_height, 2)
+                if mobile_primary_label_height is not None else None
             ),
+            "robust_upper_label_height_px": effective_p90_text_height,
+            "ocr_text_box_area_fraction": effective_text_area_fraction,
             "missing_abbreviation_expansions": missing_expansions,
             "geometry_distortions": len(geometry_distortions),
             "duplicate_text_items": len(duplicate_text),
             "unlisted_text_items": len(unlisted_text),
             "visual_quality": visual_quality,
+            "typography_scale": typography_scale,
             "communication": communication,
             "mobile_preview": inspection.get("mobile_preview"),
             "annotation": inspection.get("annotation"),

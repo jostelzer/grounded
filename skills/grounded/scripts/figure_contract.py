@@ -7,6 +7,8 @@ Both authoring and QA import the same semantic contract from here.
 
 from __future__ import annotations
 
+import re
+
 
 REQUIRED_FIELDS = ("purpose", "title", "story", "exact_text")
 RENDER_CONTEXTS = ("article", "standalone", "slide")
@@ -29,10 +31,12 @@ REPRESENTATION_KINDS = {"literal", "metaphor-assisted"}
 CUTAWAY_MAX_INTERIOR_ENTITIES = 6
 ABSOLUTE_WHITE = "#FFFFFF"
 MOBILE_PREVIEW_WIDTH_PX = 390
-MINIMUM_MOBILE_LABEL_HEIGHT_PX = 12.0
+MINIMUM_MOBILE_PRIMARY_LABEL_HEIGHT_PX = 10.0
+MAXIMUM_MOBILE_PRIMARY_LABELS = 3
 GENERATED_MOBILE_PRIMARY_MAX_WORDS = 4
 GENERATED_MOBILE_PRIMARY_MAX_CHARACTERS = 28
 GENERATED_MOBILE_PRIMARY_COMPOUND_PUNCTUATION = ":;()/"
+GLOSSARY_DEFINITION = re.compile(r"^[A-Z][A-Z0-9-]{1,9}\s*=\s*\S")
 
 
 def inferred_render_route(spec, archetype_name):
@@ -128,6 +132,23 @@ def validate_communication_goal(spec):
     return normalized
 
 
+def validate_v3_rendered_copy(spec, rendered_text):
+    """Reject poster-like or caption-like copy before pixels are produced."""
+    if spec.get("quality_contract_version") != 3:
+        return
+    for text in rendered_text:
+        if GLOSSARY_DEFINITION.match(text):
+            raise ValueError(
+                "quality contract v3 keeps abbreviation definitions in the caption, "
+                "not as glossary copy inside the artwork")
+        alphabetic_words = re.findall(r"[A-Za-z]+", text)
+        long_words = [word for word in alphabetic_words if len(word) > 1]
+        if len(long_words) >= 2 and all(word.isupper() for word in long_words):
+            raise ValueError(
+                "quality contract v3 uses sentence case for multiword labels; "
+                "all-caps display copy is poster-like")
+
+
 def validate_layout_plan(spec):
     """Validate the topic-neutral canvas-fit and optical-balance plan."""
     plan = _required_object(spec.get("layout_plan"), "layout_plan")
@@ -158,25 +179,29 @@ def validate_layout_plan(spec):
         raise ValueError(
             "layout_plan.mobile_preview.width_px must be %d"
             % MOBILE_PREVIEW_WIDTH_PX)
-    raw_minimum = mobile.get("minimum_label_height_px")
+    raw_minimum = mobile.get("minimum_primary_label_height_px")
     if isinstance(raw_minimum, bool):
         raise ValueError(
-            "layout_plan.mobile_preview.minimum_label_height_px must be numeric")
+            "layout_plan.mobile_preview.minimum_primary_label_height_px must be numeric")
     try:
         mobile_minimum = float(raw_minimum)
     except (TypeError, ValueError) as exc:
         raise ValueError(
-            "layout_plan.mobile_preview.minimum_label_height_px must be numeric") from exc
-    if mobile_minimum < MINIMUM_MOBILE_LABEL_HEIGHT_PX:
+            "layout_plan.mobile_preview.minimum_primary_label_height_px must be numeric") from exc
+    if mobile_minimum < MINIMUM_MOBILE_PRIMARY_LABEL_HEIGHT_PX:
         raise ValueError(
-            "layout_plan.mobile_preview.minimum_label_height_px must be at least %.1f"
-            % MINIMUM_MOBILE_LABEL_HEIGHT_PX)
+            "layout_plan.mobile_preview.minimum_primary_label_height_px must be at least %.1f"
+            % MINIMUM_MOBILE_PRIMARY_LABEL_HEIGHT_PX)
+    if mobile.get("all_labels_required_without_zoom") is not False:
+        raise ValueError(
+            "layout_plan.mobile_preview.all_labels_required_without_zoom must be false; "
+            "only primary wayfinding labels drive the phone gate")
     primary_labels = _nested_string_list(
         mobile.get("primary_labels"),
         "layout_plan.mobile_preview.primary_labels", nonempty=True)
-    if len(primary_labels) > 5:
+    if len(primary_labels) > MAXIMUM_MOBILE_PRIMARY_LABELS:
         raise ValueError(
-            "layout_plan.mobile_preview.primary_labels may contain at most five labels")
+            "layout_plan.mobile_preview.primary_labels may contain at most three labels")
     if spec.get("render_route") == "generated":
         for label in primary_labels:
             if (
@@ -210,9 +235,13 @@ def validate_layout_plan(spec):
             plan.get("final_display"), "layout_plan.final_display"),
         "mobile_preview": {
             "width_px": preview_width,
-            "minimum_label_height_px": mobile_minimum,
+            "minimum_primary_label_height_px": mobile_minimum,
+            "all_labels_required_without_zoom": False,
             "primary_labels": primary_labels,
             "first_glance_path": first_glance_path,
+            "supporting_detail_strategy": _required_nested_string(
+                mobile.get("supporting_detail_strategy"),
+                "layout_plan.mobile_preview.supporting_detail_strategy"),
             "explain_back_without_zoom": _required_nested_string(
                 mobile.get("explain_back_without_zoom"),
                 "layout_plan.mobile_preview.explain_back_without_zoom"),
