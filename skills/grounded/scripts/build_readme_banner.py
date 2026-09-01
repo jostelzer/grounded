@@ -20,7 +20,8 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter
 
-REPO = Path(__file__).resolve().parent.parent
+SKILL_ROOT = Path(__file__).resolve().parent.parent
+REPO = SKILL_ROOT.parents[1]
 EXAMPLES = REPO / "examples"
 
 # Back-to-front: each fan is drawn outside-in so the hero page lands on top.

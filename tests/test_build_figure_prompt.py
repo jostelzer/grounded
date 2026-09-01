@@ -7,7 +7,10 @@ import tempfile
 import unittest
 
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "skills", "grounded",
+)
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 SCRIPT = os.path.join(ROOT, "scripts", "build_figure_prompt.py")
 SPEC = importlib.util.spec_from_file_location("build_figure_prompt", SCRIPT)

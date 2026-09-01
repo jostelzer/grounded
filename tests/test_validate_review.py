@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1] / "skills" / "grounded"
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import validate_review  # noqa: E402
@@ -77,7 +77,7 @@ class ValidateReviewTests(unittest.TestCase):
         )
         for filename, style, size in examples:
             with self.subTest(filename=filename):
-                path = ROOT / "examples" / filename
+                path = ROOT.parents[1] / "examples" / filename
                 result = validate_review.validate_review(
                     path.read_text(encoding="utf-8"),
                     style=style,

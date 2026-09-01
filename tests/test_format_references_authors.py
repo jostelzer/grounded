@@ -10,7 +10,10 @@ import importlib.util
 import os
 import unittest
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "skills", "grounded",
+)
 SCRIPT = os.path.join(ROOT, "scripts", "format_references.py")
 SPEC = importlib.util.spec_from_file_location("format_references", SCRIPT)
 MODULE = importlib.util.module_from_spec(SPEC)

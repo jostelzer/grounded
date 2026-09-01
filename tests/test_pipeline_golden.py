@@ -15,9 +15,10 @@ import sys
 import tempfile
 import unittest
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(REPO, "skills", "grounded")
 SCRIPTS = os.path.join(ROOT, "scripts")
-FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic")
+FIXTURE = os.path.join(REPO, "tests", "fixtures", "colic")
 sys.path.insert(0, SCRIPTS)
 
 import qa_figure  # noqa: E402
@@ -176,7 +177,7 @@ class GoldenEli5PipelineTests(unittest.TestCase):
     full-text manifest) with a validated ELI5 rendition of the same claims,
     rendered in the primer edition."""
 
-    ELI5_FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-eli5")
+    ELI5_FIXTURE = os.path.join(REPO, "tests", "fixtures", "colic-eli5")
 
     def setUp(self):
         self.tmp = tempfile.mkdtemp(prefix="grounded-golden-eli5-")
@@ -245,7 +246,7 @@ class GoldenBulletsPipelineTests(unittest.TestCase):
     validated bullets rendition of the same claims, rendered in the brief
     edition (drawn double-chevron markers)."""
 
-    BULLETS_FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-bullets")
+    BULLETS_FIXTURE = os.path.join(REPO, "tests", "fixtures", "colic-bullets")
 
     def setUp(self):
         self.tmp = tempfile.mkdtemp(prefix="grounded-golden-bullets-")

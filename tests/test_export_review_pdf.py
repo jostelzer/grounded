@@ -10,7 +10,8 @@ from pathlib import Path
 from unittest import mock
 
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(REPO, "skills", "grounded")
 SCRIPTS = os.path.join(ROOT, "scripts")
 sys.path.insert(0, SCRIPTS)
 
@@ -691,7 +692,7 @@ class PdfExportTests(unittest.TestCase):
         self.assertNotIn('<div class="body cols">', page)
 
     def test_eli5_showcase_exports_as_flowing_prose_not_bullets(self):
-        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
+        example_dir = os.path.join(REPO, "tests", "fixtures", "showcase")
         source = os.path.join(example_dir, "eli5-why-clouds-are-white.md")
         with open(source, encoding="utf-8") as stream:
             markdown = stream.read()
@@ -728,7 +729,7 @@ class PdfExportTests(unittest.TestCase):
     def test_running_masthead_paints_on_a_real_continuation_page(self):
         from pypdf import PdfReader
 
-        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
+        example_dir = os.path.join(REPO, "tests", "fixtures", "showcase")
         with tempfile.TemporaryDirectory() as tmp:
             for filename in (
                     "prose-small-blue-light-sleep.md",
@@ -786,7 +787,7 @@ class PdfExportTests(unittest.TestCase):
             ("prose-image-mrna-vaccines.md", 6),
             ("prose-large-mediterranean-diet.md", 10),
         )
-        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
+        example_dir = os.path.join(REPO, "tests", "fixtures", "showcase")
         with tempfile.TemporaryDirectory() as tmp:
             for filename, expected_pages in examples:
                 source = os.path.join(example_dir, filename)
@@ -819,7 +820,7 @@ class PdfExportTests(unittest.TestCase):
     def test_structured_table_uses_space_below_figure_three_safely(self):
         from pypdf import PdfReader
 
-        example_dir = os.path.join(ROOT, "tests", "fixtures", "showcase")
+        example_dir = os.path.join(REPO, "tests", "fixtures", "showcase")
         source = os.path.join(example_dir, "large-mediterranean-diet.md")
         with open(source, encoding="utf-8") as stream:
             markdown = stream.read()
@@ -1023,7 +1024,7 @@ class FigureExportTests(unittest.TestCase):
         """End to end: a review whose reference tail spills onto a final
         page alone is re-rendered once with tightened (bounded) reference
         leading, pulling the spill back; type size is untouched."""
-        fixture = os.path.join(ROOT, "tests", "fixtures", "spill-probe.md")
+        fixture = os.path.join(REPO, "tests", "fixtures", "spill-probe.md")
         with open(fixture, encoding="utf-8") as stream:
             markdown = stream.read()
         # Keep this synthetic probe at the bounded spill threshold even when
@@ -1128,7 +1129,7 @@ class SalonEditionTests(unittest.TestCase):
     classical devices over the same semantic document, with the evidence
     contract untouched (references/contracts.md)."""
 
-    FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic")
+    FIXTURE = os.path.join(REPO, "tests", "fixtures", "colic")
 
     def build(self, **kwargs):
         with open(os.path.join(self.FIXTURE, "review.md"), encoding="utf-8") as stream:
@@ -1214,8 +1215,8 @@ class PrimerEditionTests(unittest.TestCase):
     step badges, answer card — over the same semantic document and evidence
     contract, in the canonical two-column measure."""
 
-    FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-eli5")
-    EVIDENCE = os.path.join(ROOT, "tests", "fixtures", "colic")
+    FIXTURE = os.path.join(REPO, "tests", "fixtures", "colic-eli5")
+    EVIDENCE = os.path.join(REPO, "tests", "fixtures", "colic")
 
     def build(self, **kwargs):
         with open(os.path.join(self.FIXTURE, "review.md"), encoding="utf-8") as stream:
@@ -1282,8 +1283,8 @@ class BriefEditionTests(unittest.TestCase):
     """The brief edition (bullets default): condensed two-column brief with
     the drawn double-chevron marker; evidence contract untouched."""
 
-    FIXTURE = os.path.join(ROOT, "tests", "fixtures", "colic-bullets")
-    EVIDENCE = os.path.join(ROOT, "tests", "fixtures", "colic")
+    FIXTURE = os.path.join(REPO, "tests", "fixtures", "colic-bullets")
+    EVIDENCE = os.path.join(REPO, "tests", "fixtures", "colic")
 
     def build(self, **kwargs):
         with open(os.path.join(self.FIXTURE, "review.md"), encoding="utf-8") as stream:

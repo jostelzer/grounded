@@ -60,15 +60,26 @@ Every review has three independent dimensions — combine them freely. The defau
 
 ## Installation
 
-**Claude Code, Codex, or any CLI agent** — just tell your agent:
+Grounded is a standard [Agent Skill](https://github.com/anthropics/skills) — one `SKILL.md` plus its `references/` and `scripts/`. The same bundle works everywhere; only the delivery differs.
 
-> Install the agent skill from https://github.com/jostelzer/grounded
+**Claude Code** — install it as a plugin from this repo:
 
-(For Claude Code that means cloning the repo into `~/.claude/skills/grounded`, or into a project's `.claude/skills/`.)
+```
+/plugin marketplace add jostelzer/grounded
+/plugin install grounded@grounded
+```
 
-**claude.ai** — download `grounded.skill` from the [latest release](https://github.com/jostelzer/grounded/releases/latest) and upload it in **Settings → Capabilities → Skills**.
+Or clone the repo and point `~/.claude/skills/grounded` (or a project's `.claude/skills/`) at its `skills/grounded/` directory.
 
-**Other agents** — give the agent the repo folder, use `SKILL.md` as the operating instructions, and keep `references/` and `scripts/` alongside. Any agent that can run Python **or** fetch URLs can run the full pipeline.
+**ChatGPT** — download `grounded.zip` from the [latest release](https://github.com/jostelzer/grounded/releases/latest) and upload it under **Skills → Create → Upload from your computer**. (Skills availability depends on your ChatGPT plan.)
+
+**claude.ai** — download `grounded.skill` from the same release and upload it in **Settings → Capabilities → Skills**.
+
+**Codex CLI** — unzip `grounded.zip` into `~/.codex/skills/` (or a project's `.codex/skills/`), then start a new session.
+
+**OpenAI API** — `POST /v1/skills` with `grounded.zip`; the manifest's name and description are read from `SKILL.md` frontmatter.
+
+**Other agents** — give the agent the `skills/grounded/` folder, use `SKILL.md` as the operating instructions, and keep `references/` and `scripts/` alongside. Any agent that can run Python **or** fetch URLs can run the full pipeline.
 
 ## Under the hood
 

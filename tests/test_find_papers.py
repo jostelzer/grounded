@@ -10,7 +10,10 @@ from pathlib import Path
 from unittest import mock
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "find_papers.py"
+SCRIPT = (
+    Path(__file__).resolve().parents[1]
+    / "skills" / "grounded" / "scripts" / "find_papers.py"
+)
 sys.path.insert(0, str(SCRIPT.parent))
 SPEC = importlib.util.spec_from_file_location("find_papers", SCRIPT)
 find_papers = importlib.util.module_from_spec(SPEC)

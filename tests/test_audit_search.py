@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1] / "skills" / "grounded"
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import audit_search  # noqa: E402

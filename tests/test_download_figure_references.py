@@ -8,7 +8,10 @@ import unittest
 from urllib.parse import urlparse
 
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "skills", "grounded",
+)
 SCRIPT = os.path.join(ROOT, "scripts", "download_figure_references.py")
 sys.path.insert(0, os.path.dirname(SCRIPT))
 MANIFEST = os.path.join(ROOT, "references", "nature-figure-corpus.json")

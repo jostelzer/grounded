@@ -4,7 +4,10 @@ import unittest
 from unittest import mock
 
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "skills", "grounded",
+)
 
 
 def load(name):

@@ -1,0 +1,23 @@
+{
+  "name": "grounded",
+  "displayName": "Grounded",
+  "version": "4.0.0",
+  "description": "Scientific reviews with no citations from memory: every source found by live OpenAlex/PubMed search, every DOI and retraction status verified through Crossref, delivered as chat, a journal-styled PDF with generated figures, or an experimental slide deck.",
+  "author": {
+    "name": "Johannes Stelzer",
+    "url": "https://github.com/jostelzer"
+  },
+  "homepage": "https://github.com/jostelzer/grounded",
+  "repository": "https://github.com/jostelzer/grounded",
+  "license": "MIT",
+  "keywords": [
+    "literature-review",
+    "citations",
+    "science",
+    "research",
+    "crossref",
+    "openalex",
+    "pubmed",
+    "pdf"
+  ]
+}
