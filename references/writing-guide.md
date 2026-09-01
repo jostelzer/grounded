@@ -8,12 +8,12 @@ It is not a document with front matter or a report about itself. Every word earn
 
 ## Choose the writing style
 
-Use **scientific by default** (the style previously named `prose` — treat `prose` as an alias). Use the compact bullet structure only when the user explicitly asks for bullets, a list, or the compact structured format. Use **popsci** when the user asks for `popsci`, popular science, magazine style, science journalism, or names that register's magazines (Scientific American, New Scientist, Quanta). Use ELI5 only when requested; ELI5 is flowing prose in simpler language, not an implicit request for bullets.
+Use **popsci by default**. Use **scientific** when the user asks for scientific or journal-register prose (the style previously named `prose` — treat `prose` as an alias). Use the compact bullet structure only when the user explicitly asks for bullets, a list, or the compact structured format. Also use popsci when the user asks for popular science, magazine style, science journalism, or names that register's magazines (Scientific American, New Scientist, Quanta). Use ELI5 only when requested; ELI5 is flowing prose in simpler language, not an implicit request for bullets.
 
 Each style's full structure and craft rules live in its own guide — **read the selected style's file before drafting**:
 
-- `style-scientific.md` — the default narrative journal article.
-- `style-popsci.md` — the magazine feature.
+- `style-scientific.md` — the narrative journal article.
+- `style-popsci.md` — the default magazine feature.
 - `style-bullets.md` — the compact punchline-and-bullets format.
 - `style-eli5.md` — the plain-language staircase explanation.
 
@@ -104,7 +104,7 @@ The first use of a technical abbreviation or specialist term is a markdown link 
 
 ## Length
 
-Default **small scientific**: aim for something a reader takes in within a few minutes — roughly 600–1,000 words of running prose plus the sources block (tables, figure captions, and alt text are budgeted separately by the validator). Popsci uses the same budgets. Explicit bullet style and small ELI5 use 350–700 words, but ELI5 spends that budget on connected paragraphs rather than list items. Medium and large scale up the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
+Default **medium popsci**: aim for a substantial magazine feature of roughly 1,500–2,500 words of running prose plus the sources block (tables, figure captions, and alt text are budgeted separately by the validator). Scientific uses the same budgets. Explicit bullet style and medium ELI5 use 900–1,600 words, but ELI5 spends that budget on connected paragraphs rather than list items. Small and large scale the number of sections and evidence, not sentence density or paragraph length. Sizes are in `sizes.md`.
 
 ## Citing
 

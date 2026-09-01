@@ -1,6 +1,6 @@
-# Scientific style (default; alias: prose)
+# Scientific style (alias: prose)
 
-Use this style unless the user explicitly selects bullets, popsci, or ELI5. The pipeline, evidence standard, citations, and verification are identical across styles; scientific and bullets share the normal term-link rules defined in `writing-guide.md`. Scientific style shapes the review into a narrative article of the kind journals publish. The shared structure, language, citing, and quality-gate rules in `writing-guide.md` apply in full.
+Use this style when the user explicitly selects scientific or journal-register prose. The pipeline, evidence standard, citations, and verification are identical across styles; scientific and bullets share the normal term-link rules defined in `writing-guide.md`. Scientific style shapes the review into a narrative article of the kind journals publish. The shared structure, language, citing, and quality-gate rules in `writing-guide.md` apply in full.
 
 **From the synthesis** (`synthesis.md`, per `synthesis-guide.md`): the claim headings *are* selected synthesis claims, already worded as calibrated sentences; order them by their dependencies and argumentative weight. The Abstract's four moves map directly — the Verdict paragraph becomes move 1, the strongest claim with its lead number move 2, the sharpest contrary line and its resolution move 3, the boundaries move 4. The synthesis's patterns become the cross-section callbacks and the Conclusion's cross-cutting claim.
 

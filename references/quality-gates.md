@@ -1,7 +1,7 @@
 # Auditable quality gates
 
 These gates are mandatory for an explicitly requested size, a journal PDF (whose
-figures are mandatory), or a PDF release. Ordinary default-small chat answers retain advisory tier budgets, but
+figures are mandatory), or a PDF release. Reviews using the default medium tier retain advisory tier budgets, but
 the evidence, citation, and text-hygiene rules never become advisory.
 
 ## Search manifest

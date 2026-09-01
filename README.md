@@ -34,26 +34,26 @@ It can also audit text you already have:
 
 ## Sizes, styles, formats
 
-Every review has three independent dimensions — combine them freely:
+Every review has three independent dimensions — combine them freely. The default is **medium · popsci · journal PDF**.
 
 **Size** — how much evidence:
 
-| | small | medium | large |
+| | small | medium (default) | large |
 |---|---|---|---|
 | Words | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
 | Verified sources | 10–20 | 30–60 | 70–150 |
 
 **Style** — how it's written; the rigour never changes:
 
-- **scientific** (default) — a journal-register article: abstract, thematic sections, effect sizes, comparison tables.
-- **popsci** — a magazine feature with a narrative arc, the contrary evidence as the story's turn — every claim still DOI-linked.
+- **scientific** — a journal-register article: abstract, thematic sections, effect sizes, comparison tables.
+- **popsci** (default) — a magazine feature with a narrative arc, the contrary evidence as the story's turn — every claim still DOI-linked.
 - **bullets** — TL;DR, punchline headings, cited bullets.
 - **ELI5** — the simplest possible English, one idea per step.
 
 **Format** — how it's delivered:
 
-- **inline chat** (default) — the review is the reply; every citation is a clickable DOI link, every technical term links to a plain-language explainer.
-- **journal PDF** — journal typesetting with superscript citations and up to 2/5/8 communication-first, style-matched figures for small/medium/large reviews, each doing a distinct evidence job.
+- **inline chat** — the review is the reply; every citation is a clickable DOI link, every technical term links to a plain-language explainer.
+- **journal PDF** (default) — journal typesetting with superscript citations and up to 2/5/8 communication-first, style-matched figures for small/medium/large reviews, each doing a distinct evidence job.
 - **slides** (experimental) — a 16:9 deck of standalone cited slides; the skill never offers it, you have to ask.
 
 ## Installation
