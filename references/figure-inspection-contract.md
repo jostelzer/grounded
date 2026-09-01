@@ -94,6 +94,10 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
     "stock_asset_assemblage_absent": true,
     "representation_serves_evidence": true,
     "avoidable_cognitive_translation_added": false,
+    "cutaway_exterior_recognizable": true,
+    "cut_plane_coherent": true,
+    "interior_spatial_relationships_truthful": true,
+    "cutaway_annotations_complete": true,
     "arranged_object_lineup_present": false,
     "arrangement_encodes_evidence": false,
     "composite_components_integrated": true,
@@ -121,7 +125,8 @@ For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
     "paper_integrity_issues": [],
     "visual_language_issues": [],
     "stock_asset_issues": [],
-    "representation_issues": []
+    "representation_issues": [],
+    "cutaway_integrity_issues": []
   },
   "quantitative": {
     "axis_semantics_visible": true,
@@ -169,6 +174,11 @@ app-style pictograms, and decorative badges even when their labels are correct.
 For a quantitative figure, an interval must be visible as an attached graphical
 extent, the data marks must remain more salient than their labels, and direct
 annotations must not touch or cross points, trajectories, axes, or each other.
+For the `cutaway` archetype, the four `cutaway_*` / interior-integrity booleans
+and `cutaway_integrity_issues` are required. Inspect the recognizable exterior,
+the physical coherence of the cut plane, the truthfulness of nesting and
+adjacency inside it, and complete one-to-one callout coverage at native and
+390 px size. Those fields are omitted for other archetypes.
 
 ## Generation provenance record
 

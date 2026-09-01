@@ -144,6 +144,20 @@ rather than retaining them as rendered copy:
       "arranged_elements": false,
       "arrangement_evidence_job": null
     },
+    "cutaway_plan": {
+      "exterior_silhouette": "<recognizable whole-object orientation anchor>",
+      "cut_plane": "<one coherent section and viewpoint>",
+      "interior_entities": ["<declared entity id>"],
+      "spatial_relationships": ["<truthful nesting or adjacency rule>"],
+      "annotation_strategy": "<how short labels and leaders explain the interior>",
+      "suitability": {
+        "hidden_interior_removes_mental_step": true,
+        "faithful_interior_supported": true,
+        "distinct_evidence_job": true,
+        "phone_readable": true,
+        "reason": "<why this cutaway earns a figure slot>"
+      }
+    },
     "quantitative_decision": {
       "verified_numbers_available": false,
       "numbers_carry_primary_message": false,
@@ -152,6 +166,11 @@ rather than retaining them as rendered copy:
   }
 }
 ```
+
+Omit `cutaway_plan` unless `archetype` is `cutaway`. For a cutaway, every ID in
+`interior_entities` must be a declared semantic entity and must be the target of
+exactly one `annotation_plan.callouts` item. That callout also declares a
+non-empty `explanatory_role` describing what the short rendered label teaches.
 
 Generated figures require all three concepts and complete evaluations. The
 selected concept must have the highest total and score at least four in every
@@ -191,6 +210,10 @@ structured `data` plus `plot_design`. Composite figures additionally supply
   identity, information priority, and route decision.
 - `annotation_plan` uses sequential A–D labels for distinct sections and gives
   each callout an exact target, leader-line decision, and background treatment.
+- `cutaway_plan` is a fail-closed suitability and physical-integrity contract:
+  recognizable exterior, one cut plane, at most six essential interior
+  entities, truthful spatial relationships, one explanatory callout per entity,
+  and native-plus-phone inspection.
 - `plot_design` gives quantitative figures chart type, encoding, reader path,
   style rationale, typography, per-panel axis semantics, caption axis summary,
   numeric attachment, uncertainty attachment, and legend decision.

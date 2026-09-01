@@ -26,6 +26,7 @@ CONNECTOR_MEANINGS = {
 CALLOUT_BACKGROUNDS = {"opaque-white", "quiet-canvas"}
 CONTENT_DENSITIES = {"sparse", "moderate", "dense"}
 REPRESENTATION_KINDS = {"literal", "metaphor-assisted"}
+CUTAWAY_MAX_INTERIOR_ENTITIES = 6
 ABSOLUTE_WHITE = "#FFFFFF"
 MOBILE_PREVIEW_WIDTH_PX = 390
 MINIMUM_MOBILE_LABEL_HEIGHT_PX = 12.0
@@ -535,6 +536,86 @@ def validate_semantic_plan(spec, annotation_plan):
         "arrangement_evidence_job": arrangement_evidence_job,
     }
 
+    cutaway_plan = None
+    if spec.get("archetype") == "cutaway":
+        if spec.get("render_route") != "generated":
+            raise ValueError("cutaway figures require the generated route")
+        cutaway = _required_object(
+            plan.get("cutaway_plan"), "semantic_plan.cutaway_plan")
+        suitability = _required_object(
+            cutaway.get("suitability"),
+            "semantic_plan.cutaway_plan.suitability")
+        suitability_fields = (
+            "hidden_interior_removes_mental_step",
+            "faithful_interior_supported",
+            "distinct_evidence_job",
+            "phone_readable",
+        )
+        for field in suitability_fields:
+            if suitability.get(field) is not True:
+                raise ValueError(
+                    "cutaway suitability requires %s=true" % field)
+
+        interior_entities = _nested_string_list(
+            cutaway.get("interior_entities"),
+            "semantic_plan.cutaway_plan.interior_entities", nonempty=True)
+        if len(interior_entities) > CUTAWAY_MAX_INTERIOR_ENTITIES:
+            raise ValueError(
+                "cutaway figures may expose at most %d essential interior entities"
+                % CUTAWAY_MAX_INTERIOR_ENTITIES)
+        if len(set(interior_entities)) != len(interior_entities):
+            raise ValueError("cutaway interior entity ids must be unique")
+        if any(entity_id not in entity_ids for entity_id in interior_entities):
+            raise ValueError(
+                "cutaway interior_entities must identify declared semantic entities")
+
+        callouts_by_target = {}
+        for index, callout in enumerate(annotation_plan["callouts"]):
+            target = callout["target"]
+            if target in callouts_by_target:
+                raise ValueError(
+                    "cutaway callouts must identify each interior entity exactly once")
+            callouts_by_target[target] = callout
+            if not callout.get("explanatory_role"):
+                raise ValueError(
+                    "cutaway callouts require a non-empty explanatory_role")
+            words = callout["text"].split()
+            if (len(words) > GENERATED_MOBILE_PRIMARY_MAX_WORDS
+                    or len(callout["text"]) > GENERATED_MOBILE_PRIMARY_MAX_CHARACTERS):
+                raise ValueError(
+                    "cutaway callouts must be phone-first labels of at most %d words "
+                    "and %d characters"
+                    % (GENERATED_MOBILE_PRIMARY_MAX_WORDS,
+                       GENERATED_MOBILE_PRIMARY_MAX_CHARACTERS))
+        if set(callouts_by_target) != set(interior_entities):
+            raise ValueError(
+                "cutaway callouts must cover every interior entity exactly once")
+
+        cutaway_plan = {
+            "exterior_silhouette": _required_nested_string(
+                cutaway.get("exterior_silhouette"),
+                "semantic_plan.cutaway_plan.exterior_silhouette"),
+            "cut_plane": _required_nested_string(
+                cutaway.get("cut_plane"),
+                "semantic_plan.cutaway_plan.cut_plane"),
+            "interior_entities": interior_entities,
+            "spatial_relationships": _nested_string_list(
+                cutaway.get("spatial_relationships"),
+                "semantic_plan.cutaway_plan.spatial_relationships", nonempty=True),
+            "annotation_strategy": _required_nested_string(
+                cutaway.get("annotation_strategy"),
+                "semantic_plan.cutaway_plan.annotation_strategy"),
+            "suitability": {
+                **{field: True for field in suitability_fields},
+                "reason": _required_nested_string(
+                    suitability.get("reason"),
+                    "semantic_plan.cutaway_plan.suitability.reason"),
+            },
+        }
+    elif plan.get("cutaway_plan") not in (None, {}):
+        raise ValueError(
+            "semantic_plan.cutaway_plan is only valid for the cutaway archetype")
+
     if spec.get("render_route") in {"deterministic", "composite"}:
         plot_design = _required_object(spec.get("plot_design"), "plot_design")
         typography = _required_object(
@@ -564,6 +645,7 @@ def validate_semantic_plan(spec, annotation_plan):
         "cross_view_identity": normalized_cross_view,
         "quantitative_decision": normalized_quantitative,
         "representation_plan": normalized_representation,
+        "cutaway_plan": cutaway_plan,
     }
 
 
@@ -834,6 +916,11 @@ def validate_annotation_plan(spec, rendered_text):
         else:
             placement_priority = "quiet-canvas-first"
             quiet_canvas_rejected_reason = None
+        explanatory_role = callout.get("explanatory_role")
+        if explanatory_role is not None:
+            explanatory_role = _required_nested_string(
+                explanatory_role,
+                "annotation_plan.callouts[%d].explanatory_role" % index)
         normalized_callouts.append({
             "text": text,
             "target": target,
@@ -841,6 +928,7 @@ def validate_annotation_plan(spec, rendered_text):
             "background": background,
             "placement_priority": placement_priority,
             "quiet_canvas_rejected_reason": quiet_canvas_rejected_reason,
+            "explanatory_role": explanatory_role,
         })
     rationale = _required_nested_string(
         plan.get("rationale"), "annotation_plan.rationale")

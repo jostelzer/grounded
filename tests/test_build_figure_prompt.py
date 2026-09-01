@@ -191,6 +191,91 @@ class FigurePromptTests(unittest.TestCase):
         }
         return spec
 
+    def v3_cutaway_spec(self, review_style="popsci"):
+        spec = self.v3_generated_spec()
+        spec.update({
+            "archetype": "cutaway",
+            "review_style": review_style,
+            "target_aspect_ratio": 1.35,
+            "title": "A hidden structure explains the visible whole",
+            "visual_anchor": "one recognizable whole object opened by one coherent section",
+            "exact_text": [
+                "A hidden structure explains the visible whole",
+                "Layer carries signal",
+                "Core makes response",
+            ],
+        })
+        spec["communication_goal"].update({
+            "visual_question": "How do the hidden parts make the visible whole work?",
+            "panel_thesis": "One continuous section connects the recognizable exterior to its working interior.",
+            "reader_takeaway": "The outer form works because two hidden parts occupy specific nested positions.",
+            "must_show": ["recognizable exterior", "outer layer", "inner core"],
+            "information_flow": ["recognize the whole", "follow the cut inward", "read each part's job"],
+            "familiar_starting_point": "the intact outer silhouette",
+            "plain_language_explain_back": "The outside contains a layer that carries a signal to a working core.",
+        })
+        spec["concepts"][0].update({
+            "id": "sectional-plate",
+            "description": "One recognizable whole object with a single clean section revealing two nested working parts.",
+            "information_flow": ["recognize the whole", "enter the section", "read two jobs"],
+        })
+        spec["concept_selection"]["selected_id"] = "sectional-plate"
+        spec["concept_selection"]["evaluations"][0]["id"] = "sectional-plate"
+        spec["concept_selection"]["selection_rationale"] = (
+            "The single section removes the hidden-structure imagination step with the fewest elements."
+        )
+        spec["annotation_plan"] = {
+            "panel_labels": [],
+            "callouts": [
+                {
+                    "text": "Layer carries signal",
+                    "target": "signal",
+                    "leader_line": True,
+                    "background": "quiet-canvas",
+                    "placement_priority": "quiet-canvas-first",
+                    "explanatory_role": "Names the outer hidden layer and explains its transfer job.",
+                },
+                {
+                    "text": "Core makes response",
+                    "target": "response",
+                    "leader_line": True,
+                    "background": "quiet-canvas",
+                    "placement_priority": "quiet-canvas-first",
+                    "explanatory_role": "Names the inner core and explains the response it produces.",
+                },
+            ],
+            "rationale": "One continuous cutaway needs no panel letter; two leaders explain the hidden parts.",
+        }
+        spec["layout_plan"]["content_density"] = "moderate"
+        spec["layout_plan"]["mobile_preview"].update({
+            "primary_labels": ["Layer carries signal", "Core makes response"],
+            "first_glance_path": ["recognize the whole", "follow the cut inward", "read each part's job"],
+            "explain_back_without_zoom": "The outer layer carries a signal to the working core.",
+        })
+        spec["semantic_plan"]["panel_jobs"] = []
+        spec["semantic_plan"]["connectors"] = []
+        spec["semantic_plan"]["grouping_rationale"] = (
+            "The intact exterior and exposed interior are two views of one physical explanation."
+        )
+        spec["semantic_plan"]["cutaway_plan"] = {
+            "exterior_silhouette": "the complete familiar outline remains visible around the opening",
+            "cut_plane": "one oblique section with a shared scale and perspective",
+            "interior_entities": ["signal", "response"],
+            "spatial_relationships": [
+                "the signal layer surrounds the response core",
+                "the cut surface preserves continuity with the intact exterior",
+            ],
+            "annotation_strategy": "two short labels in surrounding white space lead directly to the two exposed structures",
+            "suitability": {
+                "hidden_interior_removes_mental_step": True,
+                "faithful_interior_supported": True,
+                "distinct_evidence_job": True,
+                "phone_readable": True,
+                "reason": "The hidden nesting is the explanation and cannot be inferred from an exterior view alone.",
+            },
+        }
+        return spec
+
     def test_v3_prompt_encodes_one_thesis_semantic_arrows_and_salience(self):
         spec = self.v3_generated_spec()
         prompt = MODULE.build_prompt(
@@ -205,6 +290,38 @@ class FigurePromptTests(unittest.TestCase):
         self.assertIn("A — establish the signal", prompt)
         self.assertIn("PHONE PREVIEW — HARD GATE", prompt)
         self.assertIn("REPRESENTATION ECONOMY — HARD GATE", prompt)
+
+    def test_cutaway_archetype_builds_a_style_specific_integrity_prompt(self):
+        prompt = MODULE.build_prompt(
+            self.v3_cutaway_spec(), self.profiles, self.archetypes,
+            writing_styles=self.writing_styles)
+        self.assertIn("CUTAWAY INTEGRITY — HARD GATE", prompt)
+        self.assertIn("one coherent cut plane", prompt)
+        self.assertIn("premium museum-editorial sectional plate", prompt)
+        self.assertIn("explanatory job:", prompt)
+        self.assertIn("Layer carries signal → signal", prompt)
+        self.assertIn("Reserve the full outer 6–8%", prompt)
+        self.assertIn("glyph-line height of at least 48 px", prompt)
+
+    def test_cutaway_suitability_fails_closed(self):
+        spec = self.v3_cutaway_spec()
+        spec["semantic_plan"]["cutaway_plan"]["suitability"][
+            "distinct_evidence_job"] = False
+        with self.assertRaisesRegex(ValueError, "distinct_evidence_job=true"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
+
+    def test_cutaway_requires_one_explanatory_callout_per_interior_entity(self):
+        spec = self.v3_cutaway_spec()
+        spec["annotation_plan"]["callouts"].pop()
+        spec["exact_text"].remove("Core makes response")
+        spec["layout_plan"]["mobile_preview"]["primary_labels"].remove(
+            "Core makes response")
+        with self.assertRaisesRegex(ValueError, "cover every interior entity"):
+            MODULE.build_prompt(
+                spec, self.profiles, self.archetypes,
+                writing_styles=self.writing_styles)
 
     def test_v3_rejects_nonwhite_canvas_override(self):
         spec = self.v3_generated_spec()
@@ -859,6 +976,7 @@ class FigurePromptTests(unittest.TestCase):
 
     def test_domain_native_archetypes_are_available(self):
         self.assertIn("anatomical-mechanism", self.archetypes)
+        self.assertIn("cutaway", self.archetypes)
         self.assertIn("study-overview", self.archetypes)
 
     def test_main_writes_prompt_file(self):

@@ -46,6 +46,13 @@ boundary. Use fewer when the synthesis contains fewer genuinely visual stories.
 Never pad coverage with decoration, a recoloured duplicate, or a graphical
 restatement of a table.
 
+For popsci and ELI5, apply the `cutaway` suitability gate after planning the
+ordinary evidence jobs. A cutaway may use an otherwise available slot under the
+size ceiling only when the hidden interior removes a real imagination step, is
+supported well enough to draw faithfully, adds non-duplicative information, and
+remains understandable at 390 px. Otherwise omit it; the archetype is not a
+style quota.
+
 Each figure must answer one visual question and remain understandable to an
 educated non-specialist. Place it immediately after the section it supports,
 introduce it in the body, and use stable-ID cross-references. Set

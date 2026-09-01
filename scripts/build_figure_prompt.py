@@ -504,6 +504,30 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
                 ) + "\nWhen one specimen, object, or population is shown under several filters, "
                 "thresholds, or states, preserve its identity and registered positions. Change "
                 "only the declared transformation so downstream differences remain traceable.")
+        if semantic_plan["cutaway_plan"]:
+            cutaway = semantic_plan["cutaway_plan"]
+            sections.append(
+                "CUTAWAY INTEGRITY — HARD GATE\n"
+                "Preserve the recognizable exterior silhouette: %s.\n"
+                "Use one coherent cut plane: %s.\n"
+                "Expose only these essential interior entities: %s.\n"
+                "Preserve these spatial relationships: %s.\n"
+                "Annotation strategy: %s.\n"
+                "Suitability decision: %s\n"
+                "The exterior and exposed interior must share one perspective, scale, "
+                "lighting system, and material language. The cut surface must read as one "
+                "physically coherent opening, not transparency, an exploded parts view, or "
+                "several incompatible windows. Reserve the full outer 6–8%% of the canvas as "
+                "unoccupied exact-white safety margin before sizing the focal object and "
+                "callouts. At a 1,536 px-wide source, give every callout line a visibly measured "
+                "glyph-line height of at least 48 px so proportional reduction to 390 px remains "
+                "at least 12 px. Do not invent hidden layers or sacrifice the recognizable whole "
+                "merely to make room for labels."
+                % (cutaway["exterior_silhouette"], cutaway["cut_plane"],
+                   ", ".join(cutaway["interior_entities"]),
+                   "; ".join(cutaway["spatial_relationships"]),
+                   cutaway["annotation_strategy"],
+                   cutaway["suitability"]["reason"]))
     if selected_concept:
         selected_scores = next(
             item for item in concept_evaluations
@@ -601,6 +625,8 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
                         item["text"], item["target"],
                         ("leader line required" if item["leader_line"]
                          else "direct adjacency; no leader line needed")
+                        + (("; explanatory job: " + item["explanatory_role"])
+                           if item["explanatory_role"] else "")
                         + "; placement: " + item["placement_priority"]
                         + "; backing: " + item["background"]
                         + (("; quiet-canvas rejection: "
@@ -689,6 +715,10 @@ def build_prompt(spec, profiles, archetypes, profile_name=None,
         bullet_section("CANDIDATE SELECTION STANDARD", profile.get("selection_standard", [])),
         "ARCHETYPE\n%s — %s" % (selected_archetype, archetype["goal"]),
         bullet_section("COMPOSITION", archetype["composition"]),
+        *( ["WRITING-STYLE TREATMENT FOR THIS ARCHETYPE\n%s" %
+             archetype["writing_style_treatments"][selected_review_style]]
+           if selected_review_style in archetype.get("writing_style_treatments", {})
+           else [] ),
         bullet_section("EVIDENCE-BACKED STORY", story),
     ])
 

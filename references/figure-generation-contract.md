@@ -17,6 +17,14 @@ Fewer is valid when the verified synthesis genuinely contains fewer distinct
 visual stories. Never hit a target by repeating a table, recolouring the same
 topology, or adding decorative scene setting.
 
+For popsci and ELI5, evaluate one optional `cutaway` plate after the ordinary
+coverage plan. It earns a slot only when exposing a hidden interior removes a
+real mental-imagination step, the evidence supports a faithful interior, the
+plate adds a distinct explanatory job, and the whole plus its annotations will
+survive at 390 px. It may use otherwise available room under the size ceiling;
+it never displaces a stronger evidence job or raises the ceiling merely because
+cutaways are attractive.
+
 ## 1. Write the communication contract before choosing a renderer
 
 For every figure, write a `communication_goal` with:
@@ -164,6 +172,12 @@ Every v3 figure declares a `semantic_plan` before layout:
   rejected. It also declares whether objects are arranged as a lineup or set;
   such an arrangement is valid only when it performs a named evidence-encoding
   job rather than serving as presentation furniture.
+- `cutaway_plan` is required only for the `cutaway` archetype. It declares the
+  recognizable exterior silhouette, one coherent cut plane, the essential
+  interior entity IDs, their evidence-supported spatial relationships, the
+  annotation strategy, and the four-part suitability decision. Every exposed
+  interior entity receives exactly one short callout with a declared
+  `explanatory_role`; decorative transparency and exploded-parts views fail.
 - `anatomical_context` is required for every anatomical subject. It names the
   orientation landmarks and focal region that must survive simplification so a
   reader can locate the finding and understand where an instrument or mechanism
@@ -189,6 +203,16 @@ Every callout sets `placement_priority: quiet-canvas-first`. An opaque plate is
 fallback-only: it also records why moving the label to quiet canvas would break
 the spatial relationship to its referent. Opaque plates use restrained padding
 and never become decorative cards.
+
+For a cutaway, place the label in surrounding white space whenever possible,
+then lead inward to the exact structure. The leader starts at the label and
+ends on the target without crossing unrelated layers. Keep the rendered copy
+phone-short; `explanatory_role` records the full semantic job so a terse label
+cannot become an unexplained anatomy tag. Allocate the 6–8% outer safety margin
+and the label lanes before scaling the focal object; at a 1,536 px source, the
+smallest visible callout line is at least 48 px high so it remains at least
+12 px at the 390 px release view. This preflight prevents repeated typography
+repairs after an otherwise good composition.
 
 ## 5c. Fit the canvas to the information
 
@@ -359,6 +383,10 @@ style overlay from `figure-writing-style-overlays.json`:
 
 The writing-style overlay changes art direction, finish, palette, and permitted
 typography. It never changes the evidence payload or certainty encoding.
+When the selected archetype is `cutaway`, the archetype module adds an
+atlas-like scientific treatment, premium museum-editorial popsci treatment,
+compact analytical bullets treatment, or simplified ELI5 “look inside”
+treatment without changing the exterior, interior relationships, or labels.
 
 ## 8. Prevent stretching at every stage
 
@@ -421,6 +449,9 @@ A figure is releasable only when all of the following are true:
   must-show list, and information flow pass an independent post-generation
   check without caption dependency or unexplained jargon;
 - panel labels and explanatory callouts match the annotation plan;
+- a cutaway preserves a recognizable exterior, one physically coherent cut
+  plane, truthful interior spatial relationships, and complete one-to-one
+  explanatory callouts at native and phone size;
 - no geometry distortion is reported;
 - its raster aspect matches the declared target;
 - generation provenance satisfies the route rules;

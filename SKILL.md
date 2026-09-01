@@ -120,6 +120,13 @@ Style never changes search depth, source counts, citations, or verification. Sci
 
 - **Inline chat** — when the user explicitly chooses it. The review is the reply itself; nothing extra is generated.
 - **Journal PDF** — the default, and also used when the user asks for a PDF, a printable/shareable version, or a journal-styled artifact, or picks it in the format question. It **always includes generated figures**. Plan toward 2 figures for small, 3–4 for medium, and 5–6 for large, with hard ceilings of 2/5/8; fewer is valid only when the synthesis has fewer distinct visual stories, never because producing the visuals is inconvenient. Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`. For figure generation, also read `references/figure-generation-contract.md`, `references/figure-reference-analysis.md`, `references/figure-style-system.md`, `references/image-prompt-guide.md`, and `references/figure-captions.md`; build the prompt from a structured figure specification with `scripts/build_figure_prompt.py`. Place each figure after the section it supports, reference it from the body, and give it a style-matched caption with verified citations. Figures flow into the PDF export automatically.
+- **Optional popsci/ELI5 cutaway** — after the normal visual jobs are planned,
+  test whether a sectional “look inside” plate removes a genuine imagination
+  step, can show the hidden structure faithfully, adds distinct information,
+  and remains clear at 390 px. It may use an available figure slot under the
+  size ceiling; omit it when any gate fails. Follow the `cutaway` archetype and
+  its one-to-one explanatory-callout contract rather than treating cutaway as a
+  decorative style.
 - **Slides** — experimental and hidden by default: never offered in the format question, never suggested, and never inferred. Runs only on the explicit triggers `deck`, `slides`, “presentation”, “slide deck”, or “journal club deck” in the user's own words. Combines freely with every size and style. The deck is the deliverable: chat carries the question, a 1–3 sentence plain answer, and the verified 16:9 PDF; the written synthesis stays an internal working draft. Every content slide must pass the standalone test — claim, evidence, and firmness readable from the slide alone. Follow `references/deck-guide.md`; generate one slide-context evidence image per content slide, then run the canonical exporter and mandatory landscape QA.
 
 Figure and slide creation happens only after the evidence has been searched, read, verified, and synthesized.

@@ -622,9 +622,138 @@ class CommunicationFirstContractTests(unittest.TestCase):
         }
         return inspection
 
+    def v3_cutaway_spec(self):
+        spec = self.v3_spec()
+        spec.update({
+            "archetype": "cutaway",
+            "review_style": "eli5",
+            "title": "A hidden structure explains the whole",
+            "visual_anchor": "one recognizable whole object with one coherent section",
+            "exact_text": [
+                "A hidden structure explains the whole",
+                "Layer carries signal",
+                "Core makes response",
+            ],
+        })
+        spec["communication_goal"].update({
+            "visual_question": "How do two hidden parts make the whole work?",
+            "panel_thesis": "One section links the familiar outside to its working inside.",
+            "reader_takeaway": "A hidden outer layer carries a signal to an inner working core.",
+            "must_show": ["recognizable outside", "signal layer", "response core"],
+            "information_flow": ["recognize outside", "look through section", "read two jobs"],
+            "familiar_starting_point": "the intact outer silhouette",
+            "plain_language_explain_back": "The layer carries a signal to the core.",
+        })
+        spec["annotation_plan"] = {
+            "panel_labels": [],
+            "callouts": [
+                {
+                    "text": "Layer carries signal", "target": "signal",
+                    "leader_line": True, "background": "quiet-canvas",
+                    "placement_priority": "quiet-canvas-first",
+                    "explanatory_role": "Names the outer layer and explains its transfer job.",
+                },
+                {
+                    "text": "Core makes response", "target": "response",
+                    "leader_line": True, "background": "quiet-canvas",
+                    "placement_priority": "quiet-canvas-first",
+                    "explanatory_role": "Names the inner core and explains its output job.",
+                },
+            ],
+            "rationale": "One continuous section needs no panel; two leaders explain the inside.",
+        }
+        spec["layout_plan"]["mobile_preview"].update({
+            "primary_labels": ["Layer carries signal", "Core makes response"],
+            "first_glance_path": ["recognize outside", "look through section", "read two jobs"],
+            "explain_back_without_zoom": "The layer carries a signal to the core.",
+        })
+        spec["semantic_plan"]["connectors"] = []
+        spec["semantic_plan"]["panel_jobs"] = []
+        spec["semantic_plan"]["grouping_rationale"] = (
+            "The intact outside and exposed inside form one physical explanation."
+        )
+        spec["semantic_plan"]["anatomy_subjects"] = []
+        spec["semantic_plan"]["anatomical_context"] = []
+        spec["semantic_plan"]["cutaway_plan"] = {
+            "exterior_silhouette": "the full familiar outline remains visible",
+            "cut_plane": "one oblique section with shared perspective and scale",
+            "interior_entities": ["signal", "response"],
+            "spatial_relationships": ["the signal layer surrounds the response core"],
+            "annotation_strategy": "two short outside labels lead to the exposed structures",
+            "suitability": {
+                "hidden_interior_removes_mental_step": True,
+                "faithful_interior_supported": True,
+                "distinct_evidence_job": True,
+                "phone_readable": True,
+                "reason": "The hidden nesting is the evidence-bearing relationship.",
+            },
+        }
+        return spec
+
+    def v3_cutaway_inspection(self):
+        inspection = self.v3_inspection()
+        inspection["ocr_text"] = "Layer carries signal Core makes response"
+        inspection["communication"]["must_show_visible"] = [
+            "recognizable outside", "signal layer", "response core"
+        ]
+        inspection["communication"]["observed_information_flow"] = [
+            "recognize outside", "look through section", "read two jobs"
+        ]
+        inspection["mobile_preview"].update({
+            "readable_primary_labels": ["Layer carries signal", "Core makes response"],
+            "observed_first_glance_path": ["recognize outside", "look through section", "read two jobs"],
+            "observed_explain_back": "The layer carries a signal to the core.",
+        })
+        inspection["annotation"] = {
+            "panel_labels": [],
+            "callouts": [
+                {
+                    "text": "Layer carries signal", "target": "signal",
+                    "leader_line_present": True,
+                    "leader_origin_attached_to_label": True,
+                    "leader_endpoint_hits_target": True,
+                    "background": "quiet-canvas",
+                    "quiet_canvas_considered": True,
+                    "text_on_quiet_canvas": True,
+                },
+                {
+                    "text": "Core makes response", "target": "response",
+                    "leader_line_present": True,
+                    "leader_origin_attached_to_label": True,
+                    "leader_endpoint_hits_target": True,
+                    "background": "quiet-canvas",
+                    "quiet_canvas_considered": True,
+                    "text_on_quiet_canvas": True,
+                },
+            ],
+        }
+        inspection["integrity"].update({
+            "cutaway_exterior_recognizable": True,
+            "cut_plane_coherent": True,
+            "interior_spatial_relationships_truthful": True,
+            "cutaway_annotations_complete": True,
+            "cutaway_integrity_issues": [],
+        })
+        return inspection
+
     def test_v3_complete_integrity_contract_passes(self):
         result = self.audit(spec=self.v3_spec(), inspection=self.v3_inspection())
         self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_v3_cutaway_integrity_contract_passes_and_fails_closed(self):
+        spec = self.v3_cutaway_spec()
+        inspection = self.v3_cutaway_inspection()
+        result = self.audit(spec=spec, inspection=inspection)
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+        inspection = self.v3_cutaway_inspection()
+        inspection["integrity"]["cut_plane_coherent"] = False
+        inspection["integrity"]["cutaway_integrity_issues"] = [
+            "the opening combines incompatible viewpoints"
+        ]
+        result = self.audit(spec=spec, inspection=inspection)
+        self.assertTrue(any("one coherent plane" in error for error in result["errors"]))
+        self.assertTrue(any("cutaway-integrity issue" in error for error in result["errors"]))
 
     def test_v3_extra_or_impossible_body_parts_are_release_blocking(self):
         inspection = self.v3_inspection()

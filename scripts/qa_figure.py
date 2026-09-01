@@ -664,6 +664,8 @@ def audit_figure(
             "stock_asset_issues": "stock-asset assemblage issue",
             "representation_issues": "representation-economy issue",
         }
+        if semantic_plan["cutaway_plan"]:
+            issue_lists["cutaway_integrity_issues"] = "cutaway-integrity issue"
         for field, label in issue_lists.items():
             values = integrity.get(field)
             if not isinstance(values, list):
@@ -681,6 +683,20 @@ def audit_figure(
                 errors.append(
                     "anatomical context must retain enough orientation landmarks to locate "
                     "the focal region and understand any instrument or mechanism")
+        if semantic_plan["cutaway_plan"]:
+            cutaway_required_true = {
+                "cutaway_exterior_recognizable":
+                    "the cutaway exterior must remain recognizable without labels",
+                "cut_plane_coherent":
+                    "the cutaway must use one coherent plane, perspective, and scale",
+                "interior_spatial_relationships_truthful":
+                    "the exposed interior relationships must match the declared spatial plan",
+                "cutaway_annotations_complete":
+                    "every essential interior entity must have one precise explanatory callout",
+            }
+            for field, message in cutaway_required_true.items():
+                if integrity.get(field) is not True:
+                    errors.append(f"integrity inspection failed: {message}")
         if semantic_plan["uncertainty_encodings"]:
             if integrity.get("uncertainty_encodings_explanatory") is not True:
                 errors.append(

@@ -32,8 +32,8 @@ from pathlib import Path
 
 from artifact_io import atomic_write_json, sha256_bytes, sha256_file
 from grounded_metadata import (
-    FIGURE_MAX_HEIGHT_MM, PAGE_CONTENT_WIDTH_MM, rendered_figure_size_mm,
-    version as grounded_version,
+    FIGURE_MAX_HEIGHT_MM, PAGE_CONTENT_WIDTH_MM, REPOSITORY_URL,
+    rendered_figure_size_mm, version as grounded_version,
 )
 
 # ---------------------------------------------------------------- markdown ---
@@ -1463,20 +1463,17 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     else:
         repo_url = repo if repo.startswith("http") else f"https://{repo}"
     release = release or "dev"
-    repo_url = repo_url or "#"
+    repo_url = repo_url or REPOSITORY_URL
     css = css.replace(
         "__GROUNDED_RELEASE__",
         json.dumps(f"GROUNDED {release.upper()}"),
     )
 
-    # token estimate for the whole document (~4 chars per token)
-    tokens = max(1, round(len(md) / 4))
-    tok = f"≈{tokens / 1000:.1f}k" if tokens >= 1000 else f"≈{tokens}"
-
     cells = [
         ("References", f"<i>{n_refs}</i> verified" if n_refs else "—"),
         ("Style", STYLE_LABELS[style]),
-        ("Tokens", tok),
+        ("Made with", f'<a href="{html.escape(repo_url, quote=True)}">'
+                      f"Grounded {html.escape(release)}</a>"),
         ("Verification", "Crossref"),
         ("Compiled", _display_date(today, abbreviated=True)),
     ]

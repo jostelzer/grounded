@@ -148,6 +148,12 @@ class PdfExportTests(unittest.TestCase):
             page,
         )
         self.assertIn('<span class="version">grounded v-test</span>', page)
+        self.assertIn(
+            '<b>Made with</b><span><a href="https://example.test/grounded">'
+            'Grounded v-test</a></span>',
+            page,
+        )
+        self.assertNotIn('<b>Tokens</b>', page)
         self.assertNotIn('<div class="provenance">', page)
         self.assertNotIn("No floating claims", page)
         self.assertNotIn("<svg viewBox=", page)
@@ -1011,6 +1017,15 @@ class FigureExportTests(unittest.TestCase):
         fixture = os.path.join(ROOT, "tests", "fixtures", "spill-probe.md")
         with open(fixture, encoding="utf-8") as stream:
             markdown = stream.read()
+        # Keep this synthetic probe at the bounded spill threshold even when
+        # masthead metadata changes without consuming additional row height.
+        markdown = markdown.replace(
+            "\n**Sources**\n",
+            "\nAdditional calibration text keeps this synthetic layout probe "
+            "near a page boundary without changing production content.\n\n"
+            "**Sources**\n",
+            1,
+        )
         with tempfile.TemporaryDirectory() as tmp:
             plain = os.path.join(tmp, "plain.pdf")
             page = export_review.build_html(

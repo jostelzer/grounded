@@ -28,6 +28,30 @@
       "No arrow crosses a boundary or compartment that the reviewed evidence does not support."
     ]
   },
+  "cutaway": {
+    "goal": "Reveal a hidden interior whose real spatial organization removes a necessary mental-imagination step from the explanation.",
+    "composition": [
+      "Keep one immediately recognizable exterior silhouette as the dominant orientation anchor.",
+      "Open the object with one physically coherent cut plane and show only the interior layers or structures needed for the declared explain-back sentence.",
+      "Preserve truthful nesting, adjacency, thickness order, scale relationships, and continuity across the cut surface; do not substitute transparent overlap or an exploded-parts layout.",
+      "Place short explanatory callouts in surrounding exact-white space and use thin leaders whose origins visibly attach to the labels and whose endpoints land on the named interior structures.",
+      "Reserve the outer 6–8% as empty exact-white safety margin and size the focal object only after the phone-readable callout lanes fit.",
+      "Use the caption for qualifications, citations, and detail that would turn the annotated plate into a label forest."
+    ],
+    "writing_style_treatments": {
+      "scientific": "Render a precise atlas-like sectional plate with restrained depth, crisp local anatomy, and economical annotation.",
+      "popsci": "Render a premium museum-editorial sectional plate: tactile but scientifically disciplined materials, elegant tonal depth, one memorable whole object, and quiet annotation arranged around it.",
+      "bullets": "Render a compact analytical section with decisive hierarchy, crisp material boundaries, and only the structures needed for fast comparison.",
+      "eli5": "Render a friendly look-inside illustration with a familiar whole object, a small number of clearly nested layers, generous breathing room, and concrete everyday wording without childish clip art."
+    },
+    "qa": [
+      "The exterior remains recognizable before any label is read.",
+      "The cut plane, perspective, lighting, and scale form one coherent physical object.",
+      "Every exposed structure is evidence-supported, spatially truthful, necessary to the explanation, and covered by exactly one explanatory callout.",
+      "No leader line floats, crosses an unrelated structure, or terminates near rather than on its target.",
+      "At 390 px wide, the reader can identify the whole, follow the cut inward, read the callouts, and explain the hidden relationship without zoom."
+    ]
+  },
   "study-overview": {
     "goal": "Summarize an experiment, dataset, or analysis pipeline with the domain-specific inputs, transformations, and outputs that make the study interpretable.",
     "composition": [

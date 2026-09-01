@@ -154,8 +154,8 @@ cropping them away.
 Change one layer at a time:
 
 1. **Evidence payload:** claims, values, uncertainty, and exact copy.
-2. **Archetype:** mechanism, anatomical mechanism, study overview, comparison,
-   quantitative, evidence map, timeline, or mindmap.
+2. **Archetype:** mechanism, anatomical mechanism, cutaway, study overview,
+   comparison, quantitative, evidence map, timeline, or mindmap.
 3. **Style profile:** Nature Neuroscience explanatory, Nature Reviews conceptual, or Nature data.
 4. **Writing-style overlay:** scientific, popsci, bullets, or ELI5 identity.
 5. **Render route:** generated illustration, deterministic quantitative plot,
@@ -164,6 +164,20 @@ Change one layer at a time:
 7. **Overrides:** aspect ratio, palette subset, panel count, or content-specific constraints.
 
 Never bury evidence changes inside style overrides. If a user requests another journal or house style, add a new profile instead of mutating the default.
+
+### Cutaway adaptation
+
+A cutaway is a representation choice, not a decorative finish. Preserve the
+recognizable whole while one coherent section reveals only the hidden
+structures needed for the explanation. The exterior and interior share scale,
+perspective, lighting, and material language; truthful nesting and adjacency
+matter more than spectacle. Put short noun-and-job callouts on surrounding
+white space with precise leaders. Reserve the full outer safety margin and
+phone-readable annotation lanes before sizing the focal object, rather than
+shrinking labels after the illustration is composed. Popsci may add tactile museum-editorial depth;
+ELI5 reduces the number of layers and uses everyday words. Neither style may
+use gore, cheap transparency, exploded parts, impossible interiors, label
+forests, or a tinted page.
 
 ## Source basis
 

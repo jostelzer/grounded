@@ -106,6 +106,11 @@ classes are:
   change, comparison, or conclusion in a short phrase. Compound policy prose,
   stacked qualifiers, unexplained shorthand, and labels that need punctuation
   to hold multiple ideas move to the caption.
+- **cutaway physical coherence** — an exposed interior keeps a recognizable
+  exterior, one coherent cut plane, truthful nesting and adjacency, and one
+  precise explanatory callout per essential hidden structure. Transparency,
+  exploded parts, invented layers, incompatible perspectives, or labels whose
+  leaders miss their targets fail.
 
 ## Change the recipe, not the specimen
 
