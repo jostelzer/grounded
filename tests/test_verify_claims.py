@@ -434,7 +434,7 @@ class DecorativeCitationTests(unittest.TestCase):
     """Real decorative citations from the v0.4.2 reruns, kept as a regression set."""
 
     def test_recorded_decorative_pairs_never_pass_as_supported(self):
-        fixture = json.loads(Path(REPO_ROOT, "evals", "decorative-citations.json").read_text())
+        fixture = json.loads(Path(ROOT, "evals", "decorative-citations.json").read_text())
         for case in fixture["cases"]:
             with self.subTest(case=case["id"]):
                 self.assertFalse(

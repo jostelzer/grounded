@@ -131,6 +131,9 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   new artifacts are `resolution.json`, `draft-normalized.md`, and
   `draft-check.md`.
 
+- `scripts/compose_hybrid_figure.py` is kept only so quality-contract-v1
+  releases stay reproducible; v3 figures never use it.
+
 ## Fixtures
 
 `tests/fixtures/colic/` is the recorded golden run (small popsci journal PDF,

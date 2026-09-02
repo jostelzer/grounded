@@ -188,7 +188,7 @@ reference, one receipt per sentence, citations to fix.
 
 ## The honesty rules that matter most here
 
-These exist because the tempting failure mode is to *quietly downgrade* what "verified" means.
+These rules keep "verified" meaning one thing on the tool-only path:
 
 - **Name the check accurately.** Confirming that a publisher page or index listing exists is not verification. Crossref verification establishes DOI identity and canonical metadata and checks publisher plus integrated Retraction Watch update records.
 - **Do not turn a service outage into a source warning.** If Crossref cannot be reached, the check is incomplete; retry or omit the source. Do not add ⚠️ or other marks beside entries and present them as verified.

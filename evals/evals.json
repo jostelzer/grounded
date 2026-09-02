@@ -16,13 +16,13 @@
     {
       "id": 2,
       "prompt": "Give me a small scientific review as a journal PDF: how does sleep deprivation affect immune function in healthy adults?",
-      "expected_output": "A complete small scientific review with 10-20 verified peer-reviewed sources, delivered in chat AND as the canonical journal-styled PDF. Because the journal PDF format was chosen, exactly one generated figure is created automatically (small tier budget: 1) from the verified synthesis - no explicit image request is needed and no separate image mode exists. The figure is independently understandable to an educated non-specialist, defines every abbreviation and non-obvious concept with local labels or a compact readable legend when needed, distinguishes established findings from uncertain mechanisms, has exact readable labels, useful alt text, and a concise prose caption with supporting review citations. The PDF is built with the canonical browser-free exporter and passes its mandatory QA. The review carries claim receipts: each Sources entry annotated with claim count and evidence tier, a Receipts stamp after Sources, a colophon line in the PDF stating the audit tally (cited sentences, source checks, verdicts by evidence tier), and a companion <review>-receipts.md delivered beside the PDF; every pair is supported or partial.",
+      "expected_output": "A complete small scientific review with 10-20 verified peer-reviewed sources, delivered in chat AND as the canonical journal-styled PDF. Because the journal PDF format was chosen, exactly one generated figure is created automatically (small tier budget: 1) from the verified synthesis. The figure is independently understandable to an educated non-specialist, defines every abbreviation and non-obvious concept with local labels or a compact readable legend when needed, distinguishes established findings from uncertain mechanisms, has exact readable labels, useful alt text, and a concise prose caption with supporting review citations. The PDF is built with the canonical browser-free exporter and passes its mandatory QA. The review carries claim receipts: each Sources entry annotated with claim count and evidence tier, a Receipts stamp after Sources, a colophon line in the PDF stating the audit tally (cited sentences, source checks, verdicts by evidence tier), and a companion <review>-receipts.md delivered beside the PDF; every pair is supported or partial.",
       "files": []
     },
     {
       "id": 3,
       "prompt": "Use the grounded skill: what does peer-reviewed research say about the causes and maintenance of chronic low-back pain?",
-      "expected_output": "Because no size, style, or output format was specified, the very first reply arrives within seconds and is a single short question (a few lines) asking the user to pick a size (small/medium/large, medium marked as default), a style (scientific/popsci/bullets/ELI5, popsci marked as default), and an output format (inline chat/journal PDF, journal PDF marked as default). The experimental slides format is not offered in the question - it is hidden by default and runs only when the user explicitly asks for a deck, slides, or a presentation. No searching, planning, or review writing happens before the user answers.",
+      "expected_output": "Because no size, style, or output format was specified, the first reply is a single short question (a few lines) asking the user to pick a size (small/medium/large, medium marked as default), a style (scientific/popsci/bullets/ELI5, popsci marked as default), and an output format (inline chat/journal PDF, journal PDF marked as default). The experimental slides format is not offered in the question; it runs only when the user asks for a deck, slides, or a presentation. No searching, planning, or review writing happens before the user answers.",
       "files": []
     },
     {
@@ -34,7 +34,7 @@
     {
       "id": 5,
       "prompt": "Write a small scientific review, inline in chat, of medical image registration methods for longitudinal brain MRI.",
-      "expected_output": "A normal text-only small scientific review in inline chat with the default Abstract-to-Conclusion narrative structure. The word `image` appears as part of the scientific topic, not as a request for the journal PDF format, so no figures and no PDF are generated.",
+      "expected_output": "A normal text-only small scientific review in inline chat with the default Abstract-to-Conclusion narrative structure. The word `image` is part of the scientific topic, not a request for the journal PDF format: no figures and no PDF are generated.",
       "files": []
     },
     {
@@ -88,7 +88,7 @@
     {
       "id": 14,
       "prompt": "Use the grounded skill in bullet style: does intermittent fasting improve insulin sensitivity?",
-      "expected_output": "The style (bullets) is specified but the size and output format are not, so the very first reply arrives within seconds and is a single short question asking only for the size (small/medium/large, medium marked as default) and the output format (inline chat/journal PDF, journal PDF marked as default; the experimental slides format is not offered) - it does not re-ask the style. No searching or review writing happens before the user answers. Every Sources entry is annotated with its claim count and evidence tier, a two-line Receipts block after Sources carries the audit tally, and a companion <review>-receipts.md (one entry per cited sentence with source, tier, verdict, verbatim quote) is delivered beside the review; no pair is anything but supported or partial, and the reply states the tier split."
+      "expected_output": "The style (bullets) is specified but the size and output format are not, so the first reply is a single short question asking only for the size (small/medium/large, medium marked as default) and the output format (inline chat/journal PDF, journal PDF marked as default; the experimental slides format is not offered) - it does not re-ask the style. No searching or review writing happens before the user answers. Every Sources entry is annotated with its claim count and evidence tier, a two-line Receipts block after Sources carries the audit tally, and a companion <review>-receipts.md (one entry per cited sentence with source, tier, verdict, verbatim quote) is delivered beside the review; no pair is anything but supported or partial, and the reply states the tier split."
     },
     {
       "id": 15,

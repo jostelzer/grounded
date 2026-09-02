@@ -106,9 +106,11 @@ class ReleaseSkillTests(unittest.TestCase):
                     "grounded/references/production-workflow.md",
                     archive.namelist(),
                 )
-                self.assertFalse(
-                    any(name.startswith("grounded/evals/") for name in archive.namelist())
-                )
+                # The judge-qualification gold set and the decorative-citation
+                # regression set ship with the skill; behavioural evals do not.
+                self.assertIn("grounded/evals/claim-benchmark-creatine.json", archive.namelist())
+                self.assertIn("grounded/evals/decorative-citations.json", archive.namelist())
+                self.assertNotIn("grounded/evals/evals.json", archive.namelist())
                 self.assertIsNone(archive.testzip())
 
     def test_version_mismatch_fails_before_replacing_output(self):

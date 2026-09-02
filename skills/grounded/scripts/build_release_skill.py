@@ -22,7 +22,6 @@ TOP_LEVEL_FILES = ("SKILL.md", "VERSION", "LICENSE", "requirements-pdf.txt")
 ASSET_FILES = ("grounded-logo-512.png",)
 # Visual evaluation topics are deliberately private and replaceable. They are
 # never bundled as canonical templates in a public skill release.
-EVAL_FILES = ()
 REFERENCE_FILES = (
     "citation-rules.md",
     "claim-verification.md",
@@ -51,6 +50,10 @@ REFERENCE_FILES = (
     "style-scientific.md",
     "synthesis-guide.md",
     "writing-guide.md",
+)
+EVAL_FILES = (
+    "claim-benchmark-creatine.json",
+    "decorative-citations.json",
 )
 SCRIPT_FILES = (
     "artifact_io.py",

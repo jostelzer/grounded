@@ -90,7 +90,7 @@ introductions, and uncited figure captions are always hard failures.
 
 Default chat/Markdown citations are DOI-linked author–year labels immediately
 after the supported claim and before terminal punctuation: `claim [Author](DOI).`
-The formatter repairs a legacy `claim. [@key]` draft, while finished-review
+The formatter normalizes a `claim. [@key]` draft to `claim [@key].`, while finished-review
 validation rejects punctuation-before-citation and citation-led sentences. A
 DOI-only source cell in a comparison table remains valid.
 
@@ -211,6 +211,38 @@ and `check_draft.py report` then produce the chat report. A check hides no
 verdict: `not_found`, `unverifiable`, and `contradicted` pairs are listed
 under "Citations to fix" rather than blocking anything, because nothing is
 being released.
+
+## Editions and layout levers
+
+The PDF's paper identity follows the writing style: scientific renders in the
+canonical **journal** edition (Charter body, Helvetica Neue furniture);
+bullets in the **brief** edition (condensed two-column brief: tight 8.8 pt
+columns, punchline headings, a drawn double-chevron marker on every finding);
+ELI5 in the **primer** edition (Seravek humanist sans, orange step badges
+numbering the staircase, the TL;DR as a tinted answer card); popsci in the
+**salon** edition (Didot display, Hoefler Text body, Optima furniture, generous
+margins, a three-line drop cap on the opener, an asterism closing the article).
+Every edition keeps the two-column measure that lets a phone zoom one column to
+full width. `--edition journal|salon` overrides the default. Editions restyle
+the same semantic document — the evidence contract, citation placement,
+reference order, and every QA gate are identical — and the release manifest
+records the edition so QA rebuilds the exact design.
+
+Salon PDFs may carry one pull quote (`--pull-quote "<sentence>"`): a verbatim
+passage of the article body (anything else is a hard export error), placed
+before the paragraph it comes from; when the pulled sentence carries citations
+they render as a linked attribution line under the quote, and an uncited
+authorial line gets no attribution rather than a misattributed one.
+
+When a final page would carry only the tail of the reference list or the
+colophon, the exporter walks a bounded rebalance ladder — reference leading
+tightened inside its envelope (type size untouched), then the colophon folded
+into the References heading at zero height, then both — keeps the first render
+with no degenerate spill, and notes the adjustment in the manifest.
+`--ref-leading` sets that leading by hand, `--figure-max-height` (60–120 mm)
+adjusts the figure cap, and `--columns 1` gives a single-column layout; QA
+failure messages state how far a sparse page is from its threshold and which
+lever closes it. HTML sidecars are off by default (`--html-sidecar`).
 
 ## Immutable PDF lineage
 

@@ -20,7 +20,7 @@ When the profiles need to be re-audited, download them to an explicit private
 temporary directory:
 
 ```bash
-python3 scripts/download_figure_references.py --out /private/tmp/nature-figure-corpus
+python3 scripts/download_figure_references.py --out ./nature-figure-corpus   # any directory outside the release tree
 ```
 
 The downloader checks the PNG signature, records dimensions, byte counts,
