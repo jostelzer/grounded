@@ -24,17 +24,17 @@ isolated owner, but that owner receives only its visual job, the cited synthesis
 claims, the shared figure contract, and its case-local paths. It does not receive
 another report's history or invent a new evidence interpretation.
 
-## Stratify work by judgment required
+## Match the worker to the judgment required
 
-Use deterministic scripts for runtime checks, manifest audits, citation
-verification, reference formatting, rendering, and QA. Routine retrieval,
-record normalization, and command execution do not benefit from the strongest
-reasoning setting. Reserve stronger reasoning for synthesis, claim adjudication, the selected
-style's narrative structure, and the single final independent audit. Claim
-adjudication is judgment work: every verdict is a reading recorded with
-`verify_claims.py adjudicate`, never a script, similarity score, or default
-applied across pairs — the checker fails templated audits. An explicit user choice of model or reasoning level always
-wins.
+Deterministic scripts own runtime checks, manifest audits, citation
+verification, reference formatting, rendering, and QA; retrieval, record
+normalization, and command execution are routine and can go to the cheapest
+capable worker. Synthesis, claim adjudication, the selected style's narrative
+structure, and the single final independent audit are judgment work and get
+the most capable worker available. Claim adjudication in particular is a
+reading recorded with `verify_claims.py adjudicate`, never a script,
+similarity score, or default applied across pairs — the checker fails
+templated audits. An explicit user choice of model always wins.
 
 Do not assign a general-purpose reviewer to watch exports or repeatedly inspect
 unchanged state. Wait on workers in bounded snapshots. A worker that returns a
@@ -131,6 +131,16 @@ blockers to check—not every search result, candidate image, terminal transcrip
 and abandoned PDF. The final release command verifies the post-audit artifacts;
 it is the last gate.
 
+## Token accounting
+
+Every stage block may carry a `usage` object — `model`, `input_tokens`,
+`output_tokens`, `cache_read_input_tokens` — filled from whatever the host
+reports for the work of that stage. The audit validates the shape, records
+it per stage under `metrics.usage`, and totals it across stages; it never
+gates on it. Record it whenever the host exposes usage: without per-stage
+cost visibility, no change to search depth, figure count, or judge
+configuration can be measured.
+
 ## Worker packets
 
 Keep delegated prompts short and stage-bounded. These are packet shapes, not
@@ -181,6 +191,7 @@ printed by the live gate; obsolete or approximate acceptances fail.
     "fulltext_manifest": "fulltext-manifest.json",
     "synthesis": "synthesis.md",
     "frozen": true,
+    "usage": {"model": "claude-opus-5", "input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0},
     "unresolved_issues": [],
     "accepted_warnings": []
   },

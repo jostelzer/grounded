@@ -134,6 +134,11 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
 - `scripts/compose_hybrid_figure.py` is kept only so quality-contract-v1
   releases stay reproducible; v3 figures never use it.
 
+- Production-manifest schema 1 accepts an optional `usage` object per stage
+  (`model`, `input_tokens`, `output_tokens`, `cache_read_input_tokens`);
+  `audit_production.py` reports it under `metrics.usage` with totals and
+  `recorded: false` when absent. Shape errors fail; absence never does.
+
 ## Fixtures
 
 `tests/fixtures/colic/` is the recorded golden run (small popsci journal PDF,

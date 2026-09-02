@@ -687,6 +687,52 @@ def _audit_release(
     }
 
 
+USAGE_COUNTERS = ("input_tokens", "output_tokens", "cache_read_input_tokens")
+
+
+def _usage_summary(manifest: dict[str, Any], errors: list[str]) -> dict[str, Any]:
+    """Token accounting per stage, recorded when the host reports it.
+
+    Each stage block may carry ``usage``: ``{"model": str, "input_tokens": int,
+    "output_tokens": int, "cache_read_input_tokens": int}`` (counters
+    optional, non-negative). Usage is never a gate — it is the cost
+    visibility every other cleanup is measured against — so a missing block
+    is recorded as unrecorded, not as a failure; a malformed one is an error.
+    """
+    stages: dict[str, Any] = {}
+    totals = {name: 0 for name in USAGE_COUNTERS}
+    for stage in STAGES:
+        block = manifest.get(stage)
+        usage = block.get("usage") if isinstance(block, dict) else None
+        if usage is None:
+            continue
+        if not isinstance(usage, dict):
+            errors.append(f"{stage}.usage must be an object")
+            continue
+        record: dict[str, Any] = {}
+        model = usage.get("model")
+        if model is not None:
+            if not isinstance(model, str) or not model.strip():
+                errors.append(f"{stage}.usage.model must be a non-empty string")
+            else:
+                record["model"] = model.strip()
+        for name in USAGE_COUNTERS:
+            value = usage.get(name)
+            if value is None:
+                continue
+            if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                errors.append(f"{stage}.usage.{name} must be a non-negative integer")
+                continue
+            record[name] = value
+            totals[name] += value
+        stages[stage] = record
+    return {
+        "recorded": bool(stages),
+        "stages": stages,
+        **{f"total_{name}": totals[name] for name in USAGE_COUNTERS},
+    }
+
+
 def audit_production(
     manifest: dict[str, Any], *, base_dir: Path, target_stage: str,
 ) -> dict[str, Any]:
@@ -745,6 +791,7 @@ def audit_production(
         if len(errors) != before:
             break
         metrics["completed_stages"].append(stage)
+    metrics["usage"] = _usage_summary(manifest, errors)
     return {
         "status": "pass" if not errors else "fail",
         "errors": errors,

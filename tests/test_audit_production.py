@@ -125,6 +125,28 @@ class ProductionAuditTests(unittest.TestCase):
         self.assertEqual(result["metrics"]["completed_stages"], ["evidence"])
         self.assertEqual(result["metrics"]["stages"]["evidence"]["claims"], 5)
 
+    def test_usage_is_recorded_per_stage_and_totalled_but_never_gated(self):
+        manifest = self.base_manifest()
+        result = audit_production.audit_production(
+            manifest, base_dir=self.root, target_stage="evidence")
+        self.assertEqual(result["status"], "pass", result["errors"])
+        self.assertFalse(result["metrics"]["usage"]["recorded"])
+        manifest["evidence"]["usage"] = {
+            "model": "claude-opus-5", "input_tokens": 120000, "output_tokens": 9000,
+            "cache_read_input_tokens": 80000}
+        result = audit_production.audit_production(
+            manifest, base_dir=self.root, target_stage="evidence")
+        self.assertEqual(result["status"], "pass", result["errors"])
+        usage = result["metrics"]["usage"]
+        self.assertTrue(usage["recorded"])
+        self.assertEqual(usage["stages"]["evidence"]["model"], "claude-opus-5")
+        self.assertEqual(usage["total_input_tokens"], 120000)
+        self.assertEqual(usage["total_output_tokens"], 9000)
+        manifest["evidence"]["usage"] = {"input_tokens": -1}
+        result = audit_production.audit_production(
+            manifest, base_dir=self.root, target_stage="evidence")
+        self.assertIn("evidence.usage.input_tokens must be a non-negative integer", result["errors"])
+
     def test_semantic_gate_runs_validator_and_requires_whole_answer_first(self):
         manifest = self.base_manifest()
         manifest["semantic"] = self.semantic_block()
