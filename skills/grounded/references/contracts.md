@@ -21,10 +21,10 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
    example `superseded`) are additions with reasons, never rewrites of
    history.
 6. **Host portability.** Every script runs on plain `python3` plus the pinned
-   `requirements-pdf.txt` runtime, in ChatGPT, Claude Code, and any other
-   shell host; the claude.ai no-network path is preserved by
-   `references/no-script-fallback.md`, which must be updated in the same
-   change as any behavior it mirrors.
+   `requirements-pdf.txt` runtime, in Claude Code, Codex CLI, and any other
+   shell host with outbound access to the literature APIs. Hosts without that
+   access are unsupported: the skill stops at the Step 0 gate rather than
+   degrading, so no verification-free path is maintained.
 7. **CLI compatibility.** Existing flags and their defaults keep working.
    Behavior changes ship behind new flags or new output fields, never by
    repurposing existing ones.

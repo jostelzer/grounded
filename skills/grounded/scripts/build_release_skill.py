@@ -39,7 +39,6 @@ REFERENCE_FILES = (
     "image-prompt-guide.md",
     "media-modes.md",
     "nature-figure-corpus.json",
-    "no-script-fallback.md",
     "production-workflow.md",
     "quality-gates.md",
     "search-playbook.md",

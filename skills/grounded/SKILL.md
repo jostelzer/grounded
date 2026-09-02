@@ -95,15 +95,19 @@ Size is how much evidence; style is how it is written; the two are independent. 
 
 Bigger sizes add sections, evidence, and tables — never longer sentences. The budget binds the running prose alone; table cells, captions, and alt text have their own compact caps in the validator (about 80 words per caption, 40 per alt text, 120 across tables). Full definitions in `references/sizes.md`.
 
-## Step 0: check whether the scripts can reach the network
+## Step 0: check the network before anything else
 
-Some hosts (claude.ai among them) sandbox Python without outbound network access. Before searching:
+Every citation is verified against a live API, so a host that cannot reach them cannot run this skill. Before searching:
 
 ```bash
 python3 -c "import urllib.request;print(urllib.request.urlopen('https://api.crossref.org/works/10.1136/bmj.n71',timeout=15).status)"
 ```
 
-`200` → use the scripts below. Anything else → the scripts cannot run here; switch to `references/no-script-fallback.md`, which does every step through the web-fetch tool against the same APIs. The verification standard is the same on both paths — only the mechanism differs. If neither path works, say so; never present an unverified review as verified.
+`200` → run the pipeline below.
+
+Anything else → **stop and say so.** Report which host is unreachable and that Grounded needs outbound access to `api.crossref.org`, `api.openalex.org`, `eutils.ncbi.nlm.nih.gov`, and `www.ebi.ac.uk`. Browser chat sandboxes (claude.ai, ChatGPT) block these and are not supported; a coding agent with a real shell is. There is no reduced mode: do not substitute a web-search tool, do not cite from memory, and never present an unverified review as verified. Offer an explicitly uncited explainer only if the user asks for one, and label it as carrying no verified sources.
+
+Check this once, before drafting. Discovering it afterwards costs the whole citation apparatus.
 
 ## The pipeline
 
@@ -217,4 +221,4 @@ For a draft check, `check_draft.py ingest` supplies the ledger and normalized dr
 - `scripts/audit_production.py` — the staged multi-review production gate.
 - `scripts/build_release_skill.py`, `VERSION`, `scripts/grounded_metadata.py`, `requirements-pdf.txt` — packaging, shared version and user agent, pinned PDF runtime.
 - `evals/claim-benchmark-creatine.json`, `evals/decorative-citations.json` — the judge qualification gold set and the decorative-citation regression set.
-- `references/` — `search-playbook.md`, `evidence-weighing.md`, `synthesis-guide.md`, `writing-guide.md` and the four `style-*.md` files, `citation-rules.md`, `claim-verification.md`, `quality-gates.md`, `production-workflow.md`, `no-script-fallback.md`, `sizes.md`, `media-modes.md`, `deck-guide.md`, and the figure contracts (`figure-generation-contract.md`, `figure-inspection-contract.md`, `figure-style-system.md`, `figure-captions.md`, `image-prompt-guide.md`, `figure-reference-analysis.md`, `figure-feedback-generalization.md`, with `figure-style-presets.json`, `figure-archetypes.json`, `figure-writing-style-overlays.json`, `nature-figure-corpus.json`); `contracts.md` is the changelog of invariants and interfaces.
+- `references/` — `search-playbook.md`, `evidence-weighing.md`, `synthesis-guide.md`, `writing-guide.md` and the four `style-*.md` files, `citation-rules.md`, `claim-verification.md`, `quality-gates.md`, `production-workflow.md`, `sizes.md`, `media-modes.md`, `deck-guide.md`, and the figure contracts (`figure-generation-contract.md`, `figure-inspection-contract.md`, `figure-style-system.md`, `figure-captions.md`, `image-prompt-guide.md`, `figure-reference-analysis.md`, `figure-feedback-generalization.md`, with `figure-style-presets.json`, `figure-archetypes.json`, `figure-writing-style-overlays.json`, `nature-figure-corpus.json`); `contracts.md` is the changelog of invariants and interfaces.
