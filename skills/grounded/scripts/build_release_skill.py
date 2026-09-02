@@ -63,6 +63,7 @@ SCRIPT_FILES = (
     "build_figure_prompt.py",
     "build_release_skill.py",
     "check_draft.py",
+    "citation_apparatus.py",
     "claim_evidence.py",
     "claim_receipts.py",
     "synthesis_quotes.py",
