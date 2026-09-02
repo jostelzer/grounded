@@ -15,6 +15,41 @@ Unless the request names **all three**, your very first action — before any se
 
 If the user answers "you pick", "default", or similar — or the session is non-interactive and cannot ask — use medium popsci as a journal PDF.
 
+## Checking a draft (the second front door)
+
+When the user hands you text they already have — an LLM answer, a manuscript
+section, a press release, an essay — and asks to check, verify, fact-check, or
+audit its claims or references, **do not ask the size/style/format question**
+and do not write a review. The draft is the review; the deliverable is a
+chat-ready check report. Run:
+
+```bash
+python3 scripts/check_draft.py ingest --draft draft.md --out-dir check/
+python3 scripts/verify_citations.py --ledger check/sources.json
+python3 scripts/verify_claims.py extract --review check/draft-normalized.md --ledger check/sources.json --audit check/claims_audit.json
+python3 scripts/verify_claims.py fetch   --audit check/claims_audit.json --evidence check/evidence/ --ledger check/sources.json --fulltext-all
+python3 scripts/verify_claims.py packets --audit check/claims_audit.json --evidence check/evidence/ --blind
+python3 scripts/verify_claims.py adjudicate --audit check/claims_audit.json --packet C001#1 --verdict <verdict> --quote "<verbatim passage>"
+python3 scripts/verify_claims.py check   --audit check/claims_audit.json --evidence check/evidence/ --summary check/claims_summary.json
+python3 scripts/check_draft.py report --resolution check/resolution.json --ledger check/sources.json --audit check/claims_audit.json --title "<draft title>" --out check/draft-check.md
+```
+
+`ingest` reads citations in whatever form they arrive — DOI links, bare DOIs,
+numeric markers with a reference list, author–year with a reference list —
+and resolves each reference to a DOI, searching Crossref when the draft gives
+none. A reference no index can find is reported as **NOT FOUND**, the first
+thing a reader of a fabricated citation needs to know; an in-text citation
+with no reference-list entry is **UNLISTED**. Verification and the blind
+claim audit then run exactly as for a Grounded review (step 8 rules apply:
+judge ≠ writer, verbatim quotes, specific notes). Nothing is repaired and
+nothing is hidden — a check shows every verdict, including `not_found` and
+`contradicted` (`check` exits non-zero on a contradicted pair; in a draft
+check that is a finding, not a stop — the summary is still written) — and the
+report ends with the citations the author must fix.
+Deliver the report in chat (it is written for that) and keep `check/` as the
+audit folder. If the draft has no citations, say so and stop; do not invent
+references for it.
+
 ## Output formats
 
 There are exactly three output formats. **Journal PDF** is the default; **inline chat** happens when the user chooses it in the original request or as the answer to the format question. **Slides** is experimental and hidden by default: it is never offered in the format question and happens only when the user explicitly asks for a deck, slides, or a presentation themselves. Never infer slides silently.
@@ -329,10 +364,9 @@ review in every format; the journal PDF takes `--claims-audit` and
 `--claim-receipts` and prints only the tally in its colophon. State the tier split honestly in the reply (`claims_summary.json` has the
 numbers): a claim verified only at abstract level is exactly that.
 
-**Checking a draft.** When the user asks to check a draft's claims or
-references against the literature, the draft is the review: verify its DOIs
-(step 4), run this step on the draft, and deliver the receipts and the summary
-in chat, calling out every `contradicted` and `not_found` pair.
+**Checking a draft** follows its own front door (see "Checking a draft"
+above): `check_draft.py ingest` builds the ledger and normalized draft, then
+this step runs unchanged and `check_draft.py report` renders the result.
 
 ## Rules that do not bend
 
@@ -355,6 +389,7 @@ in chat, calling out every `contradicted` and `not_found` pair.
 - `scripts/fetch_fulltext.py` and `scripts/audit_fulltexts.py` — open-access retrieval plus typed authenticity, duplicate, notes, and reading-evidence manifests.
 - `references/claim-verification.md` — the adjudication rubric for claim-level verification: verdict definitions, quote rules, abstention discipline, escalation policy, and a worked example. Development benchmarks remain outside the release bundle.
 - `scripts/claim_evidence.py` and `scripts/verify_claims.py` — claim-level verification: a tiered evidence store (Europe PMC full text → OpenAlex OA locations → abstract union floor, fail-closed on challenge pages) and an extract → fetch → packets → check → receipts pipeline that audits whether each cited sentence is supported by its source's own text. Verdicts of supported/partial/contradicted require a verbatim quote that the checker string-matches against the stored evidence (quotes it cannot find are rejected to unverifiable; numeric claims marked supported must carry a claim number inside the quote, with spelled-out numbers normalized). `check --summary` writes the tally the colophon prints; `receipts` attaches the Receipts block and Sources annotations to the review; a contradicted or pending pair blocks release.
+- `scripts/check_draft.py` — the draft-check front door: parses citations in any form (DOI links, bare DOIs, numeric markers, author–year) with or without a reference list, resolves references to DOIs through Crossref, writes the ledger and a normalized draft the claim audit can read, and renders the chat report (scorecard, per-reference status incl. NOT FOUND/UNLISTED/RETRACTED, per-sentence receipts, citations to fix).
 - `scripts/claim_receipts.py` — the reader-facing rendering of the audit shared by the validator, exporter, and PDF QA: summary counts, the receipts file, the Sources annotations and Receipts stamp, and the strip/shape checks that keep receipts out of the prose budget.
 - `scripts/synthesis_quotes.py` — quotes before prose: parses the synthesis claims, requires a verbatim quote line for every cited key, string-matches each against the evidence store, and anchors every number in a claim sentence to a quote (`verify_claims.py synthesis-check`).
 - `evals/decorative-citations.json` — regression set of real decorative citations (on-topic papers attached to sentences their text does not support) that the checker's relevance floor must reject, plus legitimate paraphrases an honest bridge must rescue.

@@ -30,9 +30,11 @@ Whatever you leave out, Grounded asks you in one quick question before it starts
 - **"Do school smartphone bans improve grades and mental health?"** — bullets · small → [PDF](examples/school-smartphone-bans.pdf) · [Markdown](examples/school-smartphone-bans.md) · [Receipts](examples/school-smartphone-bans-receipts.md) · 10 verified sources · two cited figures · 3-page journal article
 - **"Are seed oils really bad for you?"** — scientific · large → [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) · [Receipts](examples/seed-oils-receipts.md) · 73 verified sources · six cited figures · 10-page journal article
 
-It can also audit text you already have:
+It can also audit text you already have — an LLM answer, a manuscript section, a press release:
 
 > Use the grounded skill to check this draft's claims and references against the literature.
+
+No questions asked: the draft's citations are parsed in whatever form they come (DOI links, `[3]` with a reference list, `(Smith et al., 2020)`), every reference is resolved and verified — a reference no index can find is reported as **NOT FOUND** — and every cited sentence is judged blind against its source's own text. You get a scorecard (*references: 12 cited · 9 verified · 1 retracted · 2 not found; sentences: 30 cited · 18 supported · 7 partial · 5 unsupported*), a line per reference, a receipt per sentence, and the list of citations to fix. Run it on a vanilla model's answer and on Grounded's own review of the same question to compare them on the same terms.
 
 ## Sizes, styles, formats
 

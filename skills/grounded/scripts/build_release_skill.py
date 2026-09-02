@@ -59,6 +59,7 @@ SCRIPT_FILES = (
     "audit_search.py",
     "build_figure_prompt.py",
     "build_release_skill.py",
+    "check_draft.py",
     "claim_evidence.py",
     "claim_receipts.py",
     "synthesis_quotes.py",

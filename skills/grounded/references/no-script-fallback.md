@@ -176,6 +176,16 @@ primary labels drive phone QA, supporting labels stay at publication scale, and
 definitions remain in captions. A manual check is reported as manual—never as a
 passing scripted gate.
 
+### B7. Checking a draft without scripts
+
+Parse the draft's citations yourself, look each reference up in Crossref
+(`https://api.crossref.org/works?query.bibliographic=<reference>&rows=3`), and
+accept a match only when the returned title is plainly the referenced work; a
+reference with no plausible match is reported as NOT FOUND. Then verify the
+resolved DOIs (B3), fetch their text (B2), judge each cited sentence with the
+draft closed (B4b), and deliver the same report shape: scorecard, one line per
+reference, one receipt per sentence, citations to fix.
+
 ## The honesty rules that matter most here
 
 These exist because the tempting failure mode is to *quietly downgrade* what "verified" means.

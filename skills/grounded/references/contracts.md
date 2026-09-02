@@ -126,6 +126,11 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   rubric (10 multi-element pairs moved to partial). Reviews without an audit still export and
   pass QA unchanged, so existing fixtures and manifests stay reproducible.
 
+- Draft check (v0.4.3): `check_draft.py ingest|report` is a new, additive
+  entry point. It reuses the verifier and the claim audit unchanged; the only
+  new artifacts are `resolution.json`, `draft-normalized.md`, and
+  `draft-check.md`.
+
 ## Fixtures
 
 `tests/fixtures/colic/` is the recorded golden run (small popsci journal PDF,

@@ -89,6 +89,12 @@
       "id": 14,
       "prompt": "Use the grounded skill in bullet style: does intermittent fasting improve insulin sensitivity?",
       "expected_output": "The style (bullets) is specified but the size and output format are not, so the very first reply arrives within seconds and is a single short question asking only for the size (small/medium/large, medium marked as default) and the output format (inline chat/journal PDF, journal PDF marked as default; the experimental slides format is not offered) - it does not re-ask the style. No searching or review writing happens before the user answers. Every Sources entry is annotated with its claim count and evidence tier, a two-line Receipts block after Sources carries the audit tally, and a companion <review>-receipts.md (one entry per cited sentence with source, tier, verdict, verbatim quote) is delivered beside the review; no pair is anything but supported or partial, and the reply states the tier split."
+    },
+    {
+      "id": 15,
+      "prompt": "Use the grounded skill to check this paragraph's claims and references: \"Creatine raises brain creatine by about 9% after a month [1]. It doubles working memory in vegetarians (Hartwell et al., 2011).\" References: 1. Dechent P, et al. Increase of total creatine in human brain after oral supplementation of creatine-monohydrate. Am J Physiol 1999. Hartwell K, Bloom S. Creatine and working-memory doubling in vegetarian adults. J Cogn Nutr 2011.",
+      "expected_output": "No size/style/format question. The reply is a draft-check report: a scorecard of references and sentences; the Dechent reference resolved to its DOI and verified via Crossref; the Hartwell reference reported as NOT FOUND (no matching paper in Crossref) rather than silently accepted or invented; the creatine-increase sentence judged against the paper's own text with a verbatim quote (supported or partial, since the paper reports 8.7%); the working-memory sentence listed under citations to fix because its reference cannot be checked. No review is written and nothing is fabricated to fill the gap.",
+      "files": []
     }
   ]
 }

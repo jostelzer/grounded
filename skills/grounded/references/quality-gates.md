@@ -200,6 +200,18 @@ pair that is not supported or partial. PDF QA re-verifies both hashes and the
 pair count, rebuilds the HTML with the audit, and requires the colophon audit
 line as visible text. The per-pair receipts never enter the PDF.
 
+## Draft check
+
+For text Grounded did not write, `check_draft.py ingest` parses every
+citation form, resolves references through Crossref (`resolution.json`:
+resolved / ambiguous / unresolved / unlisted), and writes `sources.json` plus
+`draft-normalized.md` with Grounded DOI links; `verify_citations.py`,
+`verify_claims.py` (extract → fetch → packets --blind → adjudicate → check),
+and `check_draft.py report` then produce the chat report. A check hides no
+verdict: `not_found`, `unverifiable`, and `contradicted` pairs are listed
+under "Citations to fix" rather than blocking anything, because nothing is
+being released.
+
 ## Immutable PDF lineage
 
 Create only one canonical PDF in the release directory. The exporter manifest
