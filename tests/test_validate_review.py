@@ -445,6 +445,19 @@ class WordBreakdownTests(unittest.TestCase):
                 base_dir=Path(tmp), **kwargs,
             )
 
+    def test_three_citations_on_one_sentence_warn(self):
+        clustered = scientific_review().replace(
+            f"The question has evidence [Smith 2024](https://doi.org/{DOI}).",
+            f"The question has evidence [Smith 2024](https://doi.org/{DOI}), "
+            "[Lee 2023](https://doi.org/10.1000/lee), [Park 2022](https://doi.org/10.1000/park).")
+        clustered = clustered.replace(
+            f"**Smith (2024)** A source. *Journal*. https://doi.org/{DOI}\n",
+            f"**Smith (2024)** A source. *Journal*. https://doi.org/{DOI}\n\n"
+            "**Lee (2023)** B. *J*. https://doi.org/10.1000/lee\n\n"
+            "**Park (2022)** C. *J*. https://doi.org/10.1000/park\n")
+        result = validate_review.validate_review(clustered, style="scientific", size="small")
+        self.assertTrue(any("three or more citations" in w for w in result.warnings), result.warnings)
+
     def test_breakdown_metric_reports_components(self):
         result = self.validate(self.review_with_figure())
         breakdown = result.metrics["word_breakdown"]

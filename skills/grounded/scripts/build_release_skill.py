@@ -60,6 +60,8 @@ SCRIPT_FILES = (
     "build_figure_prompt.py",
     "build_release_skill.py",
     "claim_evidence.py",
+    "claim_receipts.py",
+    "synthesis_quotes.py",
     "compose_hybrid_figure.py",
     "download_figure_references.py",
     "export_deck.py",

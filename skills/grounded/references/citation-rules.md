@@ -38,7 +38,7 @@ Fabricated, misattributed, or retracted citations are the failure mode that dest
 
 - **Guidance vs evidence.** When citing a guideline, the sentence must make clear it is a recommendation ("NICE advises…", "the 2024 AAP statement recommends…"). Never let a guideline stand in for the trial evidence behind it; if the evidence matters, cite the trials.
 - **Cite the study that did the work.** If a review reports a finding from a trial and the finding matters, cite the trial (find it) — and optionally the review too.
-- **Cite what the source actually says.** Check the abstract or full text for the specific claim; do not cite a paper for a point it mentions only in its introduction.
+- **Cite what the source actually says — one source, one statement.** A key enters the review only through a synthesis claim that quotes it, and sits on the clause that quoted passage states. Do not cite a paper for a point it mentions only in its introduction, and do not stack citations on a sentence to manufacture a consensus none of them states: attribute per clause, or cite a review that itself makes the generalisation.
 - **Secondary citation** ("as reported in [2]") is acceptable only when the primary source is inaccessible; say so.
 - **Date-sensitive claims**: when citing a review for the state of the field, note its search date if a later major study changes the picture.
 - **Multiple citations**: list the strongest first (the large trial, the most recent meta-analysis). At most four citations on one sentence — a longer chain is a list wearing a sentence's clothing. If more sources genuinely need to appear, attribute specific findings to specific sources across several sentences, or line them up in a table with a citation per row.
@@ -68,4 +68,4 @@ The canonical GROUNDED journal PDF is not produced with `--style nature`; its re
 
 ## What to tell the reader
 
-Reviews carry no methods section, so the sources block with its DOIs is the audit trail — every line is resolvable. Say nothing when verification passed. Bibliographic failures, unavailable Crossref checks, and integrity flags are fixed or removed, not published with warning symbols; the only annotation a reference entry may carry is the factual "Correction:" note for a recorded corrigendum or erratum.
+Reviews carry no methods section, so the sources block with its DOIs and the receipts after it are the audit trail — every line is resolvable, and every cited sentence has its verdict and verbatim quote. Say nothing else about verification when it passed. Bibliographic failures, unavailable Crossref checks, and integrity flags are fixed or removed, not published with warning symbols; the only annotation a reference entry may carry is the factual "Correction:" note for a recorded corrigendum or erratum.

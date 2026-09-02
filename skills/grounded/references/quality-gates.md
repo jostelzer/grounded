@@ -135,6 +135,71 @@ temporary samples from the README, or treat evaluation topics as permanent
 templates. A single-example prompt edit or case-local exception is never an
 acceptable implementation.
 
+## Quote-anchored synthesis
+
+Before drafting, the synthesis must quote every source it cites
+(`synthesis-guide.md`, "Quotes before prose"):
+
+```bash
+python3 scripts/verify_claims.py seed --ledger sources.json --evidence evidence/ --fulltext-dir fulltexts --fulltext-manifest fulltext-manifest.json
+python3 scripts/verify_claims.py synthesis-check --synthesis synthesis.md --ledger sources.json --evidence evidence/ --report synthesis-check.json
+```
+
+`seed` fills the evidence store from the authenticated full texts and the
+ledger abstracts and names every verified DOI with no stored text.
+`synthesis-check` fails on a cited key without a `- quote: [@key] "…"` line,
+a quote that is not verbatim in the stored text, or a number in a claim
+sentence that sits in none of its quotes; it warns on `numbers:` values no
+quote contains. Drafting starts only when it passes.
+
+## Claim audit and receipts
+
+Every delivered review is audited sentence by sentence after its figures are
+placed, by a judge that did not write it. The rubric is
+`claim-verification.md`; the machinery is `verify_claims.py`,
+`synthesis_quotes.py`, and `claim_receipts.py`:
+
+```bash
+python3 scripts/verify_claims.py extract  --review review.md --ledger sources.json --synthesis synthesis.md --audit claims_audit.json
+python3 scripts/verify_claims.py fetch    --audit claims_audit.json --evidence evidence/ --ledger sources.json --fulltext-dir fulltexts --fulltext-manifest fulltext-manifest.json
+python3 scripts/verify_claims.py packets  --audit claims_audit.json --evidence evidence/ --blind
+python3 scripts/verify_claims.py adjudicate --audit claims_audit.json --packet C001#1 --verdict supported --quote "<verbatim passage>"
+python3 scripts/verify_claims.py check    --audit claims_audit.json --evidence evidence/ --summary claims_summary.json --strict
+python3 scripts/verify_claims.py receipts --audit claims_audit.json --review review.md
+```
+
+`extract --synthesis` refuses a cited source the synthesis never quoted and
+carries the synthesis quotes into each packet; `packets --blind` strips source
+identity and place so the judge sees only sentence and passages.
+
+`fetch` seeds the store from the review's own authenticated full texts and
+ledger abstracts before any network call. Verdicts are recorded one pair at a
+time with `adjudicate`; `check` downgrades any verdict whose quote does not
+occur verbatim in the stored evidence, fails on a contradicted pair, and fails
+an audit that shows signs of scripted judgment — a note repeated on three or
+more pairs, or a `partial` without a note naming the uncovered element;
+`--strict` also fails on a pending pair. A quote that shares no content word
+or number with its claim is downgraded to `unverifiable` unless the pair
+carries a `bridge` that names a term from each side (`adjudicate --bridge`). Only `supported` and
+`partial` pairs ship: `receipts`, `export_review.py --claims-audit`, and
+`qa_review_pdf.py` refuse an audit with any pending, contradicted, not_found,
+or unverifiable pair — the citation is dropped, relocated, or the sentence
+rewritten, then re-audited. `receipts` refuses an unfinished audit, writes `<review>-receipts.md`
+(every cited sentence with its sources, tiers, verdicts, quotes, and
+bridges), annotates every Sources entry (`· N claims · full text|abstract`),
+and stamps a two-line `**Receipts**` block after Sources with the tally and
+the file name. `validate_review.py` checks the stamp (a clean tally, no
+per-pair lines in the review), reports `metrics.claim_receipts`, excludes it
+from every prose budget, and warns when one sentence carries three or more
+citations. The exporter takes `--claims-audit claims_audit.json` and
+`--claim-receipts <review>-receipts.md`, hashes both into the release manifest
+with `expected.claim_pairs` and `expected.claim_summary`, prints the colophon
+audit line, and refuses a review that carries a Receipts stamp without its
+audit, an audit that does not cover every cited DOI, or an audit with any
+pair that is not supported or partial. PDF QA re-verifies both hashes and the
+pair count, rebuilds the HTML with the audit, and requires the colophon audit
+line as visible text. The per-pair receipts never enter the PDF.
+
 ## Immutable PDF lineage
 
 Create only one canonical PDF in the release directory. The exporter manifest
@@ -144,7 +209,7 @@ four figure-lineage arguments once per rendered figure; omit them for a
 text-only review.
 
 ```bash
-python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --release-manifest release-manifest.json --release vX.Y.Z --compiled-date YYYY-MM-DD --figure-spec figure.json --figure-prompt figure.prompt.txt --figure-inspection figure.inspection.json --figure-provenance figure.provenance.json
+python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --claims-audit claims_audit.json --release-manifest release-manifest.json --release vX.Y.Z --compiled-date YYYY-MM-DD --figure-spec figure.json --figure-prompt figure.prompt.txt --figure-inspection figure.inspection.json --figure-provenance figure.provenance.json
 python3 scripts/qa_review_pdf.py review.pdf --manifest release-manifest.json --render-dir review-pdf-qa --report pdf-qa.json
 ```
 

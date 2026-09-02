@@ -19,6 +19,7 @@ from urllib.parse import unquote
 
 from artifact_io import atomic_write_json
 from citation_apparatus import correction_note_dois, ledger_correction_dois
+import claim_receipts
 
 WORD_BUDGETS = {
     "scientific": {"small": (600, 1000), "medium": (1500, 2500), "large": (3500, 6000)},
@@ -125,6 +126,18 @@ def _chat_citation_placement_errors(body: str) -> list[str]:
                 f"{line_number}; put the citation before that punctuation"
             )
     return errors
+
+
+def _citation_cluster_sizes(body: str) -> list[tuple[int, int]]:
+    """(line number, citations) for every citation cluster in the body prose."""
+    sizes = []
+    for match in DOI_MARKDOWN_GROUP_RE.finditer(body):
+        line_start = body.rfind("\n", 0, match.start()) + 1
+        if body[line_start:match.start()].lstrip().startswith("|"):
+            continue
+        count = len(re.findall(r"\]\(https?://(?:dx\.)?doi\.org/", match.group(0)))
+        sizes.append((body.count("\n", 0, match.start()) + 1, count))
+    return sizes
 
 
 def _sentence_count(text: str) -> int:
@@ -450,6 +463,11 @@ def validate_review(
     warnings: list[str] = []
     if MOJIBAKE.search(markdown):
         errors.append("review contains mojibake or a Unicode replacement character")
+    # The claim receipts after Sources are audit apparatus, not review prose:
+    # check their shape, then validate the review without them.
+    claim_receipts_count = claim_receipts.count_receipt_lines(markdown)
+    errors.extend(claim_receipts.receipt_errors(markdown))
+    markdown = claim_receipts.strip_receipts(markdown)
     sources_markers = list(re.finditer(r"^\*\*Sources\*\*\s*$", markdown, re.M))
     if len(sources_markers) != 1:
         errors.append("Sources must appear exactly once")
@@ -470,6 +488,15 @@ def validate_review(
     if re.search(r"\[@[^]]+\]", markdown):
         errors.append("unresolved citation key remains in the finished review")
     errors.extend(_chat_citation_placement_errors(body))
+    clustered = [
+        line_no for line_no, count in _citation_cluster_sizes(body) if count >= 3
+    ]
+    if clustered:
+        warnings.append(
+            f"{len(clustered)} sentence(s) carry three or more citations (lines "
+            + ", ".join(str(n) for n in clustered[:5])
+            + "): cite each source for the clause it states, or attribute the "
+            "generalisation to a review that makes it")
 
     first_content = next(
         (line.strip() for line in markdown.splitlines() if line.strip()), ""
@@ -709,6 +736,7 @@ def validate_review(
         "source_dois": len(source_dois),
         "correction_dois": len(correction_dois),
         "figures": figure_count,
+        "claim_receipts": claim_receipts_count,
         "journal_figure_target": (
             TIER_REQUIREMENTS[size]["figure_target"] if image_mode else None
         ),

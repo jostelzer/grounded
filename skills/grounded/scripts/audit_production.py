@@ -224,6 +224,11 @@ def audit_synthesis(
     )
     cited_keys: set[str] = set()
     dependencies: dict[str, list[str]] = {}
+    try:
+        import synthesis_quotes
+        errors.extend(synthesis_quotes.hollow_problems(synthesis_quotes.parse_claims(text)))
+    except ImportError:
+        warnings.append("synthesis_quotes unavailable; hollow-synthesis checks skipped")
     for index, match in enumerate(matches):
         end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
         block = text[match.end():end]
@@ -640,6 +645,24 @@ def _audit_release(
             "rendered_pages": 0,
         }
     release_manifest = context["manifest"]
+    claims_audit_name = block.get("claims_audit")
+    if claims_audit_name:
+        recorded = (release_manifest.get("inputs") or {}).get("claims_audit")
+        if not isinstance(recorded, dict):
+            errors.append(
+                "release.claims_audit is declared but the release manifest "
+                "records no claim audit; export with --claims-audit")
+        else:
+            try:
+                declared = _path(base_dir, claims_audit_name, "release.claims_audit")
+                recorded_path = (release_manifest_path.parent
+                                 / str(recorded.get("path"))).resolve()
+                if declared.resolve() != recorded_path:
+                    errors.append(
+                        "release.claims_audit is not the audit the release "
+                        "manifest records")
+            except ValueError as exc:
+                errors.append(str(exc))
     rendered_pages = _audit_recorded_render_set(
         release_manifest_path, release_manifest, errors)
     render = release_manifest.get("render")
@@ -660,6 +683,7 @@ def _audit_release(
         **validation["metrics"],
         "full_document_builds": builds,
         "rendered_pages": rendered_pages,
+        "claim_summary": context.get("claim_summary"),
     }
 
 

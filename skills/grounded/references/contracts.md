@@ -88,6 +88,44 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
   requires diagnosed exceptions only after normal local/full-document budgets
   are exceeded. An exception records extra work and never waives a failed gate.
 
+- Quotes before prose (v0.4.2): `synthesis.md` carries a `- quote: [@key] "…"`
+  line for every key a claim cites; `verify_claims.py seed` and
+  `synthesis-check` (module `synthesis_quotes.py`) gate drafting;
+  `extract --synthesis` refuses a cited source the synthesis never quoted and
+  carries synthesis quotes into packets; `packets --blind` and
+  `adjudicate --packet` support an independent judge; `validate_review.py`
+  warns at three citations on one sentence. All additive: an un-quoted
+  synthesis still parses for every earlier gate.
+- Claim receipts (v0.4.2) make the claim audit part of every delivered review.
+  `verify_claims.py check --summary` and the `receipts` subcommand are
+  additive; `claim_receipts.py` is the shared renderer. `receipts` writes
+  `<review>-receipts.md` (never PDF pages) and stamps the review: Sources
+  annotations plus a two-line `**Receipts**` block with the tally.
+  `validate_review.py` ignores that stamp as prose, checks it carries a clean
+  tally and no per-pair lines, and adds `metrics.claim_receipts`.
+  `export_review.py --claims-audit` adds `inputs.claims_audit`,
+  `expected.claim_pairs`, and `expected.claim_summary` (and
+  `--claim-receipts` adds `inputs.claim_receipts`) to release-manifest
+  schema 1, prints the colophon audit line, and refuses a Receipts stamp
+  without its audit or an audit with any pair that is not `supported` or
+  `partial`. `check` additionally fails templated notes (one note on three or
+  more pairs), note-less `partial` verdicts, and downgrades quotes that share
+  no content word or number with their claim unless a pair-specific `bridge`
+  connects them; `adjudicate` records one pair at a time;
+  `fetch --ledger/--fulltext-dir/--fulltext-manifest/--offline` seeds the
+  store from the review's own reading. `qa_review_pdf.py` requires the
+  visible colophon audit line and verifies the receipts-file hash when the
+  manifest records them.
+  `audit_production.py` accepts an optional `release.claims_audit` and checks
+  it against the release manifest; its synthesis audit also fails a hollow
+  ledger (no contrary evidence on any of eight or more claims, or boundary/
+  numbers/evidence lines repeated across three or more claims). `packets`
+  shows the opening of the stored text when no passage anchors on the
+  sentence, so a judge can abstain honestly instead of blindly.
+  `evals/claim-benchmark-creatine.json` is v2: re-adjudicated under this
+  rubric (10 multi-element pairs moved to partial). Reviews without an audit still export and
+  pass QA unchanged, so existing fixtures and manifests stay reproducible.
+
 ## Fixtures
 
 `tests/fixtures/colic/` is the recorded golden run (small popsci journal PDF,

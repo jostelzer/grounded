@@ -58,7 +58,23 @@ def _get(url, timeout=40):
         return None
 
 
+BINARY_SIGNATURES = ("PK\x03\x04", "%PDF-", "\x1f\x8b")
+
+
+def binary_body(text):
+    """A response that is a zip/docx, PDF, or gzip stream decoded as text.
+
+    Such bodies pass the word-count floor with garbage and were once stored
+    as full text; they are rejected here so the store never holds bytes a
+    judge cannot read."""
+    head = (text or "")[:8]
+    return any(head.startswith(sig) for sig in BINARY_SIGNATURES) or \
+        "[Content_Types].xml" in (text or "")[:4000]
+
+
 def blocked_page(text):
+    if binary_body(text):
+        return "binary_body"
     lower = (text or "").lower()
     if any(re.search(p, lower, re.I) for p in CHALLENGE_PATTERNS):
         return "challenge_page"
@@ -203,12 +219,13 @@ def acquire(doi, store, want_fulltext=False, refresh=False):
     text_path = store / f"{slug}.txt"
     meta_path = store / f"{slug}.meta.json"
 
+    cached = None
     if meta_path.exists() and not refresh:
-        meta = json.loads(meta_path.read_text())
-        upgradable = want_fulltext and meta.get("tier") != "fulltext" \
-            and not meta.get("fulltext_exhausted")
+        cached = json.loads(meta_path.read_text())
+        upgradable = want_fulltext and cached.get("tier") != "fulltext" \
+            and not cached.get("fulltext_exhausted")
         if not upgradable:
-            return meta
+            return cached
 
     notes = []
     work = openalex_work(doi)
@@ -219,6 +236,13 @@ def acquire(doi, store, want_fulltext=False, refresh=False):
             notes.extend(result)
         else:
             info = result
+    if text is None and cached is not None:
+        # The upgrade found no full text: keep what the store already holds
+        # rather than replacing a real abstract with an empty record.
+        cached["fulltext_exhausted"] = True
+        cached.setdefault("notes", []).extend(notes)
+        atomic_write_json(meta_path, cached)
+        return cached
     if text is None:
         text, result = fetch_abstract_tier(doi, work=work)
         if text is None:
@@ -240,6 +264,78 @@ def acquire(doi, store, want_fulltext=False, refresh=False):
         atomic_write_text(text_path, text)
     atomic_write_json(meta_path, meta)
     return meta
+
+
+def store_text(doi, store, text, info):
+    """Write one evidence record (text + meta) into the store."""
+    store = Path(store)
+    store.mkdir(parents=True, exist_ok=True)
+    slug = doi_slug(doi)
+    meta = {
+        "doi": norm_doi(doi), "slug": slug,
+        "retrieved": time.strftime("%Y-%m-%d"),
+        "words": len(text.split()), "notes": [],
+        "sha256": sha256_bytes(text.encode("utf-8")),
+        **info,
+    }
+    atomic_write_text(store / f"{slug}.txt", text)
+    atomic_write_json(store / f"{slug}.meta.json", meta)
+    return meta
+
+
+def seed_local_evidence(dois, store, ledger_path=None, fulltext_dir=None,
+                        manifest_path=None):
+    """Seed the store from what the review already read, before any network.
+
+    Full texts retained in ``fulltexts/`` (authenticated by
+    ``fulltext-manifest.json`` when given) enter at the fulltext tier; the
+    ledger's stored abstracts enter at the abstract tier. Returns
+    {doi: tier} for every DOI seeded or upgraded.
+    """
+    store = Path(store)
+    by_doi = {}
+    if ledger_path:
+        ledger = json.loads(Path(ledger_path).read_text())
+        for entry in ledger.get("entries", []):
+            if entry.get("doi"):
+                by_doi[norm_doi(entry["doi"])] = entry
+    valid_paths = {}
+    if manifest_path:
+        manifest = json.loads(Path(manifest_path).read_text())
+        for record in manifest.get("records", []):
+            if record.get("status") == "valid_fulltext" and record.get("doi"):
+                valid_paths[norm_doi(record["doi"])] = record.get("path")
+    seeded = {}
+    for doi in dois:
+        doi = norm_doi(doi)
+        _text, existing = load_evidence(doi, store)
+        current = (existing or {}).get("tier", "none")
+        entry = by_doi.get(doi)
+        if fulltext_dir and current != "fulltext":
+            candidates = []
+            if doi in valid_paths and valid_paths[doi]:
+                candidates.append(Path(fulltext_dir) / valid_paths[doi])
+            if entry and entry.get("key") and not manifest_path:
+                candidates.append(Path(fulltext_dir) / f"{entry['key']}.txt")
+            for path in candidates:
+                if path.is_file():
+                    text = path.read_text(encoding="utf-8", errors="replace")
+                    if len(text.split()) >= MIN_FULLTEXT_WORDS:
+                        store_text(doi, store, text, {
+                            "tier": "fulltext", "source": "local-fulltext",
+                            "version": "as-read", "url": str(path)})
+                        seeded[doi] = "fulltext"
+                        break
+            if doi in seeded:
+                continue
+        if current == "none" and entry:
+            abstract = re.sub(r"\s+", " ", str(entry.get("abstract") or "")).strip()
+            if len(abstract.split()) >= 30:
+                store_text(doi, store, abstract, {
+                    "tier": "abstract", "source": "ledger",
+                    "url": "https://doi.org/" + doi})
+                seeded[doi] = "abstract"
+    return seeded
 
 
 def load_evidence(doi, store):

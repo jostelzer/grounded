@@ -87,6 +87,54 @@ Build each reference entry from the Crossref response you just fetched — autho
 
 If a Crossref record genuinely lacks volume or pages (common for online-first and article-number journals), give what exists plus the DOI and leave the rest out. Do not invent a volume to make an entry look complete.
 
+### B4a. Quotes before prose by hand
+
+Write `synthesis.md` exactly as `synthesis-guide.md` specifies, including a
+`- quote: [@key] "…"` line for every key each claim cites, copied character
+for character from the abstract or full text you fetched in B2. Check by
+hand that every number in a claim sentence appears in one of its quotes. No
+drafting until every cited key has its quote; a key that cannot be quoted
+leaves the claim.
+
+### B4b. Claim audit and receipts by hand
+
+The audit standard does not change without scripts — only the mechanism. For
+every cited sentence and each source it cites: read the stored evidence text
+(the Europe PMC full text from B2 where it exists, otherwise the abstract
+returned by the API record), decide `supported`, `partial`, `not_found`,
+`contradicted`, or `unverifiable` per `claim-verification.md`, and copy the
+supporting passage **character for character** from that text — never
+paraphrased, never stitched from two places, and never chosen by a script or
+similarity score: each verdict is a reading, with a pair-specific note on
+every `partial`. A numeric claim is `supported`
+only when one of its numbers is inside the quote. A `contradicted` sentence is
+corrected before delivery. Then attach the receipts exactly as
+`verify_claims.py receipts` would: append `· N claims · full text` or
+`· N claims · abstract` to each Sources entry, and after Sources add a
+`**Receipts**` block — an italic summary line (`N cited sentences · N source
+checks · N supported at full text · N at abstract · N partial · 0
+contradicted — every pair's verbatim quote is in <review>-receipts.md.`), and
+in the receipts file one entry per sentence in the form
+
+```
+## C001 · ¶3 s2
+
+> the cited sentence
+
+- **Author et al. 2024** · full text · supported — “verbatim quote”
+```
+
+Without a fresh agent to judge, separate the roles in time: finish all
+writing, then adjudicate every pair from the sentence and the passages alone,
+never with the draft open. Write the receipts as `<review>-receipts.md` (one
+section per cited sentence: source, tier, verdict, quote) rather than into the
+review; the review's Sources entries get `· N claims · full text|abstract` and
+a two-line `**Receipts**` block with the tally and the file name. `full text`
+means the quote was matched against the version-of-record text; anything
+matched against an abstract is `abstract`. Only supported and partial pairs
+ship — repair the review otherwise. Report the tier split in the reply and say
+that the quote match was manual, never that the scripted checker ran.
+
 ### B5. Figures when local scripts are unavailable
 
 The evidence boundary and `figure-generation-contract.md` still apply. State

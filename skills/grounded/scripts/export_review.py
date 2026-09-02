@@ -31,6 +31,7 @@ import urllib.parse
 from pathlib import Path
 
 from artifact_io import atomic_write_json, sha256_bytes, sha256_file
+import claim_receipts
 from citation_apparatus import correction_note_dois, ledger_correction_dois
 from grounded_metadata import (
     FIGURE_MAX_HEIGHT_MM, PAGE_CONTENT_WIDTH_MM, REPOSITORY_URL,
@@ -351,8 +352,10 @@ def _to_html_document(md, base_dir=".", columns=2,
 
     ``explicit_column_runs`` forces the sibling-run flow for editions whose
     body type leaves too little slack around a spanning display; see
-    ``arrange_page_flow``.
+    ``arrange_page_flow``. A chat Receipts stamp after Sources is stripped:
+    the receipts live in their own file, the PDF prints only the tally.
     """
+    md = claim_receipts.strip_receipts(md)
     _validate_journal_citation_placement(md)
     citations = JournalCitationIndex()
     lines = md.split("\n")
@@ -1396,7 +1399,8 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
                           colophon=None, base_dir=".", release=None, repo=None,
                           compiled_date=None, style="scientific",
                           figure_max_height_mm=FIGURE_MAX_HEIGHT_MM,
-                          ref_leading=None, edition=None, pull_quote=None):
+                          ref_leading=None, edition=None, pull_quote=None,
+                          claims_audit=None):
     """Render the PDF, then walk the bounded rebalance ladder.
 
     A terminal page carrying only the reference tail and/or the book-style
@@ -1417,6 +1421,7 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
             compiled_date=compiled_date, style=style,
             figure_max_height_mm=figure_max_height_mm, ref_leading=leading,
             edition=resolved_edition, pull_quote=pull_quote,
+            claims_audit=claims_audit,
         )
 
     from weasyprint_export import write_pdf
@@ -1495,9 +1500,11 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                imprint="end",
                release=None, repo=None, compiled_date=None, style="scientific",
                figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
-               edition=None, pull_quote=None):
+               edition=None, pull_quote=None, claims_audit=None):
     import urllib.parse
 
+    # Chat receipts are never review prose: the PDF renders the audit itself.
+    md = claim_receipts.strip_receipts(md)
     style = _normalized_style(style)
     edition = resolve_edition(style, edition)
     if pull_quote is not None and edition != "salon":
@@ -1537,12 +1544,16 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         json.dumps(f"GROUNDED {release.upper()}"),
     )
 
+    audit_summary = (
+        claim_receipts.summarize_audit(claims_audit)
+        if claims_audit is not None else None)
     cells = [
         ("References", f"<i>{n_refs}</i> verified" if n_refs else "—"),
         ("Style", STYLE_LABELS[style]),
         ("Made with", f'<a href="{html.escape(repo_url, quote=True)}">'
                       f"Grounded {html.escape(release)}</a>"),
-        ("Verification", "Crossref"),
+        ("Verification",
+         "Crossref · claims" if audit_summary else "Crossref"),
         ("Compiled", _display_date(today, abbreviated=True)),
     ]
     metagrid = '<div class="metagrid">' + "".join(
@@ -1568,6 +1579,11 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         sources = f"{n_refs} sources · " if n_refs else ""
         colophon = (f"{sources}every DOI resolved · "
                     "retraction-screened via Crossref")
+    # The audit line is what "verified" means, sentence by sentence.
+    audit_line = ""
+    if audit_summary:
+        audit_line = ("<br>" + html.escape(
+            claim_receipts.summary_sentence(audit_summary)))
     plain_title = re.sub(r"<[^>]+>", "", title)
     page = PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=css,
@@ -1581,7 +1597,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         imprint=(
             "" if imprint == "refhead" else
             '<div class="endcolophon"><div class="rule"></div>'
-            f"{html.escape(colophon)}<br>Grounded {html.escape(release)}"
+            f"{html.escape(colophon)}{audit_line}<br>Grounded {html.escape(release)}"
             f" · compiled {html.escape(_display_date(today))}</div>"
         ))
     if pull_quote is not None:
@@ -1651,12 +1667,54 @@ def _manifest_path_record(path, manifest_directory):
     }
 
 
+def load_claims_audit(path):
+    """Load a claim audit and refuse one that cannot ship.
+
+    A contradicted pair means the review says something its source denies; a
+    pending pair means the audit was never finished. Neither is a receipt.
+    """
+    try:
+        audit = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"claim audit cannot be read: {exc}") from exc
+    if not isinstance(audit, dict) or not isinstance(audit.get("claims"), list):
+        raise ValueError("claim audit must be a JSON object with a claims list")
+    summary = claim_receipts.summarize_audit(audit)
+    blockers = claim_receipts.release_blockers(summary)
+    if blockers:
+        raise ValueError("claim audit is not releasable: " + "; ".join(blockers))
+    if summary["pairs"] == 0:
+        raise ValueError("claim audit contains no claim-source pairs")
+    return audit
+
+
 def validate_release_inputs(
         review_path, ledger_path, figure_specs=(), figure_prompts=(),
-        figure_inspections=(), figure_provenances=()):
+        figure_inspections=(), figure_provenances=(), claims_audit=None,
+        claim_receipts_path=None):
     """Fail before rendering when release lineage inputs are incomplete."""
     review_path = Path(review_path).resolve()
     markdown = review_path.read_text(encoding="utf-8")
+    if claim_receipts_path is not None and not Path(claim_receipts_path).is_file():
+        raise ValueError(f"claim receipts file does not exist: {claim_receipts_path}")
+    if claim_receipts_path is not None and claims_audit is None:
+        raise ValueError("--claim-receipts needs the --claims-audit it was rendered from")
+    if claims_audit is not None:
+        audit = load_claims_audit(claims_audit)
+        audited = {claim_receipts.norm_doi(adj.get("doi"))
+                   for claim in audit["claims"]
+                   for adj in claim.get("adjudications", [])}
+        cited = {claim_receipts.norm_doi(doi) for doi in re.findall(
+            r"https?://doi\.org/([^\s<>)]+)",
+            claim_receipts.strip_receipts(markdown).split("**Sources**")[0])}
+        unaudited = sorted(cited - audited)
+        if unaudited:
+            raise ValueError(
+                "claim audit does not cover every cited source: "
+                + ", ".join(unaudited[:3]))
+    elif claim_receipts.receipts_block(markdown):
+        raise ValueError(
+            "review carries a Receipts block but no --claims-audit was given")
     figure_sources = [
         source for _alt, source in re.findall(
             r"^!\[([^]]*)\]\(([^)\s]+)\)\s*$", markdown, re.M
@@ -1804,7 +1862,8 @@ def write_release_manifest(
         figure_specs=(), figure_prompts=(), figure_inspections=(),
         figure_provenances=(), style="scientific",
         figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
-        imprint="end", edition="journal", pull_quote=None):
+        imprint="end", edition="journal", pull_quote=None, claims_audit=None,
+        claim_receipts_path=None):
     """Bind every release input to the exact HTML and canonical PDF."""
     manifest_path = Path(manifest_path).resolve()
     manifest_directory = manifest_path.parent
@@ -1812,7 +1871,7 @@ def write_release_manifest(
     pdf_path = Path(pdf_path).resolve()
     markdown, figures, expected_dois, ledger_by_doi = validate_release_inputs(
         review_path, ledger_path, figure_specs, figure_prompts,
-        figure_inspections, figure_provenances
+        figure_inspections, figure_provenances, claims_audit, claim_receipts_path
     )
     inputs = {
         "review": _manifest_path_record(review_path, manifest_directory),
@@ -1836,6 +1895,15 @@ def write_release_manifest(
             for path in figure_provenances
         ],
     }
+    claim_summary = None
+    if claims_audit is not None:
+        inputs["claims_audit"] = _manifest_path_record(
+            claims_audit, manifest_directory)
+        claim_summary = claim_receipts.summarize_audit(
+            load_claims_audit(claims_audit))
+    if claim_receipts_path is not None:
+        inputs["claim_receipts"] = _manifest_path_record(
+            claim_receipts_path, manifest_directory)
     html_bytes = html_document.encode("utf-8")
     manifest = {
         "schema_version": 1,
@@ -1875,6 +1943,8 @@ def write_release_manifest(
                 str(ledger_by_doi[doi].get("key") or doi)
                 for doi in expected_dois if doi in ledger_by_doi
             ],
+            "claim_pairs": claim_summary["pairs"] if claim_summary else 0,
+            "claim_summary": claim_summary,
         },
     }
     atomic_write_json(manifest_path, manifest)
@@ -1916,6 +1986,14 @@ def main():
                     help="visual inspection JSON (repeat once per figure)")
     ap.add_argument("--figure-provenance", action="append", default=[],
                     help="generation provenance JSON (repeat once per figure)")
+    ap.add_argument("--claims-audit",
+                    help="checked claims_audit.json from verify_claims.py; "
+                         "renders the terminal Claim receipts section and the "
+                         "colophon audit line, and is hashed into the release "
+                         "manifest (a contradicted or pending pair is a hard error)")
+    ap.add_argument("--claim-receipts",
+                    help="the receipts markdown written by verify_claims.py receipts; "
+                         "delivered beside the PDF and hashed into the release manifest")
     ap.add_argument(
         "--ref-leading", type=float, default=None, metavar="LH",
         help="reference-list line-height, bounded "
@@ -1958,6 +2036,14 @@ def main():
     with open(args.src, encoding="utf-8") as stream:
         md = stream.read()
     base_dir = os.path.dirname(os.path.abspath(args.src))
+    claims_audit = None
+    if args.claims_audit:
+        try:
+            claims_audit = load_claims_audit(args.claims_audit)
+        except ValueError as exc:
+            ap.error(str(exc))
+    elif claim_receipts.receipts_block(md):
+        ap.error("review carries a Receipts block; pass the matching --claims-audit")
 
     want_pdf = args.pdf or args.out.lower().endswith(".pdf")
     if want_pdf:
@@ -1969,7 +2055,8 @@ def main():
             try:
                 validate_release_inputs(
                     args.src, args.ledger, args.figure_spec, args.figure_prompt,
-                    args.figure_inspection, args.figure_provenance
+                    args.figure_inspection, args.figure_provenance,
+                    args.claims_audit, args.claim_receipts,
                 )
             except (OSError, ValueError, json.JSONDecodeError) as exc:
                 ap.error(str(exc))
@@ -1989,7 +2076,7 @@ def main():
                 compiled_date=compiled_date,
                 style=args.style, figure_max_height_mm=args.figure_max_height,
                 ref_leading=args.ref_leading, edition=args.edition,
-                pull_quote=args.pull_quote,
+                pull_quote=args.pull_quote, claims_audit=claims_audit,
             )
         except ValueError as exc:
             ap.error(str(exc))
@@ -2033,6 +2120,8 @@ def main():
                 imprint=effective_imprint,
                 edition=resolve_edition(args.style, args.edition),
                 pull_quote=args.pull_quote,
+                claims_audit=args.claims_audit,
+                claim_receipts_path=args.claim_receipts,
             )
             suffix += f" and {args.release_manifest}"
         print(
@@ -2048,6 +2137,7 @@ def main():
                 compiled_date=args.compiled_date, style=args.style,
                 figure_max_height_mm=args.figure_max_height,
                 edition=args.edition, pull_quote=args.pull_quote,
+                claims_audit=claims_audit,
             )
         except ValueError as exc:
             ap.error(str(exc))

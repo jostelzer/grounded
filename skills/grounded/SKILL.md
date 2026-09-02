@@ -1,11 +1,11 @@
 ---
 name: grounded
-description: Write a scientific review of a topic or research question at small, medium (the default), or large size, in scientific style (flowing narrative prose), popsci style (the default; popular-science magazine storytelling), bullets, or ELI5 (very simple flowing prose), delivered as inline chat, a journal-styled PDF (the default, always with generated figures), or — only when the user explicitly asks for it — an experimental verified 16:9 slide deck, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, or explicitly asks for a deck, slides, presentation, slide deck, or journal club deck. Also use it to check a draft's claims or references against the literature.
+description: Write a scientific review of a topic or research question at small, medium (the default), or large size, in scientific style (flowing narrative prose), popsci style (the default; popular-science magazine storytelling), bullets, or ELI5 (very simple flowing prose), delivered as inline chat, a journal-styled PDF (the default, always with generated figures), or — only when the user explicitly asks for it — an experimental verified 16:9 slide deck, built only on peer-reviewed literature found by real searches, with every citation and its retraction status verified through Crossref and every cited sentence audited against its source's own text, delivered with verbatim quote receipts. Use this whenever the user wants a literature review, narrative review, state of the evidence, research summary, background or related-work section, an overview of a scientific field, or explicitly asks for a deck, slides, presentation, slide deck, or journal club deck. Also use it to check a draft's claims or references against the literature.
 ---
 
 # Grounded — scientific reviews with no floating claims
 
-The user gives a topic or question and may name a size, style, or output format; you produce a clean, thorough review that looks at the question from every relevant angle and tells a story that rests entirely on peer-reviewed science, cited correctly. The central discipline is that **no citation is ever recalled from memory**: every source comes from a live index search, every DOI is verified before it is cited, and the reference list is generated from the verified records. A review with one fabricated reference is worth less than no review.
+The user gives a topic or question and may name a size, style, or output format; you produce a clean, thorough review that looks at the question from every relevant angle and tells a story that rests entirely on peer-reviewed science, cited correctly. The central discipline is that **no citation is ever recalled from memory**: every source comes from a live index search, every DOI is verified before it is cited, and the reference list is generated from the verified records. Then every cited sentence is audited against its source's own text and the review ships with **receipts** — one verbatim, machine-matched quote per claim–source pair — so a reader can see not only that a paper exists but that it says what the review says it says. A review with one fabricated reference is worth less than no review.
 
 ## First: confirm size, style, and output format
 
@@ -25,25 +25,27 @@ There are exactly three output formats. **Journal PDF** is the default; **inline
 
 This is not a formatting preference — a markdown file is *worse* for the reader: chat clients cannot preview it, and on the user's machine it opens in a code editor with the formatting stripped, which looks broken. The review is meant to be read in the conversation, where the headings, tables and bold actually render.
 
-Working files are different. `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `synthesis.md`, and the draft are audit inputs: keep them if you have a filesystem, never present them as the main output, and mention them only if the user might want to audit. If there is no filesystem, hold the ledger in context and carry on.
+The chat review ends with its **Sources** — each entry stamped with how many claims it supports and at which evidence tier — and a two-line **Receipts** block carrying the audit tally and the name of the receipts file (`<review>-receipts.md`, written by `verify_claims.py receipts` in step 8: every cited sentence with its source, tier, verdict, and verbatim quote). The receipts file is the one file an inline-chat review always produces; attach it or name its path, and never paste it into the chat.
+
+Working files are different. `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `synthesis.md`, `claims_audit.json`, and the draft are audit inputs: keep them if you have a filesystem, never present them as the main output, and mention them only if the user might want to audit. If there is no filesystem, hold the ledger in context and carry on.
 
 Produce a file **only** when the user asks for one ("save it", "give me a .md", "export to Word"). Then write the file *and* still put the review in the chat.
 
 ### Journal PDF (default)
 
-When the user asks for a **PDF**, a **printable** or **shareable** version, or "make it look like a journal article" — or picks the journal PDF in the format question — use the canonical browser-free PDF path below — and note that **the journal PDF always includes generated figures**. There is no separate image mode: choosing the PDF format is what triggers figure creation. Visual targets/ceilings scale with size (small 2/2, medium 3/5, large 5/8). These are distinct evidence jobs, not quotas: one synthesis visual plus whatever mechanism, study-design, quantitative, comparison, or uncertainty views the verified synthesis genuinely earns. Every figure is built from the verified findings per `references/media-modes.md` and the figure references it names, then embedded in both the review and the PDF. `scripts/export_review.py` turns the finished markdown into the single canonical GROUNDED HTML/CSS design, then renders that exact design with pinned WeasyPrint: Swiss-modern masthead strip with the packaged Grounded logo, a linked "Agentically generated scientific review" descriptor, and the Grounded version on every page; a metadata grid including the selected writing style; numbered sections; two-column Charter body; Helvetica Neue furniture; full-width tables and figures; cited captions; DOI-linked superscript citation numbers; numbered references in first-citation order; clickable figure references; quiet page feet (hairline and folio only); and a book-style verification colophon closing the document after the references — the review's source count, DOI-resolution and retraction-screening statement, version, and compile date. Journal citations attach to the preceding supported claim or quotation; a citation that grammatically opens a sentence is a hard export error. Do not invoke Chrome, another browser, ReportLab, or an ad-hoc external template as a fallback.
+When the user asks for a **PDF**, a **printable** or **shareable** version, or "make it look like a journal article" — or picks the journal PDF in the format question — use the canonical browser-free PDF path below — and note that **the journal PDF always includes generated figures**. There is no separate image mode: choosing the PDF format is what triggers figure creation. Visual targets/ceilings scale with size (small 2/2, medium 3/5, large 5/8). These are distinct evidence jobs, not quotas: one synthesis visual plus whatever mechanism, study-design, quantitative, comparison, or uncertainty views the verified synthesis genuinely earns. Every figure is built from the verified findings per `references/media-modes.md` and the figure references it names, then embedded in both the review and the PDF. `scripts/export_review.py` turns the finished markdown into the single canonical GROUNDED HTML/CSS design, then renders that exact design with pinned WeasyPrint: Swiss-modern masthead strip with the packaged Grounded logo, a linked "Agentically generated scientific review" descriptor, and the Grounded version on every page; a metadata grid including the selected writing style; numbered sections; two-column Charter body; Helvetica Neue furniture; full-width tables and figures; cited captions; DOI-linked superscript citation numbers; numbered references in first-citation order; clickable figure references; quiet page feet (hairline and folio only); and a book-style verification colophon closing the document — the review's source count, DOI-resolution and retraction-screening statement, the claim-audit line (cited sentences, source checks, verdicts by evidence tier), version, and compile date. The per-pair receipts never enter the PDF: they are delivered beside it as `<review>-receipts.md`, hashed into the release manifest. Journal citations attach to the preceding supported claim or quotation; a citation that grammatically opens a sentence is a hard export error. Do not invoke Chrome, another browser, ReportLab, or an ad-hoc external template as a fallback.
 
 ```bash
 python3 scripts/export_review.py --check-pdf-runtime
-python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --release-manifest release-manifest.json --figure-spec figure.json --figure-prompt figure.prompt.txt --figure-inspection figure.inspection.json --figure-provenance figure.provenance.json
+python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --claims-audit claims_audit.json --claim-receipts review-receipts.md --release-manifest release-manifest.json --figure-spec figure.json --figure-prompt figure.prompt.txt --figure-inspection figure.inspection.json --figure-provenance figure.provenance.json
 python3 scripts/qa_review_pdf.py review.pdf --manifest release-manifest.json --render-dir review-pdf-qa --report pdf-qa.json
 ```
 
-The runtime check is a hard gate. If it fails, install the exact packages in `requirements-pdf.txt` and the native Pango runtime required by WeasyPrint, then rerun it; never silently switch renderers. On macOS, use the matching Homebrew WeasyPrint executable so Pango is self-contained. The exporter embeds every figure as a data URI and permits the renderer to load only `data:` resources: remote, missing, and escaping assets are hard failures, while PNG/JPEG/WebP and SVG are supported directly. Output is written atomically: a failed build cannot overwrite an existing good PDF. After rendering, the exporter strictly parses the artifact and refuses to replace the prior PDF unless the producer is pinned WeasyPrint and the embedded fonts include Charter and Helvetica Neue; a fallback-font redesign is a hard failure. HTML sidecars are off by default and require `--html-sidecar` explicitly.
+The runtime check is a hard gate. `--claims-audit` is the checked audit from step 8 and `--claim-receipts` the receipts file it produced: the exporter refuses an audit with any pair that is not supported or partial, refuses a review whose Receipts stamp has no matching audit, and hashes both files into the release manifest. If it fails, install the exact packages in `requirements-pdf.txt` and the native Pango runtime required by WeasyPrint, then rerun it; never silently switch renderers. On macOS, use the matching Homebrew WeasyPrint executable so Pango is self-contained. The exporter embeds every figure as a data URI and permits the renderer to load only `data:` resources: remote, missing, and escaping assets are hard failures, while PNG/JPEG/WebP and SVG are supported directly. Output is written atomically: a failed build cannot overwrite an existing good PDF. After rendering, the exporter strictly parses the artifact and refuses to replace the prior PDF unless the producer is pinned WeasyPrint and the embedded fonts include Charter and Helvetica Neue; a fallback-font redesign is a hard failure. HTML sidecars are off by default and require `--html-sidecar` explicitly.
 
 **Editions.** The PDF's paper identity follows the writing style: scientific renders in the canonical **journal** edition (Charter/Helvetica Neue), bullets renders in the **brief** edition — the condensed two-column brief: tight 8.8pt columns, punchline headings, and a drawn double-chevron marker on every finding — ELI5 renders in the **primer** edition — a friendly explainer page: Seravek humanist sans, orange step badges numbering the staircase, and the TL;DR as a tinted answer card, set — like every other edition — in the two-column measure that lets a phone zoom one column to full screen width — while popsci renders in the **salon** edition — Didot display, Hoefler Text body, Optima furniture, generous margins, an automatic three-line drop cap on the opener, and an asterism closing the article. `--edition journal|salon` overrides the default. Editions restyle the same semantic document; the evidence contract, citation placement, reference order, and every QA gate are identical, and the release manifest records the edition so QA rebuilds and verifies the exact design. For salon PDFs you may set one pull quote with `--pull-quote "<sentence>"`: it must be a verbatim passage of the article body (a non-verbatim quote is a hard export error), it is placed before the paragraph it comes from, and when the pulled sentence carries citations they render as a linked attribution line under the quote — an uncited authorial line gets no attribution rather than a misattributed one.
 
-The QA command is also mandatory before delivery. Its release manifest hashes the exact review, ledger, generated HTML, PDF, and every figure/spec/prompt/inspection/provenance record. QA rehashes them, independently rebuilds the HTML, requires one canonical PDF, a visible terminal References heading, every expected DOI as both visible reference text and a URI annotation, canonical A4 metadata/fonts, and running furniture; it also proves that every raster figure's intrinsic aspect ratio is preserved by its PDF transformation matrix, then rasterizes every page through Poppler and checks masthead, page number, body, clipping, column balance, and sparse terminal reference pages. Use a new or empty case-local `--render-dir` and inspect every generated page and contact sheet visually; the manifest records that one authoritative render set. A heading stranded at the bottom while its first paragraph/table/figure starts on the next page, an avoidably sparse spill page, a stretched figure or font, or a large preventable blank region is release-blocking. Rebalance and rebuild without dropping evidence or shrinking type. The exporter prevents the smallest failure itself: when a final page would carry only the tail of the reference list or the closing colophon, it walks a bounded rebalance ladder — reference leading tightened inside its envelope (type size untouched), then the colophon folded into the References heading at zero height, then both — and keeps the first render with no degenerate spill, noting the adjustment in the release manifest. `--ref-leading` sets that leading manually, `--figure-max-height` (60–120 mm) adjusts the figure cap, and `--columns 1` gives a single-column layout; QA failure messages state how far a sparse page is from its threshold and which lever closes it. For image PDFs, repeat all four `--figure-*` arguments once per figure. Full commands and contracts are in `references/quality-gates.md`. The review still goes in the chat as well.
+The QA command is also mandatory before delivery. Its release manifest hashes the exact review, ledger, generated HTML, PDF, and every figure/spec/prompt/inspection/provenance record. QA rehashes them, independently rebuilds the HTML, requires one canonical PDF, a visible terminal References heading, every expected DOI as both visible reference text and a URI annotation, the visible colophon audit line whenever the manifest records an audit, canonical A4 metadata/fonts, and running furniture; it also proves that every raster figure's intrinsic aspect ratio is preserved by its PDF transformation matrix, then rasterizes every page through Poppler and checks masthead, page number, body, clipping, column balance, and sparse terminal reference pages. Use a new or empty case-local `--render-dir` and inspect every generated page and contact sheet visually; the manifest records that one authoritative render set. A heading stranded at the bottom while its first paragraph/table/figure starts on the next page, an avoidably sparse spill page, a stretched figure or font, or a large preventable blank region is release-blocking. Rebalance and rebuild without dropping evidence or shrinking type. The exporter prevents the smallest failure itself: when a final page would carry only the tail of the reference list or the closing colophon, it walks a bounded rebalance ladder — reference leading tightened inside its envelope (type size untouched), then the colophon folded into the References heading at zero height, then both — and keeps the first render with no degenerate spill, noting the adjustment in the release manifest. `--ref-leading` sets that leading manually, `--figure-max-height` (60–120 mm) adjusts the figure cap, and `--columns 1` gives a single-column layout; QA failure messages state how far a sparse page is from its threshold and which lever closes it. For image PDFs, repeat all four `--figure-*` arguments once per figure. Full commands and contracts are in `references/quality-gates.md`. The review still goes in the chat as well.
 
 ### Slides (experimental — explicit request only)
 
@@ -61,7 +63,8 @@ size-appropriate arc, make every content-slide title a full-sentence cited
 claim, and create artwork with `render_context: slide` that carries the
 evidence itself — every slide must pass the guide's standalone test: claim,
 evidence, and firmness readable from that slide alone, with no presenter and no
-written review to lean on. Version 1 is 16:9 PDF only.
+written review to lean on. Version 1 is 16:9 PDF only, and decks do not yet
+carry claim receipts — say so in one sentence when delivering a deck.
 
 ```bash
 python3 scripts/export_deck.py --check-pdf-runtime
@@ -91,6 +94,7 @@ verification, and citation standard never change in any format.
 
 - **Size: medium. Style: popsci. Format: journal PDF** (`scientific` was formerly named `prose`; treat `prose` as an alias) — but these apply only after the "First: confirm size, style, and output format" question above: the defaults are for when the user answers "you pick" or the session cannot ask, never a reason to skip the question.
 - **Inline chat means chat only** — delivered in the chat, formatted with markdown, as well-presented as possible. No file, no attachment, unless the user chose the journal PDF or slides.
+- **Every delivered review carries receipts.** After the figures are placed, run the claim audit (step 8) on the final `review.md`; deliver `<review>-receipts.md` beside the review (chat or PDF), with the tally stamped after Sources and in the PDF colophon. A review without receipts is unfinished; only the experimental deck is exempt.
 - **Chat/markdown citations: `Author 2026` inline, hyperlinked to the DOI.** Put the link immediately after the supported claim or quotation and before its sentence-ending punctuation: `claim [Author 2026](DOI).`, never `claim. [Author 2026](DOI)` and never a citation-led sentence. The reader must never see square brackets around a citation — they exist only as markdown link syntax. Never write a bare `[Author 2026]`, `[1]`, or `(Author, 2026)` in the chat review. The Sources block at the end carries the DOIs. The journal PDF/HTML renderer is the deliberate exception: it replaces those author–year labels only in the journal artifact with linked superscript numbers and a matching numbered reference list.
 - **Structure is fixed per style** — scientific: question → abstract → introduction → claim-headed sections → conclusion → sources; popsci: headline → standfirst → lede → nut graf → narrative crossheads along one spine with a turn → kicker → sources; bullets: question → TL;DR → punchline sections of bullets → sources; ELI5: question → TL;DR → familiar starting point → step-by-step sections that each add one idea, with the contrary evidence as its own step → a hand-back ending → sources. Shared rules in `references/writing-guide.md`; exact layouts in the per-style files it names (`references/style-scientific.md`, `style-popsci.md`, `style-bullets.md`, `style-eli5.md`).
 - **Technical terms link to explainers.** The first use of an abbreviation or specialist term (SMD, CI, GRADE, HAM-D, mRNA, …) is a link to its verified Wikipedia article, so a non-specialist can click instead of googling. Rules and verification in `references/writing-guide.md`.
@@ -118,7 +122,7 @@ Style never changes search depth, source counts, citations, or verification. Sci
 
 **Output formats** — how the review is delivered, independent of size and style:
 
-- **Inline chat** — when the user explicitly chooses it. The review is the reply itself; nothing extra is generated.
+- **Inline chat** — when the user explicitly chooses it. The review is the reply itself, ending with its Sources and Receipts; nothing extra is generated.
 - **Journal PDF** — the default, and also used when the user asks for a PDF, a printable/shareable version, or a journal-styled artifact, or picks it in the format question. It **always includes generated figures**. Plan toward 2 figures for small, 3–4 for medium, and 5–6 for large, with hard ceilings of 2/5/8; fewer is valid only when the synthesis has fewer distinct visual stories, never because producing the visuals is inconvenient. Run the review pipeline at the chosen size, then create the figures from the verified findings per `references/media-modes.md`. For figure generation, also read `references/figure-generation-contract.md`, `references/figure-reference-analysis.md`, `references/figure-style-system.md`, `references/image-prompt-guide.md`, and `references/figure-captions.md`; build the prompt from a structured figure specification with `scripts/build_figure_prompt.py`. Place each figure after the section it supports, reference it from the body, and give it a style-matched caption with verified citations. Figures flow into the PDF export automatically.
 - **Optional popsci/ELI5 cutaway** — after the normal visual jobs are planned,
   test whether a sectional “look inside” plate removes a genuine imagination
@@ -162,7 +166,7 @@ python3 -c "import urllib.request;print(urllib.request.urlopen('https://api.cros
 
 ## The pipeline
 
-Work through every step; the order matters because the later steps depend on the ledger built in the early ones. Keep all working files in one folder for the review (`<topic-slug>/`): `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `fulltext-manifest.json`, `synthesis.md`, `review_draft.md`, and `review.md`, plus requested media. PDF releases add `release-manifest.json` and one authoritative QA render directory. See `references/quality-gates.md` for the machine-auditable contracts.
+Work through every step; the order matters because the later steps depend on the ledger built in the early ones. Keep all working files in one folder for the review (`<topic-slug>/`): `sources.json`, `search_log.md`, `search-manifest.json`, `notes.md`, `fulltext-manifest.json`, `synthesis.md`, `review_draft.md`, `review.md`, `evidence/`, `claims_audit.json`, and `claims_summary.json`, plus requested media. PDF releases add `release-manifest.json` and one authoritative QA render directory. See `references/quality-gates.md` for the machine-auditable contracts.
 
 When one request asks for **two or more journal reviews**, read
 `references/production-workflow.md` before Step 1. Use one isolated case folder
@@ -192,7 +196,14 @@ Run `scripts/verify_citations.py --ledger sources.json`. It uses the Crossref re
 
 ### 5. Distill the synthesis
 
-Before any styled prose, distill the verified evidence into `synthesis.md` — the style-neutral claims ledger specified in `references/synthesis-guide.md` (read it first): a verdict paragraph, the throughline, every load-bearing claim as an atomic calibrated sentence with its strength, exact numbers, supporting keys, contrary evidence, boundary, and dependencies, then the cross-claim patterns and open questions. Write it from `sources.json` and `notes.md` only. The synthesis is the single source that the styled review, the figures, the deck storyboard, and the claim audit all draw from; it is a working file, never delivered and never quoted verbatim. If drafting later reveals a wrong or missing claim, fix the synthesis first, then the draft.
+Before any styled prose, distill the verified evidence into `synthesis.md` — the style-neutral claims ledger specified in `references/synthesis-guide.md` (read it first): a verdict paragraph, the throughline, every load-bearing claim as an atomic calibrated sentence with its strength, exact numbers, supporting keys, contrary evidence, boundary, and dependencies, then the cross-claim patterns and open questions. Write it from `sources.json` and `notes.md` only. **Quotes before prose:** every key a claim cites carries a `- quote: [@key] "…"` line copied verbatim from that source's stored text; seed the evidence store from what you already read and run the gate before a sentence of prose exists:
+
+```bash
+python3 scripts/verify_claims.py seed --ledger sources.json --evidence evidence/ --fulltext-dir fulltexts --fulltext-manifest fulltext-manifest.json
+python3 scripts/verify_claims.py synthesis-check --synthesis synthesis.md --ledger sources.json --evidence evidence/ --report synthesis-check.json
+```
+
+A claim whose source cannot be quoted is weakened to what the passage says or loses that key; a number in a claim sentence must sit inside one of its quotes. The synthesis is the single source that the styled review, the figures, the deck storyboard, and the claim audit all draw from; it is a working file, never delivered and never quoted verbatim. If drafting later reveals a wrong or missing claim, fix the synthesis first, then the draft.
 
 ### 5b. Write the draft
 
@@ -206,23 +217,9 @@ Run the formatter through the deterministic writing-contract validator:
 python3 scripts/format_references.py --ledger sources.json --draft review_draft.md --style bracket | python3 scripts/validate_review.py - --style scientific --size small --ledger sources.json --fulltext-manifest fulltext-manifest.json --pass-through --report validation.json
 ```
 
-Replace the style and size. When the user explicitly named the tier, add `--strict-tier`; add `--image-mode` when the journal PDF format was requested, since its figures are mandatory. Strict mode hard-checks word/source/section/table/figure ranges and the full-text minimum. The formatter normalizes a legacy `claim. [@key]` draft to `claim [Author](DOI).`; the validator rejects finished citations that follow sentence-ending punctuation or open a sentence. It separately gates Crossref identity, retraction status, publication eligibility, and reading evidence, and rejects mojibake, scaffold labels, DOI/reference drift, and broken figure placement/citations. Reviews using the default medium tier keep tier ranges advisory unless the user explicitly named `medium`. Then work through the Quality gate checklist in `references/writing-guide.md` (the manual companion to this deterministic gate), and write the validated text in the reply.
+Replace the style and size. When the user explicitly named the tier, add `--strict-tier`; add `--image-mode` when the journal PDF format was requested, since its figures are mandatory. Strict mode hard-checks word/source/section/table/figure ranges and the full-text minimum. The formatter normalizes a legacy `claim. [@key]` draft to `claim [Author](DOI).`; the validator rejects finished citations that follow sentence-ending punctuation or open a sentence. It separately gates Crossref identity, retraction status, publication eligibility, and reading evidence, and rejects mojibake, scaffold labels, DOI/reference drift, and broken figure placement/citations. Reviews using the default medium tier keep tier ranges advisory unless the user explicitly named `medium`. Then work through the Quality gate checklist in `references/writing-guide.md` (the manual companion to this deterministic gate). The validated text is delivered only after step 8 has attached its receipts.
 
 Keep the validated author–year markdown as the review source: chat punctuation follows the citation link. If journal PDF/HTML is requested, `export_review.py` performs the presentation-only conversion to DOI-linked superscript numbers, moves the punctuation before those raised numbers, orders the References section by first citation, closes whitespace so each number sits directly after its supported claim or quotation, and rejects sentence-initial citations. Do not run `format_references.py --style nature` as a substitute: that would also change the chat review and bypass the journal placement gate.
-
-### 6b. Claim audit (experimental; on request or when checking a draft)
-
-When the user asks for a claim-level audit, asks to check a draft's claims against the literature, or asks for a review with a verified-claims appendix, run the quote-anchored audit after the writing gate. Follow the rubric in `references/claim-verification.md`:
-
-```bash
-python3 scripts/verify_claims.py extract --review review.md --audit claims_audit.json
-python3 scripts/verify_claims.py fetch   --audit claims_audit.json --evidence evidence/
-python3 scripts/verify_claims.py packets --audit claims_audit.json --evidence evidence/
-# adjudicate each packet: write verdict + verbatim quote(s) into claims_audit.json
-python3 scripts/verify_claims.py check   --audit claims_audit.json --evidence evidence/ --appendix claims_appendix.md
-```
-
-Verdicts you write must carry quotes copied verbatim from the packet passages; `check` rejects any quote it cannot string-match against the stored evidence and downgrades the verdict — never argue with a downgrade, fix the quote or accept the lower verdict. A `contradicted` verdict is a hard stop: correct the review sentence, not the audit. Report the evidence-tier split honestly (full text vs abstract) whenever you deliver an audit; a claim verified only at abstract level is stated as exactly that.
 
 ### 7. Create the figures or slides
 
@@ -273,17 +270,81 @@ citations. For slides, build and inspect the deck under `references/deck-guide.m
 if capable image generation is unavailable or the visual gates cannot pass,
 deliver the verified synthesis as a normal review instead.
 
+### 8. Claim audit and receipts (mandatory)
+
+After the figures are placed — their captions are cited sentences too — audit
+the final `review.md` against the sources' own text and write the receipts.
+Follow the rubric in `references/claim-verification.md`:
+
+```bash
+python3 scripts/verify_claims.py extract  --review review.md --ledger sources.json --synthesis synthesis.md --audit claims_audit.json
+python3 scripts/verify_claims.py fetch    --audit claims_audit.json --evidence evidence/ --ledger sources.json --fulltext-dir fulltexts --fulltext-manifest fulltext-manifest.json
+python3 scripts/verify_claims.py packets  --audit claims_audit.json --evidence evidence/ --blind
+python3 scripts/verify_claims.py adjudicate --audit claims_audit.json --packet C001#1 --verdict supported --quote "<verbatim passage>"
+python3 scripts/verify_claims.py check    --audit claims_audit.json --evidence evidence/ --summary claims_summary.json --strict
+python3 scripts/verify_claims.py receipts --audit claims_audit.json --review review.md
+python3 scripts/validate_review.py review.md --style <style> --size <size> --ledger sources.json --fulltext-manifest fulltext-manifest.json --report validation.json
+```
+
+`extract --synthesis` is the trace gate: a source the synthesis never quoted
+cannot be cited (add the quote to `synthesis.md` and re-run `synthesis-check`,
+or drop the citation), and each packet carries the writer's synthesis quotes
+for that source as its first candidates. `fetch` reuses the seeded store; only
+sources with no stored text touch the network (`--offline` skips it).
+
+**The writer never judges its own sentences.** Adjudication is done blind by a
+separate judge that sees only the packets (`--blind`: the sentence, the
+synthesis quotes, the candidate passages — no source identity, no place in the
+review, no synthesis, no draft). Where the host can spawn a fresh agent, hand
+it the packets and this rule; in a single-agent host, finish all writing first,
+then adjudicate in a fresh context as the judge, never while holding the draft.
+The judge records each judgment with `adjudicate --packet`, one pair at a time,
+with the quote copied verbatim from the packet; it never generates verdicts
+with a script, a similarity score, a "conservative default", or a template
+note — `check` fails an audit whose notes repeat across pairs or whose
+`partial` verdicts carry no note naming the missing element. Before a judge
+configuration is trusted on a real review, it re-adjudicates
+`evals/claim-benchmark-creatine.json` blind and `verify_claims.py score
+--min-agreement 80` passes. A sentence with several citations is judged per
+source for the part that source is cited for, and a caption is one claim;
+`partial` is the exception, not the default.
+`check` rejects any quote it cannot string-match against the stored evidence,
+or that shares no content word or number with its claim unless the judgment
+names the paraphrase (`--bridge "appetite = hunger"`, verified to connect both
+sides and printed in the receipt), and downgrades the verdict — never argue with a downgrade, fix the quote or accept the lower
+verdict. **Only `supported` and `partial` pairs ship.** A `contradicted`
+verdict is a hard stop: correct the review sentence. A `not_found` or
+`unverifiable` pair is a decorative citation — a real paper attached to a
+sentence its text does not back — and it is repaired in the review, never
+waved through: drop the citation, move it to the sentence it does support, or
+rewrite the sentence to what the source says; then re-extract and re-adjudicate
+the changed claims. `receipts`, the exporter, and PDF QA all refuse an audit
+with any pending, contradicted, not_found, or unverifiable pair. `receipts`
+then writes `<review>-receipts.md` — every cited sentence with its sources,
+tiers, verdicts, and verbatim quotes — and stamps the review: each Sources
+entry gains `· 3 claims · full text` and a two-line **Receipts** block after
+Sources carries the tally and the file name. Re-run the validator; it checks
+the stamp and never counts it as prose. Deliver the receipts file beside the
+review in every format; the journal PDF takes `--claims-audit` and
+`--claim-receipts` and prints only the tally in its colophon. State the tier split honestly in the reply (`claims_summary.json` has the
+numbers): a claim verified only at abstract level is exactly that.
+
+**Checking a draft.** When the user asks to check a draft's claims or
+references against the literature, the draft is the review: verify its DOIs
+(step 4), run this step on the draft, and deliver the receipts and the summary
+in chat, calling out every `contradicted` and `not_found` pair.
+
 ## Rules that do not bend
 
 - **Peer-reviewed literature only.** No preprints, blogs, news, or grey literature as evidence. Search eligibility and Crossref type are useful proxies, not a universal peer-review registry; check the venue or article when status is ambiguous, especially for conference proceedings and unfamiliar journals. If a preprint is the only source for something important, it may be mentioned once, labelled "(preprint, not peer reviewed)", and never load-bearing. Retracted papers are cited only to say they were retracted.
-- **Never claim a check you did not perform.** "Verified" means the DOI resolved in Crossref; title, year, and source type matched; and Crossref's publisher/Retraction Watch update metadata showed no retraction, withdrawal, removal, or expression-of-concern signal. If Crossref is unavailable, verification is incomplete and the citation does not pass. OpenAlex search availability is irrelevant to this check.
+- **Never claim a check you did not perform.** "Verified" means the DOI resolved in Crossref; title, year, and source type matched; and Crossref's publisher/Retraction Watch update metadata showed no retraction, withdrawal, removal, or expression-of-concern signal. If Crossref is unavailable, verification is incomplete and the citation does not pass. OpenAlex search availability is irrelevant to this check. A receipt's tier is what it says: `full text` only when the quote was matched against the version-of-record text, `abstract` otherwise.
 - **No citation from memory.** If you remember a paper, find it with the search script and verify it; if it cannot be found, it does not exist for this review. This applies to "classic" papers too.
 - **No name from memory.** A person's given name or an institution appears in the review only when copied verbatim from the ledger's stored author record (via the synthesis's `actors` field) — never recalled, guessed, or expanded from an initial, no matter how confident the recall feels. Surnames from the citation tags and generic actors ("researchers", "the trial investigators") are always safe. The validator cross-checks every given-name-plus-surname pair against the ledger and fails the review on a mismatch.
 - **Read before you cite.** Abstract minimum; full text for anything the argument leans on.
 - **Represent the whole literature, not the convenient part.** If studies disagree, say so and say why they might. If the best evidence is weak, say the evidence is weak. A review that only tells one side is advocacy.
 - **Keep the story and the evidence distinct.** Findings are attributed ("the MYRIAD trial found …"); synthesis is signposted ("taken together, …"); speculation is labelled as such.
 - **Never hand back a file instead of an answer.** The review lives in the reply. A file is an extra only when the journal PDF or slides format requires the generated artifact, or when the user asks for one.
-- **The sources block is the audit trail.** Reviews carry no methods section; resolvable DOIs are what make the work checkable. Say nothing when verification completes cleanly. Verification failures are fixed or removed before writing, never decorated with warning symbols in the finished review.
+- **The sources block and the receipts are the audit trail.** Reviews carry no methods section; resolvable DOIs and verbatim receipts are what make the work checkable. Say nothing else about verification when it completes cleanly. Verification failures are fixed or removed before writing, never decorated with warning symbols in the finished review.
 - **Numbers over adjectives.** Effect sizes, intervals, sample sizes, and absolute risks where the sources give them; "significant" on its own is not a result.
 
 ## Bundled resources
@@ -293,7 +354,10 @@ deliver the verified synthesis as a normal review instead.
 - `scripts/verify_citations.py` — Crossref bibliographic and integrity verification (retractions, withdrawals, expressions of concern; corrections recorded) using publisher and integrated Retraction Watch update metadata; hard stop on a failure.
 - `scripts/fetch_fulltext.py` and `scripts/audit_fulltexts.py` — open-access retrieval plus typed authenticity, duplicate, notes, and reading-evidence manifests.
 - `references/claim-verification.md` — the adjudication rubric for claim-level verification: verdict definitions, quote rules, abstention discipline, escalation policy, and a worked example. Development benchmarks remain outside the release bundle.
-- `scripts/claim_evidence.py` and `scripts/verify_claims.py` (experimental) — claim-level verification: a tiered evidence store (Europe PMC full text → OpenAlex OA locations → abstract union floor, fail-closed on challenge pages) and an extract → fetch → packets → check pipeline that audits whether each cited sentence is supported by its source's own text. Verdicts of supported/partial/contradicted require a verbatim quote that the checker string-matches against the stored evidence (quotes it cannot find are rejected to unverifiable; numeric claims marked supported must carry a claim number inside the quote, with spelled-out numbers normalized). Output is a machine-readable audit plus a rendered appendix; a contradicted claim is a hard stop.
+- `scripts/claim_evidence.py` and `scripts/verify_claims.py` — claim-level verification: a tiered evidence store (Europe PMC full text → OpenAlex OA locations → abstract union floor, fail-closed on challenge pages) and an extract → fetch → packets → check → receipts pipeline that audits whether each cited sentence is supported by its source's own text. Verdicts of supported/partial/contradicted require a verbatim quote that the checker string-matches against the stored evidence (quotes it cannot find are rejected to unverifiable; numeric claims marked supported must carry a claim number inside the quote, with spelled-out numbers normalized). `check --summary` writes the tally the colophon prints; `receipts` attaches the Receipts block and Sources annotations to the review; a contradicted or pending pair blocks release.
+- `scripts/claim_receipts.py` — the reader-facing rendering of the audit shared by the validator, exporter, and PDF QA: summary counts, the receipts file, the Sources annotations and Receipts stamp, and the strip/shape checks that keep receipts out of the prose budget.
+- `scripts/synthesis_quotes.py` — quotes before prose: parses the synthesis claims, requires a verbatim quote line for every cited key, string-matches each against the evidence store, and anchors every number in a claim sentence to a quote (`verify_claims.py synthesis-check`).
+- `evals/decorative-citations.json` — regression set of real decorative citations (on-topic papers attached to sentences their text does not support) that the checker's relevance floor must reject, plus legitimate paraphrases an honest bridge must rescue.
 - `scripts/format_references.py` — resolves `[@key]` citations, normalizes default chat punctuation, and builds the reference list (Vancouver / APA / Nature).
 - `scripts/validate_review.py` — deterministic structure, strict-tier, chat citation placement, citation-reading, DOI parity, text-hygiene, and figure contracts.
 - `scripts/export_review.py` and `scripts/weasyprint_export.py` — canonical browser-free, atomic journal-styled PDF/HTML export with linked superscript numbering, first-citation reference order, and sentence-initial-citation rejection.

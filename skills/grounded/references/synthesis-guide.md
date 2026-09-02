@@ -26,8 +26,13 @@ framings genuinely compete, list both and pick one before drafting begins.>
   ladder in evidence-weighing.md>
 - evidence: <the decisive studies, one line each: design, n, exact result with
   interval> [@key; @key]
+- quote: [@key] "<the passage, copied character for character from the stored
+  text of that source, that says what the evidence line attributes to it>"
+- quote: [@key] "<one line per cited key; more lines when one passage cannot
+  carry the claim's numbers>"
 - contrary: <what disagrees or is null, and why it might, one line each> [@key]
   <or "none found — searched">
+- quote: [@key] "<the contrary passage, likewise verbatim>"
 - boundary: <populations, doses, settings, durations where the claim stops applying>
 - depends-on: <claim IDs this claim presupposes, e.g. C2, C3 — or "—">
 - numbers: <every figure any style might need, full precision with intervals and
@@ -52,11 +57,34 @@ framings genuinely compete, list both and pick one before drafting begins.>
 
 Field labels, claim IDs (`C1`, `C2`, …), and pattern IDs (`P1`, …) are exact and stable — the format is deterministic by design so that tooling can parse and cross-check it without guessing. Do not rename fields, merge them, or add prose between entries.
 
+## Quotes before prose
+
+Every key on a claim's evidence or contrary line carries at least one
+`- quote: [@key] "…"` line — the passage from that source's stored text
+(`evidence/`, seeded from the full texts already read and the ledger
+abstracts) that says what the line attributes to it. This is where the receipt
+is born: the review's citations are rendered from these lines, so a sentence
+cannot be written against a source that was never quoted, and a source cannot
+be cited by the review unless the synthesis quotes it. Before any drafting:
+
+```bash
+python3 scripts/verify_claims.py seed --ledger sources.json --evidence evidence/ --fulltext-dir fulltexts --fulltext-manifest fulltext-manifest.json
+python3 scripts/verify_claims.py synthesis-check --synthesis synthesis.md --ledger sources.json --evidence evidence/ --report synthesis-check.json
+```
+
+The gate string-matches every quote against the stored text, requires every
+number in the claim sentence to sit inside one of the claim's quotes, and
+warns when a `numbers:` value appears in no quote (derived arithmetic is
+allowed only when the prose labels it as such). A claim that cannot be quoted
+is not a claim yet — find the passage, weaken the sentence to what the
+passage says, or drop the key. A quote is judged for meaning when the review
+is audited (step 8); here it only has to exist and be verbatim.
+
 ## Claim rules
 
 - **Atomic.** One claim is one assertable sentence a reader could agree or disagree with. "X lowers relapse risk when it replaces Y" — yes. "X affects mood and sleep" — two claims. If a claim needs "and", split it.
 - **Calibrated in the sentence itself.** The strength lives in the verb ("lowers", "probably reduces", "is associated with", "may"), matched to the `strength` field per `evidence-weighing.md`. A claim whose wording outruns its strength field is wrong at the source, and every style inherits the error.
-- **Evidence-anchored.** Every evidence and contrary line carries ledger keys; a claim with no keys is not a claim, it is an opinion, and it does not enter the ledger. Speculation and mechanism-plausibility belong inside a claim's wording ("is biologically plausible but unproven in humans") or in Open — never as bare claims.
+- **Evidence-anchored.** Every evidence and contrary line carries ledger keys, and every key carries its quote line; a claim with no keys is not a claim, it is an opinion, and it does not enter the ledger. One source, one statement: a key appears on a claim only for what its quoted passage states — a generalisation about the field ("reviews agree that…") cites a review whose text makes it, or is recorded as a pattern (P-entry) rather than dressed as evidence. Speculation and mechanism-plausibility belong inside a claim's wording ("is biologically plausible but unproven in humans") or in Open — never as bare claims.
 - **Contrary evidence is recorded on the claim it opposes**, not pooled in a separate section. This is what guarantees no style can quietly drop it: whoever renders C4 renders C4's contrary line.
 - **`depends-on` is the argument's skeleton.** It must be acyclic. Ordering claims so every claim follows its dependencies gives ELI5 its staircase, scientific its argument order, and the deck its arc for free. If the dependencies are cyclic or everything depends on everything, the claims are cut wrong — recut.
 - **`numbers` is the single home of full precision.** Exact effect sizes, intervals, denominators, absolute risks. The styles then *ration* from it under their own budgets — scientific keeps the most, popsci leads with one or two per section, ELI5 carries one per step in reader units. Nothing is ever lost by a budget: the precision stays here and in the sources.

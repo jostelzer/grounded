@@ -1,0 +1,51 @@
+{
+  "benchmark": "decorative-citations-v1",
+  "description": "Claim-source pairs from the 2026-09-02 reruns where a real, on-topic paper was attached to a sentence its quoted text does not support. quote_relates_to_claim must reject every `cases` entry; `legitimate_paraphrases` are pairs the lexical floor also rejects but an honest bridge rescues.",
+  "created": "2026-09-02",
+  "cases": [
+    {
+      "id": "seed-oils-C001",
+      "claim": "Reviews that compare oils therefore preserve their identities rather than treating seed origin as an exposure.",
+      "quote": "A literature search for systematic reviews (SRs) and meta-analyses was conducted in PubMed.",
+      "why": "search-strategy sentence attached to a claim about how reviews treat oils"
+    },
+    {
+      "id": "ozempic-C029",
+      "claim": "They are evidence boundaries, not a menu of proven fixes.",
+      "quote": "All subjects were informed of the study’s aims and provided written consent before they were included.",
+      "why": "consent statement attached to a claim about unproven maintenance strategies"
+    },
+    {
+      "id": "seed-oils-C043",
+      "claim": "All three intervals cross zero.",
+      "quote": "METHODS: We comprehensively searched PubMed, Embase and Cochrane Library for eligible studies.",
+      "why": "methods sentence attached to a numeric result"
+    },
+    {
+      "id": "ozempic-C035",
+      "claim": "Reviews and comparative studies likewise identify nausea and digestive problems as prominent reasons for dose changes or stopping.",
+      "quote": "Most side-effects occurred at 1-2 months.",
+      "why": "timing of side effects attached to a claim about reasons for stopping"
+    },
+    {
+      "id": "seed-oils-C050",
+      "claim": "Chemical studies consistently show degradation during severe or repeated frying.",
+      "quote": "Total ox-FA and keto-LA were efficiently absorbed during the first 5 h after test oil administration, but poorly absorbed in the case of fresh oils.",
+      "why": "absorption result attached to a claim about degradation during frying"
+    }
+  ],
+  "legitimate_paraphrases": [
+    {
+      "id": "ozempic-C005",
+      "claim": "Researchers reviewing discontinuation describe the returning pressure in familiar terms: hunger rises, the body defends its earlier energy stores.",
+      "quote": "These include restoration of appetite following withdrawal of pharmacological GLP-1 signalling, compensatory increases in orexigenic hormones such as ghrelin.",
+      "bridge": "appetite = hunger; orexigenic hormones = the body defends its energy stores"
+    },
+    {
+      "id": "microplastics-C016",
+      "claim": "The no-sample check shows whether stray plastic entered during the test.",
+      "quote": "The procedural blank samples comprised 62 MP particles of 10 MP polymer types, highlighting the unavoidable contamination.",
+      "bridge": "procedural blank = no-sample check; contamination = stray plastic"
+    }
+  ]
+}

@@ -29,9 +29,11 @@ another report's history or invent a new evidence interpretation.
 Use deterministic scripts for runtime checks, manifest audits, citation
 verification, reference formatting, rendering, and QA. Routine retrieval,
 record normalization, and command execution do not benefit from the strongest
-reasoning setting. Reserve stronger reasoning for synthesis, difficult evidence
-adjudication, the selected style's narrative structure, and the single final
-independent audit. An explicit user choice of model or reasoning level always
+reasoning setting. Reserve stronger reasoning for synthesis, claim adjudication, the selected
+style's narrative structure, and the single final independent audit. Claim
+adjudication is judgment work: every verdict is a reading recorded with
+`verify_claims.py adjudicate`, never a script, similarity score, or default
+applied across pairs — the checker fails templated audits. An explicit user choice of model or reasoning level always
 wins.
 
 Do not assign a general-purpose reviewer to watch exports or repeatedly inspect
@@ -43,8 +45,9 @@ transcript.
 
 ### 1. Evidence freeze
 
-Search, verify, close-read, and finish `synthesis.md`. Then set
-`evidence.frozen: true` and run:
+Search, verify, close-read, and finish `synthesis.md` with a verbatim quote
+line for every key it cites (`verify_claims.py seed`, then
+`synthesis-check` must pass). Then set `evidence.frozen: true` and run:
 
 ```bash
 python3 scripts/audit_production.py production.json --stage evidence --report production-evidence.json
@@ -113,9 +116,12 @@ python3 scripts/audit_production.py production.json --stage release --report pro
 ```
 
 The release gate re-validates the current review in strict image mode, rebuilds
-and verifies the immutable release lineage, hashes the authoritative page-raster
-set, and matches every released figure—in order—against the live figure-QA image
-hash and rendered width. A figure checked at 184 mm cannot silently ship at 72
+and verifies the immutable release lineage (including the claim audit named by
+`release.claims_audit`, which must be the audit the release manifest records),
+hashes the authoritative page-raster set, and matches every released figure—in
+order—against the live figure-QA image hash and rendered width. Run the claim
+audit and attach the receipts after the figure gate and before the export, so
+the audited text is the released text. A figure checked at 184 mm cannot silently ship at 72
 mm. The normal document budget is the initial complete build plus one repair.
 More than two full builds requires a diagnosed exception; local copy, figure, or
 pagination defects never justify rebuilding unrelated case histories.
@@ -143,6 +149,12 @@ extra output sections:
 - **Release owner:** passing semantic/figure reports and canonical export
   command. “Build once, run PDF QA, repair at most one diagnosed release defect,
   and stop at the release gate.”
+- **Claim judge:** the blind packets (`verify_claims.py packets --blind`)
+  and the adjudication rubric — nothing else: no review, no synthesis, no
+  case history. “Read every packet; record one verdict per packet with
+  `adjudicate --packet`, quoting verbatim, with a pair-specific note on every
+  partial and a bridge for every paraphrase; never script or score verdicts.”
+  The writer of a case is never its judge.
 - **Independent auditor:** compact gate reports and final artifacts. “Return
   only evidence, writing, figure, or release blockers with their owning layer;
   do not reopen passing work for preference-only variants.”
@@ -225,6 +237,7 @@ printed by the live gate; obsolete or approximate acceptances fail.
   "release": {
     "manifest": "release-manifest.json",
     "pdf": "review.pdf",
+    "claims_audit": "claims_audit.json",
     "full_document_builds": 1,
     "manual_checks": {
       "all_pages_inspected": true,

@@ -317,6 +317,142 @@ class PdfExportTests(unittest.TestCase):
             with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "review hash changed"):
                 qa_review_pdf.verify_release_manifest(manifest, pdf, review)
 
+    @staticmethod
+    def claims_audit(verdict="supported"):
+        return {
+            "review": "review.md", "created": "2026-08-26",
+            "claims": [{
+                "id": "C001",
+                "claim": "The solid steps are observed; the dashed step is inferred.",
+                "location": "paragraph 2, sentence 2",
+                "dois": ["10.1000/example"], "numbers": [],
+                "adjudications": [{
+                    "doi": "10.1000/example", "verdict": verdict,
+                    "quote": "the dashed step is inferred", "note": "",
+                    "tier": "fulltext"}],
+            }],
+        }
+
+    def test_claim_audit_prints_only_the_tally_in_the_pdf(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+                claims_audit=self.claims_audit(),
+            )
+        self.assertIn("<b>Verification</b><span>Crossref · claims</span>", page)
+        self.assertIn(
+            "retraction-screened via Crossref<br>1 cited sentence · 1 source check · "
+            "1 supported at full text · 0 at abstract · 0 partial · 0 contradicted", page)
+        # The per-pair receipts live in their own file, never in the PDF.
+        self.assertNotIn("Claim receipts", page.split("</style>")[1])
+        self.assertNotIn("the dashed step is inferred”", page)
+
+    def test_chat_receipts_block_is_never_rendered_as_prose(self):
+        import claim_receipts
+        attached = claim_receipts.attach_receipts(self.markdown(), self.claims_audit())
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            page = export_review.build_html(
+                attached, base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+                claims_audit=self.claims_audit(),
+            )
+            self.assertNotIn("**Receipts**", page)
+            self.assertNotIn("verbatim quote is in", page)
+            # The Sources annotation survives as reference apparatus.
+            self.assertIn("· 1 claim · full text", page)
+            with self.assertRaisesRegex(ValueError, "Receipts block"):
+                export_review.validate_release_inputs(
+                    self._write(tmp, "review.md", attached),
+                    self._write(tmp, "sources.json", json.dumps(self.ledger())),
+                )
+
+    @staticmethod
+    def _write(tmp, name, text):
+        path = os.path.join(tmp, name)
+        with open(path, "w", encoding="utf-8") as stream:
+            stream.write(text)
+        return path
+
+    @staticmethod
+    def ledger():
+        return {"entries": [{
+            "key": "Smith2024", "doi": "10.1000/example", "status": "verified",
+            "verification": {"bibliographic_status": "verified",
+                             "retraction_status": "clear"},
+        }]}
+
+    def test_release_refuses_a_contradicted_or_pending_audit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            review = self._write(tmp, "review.md", self.markdown())
+            ledger = self._write(tmp, "sources.json", json.dumps(self.ledger()))
+            for verdict, message in (("contradicted", "contradicted"),
+                                     ("pending", "pending")):
+                audit = self._write(tmp, "claims_audit.json",
+                                    json.dumps(self.claims_audit(verdict)))
+                with self.assertRaisesRegex(ValueError, message):
+                    export_review.validate_release_inputs(
+                        review, ledger, claims_audit=audit)
+
+    def test_release_manifest_binds_the_audit_and_qa_rejects_drift(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make_image(os.path.join(tmp, "figure.png"))
+            review = self._write(tmp, "review.md", self.markdown())
+            ledger = self._write(tmp, "sources.json", json.dumps(self.ledger()))
+            spec = self._write(tmp, "figure.json", "{}\n")
+            prompt = self._write(tmp, "figure.prompt.txt", "saved prompt\n")
+            audit = self._write(tmp, "claims_audit.json",
+                                json.dumps(self.claims_audit()))
+            receipts = self._write(tmp, "review-receipts.md", "# Claim receipts\n")
+            pdf = os.path.join(tmp, "review.pdf")
+            manifest = os.path.join(tmp, "release-manifest.json")
+            page = export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26",
+                claims_audit=self.claims_audit(),
+            )
+            weasyprint_export.write_pdf(page, pdf)
+            export_review.write_release_manifest(
+                manifest, review_path=review, ledger_path=ledger, pdf_path=pdf,
+                html_document=page, release="v-test", columns=2,
+                kicker="Review", colophon=None, repo="example.test/grounded",
+                compiled_date="2026-08-26", figure_specs=[spec],
+                figure_prompts=[prompt], claims_audit=audit,
+                claim_receipts_path=receipts,
+            )
+            recorded = json.load(open(manifest, encoding="utf-8"))
+            self.assertEqual(recorded["inputs"]["claim_receipts"]["path"], "review-receipts.md")
+            self.assertEqual(recorded["expected"]["claim_pairs"], 1)
+            self.assertEqual(recorded["expected"]["claim_summary"]["supported_fulltext"], 1)
+            self.assertEqual(recorded["inputs"]["claims_audit"]["path"], "claims_audit.json")
+            context = qa_review_pdf.verify_release_manifest(manifest, pdf, review)
+            self.assertEqual(context["claim_summary"]["pairs"], 1)
+            qa_review_pdf.inspect_structure(
+                pdf, self.markdown(), claim_summary=context["claim_summary"])
+            # A PDF rendered without the audit tally cannot pass an audited manifest.
+            bare = os.path.join(tmp, "bare", "review.pdf")
+            os.mkdir(os.path.dirname(bare))
+            weasyprint_export.write_pdf(export_review.build_html(
+                self.markdown(), base_dir=tmp, release="v-test",
+                repo="example.test/grounded", compiled_date="2026-08-26"), bare)
+            with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "claim-audit line"):
+                qa_review_pdf.inspect_structure(
+                    bare, self.markdown(), claim_summary=context["claim_summary"])
+            # Editing the receipts file after release breaks lineage.
+            with open(receipts, "a", encoding="utf-8") as stream:
+                stream.write("edited\n")
+            with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "claim_receipts hash changed"):
+                qa_review_pdf.verify_release_manifest(manifest, pdf, review)
+            with open(receipts, "w", encoding="utf-8") as stream:
+                stream.write("# Claim receipts\n")
+            # Editing the audit after release breaks lineage.
+            with open(audit, "w", encoding="utf-8") as stream:
+                json.dump(self.claims_audit("partial"), stream)
+            with self.assertRaisesRegex(qa_review_pdf.PdfQaError, "claims_audit hash changed"):
+                qa_review_pdf.verify_release_manifest(manifest, pdf, review)
+
     def test_quality_contract_manifest_hashes_inspection_and_provenance(self):
         with tempfile.TemporaryDirectory() as tmp:
             figure = os.path.join(tmp, "figure.png")

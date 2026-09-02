@@ -1,65 +1,71 @@
-## Are microplastics actually hurting our health?
+## Are microplastics actually harming our health?
 
-**TL;DR** — Tiny bits of plastic really do get into our bodies. Lab studies give scientists good reasons to worry, but human studies still can't tell us how much everyday exposure hurts us, or which illnesses it might cause.
+**TL;DR** — Tiny plastic pieces really do get into our bodies. Lab work gives us reasons to worry. But scientists still haven't shown that everyday exposure makes people ill.
 
-Think about muddy footprints in a room. The prints tell you that someone came inside. They don't tell you whether that person broke the window. Microplastics are a bit like those prints: finding them matters, but the damage needs its own proof.
+Imagine a detective following footprints. Finding a footprint proves someone was there. It doesn't prove what that person did. Microplastics leave a similar trail inside us, and the hard part is working out what that trail means.
 
-### How do we know the pieces get inside?
+### How do we know the pieces get inside us?
 
-Teams have found plastic bits in placenta, urine, artery gunk and brain tissue. In one careful study, they found them in 8 of 15 small brain samples taken after death [Amato-Lourenço et al. 2024](https://doi.org/10.1001/jamanetworkopen.2024.40018). Other teams used different tools and found plastics in every placenta they tested or in many urine samples [Garcia et al. 2024](https://doi.org/10.1093/toxsci/kfae021), [Rotchell et al. 2024](https://doi.org/10.1016/j.ecoenv.2024.116208).
+Teams have found microplastics in organs and in things such as blood, urine, stool, breast milk, semen, and placenta [Zuri et al. 2023](https://doi.org/10.1016/j.envres.2023.116966). A review of human studies found them in many body systems, though the teams used different ways to look for them [Roslan et al. 2024](https://doi.org/10.7189/jogh.14.04179).
 
-So the footprints are real. But you can see in [Figure 1](#fig-whole-answer) why the next step is harder: the path from “inside us” to “hurting us” is still only partly filled in.
+Some studies looked at just one kind of tissue. One team found plastic fragments in four of six placentas [Ragusa et al. 2021](https://doi.org/10.1016/j.envint.2020.106274). Another found them in 11 of 13 lung samples, even after checking the empty lab samples for stray plastic [Jenner et al. 2022](https://doi.org/10.1016/j.scitotenv.2022.154907). These are real footprints. They still don't tell us whether the pieces hurt the body.
 
-<a id="fig-whole-answer"></a>
-![A human outline contains scattered plastic fragments; a strong trail leads to the body, while a thinner evidence path leads toward possible illness.](microplastics-missing-piece.png)
+You can see that evidence ladder in [Figure 1](#fig-microplastics-whole-answer).
 
-**Figure 1. The pieces get inside before we know what they do.** Follow the strong path into the body. Then notice the thinner path toward illness. Scientists can measure the first part much better than the second, and one large-looking heart signal still came from an observational study rather than a fair test [Amato-Lourenço et al. 2024](https://doi.org/10.1001/jamanetworkopen.2024.40018), [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Lamoree et al. 2025](https://doi.org/10.1038/s41591-025-03902-5).
+<a id="fig-microplastics-whole-answer"></a>
+![Three connected stages move from plastic particles detected in tissue, through biological warning signs, to a dim and incomplete human disease link.](microplastics-whole-answer.png)
 
-### Does finding them mean they hurt us?
+**Figure 1. Finding plastic is not the same as proving harm.** Microplastics have been found in human tissues, but no causal health effect from their uptake has been proved [Janzik et al. 2025](https://doi.org/10.3238/arztebl.m2025.0138).
 
-Not by itself. A major review found just 3 human studies that directly joined exposure to a health result. It also found many animal studies that pointed toward trouble in the gut, lungs and reproductive system [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524). In cells and animals, plastic pieces can stir up inflammation and other kinds of stress [Prata et al. 2020](https://doi.org/10.1016/j.scitotenv.2019.134455), [Dzierżyński et al. 2024](https://doi.org/10.3390/cancers16213703).
+### Why are scientists worried, then?
 
-One study followed people who already had badly clogged neck arteries. Those with plastic in the removed artery gunk later had more heart attacks, strokes or deaths [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). That is an important clue. Still, it can't show whether the plastic helped cause the trouble or whether unhealthy arteries simply trapped more of it [Lamoree et al. 2025](https://doi.org/10.1038/s41591-025-03902-5). The footprints and the broken window happened in the same room; we still don't know who broke it.
+When researchers expose mice and rats to these particles, they often see changes in the animals' bodies. The biological effects can be affected by the kind of plastic, the particle size, the concentration, and the exposure time [Liu et al. 2023](https://doi.org/10.3389/fpubh.2023.1103289). Cell studies also report cell death and damage to genetic material [Winiarska et al. 2024](https://doi.org/10.1016/j.envres.2024.118535).
 
-### Wait — have any studies found no harm?
+A careful review put those warning signs together and called microplastics a “suspected” danger to breathing, digestion, and reproduction [Chartres et al. 2024](https://doi.org/10.1021/acs.est.3c09524). That word matters. It means the case is worrying enough to investigate, not that harm in people has been proved.
 
-Yes. One team found plastic in the fluid around babies before birth in 39 of 48 pregnancies, but it did not line up with the short-term problems they checked [Tian et al. 2025](https://doi.org/10.1016/j.jhazmat.2024.136637). Another team found particles in urine from people with and without endometriosis, but the groups did not have clearly different amounts [Rotchell et al. 2024](https://doi.org/10.1016/j.ecoenv.2024.116208).
+The different kinds of evidence are separated in [Figure 2](#fig-microplastics-evidence-boundary).
 
-These studies were small. They could miss rare harm or harm that takes years to appear [Hunt et al. 2024](https://doi.org/10.1111/1471-0528.17756). But they stop us from saying that every footprint comes with a broken window.
+<a id="fig-microplastics-evidence-boundary"></a>
+![A mouse, a dish of cells, and a human silhouette occupy separate evidence lanes that converge on a question mark rather than a disease verdict.](microplastics-evidence-boundary.png)
 
-### Why are the counts so hard to compare?
+**Figure 2. Human evidence boundary.** Direct evidence for effects on human health is still scarce [Feng et al. 2023](https://doi.org/10.1016/j.eehl.2023.08.002).
 
-Plastic dust is almost everywhere, including laboratories. One urine study found 62 particles in its empty control containers [Rotchell et al. 2024](https://doi.org/10.1016/j.ecoenv.2024.116208). Different machines also see different sizes, and teams do not yet use one shared recipe for collecting, cleaning and measuring samples [Dzierżyński et al. 2024](https://doi.org/10.3390/cancers16213703).
+### So have the pieces made anyone sick?
 
-You can see that measurement problem in [Figure 2](#fig-measurement-window). A machine is like a sieve: what it reports depends on which pieces fit through its window and what stray pieces entered during testing.
+One important study followed people who already had diseased neck arteries. Those whose artery plaque contained plastic particles later had more heart attacks, strokes, or deaths [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). Because nobody randomly received plastic, the study can't tell whether the particles helped cause the danger or simply travelled with it.
 
-<a id="fig-measurement-window"></a>
-![Two laboratory sample paths use different detection windows and control blanks, showing why their particle counts cannot be compared directly.](microplastics-measurement-methods.png)
+Other striking results have the same problem. A small liver study could not tell whether cirrhosis trapped the particles or the particles helped damage the liver [Horvatits et al. 2022](https://doi.org/10.1016/j.ebiom.2022.104147). A study of donated brain tissue found more plastic in some brains, but its authors said their results did not show that plastic caused illness [Nihart et al. 2025](https://doi.org/10.1038/s41591-024-03453-1). A broad review reached the same bottom line: current human research cannot give a firm answer about health effects [Janzik et al. 2025](https://doi.org/10.3238/arztebl.m2025.0138). The footprints are there. The culprit is not yet proved.
 
-**Figure 2. Every measuring tool sees a different slice.** The two paths begin with the same kind of sample but use different size windows. The no-sample check shows whether stray plastic entered during the test. Until laboratories share methods and report their blanks, their totals cannot be lined up as if they used the same ruler [Dzierżyński et al. 2024](https://doi.org/10.3390/cancers16213703), [Rotchell et al. 2024](https://doi.org/10.1016/j.ecoenv.2024.116208), [Tian et al. 2025](https://doi.org/10.1016/j.jhazmat.2024.136637).
+### What can we honestly say now?
 
-### What can we honestly say?
-
-Microplastics get into us, and there are sensible ways they could hurt us. We still don't know the size of the danger from normal daily exposure. The footprints picture has now done its job: the next studies must watch exposure before illness begins, use the same careful measuring rules, and find out who — if anyone — goes on to get hurt.
+Microplastics are inside us, and lab studies show believable ways they might hurt us. We still don't know how much ordinary exposure matters to your health. The detective picture also has a limit: bodies are not crime scenes, and particles can be both passengers and troublemakers. Scientists need long studies that measure exposure before illness starts, then test whether lowering that exposure changes health.
 
 **Sources**
 
-**Amato-Lourenço LF, Dantas KC, Júnior GR, Paes VR, Ando RA, de Oliveira Freitas R, da Costa OMMM, Rabelo RS, Soares Bispo KC, Carvalho-Oliveira R, Mauad T (2024)** Microplastics in the Olfactory Bulb of the Human Brain. *JAMA Network Open*. https://doi.org/10.1001/jamanetworkopen.2024.40018
+**Chartres N, Cooper CB, Bland G, Pelch KE, Gandhi SA, BakenRa A, Woodruff TJ (2024)** Effects of Microplastic Exposure on Human Digestive, Reproductive, and Respiratory Health: A Rapid Systematic Review. *Environmental Science & Technology*. https://doi.org/10.1021/acs.est.3c09524 · 1 claim · full text
 
-**Chartres N, Cooper CB, Bland G, Pelch KE, Gandhi SA, BakenRa A, Woodruff TJ (2024)** Effects of Microplastic Exposure on Human Digestive, Reproductive, and Respiratory Health: A Rapid Systematic Review. *Environmental Science & Technology*. https://doi.org/10.1021/acs.est.3c09524
+**Feng Y, Tu C, Li R, Wu D, Yang J, Xia Y, Peijnenburg WJGM, Luo Y (2023)** A systematic review of the impacts of exposure to micro- and nano-plastics on human tissue accumulation and health. *Eco-Environment & Health*. https://doi.org/10.1016/j.eehl.2023.08.002 Correction: [10.1016/j.eehl.2025.100137](https://doi.org/10.1016/j.eehl.2025.100137). · 1 claim · full text
 
-**Dzierżyński E, Gawlik PJ, Puźniak D, Flieger W, Jóźwik K, Teresiński G, Forma A, Wdowiak P, Baj J, Flieger J (2024)** Microplastics in the Human Body: Exposure, Detection, and Risk of Carcinogenesis: A State-of-the-Art Review. *Cancers*. https://doi.org/10.3390/cancers16213703
+**Horvatits T, Tamminga M, Liu B, Sebode M, Carambia A, Fischer L, Püschel K, Huber S, Fischer EK (2022)** Microplastics detected in cirrhotic liver tissue. *eBioMedicine*. https://doi.org/10.1016/j.ebiom.2022.104147 · 1 claim · abstract
 
-**Garcia MA, Liu R, Nihart A, El Hayek E, Castillo E, Barrozo ER, Suter MA, Bleske B, Scott J, Forsythe K, Gonzalez-Estrella J, Aagaard KM, Campen MJ (2024)** Quantitation and identification of microplastics accumulation in human placental specimens using pyrolysis gas chromatography mass spectrometry. *Toxicological Sciences*. https://doi.org/10.1093/toxsci/kfae021
+**Janzik R, Sieg H, Braeuning A, Böl GF (2025)** Microplastics: State of the evidence on health effects and public perception. *Deutsches Ärzteblatt international*. https://doi.org/10.3238/arztebl.m2025.0138 · 2 claims · abstract
 
-**Hunt K, Davies A, Fraser A, Burden C, Howell A, Buckley K, Harding S, Bakhbakhi D (2024)** Exposure to microplastics and human reproductive outcomes: A systematic review. *BJOG: An International Journal of Obstetrics & Gynaecology*. https://doi.org/10.1111/1471-0528.17756
+**Jenner LC, Rotchell JM, Bennett RT, Cowen M, Tentzeris V, Sadofsky LR (2022)** Detection of microplastics in human lung tissue using μFTIR spectroscopy. *Science of The Total Environment*. https://doi.org/10.1016/j.scitotenv.2022.154907 · 1 claim · abstract
 
-**Lamoree MH, van Boxel J, Nardella F, Houthuijs KJ, Brandsma SH, Béen F, van Duursen MBM (2025)** Health impacts of microplastic and nanoplastic exposure. *Nature Medicine*. https://doi.org/10.1038/s41591-025-03902-5
+**Liu W, Zhang B, Yao Q, Feng X, Shen T, Guo P, Wang P, Bai Y, Li B, Wang P, Li R, Qu Z, Liu N (2023)** Toxicological effects of micro/nano-plastics on mouse/rat models: a systematic review and meta-analysis. *Frontiers in Public Health*. https://doi.org/10.3389/fpubh.2023.1103289 · 1 claim · full text
 
-**Marfella R, Prattichizzo F, Sardu C, Fulgenzi G, Graciotti L, Spadoni T, D’Onofrio N, Scisciola L, La Grotta R, Frigé C, Pellegrini V, Municinò M, Siniscalchi M, Spinetti F, Vigliotti G, Vecchione C, Carrizzo A, Accarino G, Squillante A, Spaziano G, Mirra D, Esposito R, Altieri S, Falco G, Fenti A, Galoppo S, Canzano S, Sasso FC, Matacchione G, Olivieri F, Ferraraccio F, Panarese I, Paolisso P, Barbato E, Lubritto C, Balestrieri ML, Mauro C, Caballero AE, Rajagopalan S, Ceriello A, D’Agostino B, Iovino P, Paolisso G (2024)** Microplastics and Nanoplastics in Atheromas and Cardiovascular Events. *New England Journal of Medicine*. https://doi.org/10.1056/nejmoa2309822
+**Marfella R, Prattichizzo F, Sardu C, Fulgenzi G, Graciotti L, Spadoni T, D’Onofrio N, Scisciola L, La Grotta R, Frigé C, Pellegrini V, Municinò M, Siniscalchi M, Spinetti F, Vigliotti G, Vecchione C, Carrizzo A, Accarino G, Squillante A, Spaziano G, Mirra D, Esposito R, Altieri S, Falco G, Fenti A, Galoppo S, Canzano S, Sasso FC, Matacchione G, Olivieri F, Ferraraccio F, Panarese I, Paolisso P, Barbato E, Lubritto C, Balestrieri ML, Mauro C, Caballero AE, Rajagopalan S, Ceriello A, D’Agostino B, Iovino P, Paolisso G (2024)** Microplastics and Nanoplastics in Atheromas and Cardiovascular Events. *New England Journal of Medicine*. https://doi.org/10.1056/nejmoa2309822 · 1 claim · abstract
 
-**Prata JC, da Costa JP, Lopes I, Duarte AC, Rocha-Santos T (2020)** Environmental exposure to microplastics: An overview on possible human health effects. *Science of The Total Environment*. https://doi.org/10.1016/j.scitotenv.2019.134455
+**Nihart AJ, Garcia MA, El Hayek E, Liu R, Olewine M, Kingston JD, Castillo EF, Gullapalli RR, Howard T, Bleske B, Scott J, Gonzalez-Estrella J, Gross JM, Spilde M, Adolphi NL, Gallego DF, Jarrell HS, Dvorscak G, Zuluaga-Ruiz ME, West AB, Campen MJ (2025)** Bioaccumulation of microplastics in decedent human brains. *Nature Medicine*. https://doi.org/10.1038/s41591-024-03453-1 Correction: [10.1038/s41591-025-03675-x](https://doi.org/10.1038/s41591-025-03675-x). · 1 claim · full text
 
-**Rotchell JM, Austin C, Chapman E, Atherall CA, Liddle CR, Dunstan TS, Blackburn B, Mead A, Filart K, Beeby E, Cunningham K, Allen J, Draper H, Guinn BA (2024)** Microplastics in human urine: Characterisation using μFTIR and sampling challenges using healthy donors and endometriosis participants. *Ecotoxicology and Environmental Safety*. https://doi.org/10.1016/j.ecoenv.2024.116208
+**Ragusa A, Svelato A, Santacroce C, Catalano P, Notarstefano V, Carnevali O, Papa F, Rongioletti MCA, Baiocco F, Draghi S, D'Amore E, Rinaldo D, Matta M, Giorgini E (2021)** Plasticenta: First evidence of microplastics in human placenta. *Environment International*. https://doi.org/10.1016/j.envint.2020.106274 · 1 claim · abstract
 
-**Tian J, Liang L, Li Q, Li N, Zhu X, Zhang L (2025)** Association between microplastics in human amniotic fluid and pregnancy outcomes: Detection and characterization using Raman spectroscopy and pyrolysis GC/MS. *Journal of Hazardous Materials*. https://doi.org/10.1016/j.jhazmat.2024.136637
+**Roslan NS, Lee YY, Ibrahim YS, Tuan Anuar S, Yusof KMKK, Lai LA, Brentnall T (2024)** Detection of microplastics in human tissues and organs: A scoping review. *Journal of Global Health*. https://doi.org/10.7189/jogh.14.04179 · 1 claim · full text
+
+**Winiarska E, Jutel M, Zemelka-Wiacek M (2024)** The potential impact of nano- and microplastics on human health: Understanding human health risks. *Environmental Research*. https://doi.org/10.1016/j.envres.2024.118535 · 1 claim · abstract
+
+**Zuri G, Karanasiou A, Lacorte S (2023)** Human biomonitoring of microplastics and health implications: A review. *Environmental Research*. https://doi.org/10.1016/j.envres.2023.116966 · 1 claim · abstract
+
+**Receipts**
+
+*13 cited sentences · 13 source checks · 5 supported at full text · 8 at abstract · 0 partial · 0 contradicted — every pair's verbatim quote is in `microplastics-health-eli5-receipts.md`.*

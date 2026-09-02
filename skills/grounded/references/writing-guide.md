@@ -110,7 +110,7 @@ Default **medium popsci**: aim for a substantial magazine feature of roughly 1,5
 
 Write the draft with `[@key]` and let `format_references.py --style bracket` render each citation as an `[Author 2026](https://doi.org/…)` link and build the sources block. On the tool-only path, write the `[Author 2026](https://doi.org/…)` links directly, using the DOI from the verified Crossref record, and transcribe the sources block the same way.
 
-Place every citation immediately after the sentence, clause, quotation, figure-caption claim, or table row it supports and before terminal punctuation: `supported claim [Author 2026](DOI).` Never write `supported claim. [Author 2026](DOI)` or make an author–year link the grammatical subject that opens a sentence. `format_references.py --style bracket` normalizes punctuation misplaced before a draft key, and `validate_review.py` rejects misplaced finished links. For journal export, the renderer deliberately moves terminal punctuation before the linked superscript and separately rejects a citation that opens a sentence, paragraph, bullet, or caption. A DOI-only source cell in a comparison table is allowed.
+Cite each source only for what its quoted passage states, and place the citation on that clause — several sources on one sentence means several clauses, each with its own; a synthesised generalisation is the author's and cites nothing, or cites a review that itself makes it. Place every citation immediately after the sentence, clause, quotation, figure-caption claim, or table row it supports and before terminal punctuation: `supported claim [Author 2026](DOI).` Never write `supported claim. [Author 2026](DOI)` or make an author–year link the grammatical subject that opens a sentence. `format_references.py --style bracket` normalizes punctuation misplaced before a draft key, and `validate_review.py` rejects misplaced finished links. For journal export, the renderer deliberately moves terminal punctuation before the linked superscript and separately rejects a citation that opens a sentence, paragraph, bullet, or caption. A DOI-only source cell in a comparison table is allowed.
 
 ## If verification could not be completed
 
@@ -162,3 +162,15 @@ Place every citation immediately after the sentence, clause, quotation, figure-c
     labels, and review every remaining warning; this deterministic gate
     complements rather than replaces checks
     1–11.
+13. Every cited sentence has a receipt. The synthesis quoted every source it
+    cites before drafting began; after the figures are placed, a judge who did
+    not write the text adjudicated every pair blind, every verdict carries a
+    verbatim quote the checker matched, every pair is supported or partial,
+    the Sources entries carry their claim counts and tiers, the Receipts stamp
+    follows Sources, `<review>-receipts.md` is delivered beside the review,
+    and the reply states the tier split honestly.
+14. One source, one statement. Each citation sits on the clause its quoted
+    passage states; a sentence never carries a cluster of citations to
+    manufacture a generalisation none of them makes. "Reviews agree that…"
+    cites a review whose text says so, or is written as the author's synthesis
+    and cites nothing; the validator warns at three citations on one sentence.

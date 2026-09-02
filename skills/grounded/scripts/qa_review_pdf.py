@@ -21,6 +21,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from artifact_io import atomic_write_json, sha256_bytes, sha256_file
+import claim_receipts
 
 A4_POINTS = (595.2756, 841.8898)
 
@@ -314,6 +315,26 @@ def verify_release_manifest(
                     float(render.get("figure_max_height_mm") or 92.0),
                     f"{category}[{index}]",
                 )
+    claims_audit = None
+    claim_summary = None
+    audit_record = inputs.get("claims_audit")
+    if audit_record is not None:
+        audit_path = _verify_file_record(path, audit_record, "claims_audit")
+        try:
+            import export_review
+            claims_audit = export_review.load_claims_audit(audit_path)
+        except ValueError as exc:
+            raise PdfQaError(f"claim audit: {exc}") from exc
+        claim_summary = claim_receipts.summarize_audit(claims_audit)
+        expected_pairs = (manifest.get("expected") or {}).get("claim_pairs")
+        if expected_pairs != claim_summary["pairs"]:
+            raise PdfQaError(
+                "claim audit pair count does not match the release manifest")
+    receipts_record = inputs.get("claim_receipts")
+    if receipts_record is not None:
+        if claim_summary is None:
+            raise PdfQaError("release manifest records receipts without a claim audit")
+        _verify_file_record(path, receipts_record, "claim_receipts")
     recorded_pdf = _verify_file_record(path, artifact.get("pdf") or {}, "PDF")
     actual_pdf = Path(pdf_path).resolve()
     if actual_pdf != recorded_pdf:
@@ -348,6 +369,7 @@ def verify_release_manifest(
             imprint=str(render.get("imprint") or "end"),
             edition=str(render.get("edition") or "journal"),
             pull_quote=render.get("pull_quote"),
+            claims_audit=claims_audit,
         )
     except (OSError, TypeError, ValueError) as exc:
         raise PdfQaError(f"manifest HTML cannot be rebuilt: {exc}") from exc
@@ -368,6 +390,7 @@ def verify_release_manifest(
         "columns": int(render.get("columns")),
         "style": str(render.get("style") or "scientific"),
         "figure_records": inputs.get("figures") or [],
+        "claim_summary": claim_summary,
     }
 
 
@@ -418,8 +441,14 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
                       expected_release: str | None = None,
                       expected_fonts: tuple[str, ...] = ("Charter", "Helvetica-Neue"),
                       figure_records: list[dict[str, object]] | None = None,
+                      claim_summary: dict[str, object] | None = None,
                       ) -> dict[str, object]:
-    """Inspect PDF objects, metadata, page geometry, links, and running furniture."""
+    """Inspect PDF objects, metadata, page geometry, links, and running furniture.
+
+    ``claim_summary`` (from the release manifest's claim audit) additionally
+    requires the colophon's audit line to be visible text, so the tally cannot
+    be silently dropped from a release whose manifest claims an audit.
+    """
     _Image, _ImageDraw, _ImageOps, PdfReader = _load_runtime()
     try:
         reader = PdfReader(pdf_path, strict=True)
@@ -600,6 +629,15 @@ def inspect_structure(pdf_path: str, markdown: str | None = None,
         reference_start_page = None
         reference_only_pages = []
 
+    if claim_summary is not None:
+        def _fold(text: str) -> str:
+            return re.sub(r"\s+", "", text).upper()
+        folded_all = _fold("\n".join(page_texts))
+        audit_line = _fold(claim_receipts.summary_sentence(claim_summary))
+        if audit_line not in folded_all:
+            failures.append(
+                "PDF is missing the colophon claim-audit line: "
+                + claim_receipts.summary_sentence(claim_summary))
     if failures:
         raise PdfQaError("; ".join(failures))
     return {
@@ -952,6 +990,10 @@ def qa_pdf(pdf_path: str, *, markdown_path: str | None = None,
         expected_fonts=expected_fonts,
         figure_records=(
             manifest_context.get("figure_records")
+            if manifest_context is not None else None
+        ),
+        claim_summary=(
+            manifest_context.get("claim_summary")
             if manifest_context is not None else None
         ),
     )

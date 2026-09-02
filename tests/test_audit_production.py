@@ -30,9 +30,9 @@ class ProductionAuditTests(unittest.TestCase):
             blocks.append(
                 f"### C{index}. Claim {index} is supported by the evidence.\n"
                 "- strength: moderate — one direct study\n"
-                "- evidence: trial, n=100, bounded result [@K1]\n"
+                f"- evidence: trial {index}, n=100, bounded result [@K1]\n"
                 "- contrary: none found — searched\n"
-                "- boundary: the studied population and duration\n"
+                f"- boundary: the population and duration of study {index}\n"
                 "- depends-on: —\n"
                 "- numbers: n=100\n"
             )

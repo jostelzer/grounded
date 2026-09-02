@@ -1,5 +1,5 @@
 {
   "name": "grounded",
-  "version": "4.1.1",
-  "description": "Scientific reviews with no citations from memory: every source found by live OpenAlex/PubMed search, every DOI and retraction status verified through Crossref, delivered as chat, a journal-styled PDF with generated figures, or an experimental slide deck."
+  "version": "0.4.2",
+  "description": "Scientific reviews with no citations from memory: every source found by live OpenAlex/PubMed search, every DOI and retraction status verified through Crossref, every cited sentence audited against its source with verbatim quote receipts, delivered as chat, a journal-styled PDF with generated figures, or an experimental slide deck."
 }
