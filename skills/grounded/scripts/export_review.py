@@ -628,17 +628,22 @@ def _brand_logo_data_uri():
     return "data:image/png;base64," + encoded
 
 
-def _brand_logo_html():
+def _brand_logo_html(css_class=""):
     """Return the packaged Grounded mark as a self-contained PNG image."""
+    attributes = f' class="{css_class}"' if css_class else ""
     return (
-        '<img src="' + _brand_logo_data_uri() + '" '
+        '<img' + attributes + ' src="' + _brand_logo_data_uri() + '" '
         'alt="" aria-hidden="true">'
     )
 
 CSS = r"""
 @page {
   size: A4; margin: 25mm 13mm 12mm 13mm;
+  /* The masthead rides 4mm clear of the text block: without that margin the
+     hairline sits exactly on the content edge and the page reads top-heavy.
+     The gap comes out of the head margin, so pagination is unchanged. */
   @top-left {
+    margin-bottom: 4mm;
     content: "G R O U N D E D";
     width: 42%; vertical-align: bottom; padding: 0 0 3.4mm 42px;
     border-bottom: .5px solid #141414;
@@ -647,6 +652,7 @@ CSS = r"""
     font-weight: 600; letter-spacing: .12em; color: #141414;
   }
   @top-center {
+    margin-bottom: 4mm;
     content: "AGENTICALLY GENERATED SCIENTIFIC REVIEW";
     width: 38%; vertical-align: bottom; padding: 0 0 3.4mm;
     border-bottom: .5px solid #141414;
@@ -654,7 +660,8 @@ CSS = r"""
     font-weight: 600; letter-spacing: .11em; color: #6b6b6b;
   }
   @top-right {
-    content: __GROUNDED_RELEASE__;
+    margin-bottom: 4mm;
+    content: element(gndrelease);
     width: 20%; vertical-align: bottom; padding: 0 0 3.4mm;
     border-bottom: .5px solid #141414;
     font-family: "Helvetica Neue", Arial, sans-serif; font-size: 6.3pt;
@@ -695,7 +702,13 @@ body {
 .strip .chip img { width: 32px; height: 32px; display: block; margin: 0 auto; }
 .strip .mark, .strip .descriptor { display: none; }
 .strip .version {
-  display: block; font-size: 0; line-height: 0;
+  /* A margin-box content string cannot be a link, so the release stamp is
+     rendered as a running element: same typography, but a real anchor that
+     paints a clickable annotation in the top-right box of every page. */
+  position: running(gndrelease); display: block; text-align: right;
+  font-family: "Helvetica Neue", Arial, sans-serif; font-size: 6.3pt;
+  font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+  color: #6b6b6b; text-decoration: none; border-bottom: 0;
 }
 .kicker {
   font-size: 7.5pt; font-weight: 800; letter-spacing: .24em;
@@ -773,8 +786,10 @@ h2.refhead small { font-weight: 600; font-size: 6.3pt; letter-spacing: .12em;
   font-size: 7pt; margin-left: 6px; }
 .madewith b {
   display: block; font-size: 5.8pt; font-weight: 700; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--faint); margin-bottom: 2.5px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 2.5px;
 }
+.madewith b img.mark { width: 11px; height: 11px; margin-right: 4px;
+  vertical-align: -2.5px; }
 .madewith p { margin: 0; font-size: 7pt; line-height: 1.45; color: var(--muted); }
 /* Marker styling is left to the edition, whose list rules the band inherits. */
 .madewith ul { margin: 0; font-size: 7pt; line-height: 1.45; color: var(--muted); }
@@ -916,7 +931,7 @@ PAGE = """<!doctype html>
     <span class="chip">{gnd}</span>
     <span class="mark">GROUNDED</span>
     <a class="descriptor" href="{repo_url}">Agentically generated scientific review</a>
-    <span class="version">grounded {version}</span>
+    <a class="version" href="{repo_url}">grounded {version}</a>
   </div>
 </header>
 <main class="paper">
@@ -1539,10 +1554,6 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         repo_url = repo if repo.startswith("http") else f"https://{repo}"
     release = release or "dev"
     repo_url = repo_url or REPOSITORY_URL
-    css = css.replace(
-        "__GROUNDED_RELEASE__",
-        json.dumps(f"GROUNDED {release.upper()}"),
-    )
 
     audit_summary = (
         claim_receipts.summarize_audit(claims_audit)
@@ -1642,18 +1653,19 @@ def _made_with_block(repo_url, style, compact=False):
     """End-matter provenance band closing the article before the references.
 
     A reader who receives the PDF alone can otherwise tell only that the
-    review was agent-generated, with nothing to resolve: the running header is
-    a paged-media margin box and cannot carry a link.  The compact form is a
+    review was agent-generated: the masthead names the release and links it,
+    but not what the skill is or how to run it.  The compact form is a
     rebalance rung — it keeps both answers the band exists to give, what
     produced this and where to get it, at a single line of page height.
     """
     label = re.sub(r"^https?://", "", repo_url)
     link = (f'<a href="{html.escape(repo_url, quote=True)}">'
             f"{html.escape(label)}</a>")
+    mark = _brand_logo_html("mark")
     if compact:
         return ('<aside class="madewith compact">'
-                f"<b>Made with Grounded {link}</b></aside>")
-    return ('<aside class="madewith"><b>Made with Grounded</b>'
+                f"<b>{mark}Made with Grounded {link}</b></aside>")
+    return (f'<aside class="madewith"><b>{mark}Made with Grounded</b>'
             + MADE_WITH_COPY[style].format(link=link)
             + "</aside>")
 

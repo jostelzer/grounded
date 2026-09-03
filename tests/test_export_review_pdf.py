@@ -148,15 +148,18 @@ class PdfExportTests(unittest.TestCase):
             "Agentically generated scientific review</a>",
             page,
         )
-        self.assertIn('<span class="version">grounded v-test</span>', page)
+        self.assertIn(
+            '<a class="version" href="https://example.test/grounded">'
+            'grounded v-test</a>', page)
         self.assertIn(
             '<b>Made with</b><span><a href="https://example.test/grounded">'
             'Grounded v-test</a></span>',
             page,
         )
         self.assertNotIn('<b>Tokens</b>', page)
-        self.assertIn(
-            '<aside class="madewith"><b>Made with Grounded</b>', page)
+        self.assertIn('<aside class="madewith"><b><img class="mark" '
+                      'src="data:image/png;base64,', page)
+        self.assertIn('Made with Grounded</b>', page)
         self.assertIn(
             '<a href="https://example.test/grounded">'
             'example.test/grounded</a></p></aside>'
@@ -177,10 +180,8 @@ class PdfExportTests(unittest.TestCase):
                 compiled_date="2026-08-26",
             )
         expected = f"v{grounded_metadata.version()}"
-        self.assertIn(
-            f'<span class="version">grounded {expected}</span>', page
-        )
-        self.assertNotIn('<span class="version">grounded v1.0</span>', page)
+        self.assertIn(f'>grounded {expected}</a>', page)
+        self.assertNotIn('>grounded v1.0</a>', page)
 
     def test_prose_style_alias_prints_as_scientific(self):
         page = export_review.build_html(
@@ -1287,8 +1288,8 @@ class FigureExportTests(unittest.TestCase):
         bullets = export_review.build_html(
             markdown, style="bullets", release="v-test",
             repo="example.test/g", compiled_date="2026-08-27")
-        self.assertIn('<aside class="madewith"><b>Made with Grounded</b><ul>',
-                      bullets)
+        self.assertIn('Made with Grounded</b><ul>', bullets)
+        self.assertIn('<aside class="madewith"><b><img class="mark" ', bullets)
 
         compact = export_review.build_html(
             markdown, made_with="compact", release="v-test",
