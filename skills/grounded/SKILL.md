@@ -70,7 +70,7 @@ python3 scripts/verify_claims.py fetch --audit claims_audit.json --evidence evid
 python3 scripts/verify_claims.py packets --audit claims_audit.json --evidence evidence/ --blind
 ```
 
-The inventory includes uncited text, headings, summaries, table cells and captions. The independent judge classifies each uncited item as factual, interpretation with factual basis IDs, or nonfactual with a reason. A factual item without evidence cannot ship. Citation-free abstracts and summaries must map their assertions to checked factual claims, not disappear from the audit.
+The inventory includes uncited text, headings, summaries, table cells and captions. The independent judge classifies each uncited item as factual, interpretation with factual basis IDs, nonfactual with a reason, or document-local artifact evidence with inspected file hashes and a substantive reason. Artifact evidence is restricted to local provenance or depicted geometry, never scientific factual claims. A factual item without evidence cannot ship. Citation-free abstracts and summaries must map their assertions to checked factual claims, not disappear from the audit.
 
 Judge source support per assertion element. A partial source may ship only if other evidence covers the remainder; every element must be supported. Never drop a citation while leaving its unsupported assertion behind. Repair the prose or evidence, re-extract, and re-adjudicate changed assertions.
 

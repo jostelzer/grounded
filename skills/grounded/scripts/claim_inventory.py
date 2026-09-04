@@ -55,6 +55,23 @@ def split_sentences(paragraph):
     return [_unprotect(p).strip() for p in parts if p.strip()]
 
 
+def split_assertions(block):
+    """Split prose, keeping Markdown links intact and citations sentence-local."""
+    links = []
+    def protect_link(match):
+        links.append(match.group())
+        return f"\uFFF0{len(links) - 1}\uFFF1"
+    protected = re.sub(r"!?\[[^\]]*\]\([^\n]*?\)", protect_link, block)
+    protected = _protect(protected)
+    protected = re.sub(r"(Figure\s+\d+)\.", lambda m: m[1] + "\u2024", protected)
+    parts = re.split(
+        r"(?:(?<=[.!?])|(?<=[.!?]\*\*)|(?<=[.!?]\*)|(?<=[.!?]__)|(?<=[.!?]_))"
+        r"\s+(?=[\*_\"“(\[]*[A-Z0-9])", protected)
+    # Restore links before parsing citations.
+    return [_unprotect(re.sub(r"\uFFF0(\d+)\uFFF1", lambda m: links[int(m[1])], p)).strip()
+            for p in parts if p.strip()]
+
+
 def claim_numbers(text):
     """Numeric anchors of a claim: numbers that are not years or citation labels."""
     cleaned = DOI_LINK_RE.sub(" ", text)
@@ -132,6 +149,12 @@ def extract_claims(markdown, key_to_doi=None, *, include_uncited=False):
             continue
         caption = re.match(r"^\*\*Figure\s+(\d+)\.", block)
         if caption:
+            if include_uncited:
+                for j, sentence in enumerate(split_assertions(" ".join(block.split())), 1):
+                    pair = _pairs_from_text(sentence, f"figure {caption.group(1)} caption, sentence {j}", key_to_doi, True)
+                    if pair:
+                        claims.append(pair)
+                continue
             # A caption is one cited statement about the figure; its sources
             # back the caption as a whole, not each descriptive sentence.
             pair = _pairs_from_text(
@@ -149,6 +172,16 @@ def extract_claims(markdown, key_to_doi=None, *, include_uncited=False):
                     claims.append(pair)
             continue
         para_no += 1
+        if include_uncited:
+            items = re.split(r"(?m)^\s*(?:[-+*]|\d+[.)])\s+", block)
+            for item_no, item in enumerate((x for x in items if x.strip()), 1):
+                for j, sentence in enumerate(split_assertions(item), 1):
+                    location = (f"paragraph {para_no}, item {item_no}, sentence {j}" if len(items) > 1
+                                else f"paragraph {para_no}, sentence {j}")
+                    pair = _pairs_from_text(sentence, location, key_to_doi, True)
+                    if pair:
+                        claims.append(pair)
+            continue
         for j, sentence in enumerate(split_sentences(block), 1):
             pair = _pairs_from_text(sentence, f"paragraph {para_no}, sentence {j}", key_to_doi, include_uncited)
             if pair:

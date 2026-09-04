@@ -11,13 +11,15 @@ Two things can be wrong with it, and both are invisible:
 
 You can't catch either without checking every reference by hand. Grounded is an agent skill that does exactly that, so you don't have to.
 
-It turns your question into a real literature review with **zero citations from memory**: every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref and screened for retractions, and every paper is read before it's cited. The synthesis every review is written from must quote each source verbatim *before* a sentence of prose exists, and afterwards a judge that did not write the text audits **all assertions, including headings and uncited summaries, against evidence or an explicitly checked interpretive basis**, anchored to quotes a deterministic checker string-matches against the source. The review ships with **receipts** — a companion `…-receipts.md` with one entry per cited sentence: source, evidence tier, verdict, quote — and each source in the reference list says how many claims it supports at which tier. An assertion with uncovered factual elements cannot ship: it is dropped, moved, or the sentence is rewritten — never decorated.
+Grounded builds a narrative literature review from live searches, verified bibliographic records, and source text. Before writing, it records the evidence and its limits in a claims ledger. Afterwards, a separate judge checks the assertions against the sources, including headings, summaries, tables, and captions. A deterministic check verifies quotations and binds the final review to the checked evidence.
+
+The review ships with **receipts**: the assertion, its sources, the supporting passages, the access level, and the judge’s verdict. A separate assessment explains confidence in each outcome and identifies overlapping studies. Bibliographic identity, quotation support, and scientific certainty are different checks; a passing audit does not make a conclusion infallible.
 
 **Traceable sources, independently checked assertions, and explicit evidence limits.**
 
 Runs in coding agents with a real shell and network — Claude Code, Codex CLI, and friends. It needs literature API access, Python, artifact storage, and an independent judge context; check actual host capabilities rather than assuming them from its product name. See [Requirements](#requirements).
 
-Grounded is at 0.5.x: the pipeline is complete and every gate is tested, but interfaces still move between minor versions.
+Grounded is at 0.5.x. The repository includes regression tests and complete example runs; interfaces may still change between minor versions.
 
 ## Examples
 
@@ -25,29 +27,36 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 > Use the grounded skill to tell me: what happens to your body when you stop taking Ozempic? Popsci, medium, journal PDF.
 
-Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. Four real runs, unedited:
+Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. The examples below use four writing styles and three review sizes.
 
-- **"What happens to your body when you stop taking Ozempic?"** — popsci · medium → [PDF](examples/ozempic-after-stopping.pdf) · [Markdown](examples/ozempic-after-stopping.md) · [Receipts](examples/ozempic-after-stopping-receipts.md) · 31 verified sources · three cited figures · 6-page journal article
-- **"Are microplastics actually harming our health?"** — ELI5 · small → [PDF](examples/microplastics-health-eli5.pdf) · [Markdown](examples/microplastics-health-eli5.md) · [Receipts](examples/microplastics-health-eli5-receipts.md) · 12 verified sources · two cited figures · 3-page journal article
-- **"Do school smartphone bans improve grades and mental health?"** — bullets · small → [PDF](examples/school-smartphone-bans.pdf) · [Markdown](examples/school-smartphone-bans.md) · [Receipts](examples/school-smartphone-bans-receipts.md) · 10 verified sources · two cited figures · 3-page journal article
-- **"Are seed oils really bad for you?"** — scientific · large → [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) · [Receipts](examples/seed-oils-receipts.md) · 73 verified sources · six cited figures · 10-page journal article
+All four examples were rerun on **4 September 2026** with the current assertion audit, outcome assessments, and figure checks. Each includes the finished review and a separate, inspectable evidence receipt file.
+
+| Question | Style · size | Read the review | Evidence receipts |
+|---|---|---|---|
+| What happens to your body when you stop taking Ozempic? | Popsci · medium | [PDF](examples/ozempic-after-stopping.pdf) · [Markdown](examples/ozempic-after-stopping.md) | [Receipts](examples/ozempic-after-stopping-receipts.md) |
+| Are microplastics actually harming our health? | ELI5 · small | [PDF](examples/microplastics-health-eli5.pdf) · [Markdown](examples/microplastics-health-eli5.md) | [Receipts](examples/microplastics-health-eli5-receipts.md) |
+| Do school smartphone bans improve grades and mental health? | Bullets · small | [PDF](examples/school-smartphone-bans.pdf) · [Markdown](examples/school-smartphone-bans.md) | [Receipts](examples/school-smartphone-bans-receipts.md) |
+| Are seed oils really bad for you? | Scientific · large | [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) | [Receipts](examples/seed-oils-receipts.md) |
+
+The examples use as many sources as the question needs. Full-text and abstract-only evidence are distinguished in the receipts; more references do not automatically mean stronger evidence.
 
 It can also audit text you already have — an LLM answer, a manuscript section, a press release:
 
 > Use the grounded skill to check this draft's claims and references against the literature.
 
-No questions asked: the draft's citations are parsed in whatever form they come (DOI links, `[3]` with a reference list, `(Smith et al., 2020)`), every reference is resolved and verified — a reference no index can find is reported as **NOT FOUND** — and every cited sentence is judged blind against its source's own text. You get a scorecard (*references: 12 cited · 9 verified · 1 retracted · 2 not found; sentences: 30 cited · 18 supported · 7 partial · 5 unsupported*), a line per reference, a receipt per sentence, and the list of citations to fix. Run it on a vanilla model's answer and on Grounded's own review of the same question to compare them on the same terms.
+The draft's citations are parsed in common forms (DOI links, `[3]` with a reference list, `(Smith et al., 2020)`), every reference is resolved and verified — a reference no index can find is reported as **NOT FOUND** — and assertions are checked against the available source text, with uncited summaries and factual headings included. You get a scorecard (*references: 12 cited · 9 verified · 1 retracted · 2 not found; sentences: 30 cited · 18 supported · 7 partial · 5 unsupported*), a line per reference, a receipt per assertion, and the list of citations to fix. Run it on a vanilla model's answer and on Grounded's own review of the same question to compare them on the same terms.
 
 ## Sizes, styles, formats
 
 Every review has three independent dimensions — combine them freely. The default is **medium · popsci · journal PDF**.
 
-**Size** — how much evidence:
+**Size** — scope and depth. Reference counts are guidance, not quotas:
 
 | | small | medium (default) | large |
 |---|---|---|---|
-| Words | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
-| Verified sources | 10–20 | 30–60 | 70–150 |
+| Scientific / popsci words | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
+| ELI5 / bullets words | 350–700 | 900–1,600 | 2,000–4,000 |
+| Source guidance | 10–20 | 30–60 | 70–150 |
 
 **Style** — how it's written; the rigour never changes:
 
@@ -107,4 +116,4 @@ The model does the reading and writing; deterministic scripts do the searching, 
 
 ## Verification contract
 
-Written reviews use schema-v2 assertion audits: exact review/evidence binding, complete element coverage, independent classification of uncited material, and a multi-domain judge qualification set. Outcome certainty and study-family overlap are assessed separately from quotation support. Source counts are advisory; contrary searches are required but disagreement is not. A compact methods disclosure reports scope and access limitations. Canonical budgets live in `skills/grounded/scripts/review_config.py` and generate [the budget table](skills/grounded/references/budgets.md) and evaluation metadata. Historical examples predate this contract and are not retroactively certified by it.
+Written reviews use schema-v2 assertion audits: exact review/evidence binding, complete element coverage, independent classification of uncited material, and a multi-domain judge qualification set. Outcome certainty and study-family overlap are assessed separately from quotation support. Source counts are advisory; contrary searches are required but disagreement is not. A compact methods disclosure reports scope and access limitations. Canonical budgets live in `skills/grounded/scripts/review_config.py` and generate [the budget table](skills/grounded/references/budgets.md) and evaluation metadata. Document-local statements about searches, source access, and figure geometry are independently checked against the actual run artifacts, whose file hashes are bound into the audit. Scientific claims still require source support; local artifacts cannot substitute for scientific evidence.

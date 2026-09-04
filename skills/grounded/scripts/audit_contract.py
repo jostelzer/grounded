@@ -5,6 +5,7 @@ still decides whether quotations entail each asserted element.
 """
 import hashlib
 import json
+import os
 import re
 from decimal import Decimal
 from pathlib import Path
@@ -31,13 +32,24 @@ def checked_digest(audit):
 def quantities(text):
     """Exact signed values plus attached units; no substring or percent stripping."""
     text = spell_to_digits(text).replace("−", "-").replace(",", "")
+    # Scientific typography uses spaces (including narrow/no-break spaces)
+    # to group thousands. Preserve the number rather than treating each
+    # three-digit group as a separate measurement.
+    text = re.sub(r"(?<![\w.])\d{1,3}(?:[ \u00a0\u202f]\d{3})+(?!\d)",
+                  lambda m: re.sub(r"[ \u00a0\u202f]", "", m[0]), text)
+    # Adjectival durations express the same units as ordinary durations.
+    text = re.sub(r"(?<=\d)[-‑](?=(?:wk|wks|weeks?|months?|days?|years?|"
+                  r"h|hr|hrs|hours?|min|mins|minutes?)\b)", " ", text)
     # A hyphen between positive bounds is a range, not a minus sign.
     text = re.sub(r"(?<=\d)[-–—](?=\d)", " to ", text)
     aliases = {"milligrams": "mg", "milligram": "mg", "micrograms": "µg",
-               "microgram": "µg", "grams": "g", "gram": "g", "percent": "%"}
+               "microgram": "µg", "grams": "g", "gram": "g", "percent": "%",
+               "h": "hour", "hr": "hour", "hrs": "hour", "hours": "hour",
+               "min": "minute", "mins": "minute", "minutes": "minute",
+               "wk": "week", "wks": "week"}
     text = re.sub(r"\b(" + "|".join(aliases) + r")\b", lambda m: aliases[m.group()], text)
     text = re.sub(r"\b(?:Figure|Fig\.)\s+\d+\b", "", text, flags=re.I)
-    pattern = r"(?<![\w.])([+-]?\d+(?:\.\d+)?)(?:\s*(%|mg|kg|µg|μg|g|ml|mL|mmol|mm|cm|hours?|days?|weeks?|months?|years?)\b|(%))?"
+    pattern = r"(?<![\w.])([+-]?\d+(?:\.\d+)?)(?:\s*(%|mg|kg|µg|μg|g|ml|mL|mmol|mm|cm|minutes?|hours?|days?|weeks?|months?|years?)\b|(%))?"
     result = set()
     for match in re.finditer(pattern, text):
         value, unit, percent = match.groups()
@@ -71,6 +83,35 @@ def elements_problem(claim):
     return None
 
 
+def artifact_reference(path, audit_path):
+    """Snapshot the actual inspected file, relative to the audit's location."""
+    path = Path(path).resolve()
+    if not path.is_file():
+        raise ValueError(f"artifact is not a file: {path}")
+    return {"path": os.path.relpath(path, Path(audit_path).resolve().parent),
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+
+
+def artifact_errors(audit, audit_path):
+    errors = []
+    for claim in audit.get("claims", []):
+        for reference in claim.get("artifacts", []):
+            if not isinstance(reference, dict) or not isinstance(reference.get("path"), str):
+                errors.append(claim["id"] + ": invalid artifact reference")
+                continue
+            path = reference["path"]
+            if Path(path).is_absolute() or not path:
+                errors.append(claim["id"] + ": artifact path must be relative to audit")
+                continue
+            try:
+                current = artifact_reference(Path(audit_path).resolve().parent / path, audit_path)
+                if current["sha256"] != reference.get("sha256"):
+                    errors.append(claim["id"] + ": artifact changed: " + path)
+            except (OSError, ValueError):
+                errors.append(claim["id"] + ": artifact missing or unreadable: " + path)
+    return errors
+
+
 def coverage_errors(audit):
     errors = []
     claims = audit.get("claims", [])
@@ -80,7 +121,7 @@ def coverage_errors(audit):
     for c in claims:
         prefix = c["id"] + ": "
         classification = c.get("classification", "pending")
-        if classification not in {"factual", "interpretation", "nonfactual"}:
+        if classification not in {"factual", "interpretation", "nonfactual", "artifact"}:
             errors.append(prefix + "assertion still needs independent classification")
             continue
         if classification != "factual":
@@ -88,6 +129,10 @@ def coverage_errors(audit):
                 errors.append(prefix + "classification needs a reason")
             if c.get("dois"):
                 errors.append(prefix + "cited assertions must be assessed as factual")
+            if c.get("adjudications"):
+                errors.append(prefix + "non-factual classifications cannot retain source adjudications")
+            if classification == "artifact" and not c.get("artifacts"):
+                errors.append(prefix + "artifact classification needs inspected file evidence")
             if classification == "interpretation":
                 basis = c.get("basis", [])
                 if not basis or any(k not in by_id or by_id[k].get("classification") != "factual"
@@ -146,6 +191,7 @@ def validate_release(audit, markdown, audit_path, key_to_doi=None):
             inventory_digest(audit["claims"]) != audit.get("inventory_sha256"):
         raise ValueError("review assertions changed: re-extract and re-adjudicate before release")
     errors = coverage_errors(audit)
+    errors.extend(artifact_errors(audit, audit_path))
     if errors:
         raise ValueError("assertion coverage failed: " + "; ".join(errors))
     if audit.get("checked_sha256") != checked_digest(audit):

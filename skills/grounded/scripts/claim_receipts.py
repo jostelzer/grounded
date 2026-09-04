@@ -321,6 +321,8 @@ def render_receipts_document(audit, labels=None, title="review", review_name="re
             lines.append(f"- {c['id']} · {c.get('classification', 'pending')} · {plain_text(c['claim'])} — "
                          + c.get("classification_note", "")
                          + (" (basis: " + ", ".join(c["basis"]) + ")" if c.get("basis") else ""))
+            for reference in c.get("artifacts", []):
+                lines.append(f"  - Inspected artifact `{reference['path']}` · SHA256 `{reference['sha256']}`")
     assessment = audit.get("evidence_assessment")
     if assessment:
         lines += ["", "## Outcome certainty (separate from source support)", ""]

@@ -8,8 +8,8 @@
     {
       "name": "grounded",
       "source": "./",
-      "description": "Scientific reviews with no citations from memory: verified sources, verified DOIs, journal-styled PDF output."
+      "description": "Scientific reviews with traceable sources, explicit evidence limits, and journal PDF output."
     }
   ],
-  "description": "Grounded \u2014 scientific reviews built only on peer-reviewed literature found by real searches, with every citation and retraction status verified."
+  "description": "Grounded — scientific narrative reviews with live literature searches, verified bibliographic records, independently checked assertions, and evidence receipts."
 }

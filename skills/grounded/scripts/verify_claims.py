@@ -217,7 +217,9 @@ def cmd_packets(args):
             continue
         if not c["adjudications"]:
             print(f"{c['id']} (classification required): {c['claim']}")
-            print("  Classify factual, interpretation with factual basis IDs, or nonfactual with reason.")
+            print("  Classify factual, interpretation with factual basis IDs, nonfactual, or artifact with inspected files and reason.")
+            for reference in c.get("artifacts", []):
+                print(f"  ARTIFACT: {reference['path']} SHA256 {reference['sha256']}")
         for element in c.get("elements", []):
             print(f"  {c['id']}/{element['id']}: {element['text']}")
         for index, adj in enumerate(c["adjudications"], 1):
@@ -312,6 +314,7 @@ def cmd_check(args):
     judgment_errors = judgment_problems(audit)
     if audit.get("schema_version") == 2:
         judgment_errors.extend(audit_contract.coverage_errors(audit))
+        judgment_errors.extend(audit_contract.artifact_errors(audit, args.audit))
         audit.pop("checked_sha256", None)
         if not judgment_errors and not hard_fail:
             audit_contract.bind_evidence(audit, args.evidence, args.audit)
@@ -359,8 +362,8 @@ def cmd_check(args):
     if judgment_errors:
         for item in judgment_errors:
             print("  ! " + item)
-        print("HARD FAIL: verdicts were not adjudicated pair by pair — "
-              "read each packet and use `adjudicate`.")
+        print("HARD FAIL: assertion judgments, coverage, or evidence integrity failed — "
+              "resolve the errors above and rerun check.")
         sys.exit(1)
     if hard_fail:
         print("HARD FAIL: at least one claim is contradicted by its source.")
@@ -543,8 +546,20 @@ def cmd_classify(args):
         sys.exit("cited assertions must be assessed as factual")
     if not args.note.strip():
         sys.exit("classification requires an independent reason")
+    artifacts = getattr(args, "artifact", None) or []
+    if args.classification == "artifact" and not artifacts:
+        sys.exit("artifact classification requires at least one inspected --artifact file")
+    if artifacts and args.classification != "artifact":
+        sys.exit("--artifact requires artifact classification")
+    try:
+        references = [audit_contract.artifact_reference(path, args.audit) for path in artifacts]
+    except (OSError, ValueError) as exc:
+        sys.exit(str(exc))
     claim.update(classification=args.classification, classification_note=args.note,
                  basis=args.basis or [])
+    claim.pop("artifacts", None)
+    if references:
+        claim["artifacts"] = references
     audit.pop("checked_sha256", None)
     atomic_write_json(args.audit, audit)
 
@@ -777,9 +792,10 @@ def main():
     p = sub.add_parser("classify")
     p.add_argument("--audit", required=True)
     p.add_argument("--claim", required=True)
-    p.add_argument("--classification", choices=("factual", "interpretation", "nonfactual"), required=True)
+    p.add_argument("--classification", choices=("factual", "interpretation", "nonfactual", "artifact"), required=True)
     p.add_argument("--note", required=True)
     p.add_argument("--basis", action="append", help="factual assertion ID underpinning an interpretation")
+    p.add_argument("--artifact", action="append", help="inspected document-local evidence file; repeat for multiple files")
     p.set_defaults(fn=cmd_classify)
 
     p = sub.add_parser("elements")

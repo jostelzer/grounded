@@ -29,7 +29,15 @@ python3 scripts/verify_claims.py classify --audit claims_audit.json --claim C001
 python3 scripts/verify_claims.py classify --audit claims_audit.json --claim C002 --classification interpretation --basis C008 --basis C009 --note "Calibrated summary of the checked findings, with no additional factual premise."
 ```
 
-`interpretation` is only an explicit inference or faithful summary whose factual basis IDs are in the same audit. It cannot excuse a new number, population, causal claim, or unsupported assertion. `nonfactual` is for questions, labels, and non-assertive connective text. A factual uncited sentence needs a citation, or revision, before release. The tool checks that basis IDs identify factual claims; the judge checks their meaning. Cited text cannot be relabelled nonfactual to avoid verification.
+`interpretation` is only an explicit inference or faithful summary whose factual basis IDs are in the same audit. It cannot excuse a new number, population, causal claim, or unsupported assertion. `nonfactual` is for questions, labels, and non-assertive connective text. A factual uncited sentence needs a citation, or revision, before release. The tool checks that basis IDs identify factual claims; the judge checks their meaning. Cited text cannot be relabelled nonfactual or artifact to avoid verification.
+
+`artifact` supports only uncited assertions about this document's own provenance (for example, recorded search dates, databases and access limitations) or depicted geometry (for example, which panel contains a curve). The independent judge must open and inspect every supplied file, and give a substantive note explaining exactly which observed contents support the complete assertion. A filename, hash or the author's promise is not evidence of its contents. Use search manifests, access records, or the actual figure as appropriate. Never use this classification for scientific results, causal claims, efficacy, biological mechanisms, quantitative findings, or scientific interpretations; those require factual source evidence or interpretation with checked factual basis IDs. Mixed captions must be separated into atomic sentences before classification; never omit an assertion. An uncited scientific heading remains an interpretation with factual basis IDs, not an artifact.
+
+```bash
+python3 scripts/verify_claims.py classify --audit claims_audit.json --claim C003 --classification artifact --artifact search-manifest.json --artifact fulltext-manifest.json --note "The inspected manifests record the stated search date, databases and access limitations."
+```
+
+`--artifact` is repeatable and resolves from the command's working directory. The audit stores each file path relative to the audit file and the SHA256 of its actual bytes. Check and release both require those exact files and hashes; changed or missing files require renewed independent inspection and classification. Receipts expose these paths and hashes. Hash binding establishes identity, not semantic support or independent inspection.
 
 ## Verdicts and complete support
 
