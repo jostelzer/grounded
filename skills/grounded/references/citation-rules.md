@@ -68,4 +68,4 @@ The canonical GROUNDED journal PDF is not produced with `--style nature`; its re
 
 ## What to tell the reader
 
-Reviews carry no methods section, so the sources block with its DOIs and the receipts after it are the audit trail — every line is resolvable, and every cited sentence has its verdict and verbatim quote. Say nothing else about verification when it passed. Bibliographic failures, unavailable Crossref checks, and integrity flags are fixed or removed, not published with warning symbols; the only annotation a reference entry may carry is the factual "Correction:" note for a recorded corrigendum or erratum.
+Reviews carry a compact scope/methods disclosure; the sources block with its DOIs and the receipts after it are the audit trail — every line is resolvable, and every cited sentence has its verdict and verbatim quote. State the limits of verification accurately. Bibliographic failures, unavailable Crossref checks, and integrity flags are fixed or removed, not published with warning symbols; the only annotation a reference entry may carry is the factual "Correction:" note for a recorded corrigendum or erratum.

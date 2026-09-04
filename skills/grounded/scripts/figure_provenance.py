@@ -8,6 +8,42 @@ from typing import Any
 
 from artifact_io import sha256_file
 
+GENERATOR_DETECTION_METHODS = {
+    "session-tool-enumeration", "tool-invocation", "user-statement", "other",
+}
+
+
+def provenance_warnings(provenance: dict[str, Any] | None) -> list[str]:
+    """Return non-blocking provenance observations (additive to the errors).
+
+    A missing generator is an important claim: without a record of how the
+    absence was determined, "generator_available: false" cannot be audited and
+    a reader cannot tell a tooling gap from a preference for plots.
+    """
+    warnings: list[str] = []
+    if not isinstance(provenance, dict):
+        return warnings
+    detection = provenance.get("generator_detection")
+    if detection is None:
+        if provenance.get("generator_available") is False:
+            warnings.append(
+                "generator_available is false without generator_detection "
+                "(method, evidence); record how the absence was determined")
+        return warnings
+    if not isinstance(detection, dict):
+        warnings.append("generator_detection must be an object")
+        return warnings
+    method = str(detection.get("method") or "").strip()
+    evidence = str(detection.get("evidence") or "").strip()
+    if method not in GENERATOR_DETECTION_METHODS:
+        warnings.append(
+            "generator_detection.method must be one of: "
+            + ", ".join(sorted(GENERATOR_DETECTION_METHODS)))
+    if not evidence:
+        warnings.append("generator_detection.evidence must describe what was checked")
+    return warnings
+
+
 def validate_provenance(
     spec: dict[str, Any], image_path: Path,
     provenance: dict[str, Any] | None,

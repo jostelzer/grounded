@@ -23,6 +23,10 @@ ASSET_FILES = ("grounded-logo-512.png",)
 # Visual evaluation topics are deliberately private and replaceable. They are
 # never bundled as canonical templates in a public skill release.
 REFERENCE_FILES = (
+    "budgets.md",
+    "draft-check.md",
+    "evidence-assessment.md",
+    "output-formats.md",
     "citation-rules.md",
     "claim-verification.md",
     "deck-guide.md",
@@ -41,6 +45,7 @@ REFERENCE_FILES = (
     "nature-figure-corpus.json",
     "production-workflow.md",
     "quality-gates.md",
+    "quantitative-figure-guide.md",
     "search-playbook.md",
     "sizes.md",
     "style-bullets.md",
@@ -51,10 +56,17 @@ REFERENCE_FILES = (
     "writing-guide.md",
 )
 EVAL_FILES = (
+    "judge-benchmark-input.json",
+    "judge-benchmark-gold.json",
     "claim-benchmark-creatine.json",
     "decorative-citations.json",
 )
 SCRIPT_FILES = (
+    "audit_contract.py",
+    "claim_inventory.py",
+    "evidence_assessment.py",
+    "review_config.py",
+    "sync_review_budgets.py",
     "artifact_io.py",
     "audit_fulltexts.py",
     "audit_production.py",
@@ -74,6 +86,7 @@ SCRIPT_FILES = (
     "figure_typography.py",
     "figure_contract.py",
     "figure_provenance.py",
+    "figure_spec_tools.py",
     "find_papers.py",
     "format_references.py",
     "grounded_metadata.py",

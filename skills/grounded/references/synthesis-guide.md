@@ -112,3 +112,7 @@ The styled review is **composed from** the synthesis, never **translated from** 
 - Update it, don't fork it: if drafting reveals a wrong or missing claim, fix the synthesis first, then the draft. The synthesis and the delivered review must agree at release; a draft that quietly outgrew its synthesis has an unaudited claim in it.
 - It lives in the review's working folder next to `notes.md`, and like the other working files it is mentioned to the user only if they want to audit.
 - On the no-script path the synthesis is written identically — it needs no network and no scripts, only the verified ledger.
+
+## Certainty assessment
+
+Record per-outcome certainty and study-family overlap in `evidence-assessment.json` as specified in evidence-assessment.md. `synthesis-check` requires it. No contrary citations is a valid result after the required completed contrary/null search; the narrative must not manufacture disagreement.

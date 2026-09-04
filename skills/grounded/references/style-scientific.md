@@ -21,7 +21,7 @@ is not supported as a hazard"). This replaces the TL;DR.>
 
 ### Introduction
 <Why the question matters, what is claimed or contested, and the scope — 1–3 paragraphs.
-This is the one style where scene-setting is content, not preamble. No methods narration.
+This is the one style where scene-setting is content, not preamble. Keep the methods disclosure concise.
 End by posing the throughline: the one tension or question the whole review turns on,
 and — if it helps the reader — the sub-questions the sections will answer in order.
 Pose the question the Conclusion will actually answer: if drafting reveals that the

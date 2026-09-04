@@ -1,0 +1,470 @@
+{
+  "description": "Synthetic qualification packets. No real papers or real scientific claims. Judge only against the supplied passage; absent text means unverifiable.",
+  "claims": [
+    {
+      "id": "C001",
+      "claim": "In 20 adults, treatment reduced pain by 15%.",
+      "dois": [
+        "10.0000/synthetic-1"
+      ],
+      "field": "clinical",
+      "passages": [
+        "In 20 adults, treatment reduced pain by 15%."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-1",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C002",
+      "claim": "In 20 adults, treatment reduced pain by 90%.",
+      "dois": [
+        "10.0000/synthetic-2"
+      ],
+      "field": "clinical",
+      "passages": [
+        "In 20 adults, treatment reduced pain by 15%."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-2",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C003",
+      "claim": "Treatment reduced pain and prevented hospitalization.",
+      "dois": [
+        "10.0000/synthetic-3"
+      ],
+      "field": "clinical",
+      "passages": [
+        "Treatment reduced pain. Hospitalization was not measured."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-3",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C004",
+      "claim": "Treatment reduced mortality.",
+      "dois": [
+        "10.0000/synthetic-4"
+      ],
+      "field": "clinical",
+      "passages": [
+        "The consent form used a 12-point font."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-4",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C005",
+      "claim": "Treatment improved memory.",
+      "dois": [
+        "10.0000/synthetic-5"
+      ],
+      "field": "clinical",
+      "passages": [],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-5",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C006",
+      "claim": "Bird abundance fell by 30%.",
+      "dois": [
+        "10.0000/synthetic-6"
+      ],
+      "field": "ecology",
+      "passages": [
+        "Bird abundance fell by 30%."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-6",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C007",
+      "claim": "Bird abundance increased by 30%.",
+      "dois": [
+        "10.0000/synthetic-7"
+      ],
+      "field": "ecology",
+      "passages": [
+        "Bird abundance fell by 30%."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-7",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C008",
+      "claim": "The intervention improved survival across all bird species.",
+      "dois": [
+        "10.0000/synthetic-8"
+      ],
+      "field": "ecology",
+      "passages": [
+        "Survival improved in the single sparrow species studied."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-8",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C009",
+      "claim": "The intervention improved survival.",
+      "dois": [
+        "10.0000/synthetic-9"
+      ],
+      "field": "ecology",
+      "passages": [
+        "Researchers recorded latitude and longitude for each sampling site."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-9",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C010",
+      "claim": "The intervention increased biodiversity.",
+      "dois": [
+        "10.0000/synthetic-10"
+      ],
+      "field": "ecology",
+      "passages": [],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-10",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C011",
+      "claim": "Scores increased by 4 points after six weeks.",
+      "dois": [
+        "10.0000/synthetic-11"
+      ],
+      "field": "education",
+      "passages": [
+        "Scores increased by 4 points after six weeks."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-11",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C012",
+      "claim": "Scores increased by 40 points.",
+      "dois": [
+        "10.0000/synthetic-12"
+      ],
+      "field": "education",
+      "passages": [
+        "Scores increased by 4 points."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-12",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C013",
+      "claim": "Tutoring improved reading and mathematics.",
+      "dois": [
+        "10.0000/synthetic-13"
+      ],
+      "field": "education",
+      "passages": [
+        "Reading scores improved. Mathematics was not assessed."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-13",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C014",
+      "claim": "Tutoring improved graduation rates.",
+      "dois": [
+        "10.0000/synthetic-14"
+      ],
+      "field": "education",
+      "passages": [
+        "School buildings were constructed between 1960 and 1975."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-14",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C015",
+      "claim": "Tutoring improved attendance.",
+      "dois": [
+        "10.0000/synthetic-15"
+      ],
+      "field": "education",
+      "passages": [],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-15",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C016",
+      "claim": "Latency decreased from 80 ms to 40 ms.",
+      "dois": [
+        "10.0000/synthetic-16"
+      ],
+      "field": "engineering",
+      "passages": [
+        "Latency decreased from 80 ms to 40 ms."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-16",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C017",
+      "claim": "The device consumed 5 g of fuel.",
+      "dois": [
+        "10.0000/synthetic-17"
+      ],
+      "field": "engineering",
+      "passages": [
+        "The device consumed 5 mg of fuel."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-17",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C018",
+      "claim": "The device is faster and more energy efficient.",
+      "dois": [
+        "10.0000/synthetic-18"
+      ],
+      "field": "engineering",
+      "passages": [
+        "The measured latency decreased. Energy use was not measured."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-18",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C019",
+      "claim": "The device has lower latency.",
+      "dois": [
+        "10.0000/synthetic-19"
+      ],
+      "field": "engineering",
+      "passages": [
+        "The enclosure is blue and rectangular."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-19",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C020",
+      "claim": "The device has a longer operational lifetime.",
+      "dois": [
+        "10.0000/synthetic-20"
+      ],
+      "field": "engineering",
+      "passages": [],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-20",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C021",
+      "claim": "Employment rose by 2%.",
+      "dois": [
+        "10.0000/synthetic-21"
+      ],
+      "field": "economics",
+      "passages": [
+        "Employment rose by 2%."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-21",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C022",
+      "claim": "Employment fell by 2%.",
+      "dois": [
+        "10.0000/synthetic-22"
+      ],
+      "field": "economics",
+      "passages": [
+        "Employment rose by 2%."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-22",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C023",
+      "claim": "The association persisted after adjustment.",
+      "dois": [
+        "10.0000/synthetic-23"
+      ],
+      "field": "economics",
+      "passages": [
+        "The unadjusted analysis showed an association. Adjusted estimates were not reported."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-23",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C024",
+      "claim": "The policy reduced inflation.",
+      "dois": [
+        "10.0000/synthetic-24"
+      ],
+      "field": "economics",
+      "passages": [
+        "Survey questionnaires were printed on recycled paper."
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-24",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "id": "C025",
+      "claim": "The policy reduced inequality.",
+      "dois": [
+        "10.0000/synthetic-25"
+      ],
+      "field": "economics",
+      "passages": [],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-25",
+          "verdict": "pending",
+          "quote": "",
+          "note": ""
+        }
+      ]
+    }
+  ]
+}

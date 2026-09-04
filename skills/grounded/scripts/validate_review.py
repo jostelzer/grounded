@@ -21,21 +21,7 @@ from artifact_io import atomic_write_json
 from citation_apparatus import correction_note_dois, ledger_correction_dois
 import claim_receipts
 
-WORD_BUDGETS = {
-    "scientific": {"small": (600, 1000), "medium": (1500, 2500), "large": (3500, 6000)},
-    "popsci": {"small": (600, 1000), "medium": (1500, 2500), "large": (3500, 6000)},
-    "bullets": {"small": (350, 700), "medium": (900, 1600), "large": (2000, 4000)},
-    "eli5": {"small": (350, 700), "medium": (900, 1600), "large": (2000, 4000)},
-}
-
-TIER_REQUIREMENTS = {
-    "small": {"sections": (3, 5), "sources": (10, 20), "tables": (0, 1),
-              "fulltexts": (2, None), "figure_target": 2, "figure_cap": 2},
-    "medium": {"sections": (6, 9), "sources": (30, 60), "tables": (1, 2),
-               "fulltexts": (8, None), "figure_target": 3, "figure_cap": 5},
-    "large": {"sections": (10, 15), "sources": (70, 150), "tables": (2, 4),
-              "fulltexts": (25, None), "figure_target": 5, "figure_cap": 8},
-}
+from review_config import WORD_BUDGETS, TIER_REQUIREMENTS
 
 MOJIBAKE = re.compile(r"(?:\ufffd|Ã.|Â(?=\s|[^\w])|â(?:€|€™|€œ|€\x9d|€“|€”))")
 SCAFFOLD_LABEL = re.compile(
@@ -666,6 +652,8 @@ def validate_review(
             issue = _tier_error(name, actual, bounds)
             if issue and name in overridden and actual < bounds[0]:
                 warnings.append(f"{issue}; accepted by thin-literature override: {override_reason}")
+            elif issue and name == "sources":
+                warnings.append(issue + "; prioritize relevance and documented search saturation; never pad")
             elif issue:
                 errors.append(issue)
         if figure_count > requirements["figure_cap"]:

@@ -71,7 +71,10 @@ current agent environment.
   fallback. If a generator is unavailable, do not fake an illustration.
 
 Record the result in `<figure-id>.provenance.json`; its canonical schema is in
-`figure-inspection-contract.md`.
+`figure-inspection-contract.md`. When no generator is exposed, record how that
+was determined in `generator_detection` (`method`, `evidence`) and tell the
+reader, in one sentence of the delivery, that the figures are plots for that
+reason.
 
 ## 3. Use one of three v3 routes
 
@@ -92,6 +95,8 @@ is verified mathematical geometry. A v3 deterministic spec must use the
 `plot_design` with chart type, encoding, reader path, and style rationale. Use
 direct labels, restrained colour, intentional spacing, and profile-matched type;
 library-default axes, legends, palettes, gridlines, and margins are failures.
+The spec shape, the renderer's grammar, and the scaffold → lint → preview tools
+are in `quantitative-figure-guide.md`.
 
 ### `composite`
 
@@ -150,26 +155,31 @@ Every v3 figure declares a `semantic_plan` before layout:
   original-size integrity check.
 - `salience_targets` identifies visually vulnerable must-show entities that
   need deliberate contrast, size, and separation.
-- `quantitative_decision` states whether verified numbers exist, whether they
-  carry the primary message, and why the route follows. Primary known numbers
+- `quantitative_decision` states whether verified numbers exist
+  (`verified_numbers_available`), whether they carry the primary message
+  (`numbers_carry_primary_message`), and why the route follows (`reason`). Primary known numbers
   always use deterministic rendering.
-- `information_priority` classifies every entity as primary or supporting,
-  names non-essential elements to omit, and records a deletion test. Primary
+- `information_priority` classifies every entity as primary or supporting
+  (`primary_entities`, `supporting_entities`), names non-essential elements to
+  omit (`excluded_nonessential`), and records a `dominance_rationale` and a
+  `deletion_test`. Primary
   entities must dominate area, contrast, and first fixation; background
   scenery, props, repeated motifs, and decorative furniture that do not change
   the explain-back sentence are forbidden.
-- `uncertainty_encodings` ties every uncertainty mark to a declared entity,
-  names the source of uncertainty, specifies the visual encoding, and states
-  what the reader should infer. A generic question mark, dashed halo, outcome
+- `uncertainty_encodings` ties every uncertainty mark to a declared entity
+  (`target`), names the `source_of_uncertainty`, specifies the
+  `visual_encoding`, and states the `reader_interpretation`. A generic question mark, dashed halo, outcome
   icon, or bare `uncertain` label does not communicate an evidence boundary.
 - `cross_view_identity` declares repeated specimens or objects whose positions,
   membership, geometry, or other invariant features must remain registered
   across thresholds, filters, or states. Only the declared transformation may
   change.
 - `representation_plan` declares whether the visual is literal or
-  metaphor-assisted, names its evidence-native anchor, allows at most one
-  cognitive translation step, and requires a reason when the literal option is
-  rejected. It also declares whether objects are arranged as a lineup or set;
+  metaphor-assisted (`kind`), names its `evidence_native_anchor`, allows at
+  most one cognitive translation step (`cognitive_translation_steps`), and
+  requires a `literal_rejected_reason` when the literal option is rejected,
+  plus `added_explanatory_value`, `arranged_elements`, and
+  `arrangement_evidence_job`. It also declares whether objects are arranged as a lineup or set;
   such an arrangement is valid only when it performs a named evidence-encoding
   job rather than serving as presentation furniture.
 - `cutaway_plan` is required only for the `cutaway` archetype. It declares the
@@ -239,6 +249,13 @@ every supporting label is required without zoom and how the caption or zoom
 carries that detail. Inspect the preview as a separate release view; a large
 native raster does not rescue a figure that becomes cognitively opaque on a
 phone, but phone QA must not inflate supporting labels into display typography.
+For a deterministic figure the renderer draws the declared primary labels in a
+primary tier sized to clear the floor and records their measured heights in
+the geometry manifest; `qa_figure.py --geometry` uses that measurement, and
+an inspection that attests a taller label than the raster contains fails.
+Primary labels are the takeaway strings — a direct series or point label, a
+reference-line label, or an annotation — never tick labels, which stay at
+publication scale and may be as descriptive as the caption needs.
 For a generated figure, each primary phone label is at most four words and 28
 characters. Shorten the label rather than letting ImageGen shrink the whole
 type system; supporting detail belongs in the caption.
@@ -290,7 +307,11 @@ value, difference, denominator, and numeric qualifier
 must sit on, beside, or connect directly to the mark it describes. An interval
 key is omitted for a conventional point-and-whisker encoding when the caption
 already explains it. Add a compact legend only when two or more non-standard
-encodings genuinely require decoding; state why in `plot_design.legend_plan`.
+encodings genuinely require decoding; state why in `plot_design.legend_plan`
+(`needed`, `reason`, `placement`: `none` or `adjacent-to-marks`). The axis
+placement rule above is declared verbatim in `plot_design.axis_label_placement`
+(`x_orientation: horizontal`, `x_location: below-data-region`,
+`y_orientation: vertical`, `y_location: outside-data-region`).
 A forest plot encodes each confidence interval with the point's native
 `x_interval`; a vertical point-and-whisker plot uses `y_interval`. Do not fake
 an interval as a three-point trajectory merely to obtain a horizontal line.

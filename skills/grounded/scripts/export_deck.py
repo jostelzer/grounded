@@ -48,11 +48,7 @@ from format_references import (
 )
 
 
-SIZE_CONTRACTS = {
-    "small": {"content": (4, 6), "total": (6, 8), "reference_min": 1},
-    "medium": {"content": (8, 12), "total": (10, 15), "reference_min": 1},
-    "large": {"content": (14, 20), "total": (18, 25), "reference_min": 3},
-}
+from review_config import DECK_BUDGETS as SIZE_CONTRACTS
 STYLE_ARCS = {
     "scientific": {
         "roles": {"question", "evidence", "limitations", "conclusion"},

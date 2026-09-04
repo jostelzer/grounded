@@ -299,6 +299,12 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         self.assertLess(delivered_height, 10.0)
         self.assertLessEqual(
             max(record["size_px"] for record in manifest["fonts"]), 36)
+        # Only the declared primary labels clear the phone floor.
+        resolved = {item["text"]: item for item in manifest["primary_labels_resolved"]}
+        self.assertEqual(
+            set(resolved), {"Follow-up time", "Change from shared start (%)"})
+        for item in resolved.values():
+            self.assertGreaterEqual(item["mobile_height_px"], 10.0)
 
     def test_v3_renderer_rejects_display_or_flared_plot_type(self):
         spec = self.spec()
@@ -846,6 +852,258 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
         report = qa_quantitative_geometry.audit_geometry(changed, image, manifest)
         self.assertEqual(report["status"], "fail")
         self.assertTrue(any("exact figure spec" in error for error in report["errors"]))
+
+    def v3_layout(self, spec, primary):
+        spec["quality_contract_version"] = 3
+        spec["layout_plan"] = {
+            "content_density": "moderate",
+            "wide_canvas_required": False,
+            "aspect_ratio_rationale": "A compact landscape fits the comparison.",
+            "balance_strategy": "Marks and labels balance around the plot centre.",
+            "final_display": "Single-column article figure at final report width.",
+            "mobile_preview": {
+                "width_px": 390,
+                "minimum_primary_label_height_px": 10,
+                "all_labels_required_without_zoom": False,
+                "primary_labels": list(primary),
+                "first_glance_path": ["Start", "Paths", "Gap"],
+                "supporting_detail_strategy": "Ticks stay publication-sized.",
+                "explain_back_without_zoom": "The groups began together and ended apart.",
+            },
+        }
+        spec["plot_design"]["typography"] = {
+            "family": "Helvetica Neue", "fallback": "Arial",
+            "upright_natural_width": True,
+        }
+        return spec
+
+    def test_primary_label_never_drawn_fails_closed(self):
+        spec = self.v3_layout(self.make_phone_readable(self.spec()), ["Nowhere"])
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError,
+                "primary label was not rendered"):
+            self.render_case(spec)
+
+    def test_tick_labels_are_never_primary(self):
+        spec = self.v3_layout(self.make_phone_readable(self.spec()), ["Start"])
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError,
+                "tick labels are never primary"):
+            self.render_case(spec)
+
+    def test_scaffold_placeholders_cannot_render(self):
+        spec = self.spec()
+        spec["purpose"] = "<<FILL: purpose>>"
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError, "placeholder"):
+            self.render_case(spec)
+
+    @staticmethod
+    def dot_plot_spec(*, use_sugar):
+        spec = DeterministicQuantitativeFigureTests.spec()
+        spec["target_aspect_ratio"] = 1.6
+        spec["plot_design"]["render"].update({"width_px": 1600, "height_px": 1000})
+        names = ["Trial one", "Trial two", "Cohort"]
+        values = [(0.86, [0.72, 1.02]), (0.91, [0.78, 1.06]), (0.97, [0.80, 1.17])]
+        colours = ["#3B7C85", "#3B6F9C", "#C86F55"]
+        panel = {
+            "id": "main",
+            "y_axis": {
+                "label": "Risk ratio", "domain": [0.55, 1.3],
+                "ticks": [{"value": 0.6, "label": "0.6"}, {"value": 1.0, "label": "1.0"},
+                          {"value": 1.2, "label": "1.2"}],
+            },
+            "reference_lines": [
+                {"id": "no-difference", "axis": "y", "value": 1.0, "label": "No difference"}],
+            "events": [], "contrasts": [],
+        }
+        if use_sugar:
+            panel["x_axis"] = {"label": "Evidence source", "categories": names}
+            panel["rows"] = [
+                {"id": f"row-{index}", "value": value, "interval": interval,
+                 "label": f"{value:.2f}", "label_position": "right", "color": colour}
+                for index, ((value, interval), colour) in enumerate(
+                    zip(values, colours), start=1)]
+        else:
+            panel["x_axis"] = {
+                "label": "Evidence source", "domain": [0.5, 3.5],
+                "ticks": [{"value": index, "label": name}
+                          for index, name in enumerate(names, start=1)]}
+            panel["series"] = [
+                {"id": f"row-{index}", "label": None, "color": colour,
+                 "points": [{"id": "estimate", "x": index, "y": value,
+                             "y_interval": interval, "label": f"{value:.2f}",
+                             "label_position": "right"}]}
+                for index, ((value, interval), colour) in enumerate(
+                    zip(values, colours), start=1)]
+        spec["data"]["panels"] = [panel]
+        spec["exact_text"] = [
+            spec["title"], "Evidence source", "Risk ratio", *names,
+            "0.6", "1.0", "1.2", "No difference", "0.86", "0.91", "0.97"]
+        return spec
+
+    def test_categories_and_rows_expand_to_the_explicit_form(self):
+        sugar = self.dot_plot_spec(use_sugar=True)
+        explicit = self.dot_plot_spec(use_sugar=False)
+        _s, sugar_image, _g, sugar_manifest = self.render_case(sugar)
+        _e, explicit_image, _g2, explicit_manifest = self.render_case(explicit)
+        self.assertEqual(sugar_manifest["panels"][0]["points"],
+                         explicit_manifest["panels"][0]["points"])
+        self.assertEqual(sugar_manifest["panels"][0]["x_axis"]["ticks"],
+                         explicit_manifest["panels"][0]["x_axis"]["ticks"])
+        self.assertEqual(sugar_manifest["image"]["sha256"],
+                         explicit_manifest["image"]["sha256"])
+        report = qa_quantitative_geometry.audit_geometry(sugar, sugar_image, sugar_manifest)
+        self.assertEqual(report["status"], "pass", report["errors"])
+
+    def test_rows_require_a_categorical_axis_of_matching_length(self):
+        spec = self.dot_plot_spec(use_sugar=True)
+        spec["data"]["panels"][0]["x_axis"]["categories"].append("Extra")
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError, "one row per category"):
+            self.render_case(spec)
+
+    def test_horizontal_forest_rows_use_x_intervals(self):
+        spec = self.dot_plot_spec(use_sugar=True)
+        panel = spec["data"]["panels"][0]
+        panel["y_axis"], panel["x_axis"] = (
+            {"label": "Evidence source", "categories": panel["x_axis"]["categories"]},
+            {"label": "Risk ratio", "domain": [0.55, 1.3],
+             "ticks": panel["y_axis"]["ticks"]})
+        panel["reference_lines"][0]["axis"] = "x"
+        for row in panel["rows"]:
+            row["label_position"] = "above"
+        # Category names on the y-axis need a wider left gutter than the
+        # v2 fixture declares; the renderer fails closed without it.
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError,
+                "y_tick text does not fit"):
+            self.render_case(copy.deepcopy(spec))
+        spec["plot_design"]["render"]["plot_insets_px"]["left"] = 220
+        _s, image, _g, manifest = self.render_case(spec)
+        intervals = manifest["panels"][0]["intervals"]
+        self.assertEqual({item["axis"] for item in intervals}, {"x"})
+        report = qa_quantitative_geometry.audit_geometry(spec, image, manifest)
+        self.assertEqual(report["status"], "pass", report["errors"])
+
+    def test_auto_layout_widens_a_gutter_for_clipped_category_ticks(self):
+        spec = self.dot_plot_spec(use_sugar=True)
+        panel = spec["data"]["panels"][0]
+        panel["y_axis"], panel["x_axis"] = (
+            {"label": "Evidence source", "categories": panel["x_axis"]["categories"]},
+            {"label": "Risk ratio", "domain": [0.55, 1.3],
+             "ticks": panel["y_axis"]["ticks"]})
+        panel["reference_lines"][0]["axis"] = "x"
+        for row in panel["rows"]:
+            row["label_position"] = "above"
+        spec["plot_design"]["render"]["auto_layout"] = True
+        selected_spec, image, _g, manifest = self.render_case(spec)
+        resolved = manifest["resolved_layout"]
+        self.assertTrue(resolved["auto_layout"])
+        self.assertGreater(resolved["plot_insets_px"].get("left", 0), 140)
+        self.assertEqual(resolved["label_positions"], [])
+        report = qa_quantitative_geometry.audit_geometry(selected_spec, image, manifest)
+        self.assertEqual(report["status"], "pass", report["errors"])
+
+    def test_annotation_with_leader_renders_and_audits(self):
+        spec = self.v3_layout(self.dot_plot_spec(use_sugar=True), ["All intervals cross 1.0"])
+        panel = spec["data"]["panels"][0]
+        panel["annotations"] = [{
+            "id": "takeaway", "text": "All intervals cross 1.0", "x": 0.6, "y": 1.29,
+            "align": "left", "leader_to": {"series_id": "row-1", "point_id": "estimate"},
+        }]
+        spec["exact_text"].append("All intervals cross 1.0")
+        _s, image, _g, manifest = self.render_case(spec)
+        annotations = manifest["panels"][0]["annotations"]
+        self.assertEqual(len(annotations), 1)
+        self.assertEqual(annotations[0]["leader_to"], {"series_id": "row-1", "point_id": "estimate"})
+        self.assertTrue(any(item["role"] == "annotation" for item in manifest["text_layout"]))
+        resolved = {item["text"]: item for item in manifest["primary_labels_resolved"]}
+        self.assertGreaterEqual(resolved["All intervals cross 1.0"]["mobile_height_px"], 10.0)
+        report = qa_quantitative_geometry.audit_geometry(spec, image, manifest)
+        self.assertEqual(report["status"], "pass", report["errors"])
+
+    def test_reference_label_moves_off_a_whisker(self):
+        spec = self.dot_plot_spec(use_sugar=True)
+        _s, _image, _g, manifest = self.render_case(spec)
+        reference = manifest["panels"][0]["reference_lines"][0]
+        # The right-hand whisker reaches above the line, so the label moves.
+        self.assertNotEqual(reference["label_side"], "right")
+        label_box = next(
+            item["bbox_px"] for item in manifest["text_layout"]
+            if item["role"] == "reference_label")
+        for point in manifest["panels"][0]["points"]:
+            self.assertFalse(
+                label_box["left"] - 4 < point["x_px"] < label_box["right"] + 4
+                and label_box["top"] - 4 < point["y_px"] < label_box["bottom"] + 4)
+        clear = self.dot_plot_spec(use_sugar=True)
+        for row in clear["data"]["panels"][0]["rows"]:
+            row["interval"] = [row["value"] - 0.05, row["value"] + 0.02]
+        _s, _image, _g, clear_manifest = self.render_case(clear)
+        self.assertEqual(
+            clear_manifest["panels"][0]["reference_lines"][0]["label_side"], "right")
+
+    def test_annotation_leader_must_reference_an_existing_point(self):
+        spec = self.dot_plot_spec(use_sugar=True)
+        spec["data"]["panels"][0]["annotations"] = [{
+            "id": "takeaway", "text": "Note", "x": 1, "y": 1.2,
+            "align": "left", "leader_to": {"series_id": "missing", "point_id": "estimate"},
+        }]
+        spec["exact_text"].append("Note")
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError, "existing point"):
+            self.render_case(spec)
+
+    def test_auto_layout_resolves_colliding_direct_labels(self):
+        spec = self.spec()
+        for series in spec["data"]["panels"][0]["series"]:
+            series["label_point_id"] = "start"
+            series["label_position"] = "right"
+        spec["plot_design"]["render"]["auto_layout"] = True
+        selected_spec, image, _g, manifest = self.render_case(spec)
+        resolved = manifest["resolved_layout"]
+        self.assertTrue(resolved["auto_layout"])
+        self.assertGreater(resolved["attempts"], 1)
+        moved = {(item["kind"], item["id"]): item["position"]
+                 for item in resolved["label_positions"]}
+        self.assertTrue(moved)
+        self.assertTrue(all(position != "right" for position in moved.values()))
+        report = qa_quantitative_geometry.audit_geometry(selected_spec, image, manifest)
+        self.assertEqual(report["status"], "pass", report["errors"])
+
+    def test_auto_layout_off_still_fails_closed(self):
+        spec = self.spec()
+        for series in spec["data"]["panels"][0]["series"]:
+            series["label_point_id"] = "start"
+            series["label_position"] = "right"
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError, "text collision"):
+            self.render_case(spec)
+
+    def test_geometry_qa_accepts_a_resolved_width_only_when_the_spec_opted_in(self):
+        spec = self.spec()
+        spec["plot_design"]["render"]["auto_layout"] = True
+        geometry = {"resolved_layout": {"auto_layout": True, "width_px": 1536,
+                                        "height_px": 768}}
+        errors = []
+        adjusted = qa_quantitative_geometry._apply_resolved_layout(spec, geometry, errors)
+        self.assertEqual(errors, [])
+        self.assertEqual(adjusted["plot_design"]["render"]["width_px"], 1536)
+        spec["plot_design"]["render"]["auto_layout"] = False
+        errors = []
+        unchanged = qa_quantitative_geometry._apply_resolved_layout(spec, geometry, errors)
+        self.assertEqual(unchanged["plot_design"]["render"]["width_px"], 1200)
+        self.assertTrue(any("did not opt in" in error for error in errors))
+
+    def test_empty_label_is_rejected_but_null_is_allowed(self):
+        spec = self.spec()
+        spec["data"]["panels"][0]["series"][0]["label"] = None
+        spec["exact_text"].remove("Intervention")
+        self.render_case(spec)
+        spec["data"]["panels"][0]["series"][0]["label"] = ""
+        with self.assertRaisesRegex(
+                render_quantitative_figure.QuantitativeFigureError, "non-empty string"):
+            self.render_case(spec)
 
 
 if __name__ == "__main__":

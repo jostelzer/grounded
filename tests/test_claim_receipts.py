@@ -193,7 +193,8 @@ class CliTests(unittest.TestCase):
                 capture_output=True, text=True)
             self.assertEqual(run.returncode, 1, run.stdout)
             self.assertEqual(review.read_text(encoding="utf-8"), REVIEW)
-            audit_path.write_text(json.dumps(audit()))
+            from tests.test_assertion_audit import checked_fixture
+            review, audit_path, _store, _audit = checked_fixture(tmp, REVIEW)
             run = subprocess.run(
                 [sys.executable, str(SCRIPTS / "verify_claims.py"), "receipts",
                  "--audit", str(audit_path), "--review", str(review)],
@@ -203,7 +204,8 @@ class CliTests(unittest.TestCase):
             self.assertIn("**Receipts**", stamped)
             self.assertIn("`review-receipts.md`", stamped)
             receipts = (Path(tmp) / "review-receipts.md").read_text(encoding="utf-8")
-            self.assertIn("## C002 · ¶1 s2", receipts)
+            self.assertIn("## Uncited inventory and interpretations", receipts)
+            self.assertIn("Mechanism work agrees", receipts)
 
 
 if __name__ == "__main__":

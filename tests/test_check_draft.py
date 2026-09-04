@@ -104,7 +104,7 @@ class ReportTests(unittest.TestCase):
         self.assertIn("**References:** 5 cited · 3 verified · 1 retracted/concern · 1 not found", report)
         self.assertIn("**Hartwell 2011** · NOT FOUND", report)
         self.assertIn("RETRACTED or under expression of concern", report)
-        self.assertIn("**Sentences:** 2 cited · 2 source checks · 1 supported (0 at full text) · 0 partial · 1 unsupported · 0 contradicted", report)
+        self.assertIn("**Sentences:** 2 inventoried · 2 source checks · 1 supported (0 at full text) · 0 partial · 1 unsupported · 0 contradicted", report)
         self.assertIn("## Citations to fix", report)
         self.assertIn("C002 · Sandkühler", report)
 

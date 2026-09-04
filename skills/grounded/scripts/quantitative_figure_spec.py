@@ -24,6 +24,7 @@ RENDERER_ID = "grounded.quantitative-trajectory.v1"
 GEOMETRY_SCHEMA_VERSION = 1
 HEX_COLOUR = re.compile(r"#[0-9A-Fa-f]{6}")
 LABEL_POSITIONS = {"above", "below", "left", "right"}
+ANNOTATION_ALIGNMENTS = {"left", "center", "right"}
 CLEAN_SANS_FAMILIES = {"Arial", "Helvetica", "Helvetica Neue", "Inter", "Seravek"}
 MAX_PANEL_TITLE_WORDS = 7
 MAX_PANEL_TITLE_CHARACTERS = 56
@@ -35,10 +36,50 @@ DEFAULT_RENDER = {
     "supersample": 2,
     "plot_insets_px": {"left": 140, "right": 74, "top": 92, "bottom": 104},
 }
+# Phone-first primary tier. The style system defines a primary wayfinding
+# label of up to 56 px at a 1,536 px canvas; only the one to three labels named
+# in layout_plan.mobile_preview.primary_labels use it, and ticks never do.
+PRIMARY_TIER_MAX_PX_AT_1536 = 56
+PRIMARY_TIER_SAFETY = 1.05
+PRIMARY_ELIGIBLE_ROLES = {
+    "panel_title", "x_axis_label", "y_axis_label", "series_label",
+    "point_label", "reference_label", "event_label", "contrast", "annotation",
+}
+PRIMARY_ROLE_WEIGHTS = {"panel_title": True, "point_label": True}
+PLACEHOLDER_PREFIX = "<<FILL"
+AUTO_LAYOUT_WIDTH_CANDIDATES = (1536, 1800, 2048)
+AUTO_LAYOUT_MAX_ATTEMPTS = 64
 
 
 class QuantitativeFigureError(ValueError):
     """Raised when deterministic quantitative artwork would be ambiguous."""
+
+
+class TextLayoutError(QuantitativeFigureError):
+    """A text collision or clip; carries the texts involved for auto-layout."""
+
+    def __init__(self, message: str, *, texts: list[str], kind: str,
+                 role: str | None = None, roles: list[str] | None = None) -> None:
+        super().__init__(message)
+        self.texts = list(texts)
+        self.kind = kind
+        self.role = role
+        self.roles = list(roles) if roles else ([role] if role else [])
+
+
+def find_placeholders(value: Any, path: str = "") -> list[str]:
+    """Return JSON paths of scaffold placeholders (`<<FILL ...>>`) in a spec."""
+    found: list[str] = []
+    if isinstance(value, str):
+        if value.strip().startswith(PLACEHOLDER_PREFIX):
+            found.append(path or "$")
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            found.extend(find_placeholders(item, f"{path}.{key}" if path else key))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            found.extend(find_placeholders(item, f"{path}[{index}]"))
+    return found
 
 
 def _load_json(path: str | Path) -> dict[str, Any]:
@@ -221,6 +262,9 @@ def _render_config(spec: dict[str, Any], panel_count: int) -> dict[str, Any]:
     background_override = supplied.get("background_color")
     ink_override = supplied.get("ink_color")
     reference_override = supplied.get("reference_color")
+    auto_layout = supplied.get("auto_layout", False)
+    if not isinstance(auto_layout, bool):
+        raise QuantitativeFigureError("plot_design.render.auto_layout must be boolean")
     return {
         "width_px": width,
         "height_px": height,
@@ -229,6 +273,7 @@ def _render_config(spec: dict[str, Any], panel_count: int) -> dict[str, Any]:
         "columns": columns,
         "rows": math.ceil(panel_count / columns),
         "supersample": supersample,
+        "auto_layout": auto_layout,
         "plot_insets_px": insets,
         "background_color": (
             _colour(background_override, "plot_design.render.background_color")
@@ -366,9 +411,205 @@ def _font_set(style: dict[str, Any], width: int, height: int, supersample: int):
                 "size_px": size,
                 "target_pdf_width_mm": round(rendered_width_mm, 3),
             })
+        fonts["_scale"] = scale
+        fonts["_paths"] = (regular_path, bold_path)
         return fonts, records
     except FigureTypographyError as exc:
         raise QuantitativeFigureError(str(exc)) from exc
+
+
+def _mobile_preview_plan(spec: dict[str, Any]) -> dict[str, Any] | None:
+    """Return the declared phone preview for a v3 spec, or None."""
+    if spec.get("quality_contract_version") != 3:
+        return None
+    layout_plan = spec.get("layout_plan")
+    if not isinstance(layout_plan, dict):
+        return None
+    mobile = layout_plan.get("mobile_preview")
+    if not isinstance(mobile, dict):
+        return None
+    labels = mobile.get("primary_labels")
+    if not isinstance(labels, list) or not labels:
+        return None
+    try:
+        minimum = float(mobile.get("minimum_primary_label_height_px", 10.0))
+        preview_width = float(mobile.get("width_px", 390))
+    except (TypeError, ValueError) as exc:
+        raise QuantitativeFigureError(
+            "layout_plan.mobile_preview needs numeric width_px and "
+            "minimum_primary_label_height_px") from exc
+    return {
+        "primary_labels": [str(item).strip() for item in labels],
+        "minimum_primary_label_height_px": minimum,
+        "width_px": preview_width,
+    }
+
+
+class PrimaryTier:
+    """Per-label primary font sizing so declared phone labels clear the gate.
+
+    Only strings named in `layout_plan.mobile_preview.primary_labels` and drawn
+    in an eligible role receive a larger face. The size is the smallest that
+    makes the glyph box tall enough at the 390 px preview, capped at the style
+    system's 56 px (scaled) maximum; nothing else in the type system moves.
+    """
+
+    def __init__(self, spec: dict[str, Any], fonts: dict[str, Any],
+                 width: int, supersample: int) -> None:
+        self.plan = _mobile_preview_plan(spec)
+        self.width = width
+        self.supersample = supersample
+        self.scale = float(fonts.get("_scale", 1.0))
+        self.paths = fonts.get("_paths")
+        self.cap_px = max(
+            PRIMARY_TIER_MAX_PX_AT_1536, round(PRIMARY_TIER_MAX_PX_AT_1536 * self.scale))
+        self.resolved: list[dict[str, Any]] = []
+        self._cache: dict[tuple[str, str], Any] = {}
+
+    @property
+    def labels(self) -> list[str]:
+        return list(self.plan["primary_labels"]) if self.plan else []
+
+    def is_primary(self, text: str, role: str) -> bool:
+        return bool(self.plan) and role in PRIMARY_ELIGIBLE_ROLES and text in self.plan[
+            "primary_labels"]
+
+    def required_glyph_height_px(self) -> float:
+        assert self.plan is not None
+        return (self.plan["minimum_primary_label_height_px"] * self.width
+                / self.plan["width_px"]) * PRIMARY_TIER_SAFETY
+
+    @staticmethod
+    def glyph_height_px(face, text: str, supersample: int) -> float:
+        left, top, right, bottom = face.getbbox(text, anchor="lt")
+        return (bottom - top) / supersample
+
+    def font_for(self, text: str, role: str, base_font):
+        """Return the face to draw *text* in *role* with (primary or base)."""
+        if not self.is_primary(text, role):
+            return base_font
+        key = (text, role)
+        if key in self._cache:
+            return self._cache[key]
+        bold = PRIMARY_ROLE_WEIGHTS.get(role, False)
+        path = self.paths[1] if bold else self.paths[0]
+        required = self.required_glyph_height_px()
+        base_size = round(getattr(base_font, "size", 0) / self.supersample)
+        chosen = None
+        for size in range(max(base_size, 1), self.cap_px + 1):
+            try:
+                face, _index, _style = load_font_face(path, size * self.supersample, bold)
+            except FigureTypographyError as exc:
+                raise QuantitativeFigureError(str(exc)) from exc
+            height = self.glyph_height_px(face, text, self.supersample)
+            if height >= required:
+                chosen = (face, size, height)
+                break
+        if chosen is None:
+            face, _index, _style = load_font_face(
+                path, self.cap_px * self.supersample, bold)
+            height = self.glyph_height_px(face, text, self.supersample)
+            achieved = height * self.plan["width_px"] / self.width
+            raise QuantitativeFigureError(
+                f"primary label {text!r} reaches only {achieved:.1f} px at a "
+                f"{self.plan['width_px']:g} px preview under the {self.cap_px} px "
+                "primary tier cap; choose a label with ascenders or more height, or "
+                "declare a different primary label")
+        face, size, height = chosen
+        self._cache[key] = face
+        self.resolved.append({
+            "text": text,
+            "role": role,
+            "size_px": size,
+            "glyph_height_px": _rounded(height),
+            "mobile_height_px": _rounded(height * self.plan["width_px"] / self.width),
+        })
+        return face
+
+    def unrendered(self) -> list[str]:
+        drawn = {item["text"] for item in self.resolved}
+        return [text for text in self.labels if text not in drawn]
+
+
+def _expand_categories(axis: dict[str, Any], field: str) -> dict[str, Any]:
+    """Expand `categories: [...]` into an integer domain with one tick each."""
+    categories = axis.get("categories")
+    if categories is None:
+        return axis
+    if "domain" in axis or "ticks" in axis:
+        raise QuantitativeFigureError(
+            f"{field} declares categories; omit domain and ticks (they are derived)")
+    names = _list(categories, f"{field}.categories", nonempty=True)
+    labels = [_string(name, f"{field}.categories[{index}]")
+              for index, name in enumerate(names)]
+    if len(set(labels)) != len(labels):
+        raise QuantitativeFigureError(f"{field}.categories must be unique")
+    expanded = {key: value for key, value in axis.items() if key != "categories"}
+    expanded["domain"] = [0.5, len(labels) + 0.5]
+    expanded["ticks"] = [
+        {"value": index, "label": label} for index, label in enumerate(labels, start=1)
+    ]
+    expanded["categories"] = labels
+    return expanded
+
+
+def _expand_rows(panel: dict[str, Any], x_axis: dict[str, Any],
+                 y_axis: dict[str, Any], field: str) -> dict[str, Any]:
+    """Expand `rows` (one estimate per category) into single-point series.
+
+    A dot or forest plot is one series per row, so an author never has to
+    express it as a polyline. Rows map to the categorical axis in order.
+    """
+    rows = panel.get("rows")
+    if rows is None:
+        return panel
+    if panel.get("series") not in (None, []):
+        raise QuantitativeFigureError(f"{field} declares both rows and series; use one")
+    rows = _list(rows, f"{field}.rows", nonempty=True)
+    if x_axis.get("categories"):
+        orientation, categories = "vertical", x_axis["categories"]
+    elif y_axis.get("categories"):
+        orientation, categories = "horizontal", y_axis["categories"]
+    else:
+        raise QuantitativeFigureError(
+            f"{field}.rows require x_axis.categories or y_axis.categories")
+    if len(rows) != len(categories):
+        raise QuantitativeFigureError(
+            f"{field}.rows must contain one row per category "
+            f"({len(categories)} categories, {len(rows)} rows)")
+    series = []
+    for index, raw_row in enumerate(rows, start=1):
+        row_field = f"{field}.rows[{index - 1}]"
+        row = _object(raw_row, row_field)
+        row_id = _string(row.get("id"), f"{row_field}.id")
+        value = _number(row.get("value"), f"{row_field}.value")
+        point: dict[str, Any] = {"id": "estimate"}
+        interval = row.get("interval")
+        if orientation == "vertical":
+            point.update({"x": index, "y": value})
+            if interval is not None:
+                point["y_interval"] = interval
+            default_position = "right"
+        else:
+            point.update({"x": value, "y": index})
+            if interval is not None:
+                point["x_interval"] = interval
+            default_position = "above"
+        if row.get("label") is not None:
+            point["label"] = row["label"]
+            point["label_position"] = row.get("label_position", default_position)
+        series.append({
+            "id": row_id,
+            "label": row.get("series_label"),
+            "label_position": row.get("series_label_position", "right"),
+            "color": row.get("color"),
+            "line_width_px": row.get("line_width_px", 7),
+            "marker_radius_px": row.get("marker_radius_px", 9),
+            "points": [point],
+        })
+    expanded = {key: value for key, value in panel.items() if key != "rows"}
+    expanded["series"] = series
+    return expanded
 
 
 def _panel_label(raw: Any, field: str) -> str | None:
@@ -416,8 +657,11 @@ def _normalize_panels(spec: dict[str, Any]) -> list[dict[str, Any]]:
         title = panel.get("title")
         if title is not None:
             title = _panel_title(title, f"{field}.title")
-        x_axis = _object(panel.get("x_axis"), f"{field}.x_axis")
-        y_axis = _object(panel.get("y_axis"), f"{field}.y_axis")
+        x_axis = _expand_categories(
+            _object(panel.get("x_axis"), f"{field}.x_axis"), f"{field}.x_axis")
+        y_axis = _expand_categories(
+            _object(panel.get("y_axis"), f"{field}.y_axis"), f"{field}.y_axis")
+        panel = _expand_rows(panel, x_axis, y_axis, field)
         x_domain = _domain(x_axis, f"{field}.x_axis")
         y_domain = _domain(y_axis, f"{field}.y_axis")
         normalized = {
@@ -442,6 +686,7 @@ def _normalize_panels(spec: dict[str, Any]) -> list[dict[str, Any]]:
             "reference_lines": [],
             "events": [],
             "contrasts": [],
+            "annotations": [],
             "interval_key": None,
         }
         raw_interval_key = panel.get("interval_key")
@@ -669,6 +914,41 @@ def _normalize_panels(spec: dict[str, Any]) -> list[dict[str, Any]]:
                 "decimal_places": decimal_places,
                 "label": _string(contrast.get("label"), f"{contrast_field}.label"),
                 "label_position": position,
+            })
+        annotation_ids: set[str] = set()
+        for annotation_index, raw_annotation in enumerate(panel.get("annotations", [])):
+            annotation_field = f"{field}.annotations[{annotation_index}]"
+            annotation = _object(raw_annotation, annotation_field)
+            annotation_id = _string(annotation.get("id"), f"{annotation_field}.id")
+            if annotation_id in annotation_ids:
+                raise QuantitativeFigureError(f"{field}.annotations ids must be unique")
+            annotation_ids.add(annotation_id)
+            alignment = annotation.get("align", "left")
+            if alignment not in ANNOTATION_ALIGNMENTS:
+                raise QuantitativeFigureError(
+                    f"{annotation_field}.align must be one of "
+                    + ", ".join(sorted(ANNOTATION_ALIGNMENTS)))
+            leader = annotation.get("leader_to")
+            normalized_leader = None
+            if leader is not None:
+                leader = _object(leader, f"{annotation_field}.leader_to")
+                leader_key = (
+                    _string(leader.get("series_id"), f"{annotation_field}.leader_to.series_id"),
+                    _string(leader.get("point_id"), f"{annotation_field}.leader_to.point_id"),
+                )
+                if leader_key not in point_lookup:
+                    raise QuantitativeFigureError(
+                        f"{annotation_field}.leader_to must reference an existing point")
+                normalized_leader = {"series_id": leader_key[0], "point_id": leader_key[1]}
+            normalized["annotations"].append({
+                "id": annotation_id,
+                "text": _string(annotation.get("text"), f"{annotation_field}.text"),
+                "x": _inside(_number(annotation.get("x"), f"{annotation_field}.x"),
+                             x_domain, f"{annotation_field}.x"),
+                "y": _inside(_number(annotation.get("y"), f"{annotation_field}.y"),
+                             y_domain, f"{annotation_field}.y"),
+                "align": alignment,
+                "leader_to": normalized_leader,
             })
         panels.append(normalized)
     if len(panels) > 1:

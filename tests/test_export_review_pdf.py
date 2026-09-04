@@ -3,6 +3,7 @@ import json
 import re
 import shutil
 import subprocess
+from tests.test_assertion_audit import synthetic_release_args
 import sys
 import tempfile
 import unittest
@@ -268,6 +269,7 @@ class PdfExportTests(unittest.TestCase):
             completed = subprocess.run(
                 [sys.executable, os.path.join(SCRIPTS, "export_review.py"),
                  "--in", markdown, "--out", pdf, "--pdf",
+                 *synthetic_release_args(tmp),
                  "--release", "v-test", "--compiled-date", "2026-08-26"],
                 check=False, capture_output=True, text=True,
             )
@@ -399,6 +401,7 @@ class PdfExportTests(unittest.TestCase):
 
     def test_release_manifest_binds_the_audit_and_qa_rejects_drift(self):
         with tempfile.TemporaryDirectory() as tmp:
+            from tests.test_assertion_audit import checked_fixture
             self.make_image(os.path.join(tmp, "figure.png"))
             review = self._write(tmp, "review.md", self.markdown())
             ledger = self._write(tmp, "sources.json", json.dumps(self.ledger()))
@@ -406,13 +409,14 @@ class PdfExportTests(unittest.TestCase):
             prompt = self._write(tmp, "figure.prompt.txt", "saved prompt\n")
             audit = self._write(tmp, "claims_audit.json",
                                 json.dumps(self.claims_audit()))
+            review, audit, _store, checked_audit = checked_fixture(tmp, self.markdown())
             receipts = self._write(tmp, "review-receipts.md", "# Claim receipts\n")
             pdf = os.path.join(tmp, "review.pdf")
             manifest = os.path.join(tmp, "release-manifest.json")
             page = export_review.build_html(
                 self.markdown(), base_dir=tmp, release="v-test",
                 repo="example.test/grounded", compiled_date="2026-08-26",
-                claims_audit=self.claims_audit(),
+                claims_audit=checked_audit,
             )
             weasyprint_export.write_pdf(page, pdf)
             export_review.write_release_manifest(
@@ -427,7 +431,7 @@ class PdfExportTests(unittest.TestCase):
             self.assertEqual(recorded["inputs"]["claim_receipts"]["path"], "review-receipts.md")
             self.assertEqual(recorded["expected"]["claim_pairs"], 1)
             self.assertEqual(recorded["expected"]["claim_summary"]["supported_fulltext"], 1)
-            self.assertEqual(recorded["inputs"]["claims_audit"]["path"], "claims_audit.json")
+            self.assertEqual(recorded["inputs"]["claims_audit"]["path"], "audit.json")
             context = qa_review_pdf.verify_release_manifest(manifest, pdf, review)
             self.assertEqual(context["claim_summary"]["pairs"], 1)
             qa_review_pdf.inspect_structure(
@@ -1253,6 +1257,7 @@ class FigureExportTests(unittest.TestCase):
                     sys.executable,
                     os.path.join(SCRIPTS, "export_review.py"),
                     "--in", src, "--out", out, "--pdf",
+                    *synthetic_release_args(tmp),
                     "--release", "v-test", "--repo", "example.test/g",
                     "--compiled-date", "2026-08-27",
                 ],
@@ -1311,6 +1316,7 @@ class FigureExportTests(unittest.TestCase):
                     sys.executable,
                     os.path.join(SCRIPTS, "export_review.py"),
                     "--in", src, "--out", out, "--pdf",
+                    *synthetic_release_args(tmp),
                     "--release", "v-test", "--repo", "example.test/g",
                     "--compiled-date", "2026-08-27",
                 ],

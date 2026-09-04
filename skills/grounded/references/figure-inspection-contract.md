@@ -213,6 +213,10 @@ For `quality_contract_version: 3`, provenance keeps schema version 2 and contain
 {
   "schema_version": 2,
   "generator_available": true,
+  "generator_detection": {
+    "method": "session-tool-enumeration",
+    "evidence": "a project-bound raster generator with edit support is exposed"
+  },
   "generator": {
     "tool": "built-in-imagegen",
     "supports_edit": true
@@ -251,7 +255,13 @@ For `quality_contract_version: 3`, provenance keeps schema version 2 and contain
 ```
 
 Use `kind: edit` for a targeted ImageGen edit and `kind: render` for a
-deterministic plot. Every generated, edited, or rendered candidate requires a
+deterministic plot; a render attempt also names its `geometry` manifest
+(`"geometry": "<figure-id>.geometry.json"`) so `qa_figure.py` can measure the
+phone gate from the rendered text boxes. `generator_detection` records how
+availability was determined (`method`: `session-tool-enumeration`,
+`tool-invocation`, `user-statement`, or `other`; `evidence`: what was
+checked); QA warns when `generator_available` is false without it, and the
+staged production audit treats that warning as a blocker. Every generated, edited, or rendered candidate requires a
 matching post-generation review. Paths are case-local audit records; only the
 selected asset appears in the final review. The release manifest hashes the
 selected figure, its specification, prompt, inspection, and provenance.

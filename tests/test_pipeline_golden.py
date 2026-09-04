@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT = os.path.join(REPO, "skills", "grounded")
@@ -29,6 +30,20 @@ def run_script(name, *args, stdin_text=None, cwd=None):
         [sys.executable, os.path.join(SCRIPTS, name), *args],
         input=stdin_text, capture_output=True, text=True, cwd=cwd,
     )
+
+
+def synthetic_audit_args(directory):
+    """Rendering fixture only: synthetic evidence, not scientific validation."""
+    from tests.test_assertion_audit import checked_fixture
+    import claim_receipts
+    review_path = Path(directory) / "review.md"
+    markdown = review_path.read_text()
+    _review, audit_path, _store, audit = checked_fixture(directory, markdown)
+    receipts_path = Path(directory) / "review-receipts.md"
+    receipts_path.write_text(claim_receipts.render_receipts_document(
+        audit, claim_receipts.labels_from_markdown(markdown),
+        title=claim_receipts.review_title(markdown), review_name="review.md"))
+    return ["--claims-audit", str(audit_path), "--claim-receipts", str(receipts_path)]
 
 
 def has_pdf_runtime():
@@ -101,6 +116,7 @@ class GoldenColicPipelineTests(unittest.TestCase):
         out = os.path.join(self.tmp, "review.pdf")
         completed = run_script(
             "export_review.py",
+            *synthetic_audit_args(self.tmp),
             "--in", os.path.join(self.tmp, "review.md"),
             "--out", out, "--pdf",
             "--style", "popsci",
@@ -212,6 +228,7 @@ class GoldenEli5PipelineTests(unittest.TestCase):
         out = os.path.join(self.tmp, "review.pdf")
         completed = run_script(
             "export_review.py",
+            *synthetic_audit_args(self.tmp),
             "--in", os.path.join(self.tmp, "review.md"),
             "--out", out, "--pdf",
             "--style", "eli5",
@@ -281,6 +298,7 @@ class GoldenBulletsPipelineTests(unittest.TestCase):
         out = os.path.join(self.tmp, "review.pdf")
         completed = run_script(
             "export_review.py",
+            *synthetic_audit_args(self.tmp),
             "--in", os.path.join(self.tmp, "review.md"),
             "--out", out, "--pdf",
             "--style", "bullets",

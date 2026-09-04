@@ -75,3 +75,7 @@ Give the number when the source gives it. Prefer absolute effects (risk from 8% 
 ## Attribution
 
 Findings belong to studies: "In the MYRIAD trial (8,376 pupils, 84 schools), …". Consensus belongs to syntheses: "Meta-analyses up to 2020 pooled …". Your synthesis is yours: "Taken together, these results suggest …". Speculation is flagged: "One possible explanation, not yet tested, is …". The reader should never be unsure whose claim they are reading.
+
+## Record the judgment
+
+Use evidence-assessment.md to record all five certainty domains per outcome and group publications into study families. Separate quote support and text access from certainty. Multiple papers from one trial, and multiple reviews of the same trials, do not constitute independent replications.

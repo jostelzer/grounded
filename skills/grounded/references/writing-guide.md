@@ -33,7 +33,7 @@ Three consequences bind every style:
 
 In the chat review and source Markdown, in-text citations render as plain `Author 2026` links immediately after the supported words and before terminal punctuation: `claim [Author 2026](DOI).` The square brackets are markdown link syntax only and must never be visible. If the chat review shows `claim. [Author 2026](DOI)`, a citation-led sentence, a bare `[Author 2026]`, `[1]`, or `(Author, 2026)`, it is wrong. The journal PDF/HTML is the presentation-only exception: `export_review.py` converts those same DOI links to linked superscript numbers after the punctuation and a matching first-citation-order reference list without changing the Markdown.
 
-Nothing before the question. No scope note, no assumptions paragraph, no audience statement, no size label, no date line, no "how this was produced" section.
+Lead with the question and answer. Include a compact scope/methods disclosure near the end: review type, search date, databases, inclusion/exclusion boundaries, and material access limitations. Avoid a long process narrative.
 
 For the journal PDF format, keep the style's written structure and insert each
 rendered figure immediately after the section it supports. Every figure is
@@ -129,7 +129,7 @@ Cite each source only for what its quoted passage states, and place the citation
 4. Opposing evidence appears, and is contrasted rather than blended.
 5. A table exists wherever several studies share dimensions.
 6. Numbers match sources; intervals included where reported. In ELI5, the interval is rendered as a plain-words range, not as digits.
-7. Nothing before the question; no methods section; no audience or scope preamble. In popsci style, the headline is the question recast and the standfirst states it plainly — nothing precedes the headline.
+7. Nothing before the question; a compact scope/methods disclosure near the end, without a long process preamble. In popsci style, the headline is the question recast and the standfirst states it plainly — nothing precedes the headline.
 8. Every cited key passed Crossref bibliographic and publisher/Retraction Watch retraction checks; any failure is excluded. A recorded correction appears only as the linked "Correction:" note on the original's reference entry — never narrated in the body, never cited in-text, never its own source.
 8b. Every term link points to a confirmed-resolving Wikipedia article, first use only; unconfirmed targets are unlinked and expanded inline.
 9. Read it once and cut what carries no evidence or argument. In every style: no machinery word or self-labelling heading ("throughline", "narrative arc", "the turn:", "this section") appears in the text; sentence shapes vary rather than repeating the same evidence template; each source sits on the clause it states (three or more citations on one sentence draws a validator warning); the "X, not Y" verdict is a device used once, not a refrain; no invented abstract coinages; and concrete subjects outnumber abstraction-copula sentences.
@@ -187,7 +187,7 @@ Cite each source only for what its quoted passage states, and place the citation
 13. Every cited sentence has a receipt. The synthesis quoted every source it
     cites before drafting began; after the figures are placed, a judge who did
     not write the text adjudicated every pair blind, every verdict carries a
-    verbatim quote the checker matched, every pair is supported or partial,
+    verbatim quote the checker matched, every assertion element is supported, with partial source support allowed only when other evidence covers its gaps,
     the Sources entries carry their claim counts and tiers, the Receipts stamp
     follows Sources, `<review>-receipts.md` is delivered beside the review,
     and the reply states the tier split honestly.

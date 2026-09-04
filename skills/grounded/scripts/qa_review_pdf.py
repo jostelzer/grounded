@@ -323,6 +323,8 @@ def verify_release_manifest(
         try:
             import export_review
             claims_audit = export_review.load_claims_audit(audit_path)
+            import audit_contract
+            audit_contract.validate_release(claims_audit, review_path.read_text(encoding="utf-8"), audit_path)
         except ValueError as exc:
             raise PdfQaError(f"claim audit: {exc}") from exc
         claim_summary = claim_receipts.summarize_audit(claims_audit)
@@ -367,6 +369,7 @@ def verify_release_manifest(
             figure_max_height_mm=float(render.get("figure_max_height_mm") or 92.0),
             ref_leading=render.get("ref_leading"),
             imprint=str(render.get("imprint") or "end"),
+            made_with=str(render.get("made_with") or "full"),
             edition=str(render.get("edition") or "journal"),
             pull_quote=render.get("pull_quote"),
             claims_audit=claims_audit,

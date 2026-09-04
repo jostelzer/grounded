@@ -84,10 +84,6 @@ def hollow_problems(claims):
     is reading, not editing the lines to differ.
     """
     problems = []
-    if len(claims) >= HOLLOW_MIN_CLAIMS and not any(c["contrary_keys"] for c in claims):
-        problems.append(
-            f"none of the {len(claims)} claims records contrary evidence — a "
-            "synthesis that found no disagreement has not searched for it")
     for field, label in (("boundary_text", "boundary"), ("numbers_field", "numbers"),
                          ("evidence_text", "evidence")):
         seen = {}

@@ -16,7 +16,7 @@ from pathlib import Path
 
 from artifact_io import atomic_write_json, sha256_file
 import figure_contract
-from figure_provenance import validate_provenance
+from figure_provenance import provenance_warnings, validate_provenance
 from grounded_metadata import rendered_figure_size_mm
 from typing import Any
 
@@ -46,6 +46,7 @@ MAX_ARTICLE_P90_TEXT_HEIGHT_SHORT_EDGE_FRACTION = 0.055
 MAX_STANDALONE_P90_TEXT_HEIGHT_SHORT_EDGE_FRACTION = 0.07
 MAX_ARTICLE_TEXT_BOX_AREA_FRACTION = 0.20
 MAX_STANDALONE_TEXT_BOX_AREA_FRACTION = 0.24
+ATTESTATION_TOLERANCE = 1.15
 
 
 def _normal(value: str) -> str:
@@ -79,7 +80,7 @@ def expected_pixel_text(spec: dict[str, Any]) -> list[str]:
 
 def _tesseract_metrics(
     image_path: Path,
-) -> tuple[str, float | None, float | None, float | None]:
+) -> tuple[str, float | None, float | None, float | None, list[tuple[str, float]]]:
     executable = shutil.which("tesseract")
     if not executable:
         raise ValueError("Tesseract is required for figure OCR")
@@ -91,11 +92,12 @@ def _tesseract_metrics(
         raise ValueError("Tesseract OCR failed: " + (completed.stderr.strip() or "unknown error"))
     lines = completed.stdout.splitlines()
     if not lines:
-        return "", None, None, None
+        return "", None, None, None, []
     header = lines[0].split("\t")
     index = {name: position for position, name in enumerate(header)}
     words = []
     heights = []
+    word_boxes: list[tuple[str, float, float, float, float]] = []
     text_box_area = 0
     for line in lines[1:]:
         fields = line.split("\t")
@@ -104,10 +106,13 @@ def _tesseract_metrics(
             confidence = float(fields[index["conf"]])
             height = int(fields[index["height"]])
             width = int(fields[index["width"]])
+            left = int(fields[index["left"]])
+            top = int(fields[index["top"]])
         except (IndexError, KeyError, ValueError):
             continue
         if text and confidence >= 40:
             words.append(text)
+            word_boxes.append((text, float(height), float(width), float(left), float(top)))
             if len(re.sub(r"\W", "", text)) >= 2:
                 heights.append(height)
                 text_box_area += width * height
@@ -135,13 +140,80 @@ def _tesseract_metrics(
     except (ImportError, OSError):
         canvas_area = 0
     text_area_fraction = text_box_area / canvas_area if canvas_area else None
-    return combined, label_height, p90_height, text_area_fraction
+    return combined, label_height, p90_height, text_area_fraction, word_boxes
 
 
 def _tesseract(image_path: Path) -> tuple[str, float | None]:
     """Backward-compatible text/minimum-height helper used by renderer tests."""
-    text, label_height, _p90_height, _area_fraction = _tesseract_metrics(image_path)
+    text, label_height, _p90, _area, _words = _tesseract_metrics(image_path)
     return text, label_height
+
+
+def _ocr_label_height(label: str, word_boxes: list[tuple]) -> float | None:
+    """Largest OCR word box among the words of *label*, or None if unmatched."""
+    tokens = {token for token in _normal(label).split() if len(token) >= 2}
+    if not tokens:
+        return None
+    matched = [box[1] for box in word_boxes if _normal(box[0]) in tokens]
+    return max(matched) if matched else None
+
+
+def _p90_excluding_vertical_text(word_boxes: list[tuple], geometry: dict[str, Any]):
+    """Robust upper word height of the supporting type system.
+
+    Two kinds of OCR word box are excluded when the renderer's geometry
+    manifest is available: words inside a rotated `y_axis_label` box (Tesseract
+    reads vertical text as a stack of boxes whose height is the word's length)
+    and words inside a resolved primary label (the phone tier is large by
+    contract; the dominance cap exists to keep the *supporting* labels at
+    publication scale). Without a manifest the plain machine statistic stands.
+    """
+    primary_texts = {
+        record.get("text") for record in geometry.get("primary_labels_resolved") or []
+        if isinstance(record, dict)}
+    vertical = [
+        record["bbox_px"] for record in geometry.get("text_layout") or []
+        if isinstance(record, dict) and isinstance(record.get("bbox_px"), dict)
+        and (record.get("role") == "y_axis_label"
+             or record.get("text") in primary_texts)
+    ]
+    heights = []
+    for text, height, width, left, top in word_boxes:
+        if len(re.sub(r"\W", "", text)) < 2:
+            continue
+        centre_x = left + width / 2
+        centre_y = top + height / 2
+        inside = any(
+            box["left"] - 1 <= centre_x <= box["right"] + 1
+            and box["top"] - 1 <= centre_y <= box["bottom"] + 1
+            for box in vertical)
+        if not inside:
+            heights.append(height)
+    if not heights:
+        return None
+    ordered = sorted(heights)
+    return float(ordered[min(len(ordered) - 1, round(0.90 * (len(ordered) - 1)))])
+
+
+def _discover_geometry(provenance: dict[str, Any] | None, image_path: Path):
+    """Load the geometry manifest a render attempt names, if it exists."""
+    if not isinstance(provenance, dict):
+        return None
+    for attempt in provenance.get("attempts") or []:
+        if not isinstance(attempt, dict) or attempt.get("kind") != "render":
+            continue
+        named = attempt.get("geometry")
+        if not isinstance(named, str) or not named.strip():
+            continue
+        candidate = Path(named)
+        if not candidate.is_absolute():
+            candidate = image_path.parent / candidate
+        if candidate.is_file():
+            try:
+                return json.loads(candidate.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                return None
+    return None
 
 
 def _relationship_tuple(value: dict[str, Any]) -> tuple[str, str, str]:
@@ -189,12 +261,17 @@ def audit_figure(
     inspection: dict[str, Any] | None = None,
     provenance: dict[str, Any] | None = None,
     pdf_width_mm: float | None = None,
+    geometry: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     try:
         from PIL import Image
     except ImportError as exc:
         raise ValueError("Pillow is required for figure QA") from exc
     path = Path(image_path)
+    if geometry is None:
+        geometry = _discover_geometry(provenance, path.resolve())
+    if geometry is not None and not isinstance(geometry, dict):
+        raise ValueError("figure geometry manifest must be an object")
     with Image.open(path) as image:
         width, height = image.size
         alpha_minimum = 255
@@ -232,6 +309,7 @@ def audit_figure(
     layout_plan = None
     composite_plan = None
     if contract_version in {2, 3}:
+        figure_contract.validate_no_placeholders(spec)
         communication_goal = figure_contract.validate_communication_goal(spec)
         annotation_plan = figure_contract.validate_annotation_plan(
             spec, expected_pixel_text(spec))
@@ -328,9 +406,13 @@ def audit_figure(
     machine_minimum_height = None
     machine_p90_height = None
     machine_text_area_fraction = None
+    machine_word_boxes: list[tuple] = []
     if shutil.which("tesseract"):
         (machine_text, machine_minimum_height, machine_p90_height,
-         machine_text_area_fraction) = _tesseract_metrics(path)
+         machine_text_area_fraction, machine_word_boxes) = _tesseract_metrics(path)
+        if geometry is not None and machine_word_boxes:
+            machine_p90_height = _p90_excluding_vertical_text(
+                machine_word_boxes, geometry)
     if not isinstance(ocr_text, str):
         if machine_text is None:
             raise ValueError("Tesseract is required when ocr_text is not supplied")
@@ -469,6 +551,8 @@ def audit_figure(
     effective_p90_text_height = None
     effective_text_area_fraction = None
     mobile_primary_label_height = None
+    mobile_primary_label_source = None
+    measured_mobile_primary_label_height = None
     if contract_version == 3:
         if not isinstance(typography_scale, dict):
             errors.append(
@@ -608,6 +692,80 @@ def audit_figure(
                         f"{mobile_planned['minimum_primary_label_height_px']:.1f} px")
             except ValueError as exc:
                 errors.append(str(exc))
+                native_primary_height = None
+            deterministic_route = spec.get("render_route") in {"deterministic", "composite"}
+            if deterministic_route and geometry is not None:
+                mobile_primary_label_source = "measured"
+                geometry_image = geometry.get("image")
+                if (not isinstance(geometry_image, dict)
+                        or geometry_image.get("sha256") != sha256_file(path)):
+                    errors.append(
+                        "geometry manifest does not describe the audited image "
+                        "(image sha256 differs); re-render before QA")
+                resolved = geometry.get("primary_labels_resolved")
+                if not isinstance(resolved, list):
+                    warnings.append(
+                        "geometry manifest carries no primary_labels_resolved (renderer "
+                        "predates the primary tier); the phone gate relies on attestation")
+                    mobile_primary_label_source = "attested"
+                else:
+                    by_text = {}
+                    for record in resolved:
+                        if isinstance(record, dict) and isinstance(record.get("text"), str):
+                            by_text.setdefault(record["text"], record)
+                    measured_glyphs = []
+                    for label in mobile_planned["primary_labels"]:
+                        record = by_text.get(label)
+                        try:
+                            glyph = float(record.get("glyph_height_px")) if record else None
+                        except (TypeError, ValueError):
+                            glyph = None
+                        if glyph is None:
+                            errors.append(
+                                "geometry manifest has no resolved primary label for "
+                                f"{label!r}; the renderer did not draw it in a primary role")
+                            continue
+                        measured_glyphs.append(glyph)
+                    if measured_glyphs:
+                        measured_mobile_primary_label_height = (
+                            min(measured_glyphs) * mobile_planned["width_px"] / width)
+                        mobile_primary_label_height = measured_mobile_primary_label_height
+                        if (mobile_primary_label_height
+                                < mobile_planned["minimum_primary_label_height_px"]):
+                            errors.append(
+                                "measured smallest mobile primary label is "
+                                f"{mobile_primary_label_height:.2f} px at a "
+                                f"{mobile_planned['width_px']} px preview; required at least "
+                                f"{mobile_planned['minimum_primary_label_height_px']:.1f} px")
+                        if (native_primary_height is not None
+                                and native_primary_height
+                                > max(measured_glyphs) * ATTESTATION_TOLERANCE):
+                            errors.append(
+                                "inspection overstates the primary label height: attested "
+                                f"{native_primary_height:.1f} px, rendered "
+                                f"{max(measured_glyphs):.1f} px")
+            elif deterministic_route:
+                mobile_primary_label_source = "attested"
+                warnings.append(
+                    "phone gate relies on the attested primary label height; pass "
+                    "--geometry (or name the geometry manifest in the provenance render "
+                    "attempt) so it is measured from the rendered text boxes")
+            else:
+                mobile_primary_label_source = "attested"
+                if native_primary_height is not None and machine_word_boxes:
+                    ocr_heights = [
+                        height for height in (
+                            _ocr_label_height(label, machine_word_boxes)
+                            for label in mobile_planned["primary_labels"])
+                        if height is not None
+                    ]
+                    if ocr_heights and native_primary_height > max(
+                            ocr_heights) * ATTESTATION_TOLERANCE:
+                        warnings.append(
+                            "attested primary label height "
+                            f"{native_primary_height:.1f} px exceeds the tallest OCR word "
+                            f"box among the primary labels ({max(ocr_heights):.1f} px); "
+                            "confirm the primary labels by visual inspection")
             mobile_flow = mobile_observed.get("observed_first_glance_path")
             if not isinstance(mobile_flow, list) or not mobile_flow:
                 errors.append(
@@ -903,6 +1061,7 @@ def audit_figure(
                     errors.append("composite inspection failed: " + message)
 
     errors.extend(validate_provenance(spec, path, provenance))
+    warnings.extend(provenance_warnings(provenance))
 
     effective_points = None
     if measured_height is None:
@@ -947,6 +1106,12 @@ def audit_figure(
                 round(mobile_primary_label_height, 2)
                 if mobile_primary_label_height is not None else None
             ),
+            "mobile_primary_label_source": mobile_primary_label_source,
+            "measured_mobile_primary_label_px": (
+                round(measured_mobile_primary_label_height, 2)
+                if measured_mobile_primary_label_height is not None else None
+            ),
+            "geometry_manifest_used": geometry is not None,
             "robust_upper_label_height_px": effective_p90_text_height,
             "ocr_text_box_area_fraction": effective_text_area_fraction,
             "missing_abbreviation_expansions": missing_expansions,
@@ -979,6 +1144,12 @@ def main(argv: list[str] | None = None) -> int:
         help="generation/composition provenance JSON; required by quality contract v1",
     )
     parser.add_argument(
+        "--geometry",
+        help="renderer geometry manifest of a deterministic figure; when given "
+             "(or named in the provenance render attempt) the phone gate is "
+             "measured from rendered text boxes instead of the attested height",
+    )
+    parser.add_argument(
         "--pdf-width-mm", type=float, default=None,
         help="rendered width to evaluate label sizes at; defaults to the "
              "width the journal PDF will actually display this raster at "
@@ -999,9 +1170,13 @@ def main(argv: list[str] | None = None) -> int:
             json.loads(Path(args.provenance).read_text(encoding="utf-8"))
             if args.provenance else None
         )
+        geometry = (
+            json.loads(Path(args.geometry).read_text(encoding="utf-8"))
+            if args.geometry else None
+        )
         result = audit_figure(
             spec, args.image, inspection=inspection, provenance=provenance,
-            pdf_width_mm=args.pdf_width_mm,
+            pdf_width_mm=args.pdf_width_mm, geometry=geometry,
         )
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"Figure QA failed: {exc}", file=sys.stderr)

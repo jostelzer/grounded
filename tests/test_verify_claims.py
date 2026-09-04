@@ -389,9 +389,12 @@ T.
         (self.tmp / "synthesis.md").write_text(self.SYNTHESIS.replace(
             "- evidence: narrative reviews [@Roschel2021]",
             '- evidence: narrative reviews [@Roschel2021]\n- quote: [@Roschel2021] "modest increases"'))
+        from tests.test_assertion_audit import assessment_fixture
+        (self.tmp / "evidence-assessment.json").write_text(json.dumps(
+            assessment_fixture(self.ledger, self.SYNTHESIS)))
         verify_claims.cmd_extract(args)
         audit = json.loads((self.tmp / "audit.json").read_text())
-        self.assertEqual(audit["claims"][0]["adjudications"][0]["synthesis_quotes"],
+        self.assertEqual(audit["claims"][1]["adjudications"][0]["synthesis_quotes"],
                          ["yielded a statistically significant increase (8.7% corresponding to 0.6 mM"])
 
     def test_blind_packets_hide_source_and_place_and_packet_ids_adjudicate(self):

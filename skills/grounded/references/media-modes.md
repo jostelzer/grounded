@@ -17,11 +17,15 @@ individual predictions.
 Generate and inspect the actual media. A prompt, text outline, ASCII diagram, or
 unrendered source is not a figure. If required media tooling is unavailable,
 deliver the written review and state briefly that the visual could not be
-generated; never imply that an uninspected artifact passed.
+generated; never imply that an uninspected artifact passed. When no image
+generator is exposed and every figure is therefore a plot, say so in one
+sentence of the delivery and record the detection in the provenance, so the
+absence reads as a tooling gap rather than a preference for charts.
 
 For every figure, read `figure-generation-contract.md`. Then load only the
 route-specific references it names:
 
+- deterministic/composite plotting: `quantitative-figure-guide.md`;
 - generated/composite prompting: `image-prompt-guide.md`;
 - visual identity: `figure-style-system.md`;
 - inspection/provenance schemas: `figure-inspection-contract.md`;

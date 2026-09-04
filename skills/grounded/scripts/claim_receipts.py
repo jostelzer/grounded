@@ -21,6 +21,7 @@ text does.
 """
 import re
 import urllib.parse
+import audit_contract
 
 RECEIPTS_HEADING = "**Receipts**"
 RECEIPTS_BLOCK_RE = re.compile(r"(?ms)^\*\*Receipts\*\*\s*$.*\Z")
@@ -78,7 +79,9 @@ def summarize_audit(audit):
     for tier in source_tier.values():
         by_tier[tier if tier in by_tier else "none"] += 1
     return {
-        "claims": len(claims),
+        "coverage_errors": audit_contract.coverage_errors(audit) if audit.get("schema_version") == 2 else [],
+        "claims": sum(bool(c.get("dois", c.get("adjudications"))) for c in claims),
+        "assertions": len(claims),
         "pairs": pairs,
         "supported": counts["supported"],
         "supported_fulltext": supported_fulltext,
@@ -117,7 +120,8 @@ def summary_sentence(summary):
 def release_blockers(summary):
     """Why an audit cannot ship.
 
-    Only `supported` and `partial` pairs are receipts. A contradicted pair is
+    Schema-v2 receipts require complete element coverage. Partial source
+    support is allowed only when other evidence covers the remaining elements. A contradicted pair is
     a false sentence; a pending pair is unfinished work; a not_found or
     unverifiable pair is a decorative citation — a real paper attached to a
     sentence its text does not back — and the promise is that none ships.
@@ -125,6 +129,7 @@ def release_blockers(summary):
     sentence to what the source says, then re-audit.
     """
     problems = []
+    problems.extend(summary.get("coverage_errors", []))
     if summary["contradicted"]:
         problems.append(f"{summary['contradicted']} claim(s) contradicted by their source")
     if summary["pending"]:
@@ -309,6 +314,18 @@ def render_receipts_document(audit, labels=None, title="review", review_name="re
                       f"> {plain_text(claim.get('claim'))}", ""]
         lines.append(f"- **{entry['label']}** · {tier_label(entry['tier'])} · {entry['phrase']}")
         lines.append("")
+    uncited = [c for c in audit["claims"] if not c.get("dois")]
+    if uncited:
+        lines += ["## Uncited inventory and interpretations", ""]
+        for c in uncited:
+            lines.append(f"- {c['id']} · {c.get('classification', 'pending')} · {plain_text(c['claim'])} — "
+                         + c.get("classification_note", "")
+                         + (" (basis: " + ", ".join(c["basis"]) + ")" if c.get("basis") else ""))
+    assessment = audit.get("evidence_assessment")
+    if assessment:
+        lines += ["", "## Outcome certainty (separate from source support)", ""]
+        for outcome in assessment["outcomes"]:
+            lines.append(f"- {outcome['outcome']}: {outcome['certainty']} — {outcome['rationale']}")
     return "\n".join(lines)
 
 

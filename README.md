@@ -11,13 +11,13 @@ Two things can be wrong with it, and both are invisible:
 
 You can't catch either without checking every reference by hand. Grounded is an agent skill that does exactly that, so you don't have to.
 
-It turns your question into a real literature review with **zero citations from memory**: every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref and screened for retractions, and every paper is read before it's cited. The synthesis every review is written from must quote each source verbatim *before* a sentence of prose exists, and afterwards a judge that did not write the text audits **every cited sentence against the paper's own text**, anchored to quotes a deterministic checker string-matches against the source. The review ships with **receipts** — a companion `…-receipts.md` with one entry per cited sentence: source, evidence tier, verdict, quote — and each source in the reference list says how many claims it supports at which tier. A citation the source's own text doesn't back cannot ship: it is dropped, moved, or the sentence is rewritten — never decorated.
+It turns your question into a real literature review with **zero citations from memory**: every source comes from a live OpenAlex/PubMed search, every DOI is verified against Crossref and screened for retractions, and every paper is read before it's cited. The synthesis every review is written from must quote each source verbatim *before* a sentence of prose exists, and afterwards a judge that did not write the text audits **all assertions, including headings and uncited summaries, against evidence or an explicitly checked interpretive basis**, anchored to quotes a deterministic checker string-matches against the source. The review ships with **receipts** — a companion `…-receipts.md` with one entry per cited sentence: source, evidence tier, verdict, quote — and each source in the reference list says how many claims it supports at which tier. An assertion with uncovered factual elements cannot ship: it is dropped, moved, or the sentence is rewritten — never decorated.
 
-**Real papers, actually saying what the review says they say — with the quote to prove it.**
+**Traceable sources, independently checked assertions, and explicit evidence limits.**
 
-Runs in coding agents with a real shell and network — Claude Code, Codex CLI, and friends. It needs to reach the literature APIs and run Python, so browser chat sandboxes are out; see [Requirements](#requirements).
+Runs in coding agents with a real shell and network — Claude Code, Codex CLI, and friends. It needs literature API access, Python, artifact storage, and an independent judge context; check actual host capabilities rather than assuming them from its product name. See [Requirements](#requirements).
 
-Grounded is at 0.4.x: the pipeline is complete and every gate is tested, but interfaces still move between minor versions.
+Grounded is at 0.5.x: the pipeline is complete and every gate is tested, but interfaces still move between minor versions.
 
 ## Examples
 
@@ -25,7 +25,7 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 > Use the grounded skill to tell me: what happens to your body when you stop taking Ozempic? Popsci, medium, journal PDF.
 
-Whatever you leave out, Grounded asks you in one quick question before it starts. Four real runs, unedited:
+Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. Four real runs, unedited:
 
 - **"What happens to your body when you stop taking Ozempic?"** — popsci · medium → [PDF](examples/ozempic-after-stopping.pdf) · [Markdown](examples/ozempic-after-stopping.md) · [Receipts](examples/ozempic-after-stopping-receipts.md) · 31 verified sources · three cited figures · 6-page journal article
 - **"Are microplastics actually harming our health?"** — ELI5 · small → [PDF](examples/microplastics-health-eli5.pdf) · [Markdown](examples/microplastics-health-eli5.md) · [Receipts](examples/microplastics-health-eli5-receipts.md) · 12 verified sources · two cited figures · 3-page journal article
@@ -87,7 +87,7 @@ Grounded runs the real pipeline or it does not run. That takes a proper coding e
 - **Python 3** with the pinned packages in `requirements-pdf.txt`, plus WeasyPrint's native Pango libraries for the journal PDF.
 - **A writable filesystem** for the working ledger each review builds.
 
-**Browser chat sandboxes — claude.ai and ChatGPT — cannot run it.** Their Python sandboxes block outbound requests to the literature APIs, and their fetch tools will not open a constructed API query, so no DOI can be verified and no retraction checked. Since the skill refuses to present an unverified review as verified, there is no reduced mode to fall back to. The `.skill` and `.zip` bundles are still published for any environment that does meet the requirements above.
+Check these capabilities in the actual host before starting. If literature APIs, artifact storage, or an independent judge context are unavailable, report that limitation instead of presenting an unverified review as verified. The `.skill` and `.zip` bundles are published for environments that meet the requirements above.
 
 ## Under the hood
 
@@ -99,8 +99,12 @@ The model does the reading and writing; deterministic scripts do the searching, 
 4. **Verify** — `verify_citations.py` checks every DOI against Crossref: title, year, article type, and integrity status — retractions, withdrawals, removals, and expressions of concern via publisher and Retraction Watch update metadata. A failure is a hard stop: the source is fixed or dropped before a word is written. A thin source list on a fringe topic is the skill working, not failing.
 5. **Synthesize, write & validate** — the verified evidence is first distilled into a style-neutral claims ledger (every claim with its strength, exact numbers, contrary evidence, boundaries, and a verbatim quote from every source it cites, string-checked before drafting); the styled review is then composed from those claims, citing ledger keys, never remembered references, and never a source the ledger did not quote. Citations and the reference list are generated from the verified records, and a deterministic validator checks structure, citation placement, DOI parity, and figure contracts before delivery.
 6. **Explain visually, then render** — every figure first states what the reader should understand, where familiar intuition begins, the eye path that builds the idea, and the one sentence a non-specialist should be able to explain back. Non-quantitative figures compare three detailed concepts for clarity, simplicity, completeness, elegance, and intuitiveness; only the winner reaches the image generator. In-pixel copy stays short, distinct sections use uppercase A–D in every writing style, and explanatory callouts point to exact targets when useful. Verified numbers use bespoke deterministic plots instead. After rendering, the agent states what the pixels actually communicate and must revise when the image requires its caption, leaves jargon unexplained, or fails the explain-back test. The journal PDF is typeset with pinned WeasyPrint, then QA independently proves figures and fonts were not stretched and re-rasterizes every page with Poppler.
-7. **Audit and receipt** — `verify_claims.py` re-checks each cited sentence against the source's own text. Every verdict must carry a verbatim quote that the checker string-matches against the stored evidence; a quote it can't find rejects the verdict, and a numeric claim must have its number inside the quote. A contradicted sentence blocks release. The judge is never the writer: packets are adjudicated blind (sentence and passages only), one pair at a time, by a judge that first has to score at least 80% agreement on a bundled, human-adjudicated gold set; scripted, scored, or templated verdicts fail the checker, and a quote that shares no word with its sentence is rejected unless the judge states the paraphrase. Only supported and partial pairs ship — a real paper attached to a sentence its text does not back is removed or the sentence rewritten. The result is delivered as `…-receipts.md` (sentence → source → tier → verdict → quote), with every reference annotated by claim count and tier and the tally in the colophon — the Ozempic example reads *50 cited sentences · 50 source checks · 25 supported at full text · 25 at abstract · 0 partial · 0 contradicted*.
+7. **Audit and receipt** — inventory all assertions, including headings and uncited summaries. A fresh judge qualifies against unlabelled multi-domain cases, then checks source quotations, quantities, qualifications, and element coverage. Partial source support is accepted only when other evidence covers the remaining elements. The review, classifications, and evidence versions are bound to the checked audit; changed inputs invalidate release. Receipts report source support and access level, while the outcome assessment separately explains certainty and study overlap. The deterministic checks establish consistency, not scientific truth or judge independence.
 
 ## License
 
 [MIT](LICENSE)
+
+## Verification contract
+
+Written reviews use schema-v2 assertion audits: exact review/evidence binding, complete element coverage, independent classification of uncited material, and a multi-domain judge qualification set. Outcome certainty and study-family overlap are assessed separately from quotation support. Source counts are advisory; contrary searches are required but disagreement is not. A compact methods disclosure reports scope and access limitations. Canonical budgets live in `skills/grounded/scripts/review_config.py` and generate [the budget table](skills/grounded/references/budgets.md) and evaluation metadata. Historical examples predate this contract and are not retroactively certified by it.

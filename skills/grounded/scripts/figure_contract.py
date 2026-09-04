@@ -37,6 +37,31 @@ GENERATED_MOBILE_PRIMARY_MAX_WORDS = 4
 GENERATED_MOBILE_PRIMARY_MAX_CHARACTERS = 28
 GENERATED_MOBILE_PRIMARY_COMPOUND_PUNCTUATION = ":;()/"
 GLOSSARY_DEFINITION = re.compile(r"^[A-Z][A-Z0-9-]{1,9}\s*=\s*\S")
+PLACEHOLDER_PREFIX = "<<FILL"
+
+
+def find_placeholders(value, path=""):
+    """Return JSON paths of scaffold placeholders (`<<FILL ...>>`) in a spec."""
+    found = []
+    if isinstance(value, str):
+        if value.strip().startswith(PLACEHOLDER_PREFIX):
+            found.append(path or "$")
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            found.extend(find_placeholders(item, "%s.%s" % (path, key) if path else key))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            found.extend(find_placeholders(item, "%s[%d]" % (path, index)))
+    return found
+
+
+def validate_no_placeholders(spec):
+    """Reject a spec that still carries scaffold placeholders."""
+    placeholders = find_placeholders(spec)
+    if placeholders:
+        raise ValueError(
+            "spec still contains scaffold placeholders: "
+            + ", ".join(placeholders[:8]))
 
 
 def inferred_render_route(spec, archetype_name):

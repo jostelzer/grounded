@@ -87,6 +87,7 @@ class MaximaAreAdvisoryTests(unittest.TestCase):
             for n in range(3) for q in range(2)
         ]
         records.extend(extra)
+        records[0]["lane"] = "contrary-null"
         return {"schema_version": 1, "records": records}
 
     def test_small_within_bounds_passes_clean(self):
@@ -108,7 +109,7 @@ class MaximaAreAdvisoryTests(unittest.TestCase):
 
     def test_zero_accept_query_still_counts_toward_minimum(self):
         records = [
-            record("angle-0", "query 0 empty", accepted=0),
+            record("angle-0", "query 0 empty", lane="contrary-null", accepted=0),
         ] + [
             record(f"angle-{n}", f"query {n} 0", accepted=3) for n in range(1, 3)
         ]
@@ -129,7 +130,7 @@ class MaximaAreAdvisoryTests(unittest.TestCase):
 
     def test_too_many_angles_warns_instead_of_failing(self):
         records = [
-            record(f"angle-{n}", f"query {n}", accepted=2) for n in range(6)
+            record(f"angle-{n}", f"query {n}", lane="contrary-null" if n == 0 else "primary", accepted=2) for n in range(6)
         ]
         result = audit_search.audit_search(
             {"schema_version": 1, "records": records}, size="small"

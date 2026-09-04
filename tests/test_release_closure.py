@@ -7,6 +7,7 @@ and no existing test notices because the repository checkout is complete.
 """
 
 import ast
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -17,7 +18,7 @@ SCRIPTS = SKILL / "scripts"
 
 sys.path.insert(0, str(SCRIPTS))
 
-from build_release_skill import SCRIPT_FILES  # noqa: E402
+from build_release_skill import SCRIPT_FILES, REFERENCE_FILES  # noqa: E402
 
 
 def _local_imports(path: Path) -> set[str]:
@@ -50,6 +51,14 @@ class ReleaseClosureTests(unittest.TestCase):
     def test_allowlisted_scripts_all_exist(self) -> None:
         absent = [name for name in SCRIPT_FILES if not (SCRIPTS / name).is_file()]
         self.assertEqual(absent, [])
+
+    def test_referenced_local_guides_are_in_the_archive(self) -> None:
+        missing = set()
+        for document in [SKILL / "SKILL.md", *(SKILL / "references" / name for name in REFERENCE_FILES if name.endswith(".md"))]:
+            for name in re.findall(r"(?<![\w/-])(?:references/)?([\w-]+\.md)", document.read_text()):
+                if (SKILL / "references" / name).is_file() and name not in REFERENCE_FILES:
+                    missing.add(name)
+        self.assertEqual(missing, set())
 
 
 if __name__ == "__main__":

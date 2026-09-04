@@ -25,14 +25,10 @@ import validate_review
 
 
 STAGES = ("evidence", "semantic", "figures", "release")
-CLAIM_RANGES = {
-    "small": (5, 12),
-    "medium": (10, 25),
-    "large": (20, 45),
-}
-FIGURE_TARGETS = {"small": 2, "medium": 3, "large": 5}
-FIGURE_CAPS = {"small": 2, "medium": 5, "large": 8}
-FULLTEXT_MINIMUMS = {"small": 2, "medium": 8, "large": 25}
+from review_config import CLAIM_RANGES, TIER_REQUIREMENTS
+FIGURE_TARGETS = {size: spec["figure_target"] for size, spec in TIER_REQUIREMENTS.items()}
+FIGURE_CAPS = {size: spec["figure_cap"] for size, spec in TIER_REQUIREMENTS.items()}
+FULLTEXT_MINIMUMS = {size: spec["fulltexts"][0] for size, spec in TIER_REQUIREMENTS.items()}
 FIGURE_KINDS = {
     "synthesis", "mechanism", "study-design", "quantitative",
     "comparison", "uncertainty", "cutaway",
@@ -419,6 +415,12 @@ def _audit_evidence(
     )
     errors.extend(synthesis_result["errors"])
     observed_warnings.extend(synthesis_result["warnings"])
+    import evidence_assessment
+    _assessment_path, assessment = _json_file(
+        base_dir, block.get("assessment"), "evidence.assessment")
+    assessed = evidence_assessment.assess(assessment, ledger, synthesis_path.read_text(encoding="utf-8"))
+    errors.extend(assessed["errors"])
+    observed_warnings.extend(assessed["warnings"])
     _account_warnings(
         block, observed_warnings, "evidence", errors, warnings)
     state.update({

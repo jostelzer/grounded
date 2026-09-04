@@ -11,11 +11,7 @@ from pathlib import Path
 from typing import Any
 
 
-REQUIREMENTS = {
-    "small": {"angles": (3, 5), "queries": (1, 2), "central": (0, None)},
-    "medium": {"angles": (5, 8), "queries": (2, 3), "central": (0, None)},
-    "large": {"angles": (8, 12), "queries": (3, 5), "central": (5, 10)},
-}
+from review_config import SEARCH_REQUIREMENTS as REQUIREMENTS
 LARGE_LANES = {"reviews", "primary", "foundational", "recent", "contrary-null"}
 
 
@@ -137,9 +133,15 @@ def audit_search(
             )
 
     lanes = {str(record.get("lane")) for record in keyword}
-    missing_lanes = sorted(LARGE_LANES - lanes) if size == "large" else []
+    required_lanes = LARGE_LANES if size == "large" else {"contrary-null"}
+    missing_lanes = sorted(required_lanes - lanes)
     if missing_lanes:
-        issue("lanes", "large search is missing lane(s): " + ", ".join(missing_lanes))
+        # Contrary searches must complete even when they return no disagreement.
+        if "contrary-null" in missing_lanes:
+            errors.append("search requires a completed contrary-null lane")
+        remaining = [lane for lane in missing_lanes if lane != "contrary-null"]
+        if remaining:
+            issue("lanes", "search is missing lane(s): " + ", ".join(remaining))
 
     chase_by_seed: dict[str, set[str]] = defaultdict(set)
     for record in completed:

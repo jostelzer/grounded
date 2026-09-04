@@ -32,6 +32,7 @@ from pathlib import Path
 
 from artifact_io import atomic_write_json, sha256_bytes, sha256_file
 import claim_receipts
+import audit_contract
 from citation_apparatus import correction_note_dois, ledger_correction_dois
 from grounded_metadata import (
     FIGURE_MAX_HEIGHT_MM, PAGE_CONTENT_WIDTH_MM, REPOSITORY_URL,
@@ -772,6 +773,7 @@ h2.refhead {
   font-size: 9pt;
 }
 h2.refhead::before { content: none; counter-increment: none; }
+h2.refhead small.audit-summary { display: block; letter-spacing: normal; float: none; }
 h2.refhead small { font-weight: 600; font-size: 6.3pt; letter-spacing: .12em;
   text-transform: uppercase; color: var(--muted); float: right; margin-top: 2px; }
 .madewith {
@@ -1595,6 +1597,14 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
     if audit_summary:
         audit_line = ("<br>" + html.escape(
             claim_receipts.summary_sentence(audit_summary)))
+        if imprint == "refhead":
+            # Rebalancing may move the imprint into References, but must never
+            # discard the assertion audit tally that release QA verifies.
+            body = body.replace(
+                '</small></h2>',
+                '</small><small class="audit-summary">'
+                + html.escape(claim_receipts.summary_sentence(audit_summary))
+                + '</small></h2>', 1)
     plain_title = re.sub(r"<[^>]+>", "", title)
     page = PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=css,
@@ -1713,6 +1723,7 @@ def validate_release_inputs(
         raise ValueError("--claim-receipts needs the --claims-audit it was rendered from")
     if claims_audit is not None:
         audit = load_claims_audit(claims_audit)
+        audit_contract.validate_release(audit, markdown, claims_audit)
         audited = {claim_receipts.norm_doi(adj.get("doi"))
                    for claim in audit["claims"]
                    for adj in claim.get("adjudications", [])}
@@ -1875,6 +1886,7 @@ def write_release_manifest(
         figure_provenances=(), style="scientific",
         figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
         imprint="end", edition="journal", pull_quote=None, claims_audit=None,
+        made_with="full",
         claim_receipts_path=None):
     """Bind every release input to the exact HTML and canonical PDF."""
     manifest_path = Path(manifest_path).resolve()
@@ -1931,6 +1943,7 @@ def write_release_manifest(
             "edition": edition,
             "pull_quote": pull_quote,
             "imprint": imprint,
+            "made_with": made_with,
             "style": _normalized_style(style),
             "kicker": kicker,
             "colophon": colophon,
@@ -2059,19 +2072,18 @@ def main():
 
     want_pdf = args.pdf or args.out.lower().endswith(".pdf")
     if want_pdf:
+        if not args.ledger or not args.claims_audit or not args.claim_receipts:
+            ap.error("PDF delivery requires --ledger, --claims-audit and --claim-receipts; finish the assertion audit first")
+        try:
+            validate_release_inputs(
+                args.src, args.ledger, args.figure_spec, args.figure_prompt,
+                args.figure_inspection, args.figure_provenance,
+                args.claims_audit, args.claim_receipts,
+            )
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            ap.error(str(exc))
         from weasyprint_export import write_pdf
         release = args.release or detect_release(os.path.dirname(os.path.abspath(__file__))) or "dev"
-        if args.release_manifest:
-            if not args.ledger:
-                ap.error("--release-manifest requires --ledger")
-            try:
-                validate_release_inputs(
-                    args.src, args.ledger, args.figure_spec, args.figure_prompt,
-                    args.figure_inspection, args.figure_provenance,
-                    args.claims_audit, args.claim_receipts,
-                )
-            except (OSError, ValueError, json.JSONDecodeError) as exc:
-                ap.error(str(exc))
         compiled_date = args.compiled_date or datetime.date.today().isoformat()
         if args.repo is None:
             _repo_label, detected_repo = detect_repo(
@@ -2130,6 +2142,7 @@ def main():
                 figure_max_height_mm=args.figure_max_height,
                 ref_leading=effective_ref_leading,
                 imprint=effective_imprint,
+                made_with=effective["made_with"],
                 edition=resolve_edition(args.style, args.edition),
                 pull_quote=args.pull_quote,
                 claims_audit=args.claims_audit,

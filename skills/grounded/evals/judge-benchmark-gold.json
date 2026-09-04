@@ -1,0 +1,330 @@
+{
+  "description": "Synthetic adversarial judge qualification, not scientific evidence. Five fields, all five verdicts. Keep this evaluator file outside the judge context.",
+  "claims": [
+    {
+      "id": "C001",
+      "claim": "In 20 adults, treatment reduced pain by 15%.",
+      "dois": [
+        "10.0000/synthetic-1"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-1",
+          "verdict": "supported"
+        }
+      ]
+    },
+    {
+      "id": "C002",
+      "claim": "In 20 adults, treatment reduced pain by 90%.",
+      "dois": [
+        "10.0000/synthetic-2"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-2",
+          "verdict": "contradicted"
+        }
+      ]
+    },
+    {
+      "id": "C003",
+      "claim": "Treatment reduced pain and prevented hospitalization.",
+      "dois": [
+        "10.0000/synthetic-3"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-3",
+          "verdict": "partial"
+        }
+      ]
+    },
+    {
+      "id": "C004",
+      "claim": "Treatment reduced mortality.",
+      "dois": [
+        "10.0000/synthetic-4"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-4",
+          "verdict": "not_found"
+        }
+      ]
+    },
+    {
+      "id": "C005",
+      "claim": "Treatment improved memory.",
+      "dois": [
+        "10.0000/synthetic-5"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-5",
+          "verdict": "unverifiable"
+        }
+      ]
+    },
+    {
+      "id": "C006",
+      "claim": "Bird abundance fell by 30%.",
+      "dois": [
+        "10.0000/synthetic-6"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-6",
+          "verdict": "supported"
+        }
+      ]
+    },
+    {
+      "id": "C007",
+      "claim": "Bird abundance increased by 30%.",
+      "dois": [
+        "10.0000/synthetic-7"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-7",
+          "verdict": "contradicted"
+        }
+      ]
+    },
+    {
+      "id": "C008",
+      "claim": "The intervention improved survival across all bird species.",
+      "dois": [
+        "10.0000/synthetic-8"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-8",
+          "verdict": "partial"
+        }
+      ]
+    },
+    {
+      "id": "C009",
+      "claim": "The intervention improved survival.",
+      "dois": [
+        "10.0000/synthetic-9"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-9",
+          "verdict": "not_found"
+        }
+      ]
+    },
+    {
+      "id": "C010",
+      "claim": "The intervention increased biodiversity.",
+      "dois": [
+        "10.0000/synthetic-10"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-10",
+          "verdict": "unverifiable"
+        }
+      ]
+    },
+    {
+      "id": "C011",
+      "claim": "Scores increased by 4 points after six weeks.",
+      "dois": [
+        "10.0000/synthetic-11"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-11",
+          "verdict": "supported"
+        }
+      ]
+    },
+    {
+      "id": "C012",
+      "claim": "Scores increased by 40 points.",
+      "dois": [
+        "10.0000/synthetic-12"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-12",
+          "verdict": "contradicted"
+        }
+      ]
+    },
+    {
+      "id": "C013",
+      "claim": "Tutoring improved reading and mathematics.",
+      "dois": [
+        "10.0000/synthetic-13"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-13",
+          "verdict": "partial"
+        }
+      ]
+    },
+    {
+      "id": "C014",
+      "claim": "Tutoring improved graduation rates.",
+      "dois": [
+        "10.0000/synthetic-14"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-14",
+          "verdict": "not_found"
+        }
+      ]
+    },
+    {
+      "id": "C015",
+      "claim": "Tutoring improved attendance.",
+      "dois": [
+        "10.0000/synthetic-15"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-15",
+          "verdict": "unverifiable"
+        }
+      ]
+    },
+    {
+      "id": "C016",
+      "claim": "Latency decreased from 80 ms to 40 ms.",
+      "dois": [
+        "10.0000/synthetic-16"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-16",
+          "verdict": "supported"
+        }
+      ]
+    },
+    {
+      "id": "C017",
+      "claim": "The device consumed 5 g of fuel.",
+      "dois": [
+        "10.0000/synthetic-17"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-17",
+          "verdict": "contradicted"
+        }
+      ]
+    },
+    {
+      "id": "C018",
+      "claim": "The device is faster and more energy efficient.",
+      "dois": [
+        "10.0000/synthetic-18"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-18",
+          "verdict": "partial"
+        }
+      ]
+    },
+    {
+      "id": "C019",
+      "claim": "The device has lower latency.",
+      "dois": [
+        "10.0000/synthetic-19"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-19",
+          "verdict": "not_found"
+        }
+      ]
+    },
+    {
+      "id": "C020",
+      "claim": "The device has a longer operational lifetime.",
+      "dois": [
+        "10.0000/synthetic-20"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-20",
+          "verdict": "unverifiable"
+        }
+      ]
+    },
+    {
+      "id": "C021",
+      "claim": "Employment rose by 2%.",
+      "dois": [
+        "10.0000/synthetic-21"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-21",
+          "verdict": "supported"
+        }
+      ]
+    },
+    {
+      "id": "C022",
+      "claim": "Employment fell by 2%.",
+      "dois": [
+        "10.0000/synthetic-22"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-22",
+          "verdict": "contradicted"
+        }
+      ]
+    },
+    {
+      "id": "C023",
+      "claim": "The association persisted after adjustment.",
+      "dois": [
+        "10.0000/synthetic-23"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-23",
+          "verdict": "partial"
+        }
+      ]
+    },
+    {
+      "id": "C024",
+      "claim": "The policy reduced inflation.",
+      "dois": [
+        "10.0000/synthetic-24"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-24",
+          "verdict": "not_found"
+        }
+      ]
+    },
+    {
+      "id": "C025",
+      "claim": "The policy reduced inequality.",
+      "dois": [
+        "10.0000/synthetic-25"
+      ],
+      "adjudications": [
+        {
+          "doi": "10.0000/synthetic-25",
+          "verdict": "unverifiable"
+        }
+      ]
+    }
+  ]
+}

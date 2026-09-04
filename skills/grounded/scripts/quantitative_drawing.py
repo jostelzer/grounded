@@ -8,7 +8,7 @@ from itertools import combinations
 import math
 from typing import Any
 
-from quantitative_figure_spec import QuantitativeFigureError, _rounded
+from quantitative_figure_spec import QuantitativeFigureError, TextLayoutError, _rounded
 
 
 def _draw_dashed(draw, coordinates, fill, width, dash, supersample):
@@ -185,8 +185,9 @@ def _wrap_annotation_lines(draw, text, font, max_width_px, supersample):
         draw.textbbox((0, 0), line, font=font, anchor="lt")[2] > maximum
         for line in lines
     ):
-        raise QuantitativeFigureError(
-            "label has no readable word-boundary fit inside its panel")
+        raise TextLayoutError(
+            f"label has no readable word-boundary fit inside its panel: {text!r}",
+            texts=[text], kind="clip")
     return lines
 
 
@@ -205,8 +206,9 @@ def _draw_contrast_label(
         available = horizontal_bounds["right"] - edge
     padding = 5
     if available <= 2 * padding:
-        raise QuantitativeFigureError(
-            "contrast label has no horizontal space inside its panel")
+        raise TextLayoutError(
+            f"contrast label has no horizontal space inside its panel: {text!r}",
+            texts=[text], kind="clip")
     usable_width = min(available - 2 * padding, max_width_px)
     lines = _wrap_annotation_lines(
         draw, text, font, usable_width, supersample)
@@ -392,6 +394,90 @@ def _draw_series_label(
         (left, top, right, top + content_height), supersample)
 
 
+def _draw_annotation(
+    draw, x, y, text, align, font, fill, supersample,
+    plot_bounds: dict[str, float], text_layout: list[dict[str, Any]],
+    panel_id: str, *, leader_target: tuple[float, float] | None = None,
+    leader_clearance_px: float = 0.0, leader_fill=None,
+) -> dict[str, float]:
+    """Draw free explanatory copy anchored at a data coordinate.
+
+    The anchor is the top edge of the text block: its left, centre, or right
+    end depending on *align*. An optional thin leader runs from the nearest
+    edge of the text block to the target mark, stopping short of it.
+    """
+    max_width = max(150, (plot_bounds["right"] - plot_bounds["left"]) * 0.45)
+    lines = _wrap_annotation_lines(draw, text, font, max_width, supersample)
+    line_spacing = 4 * supersample
+    line_boxes = [
+        draw.textbbox((0, 0), line, font=font, anchor="lt") for line in lines
+    ]
+    line_height = max(box[3] - box[1] for box in line_boxes)
+    content_width = max(box[2] - box[0] for box in line_boxes)
+    content_height = len(lines) * line_height + (len(lines) - 1) * line_spacing
+    anchor_x = x * supersample
+    top = y * supersample
+    if align == "left":
+        left = anchor_x
+    elif align == "center":
+        left = anchor_x - content_width / 2
+    else:
+        left = anchor_x - content_width
+    right = left + content_width
+    for index, (line, box) in enumerate(zip(lines, line_boxes)):
+        width = box[2] - box[0]
+        if align == "left":
+            line_x = left
+        elif align == "center":
+            line_x = left + (content_width - width) / 2
+        else:
+            line_x = right - width
+        line_y = top + index * (line_height + line_spacing)
+        draw.text((round(line_x), round(line_y)), line, font=font, fill=fill, anchor="lt")
+    bbox = (left, top, right, top + content_height)
+    _record_text_box(text_layout, panel_id, "annotation", text, bbox, supersample)
+    if leader_target is not None:
+        target_x, target_y = leader_target[0] * supersample, leader_target[1] * supersample
+        pad = 6 * supersample
+        start_x = min(max(target_x, left - pad), right + pad)
+        start_y = min(max(target_y, top - pad), bottom_edge(bbox) + pad)
+        # Pull the start onto the padded boundary nearest the target.
+        if left - pad < start_x < right + pad and top - pad < start_y < bottom_edge(bbox) + pad:
+            distances = {
+                "left": abs(target_x - (left - pad)),
+                "right": abs(target_x - (right + pad)),
+                "top": abs(target_y - (top - pad)),
+                "bottom": abs(target_y - (bottom_edge(bbox) + pad)),
+            }
+            side = min(distances, key=distances.get)
+            if side == "left":
+                start_x = left - pad
+            elif side == "right":
+                start_x = right + pad
+            elif side == "top":
+                start_y = top - pad
+            else:
+                start_y = bottom_edge(bbox) + pad
+        length = math.hypot(target_x - start_x, target_y - start_y)
+        clearance = leader_clearance_px * supersample
+        if length > clearance + 2 * supersample:
+            unit_x = (target_x - start_x) / length
+            unit_y = (target_y - start_y) / length
+            end_x = target_x - unit_x * clearance
+            end_y = target_y - unit_y * clearance
+            draw.line(
+                (round(start_x), round(start_y), round(end_x), round(end_y)),
+                fill=leader_fill or fill, width=2 * supersample)
+    return {
+        "left": _rounded(bbox[0] / supersample), "top": _rounded(bbox[1] / supersample),
+        "right": _rounded(bbox[2] / supersample), "bottom": _rounded(bbox[3] / supersample),
+    }
+
+
+def bottom_edge(bbox) -> float:
+    return bbox[3]
+
+
 def _text_boxes_overlap(
     first: dict[str, float], second: dict[str, float], gap_px: float = 2.0,
 ) -> bool:
@@ -423,9 +509,10 @@ def _validate_text_layout(
             or box["top"] < bounds["top"] - 0.5
             or box["bottom"] > bounds["bottom"] + 0.5
         ):
-            raise QuantitativeFigureError(
+            raise TextLayoutError(
                 f"{record['role']} text does not fit inside panel {panel_id}: "
-                f"{record['text']!r}")
+                f"{record['text']!r}", texts=[record["text"]], kind="clip",
+                role=record["role"])
         by_panel.setdefault(panel_id, []).append(record)
     for panel_id, records in by_panel.items():
         for index, first in enumerate(records):
@@ -433,9 +520,11 @@ def _validate_text_layout(
                 if _text_boxes_overlap(
                     first["bbox_px"], second["bbox_px"], gap_px=minimum_gap_px
                 ):
-                    raise QuantitativeFigureError(
+                    raise TextLayoutError(
                         f"text collision or sub-3px mobile clearance in panel {panel_id}: "
-                        f"{first['text']!r} overlaps {second['text']!r}")
+                        f"{first['text']!r} overlaps {second['text']!r}",
+                        texts=[first["text"], second["text"]], kind="collision",
+                        roles=[first["role"], second["role"]])
 
 
 def _expected_pixel_text(spec: dict[str, Any]) -> list[str]:

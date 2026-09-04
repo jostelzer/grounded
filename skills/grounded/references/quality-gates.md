@@ -81,7 +81,7 @@ For an explicitly named tier, validate the final file with all evidence inputs:
 python3 scripts/validate_review.py review.md --style scientific --size large --strict-tier --ledger sources.json --fulltext-manifest fulltext-manifest.json --report validation.json
 ```
 
-Add `--image-mode` for journal-PDF reviews, whose figures are mandatory. Strict mode makes word, source, section,
+Add `--image-mode` for journal-PDF reviews, whose figures are mandatory. Strict mode makes word, section,
 table, and figure-cap ranges plus the counted-full-text minimum hard errors. A
 structured thin-literature override may cover only genuine source/full-text shortfalls;
 it never excuses short prose, missing sections/tables, or evidence padding.
@@ -154,51 +154,7 @@ quote contains. Drafting starts only when it passes.
 
 ## Claim audit and receipts
 
-Every delivered review is audited sentence by sentence after its figures are
-placed, by a judge that did not write it. The rubric is
-`claim-verification.md`; the machinery is `verify_claims.py`,
-`synthesis_quotes.py`, and `claim_receipts.py`:
-
-```bash
-python3 scripts/verify_claims.py extract  --review review.md --ledger sources.json --synthesis synthesis.md --audit claims_audit.json
-python3 scripts/verify_claims.py fetch    --audit claims_audit.json --evidence evidence/ --ledger sources.json --fulltext-dir fulltexts --fulltext-manifest fulltext-manifest.json
-python3 scripts/verify_claims.py packets  --audit claims_audit.json --evidence evidence/ --blind
-python3 scripts/verify_claims.py adjudicate --audit claims_audit.json --packet C001#1 --verdict supported --quote "<verbatim passage>"
-python3 scripts/verify_claims.py check    --audit claims_audit.json --evidence evidence/ --summary claims_summary.json --strict
-python3 scripts/verify_claims.py receipts --audit claims_audit.json --review review.md
-```
-
-`extract --synthesis` refuses a cited source the synthesis never quoted and
-carries the synthesis quotes into each packet; `packets --blind` strips source
-identity and place so the judge sees only sentence and passages.
-
-`fetch` seeds the store from the review's own authenticated full texts and
-ledger abstracts before any network call. Verdicts are recorded one pair at a
-time with `adjudicate`; `check` downgrades any verdict whose quote does not
-occur verbatim in the stored evidence, fails on a contradicted pair, and fails
-an audit that shows signs of scripted judgment — a note repeated on three or
-more pairs, or a `partial` without a note naming the uncovered element;
-`--strict` also fails on a pending pair. A quote that shares no content word
-or number with its claim is downgraded to `unverifiable` unless the pair
-carries a `bridge` that names a term from each side (`adjudicate --bridge`). Only `supported` and
-`partial` pairs ship: `receipts`, `export_review.py --claims-audit`, and
-`qa_review_pdf.py` refuse an audit with any pending, contradicted, not_found,
-or unverifiable pair — the citation is dropped, relocated, or the sentence
-rewritten, then re-audited. `receipts` refuses an unfinished audit, writes `<review>-receipts.md`
-(every cited sentence with its sources, tiers, verdicts, quotes, and
-bridges), annotates every Sources entry (`· N claims · full text|abstract`),
-and stamps a two-line `**Receipts**` block after Sources with the tally and
-the file name. `validate_review.py` checks the stamp (a clean tally, no
-per-pair lines in the review), reports `metrics.claim_receipts`, excludes it
-from every prose budget, and warns when one sentence carries three or more
-citations. The exporter takes `--claims-audit claims_audit.json` and
-`--claim-receipts <review>-receipts.md`, hashes both into the release manifest
-with `expected.claim_pairs` and `expected.claim_summary`, prints the colophon
-audit line, and refuses a review that carries a Receipts stamp without its
-audit, an audit that does not cover every cited DOI, or an audit with any
-pair that is not supported or partial. PDF QA re-verifies both hashes and the
-pair count, rebuilds the HTML with the audit, and requires the colophon audit
-line as visible text. The per-pair receipts never enter the PDF.
+Follow `claim-verification.md` for the schema-v2 inventory, independent classification, element coverage, qualification benchmark, and exact review/evidence binding. Every empirical assertion is covered, including headings and uncited summaries. Partial source support is releasable only when the union covers every assertion element. Old audits must be re-extracted and checked. Run check, receipts, and final validation before export; export and PDF QA revalidate the complete inventory and evidence hashes.
 
 ## Draft check
 
@@ -272,3 +228,7 @@ close directly against the preceding supported claim or quotation, after its
 punctuation; a citation that opens a sentence, paragraph, bullet, or caption is
 a hard exporter failure. The terminal References list uses the same numbers and
 order. Inspect this explicitly in the HTML and page rasters as part of PDF QA.
+
+## Evidence certainty and source counts
+
+`synthesis-check` also validates `evidence-assessment.json` (evidence-assessment.md). Source-count ranges are advisory even for explicit tiers. Completed search coverage, relevance and documented saturation determine inclusion; do not pad. Run `sync_review_budgets.py --check` to verify generated budgets.

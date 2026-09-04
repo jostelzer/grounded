@@ -53,7 +53,7 @@ class ProductionAuditTests(unittest.TestCase):
                     "angle": f"angle {index}",
                     "angle_id": f"angle-{index}",
                     "requested_query_or_seed": f"query {index}",
-                    "lane": "primary",
+                    "lane": "contrary-null" if index == 0 else "primary",
                     "method": "keyword",
                     "citation_direction": None,
                     "completed": True,
@@ -74,6 +74,9 @@ class ProductionAuditTests(unittest.TestCase):
         )
         (self.root / "synthesis.md").write_text(
             self.synthesis(), encoding="utf-8")
+        from tests.test_assertion_audit import assessment_fixture
+        self.write_json("evidence-assessment.json", assessment_fixture(
+            {"entries": [{"key": "K1"}]}, self.synthesis()))
         (self.root / "review.md").write_text("review", encoding="utf-8")
         return {
             "schema_version": 1,
@@ -87,6 +90,7 @@ class ProductionAuditTests(unittest.TestCase):
                 "search_manifest": "search-manifest.json",
                 "fulltext_manifest": "fulltext-manifest.json",
                 "synthesis": "synthesis.md",
+                "assessment": "evidence-assessment.json",
                 "frozen": True,
                 "unresolved_issues": [],
                 "accepted_warnings": [],

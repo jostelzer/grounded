@@ -177,7 +177,9 @@ non-empty `explanatory_role` describing what the short rendered label teaches.
 Generated figures require all three concepts and complete evaluations. The
 selected concept must have the highest total and score at least four in every
 dimension. Deterministic figures omit generated-concept fields and supply
-structured `data` plus `plot_design`. Composite figures additionally supply
+structured `data` plus `plot_design`; their complete shape, the renderer's
+grammar, and the scaffold/lint/preview tools are in
+`quantitative-figure-guide.md` — do not author a plot from this skeleton. Composite figures additionally supply
 `composite_plan`; generated assets are text-free and orientation-only.
 
 ## Field guidance

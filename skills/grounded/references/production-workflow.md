@@ -190,6 +190,7 @@ printed by the live gate; obsolete or approximate acceptances fail.
     "search_manifest": "search-manifest.json",
     "fulltext_manifest": "fulltext-manifest.json",
     "synthesis": "synthesis.md",
+    "assessment": "evidence-assessment.json",
     "frozen": true,
     "usage": {"model": "claude-opus-5", "input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0},
     "unresolved_issues": [],

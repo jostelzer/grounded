@@ -396,7 +396,7 @@ def render_report(resolution, ledger, audit, title="draft"):
     score = [f"**References:** {len(refs)} cited · {verified} verified · {retracted} retracted/concern · {failed} not found, unlisted, or failed"]
     if summary:
         unsupported = summary["not_found"] + summary["unverifiable"]
-        score.append(f"**Sentences:** {summary['claims']} cited · {summary['pairs']} source checks · "
+        score.append(f"**Sentences:** {summary['assertions']} inventoried · {summary['pairs']} source checks · "
                      f"{summary['supported']} supported ({summary['supported_fulltext']} at full text) · "
                      f"{summary['partial']} partial · {unsupported} unsupported · {summary['contradicted']} contradicted")
     lines += score + ["", "## References", ""] + ref_lines + [""]
@@ -410,9 +410,14 @@ def render_report(resolution, ledger, audit, title="draft"):
         fixes = [e for e in claim_receipts.receipt_entries(audit, labels)
                  if e["verdict"] in ("not_found", "unverifiable", "contradicted")]
         lines += ["", "## Citations to fix", ""]
-        if fixes:
+        coverage = summary.get("coverage_errors", [])
+        if fixes or coverage:
             for e in fixes:
                 lines.append(f"- {e['id']} · {e['label']} · {e['verdict'].replace('_', ' ')} — “{e['snippet']}”")
+            lines.extend("- " + error for error in coverage)
+            for claim in audit["claims"]:
+                if not claim.get("dois"):
+                    lines.append(f"- {claim['id']} · {claim.get('classification', 'pending')} · “{claim['claim']}”")
         else:
             lines.append("- none: every cited sentence is backed by its source's own text at the tier shown.")
     return "\n".join(lines) + "\n"

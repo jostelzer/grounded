@@ -30,6 +30,11 @@ DEFAULT_SUPERSAMPLE = 2
 DEFAULT_INSETS = {"left": 140, "right": 74, "top": 92, "bottom": 104}
 COORDINATE_TOLERANCE_PX = 0.02
 VALUE_TOLERANCE = 1e-9
+MOBILE_PREVIEW_WIDTH_PX = 390.0
+PRIMARY_ELIGIBLE_ROLES = {
+    "panel_title", "x_axis_label", "y_axis_label", "series_label",
+    "point_label", "reference_label", "event_label", "contrast", "annotation",
+}
 
 
 class QuantitativeGeometryQaError(ValueError):
@@ -94,6 +99,188 @@ def _domain(axis: dict[str, Any], field: str) -> tuple[float, float]:
     if lower >= upper:
         raise QuantitativeGeometryQaError(f"{field}.domain must increase")
     return lower, upper
+
+
+def _expand_categories(axis: dict[str, Any], field: str) -> dict[str, Any]:
+    """Mirror the renderer's `categories` sugar (duplicated on purpose)."""
+    categories = axis.get("categories")
+    if categories is None:
+        return axis
+    if "domain" in axis or "ticks" in axis:
+        raise QuantitativeGeometryQaError(
+            f"{field} declares categories together with domain or ticks")
+    labels = [_string(name, f"{field}.categories[{index}]")
+              for index, name in enumerate(_items(categories, f"{field}.categories",
+                                                  nonempty=True))]
+    expanded = {key: value for key, value in axis.items() if key != "categories"}
+    expanded["domain"] = [0.5, len(labels) + 0.5]
+    expanded["ticks"] = [
+        {"value": index, "label": label} for index, label in enumerate(labels, start=1)]
+    expanded["categories"] = labels
+    return expanded
+
+
+def _expand_rows(panel: dict[str, Any], x_axis: dict[str, Any],
+                 y_axis: dict[str, Any], field: str) -> dict[str, Any]:
+    """Mirror the renderer's `rows` sugar (duplicated on purpose)."""
+    rows = panel.get("rows")
+    if rows is None:
+        return panel
+    if panel.get("series") not in (None, []):
+        raise QuantitativeGeometryQaError(f"{field} declares both rows and series")
+    rows = _items(rows, f"{field}.rows", nonempty=True)
+    if x_axis.get("categories"):
+        vertical = True
+    elif y_axis.get("categories"):
+        vertical = False
+    else:
+        raise QuantitativeGeometryQaError(f"{field}.rows require a categorical axis")
+    series = []
+    for index, raw_row in enumerate(rows, start=1):
+        row = _object(raw_row, f"{field}.rows[{index - 1}]")
+        value = _number(row.get("value"), "row.value")
+        point: dict[str, Any] = {"id": "estimate"}
+        if vertical:
+            point.update({"x": index, "y": value})
+            if row.get("interval") is not None:
+                point["y_interval"] = row["interval"]
+        else:
+            point.update({"x": value, "y": index})
+            if row.get("interval") is not None:
+                point["x_interval"] = row["interval"]
+        series.append({
+            "id": _string(row.get("id"), "row.id"),
+            "color": row.get("color"),
+            "line_width_px": row.get("line_width_px", 7),
+            "marker_radius_px": row.get("marker_radius_px", 9),
+            "points": [point],
+        })
+    expanded = {key: value for key, value in panel.items() if key != "rows"}
+    expanded["series"] = series
+    return expanded
+
+
+def _expanded_panels(spec: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return data.panels with categorical and row sugar expanded."""
+    panels = _items(_object(spec.get("data"), "data").get("panels"),
+                    "data.panels", nonempty=True)
+    expanded = []
+    for index, raw_panel in enumerate(panels):
+        field = f"data.panels[{index}]"
+        panel = dict(_object(raw_panel, field))
+        panel["x_axis"] = _expand_categories(
+            _object(panel.get("x_axis"), f"{field}.x_axis"), f"{field}.x_axis")
+        panel["y_axis"] = _expand_categories(
+            _object(panel.get("y_axis"), f"{field}.y_axis"), f"{field}.y_axis")
+        expanded.append(_expand_rows(panel, panel["x_axis"], panel["y_axis"], field))
+    return expanded
+
+
+def _apply_resolved_layout(spec: dict[str, Any], geometry: dict[str, Any],
+                           errors: list[str]) -> dict[str, Any]:
+    """Honour an auto-layout width only when the spec opted in."""
+    resolved = geometry.get("resolved_layout")
+    if not isinstance(resolved, dict) or not resolved.get("auto_layout"):
+        return spec
+    render = _object(spec.get("plot_design"), "plot_design").get("render") or {}
+    if render.get("auto_layout") is not True:
+        errors.append(
+            "geometry resolved_layout claims auto-layout but the spec did not opt in "
+            "with plot_design.render.auto_layout=true")
+        return spec
+    width = resolved.get("width_px")
+    height = resolved.get("height_px")
+    if not isinstance(width, int) or not isinstance(height, int):
+        errors.append("geometry resolved_layout must record integer width_px and height_px")
+        return spec
+    adjusted = json.loads(json.dumps(spec))
+    adjusted.setdefault("plot_design", {}).setdefault("render", {})
+    adjusted["plot_design"]["render"]["width_px"] = width
+    adjusted["plot_design"]["render"]["height_px"] = height
+    insets = resolved.get("plot_insets_px")
+    if insets:
+        if not isinstance(insets, dict) or any(
+                side not in {"left", "right", "top", "bottom"}
+                or not isinstance(value, int) or isinstance(value, bool)
+                for side, value in insets.items()):
+            errors.append(
+                "geometry resolved_layout.plot_insets_px must map sides to integers")
+            return adjusted
+        current = dict(adjusted["plot_design"]["render"].get("plot_insets_px") or {})
+        current.update(insets)
+        adjusted["plot_design"]["render"]["plot_insets_px"] = current
+    return adjusted
+
+
+def _audit_primary_labels(
+    spec: dict[str, Any], geometry: dict[str, Any], canvas_width: int,
+    errors: list[str],
+) -> int:
+    """Check resolved primary labels against the text layout and the gate."""
+    resolved = geometry.get("primary_labels_resolved")
+    layout_plan = spec.get("layout_plan") if isinstance(spec.get("layout_plan"), dict) else {}
+    mobile = layout_plan.get("mobile_preview") if isinstance(
+        layout_plan.get("mobile_preview"), dict) else {}
+    declared = mobile.get("primary_labels") if isinstance(
+        mobile.get("primary_labels"), list) else []
+    if resolved is None:
+        if declared and spec.get("quality_contract_version") == 3:
+            errors.append(
+                "geometry manifest has no primary_labels_resolved although the spec "
+                "declares phone primary labels")
+        return 0
+    if not isinstance(resolved, list):
+        errors.append("geometry primary_labels_resolved must be a list")
+        return 0
+    boxes: dict[str, list[dict[str, float]]] = {}
+    for record in geometry.get("text_layout") or []:
+        if isinstance(record, dict) and isinstance(record.get("bbox_px"), dict):
+            boxes.setdefault(str(record.get("text")), []).append(record["bbox_px"])
+    try:
+        minimum = float(mobile.get("minimum_primary_label_height_px", 10.0))
+        preview_width = float(mobile.get("width_px", MOBILE_PREVIEW_WIDTH_PX))
+    except (TypeError, ValueError):
+        errors.append("layout_plan.mobile_preview carries non-numeric gate values")
+        return 0
+    verified = 0
+    seen = set()
+    for index, record in enumerate(resolved):
+        field = f"geometry.primary_labels_resolved[{index}]"
+        if not isinstance(record, dict):
+            errors.append(f"{field} must be an object")
+            continue
+        text = record.get("text")
+        role = record.get("role")
+        if not isinstance(text, str) or text not in boxes:
+            errors.append(f"{field} names text absent from text_layout: {text!r}")
+            continue
+        if role not in PRIMARY_ELIGIBLE_ROLES:
+            errors.append(f"{field} uses a role that is never primary: {role!r}")
+            continue
+        try:
+            glyph = float(record.get("glyph_height_px"))
+        except (TypeError, ValueError):
+            errors.append(f"{field}.glyph_height_px must be numeric")
+            continue
+        largest_edge = max(
+            max(box["right"] - box["left"], box["bottom"] - box["top"])
+            for box in boxes[text])
+        if glyph > largest_edge + 1.0:
+            errors.append(
+                f"{field} glyph height {glyph:g} exceeds its recorded text box")
+            continue
+        mobile_height = glyph * preview_width / canvas_width
+        if declared and text in declared and mobile_height + 1e-6 < minimum:
+            errors.append(
+                f"primary label {text!r} measures {mobile_height:.2f} px at the "
+                f"{preview_width:g} px preview; required at least {minimum:g} px")
+            continue
+        seen.add(text)
+        verified += 1
+    for text in declared:
+        if text not in seen:
+            errors.append(f"declared primary label was not resolved by the renderer: {text!r}")
+    return verified
 
 
 def _resolved_config(spec: dict[str, Any], panel_count: int) -> dict[str, Any]:
@@ -370,9 +557,9 @@ def audit_geometry(
             "deterministic", "composite"}:
         raise QuantitativeGeometryQaError(
             "geometry QA requires a deterministic or composite quantitative spec")
-    panels = _items(_object(spec.get("data"), "data").get("panels"),
-                    "data.panels", nonempty=True)
-    config = _resolved_config(spec, len(panels))
+    errors: list[str] = []
+    panels = _expanded_panels(spec)
+    config = _resolved_config(_apply_resolved_layout(spec, geometry, errors), len(panels))
     layouts = _layout(config, len(panels))
     panel_text_bounds = {
         _string(_object(panel, "panel").get("id"), "panel.id"): {
@@ -380,7 +567,6 @@ def audit_geometry(
         }
         for panel, layout in zip(panels, layouts)
     }
-    errors: list[str] = []
     if geometry.get("schema_version") != EXPECTED_SCHEMA_VERSION:
         errors.append(
             f"geometry schema_version must be {EXPECTED_SCHEMA_VERSION}")
@@ -717,11 +903,40 @@ def audit_geometry(
                     errors.append(f"contrast {identity} interval does not match the spec")
         for unexpected in set(contrast_records) - expected_contrast_ids:
             errors.append(f"panel {panel_id} has unexpected contrast {unexpected[0]}")
+
+        annotation_records = _unique_by(
+            record.get("annotations", []), ("id",),
+            f"panel {panel_id} annotations", errors)
+        expected_annotation_ids = set()
+        for index, raw_annotation in enumerate(panel.get("annotations", [])):
+            annotation = _object(raw_annotation, f"annotations[{index}]")
+            identity = _string(annotation.get("id"), "annotation.id")
+            expected_annotation_ids.add((identity,))
+            x_value = _number(annotation.get("x"), "annotation.x")
+            y_value = _number(annotation.get("y"), "annotation.y")
+            annotation_record = annotation_records.get((identity,))
+            if annotation_record is None:
+                errors.append(f"panel {panel_id} is missing annotation {identity}")
+                continue
+            _same_value(annotation_record.get("x_value"), x_value,
+                        f"annotation {identity} x_value", errors)
+            _same_value(annotation_record.get("y_value"), y_value,
+                        f"annotation {identity} y_value", errors)
+            _close(annotation_record.get("x_px"), _x_pixel(x_value, x_domain, box),
+                   f"annotation {identity} x_px", errors)
+            _close(annotation_record.get("y_px"), _y_pixel(y_value, y_domain, box),
+                   f"annotation {identity} y_px", errors)
+            if annotation_record.get("text") != annotation.get("text"):
+                errors.append(f"annotation {identity} text does not match the spec")
+        for unexpected in set(annotation_records) - expected_annotation_ids:
+            errors.append(f"panel {panel_id} has unexpected annotation {unexpected[0]}")
     for unexpected in set(panel_records) - expected_panel_ids:
         errors.append(f"geometry has unexpected panel {unexpected[0]}")
     text_boxes_verified = _audit_text_layout(
         geometry, panel_text_bounds, image.size, errors,
         quality_contract_version=int(spec.get("quality_contract_version", 1)))
+    primary_labels_verified = _audit_primary_labels(
+        spec, geometry, image.width, errors)
     return {
         "status": "pass" if not errors else "fail",
         "errors": errors,
@@ -731,7 +946,9 @@ def audit_geometry(
             "intervals_verified": intervals_verified,
             "raster_marks_probed": marks_probed,
             "text_boxes_verified": text_boxes_verified,
+            "primary_labels_verified": primary_labels_verified,
             "coordinate_tolerance_px": COORDINATE_TOLERANCE_PX,
+            "resolved_layout": geometry.get("resolved_layout"),
         },
         "image": str(image_path),
         "geometry_renderer": geometry.get("renderer"),

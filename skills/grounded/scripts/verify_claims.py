@@ -26,8 +26,8 @@ and judgment (the agent):
   check     enforce the quote-or-abstain contract mechanically: a verdict of
             supported/partial/contradicted is kept only if its quote appears
             verbatim (after normalization) in the stored evidence, and a numeric
-            claim marked supported must have at least one of its numbers inside
-            the quote. Violations are downgraded, never silently accepted.
+            claim marked supported must have all assigned quantities and units
+            inside its supporting quotations. Violations are downgraded, never silently accepted.
             Renders the audit appendix, writes the summary the colophon
             prints, and prints coverage statistics.
   receipts  write the reader-facing receipts as a separate Markdown file
@@ -65,148 +65,12 @@ PACKET_FALLBACK_CHARS = 2500
 VERDICTS = {"supported", "partial", "not_found", "contradicted", "unverifiable"}
 FINAL_NEEDING_QUOTE = {"supported", "partial", "contradicted"}
 
-_UNITS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
-          "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-          "sixteen", "seventeen", "eighteen", "nineteen"]
-_TENS = {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60,
-         "seventy": 70, "eighty": 80, "ninety": 90}
-_SPELLED = {w: i for i, w in enumerate(_UNITS)}
-_SPELLED.update(_TENS)
-for _t, _tv in _TENS.items():
-    for _u in range(1, 10):
-        _SPELLED[f"{_t}-{_UNITS[_u]}"] = _tv + _u
-
-
-def spell_to_digits(text):
-    """Rewrite spelled-out numbers (\"twenty-two\") as digits so a quote like
-    \"Twenty-two subjects\" satisfies the numeric anchor \"22\"."""
-    pattern = re.compile(
-        r"\b(" + "|".join(sorted(_SPELLED, key=len, reverse=True)) + r")\b", re.I)
-    return pattern.sub(lambda m: str(_SPELLED[m.group(1).lower()]), text or "")
-
-
-def quotes_of(adj):
-    """An adjudication's quote may be one string or a list of strings."""
-    quote = adj.get("quote", "")
-    if isinstance(quote, str):
-        return [quote] if quote else []
-    return [q for q in quote if q]
-
-DOI_LINK_RE = re.compile(
-    r"\[([^\]]+)\]\((https?://(?:dx\.)?doi\.org/(?:[^\s()]|\([^\s()]*\)|%28|%29)+)\)",
-    re.IGNORECASE,
+from claim_inventory import (
+    DOI_LINK_RE, claim_numbers, extract_claims, quotes_of, spell_to_digits,
+    split_sentences,
 )
-# Words a sentence splitter must not break after.
-_ABBREV = ("et al", "e.g", "i.e", "vs", "cf", "ca", "approx", "Fig", "fig",
-           "No", "no", "Dr", "St", "resp")
-
-
-def _protect(text):
-    for a in _ABBREV:
-        text = text.replace(a + ".", a + "\u2024")
-    text = re.sub(r"(\d)\.(\d)", "\\1\u2024\\2", text)
-    return text
-
-
-def _unprotect(text):
-    return text.replace("\u2024", ".")
-
-
-def split_sentences(paragraph):
-    protected = _protect(paragraph)
-    parts = re.split(r"(?<=[.!?])\s+(?=[A-Z0-9“\"(\[])", protected)
-    return [_unprotect(p).strip() for p in parts if p.strip()]
-
-
-def claim_numbers(text):
-    """Numeric anchors of a claim: numbers that are not years or citation labels."""
-    cleaned = DOI_LINK_RE.sub(" ", text)
-    # A numbered caption's leading ``Figure N.`` is document structure, not a
-    # scientific quantity the cited paper must contain.  Strip only that
-    # anchored prefix; empirical numbers elsewhere in the caption still bind.
-    cleaned = re.sub(r"^\s*\*\*Figure\s+\d+\.", "", cleaned, flags=re.IGNORECASE)
-    numbers = []
-    for m in re.finditer(r"\d+(?:[.,]\d+)*%?", cleaned):
-        token = m.group(0).replace(",", "")
-        bare = token.rstrip("%")
-        if re.fullmatch(r"(?:19|20)\d\d", bare):
-            continue
-        if token not in numbers:
-            numbers.append(token)
-    return numbers
-
-
-def _strip_citations(sentence):
-    text = DOI_LINK_RE.sub("", sentence)
-    text = re.sub(r"\[@[^\]]+\]", "", text)
-    text = re.sub(r"\(\s*(?:[,;]\s*)*\)", "", text)
-    text = re.sub(r"\s+([.,;:!?])", r"\1", text)
-    # Removing "claim, [A], [B]." leaves ",," and ",." behind.
-    text = re.sub(r"(?:\s*,)+(\s*[.;:!?])", r"\1", text)
-    text = re.sub(r"(?:\s*,){2,}", ",", text)
-    return re.sub(r"\s+", " ", text).strip()
-
-
-def _pairs_from_text(text_block, location, key_to_doi):
-    dois = [claim_evidence.norm_doi(m.group(2)) for m in DOI_LINK_RE.finditer(text_block)]
-    for m in re.finditer(r"\[@([^\]\s;]+)(?:;\s*@[^\]]+)*\]", text_block):
-        for key in re.findall(r"@([^\s;\]]+)", m.group(0)):
-            doi = key_to_doi.get(key)
-            if doi:
-                dois.append(claim_evidence.norm_doi(doi))
-    seen, ordered = set(), []
-    for d in dois:
-        if d not in seen:
-            seen.add(d)
-            ordered.append(d)
-    if not ordered:
-        return None
-    return {
-        "claim": _strip_citations(text_block),
-        "location": location,
-        "dois": ordered,
-        "numbers": claim_numbers(text_block),
-    }
-
-
-def extract_claims(markdown, key_to_doi=None):
-    key_to_doi = key_to_doi or {}
-    body = re.split(r"(?mi)^(?:\*\*Sources\*\*|#{1,4}\s*Sources)\s*$", markdown)[0]
-    claims = []
-    para_no = 0
-    for block in re.split(r"\n\s*\n", body):
-        block = block.strip()
-        if not block or block.startswith("#") or block.startswith("!["):
-            continue
-        caption = re.match(r"^\*\*Figure\s+(\d+)\.", block)
-        if caption:
-            # A caption is one cited statement about the figure; its sources
-            # back the caption as a whole, not each descriptive sentence.
-            pair = _pairs_from_text(
-                " ".join(block.split()), f"figure {caption.group(1)} caption", key_to_doi)
-            if pair:
-                claims.append(pair)
-            continue
-        if block.lstrip().startswith("|"):
-            rows = [r for r in block.splitlines() if r.strip().startswith("|")]
-            for i, row in enumerate(rows):
-                if re.fullmatch(r"[|\s:\-]+", row):
-                    continue
-                pair = _pairs_from_text(row, f"table row {i}", key_to_doi)
-                if pair:
-                    claims.append(pair)
-            continue
-        para_no += 1
-        for j, sentence in enumerate(split_sentences(block), 1):
-            pair = _pairs_from_text(sentence, f"paragraph {para_no}, sentence {j}", key_to_doi)
-            if pair:
-                claims.append(pair)
-    for i, c in enumerate(claims, 1):
-        c["id"] = f"C{i:03d}"
-        c["adjudications"] = [
-            {"doi": d, "verdict": "pending", "quote": "", "note": ""} for d in c["dois"]
-        ]
-    return claims
+import audit_contract
+import evidence_assessment
 
 
 # ------------------------------------------------------------------ passages --
@@ -266,7 +130,7 @@ def cmd_extract(args):
     if args.ledger:
         ledger = json.loads(Path(args.ledger).read_text())
         key_to_doi = {e["key"]: e.get("doi") for e in ledger["entries"] if e.get("doi")}
-    claims = extract_claims(markdown, key_to_doi)
+    claims = extract_claims(markdown, key_to_doi, include_uncited=True)
     if getattr(args, "synthesis", None):
         if ledger is None:
             sys.exit("--synthesis needs --ledger to map keys to DOIs")
@@ -286,11 +150,21 @@ def cmd_extract(args):
                   "add the quote to synthesis.md (and re-run synthesis-check) or "
                   "drop the citation.")
             sys.exit(1)
+        assessment_path = Path(getattr(args, "assessment", None) or
+                               Path(args.synthesis).with_name("evidence-assessment.json"))
+        assessment = json.loads(assessment_path.read_text())
+        assessed = evidence_assessment.assess(assessment, ledger, Path(args.synthesis).read_text())
+        if assessed["errors"]:
+            sys.exit("; ".join(assessed["errors"]))
     audit = {
+        "schema_version": 2,
         "review": str(args.review),
+        "inventory_sha256": audit_contract.inventory_digest(claims),
         "created": time.strftime("%Y-%m-%d"),
         "claims": claims,
     }
+    if getattr(args, "synthesis", None):
+        audit["evidence_assessment"] = assessment
     atomic_write_json(args.audit, audit)
     n_pairs = sum(len(c["dois"]) for c in claims)
     dois = {d for c in claims for d in c["dois"]}
@@ -339,6 +213,13 @@ def cmd_packets(args):
     shown = 0
     blind = getattr(args, "blind", False)
     for c in audit["claims"]:
+        if args.claim and c["id"] != args.claim:
+            continue
+        if not c["adjudications"]:
+            print(f"{c['id']} (classification required): {c['claim']}")
+            print("  Classify factual, interpretation with factual basis IDs, or nonfactual with reason.")
+        for element in c.get("elements", []):
+            print(f"  {c['id']}/{element['id']}: {element['text']}")
         for index, adj in enumerate(c["adjudications"], 1):
             if args.pending_only and adj["verdict"] != "pending":
                 continue
@@ -416,9 +297,11 @@ def cmd_check(args):
                         adj["note"] = (adj.get("note", "") + " [bridge does not connect]").strip()
                 elif verdict == "supported" and c["numbers"]:
                     quote_flat = spell_to_digits(" … ".join(quotes)).replace(",", "")
-                    if not any(n.rstrip("%") in quote_flat for n in c["numbers"]):
+                    covered_text = " ".join(e["text"] for e in c.get("elements", [])
+                                            if e["id"] in adj.get("covers", [])) or c["claim"]
+                    if audit_contract.missing_quantities(covered_text, " … ".join(quotes)):
                         downgrades.append(
-                            f"{c['id']}/{adj['doi']}: numeric claim but no claim number "
+                            f"{c['id']}/{adj['doi']}: numeric claim has unmatched quantities "
                             f"in quote — downgraded supported -> partial")
                         verdict = adj["verdict"] = "partial"
                         adj["note"] = (adj.get("note", "") + " [numeric anchor missing]").strip()
@@ -427,6 +310,13 @@ def cmd_check(args):
             counts[verdict] = counts.get(verdict, 0) + 1
     atomic_write_json(args.audit, audit)
     judgment_errors = judgment_problems(audit)
+    if audit.get("schema_version") == 2:
+        judgment_errors.extend(audit_contract.coverage_errors(audit))
+        audit.pop("checked_sha256", None)
+        if not judgment_errors and not hard_fail:
+            audit_contract.bind_evidence(audit, args.evidence, args.audit)
+            audit["checked_sha256"] = audit_contract.checked_digest(audit)
+        atomic_write_json(args.audit, audit)
 
     total = sum(counts.values())
     tier_counts = {}
@@ -598,6 +488,11 @@ def cmd_adjudicate(args):
                 adj["verdict"] = args.verdict
                 adj["quote"] = quotes if len(quotes) > 1 else (quotes[0] if quotes else "")
                 adj["note"] = (args.note or "").strip()
+                covers = getattr(args, "covers", None)
+                if covers is not None:
+                    adj["covers"] = covers
+                else:
+                    adj.pop("covers", None)
                 bridge = (getattr(args, "bridge", None) or "").strip()
                 if bridge:
                     adj["bridge"] = bridge
@@ -627,6 +522,7 @@ def cmd_receipts(args):
         sys.exit(1)
     review = Path(args.review)
     markdown = review.read_text(encoding="utf-8")
+    audit_contract.validate_release(audit, markdown, args.audit)
     out = Path(args.out) if args.out else review.with_name(review.stem + "-receipts.md")
     document = claim_receipts.render_receipts_document(
         audit, claim_receipts.labels_from_markdown(markdown),
@@ -636,6 +532,38 @@ def cmd_receipts(args):
     atomic_write_text(review, stamped)
     print(f"receipts -> {out} ({summary['pairs']} pairs); "
           f"{review.name} stamped: {claim_receipts.summary_sentence(summary)}")
+
+
+def cmd_classify(args):
+    audit = json.loads(Path(args.audit).read_text())
+    claim = next((c for c in audit["claims"] if c["id"] == args.claim), None)
+    if claim is None:
+        sys.exit("unknown assertion " + args.claim)
+    if claim["dois"] and args.classification != "factual":
+        sys.exit("cited assertions must be assessed as factual")
+    if not args.note.strip():
+        sys.exit("classification requires an independent reason")
+    claim.update(classification=args.classification, classification_note=args.note,
+                 basis=args.basis or [])
+    audit.pop("checked_sha256", None)
+    atomic_write_json(args.audit, audit)
+
+
+def cmd_elements(args):
+    audit = json.loads(Path(args.audit).read_text())
+    claim = next((c for c in audit["claims"] if c["id"] == args.claim), None)
+    if claim is None:
+        sys.exit("unknown assertion " + args.claim)
+    claim["elements"] = [{"id": f"E{i}", "text": text}
+                         for i, text in enumerate(args.element, 1)]
+    problem = audit_contract.elements_problem(claim)
+    if problem:
+        sys.exit(problem)
+    for adj in claim["adjudications"]:
+        adj.update(verdict="pending", quote="", note="")
+        adj.pop("covers", None)
+    audit.pop("checked_sha256", None)
+    atomic_write_json(args.audit, audit)
 
 
 def cmd_seed(args):
@@ -662,6 +590,12 @@ def cmd_synthesis_check(args):
     text = Path(args.synthesis).read_text(encoding="utf-8")
     ledger = json.loads(Path(args.ledger).read_text())
     result = synthesis_quotes.check_synthesis(text, args.evidence, ledger)
+    assessment_path = Path(getattr(args, "assessment", None) or
+                           Path(args.synthesis).with_name("evidence-assessment.json"))
+    assessed = evidence_assessment.assess(json.loads(assessment_path.read_text()), ledger, text)
+    result["errors"].extend(assessed["errors"])
+    result["warnings"].extend(assessed["warnings"])
+    result["status"] = "fail" if result["errors"] else "pass"
     if args.report:
         atomic_write_json(args.report, result)
     m = result["metrics"]
@@ -712,17 +646,85 @@ def cmd_score(args):
     if missing:
         print(f"gold pairs absent from candidate: {len(missing)} "
               f"(first: {missing[0][0]}/{missing[0][1]})")
-    if args.min_agreement is not None:
+    extra = sorted(set(cand_pairs) - set(gold_pairs))
+    negatives = [k for k in gold_pairs if gold_pairs[k] != "supported"]
+    false_accepts = [k for k in negatives if cand_pairs.get(k) == "supported"]
+    false_acceptance = 100.0 * len(false_accepts) / len(negatives) if negatives else 0.0
+    report = {
+        "coverage": len(matched) / len(gold_pairs),
+        "agreement": 100.0 * agree / len(matched),
+        "false_acceptance_percent": false_acceptance,
+        "missing_pairs": missing, "extra_pairs": extra,
+        "gold_sha256": audit_contract.digest(gold),
+        "candidate_sha256": audit_contract.digest(candidate),
+        "confusion": {key: len(value) for key, value in confusion.items()},
+    }
+    print(f"false acceptance: {len(false_accepts)}/{len(negatives)} ({false_acceptance:.1f}%)")
+    failures = []
+    gold_claims = {c["id"]: c["claim"] for c in gold["claims"] if "claim" in c}
+    if any(c.get("claim") != gold_claims[c["id"]] for c in candidate["claims"] if c["id"] in gold_claims):
+        failures.append("candidate assertion text differs from the benchmark")
+    if missing or extra or len(cand_pairs) != sum(len(c["adjudications"]) for c in candidate["claims"]):
+        failures.append("qualification requires every gold pair exactly once and no extra pairs")
+    if getattr(args, "qualify", False) and not VERDICTS <= set(gold_pairs.values()):
+        failures.append("qualification benchmark must exercise all five verdicts")
+    if getattr(args, "qualify", False):
+        input_path = Path(getattr(args, "benchmark_input", None) or
+                          Path(args.gold).with_name("judge-benchmark-input.json"))
+        inputs = json.loads(input_path.read_text())
+        report["input_sha256"] = audit_contract.digest(inputs)
+        passages = {c["id"]: " … ".join(c["passages"]) for c in inputs["claims"]}
+        for c in candidate["claims"]:
+            for adj in c["adjudications"]:
+                if adj.get("verdict") in FINAL_NEEDING_QUOTE:
+                    quotes = quotes_of(adj)
+                    if not quotes or any(not claim_evidence.quote_in_text(q, passages.get(c["id"], "")) for q in quotes):
+                        failures.append(c["id"] + ": qualification quotation is absent from the supplied passage")
+        failures.extend(judgment_problems(candidate))
+    if false_acceptance > getattr(args, "max_false_acceptance", 0):
+        failures.append("false acceptance exceeds configured maximum")
+    minimum_agreement = args.min_agreement
+    if minimum_agreement is None and getattr(args, "qualify", False):
+        minimum_agreement = 80
+    report["minimum_agreement"] = minimum_agreement
+    if minimum_agreement is not None:
         rate = 100.0 * agree / len(matched)
-        if rate < args.min_agreement:
-            print(f"FAIL: agreement {rate:.1f}% below required {args.min_agreement}%")
-            sys.exit(1)
+        if rate < minimum_agreement:
+            print(f"FAIL: agreement {rate:.1f}% below required {minimum_agreement}%")
+            failures.append("agreement below threshold")
+    report["status"] = "fail" if failures else "pass"
+    report["errors"] = failures
+    if getattr(args, "report", None):
+        atomic_write_json(args.report, report)
+    if failures:
+        sys.exit("; ".join(failures))
+
+
+def cmd_benchmark_packets(args):
+    document = json.loads(Path(args.input).read_text())
+    # Only the unlabelled fixture is read. Never load the gold answers here.
+    candidate = {"claims": []}
+    for c in document["claims"]:
+        candidate["claims"].append({"id": c["id"], "claim": c["claim"], "dois": c["dois"],
+                                     "adjudications": [{"doi": d, "verdict": "pending", "quote": "", "note": ""}
+                                                        for d in c["dois"]]})
+        print(f"{c['id']}#1: {c['claim']}")
+        for passage in c["passages"]:
+            print("  Passage: " + passage)
+        if not c["passages"]:
+            print("  No source text available.")
+    atomic_write_json(args.audit, candidate)
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
+
+    p = sub.add_parser("benchmark-packets")
+    p.add_argument("--input", required=True, help="unlabelled judge-benchmark-input.json only")
+    p.add_argument("--audit", required=True)
+    p.set_defaults(fn=cmd_benchmark_packets)
 
     p = sub.add_parser("seed")
     p.add_argument("--ledger", required=True)
@@ -733,6 +735,7 @@ def main():
 
     p = sub.add_parser("synthesis-check")
     p.add_argument("--synthesis", required=True)
+    p.add_argument("--assessment", help="defaults to evidence-assessment.json beside synthesis")
     p.add_argument("--ledger", required=True)
     p.add_argument("--evidence", required=True)
     p.add_argument("--report")
@@ -742,6 +745,7 @@ def main():
     p.add_argument("--review", required=True)
     p.add_argument("--ledger")
     p.add_argument("--synthesis", help="synthesis.md; every cited source must carry a quote there")
+    p.add_argument("--assessment", help="outcome certainty and study families, required for reviews")
     p.add_argument("--audit", required=True)
     p.set_defaults(fn=cmd_extract)
 
@@ -767,7 +771,23 @@ def main():
     p.add_argument("--note", help="required for partial: the element the quote does not cover")
     p.add_argument("--bridge", help="when the quote paraphrases the claim with no shared "
                                     "word: the equivalence, e.g. 'appetite = hunger'")
+    p.add_argument("--covers", action="append", help="fully supported element ID; repeat, e.g. E1")
     p.set_defaults(fn=cmd_adjudicate)
+
+    p = sub.add_parser("classify")
+    p.add_argument("--audit", required=True)
+    p.add_argument("--claim", required=True)
+    p.add_argument("--classification", choices=("factual", "interpretation", "nonfactual"), required=True)
+    p.add_argument("--note", required=True)
+    p.add_argument("--basis", action="append", help="factual assertion ID underpinning an interpretation")
+    p.set_defaults(fn=cmd_classify)
+
+    p = sub.add_parser("elements")
+    p.add_argument("--audit", required=True)
+    p.add_argument("--claim", required=True)
+    p.add_argument("--element", action="append", required=True,
+                   help="verbatim consecutive clause; repeat to partition the whole assertion")
+    p.set_defaults(fn=cmd_elements)
 
     p = sub.add_parser("packets")
     p.add_argument("--audit", required=True)
@@ -796,6 +816,10 @@ def main():
     p.add_argument("--audit", required=True, help="candidate audit to evaluate")
     p.add_argument("--gold", required=True, help="gold-labeled audit, e.g. evals/claim-benchmark-creatine.json")
     p.add_argument("--min-agreement", type=float, help="fail below this agreement percentage")
+    p.add_argument("--max-false-acceptance", type=float, default=0)
+    p.add_argument("--qualify", action="store_true", help="require all five verdict classes in gold")
+    p.add_argument("--benchmark-input", help="unlabelled fixture; defaults beside gold")
+    p.add_argument("--report", help="write coverage, confusion, false acceptance and fixture hashes")
     p.set_defaults(fn=cmd_score)
 
     args = ap.parse_args()

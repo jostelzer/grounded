@@ -134,6 +134,30 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
 - `scripts/compose_hybrid_figure.py` is kept only so quality-contract-v1
   releases stay reproducible; v3 figures never use it.
 
+- Plot upgrade (v0.4.5): the deterministic renderer gains a primary tier —
+  strings named in `layout_plan.mobile_preview.primary_labels` are drawn at the
+  smallest size that clears the 390 px floor (never tick labels, never the rest
+  of the type system) and recorded in the geometry manifest as
+  `primary_labels_resolved`. `qa_figure.py --geometry` (or a `geometry` path in
+  the provenance render attempt) measures the phone gate from those records and
+  fails an attestation the raster does not contain; without a manifest the
+  attested value still applies and a warning names the gap. With a manifest,
+  the machine p90 label height behind the typography-dominance cap excludes
+  OCR words inside rotated `y_axis_label` boxes and inside resolved primary
+  labels, so the cap measures the supporting type system it was written for. Geometry QA checks
+  the resolved records and the gate. Renderer sugar (`x_axis.categories` /
+  `y_axis.categories`, `rows`, `annotations`) expands inside normalization and
+  is mirrored in geometry QA; the manifest shape for existing constructs is
+  unchanged. Opt-in `plot_design.render.auto_layout` (or `--auto-layout`)
+  searches label sides and canvas widths and records `resolved_layout`; geometry
+  QA honours the width only when the spec opted in. `figure_provenance.py`
+  adds non-blocking `provenance_warnings` (a `generator_detection` record is
+  expected when `generator_available` is false). New script
+  `figure_spec_tools.py` (`scaffold`, `lint`, `preview`) wraps the unchanged
+  validators. Placeholders (`<<FILL …>>`) are rejected by lint, the renderer,
+  and figure QA. All additive: existing specs, manifests, and fixtures pass
+  unchanged.
+
 - Production-manifest schema 1 accepts an optional `usage` object per stage
   (`model`, `input_tokens`, `output_tokens`, `cache_read_input_tokens`);
   `audit_production.py` reports it under `metrics.usage` with totals and
@@ -145,3 +169,16 @@ its changelog entry. Additions are fine; silent weakening or removal is not.
 20 verified sources, one deterministic figure). It exists so that "without
 destroying what works" is checkable: the golden pipeline test must stay green
 through every phase of hardening work.
+
+## Assertion audit v2 and evidence assessment
+
+- Inventory headings, uncited paragraphs and summaries, captions, alt text, and table rows. Independent classification is required for uncited items; empirical claims cannot escape by losing a citation.
+- Source verdicts name fully covered elements. Their union must cover the complete assertion. Partial support alone is not a release pass.
+- Bind the exact assertion inventory and evidence metadata/text to a checked audit. Receipts, export and PDF QA reject stale assertions, changed judgments, missing evidence, and legacy audits. The PDF delivery CLI requires ledger, audit, and receipts even without a release manifest.
+- The judge qualification benchmark is synthetic and spans five fields and all five verdicts. Gold answers are separated from judge inputs. Qualification requires complete coverage, zero false acceptance, and the configured agreement threshold; scoring verifies quoted passages and records hashes and confusion counts.
+- Assess outcome certainty across five domains, and track study families and overlapping reviews separately from quotation support and text access. Synthesis and production evidence gates require the assessment.
+- Completed contrary/null searches are required, disagreement is not. Source ranges are advisory. Budgets are generated from review_config.py into references/budgets.md and evaluation metadata.
+- Compact scope/methods disclosures replace the prohibition on methods notes. Context/defaults resolve missing presentation choices without an automatic ask-back.
+- PDF rebalancing retains the assertion tally when moving the colophon into the References heading. Raster and text QA remain mandatory.
+
+These checks establish consistency and coverage of recorded judgments, not independent scientific truth. Offline rendering fixtures are explicitly synthetic; historical example reviews are not retroactively certified under v2.

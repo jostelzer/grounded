@@ -65,7 +65,7 @@ Run `find_papers.py --ledger sources.json --show` and read the table against you
 
 - Does each angle have at least one synthesis and at least one primary study (where such things exist)?
 - Is the newest paper from the last 12–24 months? If not, run a recency pass.
-- Is there at least one source that disagrees with the emerging story? If not, search harder for it — absence of disagreement in a ledger usually means absence of searching, not absence of disagreement.
+- Has a contrary/null search completed? Record its scope and results. Finding disagreement is not required; never manufacture balance or broaden to irrelevant papers to obtain it.
 - Are the most-cited papers on the topic present? A cited-sort pass tells you.
 - Are there sources from more than one research group and more than one country? One group's papers can dominate a search.
 
