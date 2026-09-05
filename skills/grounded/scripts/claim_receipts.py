@@ -22,6 +22,7 @@ text does.
 import re
 import urllib.parse
 import audit_contract
+import claim_context
 
 RECEIPTS_HEADING = "**Receipts**"
 RECEIPTS_BLOCK_RE = re.compile(r"(?ms)^\*\*Receipts\*\*\s*$.*\Z")
@@ -79,7 +80,11 @@ def summarize_audit(audit):
     for tier in source_tier.values():
         by_tier[tier if tier in by_tier else "none"] += 1
     return {
-        "coverage_errors": audit_contract.coverage_errors(audit) if audit.get("schema_version") == 2 else [],
+        "coverage_errors": (audit_contract.coverage_errors(audit) + claim_context.audit_errors(audit))
+                           if audit.get("schema_version") == 2 else [],
+        "context_reviewed_pairs": sum(bool(a.get("context_review")) for c in claims
+                                      for a in c.get("adjudications", [])),
+        "context_contract_version": audit.get("context_contract_version"),
         "claims": sum(bool(c.get("dois", c.get("adjudications"))) for c in claims),
         "assertions": len(claims),
         "pairs": pairs,
@@ -245,8 +250,12 @@ def verdict_phrase(adj):
         bridge = " ".join((adj.get("bridge") or "").split())
         if bridge:
             text += f" (bridge: {bridge})"
-        if verdict == "partial" and note:
+        if note:
             text += f" ({note})"
+        context = adj.get("context_review")
+        if context:
+            text += (f" Interpretation: {context['interpretation']} — {context['rationale']}"
+                     f" Limits: {context['limitations']}")
         return text
     if verdict == "not_found":
         return f"not found in {tier_label(adj.get('tier'))}"
@@ -300,11 +309,19 @@ def render_receipts_document(audit, labels=None, title="review", review_name="re
         f"# Claim receipts — {title}", "",
         f"*{summary_sentence(summary)}.*", "",
         f"Every cited sentence of `{review_name}`, paired with the passage in its "
-        "source that the checker matched verbatim. *Full text* means the passage "
-        "came from the version-of-record text; *abstract* means only the abstract "
-        "was available. A *bridge* states the paraphrase when the sentence and "
-        "the passage share no word.", "",
+        "source that the checker matched verbatim. Text access describes the stored "
+        "source, not how much was inspected or the strength of the evidence. Full text "
+        "can include an authenticated accepted manuscript; it does not by itself establish "
+        "version of record. Attribution, interpretation and outcome certainty are separate "
+        "judgments. A bridge explains a paraphrase, not missing evidence.", "",
     ]
+    if audit.get("context_contract_version"):
+        lines += ["Context review records the applicable scientific dimensions and inspected "
+                  "source ranges. These are reviewer judgments with integrity checks, not "
+                  "automatic proof of scientific correctness.", ""]
+    else:
+        lines += ["Historical audit: structured context and whole-review interpretation "
+                  "checks were not required. Do not infer them from supported verdicts.", ""]
     current = None
     for entry in receipt_entries(audit, labels):
         if entry["id"] != current:
@@ -313,6 +330,13 @@ def render_receipts_document(audit, labels=None, title="review", review_name="re
             lines += [f"## {current} · {entry['location']}", "",
                       f"> {plain_text(claim.get('claim'))}", ""]
         lines.append(f"- **{entry['label']}** · {tier_label(entry['tier'])} · {entry['phrase']}")
+        adj = next(a for c in audit["claims"] if c["id"] == entry["id"]
+                   for a in c["adjudications"] if norm_doi(a["doi"]) == entry["doi"])
+        context = adj.get("context_review")
+        if context:
+            lines.append("  - Meaning: " + "; ".join(f"{k}: {v}" for k, v in context["meaning"].items()))
+            for span in context["context"]:
+                lines.append(f"  - Inspected source lines {span['start_line']}–{span['end_line']}: {span['reason']}")
         lines.append("")
     uncited = [c for c in audit["claims"] if not c.get("dois")]
     if uncited:
@@ -324,6 +348,14 @@ def render_receipts_document(audit, labels=None, title="review", review_name="re
             for reference in c.get("artifacts", []):
                 lines.append(f"  - Inspected artifact `{reference['path']}` · SHA256 `{reference['sha256']}`")
     assessment = audit.get("evidence_assessment")
+    whole = audit.get("document_review")
+    if whole:
+        lines += ["", "## Whole-review interpretation", "",
+                  f"**{whole['interpretation']}** — {whole['takeaway']}", "",
+                  "Scientific basis: " + ", ".join(whole["basis"]), "",
+                  whole["rationale"], "", "Limitations: " + whole["limitations"]]
+        for fig in whole["figures"]:
+            lines.append(f"- Figure `{fig['path']}`: {fig['observed_meaning']} (basis: {', '.join(fig['basis'])})")
     if assessment:
         lines += ["", "## Outcome certainty (separate from source support)", ""]
         for outcome in assessment["outcomes"]:

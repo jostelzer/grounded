@@ -41,7 +41,7 @@ Run `scripts/verify_citations.py --ledger sources.json`. Peer-review eligibility
 
 ## 3. Assess and synthesize
 
-Read `references/evidence-weighing.md` and `references/synthesis-guide.md`. Write atomic, calibrated claims in `synthesis.md`, with source keys, verbatim quotes, boundaries, contrary evidence if found, dependencies, and exact quantities.
+Read `references/evidence-weighing.md`, `references/synthesis-guide.md`, and `references/interpretation-review.md`. Preserve the question each source actually answers; attribution, interpretation and evidence strength are separate judgments. Write atomic, calibrated claims in `synthesis.md`, with source keys, verbatim quotes, boundaries, contrary evidence if found, dependencies, and exact quantities.
 
 Create `evidence-assessment.json` following `references/evidence-assessment.md`. For every synthesis claim, record outcome certainty and reasons across risk of bias, inconsistency, indirectness, imprecision, and publication bias. Group publications from the same study and record overlap between reviews. Unknown overlap cannot count as independent corroboration. These are structured judgments, not automatically certified GRADE ratings.
 
@@ -58,7 +58,7 @@ Read `references/writing-guide.md` and only the selected `style-scientific.md`, 
 
 Include a compact scope/methods disclosure: narrative/systematic status, search date, databases, boundaries, and material access limitations. Keep it separate from the main explanation. Findings must distinguish text access, source support, and evidence certainty.
 
-For PDF or slides, read the selected section in `references/output-formats.md` and its linked media contracts. Plan a review-wide mix of explanatory illustrations and quantitative plots in every style; discover the actual image tools, including deferred tools, before claiming image generation is unavailable. Use the available image generator for illustrations and deterministic plots for exact quantities. Preserve the canonical renderer, figure provenance, and visual QA. Inline chat needs no media workflow. Figures and captions must be finished before the written-review assertion audit.
+For PDF or slides, read the selected section in `references/output-formats.md` and its linked media contracts. Select complementary explanatory illustrations and quantitative plots by evidence and purpose, without a fixed ratio or padding; discover the actual image tools, including deferred tools, before claiming image generation is unavailable. Use the available image generator for illustrations and deterministic plots for exact quantities. Preserve the canonical renderer, figure provenance, and visual QA. Inline chat needs no media workflow. Figures and captions must be finished before the written-review assertion audit.
 
 ## 5. Independently audit all assertions
 
@@ -72,7 +72,7 @@ python3 scripts/verify_claims.py packets --audit claims_audit.json --evidence ev
 
 The inventory includes uncited text, headings, summaries, table cells and captions. The independent judge classifies each uncited item as factual, interpretation with factual basis IDs, nonfactual with a reason, or document-local artifact evidence with inspected file hashes and a substantive reason. Artifact evidence is restricted to local provenance or depicted geometry, never scientific factual claims. A factual item without evidence cannot ship. Citation-free abstracts and summaries must map their assertions to checked factual claims, not disappear from the audit.
 
-Judge source support per assertion element. A partial source may ship only if other evidence covers the remainder; every element must be supported. Never drop a citation while leaving its unsupported assertion behind. Repair the prose or evidence, re-extract, and re-adjudicate changed assertions.
+Judge source support per assertion element and record inspected context and interpretation under `references/interpretation-review.md`. A partial source may ship only if other evidence covers the remainder; every element must be supported. Never drop a citation while leaving its unsupported assertion behind. Repair the prose or evidence, re-extract, and re-adjudicate changed assertions. Afterward, inspect the complete argument and actual figure pixels, recording the takeaway and checked basis with `review-context`. Reopen synthesis when selection, framing or compression changes the inference.
 
 ```bash
 python3 scripts/verify_claims.py check --audit claims_audit.json --evidence evidence/ --summary claims_summary.json --strict
@@ -86,3 +86,5 @@ Receipts, export, and PDF QA bind the exact assertion inventory and evidence ver
 Write the review in chat; deliver any requested PDF and the receipts alongside it. State the source-access split and the outcome certainty honestly. For PDF, run the mandatory release QA and inspect every rendered page before delivery. Follow `references/output-formats.md` for the export command and lineage files.
 
 Preserve the audit inputs for inspection. Do not claim live checks, independent judgment, source access, or successful QA that were not performed.
+
+When changing scientific rules, use `references/generalization-evaluation.md`: freeze rules before independent evaluation, separate regressions from held-out cases, and report both false acceptance and false rejection. A passing schema or quotation match is not scientific validation.

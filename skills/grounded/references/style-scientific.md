@@ -54,6 +54,12 @@ Introduce figures at the relevant point in the prose using the stable body token
 
 ## Editorial pass before the assertion audit
 
+Preserve meaning through compression: a shorter heading, summary, label or
+transition must not broaden a measured outcome, change the reference comparison,
+or strengthen causal or statistical language. Apply the same scientific boundary
+in accessible and specialist prose. Use `interpretation-review.md` for the final
+whole-argument check; register alone is not a measure of rigor.
+
 Read the complete review specifically for register and inference. Check the abstract, headings, topic sentences, transitions, captions, and conclusion—not only isolated evidence sentences.
 
 - Can the reader identify what was compared, in whom, for which outcome, and with what uncertainty?

@@ -407,6 +407,11 @@ def render_report(resolution, ledger, audit, title="draft"):
                 labels[claim_receipts.norm_doi(r["doi"])] = r.get("label") or r["doi"]
         lines += ["## Receipts", "", f"*{claim_receipts.summary_sentence(summary)}.*", ""]
         lines += [claim_receipts.receipt_line(e) for e in claim_receipts.receipt_entries(audit, labels)]
+        whole = audit.get("document_review")
+        if whole:
+            lines += ["", "## Whole-review interpretation", "",
+                      f"**{whole['interpretation']}** — {whole['takeaway']}", "",
+                      whole["rationale"], "", "Limitations: " + whole["limitations"]]
         fixes = [e for e in claim_receipts.receipt_entries(audit, labels)
                  if e["verdict"] in ("not_found", "unverifiable", "contradicted")]
         lines += ["", "## Citations to fix", ""]
@@ -419,7 +424,8 @@ def render_report(resolution, ledger, audit, title="draft"):
                 if not claim.get("dois"):
                     lines.append(f"- {claim['id']} · {claim.get('classification', 'pending')} · “{claim['claim']}”")
         else:
-            lines.append("- none: every cited sentence is backed by its source's own text at the tier shown.")
+            lines.append("- No unresolved source-support findings in the recorded audit. "
+                         "This is separate from evidence strength and does not certify the conclusion as true.")
     return "\n".join(lines) + "\n"
 
 

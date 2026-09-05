@@ -1,6 +1,6 @@
 # The synthesis — the claims ledger every style renders
 
-`synthesis.md` is the style-neutral distillation of the verified evidence, written after verification (pipeline step 4) and before a single sentence of styled prose (step 5b). It is where deciding **what the literature says** is finished, so that the styled draft can be a pure act of telling. Every downstream artifact draws from it and only from it: the styled review, the figures, and the deck storyboard; the claim audit, which verifies the review's sentences against the sources' own text, gains a fixed claim inventory to check coverage against. It is a working file — never delivered, never attached, never quoted verbatim.
+`synthesis.md` is the maintained, style-neutral record of the verified evidence, prepared before styled prose. Downstream prose, figures and storyboards trace to it. It is not a locked interpretation: source-context review or drafting can reveal an error or missing qualification, requiring an update to synthesis and assessment before the deliverable changes. The independent audit checks original source context, not merely agreement with this record. Keep the working file available for inspection.
 
 Why it exists: when synthesis and styling happen in one pass, the synthesis leaks into the deliverable as inventory sentences ("One meta-analysis found… Another found…"), number dumps, and register wobble. Finishing the synthesis first — as structured fields, not prose — makes those failure modes structurally hard: the styled text cannot paraphrase what was never prose to begin with.
 
@@ -10,14 +10,14 @@ Why it exists: when synthesis and styling happen in one pass, the synthesis leak
 # Synthesis — <the sharpened question>
 
 ## Verdict
-<One citation-free paragraph: the answer, stated affirmatively on its own terms,
+<One citation-free paragraph: the answer, including inconclusive or mixed results,
 its certainty in calibrated language, and the main boundary. This is the paragraph
 every style's opening move is carved from — the abstract's first move, the
 standfirst's shape, the TL;DR.>
 
 ## Throughline
-<One sentence naming the tension or pattern the whole review turns on. If two
-framings genuinely compete, list both and pick one before drafting begins.>
+<The organizing scientific question or supported pattern. Do not force tension,
+an affirmative answer, or a narrative resolution when the evidence lacks one.>
 
 ## Claims
 
@@ -80,9 +80,11 @@ is not a claim yet — find the passage, weaken the sentence to what the
 passage says, or drop the key. A quote is judged for meaning when the review
 is audited (step 8); here it only has to exist and be verbatim.
 
+Record applicable population/system, design, exposure, comparison, outcome, timeframe, quantity and uncertainty in the existing evidence, boundary and numbers fields. Use qualitative scope where appropriate; do not force every claim into a trial template. See `interpretation-review.md` for the independent context check.
+
 ## Claim rules
 
-- **Atomic.** One claim is one assertable sentence a reader could agree or disagree with. "X lowers relapse risk when it replaces Y" — yes. "X affects mood and sleep" — two claims. If a claim needs "and", split it.
+- **Atomic.** One claim is one assertable sentence a reader could agree or disagree with. "X lowers relapse risk when it replaces Y" — yes. "X affects mood and sleep" — two claims. Split components when they need different evidence or qualifications; a conjunction alone does not require fragmentation.
 - **Calibrated in the sentence itself.** The strength lives in the verb ("lowers", "probably reduces", "is associated with", "may"), matched to the `strength` field per `evidence-weighing.md`. A claim whose wording outruns its strength field is wrong at the source, and every style inherits the error.
 - **Evidence-anchored.** Every evidence and contrary line carries ledger keys, and every key carries its quote line; a claim with no keys is not a claim, it is an opinion, and it does not enter the ledger. One source, one statement: a key appears on a claim only for what its quoted passage states — a generalisation about the field ("reviews agree that…") cites a review whose text makes it, or is recorded as a pattern (P-entry) rather than dressed as evidence. Speculation and mechanism-plausibility belong inside a claim's wording ("is biologically plausible but unproven in humans") or in Open — never as bare claims.
 - **Contrary evidence is recorded on the claim it opposes**, not pooled in a separate section. This is what guarantees no style can quietly drop it: whoever renders C4 renders C4's contrary line.
@@ -95,12 +97,12 @@ is audited (step 8); here it only has to exist and be verbatim.
 
 The styles are four arrangements of one claims ledger — selection, ordering, and register change; the claims, their strengths, and their contrary evidence do not.
 
-- **Scientific** — claim headings *are* selected claims, worded as the calibrated sentences they already are. Order by `depends-on` and argumentative weight. Abstract four moves map directly: Verdict paragraph → move 1; the strongest claim with its lead number → move 2; the strongest contrary line and its resolution → move 3; the boundaries → move 4. Patterns become the callbacks and the Conclusion.
+- **Scientific** — organize by scientific questions, outcomes, designs or comparisons. Neutral descriptive headings are appropriate. Follow `style-scientific.md`; there is no required affirmative verdict, dramatic contrast, resolution or fixed sequence of abstract moves. The abstract and conclusion preserve the scope and uncertainty of the body.
 - **Popsci** — choose the spine (chronology, investigation, or a followed subject), then map claims to beats along it; the star number each section leads with comes from that claim's `numbers` field; the turn is the claim (or pattern) whose contrary line bites hardest; the kicker looks forward using Open.
 - **Bullets** — punchline headings are the claims; bullets are the evidence lines made concise; the once-named cross-section pattern is a P-entry.
 - **ELI5** — the staircase is the dependency order: sort claims so each stands only on earlier ones; each step renders one claim with one number in reader units; the helper picture is chosen for the hardest claim; the turn step is the strongest contrary line in the reader's own doubt-words.
 - **Slides** — content-slide titles are claims (the deck already requires full-sentence cited claim titles); the storyboard's `reference_keys` are the synthesis's keys; the evidence grade describes the slide's claim exactly as `strength` recorded it (strong → `strong`; moderate/limited → `mixed`/`limited`; contested → `mixed` with the contrary evidence visible in the artwork).
-- **Figures** — every figure specification is built from claim entries and pattern entries, never from a fresh reading of the papers; the caption's citations are the rendered claims' keys.
+- **Figures** — specifications trace to claim and pattern entries. Revisit papers whenever definitions, visual relationships or quantities need context; update the synthesis before incorporating new content. Caption citations are the rendered claims’ keys.
 
 ## The anti-paraphrase rule
 

@@ -10,7 +10,8 @@ python3 scripts/verify_citations.py --ledger check/sources.json
 python3 scripts/verify_claims.py extract --review check/draft-normalized.md --ledger check/sources.json --audit check/claims_audit.json
 python3 scripts/verify_claims.py fetch   --audit check/claims_audit.json --evidence check/evidence/ --ledger check/sources.json --fulltext-all
 python3 scripts/verify_claims.py packets --audit check/claims_audit.json --evidence check/evidence/ --blind
-python3 scripts/verify_claims.py adjudicate --audit check/claims_audit.json --packet C001#1 --verdict <verdict> --quote "<verbatim passage>"
+python3 scripts/verify_claims.py adjudicate --audit check/claims_audit.json --packet C001#1 --verdict <verdict> --quote "<verbatim passage>" --context-review check/pair-context.json --evidence check/evidence/
+python3 scripts/verify_claims.py review-context --audit check/claims_audit.json --record check/document-context.json
 python3 scripts/verify_claims.py check   --audit check/claims_audit.json --evidence check/evidence/ --summary check/claims_summary.json
 python3 scripts/check_draft.py report --resolution check/resolution.json --ledger check/sources.json --audit check/claims_audit.json --title "<draft title>" --out check/draft-check.md
 ```

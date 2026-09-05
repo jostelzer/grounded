@@ -60,6 +60,15 @@ def europepmc_fulltext(pmcid):
     raw = get(f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML")
     if not raw or "<article" not in raw:
         return None, []
+    return article_text(raw)
+
+
+def article_text(raw):
+    """Retain JATS context, including table structure and supplemental links.
+
+    Span annotations preserve merged-cell information without guessing missing
+    values. Readers should open the source table when its layout is ambiguous.
+    """
     try:
         root = ET.fromstring(raw)
     except ET.ParseError:
@@ -68,16 +77,57 @@ def europepmc_fulltext(pmcid):
     if body is None:
         return None, []
     chunks, headings = [], []
-    for el in body.iter():
+    def words(el):
+        return re.sub(r"\s+", " ", "".join(el.itertext())).strip()
+
+    def visit(el):
+        if el.tag == "table-wrap":
+            label, caption = el.find("label"), el.find("caption")
+            chunks.append("\n## " + (words(label) if label is not None else "Table") + "\n")
+            if caption is not None:
+                chunks.append(words(caption) + "\n")
+            for row in el.findall(".//tr"):
+                cells = []
+                for cell in row:
+                    if cell.tag not in {"td", "th"}:
+                        continue
+                    spans = ", ".join(f"{key}={cell.attrib[key]}" for key in ("rowspan", "colspan")
+                                      if key in cell.attrib)
+                    cells.append(words(cell) + (f" [{spans}]" if spans else ""))
+                chunks.append(" | ".join(cells) + "\n")
+            foot = el.find("table-wrap-foot")
+            if foot is not None:
+                chunks.append("Table notes: " + words(foot) + "\n")
+            if el.find(".//table") is None:
+                chunks.append("[Table is an image or external asset; inspect original for values.]\n")
+            return
         if el.tag == "title":
-            t = "".join(el.itertext()).strip()
+            t = words(el)
             if t:
                 headings.append(t)
                 chunks.append(f"\n## {t}\n")
         elif el.tag == "p":
-            t = re.sub(r"\s+", " ", "".join(el.itertext())).strip()
+            t = words(el)
             if t:
                 chunks.append(t + "\n")
+            for link in el.findall(".//ext-link"):
+                href = link.get("{http://www.w3.org/1999/xlink}href")
+                if href:
+                    chunks.append("Source link: " + href + "\n")
+            return
+        elif el.tag in {"supplementary-material", "fig"}:
+            chunks.append("\n" + words(el) + "\n")
+            for asset in el.iter():
+                href = asset.get("{http://www.w3.org/1999/xlink}href")
+                if href:
+                    chunks.append("Source asset: " + href + "\n")
+            return
+        for child in el:
+            visit(child)
+
+    visit(body)
+    for floats in root.findall("floats-group"):
+        visit(floats)
     abstract = root.find(".//abstract")
     abs_text = re.sub(r"\s+", " ", "".join(abstract.itertext())).strip() if abstract is not None else ""
     text = ("## Abstract\n" + abs_text + "\n" if abs_text else "") + "".join(chunks)

@@ -162,7 +162,7 @@ For text Grounded did not write, `check_draft.py ingest` parses every
 citation form, resolves references through Crossref (`resolution.json`:
 resolved / ambiguous / unresolved / unlisted), and writes `sources.json` plus
 `draft-normalized.md` with Grounded DOI links; `verify_citations.py`,
-`verify_claims.py` (extract → fetch → packets --blind → adjudicate → check),
+`verify_claims.py` (extract → fetch → packets --blind → adjudicate with inspected context → review-context → check),
 and `check_draft.py report` then produce the chat report. A check hides no
 verdict: `not_found`, `unverifiable`, and `contradicted` pairs are listed
 under "Citations to fix" rather than blocking anything, because nothing is

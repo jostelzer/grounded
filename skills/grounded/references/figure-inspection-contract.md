@@ -8,6 +8,14 @@ here.
 
 ## Visual inspection record
 
+For written reviews, also perform the scientific meaning check in
+`interpretation-review.md`. Pixel legibility and correct geometry do not establish
+that labels, reference points, groupings or arrows represent the source's actual
+comparison. Record the observed meaning and checked scientific basis for every
+rendered asset in the final `review-context` record. Hypotheses and observed
+relationships must remain distinguishable. Do not use artifact classification
+or a passing visual-quality flag to certify scientific meaning.
+
 For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
 
 ```json

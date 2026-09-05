@@ -2,7 +2,7 @@
 
 When agent spawning is available, spawn a fresh judge with only the packets and rubric; do not fork the writer’s context. Otherwise use a separate fresh context and disclose a blocker if independence cannot be established.
 
-The judge sees the assertion, source passages, and evidence access level; never the writer's intended answer or the qualification gold labels. Writer-selected synthesis quotes are leads, not a limit on admissible evidence. Read surrounding methods/results when a passage is ambiguous or selective. The deterministic checker establishes quote identity and quantity consistency; it does not establish scientific entailment or genuine judge independence.
+The judge reads this rubric together with `interpretation-review.md`. It sees the assertion, source passages, source access paths and evidence access level; never the writer's intended answer or the qualification gold labels. Writer-selected synthesis quotes are leads, not a limit on admissible evidence. Inspect the relevant definitions, methods/results, table headers and notes needed to interpret the source. The deterministic checker establishes quote identity and quantity consistency; it does not establish scientific entailment or genuine judge independence.
 
 ## Qualify the judge
 
@@ -41,7 +41,7 @@ python3 scripts/verify_claims.py classify --audit claims_audit.json --claim C003
 
 ## Verdicts and complete support
 
-- `supported`: the quote entails the assigned assertion elements, including material qualifications.
+- `supported`: the source in its inspected context entails the assigned assertion elements, including material qualifications; an authentic quotation alone is insufficient.
 - `partial`: the source supports only specified elements. Name the uncovered element in a pair-specific note.
 - `contradicted`: the source states incompatible evidence.
 - `not_found`: source text is available but does not address the claim.
@@ -60,6 +60,8 @@ Elements must partition the complete sentence without dropping qualifications. C
 Check population/model, design, comparison, outcome, timepoint, effect direction, magnitude, uncertainty, and causal/adjustment qualifiers. An association cannot support a causal verb. A narrow population cannot support a universal statement. Statistical significance alone is not effect magnitude. All quantities in a covered element must occur with matching signs and units in its supporting quotations. Exact numeric matching is a guard, not proof that the number refers to the right group or outcome. For derived values, retain a quoted source value in the factual statement and explain the reproducible calculation as an interpretation with factual basis IDs; do not bypass the quantity check.
 
 Quotes must occur verbatim in the stored source text after normalization. `--bridge` may record a genuine paraphrase with no shared content term, but cannot supply missing evidence. Keep pair-specific notes. Read original source context where the candidate passage omits a comparator, qualifier, or outcome definition.
+
+For newly extracted audits, record the source-specific meaning, inspected line ranges, interpretation and limitations with `--context-review` and `--evidence` as defined in `interpretation-review.md`. The short adjudication commands above illustrate verdict/element syntax; new audits additionally require that context record for supported, partial and contradicted judgments. Unavailable evidence must not be assigned invented context ranges. A complete review also requires the `review-context` judgment after sentence checks, including every rendered figure’s observed meaning and checked scientific basis.
 
 ## Check, bind, and release
 

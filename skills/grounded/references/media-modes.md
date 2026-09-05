@@ -60,11 +60,9 @@ failure, not a claim that no generator exists. If a delegated worker lacks image
 tools, return that visual job to the capable coordinator rather than silently
 replacing it with a plot.
 
-With image generation available, plan a meaningful mix across every writing
-style, including scientific. A useful starting allocation is one illustration
-and one plot for small reviews, two illustrations and one or two plots for
-medium, and two or three illustrations among five or six figures for large.
-These are planning defaults, not decoration quotas: each illustration must
+With image generation available, consider both illustrations and plots across
+every writing style, including scientific. Choose their mix by explanatory need,
+not a fixed ratio, review size allocation or renderer convenience. Each illustration must
 explain a supported mechanism, anatomy, exposure pathway, comparison, or study
 design; each plot must communicate quantities that benefit from graphical
 comparison. A whole-answer figure usually synthesizes the relationships and

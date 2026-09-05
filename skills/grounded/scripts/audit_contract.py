@@ -11,6 +11,7 @@ from decimal import Decimal
 from pathlib import Path
 
 import claim_evidence
+import claim_context
 from claim_inventory import extract_claims, spell_to_digits
 
 
@@ -197,6 +198,9 @@ def validate_release(audit, markdown, audit_path, key_to_doi=None):
     if audit.get("checked_sha256") != checked_digest(audit):
         raise ValueError("audit is unchecked or changed since check; rerun check")
     directory = Path(audit_path).resolve().parent / audit["evidence_directory"]
+    context_errors = claim_context.audit_errors(audit, directory, audit_path, markdown, audit["review"])
+    if context_errors:
+        raise ValueError("interpretation review failed: " + "; ".join(context_errors))
     for c in audit["claims"]:
         for adj in c["adjudications"]:
             text, meta = claim_evidence.load_evidence(adj["doi"], directory)

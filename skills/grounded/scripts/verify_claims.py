@@ -70,6 +70,7 @@ from claim_inventory import (
     split_sentences,
 )
 import audit_contract
+import claim_context
 import evidence_assessment
 
 
@@ -116,8 +117,15 @@ def candidate_passages(claim, numbers, evidence_text, max_windows=8, radius=320)
     merged.sort(key=score, reverse=True)
     out = []
     for s, e in merged[:max_windows]:
-        snippet = re.sub(r"\s+", " ", evidence_text[s:e]).strip()
-        out.append(("…" if s > 0 else "") + snippet + ("…" if e < len(evidence_text) else ""))
+        # Expand to line boundaries: flattened snippets lose table headers and
+        # footnotes. These are navigation leads, never a substitute for context.
+        s = evidence_text.rfind("\n", 0, s) + 1
+        line_end = evidence_text.find("\n", e)
+        e = len(evidence_text) if line_end == -1 else line_end
+        first = evidence_text.count("\n", 0, s) + 1
+        snippet = "\n".join(f"{first + i}: {line}" for i, line in
+                            enumerate(evidence_text[s:e].splitlines()))
+        out.append(snippet)
     return out
 
 
@@ -158,6 +166,7 @@ def cmd_extract(args):
             sys.exit("; ".join(assessed["errors"]))
     audit = {
         "schema_version": 2,
+        "context_contract_version": claim_context.VERSION,
         "review": str(args.review),
         "inventory_sha256": audit_contract.inventory_digest(claims),
         "created": time.strftime("%Y-%m-%d"),
@@ -229,14 +238,19 @@ def cmd_packets(args):
                 continue
             text, meta = claim_evidence.load_evidence(adj["doi"], args.evidence)
             if blind:
-                # The judge sees the sentence and the passages, nothing else:
-                # no source identity, no place in the review, no author context.
+                # Hide writer judgments and document framing. Source access
+                # remains available; source identity is not secret evidence.
                 print(f"### packet {c['id']}#{index} "
                       f"[tier: {(meta or {}).get('tier', 'MISSING')}]")
             else:
                 print(f"### {c['id']} :: {adj['doi']} "
                       f"[tier: {(meta or {}).get('tier', 'MISSING')}] ({c['location']})")
             print(f"CLAIM: {claim_receipts.plain_text(c['claim'])}")
+            if text:
+                source = Path(args.evidence).resolve() / (claim_evidence.doi_slug(adj["doi"]) + ".txt")
+                print(f"CONTEXT SOURCE: {source} ({len(text.splitlines())} lines)")
+                print("Read relevant surrounding methods/results, table headers and footnotes. "
+                      "Ranked passages and writer quotes are leads, not the full evidentiary context.")
             if c["numbers"]:
                 print(f"NUMERIC ANCHORS: {', '.join(c['numbers'])}")
             for i, quote in enumerate(adj.get("synthesis_quotes") or [], 1):
@@ -245,7 +259,8 @@ def cmd_packets(args):
             if text and not passages:
                 # No anchor matched: show the opening of the stored text rather
                 # than nothing, so the judge can still read and abstain honestly.
-                head = re.sub(r"\s+", " ", text[:PACKET_FALLBACK_CHARS]).strip()
+                head = "\n".join(f"{i}: {line}" for i, line in
+                                 enumerate(text[:PACKET_FALLBACK_CHARS].splitlines(), 1))
                 passages = [head + ("…" if len(text) > PACKET_FALLBACK_CHARS else "")]
                 print("  (no passage anchored on the claim's terms; opening of the "
                       f"stored text shown, {len(text.split())} words in store)")
@@ -315,6 +330,9 @@ def cmd_check(args):
     if audit.get("schema_version") == 2:
         judgment_errors.extend(audit_contract.coverage_errors(audit))
         judgment_errors.extend(audit_contract.artifact_errors(audit, args.audit))
+        if "context_contract_version" in audit:
+            judgment_errors.extend(claim_context.audit_errors(
+                audit, args.evidence, args.audit, Path(audit["review"]).read_text(), audit["review"]))
         audit.pop("checked_sha256", None)
         if not judgment_errors and not hard_fail:
             audit_contract.bind_evidence(audit, args.evidence, args.audit)
@@ -488,6 +506,20 @@ def cmd_adjudicate(args):
             continue
         for adj in c["adjudications"]:
             if claim_evidence.norm_doi(adj["doi"]) == target:
+                context_review = None
+                if getattr(args, "context_review", None):
+                    if not getattr(args, "evidence", None):
+                        sys.exit("--context-review requires --evidence")
+                    text, _ = claim_evidence.load_evidence(adj["doi"], args.evidence)
+                    if not text:
+                        sys.exit("no stored source available for context inspection")
+                    try:
+                        context_review = claim_context.record_pair(
+                            json.loads(Path(args.context_review).read_text()), text)
+                    except (OSError, ValueError) as exc:
+                        sys.exit(str(exc))
+                if audit.get("context_contract_version") and args.verdict in FINAL_NEEDING_QUOTE and context_review is None:
+                    sys.exit("this audit requires --context-review and --evidence for source judgments")
                 adj["verdict"] = args.verdict
                 adj["quote"] = quotes if len(quotes) > 1 else (quotes[0] if quotes else "")
                 adj["note"] = (args.note or "").strip()
@@ -501,6 +533,10 @@ def cmd_adjudicate(args):
                     adj["bridge"] = bridge
                 else:
                     adj.pop("bridge", None)
+                adj.pop("context_review", None)
+                if context_review is not None:
+                    adj["context_review"] = context_review
+                audit.pop("checked_sha256", None)
                 atomic_write_json(args.audit, audit)
                 pending = sum(1 for cc in audit["claims"] for a in cc["adjudications"]
                               if a.get("verdict", "pending") == "pending")
@@ -577,8 +613,23 @@ def cmd_elements(args):
     for adj in claim["adjudications"]:
         adj.update(verdict="pending", quote="", note="")
         adj.pop("covers", None)
+        adj.pop("context_review", None)
     audit.pop("checked_sha256", None)
     atomic_write_json(args.audit, audit)
+
+
+def cmd_review_context(args):
+    audit = json.loads(Path(args.audit).read_text())
+    try:
+        record = claim_context.record_document(
+            json.loads(Path(args.record).read_text()), audit,
+            Path(audit["review"]).read_text(), audit["review"], args.audit)
+    except (OSError, ValueError) as exc:
+        sys.exit(str(exc))
+    audit["document_review"] = record
+    audit.pop("checked_sha256", None)
+    atomic_write_json(args.audit, audit)
+    print("Whole-review interpretation and inspected figure identities recorded.")
 
 
 def cmd_seed(args):
@@ -665,10 +716,15 @@ def cmd_score(args):
     negatives = [k for k in gold_pairs if gold_pairs[k] != "supported"]
     false_accepts = [k for k in negatives if cand_pairs.get(k) == "supported"]
     false_acceptance = 100.0 * len(false_accepts) / len(negatives) if negatives else 0.0
+    positives = [k for k in gold_pairs if gold_pairs[k] == "supported"]
+    false_rejects = [k for k in positives if k in cand_pairs and cand_pairs[k] != "supported"]
     report = {
         "coverage": len(matched) / len(gold_pairs),
         "agreement": 100.0 * agree / len(matched),
         "false_acceptance_percent": false_acceptance,
+        "false_rejection_percent": 100.0 * len(false_rejects) / len(positives) if positives else None,
+        "false_acceptances": len(false_accepts), "negative_pairs": len(negatives),
+        "false_rejections": len(false_rejects), "positive_pairs": len(positives),
         "missing_pairs": missing, "extra_pairs": extra,
         "gold_sha256": audit_contract.digest(gold),
         "candidate_sha256": audit_contract.digest(candidate),
@@ -787,7 +843,14 @@ def main():
     p.add_argument("--bridge", help="when the quote paraphrases the claim with no shared "
                                     "word: the equivalence, e.g. 'appetite = hunger'")
     p.add_argument("--covers", action="append", help="fully supported element ID; repeat, e.g. E1")
+    p.add_argument("--context-review", help="independent meaning, interpretation and inspected context JSON")
+    p.add_argument("--evidence", help="source store inspected for --context-review")
     p.set_defaults(fn=cmd_adjudicate)
+
+    p = sub.add_parser("review-context")
+    p.add_argument("--audit", required=True)
+    p.add_argument("--record", required=True, help="whole-review takeaway, basis, limitations and inspected figures JSON")
+    p.set_defaults(fn=cmd_review_context)
 
     p = sub.add_parser("classify")
     p.add_argument("--audit", required=True)
@@ -811,7 +874,7 @@ def main():
     p.add_argument("--pending-only", action="store_true")
     p.add_argument("--claim")
     p.add_argument("--blind", action="store_true",
-                   help="packets for an independent judge: sentence and passages only")
+                   help="independent judge packets without writer verdicts or document framing; source access remains available")
     p.set_defaults(fn=cmd_packets)
 
     p = sub.add_parser("check")
