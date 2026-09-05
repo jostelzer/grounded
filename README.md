@@ -29,7 +29,7 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. The examples below use four writing styles and three review sizes.
 
-All four examples were rebuilt on **5 September 2026** with the updated illustration, typography, and scientific-writing conventions. Literature searches and evidence checks retain their **4 September 2026** dates. Each review includes independently checked assertions and a separate, inspectable evidence receipt file.
+All four examples were rebuilt for **v0.5.4 on 5 September 2026**, with fresh independent checks of source context, the complete argument, and the scientific meaning of every figure. The refresh corrects study timing, outcome definitions and exposure units in the affected text and visuals. Literature searches retain their **4 September 2026** dates; source-context inspections were completed on **5 September**. Each review includes a separate, inspectable receipt file.
 
 | Question | Style · size | Read the review | Evidence receipts |
 |---|---|---|---|
@@ -40,12 +40,13 @@ All four examples were rebuilt on **5 September 2026** with the updated illustra
 
 The figures combine explanatory study illustrations with exact data plots where numerical comparisons matter. The seed-oil review pairs three illustrations with two plots; the Ozempic review pairs two illustrations with a withdrawal plot. Comparable values use matching label sizes, and every figure is checked at native size and in a phone-width preview.
 
-| Study illustrations | Evidence comparisons |
+| Study illustrations | Quantitative comparisons |
 |---|---|
-| [![Dietary comparison and clinical follow-up, from the scientific seed-oil review](examples/seed-oils-comparison-framework.png)](examples/seed-oils.pdf) | [![School phone access and matched outcome assessment, from the bullet-style review](examples/school-smartphone-bans-policy-comparison-white.png)](examples/school-smartphone-bans.pdf) |
-| [![Semaglutide continuation and withdrawal study, from the popsci review](examples/ozempic-withdrawal-study.png)](examples/ozempic-after-stopping.pdf) | [![Tissue detection and unresolved health effects, from the ELI5 review](examples/microplastics-whole-answer.png)](examples/microplastics-health-eli5.pdf) |
+| [![Dietary comparison and clinical follow-up, from the scientific seed-oil review](examples/seed-oils-comparison-framework.png)](examples/seed-oils.pdf) | [![School-time phone use and measured wellbeing, with confidence intervals](examples/school-smartphone-bans-observed.png)](examples/school-smartphone-bans.pdf) |
+| [![Tissue detection and unresolved health effects, from the ELI5 review](examples/microplastics-whole-answer.png)](examples/microplastics-health-eli5.pdf) | [![Semaglutide continuation and withdrawal, with study-specific units](examples/ozempic-withdrawal-trajectory.png)](examples/ozempic-after-stopping.pdf) |
+| [![Phone storage and tablet-based wellbeing assessment as separate study components](examples/school-smartphone-bans-policy-comparison-white.png)](examples/school-smartphone-bans.pdf) | [![Linoleic-acid biomarker associations separated by exposure contrast](examples/seed-oils-prospective-estimates.png)](examples/seed-oils.pdf) |
 
-The examples use as many sources as the question needs. Full-text and abstract-only evidence are distinguished in the receipts; more references do not automatically mean stronger evidence.
+The examples use as many sources as the question needs. Full-text and abstract-only evidence are distinguished in the receipts; more references do not automatically mean stronger evidence. These familiar examples are development regressions, not held-out validation of the scientific rules.
 
 It can also audit text you already have — an LLM answer, a manuscript section, a press release:
 

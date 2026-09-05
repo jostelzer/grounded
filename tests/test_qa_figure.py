@@ -14,6 +14,20 @@ from artifact_io import sha256_file  # noqa: E402
 
 
 class FigureQaTests(unittest.TestCase):
+    def test_supporting_type_statistic_excludes_ocr_merged_rows(self):
+        words = [("weeks", 84, 100, 10, 0), ("Ticks", 30, 80, 220, 0)]
+        geometry = {
+            "text_layout": [{"text": "24", "role": "x_tick",
+                             "bbox_px": {"left": 0, "top": 0,
+                                         "right": 50, "bottom": 30}},
+                            {"text": "Follow-up weeks", "role": "x_axis_label",
+                             "bbox_px": {"left": 0, "top": 50,
+                                         "right": 150, "bottom": 84}}],
+        }
+        self.assertEqual(qa_figure._p90_excluding_vertical_text(words, geometry), 30)
+        geometry["text_layout"] = []
+        self.assertEqual(qa_figure._p90_excluding_vertical_text(words, geometry), 84)
+
     @staticmethod
     def spec():
         return {

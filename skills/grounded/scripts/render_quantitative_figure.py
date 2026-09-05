@@ -182,7 +182,8 @@ def _render_canvas(spec: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
                 fonts["panel_label"], style["ink_color"], "la", supersample,
                 text_layout=text_layout, panel_id=panel["id"], role="panel_label")
             rendered_text.append(panel["panel_label"])
-            header_x += 42
+            label_bounds = text_layout[-1]["bbox_px"]
+            header_x = label_bounds["right"] + max(16, config["width_px"] * 4 / 390)
         if panel["title"]:
             _draw_text(
                 draw, (header_x, header_y), panel["title"],
@@ -209,8 +210,14 @@ def _render_canvas(spec: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
             supersample, text_layout=text_layout, panel_id=panel["id"],
             role="y_axis_label", minimum_left_px=cell["left"] + 2,
             maximum_height_px=cell["bottom"] - cell["top"] - 8)
+        tick_bottom = max((
+            draw.textbbox(
+                (0, round((box["bottom"] + 20) * supersample)),
+                tick["label"], font=fonts["tick"], anchor="ma")[3] / supersample
+            for tick in panel["x_axis"]["ticks"]), default=box["bottom"])
         _draw_text(
-            draw, ((box["left"] + box["right"]) / 2, box["bottom"] + 70),
+            draw, ((box["left"] + box["right"]) / 2,
+                   max(box["bottom"] + 70, tick_bottom + 10)),
             panel["x_axis"]["label"],
             tier.font_for(panel["x_axis"]["label"], "x_axis_label", fonts["axis"]),
             style["ink_color"],

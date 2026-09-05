@@ -17,6 +17,36 @@ from artifact_io import sha256_file  # noqa: E402
 
 
 class DeterministicQuantitativeFigureTests(unittest.TestCase):
+    def test_scaled_headers_and_multiline_ticks_keep_clearance(self):
+        spec = self.spec()
+        spec["plot_design"]["render"].update(
+            width_px=2400, height_px=1200, auto_layout=True)
+        spec["plot_design"]["render"]["plot_insets_px"]["top"] = 200
+        spec["plot_design"]["render"]["plot_insets_px"]["bottom"] = 240
+        spec["data"]["panels"][0].update(panel_label="A", title="Study")
+        panel = spec["data"]["panels"][0]
+        panel["y_axis"]["label"] = "Change"
+        panel["x_axis"]["ticks"][1]["label"] = "End\nvisit"
+        panel["series"] = [{"id": "observed", "color": "#315A70",
+                            "points": [{"id": "estimate", "x": 5, "y": 0}]}]
+        for key in ("events", "contrasts", "reference_lines", "annotations"):
+            panel[key] = []
+        spec["exact_text"] = ["A", "Study"]
+        for axis in (panel["x_axis"], panel["y_axis"]):
+            spec["exact_text"].append(axis["label"])
+            spec["exact_text"].extend(tick["label"] for tick in axis["ticks"])
+        _, manifest = render_quantitative_figure._render_canvas(spec)
+        records = manifest["text_layout"]
+        letter = next(r for r in records if r["role"] == "panel_label")
+        title = next(r for r in records if r["role"] == "panel_title")
+        self.assertGreaterEqual(
+            title["bbox_px"]["left"] - letter["bbox_px"]["right"],
+            2400 * 3 / 390)
+        axis = next(r for r in records if r["role"] == "x_axis_label")
+        ticks = [r for r in records if r["role"] == "x_tick"]
+        self.assertGreater(axis["bbox_px"]["top"],
+                           max(r["bbox_px"]["bottom"] for r in ticks))
+
     @staticmethod
     def spec():
         return {

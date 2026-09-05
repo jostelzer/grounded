@@ -7,17 +7,17 @@
 - Restrictive English schools had lower school-time phone use than permissive schools, with an adjusted difference of **−0.67 hours daily**; this was an observational association [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
 - Overall weekday and weekend phone use showed no detectable difference between policy groups [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
 - A rapid review reported a small pooled benefit across academic and social outcomes, but explicitly cautioned that academic evidence was limited [Böttger & Zierer 2024](https://doi.org/10.3390/educsci14080906).
-- [Figure 1](#fig-school-smartphone-bans-policy-comparison) contrasts phone access under two school-policy settings.
+- [Figure 1](#fig-school-smartphone-bans-policy-comparison) separates a phone-access rule from wellbeing measurement.
 
 <a id="fig-school-smartphone-bans-policy-comparison"></a>
-![Two matched classroom scenes show pupils completing paper questionnaires, with phones stored away on the left and accessible on desks on the right.](school-smartphone-bans-policy-comparison-white.png)
+![A phone-storage example and a pupil completing a tablet questionnaire illustrate access rules and wellbeing measurement as separate parts of a study.](school-smartphone-bans-policy-comparison-white.png)
 
-**Figure 1. School phone access differs.** The English observational study compared restrictive and permissive schools and assessed pupil wellbeing [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). A related qualitative study examined both policy types [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094). Panel A shows stored phones; Panel B shows phones accessible on desks. Pupils and questionnaires are schematic; their number and expressions encode no sample size or wellbeing difference.
+**Figure 1. Access rules and wellbeing measurement are separate.** The English observational study compared restrictive and permissive policies; most permissive schools allowed phones during breaks, lunch or in specified zones [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Pupils completed wellbeing questionnaires on tablets [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Panel A illustrates phone storage; Panel B illustrates tablet-based assessment. Scenes represent neither treatment groups, sample counts nor a wellbeing effect.
 
 ### Academic gains depend on the outcome and setting
 
 - Test-score gains followed regional bans in Galicia, Spain; the authors expressed the maths gains as **0.6–0.8 years of learning** [Beneito & Vicente-Chirivella 2022](https://doi.org/10.1108/aea-05-2021-0112).
-- Academic engagement showed no detectable advantage in a preregistered South Australian comparison after one month [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
+- Academic engagement showed no detectable advantage at one-month follow-up in a South Australian comparison of earlier with newly introduced bans [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
 - The two findings therefore answer different questions: a short engagement assessment cannot settle whether examination grades improve over years.
 
 ### Mental-health findings include benefits and null results
@@ -32,16 +32,16 @@
 <a id="fig-school-smartphone-bans-observed"></a>
 ![Two separate point-and-whisker panels show the phone-use contrast below zero and the wellbeing contrast with an interval crossing zero.](school-smartphone-bans-observed.png)
 
-**Figure 2. Less school-time use did not establish better wellbeing.** Panel A: adjusted phone-use difference −0.67 hours daily, with 95% [confidence interval](https://en.wikipedia.org/wiki/Confidence_interval) −0.92 to −0.43 [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Panel B: adjusted wellbeing-score difference −0.48 points, with 95% confidence interval −2.05 to 1.06 [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Points contrast restrictive minus permissive schools; attached whiskers show the intervals. Vertical units differ and zero means no difference. The English school-policy comparison was observational [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Qualitative follow-up described benefits and drawbacks under both policy types [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094).
+**Figure 2. Less school-time use did not establish better wellbeing.** Panel A: adjusted school-time phone-use difference −0.67 hours daily, with 95% [confidence interval](https://en.wikipedia.org/wiki/Confidence_interval) −0.92 to −0.43 [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Panel B: adjusted Warwick–Edinburgh Mental Wellbeing Scale (WEMWBS) score difference −0.48 points, with 95% confidence interval −2.05 to 1.06 [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Points contrast restrictive minus permissive schools; whiskers show intervals. Units differ; zero means no difference. The English school-policy comparison was observational [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Qualitative follow-up described benefits and drawbacks [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094).
 
 | Comparison | Outcome | Finding | Source |
 |---|---|---|---|
-| South Australian ban versus no-ban schools | Academic engagement | Standardized difference 0.03; 95% confidence interval −0.14 to 0.20 | [King et al. 2024](https://doi.org/10.1556/2006.2024.00058) |
+| South Australian earlier versus newly introduced bans | Academic engagement | Standardized difference 0.03; 95% confidence interval −0.14 to 0.20 | [King et al. 2024](https://doi.org/10.1556/2006.2024.00058) |
 | Dutch full versus classroom-only bans | Wellbeing and bullying | No significant differences | [Vanluydt et al. 2026](https://doi.org/10.1007/s10964-025-02313-6) |
 
 ### A plausible mechanism does not settle policy effectiveness
 
-- Better recall followed phone removal in an undergraduate laboratory task, which did not test school grades or mental health [Tanil & Yong 2020](https://doi.org/10.1371/journal.pone.0219233).
+- Better recall followed phone removal in an undergraduate laboratory task, which did not test school grades or effects of lasting school policies on mental health [Tanil & Yong 2020](https://doi.org/10.1371/journal.pone.0219233).
 - A review linked heavier smartphone use with poorer academic performance, while warning that the underlying associations could not establish causation [Amez & Baert 2020](https://doi.org/10.1016/j.ijer.2020.101618).
 - The recurring pattern is a gap between restricting access and demonstrating lasting benefit. A qualitative SMART Schools follow-up described benefits and drawbacks under both policy types [Goodyear et al. 2026](https://doi.org/10.1016/j.socscimed.2026.119094).
 - Low confidence leaves room for context-specific benefit; the present comparisons do not establish a reliable policy effect across schools.
@@ -60,9 +60,9 @@
 
 **Gajdics J, Jagodics B (2022)** Mobile Phones in Schools: With or Without you? Comparison of Students’ Anxiety Level and Class Engagement After Regular and Mobile-Free School Days. *Technology, Knowledge and Learning*. https://doi.org/10.1007/s10758-021-09539-w · 1 claim · full text
 
-**Goodyear VA, Randhawa A, Adab P, Al-Janabi H, Fenton S, Jones K, Michail M, Morrison B, Patterson P, Quinlan J, Sitch A, Twardochleb R, Wade M, Pallan M (2025)** School phone policies and their association with mental wellbeing, phone use, and social media use (SMART Schools): a cross-sectional observational study. *The Lancet Regional Health - Europe*. https://doi.org/10.1016/j.lanepe.2025.101211 · 7 claims · full text
+**Goodyear VA, Randhawa A, Adab P, Al-Janabi H, Fenton S, Jones K, Michail M, Morrison B, Patterson P, Quinlan J, Sitch A, Twardochleb R, Wade M, Pallan M (2025)** School phone policies and their association with mental wellbeing, phone use, and social media use (SMART Schools): a cross-sectional observational study. *The Lancet Regional Health - Europe*. https://doi.org/10.1016/j.lanepe.2025.101211 · 8 claims · full text
 
-**Goodyear VA, Randhawa A, Adab P, Al-Janabi H, Fenton S, Michail M, Patterson P, Sitch A, Wade M, Pallan M (2026)** How school phone policies influence adolescent phone use and wellbeing (SMART Schools): a qualitative comparative case study. *Social Science & Medicine*. https://doi.org/10.1016/j.socscimed.2026.119094 · 3 claims · abstract
+**Goodyear VA, Randhawa A, Adab P, Al-Janabi H, Fenton S, Michail M, Patterson P, Sitch A, Wade M, Pallan M (2026)** How school phone policies influence adolescent phone use and wellbeing (SMART Schools): a qualitative comparative case study. *Social Science & Medicine*. https://doi.org/10.1016/j.socscimed.2026.119094 · 2 claims · abstract
 
 **King DL, Radunz M, Galanis CR, Quinney B, Wade T (2024)** “Phones off while school's on”: Evaluating problematic phone use and the social, wellbeing, and academic effects of banning phones in schools. *Journal of Behavioral Addictions*. https://doi.org/10.1556/2006.2024.00058 · 2 claims · full text
 
@@ -72,4 +72,4 @@
 
 **Receipts**
 
-*20 cited sentences · 20 source checks · 13 supported at full text · 7 at abstract · 0 partial · 0 contradicted — every pair's verbatim quote is in `school-smartphone-bans-receipts.md`.*
+*20 cited sentences · 20 source checks · 14 supported at full text · 6 at abstract · 0 partial · 0 contradicted — every pair's verbatim quote is in `school-smartphone-bans-receipts.md`.*

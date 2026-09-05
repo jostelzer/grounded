@@ -161,12 +161,14 @@ def _ocr_label_height(label: str, word_boxes: list[tuple]) -> float | None:
 def _p90_excluding_vertical_text(word_boxes: list[tuple], geometry: dict[str, Any]):
     """Robust upper word height of the supporting type system.
 
-    Two kinds of OCR word box are excluded when the renderer's geometry
+    OCR word boxes are excluded when the renderer's geometry
     manifest is available: words inside a rotated `y_axis_label` box (Tesseract
     reads vertical text as a stack of boxes whose height is the word's length)
     and words inside a resolved primary label (the phone tier is large by
     contract; the dominance cap exists to keep the *supporting* labels at
-    publication scale). Without a manifest the plain machine statistic stands.
+    publication scale). OCR boxes that merge separate text rows are also
+    excluded: their height is not a glyph height. Without a manifest the plain
+    machine statistic stands.
     """
     primary_texts = {
         record.get("text") for record in geometry.get("primary_labels_resolved") or []
@@ -177,6 +179,10 @@ def _p90_excluding_vertical_text(word_boxes: list[tuple], geometry: dict[str, An
         and (record.get("role") == "y_axis_label"
              or record.get("text") in primary_texts)
     ]
+    horizontal = [
+        record["bbox_px"] for record in geometry.get("text_layout") or []
+        if isinstance(record, dict) and isinstance(record.get("bbox_px"), dict)
+        and record.get("role") != "y_axis_label"]
     heights = []
     for text, height, width, left, top in word_boxes:
         if len(re.sub(r"\W", "", text)) < 2:
@@ -187,7 +193,15 @@ def _p90_excluding_vertical_text(word_boxes: list[tuple], geometry: dict[str, An
             box["left"] - 1 <= centre_x <= box["right"] + 1
             and box["top"] - 1 <= centre_y <= box["bottom"] + 1
             for box in vertical)
-        if not inside:
+        overlaps = [box for box in horizontal
+                    if box["left"] < left + width and box["right"] > left
+                    and box["top"] < top + height and box["bottom"] > top]
+        merged_rows = (
+            len(overlaps) > 1
+            and height > 1.5 * max(box["bottom"] - box["top"] for box in overlaps)
+            and any(a["bottom"] <= b["top"] or b["bottom"] <= a["top"]
+                    for a in overlaps for b in overlaps))
+        if not inside and not merged_rows:
             heights.append(height)
     if not heights:
         return None
