@@ -211,6 +211,24 @@ class ValidateReviewTests(unittest.TestCase):
             result.errors,
         )
 
+    def test_popsci_allows_two_sections_without_a_rhetorical_turn(self):
+        markdown = (
+            "## What does the comparison show?\n\n"
+            "*The study answers a limited question about the measured outcome.*\n\n"
+            "### The measured comparison\n\n"
+            f"The groups differed on the measured outcome [Smith 2024](https://doi.org/{DOI}).\n\n"
+            "### The remaining uncertainty\n\n"
+            "The comparison does not answer questions about other outcomes.\n\n"
+            f"**Sources**\n\n**Smith (2024)** A source. *Journal*. https://doi.org/{DOI}\n"
+        )
+        result = validate_review.validate_review(markdown, style="popsci", size="small")
+        self.assertTrue(result.ok, result.errors)
+        self.assertTrue(result.warnings)  # Tier budgets remain advisory here.
+        result = validate_review.validate_review(
+            markdown.replace("### ", ""), style="popsci", size="small"
+        )
+        self.assertIn("popsci style requires section crossheads", result.errors)
+
     def test_bullet_sections_require_bullets(self):
         markdown = (
             "## Question?\n\n**TL;DR** — Answer.\n\n"

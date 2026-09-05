@@ -61,7 +61,7 @@ STYLE_ARCS = {
         "roles": {"hook", "story", "contrary-evidence", "kicker"},
         "first": "hook",
         "last": "kicker",
-        "required": {"story", "contrary-evidence"},
+        "required": {"story"},
         "kicker": "Evidence story",
     },
     "bullets": {
@@ -215,10 +215,6 @@ def _check_arc(style: str, slides: tuple[ContentSlide, ...]) -> None:
     if missing:
         raise DeckValidationError(
             f"{style} storyboard is missing role(s): {', '.join(missing)}"
-        )
-    if style == "popsci" and roles.count("contrary-evidence") != 1:
-        raise DeckValidationError(
-            "popsci storyboard must contain exactly one contrary-evidence turn slide"
         )
     if style == "bullets" and any(role != "point" for role in roles[1:]):
         raise DeckValidationError(

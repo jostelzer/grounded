@@ -5,7 +5,7 @@ description: Produce source-grounded scientific narrative reviews, or audit the 
 
 # Grounded
 
-Answer the research question with a calibrated synthesis of peer-reviewed evidence. Find every citation through live search, verify its identity, read its source text, and independently check the assertions made from it. Quote receipts establish attribution; outcome certainty establishes how much confidence the evidence deserves. Neither guarantees a conclusion is true.
+Answer the research question with a calibrated, connected explanation of peer-reviewed evidence. Every sentence contributes meaning in context, and the whole report develops the answer without advising the reader. Find every citation through live search, verify its identity, read its source text, and independently check the assertions made from it. Quote receipts establish attribution; outcome certainty establishes how much confidence the evidence deserves. Neither guarantees a conclusion is true or that the writing is coherent.
 
 ## Route the request
 
@@ -54,7 +54,7 @@ Fix failed evidence checks before drafting. Derived arithmetic must be explicit 
 
 ## 4. Write and produce the selected format
 
-Read `references/writing-guide.md` and only the selected `style-scientific.md`, `style-popsci.md`, `style-bullets.md`, or `style-eli5.md`. Compose from the synthesis; if the argument changes, update the synthesis and assessment first. Cite claims with ledger keys, then use `scripts/format_references.py` and `scripts/validate_review.py` as specified in `references/quality-gates.md`.
+Read `references/writing-guide.md` and only the selected `style-scientific.md`, `style-popsci.md`, `style-bullets.md`, or `style-eli5.md`. Plan the explanation in the synthesis's existing Throughline field, then compose connected paragraphs around their purpose. Complete the shared editorial acceptance check before media production. If the scientific meaning changes, update the synthesis and assessment first. Cite claims with ledger keys, then use `scripts/format_references.py` and `scripts/validate_review.py` as specified in `references/quality-gates.md`.
 
 Include a compact scope/methods disclosure: narrative/systematic status, search date, databases, boundaries, and material access limitations. Keep it separate from the main explanation. Findings must distinguish text access, source support, and evidence certainty.
 
@@ -72,7 +72,7 @@ python3 scripts/verify_claims.py packets --audit claims_audit.json --evidence ev
 
 The inventory includes uncited text, headings, summaries, table cells and captions. The independent judge classifies each uncited item as factual, interpretation with factual basis IDs, nonfactual with a reason, or document-local artifact evidence with inspected file hashes and a substantive reason. Artifact evidence is restricted to local provenance or depicted geometry, never scientific factual claims. A factual item without evidence cannot ship. Citation-free abstracts and summaries must map their assertions to checked factual claims, not disappear from the audit.
 
-Judge source support per assertion element and record inspected context and interpretation under `references/interpretation-review.md`. A partial source may ship only if other evidence covers the remainder; every element must be supported. Never drop a citation while leaving its unsupported assertion behind. Repair the prose or evidence, re-extract, and re-adjudicate changed assertions. Afterward, inspect the complete argument and actual figure pixels, recording the takeaway and checked basis with `review-context`. Reopen synthesis when selection, framing or compression changes the inference.
+Judge source support per assertion element and record inspected context and interpretation under `references/interpretation-review.md`. A partial source may ship only if other evidence covers the remainder; every element must be supported. Never drop a citation while leaving its unsupported assertion behind. Repair the prose or evidence, re-extract, and re-adjudicate changed assertions. Afterward, re-read the whole article for continuity and reporting voice and inspect the actual figure pixels. Record the reader's takeaway, the explanation's progression and its checked basis with `review-context`. Reopen synthesis when selection, framing or compression changes the inference.
 
 ```bash
 python3 scripts/verify_claims.py check --audit claims_audit.json --evidence evidence/ --summary claims_summary.json --strict
@@ -87,4 +87,4 @@ Write the review in chat; deliver any requested PDF and the receipts alongside i
 
 Preserve the audit inputs for inspection. Do not claim live checks, independent judgment, source access, or successful QA that were not performed.
 
-When changing scientific rules, use `references/generalization-evaluation.md`: freeze rules before independent evaluation, separate regressions from held-out cases, and report both false acceptance and false rejection. A passing schema or quotation match is not scientific validation.
+When changing scientific or writing rules, use `references/generalization-evaluation.md`: freeze rules before independent evaluation, separate regressions from held-out cases, and assess editorial quality separately from source interpretation. Report false acceptance and false rejection for scientific judgments. A passing schema or quotation match validates neither judgment nor readability.

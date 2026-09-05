@@ -65,9 +65,12 @@ downstream work that depended on it.
 ### 2. Semantic preflight
 
 Compose the review in its selected register before generating pixels or tuning
-PDF layout. Check claim traceability, style structure and voice, citation
-locality, first-use term links, numeric density, table fit, and the visual-job
-matrix. Then run:
+PDF layout. Complete the editorial acceptance check in `writing-guide.md` and
+record the reader's answer, the explanation's progression and located repairs
+in the existing case notes. Set the style manual checks only after this read;
+booleans alone are not an editorial judgment. Also check claim traceability,
+citation locality, first-use term links, numeric density, table fit and the
+visual-job matrix. Then run:
 
 ```bash
 python3 scripts/audit_production.py production.json --stage semantic --report production-semantic.json
@@ -76,9 +79,10 @@ python3 scripts/audit_production.py production.json --stage semantic --report pr
 The review validator runs against the live review, ledger, and full-text
 manifest. The visual plan must begin with exactly one whole-answer synthesis
 view; every later job must ask a distinct question and cite synthesis C/P keys.
-This is where a scientific abstract, popsci turn, ELI5 staircase, bullet density,
-or table boundary is repaired. None of those should first be discovered after
-figures or PDF pagination exist.
+Repair disconnected prose, redundant evidence coverage, advisory language and
+misplaced visual jobs here, before figures or pagination make repairs expensive.
+The gate checks deterministic consistency; the recorded reading assesses whether
+the explanation works.
 
 ### 3. Figure set
 
@@ -121,7 +125,11 @@ and verifies the immutable release lineage (including the claim audit named by
 hashes the authoritative page-raster set, and matches every released figure—in
 order—against the live figure-QA image hash and rendered width. Run the claim
 audit and attach the receipts after the figure gate and before the export, so
-the audited text is the released text. A figure checked at 184 mm cannot silently ship at 72
+the audited text is the released text. After factual repairs or figure placement,
+repeat the whole-article editorial read and record it in the existing final
+`review-context` rationale, alongside the scientific interpretation. Broken
+continuity or advice is a writing blocker, not a preference-only variant. A
+figure checked at 184 mm cannot silently ship at 72
 mm. The normal document budget is the initial complete build plus one repair.
 More than two full builds requires a diagnosed exception; local copy, figure, or
 pagination defects never justify rebuilding unrelated case histories.
@@ -149,10 +157,11 @@ extra output sections:
 - **Evidence owner:** case question, size, case directory, evidence and synthesis
   contracts. “Produce the ledger, search/full-text records, notes, and
   `synthesis.md`; stop after the evidence gate. Do not draft or create media.”
-- **Writer:** frozen synthesis, ledger, selected style and size. “Compose and
-  validate the review; complete the semantic manual checks and visual-job
-  matrix; stop after the semantic gate. Reopen evidence only for a named
-  unsupported claim.”
+- **Writer:** frozen synthesis, ledger, selected style and size. “Plan and compose
+  the connected explanation; record the shared editorial check in the case
+  notes, validate the review, and complete the semantic checks and visual-job
+  matrix. Stop after the semantic gate; reopen evidence for changed scientific
+  meaning or an unsupported claim.”
 - **Figure owner:** one visual-job record, its C/P entries and ledger keys, route
   contracts, and case-local filenames. “Return one passing figure lineage; do
   not revise prose, other figures, or shared rules.”
@@ -167,7 +176,8 @@ extra output sections:
   The writer of a case is never its judge.
 - **Independent auditor:** compact gate reports and final artifacts. “Return
   only evidence, writing, figure, or release blockers with their owning layer;
-  do not reopen passing work for preference-only variants.”
+  assess continuity and reporting voice under the shared editorial check.
+  Do not reopen passing work for preference-only variants.”
 
 ## `production.json`
 

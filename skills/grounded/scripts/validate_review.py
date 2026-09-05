@@ -3,8 +3,8 @@
 
 This validator covers the deterministic parts of the writing contract.  It is
 deliberately not a substitute for the semantic quality gate: evidence weighing,
-whether a cited source supports its claim, narrative callbacks, and
-plain-language quality still require a careful read.
+whether a cited source supports its claim, explanatory continuity, reporting
+voice, and plain-language quality still require a careful read.
 """
 
 from __future__ import annotations
@@ -223,8 +223,8 @@ _GIVEN_STOP = frozenset("""
 def _author_name_errors(body: str, ledger: dict[str, object]) -> list[str]:
     """Given names in the text must match the ledger's author records.
 
-    The popsci people rule invites named actors, which makes recalled or
-    guessed first names a fabrication risk. Every "Given Surname" pair whose
+    Optional named attribution must not introduce recalled or guessed first
+    names. Every "Given Surname" pair whose
     surname matches a recorded cited author's family name must carry that
     author's recorded given name (or its first token) verbatim; surname-only
     references are always safe and never flagged.
@@ -556,8 +556,8 @@ def validate_review(
                 errors.append("popsci standfirst must not contain citations")
         if abstract or tldr:
             errors.append("popsci style must not use an Abstract or TL;DR")
-        if len(re.findall(r"^###\s+.+$", body, re.M)) < 3:
-            errors.append("popsci style requires at least three narrative crossheads")
+        if not re.search(r"^###\s+.+$", body, re.M):
+            errors.append("popsci style requires section crossheads")
     else:
         if tldr is None:
             errors.append(f"{style} style requires a citation-free TL;DR")
@@ -570,7 +570,7 @@ def validate_review(
         sections = list(re.finditer(r"^###\s+.+$", body, re.M))
         if not sections:
             requirement = (
-                "punchline sections"
+                "bullet sections"
                 if style == "bullets"
                 else "plain-language narrative sections"
             )

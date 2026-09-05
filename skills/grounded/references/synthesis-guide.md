@@ -1,8 +1,8 @@
-# The synthesis — the claims ledger every style renders
+# Synthesis: verified evidence for the explanation
 
 `synthesis.md` is the maintained, style-neutral record of the verified evidence, prepared before styled prose. Downstream prose, figures and storyboards trace to it. It is not a locked interpretation: source-context review or drafting can reveal an error or missing qualification, requiring an update to synthesis and assessment before the deliverable changes. The independent audit checks original source context, not merely agreement with this record. Keep the working file available for inspection.
 
-Why it exists: when synthesis and styling happen in one pass, the synthesis leaks into the deliverable as inventory sentences ("One meta-analysis found… Another found…"), number dumps, and register wobble. Finishing the synthesis first — as structured fields, not prose — makes those failure modes structurally hard: the styled text cannot paraphrase what was never prose to begin with.
+The ledger separates evidence assessment from composition. It makes claims and their limits inspectable; it does not supply paragraph structure or guarantee coherent writing. Plan the explanation in Throughline, then apply `writing-guide.md` and the selected style guide.
 
 ## The contract
 
@@ -16,8 +16,10 @@ every style's opening move is carved from — the abstract's first move, the
 standfirst's shape, the TL;DR.>
 
 ## Throughline
-<The organizing scientific question or supported pattern. Do not force tension,
-an affirmative answer, or a narrative resolution when the evidence lacks one.>
+<A brief plan of how the explanation develops: the question, the answer, each
+proposed section's contribution and why it follows or sits alongside the others.
+Identify the relevant claim IDs. Do not force a single conclusion, chronology,
+tension or resolution when the evidence does not support it.>
 
 ## Claims
 
@@ -47,12 +49,12 @@ an affirmative answer, or a narrative resolution when the evidence lacks one.>
 ### C2. …
 
 ## Patterns
-- P1. <A cross-cutting pattern with the claim IDs it spans: "the trial-versus-cohort
-  gap (C2, C4, C7)". These become the callbacks, the popsci turn, the conclusion.>
+- P1. <A supported relationship across claims, with their IDs: "the
+  trial-versus-cohort gap (C2, C4, C7)". Use where it advances the explanation.>
 
 ## Open
-- <What is unknown, and the specific study that would settle it. Unknowns live
-  here, not disguised as claims.>
+- <What remains unknown and which missing observations or comparisons limit the
+  answer. Unknowns live here, not disguised as claims or advice.>
 ```
 
 Field labels, claim IDs (`C1`, `C2`, …), and pattern IDs (`P1`, …) are exact and stable — the format is deterministic by design so that tooling can parse and cross-check it without guessing. Do not rename fields, merge them, or add prose between entries.
@@ -88,25 +90,18 @@ Record applicable population/system, design, exposure, comparison, outcome, time
 - **Calibrated in the sentence itself.** The strength lives in the verb ("lowers", "probably reduces", "is associated with", "may"), matched to the `strength` field per `evidence-weighing.md`. A claim whose wording outruns its strength field is wrong at the source, and every style inherits the error.
 - **Evidence-anchored.** Every evidence and contrary line carries ledger keys, and every key carries its quote line; a claim with no keys is not a claim, it is an opinion, and it does not enter the ledger. One source, one statement: a key appears on a claim only for what its quoted passage states — a generalisation about the field ("reviews agree that…") cites a review whose text makes it, or is recorded as a pattern (P-entry) rather than dressed as evidence. Speculation and mechanism-plausibility belong inside a claim's wording ("is biologically plausible but unproven in humans") or in Open — never as bare claims.
 - **Contrary evidence is recorded on the claim it opposes**, not pooled in a separate section. This is what guarantees no style can quietly drop it: whoever renders C4 renders C4's contrary line.
-- **`depends-on` is the argument's skeleton.** It must be acyclic. Ordering claims so every claim follows its dependencies gives ELI5 its staircase, scientific its argument order, and the deck its arc for free. If the dependencies are cyclic or everything depends on everything, the claims are cut wrong — recut.
-- **`numbers` is the single home of full precision.** Exact effect sizes, intervals, denominators, absolute risks. The styles then *ration* from it under their own budgets — scientific keeps the most, popsci leads with one or two per section, ELI5 carries one per step in reader units. Nothing is ever lost by a budget: the precision stays here and in the sources.
+- **`depends-on` records prerequisites.** It must be acyclic. Check cyclic or indiscriminate dependencies for incorrectly separated claims. Respect prerequisites when planning, but choose the order and explanatory relationships in Throughline; a valid dependency order is not a finished narrative.
+- **`numbers` preserves full precision.** Record exact effect sizes, intervals, denominators and absolute risks. Select quantities appropriate to the audience while preserving what is needed to interpret the finding; supporting precision remains available here and in the sources.
 - **Claim count scales with size** — advisory, like the other tier ranges: small 5–12, medium 10–25, large 20–45. Sections typically render 1–3 claims each.
 - A corrected source's claim must be checked against its recorded correction; a claim resting on the corrected-away part of a paper is removed here, before any style can inherit it.
 
-## Rendering: how each style arranges the same claims
+## Compose from the record
 
-The styles are four arrangements of one claims ledger — selection, ordering, and register change; the claims, their strengths, and their contrary evidence do not.
+Use `writing-guide.md` and only the selected style guide for composition. Atomic evidence checks do not require atomic prose: several claims can develop one paragraph, and a necessary explanation can span paragraphs. Reuse precise wording when it fits; there is no obligation to paraphrase an already clear claim. The article must develop the answer rather than transcribe evidence entries.
 
-- **Scientific** — organize by scientific questions, outcomes, designs or comparisons. Neutral descriptive headings are appropriate. Follow `style-scientific.md`; there is no required affirmative verdict, dramatic contrast, resolution or fixed sequence of abstract moves. The abstract and conclusion preserve the scope and uncertainty of the body.
-- **Popsci** — choose the spine (chronology, investigation, or a followed subject), then map claims to beats along it; the star number each section leads with comes from that claim's `numbers` field; the turn is the claim (or pattern) whose contrary line bites hardest; the kicker looks forward using Open.
-- **Bullets** — punchline headings are the claims; bullets are the evidence lines made concise; the once-named cross-section pattern is a P-entry.
-- **ELI5** — the staircase is the dependency order: sort claims so each stands only on earlier ones; each step renders one claim with one number in reader units; the helper picture is chosen for the hardest claim; the turn step is the strongest contrary line in the reader's own doubt-words.
-- **Slides** — content-slide titles are claims (the deck already requires full-sentence cited claim titles); the storyboard's `reference_keys` are the synthesis's keys; the evidence grade describes the slide's claim exactly as `strength` recorded it (strong → `strong`; moderate/limited → `mixed`/`limited`; contested → `mixed` with the contrary evidence visible in the artwork).
-- **Figures** — specifications trace to claim and pattern entries. Revisit papers whenever definitions, visual relationships or quantities need context; update the synthesis before incorporating new content. Caption citations are the rendered claims’ keys.
+Every load-bearing rendered claim traces to a C-entry and retains its strength, boundaries and material contrary evidence. Select claims for scope and contribution; do not silently omit a necessary part of the planned answer or cite a discarded claim as though it remains. Keep full precision in the ledger even when the prose uses appropriate rounding.
 
-## The anti-paraphrase rule
-
-The styled review is **composed from** the synthesis, never **translated from** it. The synthesis is fields precisely so there are no sentences to lightly reword; if any styled sentence reads as a synthesis line with connective tissue, the telling pass has collapsed into transcription — rewrite it as prose born in the target register. The check runs in both directions: every load-bearing styled claim traces to a C-entry and carries that entry's keys; no C-entry that survived into the plan is silently dropped, and dropping one deliberately (a size cut) means its evidence is not cited elsewhere as if the claim were still made.
+Figure specifications trace to C/P entries. Revisit sources for definitions, visual relationships or quantities and update the synthesis before incorporating new content. For explicitly requested slides, `deck-guide.md` defines the storyboard: reference keys come from the synthesis and evidence grades preserve claim strength and contrary findings.
 
 ## Workflow and hygiene
 

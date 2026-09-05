@@ -19,6 +19,11 @@ python3 scripts/audit_production.py production.json --stage release --report pro
 The production gate requires exact warning adjudication and records normal
 iteration budgets, but never turns a failed underlying gate into a pass.
 
+For every written review, complete `writing-guide.md`'s editorial acceptance
+check before media production and repeat it after factual repairs and figure
+placement. Record the final reading in the existing `review-context` rationale.
+Machine gates check consistency, not sentence purpose, continuity or reporting voice.
+
 ## Search manifest
 
 `find_papers.py` writes `search-manifest.json` beside the ledger. Give every run
@@ -50,8 +55,8 @@ and looks for all four signals inside it:
 - `Sung2014treating` — Design: double-blind placebo-controlled randomised
   trial, 167 infants under 3 months. Result: found no benefit — the probiotic
   group fussed 49 min/day more at 1 month (95% CI 8–90). Limitation: mostly
-  emergency-department recruitment. Synthesis use: the key contrary trial and
-  the narrative turn.
+  emergency-department recruitment. Synthesis use: qualifies the main efficacy
+  finding for this population.
 ```
 
 Continuation lines indented under the bullet belong to the same entry. A note
@@ -173,9 +178,9 @@ being released.
 The PDF's paper identity follows the writing style: scientific renders in the
 canonical **journal** edition (Charter body, Helvetica Neue furniture);
 bullets in the **brief** edition (condensed two-column brief: tight 8.8 pt
-columns, punchline headings, a drawn double-chevron marker on every finding);
+columns, informative headings, a drawn double-chevron marker on every finding);
 ELI5 in the **primer** edition (Seravek humanist sans, orange step badges
-numbering the staircase, the TL;DR as a tinted answer card); popsci in the
+numbering the sections, the TL;DR as a tinted answer card); popsci in the
 **salon** edition (Didot display, Hoefler Text body, Optima furniture, generous
 margins, a three-line drop cap on the opener, an asterism closing the article).
 Every edition keeps the two-column measure that lets a phone zoom one column to

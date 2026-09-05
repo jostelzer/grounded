@@ -81,7 +81,9 @@ drop references silently.
 
 ## Storyboard grammar by style
 
-Style changes the sequence and language, not the evidence.
+Style changes the sequence and language, not the evidence. Apply the connected
+explanation and reporting voice in `writing-guide.md`; internal role names do
+not require rhetorical devices or instructions to the audience.
 
 ### Scientific
 
@@ -93,10 +95,11 @@ what the evidence supports now.
 
 ### Popsci
 
-Use `hook` → one or more `story` slides → one `contrary-evidence` turn →
-`kicker`. The hook is concrete and honest, not sensational. The turn must be a
-dedicated slide rather than a caveat hidden in a footer. The kicker resolves the
-opening image without outrunning the evidence.
+Use `hook` → one or more `story` slides → `kicker`, placing `contrary-evidence`
+slides beside the findings they qualify when needed. The opening establishes
+the question, the middle develops the explanation, and the closing answers it
+with its uncertainty. Give material contrary findings appropriate visual weight
+without manufacturing a twist, forcing a callback or prescribing action.
 
 ### Bullets
 

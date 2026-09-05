@@ -13,6 +13,8 @@ You can't catch either without checking every reference by hand. Grounded is an 
 
 Grounded builds a narrative literature review from live searches, verified bibliographic records, and source text. Before writing, it records the evidence and its limits in a claims ledger. Afterwards, a separate judge checks the assertions against the sources, including headings, summaries, tables, and captions. A deterministic check verifies quotations and binds the final review to the checked evidence.
 
+The writing develops a connected explanation: each sentence contributes to its paragraph, each section advances the answer, and the narrator reports findings without giving advice. An editorial read checks continuity before figure production and again after factual repairs; source verification alone does not establish writing quality.
+
 The review ships with **receipts**: the assertion, its sources, the supporting passages, the access level, and the judge’s verdict. A separate assessment explains confidence in each outcome and identifies overlapping studies. Bibliographic identity, quotation support, and scientific certainty are different checks; a passing audit does not make a conclusion infallible.
 
 **Traceable sources, independently checked assertions, and explicit evidence limits.**
@@ -29,7 +31,7 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. The examples below use four writing styles and three review sizes.
 
-All four examples were rebuilt for **v0.5.4 on 5 September 2026**, with fresh independent checks of source context, the complete argument, and the scientific meaning of every figure. The refresh corrects study timing, outcome definitions and exposure units in the affected text and visuals. Literature searches retain their **4 September 2026** dates; source-context inspections were completed on **5 September**. Each review includes a separate, inspectable receipt file.
+All four examples were rebuilt for **v0.5.4 on 5 September 2026**, with fresh independent checks of source context, the complete argument, and the scientific meaning of every figure. They predate the **v0.5.5 writing-guidance revision** and remain examples of v0.5.4. The refresh corrects study timing, outcome definitions and exposure units in the affected text and visuals. Literature searches retain their **4 September 2026** dates; source-context inspections were completed on **5 September**. Each review includes a separate, inspectable receipt file.
 
 | Question | Style · size | Read the review | Evidence receipts |
 |---|---|---|---|
@@ -69,9 +71,9 @@ Every review has three independent dimensions — combine them freely. The defau
 **Style** — how it's written; the rigour never changes:
 
 - **scientific** — restrained journal prose: abstract, neutral thematic sections, effect sizes, comparison tables, and explicit uncertainty.
-- **popsci** (default) — a magazine feature with a narrative arc, the contrary evidence as the story's turn — every claim still DOI-linked.
-- **bullets** — TL;DR, punchline headings, cited bullets.
-- **ELI5** — the simplest possible English, one idea per step.
+- **popsci** (default) — accessible science reporting with a connected narrative and cited findings.
+- **bullets** — TL;DR, informative headings and concise bullets that connect findings.
+- **ELI5** — everyday language, patient explanation and explicit uncertainty.
 
 **Format** — how it's delivered:
 

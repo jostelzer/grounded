@@ -1,10 +1,23 @@
 # Evaluate changes on unseen work
 
-Read when changing scientific interpretation, synthesis or figure rules. The
+Read when changing scientific interpretation, synthesis, writing or figure rules. The
 durable target is preservation of evidence meaning across domains, study designs
 and output styles. A discovered topic is a regression input, not a production
 template. Prefer extending existing evidence and audit tools over a parallel
 workflow or a new rule for each named example.
+
+For writing changes, judge the complete explanation against the shared editorial
+acceptance criteria in `writing-guide.md`. Record continuity, sentence and section
+contribution, reporting voice, coverage and preserved qualifications separately,
+with concrete passages supporting each finding. Include introductions, endings,
+tables and captions; fluent isolated sentences do not establish a coherent
+article. Compare all four writing styles and unfamiliar topics. Familiar examples
+remain regression cases, and prepared eval prompts are not completed evaluations.
+
+Keep validation proportional: reuse existing notes, context-review records and
+eval requests rather than adding a second audit framework. Record instruction
+length and review cost alongside quality. Removing redundancy is useful only if
+the remaining guidance still preserves evidence and leads to a readable answer.
 
 Before changing the rules, save the baseline and specify the behavior and
 acceptance criteria being tested. Use independent case selection and judgments;

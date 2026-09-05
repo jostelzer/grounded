@@ -87,6 +87,14 @@ scientific basis. Check that limitations and contrary findings have not
 disappeared through compression, and that the scope matches the included
 evidence. Reopen synthesis and assessment if this reveals a problem.
 
+Also apply the editorial acceptance check in `writing-guide.md`: assess whether
+sentences develop their paragraphs, sections form a connected explanation, and
+the narrator reports without advising. Check continuity across figures, tables
+and captions. Record the actual progression and any located repairs in the
+existing rationale, rather than a generic style approval. Repair editorial
+failures before completing the final review; source support alone cannot close
+them. Keep the scientific interpretation judgment distinct from writing quality.
+
 Inspect actual figure pixels, not only prompts or captions. Every quantitative
 mark and meaningful relationship must preserve its checked claim's outcome,
 comparison, units, origin, uncertainty and scope. Distinguish observed relations,
@@ -106,7 +114,7 @@ python3 scripts/verify_claims.py review-context --audit claims_audit.json --reco
   "takeaway": "What a reader would conclude from the complete deliverable",
   "interpretation": "preserved",
   "basis": ["C001", "C004"],
-  "rationale": "Why the selection, framing and conclusion preserve the checked evidence",
+  "rationale": "How the explanation develops its answer, why the selection and conclusion preserve the evidence, and the result of checking continuity and reporting voice",
   "limitations": "Material remaining evidence or access limitations",
   "figures": [
     {"path": "figure.png", "basis": ["C004"], "observed_meaning": "What the inspected marks, labels and relationships actually communicate"}

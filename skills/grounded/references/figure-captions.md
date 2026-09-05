@@ -14,7 +14,7 @@ content slide with no chrome citation is a hard failure.
 
 A caption is part of the evidence-bearing manuscript. It must:
 
-1. begin with a short declarative title that states the visual's point;
+1. begin with a short declarative title that states the visual's point without prescribing action;
 2. explain what is shown and how to read any non-obvious encoding;
 3. state the important evidence boundary or uncertainty;
 4. end with 2–5 citations from the verified review ledger;
@@ -42,10 +42,11 @@ the body.
 Use a lowercase stable ID made of letters, digits, and hyphens. Do not type a
 figure number: `format_references.py` assigns numbers from figure order.
 
-Reference the figure from the relevant body sentence or bullet:
+Introduce the subject before the figure and reference it from the relevant body
+sentence or bullet. Keep the result and its necessary qualification together:
 
 ```markdown
-The delivery-to-memory pathway and its evidence boundary are summarized in {{figure:mechanism}}.
+The dashed segment in {{figure:mechanism}} marks the pathway supported mainly by animal experiments [@Pardi2024; @Li2022].
 ```
 
 Then add the figure and caption:
@@ -59,7 +60,7 @@ Then add the figure and caption:
 The formatter produces clickable final Markdown:
 
 ```markdown
-The delivery-to-memory pathway and its evidence boundary are summarized in [Figure 1](#fig-mechanism).
+The dashed segment in [Figure 1](#fig-mechanism) marks the pathway supported mainly by animal experiments [Pardi & Krammer 2024](https://doi.org/...), [Li et al. 2022](https://doi.org/...).
 
 <a id="fig-mechanism"></a>
 ![Specific alt text describing the visible layout and scientific point](mechanism.png)
@@ -74,8 +75,8 @@ and automatically enter the generated Sources block.
 
 ### Bullets
 
-Use either one compact caption sentence or a three-line structured caption. The
-title is a punchline; the lines are evidence-dense rather than paragraph-like.
+Use either a compact caption or a short structured caption. State the visual's
+point and preserve the comparison and uncertainty without redundant prose.
 
 ```markdown
 **Figure {#waning}. Protection wanes faster against infection.**
@@ -96,18 +97,17 @@ register used in the body.
 
 ### Popsci
 
-Use a short flowing paragraph in the magazine register: begin with the point as
-a reader-facing sentence, guide the eye through the visual, and keep the
-evidence boundary as part of the story. Human-scale numbers, no hype, citations
-unchanged.
+Use a short flowing paragraph in the magazine register. Describe the visual's
+point and relevant encoding, with the evidence boundary integrated into the
+explanation. Use interpretable quantities and the shared reporting voice.
 
 ```markdown
-**Figure {#waning}. The shield against infection thins in months; the shield against severe disease holds.** Follow the two rows from month one to month six: the drop is steep on top, shallow below. The rows are drawn the same size, so compare the slopes, not the areas — and all of this data predates Omicron [@Feikin2022; @Tang2022].
+**Figure {#waning}. Protection declines at different rates for different outcomes.** The upper row shows the change in protection against infection from month one to month six; the lower row shows the change for severe disease. Equal row areas do not encode the amount of protection, and the observations predate Omicron [@Feikin2022; @Tang2022].
 ```
 
 ### ELI5
 
-Use a short flowing paragraph made from very short sentences and everyday words.
+Use a short flowing paragraph of connected sentences in everyday words.
 Explain any line, colour, or symbol that a new reader could misunderstand. Keep
 the uncertainty; simplify the words, not the evidence. Do not switch back to a
 structured bullet caption unless the user explicitly asked for bullets.
@@ -118,17 +118,18 @@ structured bullet caption unless the user explicitly asked for bullets.
 
 ## Reference placement
 
-- Refer to a figure at the first point where it helps the argument, usually in
-  the section immediately before it.
+- Refer to a figure where it helps the current explanation, after introducing
+  its subject. Its placement must not separate a finding from its necessary
+  qualification or interrupt one study's discussion to illustrate another.
 - In bullets, add a short navigational clause to an already relevant cited
   bullet, or use a citation-free navigation bullet that makes no new empirical
   claim.
 - In scientific style, integrate the reference grammatically: “As shown in
   `{{figure:mechanism}}`, …”.
-- In popsci, weave it into the story: “Trace the pathway in
-  `{{figure:mechanism}}` and the gap becomes visible: …”.
-- In ELI5, use direct language: “You can see the steps in
-  `{{figure:mechanism}}`.”
+- In popsci and ELI5, describe the relevant part in ordinary language:
+  “The gap in `{{figure:mechanism}}` marks the step that remains untested.”
+  The wording must match the actual image and checked evidence; do not add a
+  separate command to look, follow or compare.
 - Refer to the whole figure as `{{figure:id}}`; refer to a panel as
   “panel A of `{{figure:id}}`”. Panel letters use sequential uppercase A–D in
   scientific, popsci, bullets, and ELI5 figures.

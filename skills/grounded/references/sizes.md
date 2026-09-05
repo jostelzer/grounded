@@ -1,13 +1,13 @@
 # Sizes and styles
 
-A review has a **size** (`small`, `medium` default, `large`/`big` — how much evidence) and a **style** (`scientific`, alias `prose`; `popsci` default, `bullets`, `eli5` — how it is written). The axes are independent: "medium scientific" and "large eli5" are both valid requests. Infer missing size, style, and format from context; otherwise use medium popsci as a journal PDF and start work. Ask only when ambiguity materially changes the task. Bigger sizes add sections, evidence and tables — never longer sentences.
+A review has a **size** (`small`, `medium` default, `large`/`big` — scope and depth) and a **style** (`scientific`, alias `prose`; `popsci` default, `bullets`, `eli5` — audience and presentation). The axes are independent: "medium scientific" and "large eli5" are both valid requests. Infer missing dimensions from context; otherwise use medium popsci as a journal PDF and start work. Ask only when ambiguity materially changes the task. Size changes coverage; sentence length follows the explanation.
 
 Styles change the writing register and jargon treatment — never search depth, source counts, citations, or verification. The register spectrum runs scientific → popsci → ELI5: a journal reader, a curious educated adult, a smart reader with no science background.
 
 - **Scientific** (explicit: `scientific`, alias `prose`): a narrative article in journal register — abstract, introduction, thematic sections of topic-sentence paragraphs, conclusion. Body budget: small 600–1,000, medium 1,500–2,500, large 3,500–6,000 words. Rules in `style-scientific.md`.
-- **Popsci** (default; also explicit: `popsci`, "popular science", "magazine style", "science journalism", or naming Scientific American / New Scientist / Quanta): a magazine feature — honest headline, citation-free standfirst, concrete cited lede, nut graf, narrative crossheads with the contrary evidence as the turn, kicker — jargon named, glossed inline, and linked. Same body budgets as scientific. Rules in `style-popsci.md`.
-- **Bullets** (explicit: "bullets", "list", "compact structured format"): question → TL;DR → punchline headings → cited bullets → sources. Body budget: small 350–700, medium 900–1,600, large 2,000–4,000 words. Layout in `style-bullets.md`.
-- **ELI5** (explicit: `eli5`, "explain like I'm five", very simple language): a step-by-step explanation in short paragraphs and very simple English at the chosen size (defaults medium) — a familiar starting point, one new idea per section built on the steps before it, the contrary evidence as its own step, and a hand-back ending. It rewrites jargon instead of applying the normal term-link pattern. It is not a bullet format unless the user explicitly asks for bullets too. Rules in `style-eli5.md`.
+- **Popsci** (default; also explicit: `popsci`, "popular science", "magazine style", "science journalism", or naming Scientific American / New Scientist / Quanta): accessible reporting with an honest headline, citation-free standfirst and a connected explanation under informative crossheads. Jargon is glossed and linked. Same body budgets as scientific. Rules in `style-popsci.md`.
+- **Bullets** (explicit: "bullets", "list", "compact structured format"): question → TL;DR → informative headings and connected cited bullets → sources. Body budget: small 350–700, medium 900–1,600, large 2,000–4,000 words. Layout in `style-bullets.md`.
+- **ELI5** (explicit: `eli5`, "explain like I'm five", very simple language): connected paragraphs that introduce ideas before relying on them, using everyday words and a plain answer with its uncertainty. It is not a bullet format unless bullets are also requested. Rules in `style-eli5.md`.
 
 The **output format** — `inline chat`, `journal PDF` (default), or `slides` — is the third independent axis, inferred from the request or defaults when missing. The journal PDF always includes generated figures, with a size-scaled visual target and ceiling (small target 2/cap 2, medium target 3/cap 5, large target 5/cap 8), per `media-modes.md`. These are distinct evidence jobs, not illustration quotas; one is still valid when the synthesis genuinely contains only one visual story. Slides combines with any size and style and is itself the deliverable — a verified 16:9 PDF of standalone slides, with a 1–3 sentence plain answer in chat and the written synthesis kept as an internal working draft, per `deck-guide.md`.
 
@@ -15,15 +15,15 @@ The authoritative budgets are generated in [budgets.md](budgets.md) from `script
 
 ## Small
 
-Answer the question and stop. Typical sections: the direct evidence, the contrary case, who it varies for, what would settle it. One table if several studies share dimensions. Read the load-bearing papers in full; abstracts for the rest.
+Answer the focused question with the evidence and qualifications needed to understand it. Use a table when shared dimensions make the comparison clearer. Read the load-bearing papers in full; abstracts for the rest.
 
 ## Medium (default)
 
-More angles, not denser paragraphs or bullets: add mechanism, moderators, measurement problems, harms, and recent work as their own thematic sections. Expect at least one comparison table. Use when the user asks, or when the question has several genuinely distinct sub-questions.
+Develop additional relevant questions, such as mechanisms, variation, measurement or harms, where they contribute to the answer. Integrate them into the explanation instead of assigning a section to each available evidence category. Use comparison tables where appropriate.
 
 ## Large / big
 
-Full coverage of the field: history, competing frameworks, generalisability, quality of the evidence base, research agenda — each as a distinct thematic section. Multiple tables. Citation chasing on the central papers. Use only when the user asks for `large` or `big`.
+Cover the defined scope in depth, including relevant history, competing explanations, generalisability and unresolved questions. Retain a connected argument as coverage expands; do not claim systematic completeness from length alone. Use multiple useful tables and chase citations from central papers. Use only when the user asks for `large` or `big`.
 
 ## Journal PDF and slides
 

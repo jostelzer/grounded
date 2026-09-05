@@ -92,6 +92,25 @@ class DeckExportTests(unittest.TestCase):
         ):
             export_deck.validate_storyboard(storyboard, self.ledger())
 
+    def test_popsci_allows_no_or_multiple_contrary_slides(self):
+        for roles in (
+            ("hook", "story", "story", "kicker"),
+            ("hook", "story", "contrary-evidence", "story", "contrary-evidence", "kicker"),
+        ):
+            with self.subTest(roles=roles):
+                storyboard = self.storyboard()
+                storyboard["style"] = "popsci"
+                template = storyboard["slides"][0]
+                storyboard["slides"] = [
+                    {**template, "id": f"slide-{index}", "role": role}
+                    for index, role in enumerate(roles, 1)
+                ]
+                document = export_deck.validate_storyboard(storyboard, self.ledger())
+                self.assertEqual(tuple(slide.role for slide in document.slides), roles)
+                storyboard["slides"][0]["citations"] = []
+                with self.assertRaises(export_deck.DeckValidationError):
+                    export_deck.validate_storyboard(storyboard, self.ledger())
+
     def test_slide_images_must_be_local_readable_and_16_by_9(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.make_image(os.path.join(tmp, "slide.png"))
