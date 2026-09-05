@@ -44,6 +44,57 @@ def provenance_warnings(provenance: dict[str, Any] | None) -> list[str]:
     return warnings
 
 
+def validate_figure_set(
+    specs: list[dict[str, Any]], provenances: list[dict[str, Any]],
+) -> list[str]:
+    """Check review-wide capability and visual mix, beyond per-figure QA.
+
+    A numerical-only evidence question can justify an all-plot set. The
+    exception is an explicit scope decision repeated consistently in its
+    provenance, never inferred from the renderer selected for each figure.
+    """
+    if len(specs) != len(provenances):
+        return ["figure-set specifications and provenance counts differ"]
+    pairs = [(spec, provenance) for spec, provenance in zip(specs, provenances)
+             if isinstance(spec, dict) and spec.get("quality_contract_version") == 3]
+    errors: list[str] = []
+    available: set[bool] = set()
+    for index, (_spec, provenance) in enumerate(pairs, 1):
+        if not isinstance(provenance, dict):
+            errors.append(f"figure-set provenance {index} must be an object")
+            continue
+        capability = provenance.get("generator_available")
+        if not isinstance(capability, bool):
+            errors.append(f"figure-set provenance {index} requires generator_available")
+        else:
+            available.add(capability)
+        detection = provenance.get("generator_detection")
+        if not isinstance(detection, dict) or (
+                not isinstance(detection.get("method"), str)
+                or detection.get("method") not in GENERATOR_DETECTION_METHODS
+                or not str(detection.get("evidence") or "").strip()):
+            errors.append(
+                f"figure-set provenance {index} requires actual generator_detection "
+                "(method and evidence), including discovery of deferred tools")
+    if len(available) > 1:
+        errors.append("figure set has conflicting image-generator availability records")
+    if len(pairs) >= 2 and available == {True}:
+        illustrations = sum(spec.get("render_route") in {"generated", "hybrid"}
+                            for spec, _provenance in pairs)
+        # A composite's decorative/orientation anchor does not itself supply
+        # the missing explanatory illustration in an otherwise all-plot review.
+        if not illustrations:
+            reasons = [str(provenance.get("quantitative_only_reason") or "").strip()
+                       for _spec, provenance in pairs if isinstance(provenance, dict)]
+            if len(set(reasons)) != 1 or not reasons or len(reasons[0].split()) < 12:
+                errors.append(
+                    "image generation is available but the figure set contains no "
+                    "explanatory illustration; add a synthesis-grounded generated "
+                    "figure or record one substantive, review-wide "
+                    "quantitative_only_reason in every provenance")
+    return errors
+
+
 def validate_provenance(
     spec: dict[str, Any], image_path: Path,
     provenance: dict[str, Any] | None,

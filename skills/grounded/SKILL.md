@@ -58,7 +58,7 @@ Read `references/writing-guide.md` and only the selected `style-scientific.md`, 
 
 Include a compact scope/methods disclosure: narrative/systematic status, search date, databases, boundaries, and material access limitations. Keep it separate from the main explanation. Findings must distinguish text access, source support, and evidence certainty.
 
-For PDF or slides, read the selected section in `references/output-formats.md` and its linked media contracts. Preserve the canonical renderer, figure provenance, deterministic plots for quantitative evidence, and visual QA. Inline chat needs no media workflow. Figures and captions must be finished before the written-review assertion audit.
+For PDF or slides, read the selected section in `references/output-formats.md` and its linked media contracts. Plan a review-wide mix of explanatory illustrations and quantitative plots in every style; discover the actual image tools, including deferred tools, before claiming image generation is unavailable. Use the available image generator for illustrations and deterministic plots for exact quantities. Preserve the canonical renderer, figure provenance, and visual QA. Inline chat needs no media workflow. Figures and captions must be finished before the written-review assertion audit.
 
 ## 5. Independently audit all assertions
 

@@ -260,7 +260,7 @@ deterministic plot; a render attempt also names its `geometry` manifest
 phone gate from the rendered text boxes. `generator_detection` records how
 availability was determined (`method`: `session-tool-enumeration`,
 `tool-invocation`, `user-statement`, or `other`; `evidence`: what was
-checked); QA warns when `generator_available` is false without it, and the
+checked, including deferred tools). Export additionally checks consistent detection across the complete v3 figure set and requires an explanatory illustration when a generator is available; a genuinely numerical-only review uses the same substantive `quantitative_only_reason` in every provenance, as defined in `media-modes.md`. Per-figure QA warns when `generator_available` is false without it, and the
 staged production audit treats that warning as a blocker. Every generated, edited, or rendered candidate requires a
 matching post-generation review. Paths are case-local audit records; only the
 selected asset appears in the final review. The release manifest hashes the
@@ -273,3 +273,5 @@ For a v3 non-quantitative hybrid used to preserve exact repeated identity, set
 `anisotropic_resize: false`. At least two whole-image candidates, or one
 candidate plus a targeted edit, must document why the identity invariant could
 not be trusted to generation alone.
+
+Typography inspection compares equivalent values and labels within each role across panels and at their actual PDF placement. Equal nominal font sizes are insufficient if panels or figures were scaled differently. Report unequal emphasis under `font_consistency_issues`; never attest consistency from a font-family match alone.

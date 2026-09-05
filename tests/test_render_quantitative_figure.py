@@ -942,6 +942,26 @@ class DeterministicQuantitativeFigureTests(unittest.TestCase):
             "0.6", "1.0", "1.2", "No difference", "0.86", "0.91", "0.97"]
         return spec
 
+    def test_primary_value_promotes_all_peer_values_equally(self):
+        spec = self.v3_layout(self.dot_plot_spec(use_sugar=True), ["0.86"])
+        _s, _image, _g, manifest = self.render_case(spec)
+        boxes = [item["bbox_px"] for item in manifest["text_layout"]
+                 if item["role"] == "point_label"]
+        self.assertEqual(len(boxes), 3)
+        heights = [box["bottom"] - box["top"] for box in boxes]
+        self.assertLess(max(heights) - min(heights), 0.1)
+        self.assertGreaterEqual(heights[0] * 390 / manifest["image"]["width_px"], 10)
+        self.assertEqual({item["text"] for item in manifest["primary_labels_resolved"]},
+                         {"0.86"})
+
+    def test_peer_font_size_is_independent_of_primary_point_order(self):
+        spec = self.v3_layout(self.dot_plot_spec(use_sugar=True), ["0.97"])
+        _s, _image, _g, manifest = self.render_case(spec)
+        sizes = [item["bbox_px"]["bottom"] - item["bbox_px"]["top"]
+                 for item in manifest["text_layout"] if item["role"] == "point_label"]
+        self.assertLess(max(sizes) - min(sizes), 0.1)
+        self.assertGreaterEqual(min(sizes) * 390 / manifest["image"]["width_px"], 10)
+
     def test_categories_and_rows_expand_to_the_explicit_form(self):
         sugar = self.dot_plot_spec(use_sugar=True)
         explicit = self.dot_plot_spec(use_sugar=False)

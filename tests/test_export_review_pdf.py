@@ -1220,6 +1220,24 @@ class FigureExportTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             export_review._stylesheet(92, ref_leading=1.5)
 
+    def test_explicit_reference_leading_overrides_salon_default(self):
+        from weasyprint import HTML
+
+        def reference_style(leading):
+            css = export_review._stylesheet(92, edition="salon", ref_leading=leading)
+            document = HTML(string=(f"<style>{css}</style>"
+                                    '<div class="refs"><p>Reference entry.</p></div>')).render()
+            return next(box.style for box in document.pages[0]._page_box.descendants()
+                        if box.element is not None
+                        and box.element.get("class") == "refs")
+
+        default = reference_style(None)
+        tightened = reference_style(1.1)
+        self.assertEqual(default["line_height"], ("NUMBER", 1.35))
+        self.assertEqual(tightened["line_height"], ("NUMBER", 1.1))
+        self.assertEqual(default["font_size"], tightened["font_size"])
+        self.assertEqual(default["font_family"], tightened["font_family"])
+
     def test_terminal_spill_is_detected_and_auto_rebalanced(self):
         """End to end: a review whose reference tail spills onto a final
         page alone is re-rendered once with tightened (bounded) reference
@@ -1227,6 +1245,9 @@ class FigureExportTests(unittest.TestCase):
         fixture = os.path.join(REPO, "tests", "fixtures", "spill-probe.md")
         with open(fixture, encoding="utf-8") as stream:
             markdown = stream.read()
+        # Keep the synthetic DOI tokens distinct even when one reference
+        # number is a prefix of another (ref1 versus ref12).
+        markdown = re.sub(r"(10\.1000/ref\d+)", r"\1x", markdown)
         # Keep this synthetic probe at the bounded spill threshold even when
         # masthead metadata changes without consuming additional row height.
         markdown = markdown.replace(
@@ -1242,6 +1263,7 @@ class FigureExportTests(unittest.TestCase):
                 markdown, release="v-test", repo="example.test/g",
                 compiled_date="2026-08-27",
             )
+            self.assertEqual(page.count('<div class="body cols">'), 2)
             weasyprint_export.write_pdf(page, plain)
             n_refs = export_review.count_unique_dois(markdown)
             spill = export_review.count_terminal_reference_spill(plain, n_refs)
@@ -1268,6 +1290,43 @@ class FigureExportTests(unittest.TestCase):
             self.assertEqual(
                 export_review.count_terminal_reference_spill(out, n_refs), 0
             )
+
+    def test_rebalance_rejects_pdf_that_loses_reference_content(self):
+        """A renderer-dropped bibliography looks spill-free, but cannot win."""
+        markdown = (
+            "## A layout probe\n\n**TL;DR** — Test.\n\n"
+            "A supported statement [Smith 2024](https://doi.org/10.1000/example).\n\n"
+            "**Sources**\n\n"
+            "**Smith 2024** A verified source. *Journal*. "
+            "https://doi.org/10.1000/example\n"
+        )
+        actual_write = weasyprint_export.write_pdf
+        candidates = []
+        with tempfile.TemporaryDirectory() as tmp:
+            out = os.path.join(tmp, "review.pdf")
+
+            def lose_references(page, path, **kwargs):
+                if str(path).endswith(".rebalance.pdf"):
+                    # Reproduce an engine dropping everything from References
+                    # onward while leaving a syntactically valid PDF behind.
+                    page = re.sub(
+                        r'<h2 class="refhead">.*',
+                        '</div></main></body></html>', page, flags=re.S)
+                    candidates.append(path)
+                return actual_write(page, path, **kwargs)
+
+            with mock.patch.object(weasyprint_export, "write_pdf", lose_references), \
+                    mock.patch.object(
+                        export_review, "count_terminal_reference_spill",
+                        side_effect=lambda path, count: 1 if str(path) == out else 0):
+                _page, result, effective = export_review.render_pdf_rebalanced(
+                    markdown, out, release="v-test", compiled_date="2026-08-27")
+            self.assertEqual(len(candidates), 4)
+            self.assertFalse(effective["rebalanced"])
+            self.assertEqual(result["sha256"], sha256_file(out))
+            checked = qa_review_pdf.inspect_structure(
+                out, markdown, expected_release="v-test")
+            self.assertEqual(checked["visible_reference_dois"], 1)
 
     def test_made_with_band_is_style_keyed_and_compactable(self):
         """The band speaks each style's register, and its compact rebalance

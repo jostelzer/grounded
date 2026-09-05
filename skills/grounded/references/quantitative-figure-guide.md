@@ -86,11 +86,16 @@ source otherwise reveals:
 ## The phone gate, and what a primary label is
 
 `layout_plan.mobile_preview` declares one to three `primary_labels` that must
-measure at least 10 px tall in a 390 px preview. The renderer draws exactly
-those strings in a **primary tier** — the smallest size whose glyph box clears
-the floor, capped at the style system's 56 px (scaled) — and records each one
-in the geometry manifest under `primary_labels_resolved`. Nothing else in the
-type system moves. `qa_figure.py --geometry` uses that measurement; an
+measure at least 10 px tall in a 390 px preview. Before drawing, the renderer
+selects one font size per semantic role across all panels. A nominated point
+label therefore promotes every point label, not only that value; primary strings
+with different glyph heights share the size needed by the shortest glyph box.
+The face is capped at the style system's 56 px (scaled). Tick fonts remain
+separate. Geometry records actual primary heights in `primary_labels_resolved`
+and promoted role sizes in `role_fonts_resolved`. If an entire role cannot fit,
+choose a short wayfinding annotation or revise layout; never shrink peer values
+individually or promote the largest effect just to emphasize it.
+`qa_figure.py --geometry` uses that measurement; an
 inspection that attests a taller label than the renderer produced fails. The
 same manifest lets the typography-dominance cap ignore OCR boxes for the
 rotated y-axis title and for the primary labels themselves, so it measures the

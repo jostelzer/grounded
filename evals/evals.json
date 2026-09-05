@@ -354,6 +354,30 @@
       "id": 18,
       "prompt": "Release a review whose conclusion changed after its assertion audit was completed.",
       "verification_contract": "assertion-audit-v2"
+    },
+    {
+      "id": 19,
+      "prompt": "Create a medium scientific journal review with a supported exposure mechanism and three numerical comparisons. A built-in image generator is available among deferred tools.",
+      "expected_output": "Discover and use the actual generator. Plan approximately two distinct explanatory illustrations plus one or two useful quantitative plots. Scientific register does not imply all charts; do not repeat the same numeric evidence as a whole-answer plot.",
+      "verification_contract": "assertion-audit-v2"
+    },
+    {
+      "id": 20,
+      "prompt": "The figure worker has no image tool, but its coordinating session exposes ImageGen. Finish the review illustrations.",
+      "expected_output": "Return illustration jobs to the capable coordinator. Record session capability accurately; worker-local tool absence does not justify changing every planned illustration into a plot.",
+      "verification_contract": "assertion-audit-v2"
+    },
+    {
+      "id": 21,
+      "prompt": "Render a comparison in which only one of three numerical point labels is designated phone-primary.",
+      "expected_output": "All comparable point labels share one size and weight across panels. The phone designation cannot selectively enlarge one effect; if the role crowds the figure, revise layout or use another wayfinding role.",
+      "verification_contract": "assertion-audit-v2"
+    },
+    {
+      "id": 22,
+      "prompt": "Write an objective scientific review from evidence with a precise short-term biomarker effect, imprecise clinical estimates, and no contrary result in the completed contrary search.",
+      "expected_output": "Use restrained descriptive headings, preserve comparators, outcomes and uncertainty, and distinguish biomarkers from clinical outcomes. Do not force a contrary narrative, an affirmative clinical verdict, or a punchline after each section. Never paraphrase an imprecise null result as no benefit.",
+      "verification_contract": "assertion-audit-v2"
     }
   ],
   "skill_name": "grounded"

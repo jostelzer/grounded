@@ -1,90 +1,66 @@
 # Scientific style (alias: prose)
 
-Use this style when the user explicitly selects scientific or journal-register prose. The pipeline, evidence standard, citations, and verification are identical across styles; scientific and bullets share the normal term-link rules defined in `writing-guide.md`. Scientific style shapes the review into a narrative article of the kind journals publish. The shared structure, language, citing, and quality-gate rules in `writing-guide.md` apply in full.
+Write for a scientifically literate reader in the register of a careful peer-reviewed narrative review: precise, objective, coherent, and readable. Clarity comes from specifying the exposure, comparison, outcome, study design, and uncertainty. It does not require punchlines, conversational flourishes, exaggerated confidence, or dense terminology.
 
-**From the synthesis** (`synthesis.md`, per `synthesis-guide.md`): the claim headings *are* selected synthesis claims, already worded as calibrated sentences; order them by their dependencies and argumentative weight. The Abstract's four moves map directly — the Verdict paragraph becomes move 1, the strongest claim with its lead number move 2, the sharpest contrary line and its resolution move 3, the boundaries move 4. The synthesis's patterns become the cross-section callbacks and the Conclusion's cross-cutting claim.
+Use the verified `synthesis.md` and outcome assessment as the factual basis. Preserve their qualifications when composing prose. The shared evidence, citation, term-link, and output contracts in `writing-guide.md` apply; this reference takes precedence over shared rhetorical or sentence-rhythm advice for scientific prose.
 
-Structure:
+## Organize by scientific questions
 
-```
-## <The question>
+- **Title:** a concise description of the exposure or intervention and outcomes. A question is appropriate when it accurately defines the scope; a provocative claim is not.
+- **Abstract:** 120–180 citation-free words identifying the scope, principal findings, major uncertainty, and conclusion. Include a quantitative estimate when it is representative and interpretable with its comparator and outcome. State review type where useful. Do not force an affirmative verdict, a contrary finding, a practical recommendation, or an exact sequence of four rhetorical moves. Claims must map to checked body assertions.
+- **Introduction:** explain the scientific context and define the question, population, exposures, outcomes, and scope. Avoid a popular controversy as a framing device unless that controversy is itself relevant to the question.
+- **Main sections:** organize by outcomes, comparisons, mechanisms, or study designs as the evidence requires. Neutral descriptive headings such as “Lipid outcomes in substitution trials” and “Cardiovascular events and mortality” are valid and often preferable to claim sentences. Do not manually number headings; the exporter handles numbering.
+- **Scope and methods:** identify the review type, search date, databases, selection boundaries, and material access limitations in a compact disclosure. A narrative review must not imply systematic completeness.
+- **Conclusion:** answer the defined question at the justified level of certainty. Separate established findings from unresolved effects and identify the specific evidence needed to resolve important uncertainty. It may necessarily overlap with the abstract; do not invent a new conclusion merely to avoid repetition.
+- **Sources and receipts:** retain the shared verified apparatus.
 
-**Abstract** — <120–180 words, citation-free, plain language, in exactly four moves:
-(1) the verdict, stated affirmatively in the first sentence; (2) the strongest
-supporting evidence, with at least one number (an effect size, interval, or count);
-(3) the strongest contrary evidence and, in a clause, why it does or does not
-overturn the verdict; (4) the boundary — where the verdict stops applying, and the
-practical line. An argument with a hierarchy, never a one-sentence-per-section
-inventory of the review. State the verdict on its own terms, not as a negation of
-the claim being examined ("X improves the outcome when it replaces Y", not "X
-is not supported as a hazard"). This replaces the TL;DR.>
+A review can have several related conclusions. Do not force heterogeneous evidence into one storyline, manufacture disagreement, or assign one side the role of defeating the other. Discuss conflicting findings alongside the outcome to which they apply and explain differences only when supported.
 
-### Introduction
-<Why the question matters, what is claimed or contested, and the scope — 1–3 paragraphs.
-This is the one style where scene-setting is content, not preamble. Keep the methods disclosure concise.
-End by posing the throughline: the one tension or question the whole review turns on,
-and — if it helps the reader — the sub-questions the sections will answer in order.
-Pose the question the Conclusion will actually answer: if drafting reveals that the
-sections argue a different, better question than the Introduction posed, rewrite the
-Introduction to pose that one.>
+## Write paragraphs that distinguish findings from inference
 
-### <Claim heading — a short full sentence stating what the section shows,
-e.g. "The randomized trials agree on direction but not on size">
-<Paragraphs. See rules below.>
+Develop one scientific point per paragraph, with enough context to interpret it. Report the relevant evidence and then any justified synthesis. Paragraph length and sentence rhythm follow the content; there is no quota of short sentences, citation-free interpretation, callbacks, or concluding verdicts.
 
-### Conclusion
-<Name the cross-cutting pattern plainly — the one claim the sections demonstrated
-together — then what the evidence supports at what confidence, and the specific
-evidence that would settle what is open. No new evidence introduced here, and no
-re-summary: any sentence that could sit in the Abstract unchanged gets cut. The
-Conclusion answers the throughline in new words or it is not finished.>
+1. **Specify the comparison.** Name what replaces what, exposure units, population, endpoint, and follow-up when they affect interpretation. “Benefit,” “harm,” and “favorable” need an identified outcome. Define abbreviations at first use.
+2. **Preserve study design.** Use causal verbs for effects supported by the design and its limitations. Describe observational estimates as associations. Biomarkers, mechanistic plausibility, and clinical outcomes are separate evidence categories; do not substitute one for another.
+3. **Report estimates with uncertainty.** Attach intervals and units to the correct estimand. Distinguish relative from absolute effects, percentage points from percentages, and ranges across comparisons from confidence intervals. State follow-up and sample size where they inform precision or applicability.
+4. **Treat null findings accurately.** “No benefit” requires evidence excluding a clinically relevant benefit, not merely a non-significant test. Where appropriate, write “The estimate was imprecise and the interval included both benefit and harm.” Do not claim equivalence, safety, or absence of an effect without evidence supporting that conclusion.
+5. **State limitations specifically.** Identify the source of bias, inconsistency, indirectness, or imprecision and the inference it limits. Avoid recurring generic cautions such as “association is not causation” when the actual issue can be named. Do not infer subgroup differences from significance in one group and non-significance in another.
+6. **Keep certainty and support separate.** A source can support a sentence while the evidence body remains uncertain. Several overlapping reviews do not constitute independent replication. A proposed explanation for disagreement remains a hypothesis unless directly evaluated.
+7. **Keep synthesis accountable.** Interpretive sentences must identify their factual basis in the assertion audit. Absence of an inline citation is not permission to assert a new empirical finding. Do not turn “not measured” into “unknown in all research.”
 
-**Sources**
-<same generated sources block as always>
-```
+## Use restrained, explicit language
 
-Narrative arc — what makes the article read as an argument rather than a list:
+Prefer direct sentences with identifiable subjects and precise verbs. Active and passive constructions are both acceptable when their meaning is clear. Use standard disciplinary terms and explain unfamiliar ones; unnecessary nominalizations and compressed jargon do not improve rigor.
 
-- **Find the throughline before drafting.** One sentence naming the tension or pattern the whole review turns on ("the biology is solid, but the sleep effect appears only at high doses"). The Introduction poses it, every section advances it, the Conclusion answers it. If no single sentence covers the review, the plan is a taxonomy, not an argument — reorganize until it is one.
-- **Land every section.** After the evidence, one plain sentence saying what the section adds to the throughline, ideally handing off to the next section ("So the mechanism is real; whether it costs sleep is a separate question — the one the exposure trials answer next."). A section that stops on its last study is unfinished.
-- **Call back across sections.** When a pattern repeats, say so at its second appearance ("the same cohort-versus-trial gap seen for dementia"). One or two callbacks per review are what make it one text rather than stacked summaries. The same discipline caps repetition: make each caveat or confounder fully once, where it bites hardest; every later appearance is a one-clause callback, never a restatement.
-- **Interpretive sentences are content, not filler.** Roughly one citation-free sentence per paragraph that weighs or connects the evidence ("The mechanism is real, but the marker does not establish sleep loss."). These carry the argument; the banned-filler list bans throat-clearing, not judgment.
-- **Vary the rhythm, and keep it easy to read.** Follow a long evidence sentence with a short verdict sentence; the universal two-in-a-row cap on same-shape evidence sentences (in `writing-guide.md` Language) applies. Prefer two clear sentences over one packed one; plain words and short sentences outrank density everywhere the numbers allow it.
+Avoid conversational prompts, rhetorical questions in the body, metaphors, personification of evidence, dramatic contrasts, evaluative commentary, and generic section-ending slogans. Phrases such as “the uncertainty is substantive,” “the defensible conclusion,” “the mechanism is real,” “the strongest challenge to the story,” and “these findings cannot be dismissed” should be replaced by the specific result or limitation—or removed when they add none. Do not enforce a phrase blacklist mechanically; assess the sentence's meaning in context.
 
-Paragraph craft:
+Editorial examples below illustrate register, not new scientific evidence. Use a replacement only when its content is supported:
 
-- **The register is that of a peer-reviewed narrative review** — objective, precise, and plain. Open sections with the finding, not with scene-setting flourishes; the Introduction motivates the question with facts (prevalence, contested claims, stakes), never with journalistic hooks. Calibrated verbs ("reduces", "is associated with", "may"), quantities over adjectives, no metaphors, no first person.
-- **Headings are claim sentences — and never manually numbered.** Write "### The randomized trials agree on direction but not on size", never "### 3. The randomized trials…": the journal exporter numbers sections itself, so hand-typed numbers double up in the PDF and clutter the chat. Each section heading is a short full sentence stating what the section shows, calibrated to the evidence — the headings alone should read as the skeleton of the argument. Structural headings (Introduction, Conclusion) stay as labels. Every paragraph still opens with the claim it defends, then weaves in the evidence — numbers, intervals, designs — with the same `Author 2026` DOI links inline; the heading states the section's claim, the topic sentences carry the paragraphs' own.
-- One claim per paragraph, 3–6 sentences. A paragraph that needs eight sentences is two claims.
-- Transitions carry the argument between paragraphs and sections ("The picture changes in older adults…"), but every empirical sentence still carries its citation.
-- Contrary evidence gets its own paragraphs with explicit contrast ("Against this…", "The null results cluster where…").
-- Tables remain allowed and follow the shared rules; introduce each one in the running text.
-- Figures are introduced from the running prose with the stable token in
-  `figure-captions.md`. Their captions are short flowing paragraphs in the same
-  narrative-review register, with verified author–year citations.
-- The banned-filler list still applies in full. Flowing means flowing, not padded: no "it is important to note", no throat-clearing, no restating the abstract in the conclusion.
-- Word budgets run ~1.5× the bullet tiers because connective tissue costs words: small 600–1,000, medium 1,500–2,500, large 3,500–6,000. Sources, angles, and search depth are unchanged from the chosen size.
-- Scientific reviews print beautifully — end the delivery by offering the journal-styled PDF (`scripts/export_review.py`), but the review itself still goes in the chat.
+| Rhetorical or imprecise | More objective and explicit |
+|---|---|
+| “Replacement is the causal question.” | “The estimated effect applies to the specified dietary substitution.” |
+| “The trials are too heterogeneous to support a single pooled verdict.” | “Differences in interventions and outcomes limit interpretation of a pooled estimate.” |
+| “The short-term effects are real. Whether they last is unknown.” | “The trials reported short-term effects; their follow-up did not establish persistence.” |
+| “Coconut oil looked less adverse than butter.” | “LDL cholesterol was lower with coconut oil than with butter in the reported comparison.” |
+| “A useful answer therefore specifies the oil, comparator, endpoint, and preparation conditions.” | “Conclusions depend on the oil, comparator, clinical outcome, and preparation conditions evaluated.” |
 
-## The voice: how a good journal article actually sounds
+Do not replace ordinary prose with formulaic shorthand. Integrate study details grammatically when this reads better than a run of parenthetical “RCT, n=…” labels. Preserve qualifications even when a shorter sentence would sound more decisive.
 
-The model for this style is the best-written narrative review you have read — *NEJM* review-article prose, not committee-report prose. Objective never means inert: the great reviews are direct, concrete, and quietly confident, and their authority comes from precision, not from abstraction. The universal rules in `writing-guide.md` (agents act, ration the antithesis, no coinages) bite hardest here, because this register is where the machine voice defaults.
+## Figures and captions
 
-**Do:**
+Scientific style includes explanatory illustrations as well as quantitative plots. A mechanism, anatomical relationship, exposure pathway, or study-design illustration can make a precise scientific contribution; the style does not imply an all-chart review. Follow the review-wide mix and capability rules in `media-modes.md`.
 
-- **Give every claim an agent.** Trials show, cohorts associate, doses matter, the data cannot distinguish. When a sentence needs a verdict, let the evidence deliver it: "The trials show a small effect that fades by six months" beats "The supportable inference is limited transient efficacy."
-- **Let calibrated verbs carry the hedging.** "Probably lowers", "may reduce", "is associated with" — the uncertainty lives in the verb, once. Stacking abstraction-hedges ("is compatible with", "is aligned with", "weighs against") around the same claim builds fog, not caution.
-- **Earn short sentences and spend them at pressure points.** "Neither trial measured sleep." "That is an assumption, not a result." The shortest sentences in a review are its best moments; a review with none is monotone. After two long evidence sentences, the reader needs a short one.
-- **Let a number be the subject sometimes.** "That hazard ratio rests on eleven events." Numbers as agents keep quantitative prose alive.
-- **Use "this/that" anaphora only with a solid referent.** "That gap matters" works when the previous sentence named exactly one gap. A "this dependence" three sentences after two candidate dependencies sends the reader backwards.
+Introduce figures at the relevant point in the prose using the stable body token from `figure-captions.md`. Captions identify what is depicted, the comparison and encoding, and material limits. Avoid promotional titles and refrain from interpreting schematic arrows as demonstrated causal effects. Comparable quantities use equal typographic emphasis.
 
-**Don't — each pair shows a shape to avoid and the shape to write:**
+## Editorial pass before the assertion audit
 
-- ✗ "Adherence is the decisive coordinate of this literature." → ✓ "Most of these trials failed where adherence failed."
-- ✗ "A pooled verdict is therefore methodologically underdetermined." → ✓ "The trials are too heterogeneous to support a single pooled verdict."
-- ✗ "The appropriate conclusion is qualified optimism around short-term effects, not evidence of durable benefit." → ✓ "The short-term effects are real. Whether they last is unknown."
-- ✗ "Metabolomics offers a mechanistic bridge." → ✓ "The metabolite data show the same shift at the molecular level."
-- ✗ "The operative boundary is shown in Figure 2." → ✓ "Figure 2 marks where the effect disappears: below two sessions a week."
-- ✗ Three sections in a row landing on "…, not …". → ✓ Land one on the number, one on the consequence, one on the open question.
+Read the complete review specifically for register and inference. Check the abstract, headings, topic sentences, transitions, captions, and conclusion—not only isolated evidence sentences.
 
-The section-landing sentence deserves special care because it is where the tics concentrate: the landing is a *conclusion the section proved*, in whatever shape that conclusion naturally takes — not a slot to be filled by the antithesis machine.
+- Can the reader identify what was compared, in whom, for which outcome, and with what uncertainty?
+- Does any sentence strengthen the evidence merely to sound concise or authoritative?
+- Are causal language, null results, subgroup claims, and generalizations justified?
+- Does each interpretation add a supported conclusion rather than commentary about how to read the review?
+- Are limitations attached to the relevant inference without repeated generic cautions?
+- Do the abstract and conclusion represent the same evidence without forced certainty or manufactured contrast?
+
+Revise any failures before auditing assertions; substantive revisions require the ordinary evidence and audit checks. Do not claim this editorial pass proves scientific validity. Size and output follow the user's selection and canonical budgets, with no additional format question.

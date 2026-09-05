@@ -29,7 +29,7 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. The examples below use four writing styles and three review sizes.
 
-All four examples were rerun on **4 September 2026** with the current assertion audit, outcome assessments, and figure checks. Each includes the finished review and a separate, inspectable evidence receipt file.
+All four examples were rebuilt on **5 September 2026** with the updated illustration, typography, and scientific-writing conventions. Literature searches and evidence checks retain their **4 September 2026** dates. Each review includes independently checked assertions and a separate, inspectable evidence receipt file.
 
 | Question | Style · size | Read the review | Evidence receipts |
 |---|---|---|---|
@@ -37,6 +37,13 @@ All four examples were rerun on **4 September 2026** with the current assertion 
 | Are microplastics actually harming our health? | ELI5 · small | [PDF](examples/microplastics-health-eli5.pdf) · [Markdown](examples/microplastics-health-eli5.md) | [Receipts](examples/microplastics-health-eli5-receipts.md) |
 | Do school smartphone bans improve grades and mental health? | Bullets · small | [PDF](examples/school-smartphone-bans.pdf) · [Markdown](examples/school-smartphone-bans.md) | [Receipts](examples/school-smartphone-bans-receipts.md) |
 | Are seed oils really bad for you? | Scientific · large | [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) | [Receipts](examples/seed-oils-receipts.md) |
+
+The figures combine explanatory study illustrations with exact data plots where numerical comparisons matter. The seed-oil review pairs three illustrations with two plots; the Ozempic review pairs two illustrations with a withdrawal plot. Comparable values use matching label sizes, and every figure is checked at native size and in a phone-width preview.
+
+| Study illustrations | Evidence comparisons |
+|---|---|
+| [![Dietary comparison and clinical follow-up, from the scientific seed-oil review](examples/seed-oils-comparison-framework.png)](examples/seed-oils.pdf) | [![School phone access and matched outcome assessment, from the bullet-style review](examples/school-smartphone-bans-policy-comparison-white.png)](examples/school-smartphone-bans.pdf) |
+| [![Semaglutide continuation and withdrawal study, from the popsci review](examples/ozempic-withdrawal-study.png)](examples/ozempic-after-stopping.pdf) | [![Tissue detection and unresolved health effects, from the ELI5 review](examples/microplastics-whole-answer.png)](examples/microplastics-health-eli5.pdf) |
 
 The examples use as many sources as the question needs. Full-text and abstract-only evidence are distinguished in the receipts; more references do not automatically mean stronger evidence.
 
@@ -60,7 +67,7 @@ Every review has three independent dimensions — combine them freely. The defau
 
 **Style** — how it's written; the rigour never changes:
 
-- **scientific** — a journal-register article: abstract, thematic sections, effect sizes, comparison tables.
+- **scientific** — restrained journal prose: abstract, neutral thematic sections, effect sizes, comparison tables, and explicit uncertainty.
 - **popsci** (default) — a magazine feature with a narrative arc, the contrary evidence as the story's turn — every claim still DOI-linked.
 - **bullets** — TL;DR, punchline headings, cited bullets.
 - **ELI5** — the simplest possible English, one idea per step.
@@ -107,7 +114,7 @@ The model does the reading and writing; deterministic scripts do the searching, 
 3. **Read** — every abstract that might be cited; open-access full texts (Europe PMC) for the load-bearing papers, behind an authenticity audit that rejects paywall stubs and challenge pages.
 4. **Verify** — `verify_citations.py` checks every DOI against Crossref: title, year, article type, and integrity status — retractions, withdrawals, removals, and expressions of concern via publisher and Retraction Watch update metadata. A failure is a hard stop: the source is fixed or dropped before a word is written. A thin source list on a fringe topic is the skill working, not failing.
 5. **Synthesize, write & validate** — the verified evidence is first distilled into a style-neutral claims ledger (every claim with its strength, exact numbers, contrary evidence, boundaries, and a verbatim quote from every source it cites, string-checked before drafting); the styled review is then composed from those claims, citing ledger keys, never remembered references, and never a source the ledger did not quote. Citations and the reference list are generated from the verified records, and a deterministic validator checks structure, citation placement, DOI parity, and figure contracts before delivery.
-6. **Explain visually, then render** — every figure first states what the reader should understand, where familiar intuition begins, the eye path that builds the idea, and the one sentence a non-specialist should be able to explain back. Non-quantitative figures compare three detailed concepts for clarity, simplicity, completeness, elegance, and intuitiveness; only the winner reaches the image generator. In-pixel copy stays short, distinct sections use uppercase A–D in every writing style, and explanatory callouts point to exact targets when useful. Verified numbers use bespoke deterministic plots instead. After rendering, the agent states what the pixels actually communicate and must revise when the image requires its caption, leaves jargon unexplained, or fails the explain-back test. The journal PDF is typeset with pinned WeasyPrint, then QA independently proves figures and fonts were not stretched and re-rasterizes every page with Poppler.
+6. **Explain visually, then render** — every figure first states what the reader should understand, where familiar intuition begins, the eye path that builds the idea, and the one sentence a non-specialist should be able to explain back. Non-quantitative figures compare three detailed concepts for clarity, simplicity, completeness, elegance, and intuitiveness; only the winner reaches the image generator. In-pixel copy stays short, distinct sections use uppercase A–D in every writing style, and explanatory callouts point to exact targets when useful. Numerical comparisons use source-verified deterministic plots, with equal typography for comparable quantities across panels. Each review plans a meaningful illustration–plot mix; an illustration explains a study, mechanism, or evidence boundary rather than decorating the data. After rendering, the agent states what the pixels actually communicate and must revise when the image requires its caption, leaves jargon unexplained, or fails the explain-back test. The journal PDF is typeset with pinned WeasyPrint, then QA independently proves figures and fonts were not stretched and re-rasterizes every page with Poppler.
 7. **Audit and receipt** — inventory all assertions, including headings and uncited summaries. A fresh judge qualifies against unlabelled multi-domain cases, then checks source quotations, quantities, qualifications, and element coverage. Partial source support is accepted only when other evidence covers the remaining elements. The review, classifications, and evidence versions are bound to the checked audit; changed inputs invalidate release. Receipts report source support and access level, while the outcome assessment separately explains certainty and study overlap. The deterministic checks establish consistency, not scientific truth or judge independence.
 
 ## License

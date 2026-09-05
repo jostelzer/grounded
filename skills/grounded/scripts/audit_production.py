@@ -20,6 +20,7 @@ from artifact_io import atomic_write_json, sha256_file
 import audit_search
 from grounded_metadata import FIGURE_MAX_HEIGHT_MM, rendered_figure_size_mm
 import qa_figure
+from figure_provenance import validate_figure_set
 import qa_review_pdf
 import validate_review
 
@@ -503,6 +504,8 @@ def _audit_figures(
         errors.append("figure item job_ids must match visual-job order exactly")
 
     figure_results: list[dict[str, Any]] = []
+    figure_specs = []
+    figure_provenances = []
     observed: list[str] = []
     total_authored_attempts = 0
     max_height = state["figure_max_height_mm"]
@@ -520,6 +523,8 @@ def _audit_figures(
             base_dir, item.get("inspection"), f"{label}.inspection")
         _provenance_path, provenance = _json_file(
             base_dir, item.get("provenance"), f"{label}.provenance")
+        figure_specs.append(spec)
+        figure_provenances.append(provenance)
         try:
             from PIL import Image
             with Image.open(image_path) as image:
@@ -549,6 +554,7 @@ def _audit_figures(
                 errors=errors, warnings=warnings)
         result["job_id"] = item.get("job_id")
         figure_results.append(result)
+    errors.extend(validate_figure_set(figure_specs, figure_provenances))
     _account_warnings(block, observed, "figures", errors, warnings)
     state["figure_results"] = figure_results
     return {

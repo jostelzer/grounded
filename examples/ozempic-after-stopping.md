@@ -4,6 +4,12 @@
 
 Rubino and colleagues gave everyone in their withdrawal trial the same beginning: twenty weeks of semaglutide, followed by a random assignment to keep taking it or switch to placebo [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). Over the next 48 weeks, the continuing group lost more weight, while the switch group regained it [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). The average changes were −7.9% with continued treatment and +6.9% after switching [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224).
 
+The study structure is shown in [Figure 1](#fig-withdrawal-study).
+
+<a id="fig-withdrawal-study"></a>
+![A shared treatment visit branches into continued medicine or withdrawal, both with lifestyle support and weighing.](ozempic-withdrawal-study.png)
+**Figure 1. A shared start makes withdrawal testable.** Rubino randomized participants after a common semaglutide run-in to continue treatment or switch to placebo [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). Both groups continued lifestyle intervention [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). The branching clinic scenes depict that comparison. Pens and scales denote treatment and follow-up, not individual outcomes.
+
 That experiment puts a concrete question behind the familiar one about stopping. How much of a treatment's benefit survives when treatment ends? The randomized withdrawal trial found weight regain after the placebo switch [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). A longer extension also found regain after treatment ended [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). Together, they make weight the clearest part of the answer. Appetite, blood sugar and the possibilities for maintaining a loss need their own evidence.
 
 Ozempic is injectable semaglutide, introduced for type 2 diabetes [Yang & Yang 2024](https://doi.org/10.2147/dddt.s470826). The STEP 1 withdrawal extension studied semaglutide 2.4 mg in adults without diabetes [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). If you are asking about your own future, that distinction matters: the studies describe particular people taking particular regimens, rather than every situation in which a prescription ends.
@@ -26,27 +32,23 @@ During active treatment, the weight findings are consistent. In STEP 1, Wilding 
 
 Rubino's withdrawal experiment asked whether that benefit needed continued treatment. Both randomized groups kept their lifestyle intervention, yet the people switched to placebo gained weight while those continuing semaglutide lost more [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). Only people who had reached the maintenance dose were randomized [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). Random assignment makes this a particularly useful comparison for separating withdrawal from continued treatment.
 
-The main weight result is visible in [Figure 1](#fig-withdrawal-trajectory): continued treatment and withdrawal send the averages in opposite directions.
-
-<a id="fig-withdrawal-trajectory"></a>
-![Two study panels show falling weight with continued semaglutide and rising weight after withdrawal.](ozempic-withdrawal-trajectory.png)
-**Figure 1. Weight rises after treatment ends.** Horizontal axes: follow-up weeks. Vertical axes: percentage change from randomization (A) or percentage-point change from original baseline (B). The withdrawal trial compared continuation with a placebo switch [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). In the STEP 1 extension, medication and lifestyle support ended [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). Lines connect endpoints, not measured weekly paths. No uncertainty intervals are plotted. “Sema” means semaglutide.
-
 Wilding's STEP 1 extension followed participants for another year after treatment ended [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). Former semaglutide recipients regained about two-thirds of their earlier loss, but still averaged less than their starting weight [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). At follow-up, 48.2% retained at least 5% weight loss [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). The word “regain” therefore describes a direction, not a claim that everyone returned to the beginning.
+
+The main weight result is visible in [Figure 2](#fig-withdrawal-trajectory): continued treatment and withdrawal send the averages in opposite directions.
 
 ### Averages acquire a misleading precision
 
 West and colleagues assembled cessation studies across weight-management medicines [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). For newer incretin medicines, including semaglutide and tirzepatide, their model estimated average regain of 0.8 kg per month [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). That sounds temptingly like a personal timetable. It is a study-level average.
 
+<a id="fig-withdrawal-trajectory"></a>
+![Two study panels show falling weight with continued semaglutide and rising weight after withdrawal.](ozempic-withdrawal-trajectory.png)
+**Figure 2. Weight rises after treatment ends.** Horizontal axes: follow-up weeks. Vertical axes: percentage change from randomization (A) or percentage-point change from original baseline (B). The withdrawal trial compared continuation with a placebo switch [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). In the STEP 1 extension, medication and lifestyle support ended [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). Lines connect endpoints, not measured weekly paths. No uncertainty intervals are plotted. “Sema” means semaglutide. “Keep” denotes continuation; “Stop” denotes the placebo switch.
+
 The researchers had no more than a year of post-cessation observation for the newer medicines; the later trajectory was projected [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). A line continuing into the future is doing a different job from a measurement collected there.
 
 Other syntheses reinforce the direction while showing why one number cannot fit every setting. Berg's team found that larger initial losses were followed by larger regain [Berg et al. 2025](https://doi.org/10.1111/obr.13929). Tzang and colleagues found regain across randomized obesity trials, with very large differences between studies [Tzang et al. 2025](https://doi.org/10.1016/j.eclinm.2025.103680). Quarenghi's review likewise described regain after interruption of several related medicines [Quarenghi et al. 2025](https://doi.org/10.3390/jcm14113791). These syntheses should be read as summaries of studies, not added together as independent replications.
 
-[Figure 2](#fig-metabolic-rebound) shows three published estimates with their different scopes. The table keeps the individual study clocks separate.
 
-<a id="fig-metabolic-rebound"></a>
-![Three point estimates and attached uncertainty whiskers show differently scoped average weight regain.](ozempic-metabolic-rebound.png)
-**Figure 2. Regain estimates depend on the question.** Horizontal categories identify syntheses; vertical position gives kilograms regained. Left to right: Tzang, Berg, West. Tzang pooled GLP-1 cessation in obesity trials [Tzang et al. 2025](https://doi.org/10.1016/j.eclinm.2025.103680). Berg reported regain after semaglutide/tirzepatide cessation [Berg et al. 2025](https://doi.org/10.1111/obr.13929). West modeled regain within the first year after newer-incretin cessation [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). Whiskers show reported 95% confidence intervals. Drugs, follow-up and analyses differ.
 
 | Evidence window | Result after stopping | Boundary |
 |---|---|---|
@@ -67,17 +69,21 @@ These findings support moderate confidence that several metabolic improvements c
 
 Rodriguez and colleagues looked at routine US care and found that stopping and restarting were both common [Rodriguez et al. 2025](https://doi.org/10.1001/jamanetworkopen.2024.57349). Their records tell a less orderly story than a scheduled trial withdrawal. In Gasoyan's chart review, cost or insurance problems were the most frequently recorded reason for stopping; side effects and shortages were also recorded [Gasoyan et al. 2025b](https://doi.org/10.1002/oby.70058).
 
-[Figure 3](#fig-real-world-stopping) separates three questions that can otherwise become blurred: who stopped, who stayed on treatment, and who restarted.
 
-<a id="fig-real-world-stopping"></a>
-![Separate panels plot discontinuation, persistence and restarting in routine-care cohorts.](ozempic-real-world-stopping.png)
-**Figure 3. Stopping and restarting have different denominators.** Vertical axes: percentages. Horizontal categories: diabetes status (A/C), medication cohorts (B). A shows stopping and C shows restarting, with “T” for type 2 diabetes and “No” for no type 2 diabetes. Rodriguez measured one-year discontinuation and one-year reinitiation after stopping [Rodriguez et al. 2025](https://doi.org/10.1001/jamanetworkopen.2024.57349). B: persistence. “G”: Gleason’s GLP-1 cohort; “A”: Gasoyan’s all-medication cohort; “S”: its semaglutide subgroup. Gleason measured one-year GLP-1 persistence [Gleason et al. 2024](https://doi.org/10.18553/jmcp.2024.23332). Gasoyan reported one-year persistence across anti-obesity medications and for semaglutide [Gasoyan et al. 2024a](https://doi.org/10.1002/oby.23952). Compare each panel within its own study and outcome definition.
-
-Patients with longer medication coverage also lost more weight on average in Gasoyan's clinical cohorts [Gasoyan et al. 2025a](https://doi.org/10.1002/oby.24331), [Gasoyan et al. 2024b](https://doi.org/10.1001/jamanetworkopen.2024.33326). The discontinuation analysis used a retrospective cohort [Gasoyan et al. 2025a](https://doi.org/10.1002/oby.24331). The earlier semaglutide/liraglutide comparison also used a retrospective cohort [Gasoyan et al. 2024b](https://doi.org/10.1001/jamanetworkopen.2024.33326). Access, dose and the characteristics of people who continue can contribute to the gap; the cohorts cannot assign the entire difference to stopping alone.
 
 ### Some people keep more of the loss
 
 Must the average be everyone's outcome? Jensen and colleagues tested a promising complication: supervised exercise alongside liraglutide, a related GLP-1 medicine [Jensen et al. 2024](https://doi.org/10.1016/j.eclinm.2024.102475). After treatment ended, people previously assigned to the combination maintained weight and fat loss better than those assigned to liraglutide alone, although regain was not eliminated [Jensen et al. 2024](https://doi.org/10.1016/j.eclinm.2024.102475). The drug was different, and follow-up was incomplete [Jensen et al. 2024](https://doi.org/10.1016/j.eclinm.2024.102475). It is an encouraging clue for semaglutide, rather than a demonstrated replacement for it.
+
+The timing of that study matters, as [Figure 3](#fig-exercise-followup) shows.
+
+<a id="fig-exercise-followup"></a>
+![Supervised cycling with medicine leads to the end of active treatment and later clinical weighing.](ozempic-exercise-followup.png)
+**Figure 3. Measure maintenance after treatment ends.** Jensen combined supervised exercise with liraglutide and assessed participants after treatment ended [Jensen et al. 2024](https://doi.org/10.1016/j.eclinm.2024.102475). This was a liraglutide study [Jensen et al. 2024](https://doi.org/10.1016/j.eclinm.2024.102475). The temporal path separates active treatment from later weighing; it does not depict a weight-loss magnitude.
+
+Patients with longer medication coverage also lost more weight on average in Gasoyan's clinical cohorts [Gasoyan et al. 2025a](https://doi.org/10.1002/oby.24331), [Gasoyan et al. 2024b](https://doi.org/10.1001/jamanetworkopen.2024.33326). The discontinuation analysis used a retrospective cohort [Gasoyan et al. 2025a](https://doi.org/10.1002/oby.24331). The earlier semaglutide/liraglutide comparison also used a retrospective cohort [Gasoyan et al. 2024b](https://doi.org/10.1001/jamanetworkopen.2024.33326). Access, dose and the characteristics of people who continue can contribute to the gap; the cohorts cannot assign the entire difference to stopping alone.
+
+Gleason measured one-year GLP-1 persistence [Gleason et al. 2024](https://doi.org/10.18553/jmcp.2024.23332). Gasoyan reported one-year persistence across anti-obesity medications and for semaglutide [Gasoyan et al. 2024a](https://doi.org/10.1002/oby.23952).
 
 Jensterle's team followed a small group of women with polycystic ovary syndrome who continued metformin after semaglutide ended [Jensterle et al. 2024](https://doi.org/10.3389/fendo.2024.1366940). They regained only about a third of their prior loss over two years, but several metabolic improvements returned to baseline [Jensterle et al. 2024](https://doi.org/10.3389/fendo.2024.1366940). The study had no control group [Jensterle et al. 2024](https://doi.org/10.3389/fendo.2024.1366940). It therefore cannot establish that metformin caused the better weight maintenance.
 
@@ -97,7 +103,7 @@ The next useful experiment would follow people from their final semaglutide dose
 
 **Aldawsari M, Almadani FA, Almuhammadi N, Algabsani S, Alamro Y, Aldhwayan M (2023)** The Efficacy of GLP-1 Analogues on Appetite Parameters, Gastric Emptying, Food Preference and Taste Among Adults with Obesity: Systematic Review of Randomized Controlled Trials. *Diabetes, Metabolic Syndrome and Obesity*. https://doi.org/10.2147/dmso.s387116 · 1 claim · abstract
 
-**Berg S, Stickle H, Rose SJ, Nemec EC (2025)** Discontinuing glucagon‐like peptide‐1 receptor agonists and body habitus: A systematic review and meta‐analysis. *Obesity Reviews*. https://doi.org/10.1111/obr.13929 · 2 claims · abstract
+**Berg S, Stickle H, Rose SJ, Nemec EC (2025)** Discontinuing glucagon‐like peptide‐1 receptor agonists and body habitus: A systematic review and meta‐analysis. *Obesity Reviews*. https://doi.org/10.1111/obr.13929 · 1 claim · abstract
 
 **Bergmann NC, Davies MJ, Lingvay I, Knop FK (2023)** Semaglutide for the treatment of overweight and obesity: A review. *Diabetes, Obesity and Metabolism*. https://doi.org/10.1111/dom.14863 · 1 claim · abstract
 
@@ -111,9 +117,9 @@ The next useful experiment would follow people from their final semaglutide dose
 
 **Garvey WT, Batterham RL, Bhatta M, Buscemi S, Christensen LN, Frias JP, Jódar E, Kandler K, Rigas G, Wadden TA, Wharton S, the STEP 5 Study Group (2022)** Two-year effects of semaglutide in adults with overweight or obesity: the STEP 5 trial. *Nature Medicine*. https://doi.org/10.1038/s41591-022-02026-4 · 1 claim · abstract
 
-**Gasoyan H, Pfoh ER, Schulte R, Le P, Rothberg MB (2024a)** Early‐ and later‐stage persistence with antiobesity medications: A retrospective cohort study. *Obesity*. https://doi.org/10.1002/oby.23952 · 1 claim · abstract
-
 **Gasoyan H, Pfoh ER, Schulte R, Le P, Butsch WS, Rothberg MB (2024b)** One-Year Weight Reduction With Semaglutide or Liraglutide in Clinical Practice. *JAMA Network Open*. https://doi.org/10.1001/jamanetworkopen.2024.33326 · 2 claims · abstract
+
+**Gasoyan H, Pfoh ER, Schulte R, Le P, Rothberg MB (2024a)** Early‐ and later‐stage persistence with antiobesity medications: A retrospective cohort study. *Obesity*. https://doi.org/10.1002/oby.23952 · 1 claim · abstract
 
 **Gasoyan H, Butsch WS, Casacchia NJ, Schulte R, Criswell V, Fox J, Renner H, Le P, Alpert J, Rothberg MB (2025b)** Reasons for Discontinuation of Obesity Pharmacotherapy With Semaglutide or Tirzepatide in Clinical Practice. *Obesity*. https://doi.org/10.1002/oby.70058 · 1 claim · abstract
 
@@ -125,7 +131,7 @@ The next useful experiment would follow people from their final semaglutide dose
 
 **Gudzune KA, Kushner RF (2024)** Medications for Obesity. *JAMA*. https://doi.org/10.1001/jama.2024.10816 · 1 claim · abstract
 
-**Jensen SBK, Blond MB, Sandsdal RM, Olsen LM, Juhl CR, Lundgren JR, Janus C, Stallknecht BM, Holst JJ, Madsbad S, Torekov SS (2024)** Healthy weight loss maintenance with exercise, GLP-1 receptor agonist, or both combined followed by one year without treatment: a post-treatment analysis of a randomised placebo-controlled trial. *eClinicalMedicine*. https://doi.org/10.1016/j.eclinm.2024.102475 · 3 claims · full text
+**Jensen SBK, Blond MB, Sandsdal RM, Olsen LM, Juhl CR, Lundgren JR, Janus C, Stallknecht BM, Holst JJ, Madsbad S, Torekov SS (2024)** Healthy weight loss maintenance with exercise, GLP-1 receptor agonist, or both combined followed by one year without treatment: a post-treatment analysis of a randomised placebo-controlled trial. *eClinicalMedicine*. https://doi.org/10.1016/j.eclinm.2024.102475 · 5 claims · full text
 
 **Jensterle M, Ferjan S, Janez A (2024)** The maintenance of long-term weight loss after semaglutide withdrawal in obese women with PCOS treated with metformin: a 2-year observational study. *Frontiers in Endocrinology*. https://doi.org/10.3389/fendo.2024.1366940 · 4 claims · full text
 
@@ -141,13 +147,13 @@ The next useful experiment would follow people from their final semaglutide dose
 
 **Quarenghi M, Capelli S, Galligani G, Giana A, Preatoni G, Turri Quarenghi R (2025)** Weight Regain After Liraglutide, Semaglutide or Tirzepatide Interruption: A Narrative Review of Randomized Studies. *Journal of Clinical Medicine*. https://doi.org/10.3390/jcm14113791 · 1 claim · abstract
 
-**Rodriguez PJ, Zhang V, Gratzl S, Do D, Goodwin Cartwright B, Baker C, Gluckman TJ, Stucky N, Emanuel EJ (2025)** Discontinuation and Reinitiation of Dual-Labeled GLP-1 Receptor Agonists Among US Adults With Overweight or Obesity. *JAMA Network Open*. https://doi.org/10.1001/jamanetworkopen.2024.57349 · 2 claims · full text
+**Rodriguez PJ, Zhang V, Gratzl S, Do D, Goodwin Cartwright B, Baker C, Gluckman TJ, Stucky N, Emanuel EJ (2025)** Discontinuation and Reinitiation of Dual-Labeled GLP-1 Receptor Agonists Among US Adults With Overweight or Obesity. *JAMA Network Open*. https://doi.org/10.1001/jamanetworkopen.2024.57349 · 1 claim · full text
 
-**Rubino D, Abrahamsson N, Davies M, Hesse D, Greenway FL, Jensen C, Lingvay I, Mosenzon O, Rosenstock J, Rubio MA, Rudofsky G, Tadayon S, Wadden TA, Dicker D, STEP 4 Investigators, Friberg M, Sjödin A, Dicker D, Segal G, Mosenzon O, Sabbah M, Sofer Y, Vishlitzky V, Meesters EW, Serlie M, van Bon A, Cardoso H, Freitas P, Carneiro de Melo P, Monteiro M, Monteiro M, Rodrigues D, Badat A, Joshi P, Latiff G, Mitha EA, Snyman HH, van Nieuwenhuizen E, González Albarrán O, Caixas A, de al Cuesta C, Garcia Luna PP, Morales Portillo C, Mezquita Raya P, Rubio MA, Abrahamsson N, Hoffstedt J, von Wowern F, Uddman E, Bach-Kliegel B, Beuschlein F, Bilz S, Golay A, Rudofsky G, Strey C, Fadieienko G, Kosei N, Tatarchuk T, Velychko V, Zinych O, Aronoff SL, Bays HE, Brockmyre AP, Call RS, Crump C, Desouza CV, Espinosa V, Free AL, Gandy WH, Geller SA, Gottschlich GM, Greenway FL, Han-Conrad L, Harper W, Herman L, Hewitt M, Hollander P, Kaster SR, Manessis A, Martin FA, McNeill RE, Murray AV, Norwood PC, Reed JCH, Rosenstock J, Rubino DM, Schear MJ, Warren ML (2021)** Effect of Continued Weekly Subcutaneous Semaglutide vs Placebo on Weight Loss Maintenance in Adults With Overweight or Obesity. *JAMA*. https://doi.org/10.1001/jama.2021.3224 · 9 claims · abstract
+**Rubino D, Abrahamsson N, Davies M, Hesse D, Greenway FL, Jensen C, Lingvay I, Mosenzon O, Rosenstock J, Rubio MA, Rudofsky G, Tadayon S, Wadden TA, Dicker D, STEP 4 Investigators, Friberg M, Sjödin A, Dicker D, Segal G, Mosenzon O, Sabbah M, Sofer Y, Vishlitzky V, Meesters EW, Serlie M, van Bon A, Cardoso H, Freitas P, Carneiro de Melo P, Monteiro M, Monteiro M, Rodrigues D, Badat A, Joshi P, Latiff G, Mitha EA, Snyman HH, van Nieuwenhuizen E, González Albarrán O, Caixas A, de al Cuesta C, Garcia Luna PP, Morales Portillo C, Mezquita Raya P, Rubio MA, Abrahamsson N, Hoffstedt J, von Wowern F, Uddman E, Bach-Kliegel B, Beuschlein F, Bilz S, Golay A, Rudofsky G, Strey C, Fadieienko G, Kosei N, Tatarchuk T, Velychko V, Zinych O, Aronoff SL, Bays HE, Brockmyre AP, Call RS, Crump C, Desouza CV, Espinosa V, Free AL, Gandy WH, Geller SA, Gottschlich GM, Greenway FL, Han-Conrad L, Harper W, Herman L, Hewitt M, Hollander P, Kaster SR, Manessis A, Martin FA, McNeill RE, Murray AV, Norwood PC, Reed JCH, Rosenstock J, Rubino DM, Schear MJ, Warren ML (2021)** Effect of Continued Weekly Subcutaneous Semaglutide vs Placebo on Weight Loss Maintenance in Adults With Overweight or Obesity. *JAMA*. https://doi.org/10.1001/jama.2021.3224 · 11 claims · abstract
 
-**Tzang CC, Wu PH, Luo CA, Chen ZT, Lee YT, Huang ES, Kang YF, Lin WC, Tzang BS, Hsu TC (2025)** Metabolic rebound after GLP-1 receptor agonist discontinuation: a systematic review and meta-analysis. *eClinicalMedicine*. https://doi.org/10.1016/j.eclinm.2025.103680 · 5 claims · full text
+**Tzang CC, Wu PH, Luo CA, Chen ZT, Lee YT, Huang ES, Kang YF, Lin WC, Tzang BS, Hsu TC (2025)** Metabolic rebound after GLP-1 receptor agonist discontinuation: a systematic review and meta-analysis. *eClinicalMedicine*. https://doi.org/10.1016/j.eclinm.2025.103680 · 4 claims · full text
 
-**West S, Scragg J, Aveyard P, Oke JL, Willis L, Haffner SJP, Knight H, Wang D, Morrow S, Heath L, Jebb SA, Koutoukidis DA (2026)** Weight regain after cessation of medication for weight management: systematic review and meta-analysis. *BMJ*. https://doi.org/10.1136/bmj-2025-085304 · 6 claims · full text
+**West S, Scragg J, Aveyard P, Oke JL, Willis L, Haffner SJP, Knight H, Wang D, Morrow S, Heath L, Jebb SA, Koutoukidis DA (2026)** Weight regain after cessation of medication for weight management: systematic review and meta-analysis. *BMJ*. https://doi.org/10.1136/bmj-2025-085304 · 5 claims · full text
 
 **Wilding JPH, Batterham RL, Calanna S, Davies M, Van Gaal LF, Lingvay I, McGowan BM, Rosenstock J, Tran MTD, Wadden TA, Wharton S, Yokote K, Zeuthen N, Kushner RF (2021)** Once-Weekly Semaglutide in Adults with Overweight or Obesity. *New England Journal of Medicine*. https://doi.org/10.1056/nejmoa2032183 · 1 claim · abstract
 
@@ -159,4 +165,4 @@ The next useful experiment would follow people from their final semaglutide dose
 
 **Receipts**
 
-*74 cited sentences · 75 source checks · 43 supported at full text · 32 at abstract · 0 partial · 0 contradicted — every pair's verbatim quote is in `ozempic-after-stopping-receipts.md`.*
+*74 cited sentences · 75 source checks · 42 supported at full text · 33 at abstract · 0 partial · 0 contradicted — every pair's verbatim quote is in `ozempic-after-stopping-receipts.md`.*

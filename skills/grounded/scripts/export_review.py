@@ -944,6 +944,7 @@ PAGE = """<!doctype html>
 <div class="body{cols}">
 {body}
 </div>
+{reference_body}
 {imprint}<footer class="colophon"></footer>
 </main>
 </body></html>
@@ -1045,6 +1046,11 @@ def _stylesheet(figure_max_height_mm=FIGURE_MAX_HEIGHT_MM, ref_leading=None,
     overlay = EDITIONS[edition]["css"]
     if overlay:
         css = css + "\n" + overlay
+    if ref_leading is not None:
+        # An explicit bounded layout control must win over edition defaults.
+        # Leave the edition's font size and face untouched.
+        css += (f"\n.refs {{ line-height: {ref_leading:g}; }}"
+                "\n.refs p { margin-bottom: 1px; }\n")
     return css
 
 
@@ -1442,6 +1448,7 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
         )
 
     from weasyprint_export import write_pdf
+    from qa_review_pdf import PdfQaError, inspect_structure
     page = build(ref_leading, "end")
     result = write_pdf(page, out_path, expected_fonts=expected_fonts)
     effective = {"ref_leading": ref_leading, "imprint": "end",
@@ -1478,6 +1485,18 @@ def render_pdf_rebalanced(md, out_path, *, columns=2, kicker="Review",
             try:
                 candidate = write_pdf(candidate_page, candidate_path,
                                       expected_fonts=expected_fonts)
+                # A paged-layout engine can omit overflowing content entirely.
+                # Such a render also has no reference spill and fewer pages;
+                # verify content before treating those properties as progress.
+                try:
+                    inspect_structure(
+                        candidate_path, md, expected_release=release,
+                        expected_fonts=expected_fonts,
+                        claim_summary=(claim_receipts.summarize_audit(claims_audit)
+                                       if claims_audit is not None else None),
+                    )
+                except PdfQaError:
+                    continue
                 # Acceptable = out of the degenerate band: either nothing
                 # spills, or the terminal page is a full reference
                 # continuation page (sparseness there stays the raster QA's
@@ -1605,6 +1624,16 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
                 '</small><small class="audit-summary">'
                 + html.escape(claim_receipts.summary_sentence(audit_summary))
                 + '</small></h2>', 1)
+    reference_body = ""
+    if (n_refs and columns == 2 and not structured_flow
+            and '<div class="refs">' in body):
+        # Keep a flowing bibliography in its own multicolumn container.
+        # A column-spanning provenance band late in a long article can make
+        # WeasyPrint discard the following reference fragment altogether.
+        # The compact balanced-reference layout already has its own container.
+        reference_start = body.index('<aside class="madewith')
+        reference_body = '<div class="body cols">' + body[reference_start:] + '</div>'
+        body = body[:reference_start]
     plain_title = re.sub(r"<[^>]+>", "", title)
     page = PAGE.format(
         title_text=plain_title, compiled_iso=today.isoformat(), css=css,
@@ -1615,6 +1644,7 @@ def build_html(md, columns=2, kicker="Review", colophon=None, base_dir=".",
         cols=(" structured-flow" if structured_flow else
               (" cols" if columns == 2 else "")),
         body=body,
+        reference_body=reference_body,
         imprint=(
             "" if imprint == "refhead" else
             '<div class="endcolophon"><div class="rule"></div>'
@@ -1777,6 +1807,12 @@ def validate_release_inputs(
                 "--figure-provenance for every rendered figure"
             )
     if quality_contract:
+        from figure_provenance import validate_figure_set
+        set_errors = validate_figure_set(specs, [
+            json.loads(Path(path).read_text(encoding="utf-8"))
+            for path in figure_provenances])
+        if set_errors:
+            raise ValueError("figure-set QA failed: " + "; ".join(set_errors))
         try:
             import qa_figure
         except ImportError as exc:

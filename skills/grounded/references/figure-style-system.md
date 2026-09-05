@@ -47,8 +47,10 @@ At a 1,536 px-wide deliverable, use these visual targets:
 | Panel letter requested from ImageGen | 44 px bold, uppercase A–D |
 | Maximum requested size for any role | 56 px |
 
-This is a compact publication hierarchy, not a scale-up ladder. Only the one to
-three declared primary wayfinding labels use the primary tier. Supporting
+This is a compact publication hierarchy, not a scale-up ladder. The one to three declared
+primary wayfinding labels set the primary tier. Comparable labels within a
+semantic role use the same size and weight across panels; selecting one point
+as primary cannot make it larger than its peers. Supporting
 labels remain publication-sized and may require zoom on a phone; making every
 label phone-sized produces poster typography and is forbidden. At final PDF
 width, the smallest delivered glyph still clears `qa_figure.py`'s 6.5 pt gate.

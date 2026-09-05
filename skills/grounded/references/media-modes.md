@@ -50,6 +50,43 @@ boundary. Use fewer when the synthesis contains fewer genuinely visual stories.
 Never pad coverage with decoration, a recoloured duplicate, or a graphical
 restatement of a table.
 
+## Plan the mix before individual figures
+
+Inspect the current session's direct and discoverable/deferred image tools before
+choosing visual jobs. In a host exposing ImageGen, use it for explanatory art;
+a coding-oriented interface or lack of an image CLI is not evidence of absence.
+Record the actual tool and discovery result. An invocation failure is a recorded
+failure, not a claim that no generator exists. If a delegated worker lacks image
+tools, return that visual job to the capable coordinator rather than silently
+replacing it with a plot.
+
+With image generation available, plan a meaningful mix across every writing
+style, including scientific. A useful starting allocation is one illustration
+and one plot for small reviews, two illustrations and one or two plots for
+medium, and two or three illustrations among five or six figures for large.
+These are planning defaults, not decoration quotas: each illustration must
+explain a supported mechanism, anatomy, exposure pathway, comparison, or study
+design; each plot must communicate quantities that benefit from graphical
+comparison. A whole-answer figure usually synthesizes the relationships and
+evidence boundaries, rather than repeating estimates plotted again later.
+
+Evaluate candidate jobs before choosing renderers. Do not select only numerical
+jobs because deterministic rendering is easier. Do not turn a few counts or the
+endpoints of a range into a plot just to fill a slot; a concise caption or table
+may suffice. A generated anchor beside a chart does not replace a substantive
+explanatory illustration. An illustration must remain useful with labels hidden
+and must not manufacture anatomy, mechanisms, quantities, or causal arrows.
+
+The exporter and staged production gate check the complete figure set. With a
+capable generator and two or more figures, a set without a generated explanatory
+figure fails unless every provenance contains the same substantive
+`quantitative_only_reason` explaining why this particular review genuinely has
+no supported illustrative job (at least 12 words). This exception concerns the
+question and evidence; time, convenience, or a preference for code are not valid
+reasons. Capability detection is required for both available and unavailable
+generators, and records must agree across the set. Inspect the final set together
+for complementary information, consistent typography, and visual variety.
+
 For popsci and ELI5, apply the `cutaway` suitability gate after planning the
 ordinary evidence jobs. A cutaway may use an otherwise available slot under the
 size ceiling only when the hidden interior removes a real imagination step, is

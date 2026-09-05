@@ -25,6 +25,9 @@ survive at 390 px. It may use otherwise available room under the size ceiling;
 it never displaces a stronger evidence job or raises the ceiling merely because
 cutaways are attractive.
 
+Apply the review-wide mix and capability check in `media-modes.md` before
+individual renderer choices. An all-plot set is not the default scientific style.
+
 ## 1. Write the communication contract before choosing a renderer
 
 For every figure, write a `communication_goal` with:
@@ -48,7 +51,8 @@ evidence.
 ## 2. Route by evidence type
 
 At the start of media production, inspect the tools actually available in the
-current agent environment.
+current agent environment, including deferred-tool discovery. Lack of an image
+CLI or a worker-local generator does not establish absence from the session.
 
 - If a capable built-in image generator is exposed, record
   `generator_available: true` and use it for the generated portion of every
@@ -249,9 +253,10 @@ every supporting label is required without zoom and how the caption or zoom
 carries that detail. Inspect the preview as a separate release view; a large
 native raster does not rescue a figure that becomes cognitively opaque on a
 phone, but phone QA must not inflate supporting labels into display typography.
-For a deterministic figure the renderer draws the declared primary labels in a
-primary tier sized to clear the floor and records their measured heights in
-the geometry manifest; `qa_figure.py --geometry` uses that measurement, and
+For a deterministic figure the renderer sizes each semantic role once across
+all panels. A phone-primary point label promotes every comparable point label
+to the same size; it never enlarges just one estimate. The renderer records
+role sizes and measured primary-label heights in the geometry manifest; `qa_figure.py --geometry` uses that measurement, and
 an inspection that attests a taller label than the raster contains fails.
 Primary labels are the takeaway strings — a direct series or point label, a
 reference-line label, or an annotation — never tick labels, which stay at
@@ -375,7 +380,11 @@ interval is rendered as an attached whisker, band, bracket, or equivalent
 graphical extent rather than the words `95% CI` floating beside a point. When
 the primary 390 px label floor would crowd the evidence, shorten copy or change
 topology/aspect ratio instead of inflating axes, ticks, notes, and every
-annotation inside the same plot.
+annotation inside the same plot. Equivalent values, direct series labels, and interval annotations
+use consistent size and weight within their respective roles across panels.
+Glyph content and effect magnitude must never determine emphasis. If promoting
+a role causes crowding, choose a short wayfinding annotation, change the layout,
+or split the figure; do not shrink individual peer labels to fit.
 Independent text boxes retain at least 3 px of clear separation in the
 proportional 390 px preview; near-touching type is treated as a collision.
 

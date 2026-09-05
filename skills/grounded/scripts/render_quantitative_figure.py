@@ -10,7 +10,7 @@ from data values to final-image pixels.
 Two additive behaviours sit on top of the fixed grammar:
 
 * the primary tier — strings named in `layout_plan.mobile_preview.primary_labels`
-  are drawn large enough to clear the 390 px phone gate, and their measured
+  set one shared size for their semantic role across panels; their measured
   glyph heights are written to the manifest as `primary_labels_resolved`;
 * opt-in auto-layout (`plot_design.render.auto_layout: true` or
   `--auto-layout`) — a deterministic search over direct-label sides and canvas
@@ -159,7 +159,7 @@ def _render_canvas(spec: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
     fonts, font_records = _font_set(
         style, config["width_px"], config["height_px"], config["supersample"])
     supersample = config["supersample"]
-    tier = PrimaryTier(spec, fonts, config["width_px"], supersample)
+    tier = PrimaryTier(spec, fonts, config["width_px"], supersample, panels)
     canvas = Image.new(
         "RGB",
         (config["width_px"] * supersample, config["height_px"] * supersample),
@@ -578,6 +578,7 @@ def _render_canvas(spec: dict[str, Any]) -> tuple[Any, dict[str, Any]]:
                 _rounded(tier.required_glyph_height_px()) if tier.plan else None),
         },
         "primary_labels_resolved": tier.resolved,
+        "role_fonts_resolved": tier.role_fonts,
         "rendered_text": sorted(set(rendered_text)),
         "text_layout": text_layout,
         "panels": manifest_panels,

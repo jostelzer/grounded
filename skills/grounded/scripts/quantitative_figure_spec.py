@@ -37,8 +37,8 @@ DEFAULT_RENDER = {
     "plot_insets_px": {"left": 140, "right": 74, "top": 92, "bottom": 104},
 }
 # Phone-first primary tier. The style system defines a primary wayfinding
-# label of up to 56 px at a 1,536 px canvas; only the one to three labels named
-# in layout_plan.mobile_preview.primary_labels use it, and ticks never do.
+# label of up to 56 px at a 1,536 px canvas. A promoted label promotes its
+# entire semantic role, so comparable values never acquire different sizes.
 PRIMARY_TIER_MAX_PX_AT_1536 = 56
 PRIMARY_TIER_SAFETY = 1.05
 PRIMARY_ELIGIBLE_ROLES = {
@@ -446,16 +446,15 @@ def _mobile_preview_plan(spec: dict[str, Any]) -> dict[str, Any] | None:
 
 
 class PrimaryTier:
-    """Per-label primary font sizing so declared phone labels clear the gate.
+    """Resolve one font per semantic role before drawing any labels.
 
-    Only strings named in `layout_plan.mobile_preview.primary_labels` and drawn
-    in an eligible role receive a larger face. The size is the smallest that
-    makes the glyph box tall enough at the 390 px preview, capped at the style
-    system's 56 px (scaled) maximum; nothing else in the type system moves.
+    Phone-primary labels set the floor for their role, including peers in other
+    panels. Tick fonts remain separate. Font size never encodes effect size or
+    depends on draw order, string length, or which point was nominated primary.
     """
 
     def __init__(self, spec: dict[str, Any], fonts: dict[str, Any],
-                 width: int, supersample: int) -> None:
+                 width: int, supersample: int, panels: list[dict[str, Any]]) -> None:
         self.plan = _mobile_preview_plan(spec)
         self.width = width
         self.supersample = supersample
@@ -464,7 +463,30 @@ class PrimaryTier:
         self.cap_px = max(
             PRIMARY_TIER_MAX_PX_AT_1536, round(PRIMARY_TIER_MAX_PX_AT_1536 * self.scale))
         self.resolved: list[dict[str, Any]] = []
-        self._cache: dict[tuple[str, str], Any] = {}
+        self._cache: dict[str, Any] = {}
+        self.role_fonts: list[dict[str, Any]] = []
+        self._primary_by_role: dict[str, set[str]] = {}
+
+        def register(text, role):
+            if text and self.is_primary(text, role):
+                self._primary_by_role.setdefault(role, set()).add(text)
+
+        for panel in panels:
+            register(panel.get("title"), "panel_title")
+            for axis in ("x", "y"):
+                register(panel[f"{axis}_axis"]["label"], f"{axis}_axis_label")
+            for collection, role, field in (
+                ("reference_lines", "reference_label", "label"),
+                ("events", "event_label", "label"),
+                ("contrasts", "contrast", "label"),
+                ("annotations", "annotation", "text"),
+            ):
+                for item in panel.get(collection, []):
+                    register(item.get(field), role)
+            for series in panel["series"]:
+                register(series.get("label"), "series_label")
+                for point in series["points"]:
+                    register(point.get("label"), "point_label")
 
     @property
     def labels(self) -> list[str]:
@@ -485,45 +507,42 @@ class PrimaryTier:
         return (bottom - top) / supersample
 
     def font_for(self, text: str, role: str, base_font):
-        """Return the face to draw *text* in *role* with (primary or base)."""
-        if not self.is_primary(text, role):
+        """Return the common role face; record measurements for primary text."""
+        labels = self._primary_by_role.get(role)
+        if not labels:
             return base_font
-        key = (text, role)
-        if key in self._cache:
-            return self._cache[key]
-        bold = PRIMARY_ROLE_WEIGHTS.get(role, False)
-        path = self.paths[1] if bold else self.paths[0]
-        required = self.required_glyph_height_px()
-        base_size = round(getattr(base_font, "size", 0) / self.supersample)
-        chosen = None
-        for size in range(max(base_size, 1), self.cap_px + 1):
-            try:
-                face, _index, _style = load_font_face(path, size * self.supersample, bold)
-            except FigureTypographyError as exc:
-                raise QuantitativeFigureError(str(exc)) from exc
+        if role not in self._cache:
+            bold = PRIMARY_ROLE_WEIGHTS.get(role, False)
+            path = self.paths[1] if bold else self.paths[0]
+            required = self.required_glyph_height_px()
+            base_size = round(getattr(base_font, "size", 0) / self.supersample)
+            for size in range(max(base_size, 1), self.cap_px + 1):
+                try:
+                    face, _index, _style = load_font_face(
+                        path, size * self.supersample, bold)
+                except FigureTypographyError as exc:
+                    raise QuantitativeFigureError(str(exc)) from exc
+                if all(self.glyph_height_px(face, label, self.supersample) >= required
+                       for label in labels):
+                    self._cache[role] = face
+                    self.role_fonts.append({"role": role, "size_px": size,
+                                            "scope": "all-panels"})
+                    break
+            else:
+                raise QuantitativeFigureError(
+                    f"primary label role {role!r} cannot clear the phone floor "
+                    f"under the {self.cap_px} px primary tier cap; shorten copy, "
+                    "choose another wayfinding role, or split the figure")
+        face = self._cache[role]
+        if self.is_primary(text, role) and not any(
+                item["text"] == text and item["role"] == role for item in self.resolved):
             height = self.glyph_height_px(face, text, self.supersample)
-            if height >= required:
-                chosen = (face, size, height)
-                break
-        if chosen is None:
-            face, _index, _style = load_font_face(
-                path, self.cap_px * self.supersample, bold)
-            height = self.glyph_height_px(face, text, self.supersample)
-            achieved = height * self.plan["width_px"] / self.width
-            raise QuantitativeFigureError(
-                f"primary label {text!r} reaches only {achieved:.1f} px at a "
-                f"{self.plan['width_px']:g} px preview under the {self.cap_px} px "
-                "primary tier cap; choose a label with ascenders or more height, or "
-                "declare a different primary label")
-        face, size, height = chosen
-        self._cache[key] = face
-        self.resolved.append({
-            "text": text,
-            "role": role,
-            "size_px": size,
-            "glyph_height_px": _rounded(height),
-            "mobile_height_px": _rounded(height * self.plan["width_px"] / self.width),
-        })
+            self.resolved.append({
+                "text": text, "role": role,
+                "size_px": face.size / self.supersample,
+                "glyph_height_px": _rounded(height),
+                "mobile_height_px": _rounded(height * self.plan["width_px"] / self.width),
+            })
         return face
 
     def unrendered(self) -> list[str]:
