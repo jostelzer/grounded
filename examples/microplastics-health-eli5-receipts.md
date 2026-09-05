@@ -1,251 +1,271 @@
-# Claim receipts — Are microplastics actually harming our health?
+# Claim receipts — Are microplastics making people ill?
 
-*19 cited sentences · 19 source checks · 18 supported at full text · 1 at abstract · 0 partial · 0 contradicted.*
+*20 cited sentences · 22 source checks · 21 supported at full text · 1 at abstract · 0 partial · 0 contradicted.*
 
 Every cited sentence of `microplastics-health-eli5.md`, paired with the passage in its source that the checker matched verbatim. Text access describes the stored source, not how much was inspected or the strength of the evidence. Full text can include an authenticated accepted manuscript; it does not by itself establish version of record. Attribution, interpretation and outcome certainty are separate judgments. A bridge explains a paraphrase, not missing evidence.
 
 Context review records the applicable scientific dimensions and inspected source ranges. These are reviewer judgments with integrity checks, not automatic proof of scientific correctness.
 
-## C009 · ¶3 s1
+## C005 · ¶2 s1
 
-> Teams have reported tiny plastic pieces in human tissues, including lungs.
+> Studies have reported microplastics, tiny plastic pieces, in human tissues including lungs.
 
-- **Roslan et al. 2024** · full text · supported — “Microplastics were detected in 8/12 human organ systems including cardiovascular, digestive, endocrine, integumentary, lymphatic, respiratory, reproductive and urinary.” … “Microplastics have been identified as a potential vector for pollutants and chemicals, facilitating their entry into human tissues. Chemicals could leach either from plastics themselves or from chemicals absorbed from the environment. Studies have shown that microplastics contained a range of toxic chemicals, such as phthalates and BPA [55,60]. These have been linked to various health problems, including cancer, developmental disorders, and reproductive problems [55]. Other studies have shown that polypropylene and polyethylene microplastics can accumulate in various human tissues but are more abundant in digestive tract, placenta and lungs [21,24,29]. The reason for greater abundance of the polymers polyethylene in these human organs compared to others is unknown but these polymers are commonly found in consumer goods, such as food packaging, cosmetics, and textiles [57].” (Reported detection, including lung tissue discussed in the respiratory section, supports presence without claiming harm.) Interpretation: preserved — Reported detection, including lung tissue discussed in the respiratory section, supports presence without claiming harm. Limits: Detection methods and contamination controls varied; this is a report of findings, not proof of disease.
-  - Meaning: design: Scoping review of in-vivo human studies; outcome: Reported detection in organ systems including lungs; population: Human tissue studies, including respiratory tissues
-  - Inspected source lines 15–27: Reported detection, including lung tissue discussed in the respiratory section, supports presence without claiming harm.
-  - Inspected source lines 43–48: Reported detection, including lung tissue discussed in the respiratory section, supports presence without claiming harm.
+- **Roslan et al. 2024** · full text · supported — “Mismanaged plastic wastes may lead to the formation of tiny plastics with the size of less than five mm, called as microplastics” … “Other studies have shown that polypropylene and polyethylene microplastics can accumulate in various human tissues but are more abundant in digestive tract, placenta and lungs” (The source defines the material and reports human lung and other tissue detections; the assertion says reported, without implying universal prevalence or harm.) Interpretation: preserved — The source defines the material and reports human lung and other tissue detections; the assertion says reported, without implying universal prevalence or harm. Limits: Methods and contamination control differ across the included detection studies.
+  - Meaning: design: Scoping review of human detection studies; outcome: Reported microplastic presence, including lungs; population: Human tissue samples across in-vivo studies
+  - Inspected source lines 7–7: Defines microplastics as tiny plastic pieces
+  - Inspected source lines 15–18: Human-only eligibility and tissue-level extraction
+  - Inspected source lines 27–38: Detection scope and study quality
+  - Inspected source lines 71–71: Lung detection explicitly included
 
-## C010 · ¶3 s2
+## C006 · ¶2 s2
 
-> Some studies took more care than others to check for stray plastic entering samples in the lab.
+> The detections leave open whether these pieces have harmed the body.
 
-- **Roslan et al. 2024** · full text · supported — “Several studies do not report on the preparation and use of blanks in their laboratory processes” … “RoB assessment is presented in Figure 3. Nine studies were deemed to have high risk [18,23,27-30,34,37,38], while three were of unclear risk [20,24,26], with the remaining being low risk [17,19,21,22,25,31-33,35,36,39-42]. Studies with low risk of bias in the study design reported clear and comprehensive methodologies to identify and quantify microplastics. Four studies [28,34,37,38] have high RoB in the sampling domain due to absence of quality control measures when handling microplastics which may cause contamination from atmospheric microplastics. Additionally, six studies [18,23,27-30] have high RoB and three studies [20,24,26] with unclear risk in the reporting domain, as these studies did not report specific concentration of microplastics particles per g of tissue or ml of solution. Additionally, sample size was often mentioned as limitation in all studies.” (The quality evaluation identifies studies missing contamination control while others addressed sampling; the lay comparison preserves this methodological difference.) Interpretation: preserved — The quality evaluation identifies studies missing contamination control while others addressed sampling; the lay comparison preserves this methodological difference. Limits: Missing reporting does not establish contamination occurred.
-  - Meaning: design: Scoping review with sampling and reporting risk-of-bias evaluation; outcome: Variable laboratory contamination precautions; uncertainty: Several reports lacked documentation of blanks
-  - Inspected source lines 20–21: The quality evaluation identifies studies missing contamination control while others addressed sampling; the lay comparison preserves this methodological difference.
-  - Inspected source lines 37–38: The quality evaluation identifies studies missing contamination control while others addressed sampling; the lay comparison preserves this methodological difference.
-  - Inspected source lines 81–89: The quality evaluation identifies studies missing contamination control while others addressed sampling; the lay comparison preserves this methodological difference.
+- **Roslan et al. 2024** · full text · supported — “There may be discussion on potential health effects but these are by no means regarded as definitive due to limitations in current evidence.” … “correlations with adverse health effects” (bridge: health effects are not definitive = detections leave open whether pieces harmed the body) (The review explicitly separates observed tissue presence from nondefinitive health effects, preserving the uncertainty in this sentence.) Interpretation: preserved — The review explicitly separates observed tissue presence from nondefinitive health effects, preserving the uncertainty in this sentence. Limits: This is a limit on inference, not evidence of safety.
+  - Meaning: design: Scoping review focused on detection; outcome: Health consequences of tissue presence; uncertainty: Detection does not establish adverse health consequences
+  - Inspected source lines 6–7: Detection versus unknown health effects
+  - Inspected source lines 45–50: Health discussion draws on models, small studies and speculation
+  - Inspected source lines 85–89: Measurement and health-correlation limits
 
-## C016 · fig 1
+## C008 · ¶3 s1
 
-> Teams have reported plastic in human tissues.
+> Some studies did not report using checks for stray plastic entering samples during laboratory work, which makes those findings harder to interpret.
 
-- **Roslan et al. 2024** · full text · supported — “Microplastics have been detected in more than half of human organ systems.” (The caption asserts reported presence only, consistent with the reviewed tissue studies.) Interpretation: preserved — The caption asserts reported presence only, consistent with the reviewed tissue studies. Limits: Presence alone does not establish causation and contamination remains a concern.
-  - Meaning: design: Scoping review of human in-vivo studies; outcome: Presence of microplastics reported; population: Human organ and biological samples
-  - Inspected source lines 15–27: The caption asserts reported presence only, consistent with the reviewed tissue studies.
-  - Inspected source lines 85–89: The caption asserts reported presence only, consistent with the reviewed tissue studies.
+- **Roslan et al. 2024** · full text · supported — “Several studies do not report on the preparation and use of blanks in their laboratory processes” … “Blanks are being performed by mimicking the same process of laboratory experiment to identify potential contaminants” (The assertion accurately paraphrases unreported blanks as checks for stray plastic and their consequence for reliability.) Interpretation: preserved — The assertion accurately paraphrases unreported blanks as checks for stray plastic and their consequence for reliability. Limits: Unreported safeguards do not prove that contamination occurred.
+  - Meaning: design: Methodological appraisal of tissue-detection studies; outcome: Unreported laboratory blanks; uncertainty: Stray atmospheric plastic may contaminate processing
+  - Inspected source lines 37–39: Specific study quality-control weaknesses
+  - Inspected source lines 81–86: Sample preparation and purpose of blank checks
 
-## C017 · fig 1
+## C009 · ¶3 s2
 
-> Human studies still struggle to show whether it causes illness.
+> This uncertainty concerns the reliability of particular measurements; it does not mean every reported detection is false.
 
-- **Tran et al. 2026** · full text · supported — “Methodological heterogeneity and bias constrain causal inference.” (bridge: Causal inference means showing whether particles cause illness; methodological heterogeneity and bias mean human studies struggle to show it.) (The claim accurately states the difficulty of demonstrating illness causation given mainly observational studies and incomplete confounder adjustment.) Interpretation: preserved — The claim accurately states the difficulty of demonstrating illness causation given mainly observational studies and incomplete confounder adjustment. Limits: The review does not establish absence of harm; stronger longitudinal evidence is needed.
-  - Meaning: design: Systematic review dominated by cross-sectional and case-control designs; outcome: Limits to causal inference from associations; population: Living human subjects with measured MNPs
-  - Inspected source lines 26–37: The claim accurately states the difficulty of demonstrating illness causation given mainly observational studies and incomplete confounder adjustment.
-  - Inspected source lines 48–50: The claim accurately states the difficulty of demonstrating illness causation given mainly observational studies and incomplete confounder adjustment.
-  - Inspected source lines 113–124: The claim accurately states the difficulty of demonstrating illness causation given mainly observational studies and incomplete confounder adjustment.
+- **Roslan et al. 2024** · full text · supported — “Studies with low risk of bias in the study design reported clear and comprehensive methodologies to identify and quantify microplastics.” … “Several studies do not report on the preparation and use of blanks in their laboratory processes” (bridge: several studies lack blanks and other studies have low risk = reliability uncertainty concerns particular measurements, not every detection being false) (The source identifies a subset of studies with missing safeguards and still concludes detection occurred; the sentence correctly rejects a blanket false-detection inference.) Interpretation: preserved — The source identifies a subset of studies with missing safeguards and still concludes detection occurred; the sentence correctly rejects a blanket false-detection inference. Limits: This does not independently validate each tissue measurement.
+  - Meaning: scope: Heterogeneous reliability of particular detection studies; uncertainty: Potential contamination, not blanket rejection of all detections
+  - Inspected source lines 37–39: Review distinguishes low, unclear and high risk studies
+  - Inspected source lines 85–89: Potential contamination qualified; detections retained in conclusion
 
-## C019 · ¶6 s1
+## C013 · fig 1
 
-> Scientists can give mice plastic particles and watch what happens.
+> Human tissue detections leave causal health effects uncertain.
 
-- **Liu et al. 2023** · full text · supported — “Exposure to pristine MNPs based on the laboratory conditions of a mouse/a rat” … “The search was not restricted to any language. The inclusion criteria of the present study were as follows: (1) Exposure to pristine MNPs based on the laboratory conditions of a mouse/a rat, (2) at least one toxicological physiological endpoint included in the findings, and (3) a blank control group was set up. The exclusion criteria were: (1) the effects of other substances on laboratory animals; (2) a lack of appropriate data in the study; (3) low-quality studies assessed using the Rob tool for animal intervention studies (SYRCLE's Rob tool) (42); and (4) unavailability of full-text articles. Two authors (WL and BZ) independently searched the database and decided to include or exclude publications according to the criteria established above. Inconsistencies were resolved through discussion and consultation with the third author (QY). The detailed Modified Preferred Reporting Items for Systematic Reviews and Meta-Analysis (PRISMA flow diagram for the literature search and selection strategy is exhibited in Figure 1.” (bridge: Laboratory exposure to MNPs means giving plastic particles to mice; toxicological endpoints measure what happens.) (The eligibility criteria explicitly describe administering particles under laboratory conditions and requiring a control and endpoint; the assertion is about experimental capability.) Interpretation: preserved — The eligibility criteria explicitly describe administering particles under laboratory conditions and requiring a control and endpoint; the assertion is about experimental capability. Limits: Laboratory dosing differs from real-world exposure.
-  - Meaning: comparison: MNP exposed versus blank control; design: Review of controlled pristine-particle exposures; outcome: Measured toxicological endpoints; population: Laboratory mice and rats
-  - Inspected source lines 20–29: The eligibility criteria explicitly describe administering particles under laboratory conditions and requiring a control and endpoint; the assertion is about experimental capability.
-  - Inspected source lines 45–52: The eligibility criteria explicitly describe administering particles under laboratory conditions and requiring a control and endpoint; the assertion is about experimental capability.
+- **Roslan et al. 2024** · full text · supported — “their potential health effects remain unknown” … “There may be discussion on potential health effects but these are by no means regarded as definitive due to limitations in current evidence.” (The caption states uncertainty about causal effects, consistent with a review documenting tissue presence without establishing harm.) Interpretation: preserved — The caption states uncertainty about causal effects, consistent with a review documenting tissue presence without establishing harm. Limits: Absence of a causal demonstration is not absence of risk.
+  - Meaning: design: Scoping review; outcome: Uncertain health effects after detections; population: Human tissues
+  - Inspected source lines 6–7: Explicit distinction between detection and health effects
+  - Inspected source lines 85–89: Measurement qualifications and nondefinitive adverse-effect correlations
 
-## C020 · ¶6 s2
+- **Tran et al. 2026** · full text · supported — “Human in vivo evidence confirms that MNPs accumulate in multiple organ systems and are associated with inflammation and functional impairment. Methodological heterogeneity and bias constrain causal inference.” (The source explicitly documents presence and associations while declining causal inference, supporting the full caption assertion.) Interpretation: preserved — The source explicitly documents presence and associations while declining causal inference, supporting the full caption assertion. Limits: This review includes the carotid cohort rather than independently replicating it.
+  - Meaning: design: Systematic review of observational exposure studies; outcome: Tissue presence and health associations; population: Living human participants across 25 studies; uncertainty: Causal inference constrained by methods and bias
+  - Inspected source lines 9–15: Eligibility, association findings and causal limit
+  - Inspected source lines 26–37: Human sample scope and predominant observational designs
+  - Inspected source lines 74–79: Confounding and exposure-measurement issues
 
-> A review found changes in how mice handled sugar and fat, and in their ability to reproduce.
+## C017 · ¶5 s1
 
-- **Liu et al. 2023** · full text · supported — “MNPs negatively affected the blood glucose metabolism, lipid metabolism, and reproductive function in mice.” (Sugar and fat handling faithfully paraphrase glucose and lipid metabolism; reproductive endpoints include sperm and follicle measures. The claim confines findings to mice.) Interpretation: preserved — Sugar and fat handling faithfully paraphrase glucose and lipid metabolism; reproductive endpoints include sperm and follicle measures. The claim confines findings to mice. Limits: Reproduction wording summarizes functional endpoints, not a quantified human fertility risk.
-  - Meaning: design: Random-effects synthesis of experimental endpoints; outcome: Blood glucose, lipid metabolism and reproductive function; population: Mice; uncertainty: Exposure and strain heterogeneity; funnel plot asymmetry
-  - Inspected source lines 45–52: Sugar and fat handling faithfully paraphrase glucose and lipid metabolism; reproductive endpoints include sperm and follicle measures. The claim confines findings to mice.
-  - Inspected source lines 111–121: Sugar and fat handling faithfully paraphrase glucose and lipid metabolism; reproductive endpoints include sperm and follicle measures. The claim confines findings to mice.
-  - Inspected source lines 129–135: Sugar and fat handling faithfully paraphrase glucose and lipid metabolism; reproductive endpoints include sperm and follicle measures. The claim confines findings to mice.
+> Experiments in mice have found changes in how their bodies handled sugar and fat, and in their ability to reproduce, after exposure to plastic particles.
 
-## C021 · ¶6 s3
+- **Liu et al. 2023** · full text · supported — “MNPs negatively affected the blood glucose metabolism, lipid metabolism, and reproductive function in mice.” (Sugar and fat handling accurately paraphrase glucose and lipid metabolism, and reproductive function is explicit; the claim remains about mice after experimental exposure.) Interpretation: preserved — Sugar and fat handling accurately paraphrase glucose and lipid metabolism, and reproductive function is explicit; the claim remains about mice after experimental exposure. Limits: Reproductive endpoints include sperm and oocyte measures; they do not quantify human fertility risk.
+  - Meaning: design: Systematic review and meta-analysis with exposed and control groups; exposure: Laboratory micro/nanoplastic treatments; outcome: Glucose, lipid and reproductive endpoints; population: Experimental mice
+  - Inspected source lines 20–23: Controlled rodent-exposure eligibility
+  - Inspected source lines 44–52: Meta-analysis endpoints and treatment/control comparison
+  - Inspected source lines 110–121: Metabolic and reproductive results and endpoint details
 
-> But some tests in rats did not find clear changes in behaviour.
+## C018 · ¶5 s2
 
-- **Liu et al. 2023** · full text · supported — “Another study showed that the effect of PS-NPs on neurobehavior in rats was not statistically significant due to the limitations of small sample sizes and study design” (Not finding clear behavior change faithfully expresses nonsignificance without implying equivalence or safety.) Interpretation: preserved — Not finding clear behavior change faithfully expresses nonsignificance without implying equivalence or safety. Limits: This is a limited null finding in a rat study, not a general refutation of neurotoxicity.
-  - Meaning: outcome: Neurobehavioral changes; population: Rats in neurobehavioral experiments; uncertainty: Nonsignificance with small sample and design limitations
-  - Inspected source lines 72–76: Not finding clear behavior change faithfully expresses nonsignificance without implying equivalence or safety.
-  - Inspected source lines 117–119: Not finding clear behavior change faithfully expresses nonsignificance without implying equivalence or safety.
+> The doses and exposure times in those experiments may not closely match everyday human exposure, so the results do not establish human disease risk.
 
-## C024 · ¶7 s1
+- **Liu et al. 2023** · full text · supported — “The concentration and duration of exposure of mice to MNPs based on laboratory conditions are different from those of humans exposed to MNPs under the indicated conditions.” … “The concentrations and exposure times still need to be closer to the real levels.” … “Animal models ingest MNPs by gavage, and most of the doses of exposure were much higher than those ingested by human beings.” (The claim preserves the source limitation that experimental doses and timing differ from real exposures, so the findings do not establish human risk.) Interpretation: preserved — The claim preserves the source limitation that experimental doses and timing differ from real exposures, so the findings do not establish human risk. Limits: Laboratory effects remain evidence of potential hazard under tested conditions.
+  - Meaning: exposure: Concentration, duration and delivery differ; population: Experimental rodents versus everyday human exposure; uncertainty: Animal exposure conditions cannot quantify human disease risk
+  - Inspected source lines 123–132: Polymer, concentration, duration, exposure-estimation and extrapolation limitations
 
-> Another team gathered animal and human studies and judged that plastic particles might harm breathing, digestion and reproduction.
+## C019 · ¶5 s3
 
-- **Chartres et al. 2024** · full text · supported — “Microplastics are “suspected” to harm human reproduction and digestive and respiratory health” (The cautious might-harm phrasing reflects the formal suspected-hazard conclusion; explicitly mentioning animal and human studies preserves the evidence mix.) Interpretation: preserved — The cautious might-harm phrasing reflects the formal suspected-hazard conclusion; explicitly mentioning animal and human studies preserves the evidence mix. Limits: Hazard identification does not quantify everyday human disease risk or prove all outcomes.
-  - Meaning: design: Rapid Navigation Guide review integrating human observational and rodent experimental streams; outcome: Suspected reproductive, digestive and respiratory hazards; uncertainty: Limited human studies; selected endpoints and homogeneous experimental particles
-  - Inspected source lines 17–20: The cautious might-harm phrasing reflects the formal suspected-hazard conclusion; explicitly mentioning animal and human studies preserves the evidence mix.
-  - Inspected source lines 102–118: The cautious might-harm phrasing reflects the formal suspected-hazard conclusion; explicitly mentioning animal and human studies preserves the evidence mix.
-  - Inspected source lines 159–174: The cautious might-harm phrasing reflects the formal suspected-hazard conclusion; explicitly mentioning animal and human studies preserves the evidence mix.
-  - Inspected source lines 420–429: The cautious might-harm phrasing reflects the formal suspected-hazard conclusion; explicitly mentioning animal and human studies preserves the evidence mix.
+> Not every test found a clear effect: a rat study found no clear change in behaviour, although its small size and design left uncertainty.
+
+- **Liu et al. 2023** · full text · supported — “Another study showed that the effect of PS-NPs on neurobehavior in rats was not statistically significant due to the limitations of small sample sizes and study design” (No clear change preserves nonsignificance without converting it into equivalence, and the sentence retains the small-sample/design uncertainty.) Interpretation: preserved — No clear change preserves nonsignificance without converting it into equivalence, and the sentence retains the small-sample/design uncertainty. Limits: One outcome in one rat study cannot establish general absence of toxicity.
+  - Meaning: outcome: Neurobehavior; population: Rats in one cited polystyrene nanoparticle study; uncertainty: Nonsignificant result with sample-size and design limitations
+  - Inspected source lines 117–118: Limited rat evidence and the specific nonsignificant neurobehavior finding
+
+## C020 · ¶6 s1
+
+> A review combining mostly animal evidence with a few human studies judged harm to digestion, breathing and reproduction to be “suspected”.
+
+- **Chartres et al. 2024** · full text · supported — “We included three human observational studies examining reproductive (n = 2) and respiratory (n = 1) outcomes and 28 animal studies examining reproductive (n = 11), respiratory (n = 7), and digestive (n = 10) outcomes.” … “We concluded that microplastics are “suspected” to harm human reproductive, digestive, and respiratory health” (Mostly animal with few human studies faithfully describes the corpus; the sentence attributes the suspected classification to this review without claiming quantified human harm.) Interpretation: preserved — Mostly animal with few human studies faithfully describes the corpus; the sentence attributes the suspected classification to this review without claiming quantified human harm. Limits: Outcome bodies differ in strength; human birth effects remain unclassifiable.
+  - Meaning: design: Rapid systematic hazard review; outcome: Suspected digestive, respiratory and reproductive hazard; population: Three human observational and 28 animal studies; uncertainty: Hazard classification, not measured disease burden
+  - Inspected source lines 6–6: Attributed suspected-hazard conclusion and study composition
+  - Inspected source lines 114–119: Definition of evidence-strength and hazard categories
+  - Inspected source lines 153–170: Heterogeneous data, human/animal mix and exposures
+  - Inspected source lines 250–269: Digestive conclusion and weaker human birth findings
+
+## C022 · ¶6 s3
+
+> The same review could not judge effects on human birth outcomes because the evidence was too weak.
+
+- **Chartres et al. 2024** · full text · supported — “We concluded that exposure to microplastics is “not classifiable” for birth outcomes in humans on the basis of (a) the “low” quality of the body of evidence” (The sentence correctly reports inability to classify human birth effects because of weak evidence, without treating that as a null effect.) Interpretation: preserved — The sentence correctly reports inability to classify human birth effects because of weak evidence, without treating that as a null effect. Limits: Some associations were reported, but they did not justify a hazard judgment.
+  - Meaning: design: Rapid review of two observational studies; outcome: Birth weight, length and head circumference; population: Human birth-outcome studies; uncertainty: Low quality, confounding, small evidence base
+  - Inspected source lines 256–269: Human birth results, mixed findings, bias and classification
 
 ## C025 · ¶7 s2
 
-> They couldn't reach a judgment about human birth outcomes because that evidence was too weak.
+> In a study, doctors tested material removed during surgery on narrowed blood vessels in the neck, then followed 257 patients for an average of about 34 months.
 
-- **Chartres et al. 2024** · full text · supported — “We concluded that exposure to microplastics is “not classifiable” for birth outcomes in humans” … “We concluded that exposure to microplastics is “not classifiable” for birth outcomes in humans on the basis of (a) the “low” quality of the body of evidence (see Supporting Information File 8, “Evidence ratings for studies”, for a detailed rationale for these ratings), (b) the direction of the effect (i.e., evidence of an increasing adverse health effect with an increasing level of microplastic exposure), and (c) the confidence in the association considering factors including the number and size of studies.” (Not reaching a hazard judgment accurately conveys not-classifiable; it is attributed to weak evidence rather than absence of an effect.) Interpretation: preserved — Not reaching a hazard judgment accurately conveys not-classifiable; it is attributed to weak evidence rather than absence of an effect. Limits: Some individual birth measures had adverse associations; classification is not evidence of safety.
-  - Meaning: design: Two observational studies synthesized for birth growth outcomes; outcome: Birth outcomes and gestational age hazard classification; population: Human pregnancy studies; uncertainty: Low-quality evidence, limited numbers and risk of bias
-  - Inspected source lines 254–272: Not reaching a hazard judgment accurately conveys not-classifiable; it is attributed to weak evidence rather than absence of an effect.
-  - Inspected source lines 420–420: Not reaching a hazard judgment accurately conveys not-classifiable; it is attributed to weak evidence rather than absence of an effect.
+- **Marfella et al. 2024** · full text · supported — “A total of 304 patients were enrolled in the study, and 257 completed a mean (±SD) follow-up of 33.7±6.9 months.” … “at 34 months of follow-up” … “We conducted a prospective, multicenter, observational study involving patients who were undergoing carotid endarterectomy for asymptomatic carotid artery disease. The excised carotid plaque specimens were analyzed for the presence of MNPs” (The statement accurately describes surgically removed carotid material and 257 followed patients; about 34 months is the source-supported rounding of mean 33.7 months.) Interpretation: preserved — The statement accurately describes surgically removed carotid material and 257 followed patients; about 34 months is the source-supported rounding of mean 33.7 months. Limits: The 257 are completers, not all enrolled patients; the statement does not claim otherwise.
+  - Meaning: design: Prospective multicenter observational cohort; population: Patients undergoing carotid endarterectomy for asymptomatic high-grade stenosis; quantity: 257 completing follow-up; timeframe: Mean 33.7 months, approximately 34 months
+  - Inspected source lines 479–487: Sample count, rounded follow-up and removed-plaque tests
+  - Inspected source lines 497–507: Eligibility and follow-up outcomes
+  - Inspected source lines 513–517: Attrition and analyzed population
 
-## C029 · ¶8 s1
+## C026 · ¶7 s3
 
-> Doctors tested material removed during surgery on narrowed neck arteries.
+> A heart attack, stroke or death occurred in 30 of the 150 patients with detected plastic, compared with 8 of the 107 without detected plastic.
 
-- **Marfella et al. 2024** · full text · supported — “Specimens of the atheromatous plaque that were surgically excised from the carotid artery bifurcation region” (Neck artery surgery is a plain-language description of carotid endarterectomy and the source explicitly describes testing excised plaque.) Interpretation: preserved — Neck artery surgery is a plain-language description of carotid endarterectomy and the source explicitly describes testing excised plaque. Limits: Selected surgical patients do not represent the general population.
-  - Meaning: design: Prospective multicenter observational study; exposure: MNP assay of excised carotid plaque; population: Patients with high-grade asymptomatic carotid stenosis undergoing endarterectomy
-  - Inspected source lines 497–507: Neck artery surgery is a plain-language description of carotid endarterectomy and the source explicitly describes testing excised plaque.
+- **Marfella et al. 2024** · full text · supported — “A primary end-point event (nonfatal myocardial infarction, nonfatal stroke, or death from any cause), occurred in 8 of 107 patients (7.5%) in the group that did not have evidence of MNPs (2.2 events per 100 patient-years) and in 30 of 150 patients (20.0%) in the group that had evidence of MNPs (6.1 events per 100 patient-years) at 33.7±6.9 months.” (The event composite and group denominators match exactly; the sentence reports raw counts rather than misidentifying the adjusted hazard ratio as a risk ratio.) Interpretation: preserved — The event composite and group denominators match exactly; the sentence reports raw counts rather than misidentifying the adjusted hazard ratio as a risk ratio. Limits: These counts describe a selected observational cohort and do not establish causality.
+  - Meaning: comparison: Detected plaque plastic versus no detected plastic; outcome: Composite nonfatal MI, nonfatal stroke or all-cause death; population: 257 carotid-surgery follow-up completers; quantity: 30/150 versus 8/107 observed events
+  - Inspected source lines 499–517: Observed groups, composite definition, adjustment and sample selection
+  - Inspected source lines 735–747: Composite event results, raw counts distinct from hazard ratio
+  - Inspected source lines 756–758: Causal and generalizability limitations
 
-## C030 · ¶8 s2
+## C028 · ¶8 s2
 
-> They then followed the patients to see who had a heart attack, stroke or died.
+> The groups could also differ in other exposures, health conditions or behaviours that affected their later health.
 
-- **Marfella et al. 2024** · full text · supported — “After undergoing carotid endarterectomy, the patients were followed to monitor the incidence of nonfatal myocardial infarction, nonfatal stroke, and death from any cause” (The follow-up sentence names the exact monitored clinical events in ordinary language.) Interpretation: preserved — The follow-up sentence names the exact monitored clinical events in ordinary language. Limits: Visits followed common clinical practice and were unscheduled; patients lost to follow-up were excluded.
-  - Meaning: design: Prospective observation after surgery; outcome: Composite nonfatal myocardial infarction, nonfatal stroke or all-cause death; population: Carotid endarterectomy patients
-  - Inspected source lines 499–511: The follow-up sentence names the exact monitored clinical events in ordinary language.
-  - Inspected source lines 736–744: The follow-up sentence names the exact monitored clinical events in ordinary language.
+- **Marfella et al. 2024** · full text · supported — “The association between the presence of MNPs within plaque and the incidence of a composite of cardiovascular disease or death outcomes may also entail the risk from exposure to other residual, unmeasured confounding variables, such as unknown exposures during the life course of the patient or, more broadly, the health status and behaviors of the patients.” (Other exposures, conditions and behaviors are the source-identified alternative explanations, and could accurately preserves their possibility.) Interpretation: preserved — Other exposures, conditions and behaviors are the source-identified alternative explanations, and could accurately preserves their possibility. Limits: The study does not determine the amount or direction of residual confounding.
+  - Meaning: design: Observational carotid cohort with adjusted analysis; uncertainty: Residual unmeasured exposures, health and behaviors
+  - Inspected source lines 510–512: Covariates adjusted in Cox analysis
+  - Inspected source lines 756–758: Residual confounding and missing socioeconomic/exposure data
 
-## C031 · ¶8 s3
+## C029 · ¶8 s3
 
-> Patients whose artery material contained plastic had more of those events.
+> They were all patients undergoing surgery for artery disease, so this comparison cannot provide a risk estimate for the general population.
 
-- **Marfella et al. 2024** · full text · supported — “A primary end-point event (nonfatal myocardial infarction, nonfatal stroke, or death from any cause), occurred in 8 of 107 patients (7.5%) in the group that did not have evidence of MNPs” … “A primary end-point event (nonfatal myocardial infarction, nonfatal stroke, or death from any cause), occurred in 8 of 107 patients (7.5%) in the group that did not have evidence of MNPs (2.2 events per 100 patient-years) and in 30 of 150 patients (20.0%) in the group that had evidence of MNPs (6.1 events per 100 patient-years) at 33.7±6.9 months. The incidence of individual components of the composite end point is shown in Table S2. Patients with MNPs in plaque had a higher risk of having a primary end-point event than patients with no evidence of MNPs (hazard ratio, 4.53; 95% confidence interval [CI], 2.00 to 10.27; P<0.001) (Fig. 4), as shown by Cox regression analysis with adjustment for risk factors for cardiovascular disease (Table S3). The unadjusted hazard ratio was 2.84 (95% CI, 1.50 to 5.40; P = 0.007). When the levels of MNPs were analyzed as a continuous variable, the results showed an association with the primary end point (Table S4).” (Results report more composite events in the detected group both as counts and proportions; the review makes no causal claim or separate-component claim.) Interpretation: preserved — Results report more composite events in the detected group both as counts and proportions; the review makes no causal claim or separate-component claim. Limits: No causal effect is established and the general population is outside the sampled scope.
-  - Meaning: comparison: MNP detected in plaque versus no evidence detected; outcome: Composite cardiovascular event or all-cause death; population: Analyzed carotid surgery cohort; uncertainty: Observational association with residual confounding
-  - Inspected source lines 507–519: Results report more composite events in the detected group both as counts and proportions; the review makes no causal claim or separate-component claim.
-  - Inspected source lines 736–744: Results report more composite events in the detected group both as counts and proportions; the review makes no causal claim or separate-component claim.
-  - Inspected source lines 754–758: Results report more composite events in the detected group both as counts and proportions; the review makes no causal claim or separate-component claim.
+- **Marfella et al. 2024** · full text · supported — “Our findings pertain only to a population of asymptomatic patients undergoing carotid endarterectomy, who may not be representative of the general population.” … “Thus, our findings may not be generalizable.” (The source states the population restriction and warns against generalization, supporting the lack of a general-population risk estimate from this comparison.) Interpretation: preserved — The source states the population restriction and warns against generalization, supporting the lack of a general-population risk estimate from this comparison. Limits: The observed cohort association remains reportable within its population.
+  - Meaning: population: Asymptomatic patients selected for carotid endarterectomy; scope: Selected surgical cohort versus general population; uncertainty: Lack of representative general-population sampling
+  - Inspected source lines 499–504: Clinical selection and stenosis eligibility
+  - Inspected source lines 756–758: Explicit generalizability limitation
 
-## C033 · ¶9 s2
+## C034 · fig 2
 
-> The researchers also warned that their results didn't prove cause and might not apply to people without that artery disease.
+> The study followed patients with and without detected plastic in material removed during surgery.
 
-- **Marfella et al. 2024** · full text · supported — “It is important to note that our results do not prove causality.” … “It is important to note that our results do not prove causality. The association between the presence of MNPs within plaque and the incidence of a composite of cardiovascular disease or death outcomes may also entail the risk from exposure to other residual, unmeasured confounding variables, such as unknown exposures during the life course of the patient or, more broadly, the health status and behaviors of the patients. In addition, we did not consider levels of exposure to PM2.5 and PM10, which is an emerging risk factor for cardiovascular disease.31” … “Our study has limitations. Despite the preventive measures adopted, laboratory contamination cannot be firmly ruled out. Even though we applied updated procedures to collect and analyze plaque specimens, the residual risk of contamination might exist. Future studies performed with the use of clean rooms, where there is no plastic in any form except the material under study, might corroborate our observations. We did not have socioeconomic data available for our study population. Income and education, among other conditions, are linked to a wide range of outcomes and might be particularly relevant.32 Our findings pertain only to a population of asymptomatic patients undergoing carotid endarterectomy, who may not be representative of the general population.14 Thus, our findings may not be generalizable. The representativeness of patients who participated in the study is shown in Table S5. We did not explore the variables of food and drinking water, which may be linked to accumulation of MNPs in humans.25,33,34 Thus, it is possible that the putative role of MNPs in driving cardiovascular disease might be limited if compared with canonical risk factors, given that over a period of decades in which exposure to plastics has presumably been increasing, the rate of cardiovascular disease has been falling.35 However, results of our study show that patients with MNPs that were detected in carotid artery plaque have a higher risk of a composite end point of myocardial infarction, stroke, or death from any cause at 34 months of follow-up.” (The explicit causal caveat and restricted population support both clauses about causation and applicability outside artery disease.) Interpretation: preserved — The explicit causal caveat and restricted population support both clauses about causation and applicability outside artery disease. Limits: Nonrepresentativeness extends beyond just disease status.
-  - Meaning: design: Observational carotid surgery cohort; population: Asymptomatic carotid endarterectomy patients; uncertainty: Residual confounding and limited generalizability
-  - Inspected source lines 754–758: The explicit causal caveat and restricted population support both clauses about causation and applicability outside artery disease.
+- **Marfella et al. 2024** · full text · supported — “After analysis of atherosclerotic plaque, patients were assigned to one of two groups: patients with evidence of MNPs (having detectable levels of at least one of the two substances) or patients with no evidence of MNPs.” (The caption describes actual source grouping and prospective follow-up; it does not imply random allocation.) Interpretation: preserved — The caption describes actual source grouping and prospective follow-up; it does not imply random allocation. Limits: Detection status is an observed exposure grouping.
+  - Meaning: comparison: Detected versus undetected MNPs in excised surgical material; design: Prospective follow-up after plaque testing
+  - Inspected source lines 481–481: Excised carotid plaque analysis
+  - Inspected source lines 499–512: Follow-up process, outcomes and detection-defined groups
 
-## C038 · fig 2
+## C037 · fig 2
 
-> Doctors compared patients with and without plastic found in their artery material.
+> Other differences between the groups can affect the comparison.
 
-- **Marfella et al. 2024** · full text · supported — “one group with plaque in which MNPs were detected and one group with plaque in which MNPs were not detected” (bridge: Plaque means artery material; MNPs means microplastics and nanoplastics; detected versus not detected defines patients compared.) (The comparison is defined by the tissue assay rather than allocated particle exposure.) Interpretation: preserved — The comparison is defined by the tissue assay rather than allocated particle exposure. Limits: A nondetection group is assay-defined and does not prove absence of all plastic.
-  - Meaning: comparison: Detected MNPs versus no evidence of detected MNPs; design: Groups classified after enrollment by excised plaque assay; population: Carotid surgery patients
-  - Inspected source lines 499–517: The comparison is defined by the tissue assay rather than allocated particle exposure.
+- **Marfella et al. 2024** · full text · supported — “The association between the presence of MNPs within plaque and the incidence of a composite of cardiovascular disease or death outcomes may also entail the risk from exposure to other residual, unmeasured confounding variables” (bridge: residual unmeasured confounding variables = other differences between groups can affect the comparison) (The source explicitly allows residual confounding despite adjustment, so the caption limitation is supported.) Interpretation: preserved — The source explicitly allows residual confounding despite adjustment, so the caption limitation is supported. Limits: This possibility does not show that every observed difference is due to confounding.
+  - Meaning: comparison: Detected versus undetected plaque plastic groups; uncertainty: Unmeasured confounding can affect outcome comparison
+  - Inspected source lines 512–512: Measured covariate adjustment
+  - Inspected source lines 756–758: Residual unmeasured differences and missing data
 
-## C039 · fig 2
+- **Tran et al. 2026** · full text · supported — “We note that the studies included in this analysis were at highest risk of bias arising from uncontrolled confounding, lack of standardisation and rigour in the measurement of MNP exposure, and selective reporting of outcomes.” (bridge: uncontrolled confounding = other differences between groups can affect the comparison) (The review includes this cohort and independently discusses uncontrolled differences as a limitation of the human comparisons; the caption makes only that qualified statement.) Interpretation: preserved — The review includes this cohort and independently discusses uncontrolled differences as a limitation of the human comparisons; the caption makes only that qualified statement. Limits: Tran is a review of overlapping studies, not an independent cohort replication.
+  - Meaning: design: Review including the carotid cohort and other human observational comparisons; uncertainty: Uncontrolled covariates can obscure exposure associations
+  - Inspected source lines 50–50: Longitudinal Marfella identified within review
+  - Inspected source lines 74–79: Consequences of uncontrolled covariates and exposure measurement
+  - Inspected source lines 111–124: Overall bias and limits on association inference
 
-> Other differences between people can make such comparisons difficult to interpret.
+## C039 · ¶10 s1
 
-- **Tran et al. 2026** · full text · supported — “bias due to uncontrolled confounding, unmeasured covariates, and unexamined effect modification emerged as the most frequent methodological limitation” (bridge: Uncontrolled confounding and unmeasured covariates are other differences between people that complicate interpreting associations.) (Other differences between people is an accessible description of the specified covariate problems; the sentence correctly limits interpretation.) Interpretation: preserved — Other differences between people is an accessible description of the specified covariate problems; the sentence correctly limits interpretation. Limits: Not every omitted covariate is a true confounder, as the source itself emphasizes.
-  - Meaning: design: Human observational evidence review; outcome: Uncertainty in exposure-outcome association interpretation; uncertainty: Uncontrolled confounding, unmeasured covariates and effect modification
-  - Inspected source lines 74–79: Other differences between people is an accessible description of the specified covariate problems; the sentence correctly limits interpretation.
-  - Inspected source lines 113–124: Other differences between people is an accessible description of the specified covariate problems; the sentence correctly limits interpretation.
+> The artery study also could not firmly rule out stray plastic entering samples in the laboratory.
 
-## C042 · ¶11 s2
+- **Marfella et al. 2024** · full text · supported — “Despite the preventive measures adopted, laboratory contamination cannot be firmly ruled out. Even though we applied updated procedures to collect and analyze plaque specimens, the residual risk of contamination might exist.” (Could not firmly rule out preserves the source wording and does not allege that contamination definitely occurred.) Interpretation: preserved — Could not firmly rule out preserves the source wording and does not allege that contamination definitely occurred. Limits: The source supplies no estimate of actual contamination.
+  - Meaning: outcome: Potential laboratory contamination; population: Excised carotid plaque samples; uncertainty: Not ruled out despite preventive measures
+  - Inspected source lines 758–758: Exact limitation and sample-procedure context
 
-> In the artery study, the researchers couldn't rule out all the other differences between patients, or stray plastic entering samples in the lab.
+## C040 · ¶10 s2
 
-- **Marfella et al. 2024** · full text · supported — “laboratory contamination cannot be firmly ruled out.” … “It is important to note that our results do not prove causality. The association between the presence of MNPs within plaque and the incidence of a composite of cardiovascular disease or death outcomes may also entail the risk from exposure to other residual, unmeasured confounding variables, such as unknown exposures during the life course of the patient or, more broadly, the health status and behaviors of the patients. In addition, we did not consider levels of exposure to PM2.5 and PM10, which is an emerging risk factor for cardiovascular disease.31” … “Our study has limitations. Despite the preventive measures adopted, laboratory contamination cannot be firmly ruled out. Even though we applied updated procedures to collect and analyze plaque specimens, the residual risk of contamination might exist. Future studies performed with the use of clean rooms, where there is no plastic in any form except the material under study, might corroborate our observations. We did not have socioeconomic data available for our study population. Income and education, among other conditions, are linked to a wide range of outcomes and might be particularly relevant.32 Our findings pertain only to a population of asymptomatic patients undergoing carotid endarterectomy, who may not be representative of the general population.14 Thus, our findings may not be generalizable. The representativeness of patients who participated in the study is shown in Table S5. We did not explore the variables of food and drinking water, which may be linked to accumulation of MNPs in humans.25,33,34 Thus, it is possible that the putative role of MNPs in driving cardiovascular disease might be limited if compared with canonical risk factors, given that over a period of decades in which exposure to plastics has presumably been increasing, the rate of cardiovascular disease has been falling.35 However, results of our study show that patients with MNPs that were detected in carotid artery plaque have a higher risk of a composite end point of myocardial infarction, stroke, or death from any cause at 34 months of follow-up.” (The discussion separately identifies residual confounding and possible sample contamination, supporting both elements of the warning.) Interpretation: preserved — The discussion separately identifies residual confounding and possible sample contamination, supporting both elements of the warning. Limits: Potential contamination is not proof the detected particles were artifacts.
-  - Meaning: design: Observational plaque-assay cohort; uncertainty: Unmeasured lifetime exposures, socioeconomic factors and residual laboratory contamination
-  - Inspected source lines 754–758: The discussion separately identifies residual confounding and possible sample contamination, supporting both elements of the warning.
+> Across human studies, uneven measurements and unaccounted-for differences between people make it difficult to separate plastic's possible effects from other causes of illness.
 
-## C044 · ¶12 s1
+- **Tran et al. 2026** · full text · supported — “There is considerable heterogeneity in detection techniques across—and even within—organ systems, which undermines reliable cross study comparisons.” … “bias due to uncontrolled confounding, unmeasured covariates, and unexamined effect modification emerged as the most frequent methodological limitation.” (bridge: heterogeneity in detection techniques and uncontrolled confounding = uneven measurements and unaccounted-for differences make effects difficult to separate from other causes) (The sentence accurately combines two source-specific barriers to causal attribution without converting associations into caused illness.) Interpretation: preserved — The sentence accurately combines two source-specific barriers to causal attribution without converting associations into caused illness. Limits: Covariates can also modify effects; the prose does not claim every omitted variable is a confounder.
+  - Meaning: design: Systematic review with ROBINS-E appraisal; population: Human observational studies across organ systems; uncertainty: Uneven exposure measurements and uncontrolled covariates constrain attribution
+  - Inspected source lines 26–37: Human observational evidence base
+  - Inspected source lines 74–79: Consequences of confounding and varying assays
+  - Inspected source lines 101–124: Quality-control inconsistency, selective reporting and conclusions
 
-> A newer review found that human studies often measured plastic in different ways and left other possible causes of illness unaccounted for.
+## C041 · ¶10 s3
 
-- **Tran et al. 2026** · full text · supported — “There is considerable heterogeneity in detection techniques across—and even within—organ systems, which undermines reliable cross study comparisons.” … “In this review, bias due to uncontrolled confounding, unmeasured covariates, and unexamined effect modification emerged as the most frequent methodological limitation. While factors such as diet, body mass index, and physical activity may not meet strict definitions of confounding in all contexts, failure to account for these covariables limits estimation of association strength and obscures effect heterogeneity across populations. Notably, seven out of nine studies focusing on the health impact of MNPs on the gastrointestinal system failed to control for subjects’ dietary habits, body mass and exercise habits, which are all well-established risk factors for gastrointestinal pathologies [ 102 ]. Additionally, many studies did not address the role that genetics and family history play in the development of disease states, most notably neoplasms and autoimmune disorders [ 103 ]. However, the current evidence base is too sparse and heterogeneous to reliably differentiate true confounders from potential effect modifiers. Many candidate variables may plausibly play either role depending on context and population. As the evidence base expands, the use of causal inference frameworks—such as directed acyclic graphs (DAGs)—will be valuable in formally specifying assumptions and identifying appropriate adjustment sets.” (Variable measurements and unaccounted alternative contributors are both discussed in the dedicated bias sections; the review preserves those concerns.) Interpretation: preserved — Variable measurements and unaccounted alternative contributors are both discussed in the dedicated bias sections; the review preserves those concerns. Limits: Heterogeneity and omitted covariates do not themselves disprove an association.
-  - Meaning: design: Systematic review of human in-vivo studies; exposure: Heterogeneous Raman, FTIR, LDIR and Py-GC/MS measurement; uncertainty: Uncontrolled covariates and inconsistent measurement impair comparability
-  - Inspected source lines 74–101: Variable measurements and unaccounted alternative contributors are both discussed in the dedicated bias sections; the review preserves those concerns.
-  - Inspected source lines 113–124: Variable measurements and unaccounted alternative contributors are both discussed in the dedicated bias sections; the review preserves those concerns.
+> The findings also vary by outcome: some studies of nasal conditions found no clear relationship between more measured plastic and worse symptoms.
 
-## C045 · ¶12 s2
+- **Tran et al. 2026** · full text · supported — “Notably, no dose–response relationship was seen between increased MNP load and the severity of the subjects’ symptoms, as defined by the Score for Allergic Rhinitis and Nasal Obstruction Symptom Evaluation” (The claim retains nasal-condition and symptom-severity scope and reports no clear relationship without erasing the separately reported disease-occurrence associations.) Interpretation: preserved — The claim retains nasal-condition and symptom-severity scope and reports no clear relationship without erasing the separately reported disease-occurrence associations. Limits: This is not a safety finding or proof that reducing exposure cannot help.
+  - Meaning: comparison: Increasing MNP load versus worse symptoms; outcome: Symptom severity on validated nasal scales; population: Allergic rhinitis and chronic rhinosinusitis without polyps; uncertainty: No clear dose-response, distinct from disease occurrence associations
+  - Inspected source lines 67–70: Disease occurrence versus severity and restricted human respiratory evidence
+  - Inspected source lines 108–111: Outcome instruments and selective emphasis
 
-> Some nose and airway studies found that more plastic didn't go along with worse symptoms.
+## C042 · ¶10 s4
 
-- **Tran et al. 2026** · full text · supported — “no dose–response relationship was seen between increased MNP load and the severity of the subjects’ symptoms” (The sentence reports a lack of association with worse symptoms in some upper-airway studies, preserving the distinction from positive disease-occurrence associations.) Interpretation: preserved — The sentence reports a lack of association with worse symptoms in some upper-airway studies, preserving the distinction from positive disease-occurrence associations. Limits: It does not imply lower disease occurrence or demonstrate that reducing exposure cannot help.
-  - Meaning: comparison: Increasing MNP load against symptom severity; outcome: Severity on Score for Allergic Rhinitis and Nasal Obstruction Symptom Evaluation; population: Upper-airway rhinitis and rhinosinusitis patients
-  - Inspected source lines 67–70: The sentence reports a lack of association with worse symptoms in some upper-airway studies, preserving the distinction from positive disease-occurrence associations.
-  - Inspected source lines 108–111: The sentence reports a lack of association with worse symptoms in some upper-airway studies, preserving the distinction from positive disease-occurrence associations.
+> Small studies and inadequate exposure measurements still prevent a reliable estimate of health risk.
 
-## C046 · ¶12 s3
-
-> Another review warned that small studies and poor measurements still prevent a reliable estimate of health risk.
-
-- **Lamoree et al. 2025** · abstract · supported — “these studies typically suffer from low patient numbers and inadequate MNP exposure assessment, which precludes adequate risk assessment.” (The assertion faithfully attributes the stated risk-assessment limitation to this review.) Interpretation: preserved — The assertion faithfully attributes the stated risk-assessment limitation to this review. Limits: Only the abstract was accessible; no unreported methods or results are inferred.
-  - Meaning: design: Review abstract discussing early clinical evidence; outcome: Adequacy of human health risk assessment; uncertainty: Low patient numbers and inadequate MNP exposure assessment
-  - Inspected source lines 1–1: The assertion faithfully attributes the stated risk-assessment limitation to this review.
+- **Lamoree et al. 2025** · abstract · supported — “However, these studies typically suffer from low patient numbers and inadequate MNP exposure assessment, which precludes adequate risk assessment.” (The assertion closely and faithfully paraphrases the explicit abstract limitation, making no claim about uninspected study-specific methods.) Interpretation: preserved — The assertion closely and faithfully paraphrases the explicit abstract limitation, making no claim about uninspected study-specific methods. Limits: Abstract-only access restricts verification to this broad limitation.
+  - Meaning: design: Clinical overview available as abstract; population: Early human clinical studies; uncertainty: Small patient numbers and inadequate exposure assessment prevent adequate risk assessment
+  - Inspected source lines 1–1: Entire available abstract including early associations and risk-assessment limit
 
 ## Uncited inventory and interpretations
 
-- C001 · nonfactual · Are microplastics actually harming our health? — Question title makes no empirical assertion.
-- C002 · interpretation · TL;DR — Tiny plastic pieces have been found inside people, and scientists have good reasons to worry. — The summary combines detected particles with experimental hazards and the clinical association as grounds for concern. (basis: C009, C020, C024, C031)
-- C003 · interpretation · We still don't know how much everyday exposure contributes to illness. — Causal and risk-assessment limitations support uncertainty about the contribution of everyday exposure. (basis: C017, C033, C046)
-- C004 · nonfactual · Think of a muddy footprint on your floor. — Invitation to imagine a metaphorical footprint.
-- C005 · nonfactual · It tells you someone passed through. — Continuation of a hypothetical footprint analogy, not a finding about microplastics.
-- C006 · nonfactual · It doesn't tell you whether they broke the lamp. — Hypothetical lamp analogy distinguishes a clue from an explanation.
-- C007 · interpretation · That difference helps us think about tiny plastic pieces inside our bodies. — Maps the analogy to detection versus causation without adding a mechanism. (basis: C009, C017)
-- C008 · nonfactual · What have scientists found inside us? — Question introduces detection evidence.
-- C011 · interpretation · So we have footprints to investigate, while still needing to check how they got onto the floor. — Footprint metaphor summarizes reported detection and contamination controls. (basis: C009, C010)
-- C012 · artifact · You can follow the open question in Figure 1. — I inspected the image: detected tissue at left is linked by a dashed question-mark line to health harm unclear, so Figure 1 displays the open question.
+- C001 · nonfactual · Are microplastics making people ill? — The title asks whether illness is caused; it does not assert the answer.
+- C002 · interpretation · TL;DR — Tiny plastic pieces have been detected inside people, and experiments show that they can affect animals. — Summary combines checked human detections and rodent experimental effects without claiming a human causal result. (basis: C005, C017)
+- C003 · interpretation · Human studies link plastic in the body with some illnesses, but have not established how much everyday exposure contributes to disease. — Summary preserves the observed cohort association and the inability to quantify causal human risk from this evidence. (basis: C026, C028, C029, C040, C042)
+- C004 · interpretation · Finding plastic inside the body — Heading previews the documented human tissue detections. (basis: C005)
+- C007 · interpretation · The unfinished line in Figure 1 marks that gap between detecting plastic and establishing harm. — Inspected Figure 1 has an unfinished dashed connection and question mark; the meaning assigned to it is the checked gap between presence and causal health effects. (basis: C006, C013)
+- C010 · artifact · An illustrated tissue sample with blue particles is enlarged beside a torso. — The actual figure pixels show a large circular pink tissue drawing with blue pieces to the left of a torso and magnification leader lines.
   - Inspected artifact `microplastics-whole-answer.png` · SHA256 `7a31d320ecfb9e90bde9047a1f9d8ab1ee09fe743aa6b9f30f62a87c5c54e67c`
-- C013 · artifact · A magnified tissue sample containing blue particles is connected to a human torso, with a dashed open link toward another human. — The actual image contains a circular pink tissue magnification with blue particles, solid magnification guides to a torso and a dashed open link to another torso.
+- C011 · artifact · A dashed line and question mark separate it from a second torso labelled “Health harm unclear”. — The actual image shows a dashed horizontal connection, a question mark above it, and the right torso labelled Health harm unclear.
   - Inspected artifact `microplastics-whole-answer.png` · SHA256 `7a31d320ecfb9e90bde9047a1f9d8ab1ee09fe743aa6b9f30f62a87c5c54e67c`
-- C014 · interpretation · Figure 1. The clues leave an open question. — Caption heading accurately describes the unresolved causal link. (basis: C016, C017)
-- C015 · artifact · Follow the tissue sample toward the unfinished link. — The actual image places the tissue image left of the dashed question-mark connection; this sentence is a navigation instruction.
+- C012 · interpretation · Figure 1. Finding plastic leaves its health effects unresolved. — Caption headline restates the independently verified detection-versus-causal-effect uncertainty. (basis: C006, C013)
+- C014 · interpretation · The blue pieces represent detections, not measured sizes or amounts; the dashed line and question mark represent the unresolved causal connection. — Inspected blue fragments have no scale bar or quantitative legend; the dashed connection and question mark express the supported uncertainty, without asserting measured particle amounts or illness. (basis: C005, C013)
+- C015 · artifact · Neither torso represents a diagnosed patient. — The inspected image consists of generic drawn torsos without a patient identity or diagnosis; the provenance records image generation as the route, supporting that these are illustrative figures rather than diagnosed patient depictions.
   - Inspected artifact `microplastics-whole-answer.png` · SHA256 `7a31d320ecfb9e90bde9047a1f9d8ab1ee09fe743aa6b9f30f62a87c5c54e67c`
-- C018 · nonfactual · Why might those pieces matter? — Question introduces potential significance.
-- C022 · interpretation · These experiments help us look for possible trouble. — Animal experiments provide potential hazard clues with some unclear findings. (basis: C020, C021)
-- C023 · interpretation · They cannot tell us how much trouble ordinary exposure causes you. — Animal-specific results and human risk limits cannot determine an individual everyday risk. (basis: C020, C033, C046)
-- C026 · interpretation · The footprint now deserves a closer look. — Metaphorical statement of concern follows suspected hazard conclusion. (basis: C024)
-- C027 · interpretation · It still hasn't explained the broken lamp. — Metaphor preserves the absence of an established causal account. (basis: C017, C025)
-- C028 · nonfactual · Have doctors seen people become ill? — Question introduces prospective clinical observations.
-- C032 · interpretation · That is a worrying clue. — Worrying is an evaluative judgment of the observed adverse association. (basis: C031)
-- C034 · artifact · See how the groups were followed in Figure 2. — The actual figure displays an artery plaque test branching to particle-detected and nondetected tissue, two patients, and arrows to follow-health clipboards.
+  - Inspected artifact `microplastics-whole-answer.provenance.json` · SHA256 `f27a8db486dec54fad8f095d7fa1567602580872af18e2434df9038a0fe87260`
+- C016 · nonfactual · Testing what the pieces can do — Section label introduces experimental testing without asserting a particular result.
+- C021 · interpretation · That judgment identifies possible harm without establishing how much disease ordinary exposure causes. — Interprets the attributed suspected-hazard category with the retained animal-to-human exposure limitation, without claiming a disease incidence estimate. (basis: C020, C018, C022)
+- C023 · nonfactual · Following people's health — Section label introduces follow-up observation without an empirical outcome assertion.
+- C024 · interpretation · Human follow-up studies connect a tissue measurement with what happens later. — Explains the prospective structure of the checked carotid example: removed tissue is measured, then later outcomes are followed. (basis: C025, C034)
+- C027 · interpretation · The difference does not establish that plastic caused those events. — States the causal limitation implied by the checked observational comparison and explicit residual-confounding discussion. (basis: C026, C028, C029)
+- C030 · interpretation · The parallel paths in Figure 2 show how the tissue tests defined the groups whose health was then followed. — The inspected figure uses two parallel tissue-test-to-record paths, representing the source-verified grouping and follow-up, without randomized treatment allocation. (basis: C034)
+- C031 · artifact · Material in a narrowed blood vessel branches into tissue drawings with and without blue particles. — The inspected left artery drawing contains a narrowed lumen and highlighted yellow material; branching leaders end at two tissue squares, only the upper one containing blue pieces.
   - Inspected artifact `microplastics-evidence-boundary.png` · SHA256 `b6c56b4fee6d7886701334680ba88aecccd5ef7efaeb7f4fd8fb05423d7ceafc`
-- C035 · artifact · Two groups of surgery patients, separated by their tissue test, follow parallel observation paths toward a common health check. — The inspected image has two tissue-result branches and parallel patient-to-clipboard arrows, with a bracket grouping the health follow-up panels.
+- C032 · artifact · Each row contains a person and an arrow pointing to a health-record clipboard; a brace joins the records. — Both actual rows contain a torso and a right-facing arrow to a blank clipboard, with a common brace at right.
   - Inspected artifact `microplastics-evidence-boundary.png` · SHA256 `b6c56b4fee6d7886701334680ba88aecccd5ef7efaeb7f4fd8fb05423d7ceafc`
-- C036 · interpretation · Figure 2. Doctors followed groups they did not create by chance. — Assay-defined observational groups were not randomized. (basis: C029, C038)
-- C037 · artifact · The paths show the study design, not event counts. — The image shows tissue-test branches and follow-health arrows with blank clipboards and no event counts, rates, axes or quantitative marks.
+- C033 · interpretation · Figure 2. Tissue tests defined the groups being followed. — Caption headline restates detection-defined follow-up groups, directly established by the study methods. (basis: C034)
+- C035 · interpretation · The two rows depict those groups, with arrows to later health records and a brace marking their comparison. — The inspected equal rows and blank health records are a process representation of the source-defined groups and later comparison. (basis: C034, C026)
+- C036 · artifact · The drawing encodes neither patient numbers nor event counts. — The image contains one symbolic torso per row and blank clipboards, with no numerical labels, scales, repeated patient icons or event marks; therefore it encodes neither sample nor event counts.
   - Inspected artifact `microplastics-evidence-boundary.png` · SHA256 `b6c56b4fee6d7886701334680ba88aecccd5ef7efaeb7f4fd8fb05423d7ceafc`
-- C040 · nonfactual · Wait — could something else explain it? — Question invites evaluation of alternatives.
-- C041 · interpretation · Yes. — Yes answers the alternative-explanation question using residual confounding and contamination limitations. (basis: C042)
-- C043 · interpretation · The footprint might be connected to the damage without explaining who caused it. — Metaphor states association can coexist with alternative explanations. (basis: C031, C042)
-- C047 · interpretation · We should keep our confidence in a cause-and-effect answer low. — Cautious causal confidence follows the cited observational and measurement limitations. (basis: C017, C033, C044, C046)
-- C048 · nonfactual · What can we say now? — Question introduces conclusion.
-- C049 · interpretation · There are reasons to take these plastic pieces seriously. — Concern is grounded in animal findings, suspected hazards and clinical association. (basis: C020, C024, C031)
-- C050 · interpretation · We still can't say how much they contribute to everyday illness. — Conclusion retains uncertain everyday causal contribution. (basis: C017, C033, C046)
-- C051 · nonfactual · The footprint picture stops here: a body is more complicated than a broken lamp. — Explicitly terminates the illustrative footprint analogy.
-- C052 · interpretation · Scientists need to follow larger groups over time, measure the plastic carefully, and untangle the other things that affect our health. — Research priorities follow longitudinal, confounder-control and measurement limitations. (basis: C017, C044, C046)
-- C053 · artifact · Scope and methods: This is a short narrative review. — The read document is a short prose synthesis organized by explanatory questions and contains no systematic study-selection claim or meta-analysis.
-  - Inspected artifact `review.md` · SHA256 `370a30bcccb8eaa919ef025ce721811b346ebb44817a23485e77503c71328785`
-- C054 · artifact · PubMed searches on 4 September 2026 covered human studies, animal experiments, recent reviews and contrary findings. — I inspected seven completed PubMed records dated 4 September 2026 with tissue detection, carotid outcomes, animal review, causal limitations, null association and recent human review queries.
+- C038 · nonfactual · What remains uncertain — Section label introduces remaining uncertainty without a new scientific proposition.
+- C043 · interpretation · Experiments and human associations support concern about possible harm. — Calibrated synthesis of experimental effects and observed human associations; possible harm is not a quantified causal conclusion. (basis: C017, C020, C026, C028)
+- C044 · interpretation · How much everyday exposure contributes to human illness remains uncertain. — The closing uncertainty follows from exposure mismatch, selected cohort and unresolved clinical risk assessment. (basis: C018, C029, C040, C042)
+- C045 · artifact · Scope and methods: This short narrative review uses the retained corpus from PubMed searches on 4 September 2026, covering human studies, animal experiments, reviews and contrary findings. — Inspected search records are PubMed searches dated 4 September 2026 with human-presence, clinical-harm, experimental-hazard, contrary-null and recent lanes; assessment scope identifies this as narrative and defines human and animal inclusion.
   - Inspected artifact `search-manifest.json` · SHA256 `cf8030cc98850aeb32146e8955f23b558391366543204f553e2f7d90432cff1a`
-- C055 · artifact · Five cited papers were read in full; one was available as an abstract. — The inspected manifest identifies five distinct cited article-length full texts with methods/results, while the sixth cited evidence file contains only a review abstract. I independently inspected relevant full-text contexts and that abstract.
+  - Inspected artifact `evidence-assessment.json` · SHA256 `1e7c425f13dbb220e7e09ff49ef061b903b7005e4e70b75eae453cc9c614ec5e`
+  - Inspected artifact `rebuild-context.json` · SHA256 `13c4e8cf3de632ae13eff455e6ff37ac5440da3250d5bcc800398dbae79a96e3`
+- C046 · artifact · Five cited papers were read in full; one was available only as an abstract. — The inspected fulltext manifest counts Chartres, Liu, Marfella, Roslan and Tran as five distinct full texts with complete reading notes; Lamoree metadata explicitly records abstract tier and its inspected text is an abstract.
   - Inspected artifact `fulltext-manifest.json` · SHA256 `d5e2837758ebffd501a17d17acce1bf8601a578709ba89cca41056e5b930e5ca`
+  - Inspected artifact `evidence/10-1038-s41591-025-03902-5.meta.json` · SHA256 `a739ab4ff013bae2cb9140aa04f12c184d721b2646cff36423cfa267e7c134ab`
   - Inspected artifact `evidence/10-1038-s41591-025-03902-5.txt` · SHA256 `d1721b6e6c27ffb6f255652557201dcdd4e57edf033e2713eb278c913b6bdf5b`
-- C056 · artifact · Animal results were not used to calculate human risk. — The complete review contains no animal-to-human risk calculation or quantitative risk estimate; its animal discussion explicitly says ordinary human harm cannot be inferred.
-  - Inspected artifact `review.md` · SHA256 `370a30bcccb8eaa919ef025ce721811b346ebb44817a23485e77503c71328785`
+- C047 · artifact · Animal results were not used to calculate human risk. — The inspected assessment scope explicitly excludes animal-to-human risk conversion; whole-review inspection found animal effects reported as plausibility with no numerical conversion to human risk.
+  - Inspected artifact `evidence-assessment.json` · SHA256 `1e7c425f13dbb220e7e09ff49ef061b903b7005e4e70b75eae453cc9c614ec5e`
+- C048 · artifact · This editorial revision includes no new literature search. — The rebuild record says this is an editorial rebuild using a retained authenticated corpus with search dates unchanged; the inspected search manifest contains the earlier search runs only.
+  - Inspected artifact `rebuild-context.json` · SHA256 `13c4e8cf3de632ae13eff455e6ff37ac5440da3250d5bcc800398dbae79a96e3`
+  - Inspected artifact `search-manifest.json` · SHA256 `cf8030cc98850aeb32146e8955f23b558391366543204f553e2f7d90432cff1a`
 
 ## Whole-review interpretation
 
-**preserved** — Plastic particles have been reported in humans and experimental and observational findings justify concern, but their causal contribution to everyday illness is unresolved.
+**preserved** — Plastic has been detected in human tissue and experimental rodent effects support potential hazard; the selected human associations do not determine how much everyday exposure causes illness.
 
-Scientific basis: C009, C010, C017, C020, C021, C024, C025, C031, C033, C042, C044, C045, C046
+Scientific basis: C005, C006, C017, C018, C019, C020, C022, C025, C026, C028, C029, C039, C040, C041, C042
 
-The full narrative separates tissue detection, animal experiments, suspected hazards and clinical association. It explicitly reports rat and upper-airway null findings, uncertain birth-outcome classification, possible laboratory contamination, residual confounding and restricted surgical population. The conclusion does not convert association or animal dosing into a quantified everyday human risk.
+The explanation develops from detecting particles, through laboratory tests of possible effects, to following surgical patients and the remaining causal uncertainty. The detection paragraphs separate uncertain sample reliability from uncertain health consequences. The animal paragraph keeps exposure mismatch beside the effects and retains a nonsignificant rat finding. The prospective-cohort paragraph gives observed composite counts, then immediately explains residual differences and population limits. The final uncertainty section adds sample contamination and differing symptom outcomes before answering the opening question. Paragraphs develop those points rather than merely listing studies; the figure references and captions continue the current explanation. The narrator reports throughout, including its ending, without adopting exposure advice. Two caption repairs were required and are now reflected in the inspected review: source citations attach to scientific detection/grouping statements while drawing provenance and numerical encoding are separate. Scientific meaning is preserved independently of this editorial acceptance: neither illustrations nor conclusion imply proven human causality or safety.
 
-Limitations: Evidence includes overlapping reviews, sparse observational human studies, variable particle measurement and an abstract-only risk-assessment review. The illustrations are schematic and do not depict observed particle dimensions or burdens.
-- Figure `microplastics-whole-answer.png`: A schematic tissue magnification with blue particles is connected to a human torso under Found in tissue. A dashed line and question mark lead to another torso labeled Health harm unclear. It communicates an unresolved human-health connection rather than a demonstrated causal arrow; particles and tissue are illustrative, without a scale or count claim. (basis: C009, C017)
-- Figure `microplastics-evidence-boundary.png`: An artery-plaque test branches into tissue with visible blue particles and tissue without such marks. Each is paired with a patient and a parallel arrow to a blank health clipboard, grouped by a bracket. These are assay-defined observation paths, with no event numbers, risk proportions or treatment randomization shown. (basis: C029, C030, C038, C039)
+Limitations: Evidence is mostly reviews and selected observational studies; the clinical overview is abstract-only. Animal conditions differ from ordinary human exposure, the cohort is selected, potential contamination and confounding remain, and Tran overlaps with Marfella. The short review therefore cannot quantify everyday human disease burden.
+- Figure `microplastics-whole-answer.png`: The inspected image shows symbolic blue fragments in an enlarged tissue drawing beside a generic torso. A dashed non-arrow connection and question mark lead to a torso labelled Health harm unclear. There is no scale or measured particle count, no diagnosis and no completed causal arrow; the intended presence-versus-health uncertainty is visible in the marks themselves. (basis: C005, C006, C013)
+- Figure `microplastics-evidence-boundary.png`: The inspected artery sample branches into two tissue-test drawings, with and without blue fragments. Equal symbolic torso rows lead to blank later health-record clipboards joined by a comparison brace. This communicates detection-based grouping and prospective observation, not intervention assignment, event counts, equal sample sizes or causal disease. The nearby caption explicitly states the nonquantitative encoding and confounding limitation. (basis: C025, C026, C028, C034)
 
 ## Outcome certainty (separate from source support)
 
-- Reported tissue presence: moderate — Direct source support is separate from certainty; heterogeneous measurements and observational or experimental boundaries limit generalization.
-- Experimental rodent effects: moderate — Direct source support is separate from certainty; heterogeneous measurements and observational or experimental boundaries limit generalization.
-- Suspected human-system hazard: low — Direct source support is separate from certainty; heterogeneous measurements and observational or experimental boundaries limit generalization.
-- Human cardiovascular causation: low — Direct source support is separate from certainty; heterogeneous measurements and observational or experimental boundaries limit generalization.
-- Interpretability of human associations: low — Direct source support is separate from certainty; heterogeneous measurements and observational or experimental boundaries limit generalization.
-- Contamination uncertainty: low — Direct source support is separate from certainty; heterogeneous measurements and observational or experimental boundaries limit generalization.
+- Reported tissue presence: moderate — Repeated tissue detections support presence with moderate certainty, but varied methods and missing laboratory blanks make some detections less secure; presence is not a causal health outcome.
+- Experimental rodent effects: moderate — Mouse experiments report metabolic and reproductive changes under tested exposure conditions. The nonsignificant rat neurobehavior result has sample and design limitations; it does not establish no effect. Extrapolation to everyday human exposure is highly indirect.
+- Suspected human-system hazard: low — Chartres combines three human observational studies with 28 animal studies in a hazard framework. A suspected hazard conclusion is supported as the authors’ classification, while direct certainty about human disease remains low and birth outcomes are unclassifiable.
+- Cardiovascular-event association in carotid-surgery patients: low — Among 257 patients completing mean follow-up of 33.7 months, the composite event occurred in 30/150 with detectable plaque plastic and 8/107 without. These observed counts describe a selected cohort; they are not causal effects or general-population risks. The adjusted hazard ratio is a separate time-to-event estimate.
+- Interpretability of human associations: low — Human associations have low causal certainty because exposure measurements and control of other illness-related differences are uneven. Tran’s nasal symptom-severity findings show no clear dose-response but do not establish general safety. Lamoree’s abstract supports only the broad small-sample and exposure-assessment limitations.
+- Contamination uncertainty: low — The carotid study explicitly cannot firmly rule out laboratory contamination despite preventive measures. This is an unresolved source limitation, not evidence that contamination occurred or that tissue detection is false.

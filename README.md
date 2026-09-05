@@ -31,7 +31,7 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. The examples below use four writing styles and three review sizes.
 
-All four examples were rebuilt for **v0.5.4 on 5 September 2026**, with fresh independent checks of source context, the complete argument, and the scientific meaning of every figure. They predate the **v0.5.5 writing-guidance revision** and remain examples of v0.5.4. The refresh corrects study timing, outcome definitions and exposure units in the affected text and visuals. Literature searches retain their **4 September 2026** dates; source-context inspections were completed on **5 September**. Each review includes a separate, inspectable receipt file.
+All four examples were rewritten with the **v0.5.5 writing conventions on 5 September 2026**. Each develops a connected explanation, reports findings without giving advice, and places illustrations and plots beside the evidence they explain. Fresh independent checks cover source context, the complete argument and every figure’s scientific meaning. These editorial rebuilds reuse the authenticated literature searches from **4 September 2026**; they do not claim a new search. Each review includes its evidence receipts.
 
 | Question | Style · size | Read the review | Evidence receipts |
 |---|---|---|---|
