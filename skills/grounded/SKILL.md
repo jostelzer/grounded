@@ -1,6 +1,6 @@
 ---
 name: grounded
-description: Produce source-grounded scientific narrative reviews, or audit the claims and references of a supplied draft, using live literature discovery, verified bibliographic records, independent claim checking, and evidence receipts. Supports chat, journal PDFs, and explicitly requested experimental slide decks.
+description: Produce source-grounded scientific narrative reviews, or audit the claims and references of a supplied draft, using live literature discovery, verified bibliographic records, independent claim checking, and evidence receipts. Supports chat and journal PDF output.
 ---
 
 # Grounded

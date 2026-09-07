@@ -2,7 +2,7 @@
   "name": "grounded",
   "displayName": "Grounded",
   "version": "0.5.6",
-  "description": "Scientific narrative reviews and draft audits with live literature discovery, verified bibliographic records, independently checked assertions, evidence receipts, and explicit certainty and access limits. Outputs include chat, journal PDFs, and experimental slide decks.",
+  "description": "Scientific narrative reviews and draft audits with live literature discovery, verified bibliographic records, independently checked assertions, evidence receipts, and explicit certainty and access limits. Outputs include chat and journal PDFs.",
   "author": {
     "name": "Johannes Stelzer",
     "url": "https://github.com/jostelzer"
