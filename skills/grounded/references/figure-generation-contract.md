@@ -10,8 +10,9 @@ v1 and v2 remain readable only so older releases can be reproduced.
 
 Journal PDFs aim for more explanatory graphics than earlier Grounded releases:
 2 figures for small reviews, 3–4 for medium, and 5–6 for large, with hard
-ceilings of 2, 5, and 8. Start with one whole-answer synthesis visual, then give
-each additional figure a different evidence job: mechanism, study design, exact
+ceilings of 2, 5, and 8. Find the moments in the developing article where a visual
+can make a relationship easier to understand. A whole-answer synthesis is one
+possible job, not a mandatory first figure. Give each figure a distinct job: mechanism, study design, exact
 quantitative result, comparison/moderator, or uncertainty/evidence boundary.
 Fewer is valid when the verified synthesis genuinely contains fewer distinct
 visual stories. Never hit a target by repeating a table, recolouring the same
@@ -27,6 +28,34 @@ cutaways are attractive.
 
 Apply the review-wide mix and capability check in `media-modes.md` before
 individual renderer choices. An all-plot set is not the default scientific style.
+
+### First decide whether the figure is worth making
+
+Before comparing compositions, name the reader's difficulty and how seeing the
+figure resolves it. Use the existing `visual_question`, `reader_takeaway`,
+`must_show` and `representation_plan.added_explanatory_value` fields. The answer
+must describe learned structure, behavior, sequence, comparison or scale—not
+merely recognition of the subject or an attitude toward it.
+
+Apply a **whole-figure deletion test**: if the image vanished but its caption and
+surrounding prose remained, what would become materially harder to understand?
+Name the lost relationship and the visible features that convey it. Emotional
+tone, a pleasant break, a familiar face, or the fact that an object exists does
+not meet this test. A portrait, scenic vignette or specimen can earn a place
+when its visible features themselves explain something; adding a slogan does
+not create that explanatory work.
+
+Also imagine hiding the caption: can the image still reveal the relationship,
+with its necessary labels, rather than merely accompany words that state it?
+Then hide the labels to inspect whether the structure carries the explanation.
+Do not make either test demand that unlabelled symbols explain all specialist
+concepts unaided. The standard is useful visual reasoning, not universal
+caption independence.
+
+If every proposed job is weak, revisit the explanation and source material for
+a better visual question before generating. Do not commission decorative art
+to satisfy the mix requirement. Record the figure's contribution to its actual
+article passage in the existing media notes; no extra form is needed.
 
 ## 1. Write the communication contract before choosing a renderer
 
@@ -127,8 +156,11 @@ strengths, and risks. Score every concept from 1–5 for:
 5. intuitiveness — can a non-specialist reconstruct the explanation from the
    picture, starting from something recognizable and without hidden jargon.
 
-Select the highest combined score; the winner must score at least 4 in every
-dimension. Feed only the selected concept to the image prompt. Do not expose the
+First reject concepts that fail the whole-figure deletion test, even if they
+accurately deliver their own trivial takeaway. Select the highest combined
+score among the remaining concepts; the winner must score at least 4 in every
+dimension. If none qualifies, change the visual question rather than polishing
+the least weak concept. Feed only the selected concept to the image prompt. Do not expose the
 two rejected descriptions to the generator, because their layouts and motifs
 can leak into a confused compromise.
 
@@ -421,7 +453,7 @@ style overlay from `figure-writing-style-overlays.json`:
 | `scientific` | Precise journal-native scientific illustration; restrained colour, high information density, exact local annotation. |
 | `popsci` | Premium editorial science art; one memorable focal visual, elegant tonal depth, less in-pixel copy, no marketing-infographic furniture. |
 | `bullets` | Fast-scanning analytical visual; decisive hierarchy, compact comparison structure, strong but restrained contrast. |
-| `eli5` | Warm explanatory illustration; concrete visual metaphor, friendly spatial storytelling, generous breathing room, never childish clip art. |
+| `eli5` | Warm explanatory illustration; a concrete relationship with readable everyday labels and generous breathing room. A metaphor or story is optional; never childish clip art. |
 
 The writing-style overlay changes art direction, finish, palette, and permitted
 typography. It never changes the evidence payload or certainty encoding.

@@ -29,7 +29,7 @@ another report's history or invent a new evidence interpretation.
 Deterministic scripts own runtime checks, manifest audits, citation
 verification, reference formatting, rendering, and QA; retrieval, record
 normalization, and command execution are routine and can go to the cheapest
-capable worker. Synthesis, claim adjudication, the selected style's narrative
+capable worker. Synthesis, claim adjudication, the selected style's article
 structure, and the single final independent audit are judgment work and get
 the most capable worker available. Claim adjudication in particular is a
 reading recorded with `verify_claims.py adjudicate`, never a script,
@@ -77,8 +77,9 @@ python3 scripts/audit_production.py production.json --stage semantic --report pr
 ```
 
 The review validator runs against the live review, ledger, and full-text
-manifest. The visual plan must begin with exactly one whole-answer synthesis
-view; every later job must ask a distinct question and cite synthesis C/P keys.
+manifest. Visual jobs follow the article's explanatory needs; a whole-answer
+overview is optional and need not come first. Every job must ask a distinct
+question, cite synthesis C/P keys and pass the whole-figure deletion test.
 Repair disconnected prose, redundant evidence coverage, advisory language and
 misplaced visual jobs here, before figures or pagination make repairs expensive.
 The gate checks deterministic consistency; the recorded reading assesses whether

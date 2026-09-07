@@ -14,6 +14,24 @@ tables and captions; fluent isolated sentences do not establish a coherent
 article. Compare all four writing styles and unfamiliar topics. Familiar examples
 remain regression cases, and prepared eval prompts are not completed evaluations.
 
+Judge each style by its reader's task. Scientific outputs should present the
+assessment early and support appraisal through comparisons and synthesis; do not
+reward suspense or penalize a direct abstract and descriptive headings. For ELI5,
+reconstruct the essential explanation without filling gaps from specialist
+knowledge; do not require a story or analogy. For bullets, check retrieval and
+comparison of findings. Report style drift separately from shared clarity and
+scientific fidelity; the same narrative rubric must not govern all four styles.
+
+For popsci, judge the article first without the author's plan or check results:
+what invites continued reading, how the story progresses, where reading becomes
+effortful, and what understanding the ending delivers. Assess source fidelity
+separately afterward. For illustrations, describe what the actual pixels teach
+before seeing the intended takeaway, then apply the whole-figure deletion test.
+Matching a trivial intention is a failure of concept, not a successful figure.
+Concept-only comparisons cannot establish rendered quality. Record preference
+and located reasons without disguising an editorial judgment as an objective
+readability score or allowing a source-support pass to compensate for dull prose.
+
 Keep validation proportional: reuse existing notes, context-review records and
 eval requests rather than adding a second audit framework. Record instruction
 length and review cost alongside quality. Removing redundancy is useful only if

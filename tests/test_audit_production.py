@@ -151,7 +151,7 @@ class ProductionAuditTests(unittest.TestCase):
             manifest, base_dir=self.root, target_stage="evidence")
         self.assertIn("evidence.usage.input_tokens must be a non-negative integer", result["errors"])
 
-    def test_semantic_gate_runs_validator_and_requires_whole_answer_first(self):
+    def test_semantic_gate_runs_validator_and_allows_article_led_figure_order(self):
         manifest = self.base_manifest()
         manifest["semantic"] = self.semantic_block()
         validation = validate_review.ValidationResult(
@@ -172,9 +172,27 @@ class ProductionAuditTests(unittest.TestCase):
         ):
             result = audit_production.audit_production(
                 manifest, base_dir=self.root, target_stage="semantic")
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+    def test_visual_plan_can_explain_without_an_overview(self):
+        jobs = self.semantic_block()["visual_jobs"]
+        jobs[0] = {
+            "id": "experimental-setup",
+            "kind": "study-design",
+            "question": "How does the experiment isolate the proposed mechanism?",
+            "evidence_keys": ["C1"],
+        }
+        result = audit_production.audit_visual_jobs(jobs, size="small", claim_count=5)
+        self.assertEqual(result["status"], "pass", result["errors"])
+
+        # Removing an arbitrary overview requirement must not relax evidence
+        # references or allow duplicate questions to masquerade as coverage.
+        jobs[0]["evidence_keys"] = ["C99"]
+        jobs[1]["question"] = jobs[0]["question"]
+        result = audit_production.audit_visual_jobs(jobs, size="small", claim_count=5)
         self.assertEqual(result["status"], "fail")
-        self.assertTrue(any("whole-answer synthesis" in error
-                            for error in result["errors"]))
+        self.assertTrue(any("unknown synthesis" in e for e in result["errors"]))
+        self.assertTrue(any("distinct reader-facing" in e for e in result["errors"]))
 
     def test_live_warnings_must_be_reviewed_exactly_once(self):
         manifest = self.base_manifest()

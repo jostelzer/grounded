@@ -4,6 +4,8 @@ Use only when requested. Write a connected explanation for a reader with no scie
 
 ## Build understanding
 
+The purpose is to make the essential idea reconstructable without prior expertise. A story, character, analogy or discovery sequence is optional; use one only when it reduces the work of understanding. Do not delay a useful answer to create suspense. A direct explanation with one well-chosen illustration can be complete.
+
 Open with the question in everyday words and a citation-free **TL;DR** of 1–3 sentences. Start the explanation from a familiar fact or a clearly described observation, then introduce ideas in the order needed to understand the answer. An invented anecdote is not a substitute for context.
 
 Each section develops a useful question or point. Headings can be plain statements or natural questions; the body answers them with connected paragraphs. Explain necessary ideas before relying on them. If a later limitation changes an earlier finding, qualify that finding from the start rather than saving the limitation for a surprise.
@@ -22,4 +24,6 @@ Select quantities that help explain the finding. Use understandable units, frequ
 
 Rewrite jargon when possible. For an unavoidable specialist term, explain it simply and give its verified first-use link under `writing-guide.md`. Keep empirical citations beside the claims they support, before terminal punctuation. Do not collect them into a source dump or remove them to simplify the appearance.
 
-Figure captions also use connected everyday sentences. Describe the parts, lines or symbols that need explanation and preserve the uncertainty. Follow `figure-captions.md`; do not switch to structured bullet captions unless bullets were requested. Apply the shared whole-article editorial check to the explanation and captions together.
+Choose figures at the point where a newcomer needs to picture a part, process or comparison. Show the essential relationship with concrete forms and readable labels; the figure need not depict a character or a story. Figure captions also use connected everyday sentences. Describe the parts, lines or symbols that need explanation and preserve the uncertainty. Follow `figure-captions.md`; do not switch to structured bullet captions unless bullets were requested.
+
+Apply the shared whole-article editorial check to the explanation and captions together. Try to reconstruct the essential idea from what is actually given, without silently filling gaps from expertise. Locate an unexplained step, misleading analogy or unnecessary technical detour and repair it. Judge success by understandable relationships and retained limits, not by the presence of a hook or narrative arc.

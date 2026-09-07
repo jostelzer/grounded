@@ -43,8 +43,9 @@ selected review size:
 | Normal target | 2 | 3–4 | 5–6 |
 | Hard ceiling | 2 | 5 | 8 |
 
-These are distinct evidence jobs, not quotas. Normally Figure 1 gives the
-whole-answer synthesis; additional figures may explain a mechanism, study
+These are distinct evidence jobs, not quotas. Figure 1 serves the first substantial
+visual need in the article's explanation; a whole-answer synthesis is one option,
+not a required overview poster. Additional figures may explain a mechanism, study
 design, exact quantitative result, comparison/moderator, or uncertainty
 boundary. Use fewer when the synthesis contains fewer genuinely visual stories.
 Never pad coverage with decoration, a recoloured duplicate, or a graphical
@@ -68,7 +69,12 @@ design; each plot must communicate quantities that benefit from graphical
 comparison. A whole-answer figure usually synthesizes the relationships and
 evidence boundaries, rather than repeating estimates plotted again later.
 
-Evaluate candidate jobs before choosing renderers. Do not select only numerical
+Evaluate candidate jobs before choosing renderers. For each, identify the specific
+understanding gained and the visible relationship that supplies it; apply the
+whole-figure deletion test in `figure-generation-contract.md`. A recognizable
+subject, emotional resonance, visual variety or a slogan is not enough to earn
+an explanatory slot. An attractive image may still be an inadequate figure.
+Do not select only numerical
 jobs because deterministic rendering is easier. Do not turn a few counts or the
 endpoints of a range into a plot just to fill a slot; a concise caption or table
 may suffice. A generated anchor beside a chart does not replace a substantive

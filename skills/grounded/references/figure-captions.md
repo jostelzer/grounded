@@ -37,6 +37,12 @@ a scientific caveat that belongs in the image itself. Caption citations support
 what the figure depicts; they do not replace citations on empirical claims in
 the body.
 
+The title names the visible scientific point, not a sentiment or slogan. Explain
+how the depicted features establish that point. If the caption could accompany
+almost any image of the same topic, revisit the visual concept. A caption may
+orient a complex image, but it cannot supply an explanation that the pixels do
+not help the reader understand.
+
 ## Draft syntax
 
 Use a lowercase stable ID made of letters, digits, and hyphens. Do not type a

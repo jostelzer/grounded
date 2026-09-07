@@ -94,7 +94,13 @@ Grounded is a standard [Agent Skill](https://github.com/anthropics/skills) — o
 
 Or clone the repo and point `~/.claude/skills/grounded` (or a project's `.claude/skills/`) at its `skills/grounded/` directory.
 
-**Codex CLI** — download `grounded.zip` from the [latest release](https://github.com/jostelzer/grounded/releases/latest) and unzip it into `~/.codex/skills/` (or a project's `.codex/skills/`), then start a new session.
+**Codex CLI** — download `grounded.zip` from the [latest release](https://github.com/jostelzer/grounded/releases/latest) and unzip it into `~/.agents/skills/` (or a project's `.agents/skills/`), then start a new session.
+
+**Gemini CLI** — install it as an extension straight from this repo:
+
+```
+gemini extensions install https://github.com/jostelzer/grounded
+```
 
 **Other CLI agents** — give the agent the `skills/grounded/` folder and use `SKILL.md` as the operating instructions, keeping `references/` and `scripts/` alongside.
 

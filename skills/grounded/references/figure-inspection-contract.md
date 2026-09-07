@@ -16,6 +16,15 @@ rendered asset in the final `review-context` record. Hypotheses and observed
 relationships must remain distinguishable. Do not use artifact classification
 or a passing visual-quality flag to certify scientific meaning.
 
+Assess usefulness before polish. In `communication.observed_explain_back`, state
+what the actual image makes understandable and which visible relationship does
+the work. Apply the whole-figure deletion test against the surrounding article.
+Matching an impoverished intended takeaway is insufficient: a correct depiction
+of the topic can still fail `visual_quality.explanatory_value`. Judge the figure
+without reading its intended takeaway first, then compare them. If the caption
+carries all the explanation, request a new concept rather than accepting pretty
+pixels. Record the located problem in the existing review notes and issue lists.
+
 For `quality_contract_version: 3`, `<figure-id>.inspection.json` contains:
 
 ```json

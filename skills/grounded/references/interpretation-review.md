@@ -87,10 +87,11 @@ scientific basis. Check that limitations and contrary findings have not
 disappeared through compression, and that the scope matches the included
 evidence. Reopen synthesis and assessment if this reveals a problem.
 
-Also apply the editorial acceptance check in `writing-guide.md`: assess whether
-sentences develop their paragraphs, sections form a connected explanation, and
-the narrator reports without advising. Check continuity across figures, tables
-and captions. Record the actual progression and any located repairs in the
+Also apply the reader-first editorial assessment in `writing-guide.md`, with
+planning notes and approval flags out of view. For popsci, identify what draws
+the reader in, how the story develops, where reading becomes laborious and what
+the ending delivers. Check continuity across figures, tables and captions, and
+what each image makes easier to understand. Record located observations in the
 existing rationale, rather than a generic style approval. Repair editorial
 failures before completing the final review; source support alone cannot close
 them. Keep the scientific interpretation judgment distinct from writing quality.

@@ -1,6 +1,6 @@
 # Writing guide
 
-Write a connected, source-grounded report that develops an answer to the research question. Every sentence must contribute meaning and connect to its context; paragraphs develop points, and sections build the reader's understanding of the whole. Accuracy, continuity and a clear reporting voice apply to every style.
+Write an article that rewards the reader's attention and develops an answer to the research question. Accuracy, clarity and interest are joint requirements. Paragraphs build understanding; figures make something easier to grasp. Verification supports this work without becoming the subject of the article. Apply the selected register: popsci requires a sustained story, while scientific prose, bullets and ELI5 have their own forms.
 
 ## Select the audience and format
 
@@ -11,15 +11,24 @@ Read only the selected style guide in addition to this shared contract:
 - `style-bullets.md`: only when explicitly requested; compact scientific reporting.
 - `style-eli5.md`: only when requested; connected explanation without assumed science knowledge. It does not imply bullets.
 
-Style changes vocabulary, technical depth and presentation. It does not relax evidence requirements or change the narrator into a counselor. Size and word budgets come from `sizes.md` and `scripts/review_config.py`; size controls scope, not sentence density or reference quotas.
+Style determines the organizing logic as well as vocabulary, technical depth and presentation. Choose the structure that supports the reader's task:
+
+| Style | Organizing logic | Editorial success |
+|---|---|---|
+| Popular science | Curiosity and a sustained, source-backed story | The reader wants to continue and reaches a changed understanding of the subject. |
+| ELI5 | A concrete question, direct answer and necessary explanatory steps | A newcomer can reconstruct the essential idea and its limits; a story is optional. |
+| Scientific | An early assessment followed by evidence-led argument and synthesis | A scientifically literate reader can assess findings, relationships, competing interpretations and unresolved questions. |
+| Bullets | An early answer and grouped, scannable findings | The reader can locate and compare findings without losing their context or uncertainty. |
+
+Evidence requirements stay the same across styles, and the narrator remains a reporter. Size and word budgets come from `sizes.md` and `scripts/review_config.py`; size controls scope, not sentence density or reference quotas.
 
 Deliver the written review in chat. Create files when requested; journal PDF adds its figures and PDF without replacing the chat review. Include a compact scope/methods disclosure near the end: review type, search date, databases, inclusion/exclusion boundaries and material access limitations.
 
 ## Plan the explanation from the evidence
 
-Finish the verified `synthesis.md` under `synthesis-guide.md` before drafting. In its existing **Throughline** field, briefly set out the question, the developing answer, and why each proposed section follows or sits alongside the others. Identify which claims establish, explain, qualify or challenge the answer. Match the detail of this plan to the review's size; no separate planning document is required.
+Finish the verified `synthesis.md` under `synthesis-guide.md` before drafting. In its existing **Throughline** field, briefly set out the question, the developing answer, and why each proposed section follows or sits alongside the others. Identify which claims establish, explain, qualify or challenge the answer, and where a visual would remove a specific difficulty in understanding. For popsci use the story planning in `style-popsci.md`. Match detail to the review's size; no separate planning document is required.
 
-Dependencies identify prerequisites, not a finished narrative. Several parallel outcomes or unresolved findings may belong in one coherent review. Explain their relationship to the question without inventing chronology, causation, disagreement or resolution. Publication order and source-discovery order are not default article structures.
+Dependencies identify prerequisites, not a finished article structure. Several parallel outcomes or unresolved findings may belong in one coherent review. Explain their relationship to the question without inventing chronology, causation, disagreement or resolution. Publication order and source-discovery order are not default article structures. Scientific argument may follow logical comparisons rather than events; ELI5 may begin with the answer and unpack it. Do not impose the popular-science arc on either.
 
 Select evidence for its contribution. A paper belongs because its finding or method advances the explanation, not because it was retrieved. Combine redundant coverage while retaining material contrary findings and qualifications. Every load-bearing claim must trace to the synthesis and carry the appropriate source keys; do not cite a cut claim's evidence as though the claim remains. Changes to scientific meaning require updating synthesis and assessment before revising the deliverable.
 
@@ -30,6 +39,7 @@ Select evidence for its contribution. A paper belongs because its finding or met
 - **Develop a point through the paragraph.** Select and relate the evidence needed to understand that point. The ledger's atomic claims need not become isolated sentences or one-study paragraphs. Sentence length follows the relationship being expressed; cutting every clause into a short sentence can break the flow.
 - **Make transitions carry reasoning.** Show how the next finding extends, explains, contrasts with or limits the preceding one. A word such as “therefore” cannot supply a missing premise. Where outcomes are parallel, orient the reader to the change in question instead of implying one follows causally from another.
 - **Keep qualifications with the inference they limit.** Preserve comparators, populations, endpoints, timescales and uncertainty wherever needed. Return to a limitation when its consequence changes; avoid recurring generic cautions or assessment announcements. Explain supported reasons for disagreement and leave unresolved differences unresolved.
+- **Give the reader something concrete to understand.** Connect an evidential assessment to the observation, process or comparison it assesses. An early scientific assessment or direct answer may precede that explanation; follow the selected style's ordering. Include useful magnitude and timescale where supported; avoiding false precision must not erase the basic answer. Let a limitation clarify a specific finding rather than replace it with an abstract warning. Routine verification activity belongs in the apparatus.
 - **Use repetition purposefully.** A brief reminder can connect distant parts of the explanation. Repeating the same result, caveat or conclusion without a new role adds reading effort. End paragraphs where their point is complete; do not append a verdict, dramatic contrast or bridge sentence by formula.
 
 Use direct verbs, clear subjects and ordinary wording where precise. Keep necessary disciplinary terms; explain unfamiliar ones for the selected audience. Avoid dense noun stacks, invented abstractions and repeated stock constructions. Rhythm should serve the meaning, with no quotas for short sentences, actors, rhetorical questions, callbacks or section endings. In prose, emphasis comes from wording and placement rather than mid-sentence bolding.
@@ -38,7 +48,7 @@ Use direct verbs, clear subjects and ordinary wording where precise. Keep necess
 
 State what was observed, what it supports and what remains uncertain. Do not tell readers what to do, choose, believe, ask or feel. This applies to summaries, headings, captions and conclusions as well as body prose. Describe gaps in the evidence instead of ending with instructions for researchers.
 
-When recommendations are relevant, attribute them to their source and report their scope without adopting them. A citation does not turn the narrator's advice into reporting. Describe study populations directly rather than implying that a group result predicts an individual reader's experience. Accessible language can be warm without personal address or navigation commands.
+When recommendations are relevant, attribute them to their source and report their scope without adopting them. A citation does not turn the narrator's advice into reporting. Describe study populations directly rather than implying that a group result predicts an individual reader's experience. Reporting does not require remote, bureaucratic language: describe what people, organisms and physical systems do. Use explicit source-led phrasing when it distinguishes guidance or an interpretation from a finding, not as a default opening for every sentence.
 
 For example, “We should keep our confidence in a causal answer low” becomes “The available studies leave the causal relationship uncertain,” when that is what the evidence supports. Review meaning in context; neither a pronoun counter nor a blacklist of “should” can enforce this distinction.
 
@@ -56,22 +66,24 @@ At the first use of a specialist term or abbreviation, link its English Wikipedi
 
 Use a table when shared dimensions make several studies easier to compare. Keep it compact, normally 3–5 columns, and cite each empirical row. Explain why the comparison matters in the prose; do not duplicate the table's contents sentence by sentence or force unlike outcomes into a common comparison.
 
-Place a figure after the body has introduced its subject and at the point where it helps develop the explanation. Keep a result and its necessary qualification together. Do not let artwork or a table interrupt one argument to illustrate a different study. Use stable body references, alt text and cited captions under `figure-captions.md`; each caption reports what is shown, its encoding and its evidence boundary in the selected register. Re-read the prose–figure–caption sequence as a whole.
+Place a figure after the body has introduced its subject and at the point where it helps develop the explanation. Its contribution must be more specific than showing what the article is about: what relationship becomes easier to understand by seeing it? Apply the whole-figure deletion test in `figure-generation-contract.md`. Keep a result and its necessary qualification together. Use stable body references, alt text and cited captions under `figure-captions.md`; the caption names the visible explanation, its encoding and material scope. Re-read the prose–figure–caption sequence as a whole.
 
 For visual generation and PDF production, follow `media-modes.md` and `output-formats.md`. Preserve figure provenance, exact quantities, scientific meaning, natural proportions, legibility and inspection of every rendered page. Layout repair must preserve the explanation and evidence.
 
 ## Editorial acceptance
 
-Before generating figures, read the complete draft as a reader who has not seen the ledger. Check the title, opening, headings, body, planned visual placements and conclusion together:
+Before generating figures, put the ledger and check results aside and read the complete draft as an article. This is a reader's assessment, not another evidence checklist. Read the title, opening, headings, body, planned visual placements and conclusion together:
 
-1. Can the reader state the question, the answer and its material uncertainty?
+1. Does the structure support the selected reader's task? For popsci, identify curiosity and sustained story; for ELI5, reconstruct the essential explanation without assumed expertise; for scientific writing, locate the early assessment and the reasoning that supports or limits it; for bullets, assess how readily findings can be located and compared.
 2. Does each section contribute to that answer, with a clear reason for its position or its relationship to parallel sections?
-3. Does each paragraph develop a point, and does every sentence contribute to it while connecting naturally to its context? Resolve inventories, unexplained jumps, unclear referents and redundant returns.
+3. Where does reading become effortful or tedious? Resolve inventories, abstract phrasing, unexplained terms, unclear referents and repeated caveats. Check rhythm and transitions in whole paragraphs rather than polishing isolated sentences.
 4. Do transitions express supported relationships, with qualifications available when needed?
-5. Does the narrator report throughout, including the ending? Do figures and tables support the current explanation?
-6. Does the conclusion answer the opening question without introducing unsupported claims or prescribing action?
+5. What would become harder to understand if each planned figure disappeared? Reject a topic illustration, slogan or decorative scene that leaves the explanation unchanged.
+6. Does the ending fulfill the selected form? Popsci earns the opening's promised understanding; scientific writing synthesizes the answer and unresolved issues without a dramatic reveal; ELI5 leaves a plain, usable explanation; bullets close the answer without a compulsory narrative ending. Preserve material uncertainty and the reporting voice.
 
-Record a short case-specific judgment in the existing working notes: the answer a reader would take away, how the explanation develops, and any located failures and repairs. A bare “coherent” or checked style box is insufficient. Revise failures before production; do not add a new form or paragraph-by-paragraph scorecard.
+Record a short case-specific judgment in the existing working notes: how the structure serves the selected reader and what becomes understandable, with located failures and repairs. A bare “coherent” or checked style box is insufficient. An article that fails its reader's task or a low-value figure still needs revision when every claim is supported. Do not add a new form or paragraph-by-paragraph scorecard.
+
+Revise at the level of the problem. If the central question, scope or section order is wrong, rebuild it before polishing sentences; move, combine or cut material that does not contribute while preserving required coverage and material contrary evidence. Plan prose and figures together so each supplies a useful part of the explanation. Scientific precision belongs where it enables assessment; accessible styles explain the necessary detail when the reader needs it. An editorial revision may change substantial structure, but changes to scientific meaning still require updating the synthesis and assessment.
 
 After claim repairs or figure placement, re-read the complete article for changed meaning and broken continuity. Re-audit altered factual claims. The final independent `review-context` check under `interpretation-review.md` records the reading judgment alongside scientific interpretation and binds it to the finished deliverable. Source support and editorial quality are separate judgments.
 

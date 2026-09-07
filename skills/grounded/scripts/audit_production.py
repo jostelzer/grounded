@@ -297,7 +297,6 @@ def audit_visual_jobs(
         }
     ids: list[str] = []
     questions: list[str] = []
-    synthesis_positions: list[int] = []
     for index, job in enumerate(jobs):
         if not isinstance(job, dict):
             errors.append(f"semantic.visual_jobs[{index + 1}] must be an object")
@@ -327,16 +326,12 @@ def audit_visual_jobs(
                 errors.append(
                     f"visual job {job_id or index + 1} cites unknown synthesis "
                     "claim(s): " + ", ".join(unknown_claims))
-        if kind == "synthesis":
-            synthesis_positions.append(index)
         ids.append(job_id)
         questions.append(question.casefold())
     if len(set(ids)) != len(ids):
         errors.append("visual job IDs must be unique")
     if len(set(questions)) != len(questions):
         errors.append("visual jobs must ask distinct reader-facing questions")
-    if synthesis_positions != [0]:
-        errors.append("exactly the first visual job must be the whole-answer synthesis")
     if len(jobs) > FIGURE_CAPS[size]:
         errors.append(
             f"{size} production permits at most {FIGURE_CAPS[size]} visual jobs; "

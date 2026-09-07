@@ -147,7 +147,7 @@
   },
   "eli5": {
     "name": "Warm explanatory illustration",
-    "intent": "A friendly, concrete scientific explainer that makes one difficult idea graspable through spatial storytelling without becoming childish or imprecise.",
+    "intent": "A friendly, concrete scientific explainer that makes one difficult idea graspable through a clear spatial relationship without becoming childish or imprecise; no story or character is required.",
     "font": {
       "family": "Seravek",
       "fallback": "Helvetica Neue",

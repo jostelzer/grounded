@@ -8,7 +8,10 @@ showcase, or preserve its topic as a permanent template.
 
 An accepted change must be expressible without a subject name, case ID,
 case-local path, named object from the criticized image, or magic coordinate.
-It must add a portable rule and an executable regression check. If the proposed
+It must add a portable rule and a check of the behavior it changes. Use an
+executable regression for deterministic properties, and independent inspection
+of actual artifacts for editorial or explanatory value; a field-presence test
+cannot establish that an image teaches. If the proposed
 change would not make sense for an unseen subject, another visual archetype,
 and every applicable writing style, abstract it further.
 
@@ -24,8 +27,9 @@ Record this chain internally:
 3. **Failure class** — map it to a reusable dimension.
 4. **General rule** — state the required behavior without topic vocabulary.
 5. **Contract field** — identify what must be planned or inspected explicitly.
-6. **Executable regression check** — create a topic-neutral fixture that fails
-   when the rule is absent or violated.
+6. **Regression check** — use a topic-neutral executable fixture for a machine
+   invariant, or an independently judged unfamiliar artifact for meaning and
+   usefulness. State what the check actually establishes.
 
 Prefer invariant checks over aesthetic scores. The core reusable failure
 classes are:
@@ -134,7 +138,8 @@ Do not create public benchmark galleries or before/after boards. Do not promote
 temporary test topics into the README. Acceptance is forward-looking:
 
 1. add the topic-neutral contract or QA rule;
-2. add a minimal synthetic regression fixture for the failure;
+2. add a minimal synthetic regression for a changed machine invariant; use
+   actual independent reader observations for a semantic or editorial failure;
 3. run the focused tests and the complete suite;
 4. when visual sampling is useful, choose replaceable topics after the rule is
    frozen and inspect only the final candidates against the same contract;

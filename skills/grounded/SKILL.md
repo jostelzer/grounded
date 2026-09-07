@@ -5,7 +5,9 @@ description: Produce source-grounded scientific narrative reviews, or audit the 
 
 # Grounded
 
-Answer the research question with a calibrated, connected explanation of peer-reviewed evidence. Every sentence contributes meaning in context, and the whole report develops the answer without advising the reader. Find every citation through live search, verify its identity, read its source text, and independently check the assertions made from it. Quote receipts establish attribution; outcome certainty establishes how much confidence the evidence deserves. Neither guarantees a conclusion is true or that the writing is coherent.
+Make an article worth reading: answer the research question through a clear, engaging explanation and figures that teach. For popular science, a sustained story must draw the reader in and develop their understanding. Editorial quality and scientific integrity are both required; an accurate inventory of findings is unfinished work. Keep verification in the working process and compact evidence apparatus, while the article follows its subject. Find citations through live search, read their sources and independently check assertions. Receipts establish attribution, not truth or a good article.
+
+Choose the structure that supports the reader's task. Popular science develops curiosity through a story; ELI5 builds a concrete explanation with no assumed expertise and no compulsory story; scientific writing states the assessment early and develops an evidence-led synthesis. Here, **narrative review** names the review methodology, not a requirement for storytelling. Use the selected style's planning and editorial criteria in `references/writing-guide.md`.
 
 ## Route the request
 
@@ -37,6 +39,8 @@ A contrary/null search must complete at every size. Finding disagreement is not 
 
 Read every cited abstract and obtain full text for load-bearing claims. Save full texts under ledger keys and record design/sample, result, limitation, and synthesis use in notes. Run `scripts/audit_fulltexts.py` as specified in `references/quality-gates.md`. Missing text limits what may be claimed; never guess inaccessible methods or results.
 
+For popsci, also gather material for the story while reading: the observation that needs explaining, what an investigation actually did, and how a finding changed the question. Use `references/style-popsci.md`; record sourced details in the existing notes and synthesis rather than trying to decorate a finished evidence summary afterward.
+
 Run `scripts/verify_citations.py --ledger sources.json`. Peer-review eligibility, bibliographic identity, integrity screening, and text access are separate checks. Crossref's absence of an integrity signal means **no signal found in the queried data as of the check date**, not proof that no correction or concern exists; inspect publisher notices for load-bearing sources and recorded corrections.
 
 ## 3. Assess and synthesize
@@ -54,7 +58,7 @@ Fix failed evidence checks before drafting. Derived arithmetic must be explicit 
 
 ## 4. Write and produce the selected format
 
-Read `references/writing-guide.md` and only the selected `style-scientific.md`, `style-popsci.md`, `style-bullets.md`, or `style-eli5.md`. Plan the explanation in the synthesis's existing Throughline field, then compose connected paragraphs around their purpose. Complete the shared editorial acceptance check before media production. If the scientific meaning changes, update the synthesis and assessment first. Cite claims with ledger keys, then use `scripts/format_references.py` and `scripts/validate_review.py` as specified in `references/quality-gates.md`.
+Read `references/writing-guide.md` and only the selected `style-scientific.md`, `style-popsci.md`, `style-bullets.md`, or `style-eli5.md`. Plan the developing explanation and the figures' contribution in the synthesis's existing Throughline field. For popsci, compose a feature with an inviting opening, a story sustained through the body and an earned payoff. Complete the editorial read before media production; each figure must earn its place by making a specific relationship easier to understand. If the scientific meaning changes, update the synthesis and assessment first. Cite claims with ledger keys, then use `scripts/format_references.py` and `scripts/validate_review.py` as specified in `references/quality-gates.md`.
 
 Include a compact scope/methods disclosure: narrative/systematic status, search date, databases, boundaries, and material access limitations. Keep it separate from the main explanation. Findings must distinguish text access, source support, and evidence certainty.
 

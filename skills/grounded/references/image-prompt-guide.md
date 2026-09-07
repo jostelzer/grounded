@@ -234,6 +234,11 @@ grammar, and the scaffold/lint/preview tools are in
 
 ## Prompting rules
 
+- Carry the selected concept's actual explanatory relationship into the prompt:
+  what changes, connects, differs or becomes visible, and which spatial features
+  make that understandable. A subject plus an aesthetic is not an art brief.
+  Apply the whole-figure deletion test before prompting; rendering quality
+  cannot rescue a visual question with no useful learning payoff.
 - Describe the focal scientific structure, information hierarchy, eye path,
   negative space, material treatment, finish, and rejection standard richly
   enough to guide a capable image generator. Richness clarifies evidence; it

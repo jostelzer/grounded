@@ -6,6 +6,8 @@ Use the verified `synthesis.md` and outcome assessment as the factual basis. Thi
 
 ## Organize by scientific questions
 
+State the central assessment early, including when it is mixed or inconclusive. Let the body establish its basis, compare interpretations and define its limits. Do not withhold the answer for suspense or require a scene, protagonist, historical journey or closing revelation. A narrative review is a methodological category, not an instruction to use a popular-science story arc. Historical development belongs when it explains a scientific issue relevant to the question.
+
 - **Title:** a concise description of the exposure or intervention and outcomes. A question is appropriate when it accurately defines the scope; a provocative claim is not.
 - **Abstract:** 120–180 citation-free words identifying the scope, principal findings, major uncertainty, and conclusion. Include a quantitative estimate when it is representative and interpretable with its comparator and outcome. State review type where useful. Do not force an affirmative verdict, a contrary finding, a practical recommendation, or an exact sequence of four rhetorical moves. Claims must map to checked body assertions.
 - **Introduction:** explain the scientific context and define the question, population, exposures, outcomes, and scope. Avoid a popular controversy as a framing device unless that controversy is itself relevant to the question.
@@ -14,7 +16,7 @@ Use the verified `synthesis.md` and outcome assessment as the factual basis. Thi
 - **Conclusion:** answer the defined question at the justified level of certainty and explain what remains unresolved. Describe the missing evidence without prescribing a research agenda. It may necessarily overlap with the abstract; do not invent a new conclusion merely to avoid repetition.
 - **Sources and receipts:** retain the shared verified apparatus.
 
-A review can have several related conclusions. Make their relationship to the review question explicit and give each section a clear contribution. Keep evidence addressing the same comparison together unless a later return adds a distinct inference. This creates continuity without forcing heterogeneous findings into one verdict. Discuss conflicting findings beside the relevant outcome and explain differences only when supported.
+A review can have several related conclusions. Make their relationship to the review question explicit and give each section a clear contribution. Keep evidence addressing the same comparison together unless a later return adds a distinct inference. This creates continuity without forcing heterogeneous findings into one verdict. Discuss conflicting findings beside the relevant outcome and explain differences only when supported. Organize around what can be inferred across studies: where findings converge, what comparisons differ, and which competing explanations remain distinguishable or unresolved. A sequence of accurate study summaries is insufficient synthesis.
 
 ## Write paragraphs that distinguish findings from inference
 
@@ -50,6 +52,8 @@ Do not replace ordinary prose with formulaic shorthand. Integrate study details 
 
 Scientific style includes explanatory illustrations as well as quantitative plots. A mechanism, anatomical relationship, exposure pathway, or study-design illustration can make a precise scientific contribution; the style does not imply an all-chart review. Follow the review-wide mix and capability rules in `media-modes.md`.
 
+Choose figures to support scientific reasoning: comparing quantities, understanding experimental controls, distinguishing competing mechanisms or showing how different evidence bears on an interpretation. Match detail to the scientific audience; necessary technical labels and uncertainty must remain legible. A visually compelling figure does not need to tell a story.
+
 Introduce figures at the relevant point in the prose using the stable body token from `figure-captions.md`. Captions identify what is depicted, the comparison and encoding, and material limits. Avoid promotional titles and refrain from interpreting schematic arrows as demonstrated causal effects. Comparable quantities use equal typographic emphasis.
 
-Apply the shared editorial check to the complete article, including the abstract and conclusion. Use `interpretation-review.md` to verify that compression and transitions preserve the measured outcomes, comparisons and uncertainty. Revise failures before assertion auditing, and repeat the whole-article read after repairs. Size and output follow the user's selection and canonical budgets.
+Apply the shared editorial check to the complete article, including the abstract and conclusion. Ask whether a scientifically literate reader can locate the assessment early, follow its evidential basis, compare interpretations and identify unresolved questions. Judge continuity by the argument and synthesis, not suspense, a dramatic opening or a narrative payoff. Use `interpretation-review.md` to verify that compression and transitions preserve the measured outcomes, comparisons and uncertainty. Revise failures before assertion auditing, and repeat the whole-article read after repairs. Size and output follow the user's selection and canonical budgets.

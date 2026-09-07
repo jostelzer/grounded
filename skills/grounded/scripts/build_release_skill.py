@@ -45,6 +45,7 @@ REFERENCE_FILES = (
     "image-prompt-guide.md",
     "media-modes.md",
     "nature-figure-corpus.json",
+    "popsci-craft-notes.md",
     "production-workflow.md",
     "quality-gates.md",
     "quantitative-figure-guide.md",

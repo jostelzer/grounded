@@ -2,7 +2,7 @@
 
 `synthesis.md` is the maintained, style-neutral record of the verified evidence, prepared before styled prose. Downstream prose, figures and storyboards trace to it. It is not a locked interpretation: source-context review or drafting can reveal an error or missing qualification, requiring an update to synthesis and assessment before the deliverable changes. The independent audit checks original source context, not merely agreement with this record. Keep the working file available for inspection.
 
-The ledger separates evidence assessment from composition. It makes claims and their limits inspectable; it does not supply paragraph structure or guarantee coherent writing. Plan the explanation in Throughline, then apply `writing-guide.md` and the selected style guide.
+The ledger separates evidence assessment from composition. It makes claims and their limits inspectable; it does not supply paragraph structure or guarantee coherent writing. Evidence entries remain style-neutral; Throughline is the composition plan for the selected reader's task under `writing-guide.md` and the selected style guide.
 
 ## The contract
 
@@ -16,10 +16,15 @@ every style's opening move is carved from — the abstract's first move, the
 standfirst's shape, the TL;DR.>
 
 ## Throughline
-<A brief plan of how the explanation develops: the question, the answer, each
-proposed section's contribution and why it follows or sits alongside the others.
-Identify the relevant claim IDs. Do not force a single conclusion, chronology,
-tension or resolution when the evidence does not support it.>
+<A brief plan of how the explanation develops: the opening question, the answer,
+each section's contribution, and where seeing a relationship would help.
+For popsci, name the concrete story subject, how the investigation or explanation
+develops, and the understanding reached at the end; use style-popsci.md.
+For scientific writing, state the assessment early and plan the comparisons,
+evidence relationships and unresolved interpretations that support its appraisal.
+For ELI5, plan a direct answer and the concrete steps needed to understand it;
+a story is optional. For bullets, group findings for location and comparison.
+Identify relevant claim IDs. Do not invent chronology, conflict or resolution.>
 
 ## Claims
 
@@ -90,7 +95,7 @@ Record applicable population/system, design, exposure, comparison, outcome, time
 - **Calibrated in the sentence itself.** The strength lives in the verb ("lowers", "probably reduces", "is associated with", "may"), matched to the `strength` field per `evidence-weighing.md`. A claim whose wording outruns its strength field is wrong at the source, and every style inherits the error.
 - **Evidence-anchored.** Every evidence and contrary line carries ledger keys, and every key carries its quote line; a claim with no keys is not a claim, it is an opinion, and it does not enter the ledger. One source, one statement: a key appears on a claim only for what its quoted passage states — a generalisation about the field ("reviews agree that…") cites a review whose text makes it, or is recorded as a pattern (P-entry) rather than dressed as evidence. Speculation and mechanism-plausibility belong inside a claim's wording ("is biologically plausible but unproven in humans") or in Open — never as bare claims.
 - **Contrary evidence is recorded on the claim it opposes**, not pooled in a separate section. This is what guarantees no style can quietly drop it: whoever renders C4 renders C4's contrary line.
-- **`depends-on` records prerequisites.** It must be acyclic. Check cyclic or indiscriminate dependencies for incorrectly separated claims. Respect prerequisites when planning, but choose the order and explanatory relationships in Throughline; a valid dependency order is not a finished narrative.
+- **`depends-on` records prerequisites.** It must be acyclic. Check cyclic or indiscriminate dependencies for incorrectly separated claims. Respect prerequisites when planning, but choose the order and explanatory relationships in Throughline; a valid dependency order is not a finished article structure.
 - **`numbers` preserves full precision.** Record exact effect sizes, intervals, denominators and absolute risks. Select quantities appropriate to the audience while preserving what is needed to interpret the finding; supporting precision remains available here and in the sources.
 - **Claim count scales with size** — advisory, like the other tier ranges: small 5–12, medium 10–25, large 20–45. Sections typically render 1–3 claims each.
 - A corrected source's claim must be checked against its recorded correction; a claim resting on the corrected-away part of a paper is removed here, before any style can inherit it.
@@ -112,4 +117,4 @@ Figure specifications trace to C/P entries. Revisit sources for definitions, vis
 
 ## Certainty assessment
 
-Record per-outcome certainty and study-family overlap in `evidence-assessment.json` as specified in evidence-assessment.md. `synthesis-check` requires it. No contrary citations is a valid result after the required completed contrary/null search; the narrative must not manufacture disagreement.
+Record per-outcome certainty and study-family overlap in `evidence-assessment.json` as specified in evidence-assessment.md. `synthesis-check` requires it. No contrary citations is a valid result after the required completed contrary/null search; the article must not manufacture disagreement.
