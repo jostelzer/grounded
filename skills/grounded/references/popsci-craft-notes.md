@@ -55,6 +55,29 @@ Grounded's numbered explanatory figures therefore need a visible information
 job, not merely an attractive subject or a slogan. Labels and captions should
 help reveal that job, rather than be forced out in pursuit of wordless art.
 
+## A regression: accurate, but hard to read
+
+In October 2026 a medium popsci review of infant night sleep passed every
+evidence check, yet its reader found it convoluted and incomplete. It opened on
+"the pattern in the question", which no reader of the article had seen. Most
+findings were followed by a sentence about what they did "not establish".
+Statistics arrived raw ("−0.18 (95% confidence interval −16.1 to 15.8)") with no
+plain reading. The text narrated its own construction: a figure "deliberately
+kept separate" two results. Above all, it never showed how any study was done.
+Trials were named and summarised, but nothing said who took part, what families
+actually did, or how sleep was measured. Eight crossheads in about 1,700 words
+left no section room to explain anything.
+
+The September revision had replaced a concrete guide, built on worked ✗/✓
+rewrites, scenes drawn from methods sections and an editor's test for
+academese, with abstract principles about the same aims. The writer then took on
+the register of the instructions. The applied repair restores concrete teaching
+examples taken from the failed draft, makes "how we know" and "how it works"
+explicit completeness requirements, limits caveats to the places where they
+change meaning, separates popsci budgets (more words, fewer sections) and adds a
+cold read by a fresh agent who has seen nothing but the draft. It keeps the
+September rules against invented drama, rhetorical quotas and phrase blacklists.
+
 ## Applied decisions
 
 The style guide requires a sustained story but leaves its form open. Research

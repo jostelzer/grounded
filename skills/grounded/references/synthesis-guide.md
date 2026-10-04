@@ -19,7 +19,9 @@ standfirst's shape, the TL;DR.>
 <A brief plan of how the explanation develops: the opening question, the answer,
 each section's contribution, and where seeing a relationship would help.
 For popsci, name the concrete story subject, how the investigation or explanation
-develops, and the understanding reached at the end; use style-popsci.md.
+develops, the anchor studies whose methods the article will show, the understanding
+reached at the end, and where each of the six reader questions is answered;
+use style-popsci.md.
 For scientific writing, state the assessment early and plan the comparisons,
 evidence relationships and unresolved interpretations that support its appraisal.
 For ELI5, plan a direct answer and the concrete steps needed to understand it;
@@ -87,7 +89,7 @@ is not a claim yet — find the passage, weaken the sentence to what the
 passage says, or drop the key. A quote is judged for meaning when the review
 is audited (step 8); here it only has to exist and be verbatim.
 
-Record applicable population/system, design, exposure, comparison, outcome, timeframe, quantity and uncertainty in the existing evidence, boundary and numbers fields. Use qualitative scope where appropriate; do not force every claim into a trial template. See `interpretation-review.md` for the independent context check.
+Record applicable population/system, design, exposure, comparison, outcome, timeframe, quantity and uncertainty in the existing evidence, boundary and numbers fields. Use qualitative scope where appropriate; do not force every claim into a trial template. When the article will explain how a study was done, as popsci does for its anchor studies, add `quote:` lines from its methods for the procedural details the prose will describe: participants, what was done, the comparison, the measurement and its duration. A method that is itself a point of the explanation, such as a measurement that misses part of the phenomenon, becomes its own claim attached to the outcome it qualifies. See `interpretation-review.md` for the independent context check.
 
 ## Claim rules
 

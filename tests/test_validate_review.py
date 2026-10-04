@@ -229,6 +229,28 @@ class ValidateReviewTests(unittest.TestCase):
         )
         self.assertIn("popsci style requires section crossheads", result.errors)
 
+    def test_popsci_strict_tier_uses_fewer_fuller_sections(self):
+        def popsci_review(sections):
+            body = "\n\n".join(
+                f"### Part {index}\n\nThe groups differed [Smith 2024](https://doi.org/{DOI})."
+                for index in range(sections)
+            )
+            return (
+                "## What does the comparison show?\n\n"
+                "*The study answers a limited question.*\n\n"
+                f"{body}\n\n**Sources**\n\n"
+                f"**Smith (2024)** A source. *Journal*. https://doi.org/{DOI}\n"
+            )
+
+        def section_errors(markdown, style):
+            result = validate_review.validate_review(
+                markdown, style=style, size="medium", strict_tier=True
+            )
+            return [e for e in result.errors if "sections; found" in e]
+
+        self.assertEqual(section_errors(popsci_review(5), "popsci"), [])
+        self.assertTrue(section_errors(popsci_review(8), "popsci"))
+
     def test_bullet_sections_require_bullets(self):
         markdown = (
             "## Question?\n\n**TL;DR** — Answer.\n\n"
@@ -500,14 +522,14 @@ class WordBreakdownTests(unittest.TestCase):
         self.assertTrue(any("captions" in e for e in result.errors))
 
     def test_word_failures_name_the_component_and_overage(self):
-        markdown = self.review_with_figure(prose_words=1200)
+        markdown = self.review_with_figure(prose_words=1500)
         result = self.validate(markdown, strict_tier=True)
         message = " ".join(result.errors)
         self.assertIn("prose body", message)
         self.assertIn("trim", message)
 
     def test_legacy_flag_restores_single_bucket_behavior(self):
-        markdown = self.review_with_figure(prose_words=920, caption_words=70)
+        markdown = self.review_with_figure(prose_words=1220, caption_words=70)
         modern = self.validate(markdown, strict_tier=True)
         legacy = self.validate(
             markdown, strict_tier=True, legacy_word_count=True

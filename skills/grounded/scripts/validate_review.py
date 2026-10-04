@@ -21,7 +21,7 @@ from artifact_io import atomic_write_json
 from citation_apparatus import correction_note_dois, ledger_correction_dois
 import claim_receipts
 
-from review_config import WORD_BUDGETS, TIER_REQUIREMENTS
+from review_config import WORD_BUDGETS, TIER_REQUIREMENTS, section_range
 
 MOJIBAKE = re.compile(r"(?:\ufffd|Ã.|Â(?=\s|[^\w])|â(?:€|€™|€œ|€\x9d|€“|€”))")
 SCAFFOLD_LABEL = re.compile(
@@ -643,7 +643,7 @@ def validate_review(
     if strict_tier:
         requirements = TIER_REQUIREMENTS[size]
         checks = (
-            ("sections", section_count, requirements["sections"]),
+            ("sections", section_count, section_range(style, size)),
             ("sources", len(source_dois), requirements["sources"]),
             ("tables", table_count, requirements["tables"]),
             ("fulltexts", fulltext_count, requirements["fulltexts"]),

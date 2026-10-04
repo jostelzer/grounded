@@ -3,12 +3,13 @@ import argparse
 import json
 from pathlib import Path
 
-from review_config import TIER_REQUIREMENTS, WORD_BUDGETS, SEARCH_REQUIREMENTS, CLAIM_RANGES, DECK_BUDGETS
+from review_config import TIER_REQUIREMENTS, WORD_BUDGETS, SEARCH_REQUIREMENTS, CLAIM_RANGES, DECK_BUDGETS, section_range
 from artifact_io import atomic_write_json, atomic_write_text
 
 
 def profile(size):
     return {"tier": TIER_REQUIREMENTS[size], "words": {s: v[size] for s, v in WORD_BUDGETS.items()},
+            "sections": {s: section_range(s, size) for s in WORD_BUDGETS},
             "search": SEARCH_REQUIREMENTS[size], "claims": CLAIM_RANGES[size], "slides": DECK_BUDGETS[size]}
 
 
@@ -19,10 +20,13 @@ def documentation():
             "Source ranges are planning guidance, never inclusion quotas. Search saturation and relevance take precedence.",
             "", "| Budget | Small | Medium | Large |", "|---|---|---|---|"]
     for label, values in (
-        ("Scientific/popsci words", WORD_BUDGETS["scientific"]),
+        ("Scientific words", WORD_BUDGETS["scientific"]),
+        ("Popsci words", WORD_BUDGETS["popsci"]),
         ("Bullets/ELI5 words", WORD_BUDGETS["bullets"]),
+        ("sections", {s: v["sections"] for s, v in TIER_REQUIREMENTS.items()}),
+        ("Popsci sections", {s: section_range("popsci", s) for s in TIER_REQUIREMENTS}),
         *((name, {s: v[name] for s, v in TIER_REQUIREMENTS.items()})
-          for name in ("sections", "sources", "tables", "fulltexts")),
+          for name in ("sources", "tables", "fulltexts")),
         ("Synthesis claims", CLAIM_RANGES),
         *((name, {s: v[name] for s, v in SEARCH_REQUIREMENTS.items()})
           for name in ("angles", "queries")),

@@ -19,6 +19,24 @@
           5
         ]
       },
+      "sections": {
+        "bullets": [
+          10,
+          15
+        ],
+        "eli5": [
+          10,
+          15
+        ],
+        "popsci": [
+          6,
+          10
+        ],
+        "scientific": [
+          10,
+          15
+        ]
+      },
       "slides": {
         "content": [
           14,
@@ -60,8 +78,8 @@
           4000
         ],
         "popsci": [
-          3500,
-          6000
+          4000,
+          7000
         ],
         "scientific": [
           3500,
@@ -86,6 +104,24 @@
         "queries": [
           2,
           3
+        ]
+      },
+      "sections": {
+        "bullets": [
+          6,
+          9
+        ],
+        "eli5": [
+          6,
+          9
+        ],
+        "popsci": [
+          4,
+          7
+        ],
+        "scientific": [
+          6,
+          9
         ]
       },
       "slides": {
@@ -129,8 +165,8 @@
           1600
         ],
         "popsci": [
-          1500,
-          2500
+          1800,
+          3000
         ],
         "scientific": [
           1500,
@@ -155,6 +191,24 @@
         "queries": [
           1,
           2
+        ]
+      },
+      "sections": {
+        "bullets": [
+          3,
+          5
+        ],
+        "eli5": [
+          3,
+          5
+        ],
+        "popsci": [
+          2,
+          4
+        ],
+        "scientific": [
+          3,
+          5
         ]
       },
       "slides": {
@@ -198,8 +252,8 @@
           700
         ],
         "popsci": [
-          600,
-          1000
+          800,
+          1300
         ],
         "scientific": [
           600,
@@ -208,6 +262,12 @@
       }
     }
   },
+  "editorial_criteria": [
+    "For written-review tasks, assess the complete article, including title, opening, headings, figures, captions and ending, under writing-guide.md. Each sentence contributes meaning in context; paragraphs develop points and sections form a connected explanation. Fluency or varying sentence shapes alone does not establish continuity.",
+    "Report findings and uncertainty without directing what the reader should do or believe. Attributed guidance can remain as reported evidence. Accessible styles need no required personal address, named actors, plot twist, analogy recurrence or formulaic endings.",
+    "Locate unexplained jumps, source inventories, redundant returns and figures that separate a finding from its qualification. Distinguish defects from reasonable alternative organizations and permit parallel outcomes without inventing causal links.",
+    "Evaluate preserved comparisons, outcomes, uncertainty, contrary findings and source coverage separately from readability. Record passage-specific reasons and the reader's reconstructed answer; never treat a machine pass, source support or a word count as an editorial verdict."
+  ],
   "evals": [
     {
       "budget_profile": "small",
@@ -356,51 +416,45 @@
       "verification_contract": "assertion-audit-v2"
     },
     {
+      "expected_output": "Discover and use the actual generator. Plan approximately two distinct explanatory illustrations plus one or two useful quantitative plots. Scientific register does not imply all charts; do not repeat the same numeric evidence as a whole-answer plot.",
       "id": 19,
       "prompt": "Create a medium scientific journal review with a supported exposure mechanism and three numerical comparisons. A built-in image generator is available among deferred tools.",
-      "expected_output": "Discover and use the actual generator. Plan approximately two distinct explanatory illustrations plus one or two useful quantitative plots. Scientific register does not imply all charts; do not repeat the same numeric evidence as a whole-answer plot.",
       "verification_contract": "assertion-audit-v2"
     },
     {
+      "expected_output": "Return illustration jobs to the capable coordinator. Record session capability accurately; worker-local tool absence does not justify changing every planned illustration into a plot.",
       "id": 20,
       "prompt": "The figure worker has no image tool, but its coordinating session exposes ImageGen. Finish the review illustrations.",
-      "expected_output": "Return illustration jobs to the capable coordinator. Record session capability accurately; worker-local tool absence does not justify changing every planned illustration into a plot.",
       "verification_contract": "assertion-audit-v2"
     },
     {
+      "expected_output": "All comparable point labels share one size and weight across panels. The phone designation cannot selectively enlarge one effect; if the role crowds the figure, revise layout or use another wayfinding role.",
       "id": 21,
       "prompt": "Render a comparison in which only one of three numerical point labels is designated phone-primary.",
-      "expected_output": "All comparable point labels share one size and weight across panels. The phone designation cannot selectively enlarge one effect; if the role crowds the figure, revise layout or use another wayfinding role.",
       "verification_contract": "assertion-audit-v2"
     },
     {
+      "expected_output": "Use restrained descriptive headings, preserve comparators, outcomes and uncertainty, and distinguish biomarkers from clinical outcomes. Do not force a contrary narrative, an affirmative clinical verdict, or a punchline after each section. Never paraphrase an imprecise null result as no benefit.",
       "id": 22,
       "prompt": "Write an objective scientific review from evidence with a precise short-term biomarker effect, imprecise clinical estimates, and no contrary result in the completed contrary search.",
-      "expected_output": "Use restrained descriptive headings, preserve comparators, outcomes and uncertainty, and distinguish biomarkers from clinical outcomes. Do not force a contrary narrative, an affirmative clinical verdict, or a punchline after each section. Never paraphrase an imprecise null result as no benefit.",
       "verification_contract": "assertion-audit-v2"
     },
     {
+      "budget_profile": "small",
+      "expected_output": "Complete the normal live-source review and apply the shared editorial criteria. Develop the question through relevant observations and study comparisons, preserving differences between settings and measured outcomes. Explain the contribution of each finding without a researcher-by-researcher inventory or treating unlike outcomes as a single causal sequence. Report the bounded answer without lighting advice. No forced twist or callbacks. Complete the ordinary verification and receipts workflow.",
+      "files": [],
       "id": 23,
       "prompt": "Use Grounded, small popsci, inline in chat: how does artificial light at night affect insect pollination?",
-      "expected_output": "Complete the normal live-source review and apply the shared editorial criteria. Develop the question through relevant observations and study comparisons, preserving differences between settings and measured outcomes. Explain the contribution of each finding without a researcher-by-researcher inventory or treating unlike outcomes as a single causal sequence. Report the bounded answer without lighting advice. No forced twist or callbacks. Complete the ordinary verification and receipts workflow.",
-      "budget_profile": "small",
-      "files": [],
       "verification_contract": "assertion-audit-v2"
     },
     {
+      "budget_profile": "small",
+      "expected_output": "Complete the normal live-source review and apply the shared editorial criteria. Relate the distinct outcomes to the question while preserving setting, comparator and timescale. Keep parallel conclusions intelligible without forcing one unified effect or treating building measurements as city-wide evidence. Explain study differences only when supported; avoid repeating generic caveats or giving roofing recommendations. Complete the ordinary verification and receipts workflow.",
+      "files": [],
       "id": 24,
       "prompt": "Use Grounded, small scientific, inline in chat: how do reflective roofs affect building energy use and urban air temperature?",
-      "expected_output": "Complete the normal live-source review and apply the shared editorial criteria. Relate the distinct outcomes to the question while preserving setting, comparator and timescale. Keep parallel conclusions intelligible without forcing one unified effect or treating building measurements as city-wide evidence. Explain study differences only when supported; avoid repeating generic caveats or giving roofing recommendations. Complete the ordinary verification and receipts workflow.",
-      "budget_profile": "small",
-      "files": [],
       "verification_contract": "assertion-audit-v2"
     }
   ],
-  "skill_name": "grounded",
-  "editorial_criteria": [
-    "For written-review tasks, assess the complete article, including title, opening, headings, figures, captions and ending, under writing-guide.md. Each sentence contributes meaning in context; paragraphs develop points and sections form a connected explanation. Fluency or varying sentence shapes alone does not establish continuity.",
-    "Report findings and uncertainty without directing what the reader should do or believe. Attributed guidance can remain as reported evidence. Accessible styles need no required personal address, named actors, plot twist, analogy recurrence or formulaic endings.",
-    "Locate unexplained jumps, source inventories, redundant returns and figures that separate a finding from its qualification. Distinguish defects from reasonable alternative organizations and permit parallel outcomes without inventing causal links.",
-    "Evaluate preserved comparisons, outcomes, uncertainty, contrary findings and source coverage separately from readability. Record passage-specific reasons and the reader's reconstructed answer; never treat a machine pass, source support or a word count as an editorial verdict."
-  ]
+  "skill_name": "grounded"
 }

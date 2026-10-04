@@ -1,7 +1,7 @@
 """Canonical review budgets. Generated documentation and evaluations consume these."""
 WORD_BUDGETS = {
     "scientific": {"small": (600, 1000), "medium": (1500, 2500), "large": (3500, 6000)},
-    "popsci": {"small": (600, 1000), "medium": (1500, 2500), "large": (3500, 6000)},
+    "popsci": {"small": (800, 1300), "medium": (1800, 3000), "large": (4000, 7000)},
     "bullets": {"small": (350, 700), "medium": (900, 1600), "large": (2000, 4000)},
     "eli5": {"small": (350, 700), "medium": (900, 1600), "large": (2000, 4000)},
 }
@@ -14,6 +14,14 @@ TIER_REQUIREMENTS = {
     "large": {"sections": (10, 15), "sources": (70, 150), "tables": (2, 4),
               "fulltexts": (25, None), "figure_target": 5, "figure_cap": 8},
 }
+
+# Popular science develops fewer, fuller sections, each with room to show how its
+# anchor studies were done; other styles use the tier's section range.
+STYLE_SECTIONS = {"popsci": {"small": (2, 4), "medium": (4, 7), "large": (6, 10)}}
+
+
+def section_range(style, size):
+    return STYLE_SECTIONS.get(style, {}).get(size, TIER_REQUIREMENTS[size]["sections"])
 
 SEARCH_REQUIREMENTS = {
     "small": {"angles": (3, 5), "queries": (1, 2), "central": (0, None)},

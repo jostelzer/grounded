@@ -105,7 +105,10 @@ register used in the body.
 
 Use a short flowing paragraph in the magazine register. Describe the visual's
 point and relevant encoding, with the evidence boundary integrated into the
-explanation. Use interpretable quantities and the shared reporting voice.
+explanation. Use interpretable quantities and the shared reporting voice. Say
+what each axis or panel shows and what to notice in everyday words; statistical
+shorthand such as "contrast" or "model estimate" needs a plain gloss or a
+plainer substitute.
 
 ```markdown
 **Figure {#waning}. Protection declines at different rates for different outcomes.** The upper row shows the change in protection against infection from month one to month six; the lower row shows the change for severe disease. Equal row areas do not encode the amount of protection, and the observations predate Omicron [@Feikin2022; @Tang2022].

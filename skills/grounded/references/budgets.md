@@ -5,9 +5,11 @@ Source ranges are planning guidance, never inclusion quotas. Search saturation a
 
 | Budget | Small | Medium | Large |
 |---|---|---|---|
-| Scientific/popsci words | 600–1000 | 1500–2500 | 3500–6000 |
+| Scientific words | 600–1000 | 1500–2500 | 3500–6000 |
+| Popsci words | 800–1300 | 1800–3000 | 4000–7000 |
 | Bullets/ELI5 words | 350–700 | 900–1600 | 2000–4000 |
 | sections | 3–5 | 6–9 | 10–15 |
+| Popsci sections | 2–4 | 4–7 | 6–10 |
 | sources | 10–20 | 30–60 | 70–150 |
 | tables | 0–1 | 1–2 | 2–4 |
 | fulltexts | 2+ | 8+ | 25+ |

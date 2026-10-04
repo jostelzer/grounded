@@ -64,14 +64,15 @@ Every review has three independent dimensions — combine them freely. The defau
 
 | | small | medium (default) | large |
 |---|---|---|---|
-| Scientific / popsci words | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
+| Scientific words | 600–1,000 | 1,500–2,500 | 3,500–6,000 |
+| Popsci words | 800–1,300 | 1,800–3,000 | 4,000–7,000 |
 | ELI5 / bullets words | 350–700 | 900–1,600 | 2,000–4,000 |
 | Source guidance | 10–20 | 30–60 | 70–150 |
 
 **Style** — how it's written; the rigour never changes:
 
 - **scientific** — restrained journal prose: abstract, neutral thematic sections, effect sizes, comparison tables, and explicit uncertainty.
-- **popsci** (default) — accessible science reporting with a connected narrative and cited findings.
+- **popsci** (default) — a magazine-style feature that tells the story of the evidence, explains how the key studies were done and how things work, and cites every finding.
 - **bullets** — TL;DR, informative headings and concise bullets that connect findings.
 - **ELI5** — everyday language, patient explanation and explicit uncertainty.
 
