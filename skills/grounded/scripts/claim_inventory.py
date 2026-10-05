@@ -14,12 +14,26 @@ for _t, _tv in _TENS.items():
         _SPELLED[f"{_t}-{_UNITS[_u]}"] = _tv + _u
 
 
+_SPELLED_WORD = "(?:" + "|".join(sorted(_SPELLED, key=len, reverse=True)) + ")"
+_SPELLED_RE = re.compile(rf"\b({_SPELLED_WORD})\b", re.I)
+# "one hundred six", "two hundred and forty-six"; "hundreds" is not a number.
+_HUNDREDS_RE = re.compile(
+    rf"\b({_SPELLED_WORD})\s+hundred(?:\s+(?:and\s+)?({_SPELLED_WORD}))?\b", re.I)
+
+
+def _hundreds(match):
+    head = _SPELLED[match.group(1).lower()]
+    tail = _SPELLED[match.group(2).lower()] if match.group(2) else 0
+    if not 1 <= head <= 9:
+        return match.group(0)
+    return str(head * 100 + tail)
+
+
 def spell_to_digits(text):
-    """Rewrite spelled-out numbers (\"twenty-two\") as digits so a quote like
-    \"Twenty-two subjects\" satisfies the numeric anchor \"22\"."""
-    pattern = re.compile(
-        r"\b(" + "|".join(sorted(_SPELLED, key=len, reverse=True)) + r")\b", re.I)
-    return pattern.sub(lambda m: str(_SPELLED[m.group(1).lower()]), text or "")
+    """Rewrite spelled-out numbers (\"twenty-two\", \"one hundred six\") as digits
+    so a quote like \"Twenty-two subjects\" satisfies the numeric anchor \"22\"."""
+    text = _HUNDREDS_RE.sub(_hundreds, text or "")
+    return _SPELLED_RE.sub(lambda m: str(_SPELLED[m.group(1).lower()]), text)
 
 
 def quotes_of(adj):

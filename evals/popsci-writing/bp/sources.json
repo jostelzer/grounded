@@ -1,0 +1,392 @@
+{
+ "entries": [
+  {
+   "key": "Tucker2017self",
+   "doi": "10.1371/journal.pmed.1002389",
+   "title": "Self-monitoring of blood pressure in hypertension: A systematic review and individual patient data meta-analysis",
+   "authors": [
+    "Katherine L. Tucker",
+    "James P Sheppard",
+    "Richard Stevens",
+    "Hayden B. Bosworth",
+    "Alfred A. Bové",
+    "Emma P Bray",
+    "Kenneth Earle",
+    "Johnson George",
+    "Marshall Godwin",
+    "Beverly B. Green",
+    "Paul L. Hebert",
+    "Richard Hobbs",
+    "Ilkka Kantola",
+    "Sally Kerry",
+    "Alfonso Leiva",
+    "David J. Magid",
+    "Jonathan Mant",
+    "Karen L. Margolis",
+    "Brian McKinstry",
+    "Mary Ann McLaughlin",
+    "Stefano Omboni",
+    "Olugbenga Ogedegbe",
+    "Gianfranco Parati",
+    "Nashat Qamar",
+    "Bahman P. Tabaei",
+    "Juha Varis",
+    "Willem J. Verberk",
+    "Bonnie J. Wakefield",
+    "Richard J. McManus"
+   ],
+   "year": 2017,
+   "journal": "PLoS Medicine",
+   "abstract": "BACKGROUND: Self-monitoring of blood pressure (BP) appears to reduce BP in hypertension but important questions remain regarding effective implementation and which groups may benefit most. This individual patient data (IPD) meta-analysis was performed to better understand the effectiveness of BP self-monitoring to lower BP and control hypertension. METHODS AND FINDINGS: Medline, Embase, and the Cochrane Library were searched for randomised trials comparing self-monitoring to no self-monitoring in hypertensive patients (June 2016). Two reviewers independently assessed articles for eligibility and the authors of eligible trials were approached requesting IPD. Of 2,846 articles in the initial search, 36 were eligible. IPD were provided from 25 trials, including 1 unpublished study. Data for the primary outcomes-change in mean clinic or ambulatory BP and proportion controlled below target at 12 months-were available from 15/19 possible studies (7,138/8,292 [86%] of randomised participants). Overall, self-monitoring was associated with reduced clinic systolic blood pressure (sBP) compared to usual care at 12 months (-3.2 mmHg, [95% CI -4.9, -1.6 mmHg]). However, this effect was strongly influenced by the intensity of co-intervention ranging from no effect with self-monitoring alone (-1.0 mmHg [-3.3, 1.2]), to a 6.1 mmHg (-9.0, -3.2) reduction when monitoring was combined with intensive support. Self-monitoring was most effective in those with fewer antihypertensive medications and higher baseline sBP up to 170 mmHg. No differences in efficacy were seen by sex or by most comorbidities. Ambulatory BP data at 12 months were available from 4 trials (1,478 patients), which assessed self-monitoring with little or no co-intervention. There was no association between self-monitoring and either lower clinic or ambulatory sBP in this group (clinic -0.2 mmHg [-2.2, 1.8]; ambulatory 1.1 mmHg [-0.3, 2.5]). Results for diastolic blood pressure (dBP) were similar. The main limitation of this work was that significant heterogeneity remained. This was at least in part due to different inclusion criteria, self-monitoring regimes, and target BPs in included studies. CONCLUSIONS: Self-monitoring alone is not associated with lower BP or better control, but in conjunction with co-interventions (including systematic medication titration by doctors, pharmacists, or patients; education; or lifestyle counselling) leads to clinically significant BP reduction which persists for at least 12 months. The implementation of self-monitoring in hypertension should be accompanied by such co-interventions."
+  },
+  {
+   "key": "Chen2024updated",
+   "doi": "10.1186/s13643-024-02744-5",
+   "title": "An updated network meta-analysis of non-pharmacological interventions for primary hypertension in adults: insights from recent studies.",
+   "authors": [
+    "Ziwen Chen",
+    "Qifu Li",
+    "Tao Xu",
+    "Xueli Zhou",
+    "Yunjie Shu",
+    "Taipin Guo",
+    "Fanrong Liang"
+   ],
+   "year": 2024,
+   "journal": "Systematic reviews",
+   "abstract": "Primary hypertension significantly impacts global cardiovascular health, contributing to increased mortality rates and posing a substantial public health challenge. Recognizing the growing evidence supporting non-pharmacological interventions (NPIs) for controlling primary hypertension, our study employs Network Meta-Analysis (NMA) to comprehensively assess their efficacy. This review updates a prior systematic review by searching for original literature on NPIs for primary hypertension from 2013 to 2024. We conducted a thorough search in eight databases, including PubMed, Embase, Web of Science, Cochrane Central Register of Controlled Trials, Allied and Complementary Medicine Database, CNKI, WanFang Data, and Chongqing VIP, identifying potential randomized controlled trials (RCTs) from January 1, 2013, to August 1, 2024. Primary outcomes included the mean changes in blood pressure before and after treatment. Analysis was performed using GeMTC package (R 4.2.3), and Stata 17.0. The confidence of evidence was examined using Confidence in Network Meta-Analysis (CINeMA). Utilizing NMA, we reviewed 9,189 studies, identifying 54 eligible articles with 5,827 participants. Investigating 22 distinct NPIs, the focus was on changes in systolic and diastolic blood pressure pre and post-treatment. Lifestyle intervention + Tai Chi significantly reduced systolic (-21.75 mm Hg; 95% CI -33.25 to -10.02) and diastolic blood pressure (-13.62 mm Hg; 95% CI -23.14 to -3.71) compared to usual care and other NPIs. Consistency and regression analyses did not reveal significant differences. This review provides a comprehensive evaluation of NPIs for primary hypertension, emphasizing lifestyle + Tai Chi as a preferred NPI. Breathing exercises show potential in lowering systolic blood pressure, and acupuncture + tui na demonstrates effectiveness in reducing diastolic blood pressure, outperforming other interventions. The study reinforces the role of NPIs in managing primary hypertension, providing a foundation for future hypertension research."
+  },
+  {
+   "key": "Edwards2023exercise",
+   "doi": "10.1136/bjsports-2022-106503",
+   "title": "Exercise training and resting blood pressure: a large-scale pairwise and network meta-analysis of randomised controlled trials",
+   "authors": [
+    "Jamie Edwards",
+    "Algis H P Deenmamode",
+    "Megan E. Griffiths",
+    "Oliver Arnold",
+    "Nicola J. Cooper",
+    "Jonathan D. Wiles",
+    "Jamie M. O’Driscoll"
+   ],
+   "year": 2023,
+   "journal": "British Journal of Sports Medicine",
+   "abstract": "OBJECTIVE: To perform a large-scale pairwise and network meta-analysis on the effects of all relevant exercise training modes on resting blood pressure to establish optimal antihypertensive exercise prescription practices. DESIGN: Systematic review and network meta-analysis. DATA SOURCES: PubMed (Medline), the Cochrane library and Web of Science were systematically searched. ELIGIBILITY CRITERIA: Randomised controlled trials published between 1990 and February 2023. All relevant work reporting reductions in systolic blood pressure (SBP) and/or diastolic blood pressure (DBP) following an exercise intervention of ≥2 weeks, with an eligible non-intervention control group, were included. RESULTS: 270 randomised controlled trials were ultimately included in the final analysis, with a pooled sample size of 15 827 participants. Pairwise analyses demonstrated significant reductions in resting SBP and DBP following aerobic exercise training (-4.49/-2.53 mm Hg, p<0.001), dynamic resistance training (-4.55/-3.04 mm Hg, p<0.001), combined training (-6.04/-2.54 mm Hg, p<0.001), high-intensity interval training (-4.08/-2.50 mm Hg, p<0.001) and isometric exercise training (-8.24/-4.00 mm Hg, p<0.001). As shown in the network meta-analysis, the rank order of effectiveness based on the surface under the cumulative ranking curve (SUCRA) values for SBP were isometric exercise training (SUCRA: 98.3%), combined training (75.7%), dynamic resistance training (46.1%), aerobic exercise training (40.5%) and high-intensity interval training (39.4%). Secondary network meta-analyses revealed isometric wall squat and running as the most effective submodes for reducing SBP (90.4%) and DBP (91.3%), respectively. CONCLUSION: Various exercise training modes improve resting blood pressure, particularly isometric exercise. The results of this analysis should inform future exercise guideline recommendations for the prevention and treatment of arterial hypertension."
+  },
+  {
+   "key": "Huang2020effect",
+   "doi": "10.1136/bmj.m315",
+   "title": "Effect of dose and duration of reduction in dietary sodium on blood pressure levels: systematic review and meta-analysis of randomised trials",
+   "authors": [
+    "Liping Huang",
+    "Kathy Trieu",
+    "Sohei Yoshimura",
+    "Bruce Neal",
+    "Mark Woodward",
+    "Norm R.C. Campbell",
+    "Qiang Li",
+    "Daniel T. Lackland",
+    "Alexander A. C. Leung",
+    "Cheryl A.M. Anderson",
+    "Graham A. MacGregor",
+    "Feng J. He"
+   ],
+   "year": 2020,
+   "journal": "BMJ",
+   "abstract": "OBJECTIVE: To examine the dose-response relation between reduction in dietary sodium and blood pressure change and to explore the impact of intervention duration. DESIGN: Systematic review and meta-analysis following PRISMA guidelines. DATA SOURCES: Ovid MEDLINE(R), EMBASE, and Cochrane Central Register of Controlled Trials (Wiley) and reference lists of relevant articles up to 21 January 2019. INCLUSION CRITERIA: Randomised trials comparing different levels of sodium intake undertaken among adult populations with estimates of intake made using 24 hour urinary sodium excretion. DATA EXTRACTION AND ANALYSIS: Two of three reviewers screened the records independently for eligibility. One reviewer extracted all data and the other two reviewed the data for accuracy. Reviewers performed random effects meta-analyses, subgroup analyses, and meta-regression. RESULTS: usual sodium) of 24 hour urinary sodium, systolic blood pressure (SBP), and diastolic blood pressure (DBP) were 130 mmol (95% confidence interval 115 to 145, P<0.001), 4.26 mm Hg (3.62 to 4.89, P<0.001), and 2.07 mm Hg (1.67 to 2.48, P<0.001), respectively. Each 50 mmol reduction in 24 hour sodium excretion was associated with a 1.10 mm Hg (0.66 to 1.54; P<0.001) reduction in SBP and a 0.33 mm Hg (0.04 to 0.63; P=0.03) reduction in DBP. Reductions in blood pressure were observed in diverse population subsets examined, including hypertensive and non-hypertensive individuals. For the same reduction in 24 hour urinary sodium there was greater SBP reduction in older people, non-white populations, and those with higher baseline SBP levels. In trials of less than 15 days' duration, each 50 mmol reduction in 24 hour urinary sodium excretion was associated with a 1.05 mm Hg (0.40 to 1.70; P=0.002) SBP fall, less than half the effect observed in studies of longer duration (2.13 mm Hg; 0.85 to 3.40; P=0.002). Otherwise, there was no association between trial duration and SBP reduction. CONCLUSIONS: The magnitude of blood pressure lowering achieved with sodium reduction showed a dose-response relation and was greater for older populations, non-white populations, and those with higher blood pressure. Short term studies underestimate the effect of sodium reduction on blood pressure. SYSTEMATIC REVIEW REGISTRATION: PROSPERO CRD42019140812."
+  },
+  {
+   "key": "Schwingshackl2018comparative",
+   "doi": "10.1080/10408398.2018.1463967",
+   "title": "Comparative effects of different dietary approaches on blood pressure in hypertensive and pre-hypertensive patients: A systematic review and network meta-analysis",
+   "authors": [
+    "Lukas Schwingshackl",
+    "Anna Chaimani",
+    "Carolina Schwedhelm",
+    "Estefanía Toledo",
+    "Marina Pünsch",
+    "Georg Hoffmann",
+    "Heiner Boeing"
+   ],
+   "year": 2018,
+   "journal": "Critical Reviews in Food Science and Nutrition",
+   "abstract": "BACKGROUND: Pairwise meta-analyses have shown beneficial effects of individual dietary approaches on blood pressure but their comparative effects have not been established. OBJECTIVE: Therefore we performed a systematic review of different dietary intervention trials and estimated the aggregate blood pressure effects through network meta-analysis including hypertensive and pre-hypertensive patients. DESIGN: PubMed, Cochrane CENTRAL, and Google Scholar were searched until June 2017. The inclusion criteria were defined as follows: i) Randomized trial with a dietary approach; ii) hypertensive and pre-hypertensive adult patients; and iii) minimum intervention period of 12 weeks. In order to determine the pooled effect of each intervention relative to each of the other intervention for both diastolic and systolic blood pressure (SBP and DBP), random effects network meta-analysis was performed. RESULTS: A total of 67 trials comparing 13 dietary approaches (DASH, low-fat, moderate-carbohydrate, high-protein, low-carbohydrate, Mediterranean, Palaeolithic, vegetarian, low-GI/GL, low-sodium, Nordic, Tibetan, and control) enrolling 17,230 participants were included. In the network meta-analysis, the DASH, Mediterranean, low-carbohydrate, Palaeolithic, high-protein, low-glycaemic index, low-sodium, and low-fat dietary approaches were significantly more effective in reducing SBP (-8.73 to -2.32 mmHg) and DBP (-4.85 to -1.27 mmHg) compared to a control diet. According to the SUCRAs, the DASH diet was ranked the most effective dietary approach in reducing SBP (90%) and DBP (91%), followed by the Palaeolithic, and the low-carbohydrate diet (ranked 3rd for SBP) or the Mediterranean diet (ranked 3rd for DBP). For most comparisons, the credibility of evidence was rated very low to moderate, with the exception for the DASH vs. the low-fat dietary approach for which the quality of evidence was rated high. CONCLUSION: The present network meta-analysis suggests that the DASH dietary approach might be the most effective dietary measure to reduce blood pressure among hypertensive and pre-hypertensive patients based on high quality evidence."
+  },
+  {
+   "key": "Neal2021effect",
+   "doi": "10.1056/nejmoa2105675",
+   "title": "Effect of Salt Substitution on Cardiovascular Events and Death",
+   "authors": [
+    "Bruce Neal",
+    "Yangfeng Wu",
+    "Xiangxian Feng",
+    "Ruijuan Zhang",
+    "Yuhong Zhang",
+    "Jingpu Shi",
+    "Jianxin Zhang",
+    "Maoyi Tian",
+    "Liping Huang",
+    "Zhifang Li",
+    "Yan Yu",
+    "Yi Zhao",
+    "Bo Zhou",
+    "Jixin Sun",
+    "Yishu Liu",
+    "Xuejun Yin",
+    "Zhixin Hao",
+    "Jie Yu",
+    "Ka‐Chun Li",
+    "Xinyi Zhang",
+    "Peifen Duan",
+    "Faxuan Wang",
+    "Bing Ma",
+    "Weiwei Shi",
+    "Gian Luca Di Tanna",
+    "Sandrine Stepien",
+    "Sana Shan",
+    "Sallie‐Anne Pearson",
+    "Nicole Li",
+    "Lijing L. Yan",
+    "Darwin R. Labarthe",
+    "Paul Elliott"
+   ],
+   "year": 2021,
+   "journal": "New England Journal of Medicine",
+   "abstract": "BACKGROUND: Salt substitutes with reduced sodium levels and increased potassium levels have been shown to lower blood pressure, but their effects on cardiovascular and safety outcomes are uncertain. METHODS: We conducted an open-label, cluster-randomized trial involving persons from 600 villages in rural China. The participants had a history of stroke or were 60 years of age or older and had high blood pressure. The villages were randomly assigned in a 1:1 ratio to the intervention group, in which the participants used a salt substitute (75% sodium chloride and 25% potassium chloride by mass), or to the control group, in which the participants continued to use regular salt (100% sodium chloride). The primary outcome was stroke, the secondary outcomes were major adverse cardiovascular events and death from any cause, and the safety outcome was clinical hyperkalemia. RESULTS: A total of 20,995 persons were enrolled in the trial. The mean age of the participants was 65.4 years, and 49.5% were female, 72.6% had a history of stroke, and 88.4% a history of hypertension. The mean duration of follow-up was 4.74 years. The rate of stroke was lower with the salt substitute than with regular salt (29.14 events vs. 33.65 events per 1000 person-years; rate ratio, 0.86; 95% confidence interval [CI], 0.77 to 0.96; P = 0.006), as were the rates of major cardiovascular events (49.09 events vs. 56.29 events per 1000 person-years; rate ratio, 0.87; 95% CI, 0.80 to 0.94; P<0.001) and death (39.28 events vs. 44.61 events per 1000 person-years; rate ratio, 0.88; 95% CI, 0.82 to 0.95; P<0.001). The rate of serious adverse events attributed to hyperkalemia was not significantly higher with the salt substitute than with regular salt (3.35 events vs. 3.30 events per 1000 person-years; rate ratio, 1.04; 95% CI, 0.80 to 1.37; P = 0.76). CONCLUSIONS: Among persons who had a history of stroke or were 60 years of age or older and had high blood pressure, the rates of stroke, major cardiovascular events, and death from any cause were lower with the salt substitute than with regular salt. (Funded by the National Health and Medical Research Council of Australia; SSaSS ClinicalTrials.gov number, NCT02092090.)."
+  },
+  {
+   "key": "Blumenthal2010effects",
+   "doi": "10.1001/archinternmed.2009.470",
+   "title": "Effects of the DASH Diet Alone and in Combination With Exercise and Weight Loss on Blood Pressure and Cardiovascular Biomarkers in Men and Women With High Blood Pressure",
+   "authors": [
+    "James A. Blumenthal"
+   ],
+   "year": 2010,
+   "journal": "Archives of Internal Medicine",
+   "abstract": "BACKGROUND: Although the DASH (Dietary Approaches to Stop Hypertension) diet has been shown to lower blood pressure (BP) in short-term feeding studies, it has not been shown to lower BP among free-living individuals, nor has it been shown to alter cardiovascular biomarkers of risk. OBJECTIVE: To compare the DASH diet alone or combined with a weight management program with usual diet controls among participants with prehypertension or stage 1 hypertension (systolic BP, 130-159 mm Hg; or diastolic BP, 85-99 mm Hg). DESIGN AND SETTING: Randomized, controlled trial in a tertiary care medical center with assessments at baseline and 4 months. Enrollment began October 29, 2003, and ended July 28, 2008. PARTICIPANTS: Overweight or obese, unmedicated outpatients with high BP (N = 144). INTERVENTIONS: Usual diet controls, DASH diet alone, and DASH diet plus weight management. OUTCOME MEASURES: The main outcome measure is BP measured in the clinic and by ambulatory BP monitoring. Secondary outcomes included pulse wave velocity, flow-mediated dilation of the brachial artery, baroreflex sensitivity, and left ventricular mass. RESULTS: Clinic-measured BP was reduced by 16.1/9.9 mm Hg (DASH plus weight management); 11.2/7.5 mm (DASH alone); and 3.4/3.8 mm (usual diet controls) (P < .001). A similar pattern was observed for ambulatory BP (P < .05). Greater improvement was noted for DASH plus weight management compared with DASH alone for pulse wave velocity, baroreflex sensitivity, and left ventricular mass (all P < .05). CONCLUSION: For overweight or obese persons with above-normal BP, the addition of exercise and weight loss to the DASH diet resulted in even larger BP reductions, greater improvements in vascular and autonomic function, and reduced left ventricular mass. CLINICAL TRIAL REGISTRATION: clinicaltrials.gov Identifier: NCT00571844."
+  },
+  {
+   "key": "Group2003effects",
+   "doi": "10.1001/jama.289.16.2083",
+   "title": "Effects of Comprehensive Lifestyle Modification on Blood Pressure Control",
+   "authors": [
+    "Writing Group of the PREMIER Collaborative Research Group"
+   ],
+   "year": 2003,
+   "journal": "JAMA",
+   "abstract": "CONTEXT: Weight loss, sodium reduction, increased physical activity, and limited alcohol intake are established recommendations that reduce blood pressure (BP). The Dietary Approaches to Stop Hypertension (DASH) diet also lowers BP. To date, no trial has evaluated the effects of simultaneously implementing these lifestyle recommendations. OBJECTIVE: To determine the effect on BP of 2 multicomponent, behavioral interventions. DESIGN, SETTING, AND PARTICIPANTS: Randomized trial with enrollment at 4 clinical centers (January 2000-June 2001) among 810 adults (mean [SD] age, 50 [8.9] years; 62% women; 34% African American) with above-optimal BP, including stage 1 hypertension (120-159 mm Hg systolic and 80-95 mm Hg diastolic), and who were not taking antihypertensive medications. INTERVENTION: Participants were randomized to one of 3 intervention groups: (1) \"established,\" a behavioral intervention that implemented established recommendations (n = 268); (2) \"established plus DASH,\"which also implemented the DASH diet (n = 269); and (3) an \"advice only\" comparison group (n = 273). MAIN OUTCOME MEASURES: Blood pressure measurement and hypertension status at 6 months. RESULTS: Both behavioral interventions significantly reduced weight, improved fitness, and lowered sodium intake. The established plus DASH intervention also increased fruit, vegetable, and dairy intake. Across the groups, gradients in BP and hypertensive status were evident. After subtracting change in advice only, the mean net reduction in systolic BP was 3.7 mm Hg (P<.001) in the established group and 4.3 mm Hg (P<.001) in the established plus DASH group; the systolic BP difference between the established and established plus DASH groups was 0.6 mm Hg (P =.43). Compared with the baseline hypertension prevalence of 38%, the prevalence at 6 months was 26% in the advice only group, 17% in the established group (P =.01 compared with the advice only group), and 12% in the established plus DASH group (P<.001 compared with the advice only group; P =.12 compared with the established group). The prevalence of optimal BP (<120 mm Hg systolic and <80 mm Hg diastolic) was 19% in the advice only group, 30% in the established group (P =.005 compared with the advice only group), and 35% in the established plus DASH group (P<.001 compared with the advice only group; P =.24 compared with the established group). CONCLUSION: Individuals with above-optimal BP, including stage 1 hypertension, can make multiple lifestyle changes that lower BP and reduce their cardiovascular disease risk."
+  },
+  {
+   "key": "Sacks2001effects",
+   "doi": "10.1056/nejm200101043440101",
+   "title": "Effects on blood pressure of reduced dietary sodium and the Dietary Approaches to Stop Hypertension (DASH) diet. DASH-Sodium Collaborative Research Group.",
+   "authors": [
+    "F M Sacks",
+    "L P Svetkey",
+    "W M Vollmer",
+    "L J Appel",
+    "G A Bray",
+    "D Harsha",
+    "E Obarzanek",
+    "P R Conlin",
+    "E R Miller",
+    "D G Simons-Morton",
+    "N Karanja",
+    "P H Lin"
+   ],
+   "year": 2001,
+   "journal": "The New England journal of medicine",
+   "abstract": "The effect of dietary composition on blood pressure is a subject of public health importance. We studied the effect of different levels of dietary sodium, in conjunction with the Dietary Approaches to Stop Hypertension (DASH) diet, which is rich in vegetables, fruits, and low-fat dairy products, in persons with and in those without hypertension. A total of 412 participants were randomly assigned to eat either a control diet typical of intake in the United States or the DASH diet. Within the assigned diet, participants ate foods with high, intermediate, and low levels of sodium for 30 consecutive days each, in random order. Reducing the sodium intake from the high to the intermediate level reduced the systolic blood pressure by 2.1 mm Hg (P<0.001) during the control diet and by 1.3 mm Hg (P=0.03) during the DASH diet. Reducing the sodium intake from the intermediate to the low level caused additional reductions of 4.6 mm Hg during the control diet (P<0.001) and 1.7 mm Hg during the DASH diet (P<0.01). The effects of sodium were observed in participants with and in those without hypertension, blacks and those of other races, and women and men. The DASH diet was associated with a significantly lower systolic blood pressure at each sodium level; and the difference was greater with high sodium levels than with low ones. As compared with the control diet with a high sodium level, the DASH diet with a low sodium level led to a mean systolic blood pressure that was 7.1 mm Hg lower in participants without hypertension, and 11.5 mm Hg lower in participants with hypertension. The reduction of sodium intake to levels below the current recommendation of 100 mmol per day and the DASH diet both lower blood pressure substantially, with greater effects in combination than singly. Long-term health benefits will depend on the ability of people to make long-lasting dietary changes and the increased availability of lower-sodium foods."
+  },
+  {
+   "key": "Juraschek2026dash",
+   "doi": "10.1001/jama.2025.21112",
+   "title": "DASH-Patterned Groceries and Effects on Blood Pressure: The GoFresh Randomized Clinical Trial.",
+   "authors": [
+    "Stephen P Juraschek",
+    "Hannah Col",
+    "Kayla Ferro",
+    "Ruth-Alma N Turkson-Ocran",
+    "Jennifer L Cluett",
+    "Roger B Davis",
+    "Kristen M Kraemer",
+    "Kathy McManus",
+    "Kenneth J Mukamal",
+    "Emily L Aidoo",
+    "Fredrick Larbi Kwapong",
+    "Marian Budu",
+    "Dhrumil Patil",
+    "Sarah Nartey",
+    "Jacqueline Michetti",
+    "Sofia Allison",
+    "Manfred Mate-Kole",
+    "Jingyi Cao",
+    "Benjamin Grobman",
+    "Reva Seager",
+    "Anika L Hines",
+    "Edgar R Miller",
+    "Deidra C Crews",
+    "Stephanie L Fitzpatrick"
+   ],
+   "year": 2026,
+   "journal": "JAMA",
+   "abstract": "The Dietary Approaches to Stop Hypertension (DASH) eating plan lowered blood pressure (BP) among Black adults in a controlled environment, but to date, there are no grocery shopping strategies that replicated its health effects in a community setting. The Groceries for Black Residents of Boston to Stop Hypertension (GoFresh) trial was conducted to determine the effects of low sodium-DASH groceries on systolic BP. This parallel-group randomized clinical trial was conducted in Boston from August 2022 to September 2025 among Black residents of urban communities with few grocery stores, a systolic BP of 120 to less than 150 mm Hg, a diastolic BP less than 100 mm Hg, and no hypertension treatment. Data were analyzed from June through October 2025. Participants were randomly assigned to 12 weeks of home-delivered, DASH-patterned groceries ordered weekly with dietitian counseling without emphasizing cost or three $500 stipends every 4 weeks intended for self-directed grocery shopping. The primary comparison was the difference in the 3-month change in model-estimated office systolic BP (based on 3 measurements over at least 2 visits) between interventions. Adherence was assessed via 24-hour urine collection. Secondary outcomes included diastolic BP, body mass index (BMI), hemoglobin A1c levels, and low-density lipoprotein (LDL) cholesterol. Maintenance of effects was assessed 3 months after intervention cessation. Among 180 participants, (mean [SD] age, 46.1 [13.3] years; 102 female [56.7%]; 180 self-reported Black [100%]; 12 Hispanic [6.7%]), 175 individuals (97.2%) completed the primary outcome assessment. Mean (SD) baseline systolic BP and diastolic BP were 130.0 (6.7) mm Hg and 79.8 (8.1) mm Hg. At 3 months, the mean systolic BP changed -5.7 mm Hg (95% CI, -7.4, to-3.9 mm Hg) in the DASH-patterned group and -2.3 mm Hg (95% CI, -4.1 to -0.4 mm Hg) in the self-directed group (difference in changes, -3.4 mm Hg; 95% CI, -5.9 to -0.8 mm Hg; P = .009). Compared with the self-directed group, after 3 months the DASH-patterned group changed mean diastolic BP by -2.4 mm Hg (95% CI, -4.2 to -0.5 mm Hg), urine sodium level by -545 mg/24 h (95% CI, -1041 to -50 mg/24 h), and LDL cholesterol by -8.0 mg/dL (95% CI, -13.7 to -2.3 mg/dL) (to convert LDL cholesterol to millimoles per liter, multiply by 0.0259). Effects were not maintained 6 months after the intervention was initiated. No effects occurred in BMI or hemoglobin A1c level. In this study, a program of home-delivered, DASH-style groceries plus dietitian counseling decreased BP and LDL cholesterol levels beyond comparable monetary compensation. However, effects were not maintained after the intervention ended. ClinicalTrials.gov Identifier: NCT05121337."
+  },
+  {
+   "key": "Blumenthal2021effects",
+   "doi": "10.1161/circulationaha.121.055329",
+   "title": "Effects of Lifestyle Modification on Patients With Resistant Hypertension: Results of the TRIUMPH Randomized Clinical Trial.",
+   "authors": [
+    "James A Blumenthal",
+    "Alan L Hinderliter",
+    "Patrick J Smith",
+    "Stephanie Mabe",
+    "Lana L Watkins",
+    "Linda Craighead",
+    "Krista Ingle",
+    "Crystal Tyson",
+    "Pao-Hwa Lin",
+    "William E Kraus",
+    "Lawrence Liao",
+    "Andrew Sherwood"
+   ],
+   "year": 2021,
+   "journal": "Circulation",
+   "abstract": "Although lifestyle modifications generally are effective in lowering blood pressure (BP) among patients with unmedicated hypertension and in those treated with 1 or 2 antihypertensive agents, the value of exercise and diet for lowering BP in patients with resistant hypertension is unknown. One hundred forty patients with resistant hypertension (mean age, 63 years; 48% female; 59% Black; 31% with diabetes; 21% with chronic kidney disease) were randomly assigned to a 4-month program of lifestyle modification (C-LIFE [Center-Based Lifestyle Intervention]) including dietary counseling, behavioral weight management, and exercise, or a single counseling session providing SEPA (Standardized Education and Physician Advice). The primary end point was clinic systolic BP; secondary end points included 24-hour ambulatory BP and select cardiovascular disease biomarkers including baroreflex sensitivity to quantify the influence of the baroreflex on heart rate, high-frequency heart rate variability to assess vagally mediated modulation of heart rate, flow-mediated dilation to evaluate endothelial function, pulse wave velocity to assess arterial stiffness, and left ventricular mass to characterize left ventricular structure. Between-group comparisons revealed that the reduction in clinic systolic BP was greater in C-LIFE (-12.5 [95% CI, -14.9 to -10.2] mm Hg) compared with SEPA(-7.1 [-95% CI, 10.4 to -3.7] mm Hg) (P=0.005); 24-hour ambulatory systolic BP also was reduced in C-LIFE (-7.0 [95% CI, -8.5 to -4.0] mm Hg), with no change in SEPA (-0.3 [95% CI, -4.0 to 3.4] mm Hg) (P=0.001). Compared with SEPA, C-LIFE resulted in greater improvements in resting baroreflex sensitivity (2.3 ms/mm Hg [95% CI, 1.3 to 3.3] versus -1.1 ms/mm Hg [95% CI, -2.5 to 0.3]; P<0.001), high-frequency heart rate variability (0.4 ln ms2 [95% CI, 0.2 to 0.6] versus -0.2 ln ms2 [95% CI, -0.5 to 0.1]; P<0.001), and flow-mediated dilation (0.3% [95% CI, -0.3 to 1.0] versus -1.4% [95% CI, -2.5 to -0.3]; P=0.022). There were no between-group differences in pulse wave velocity (P=0.958) or left ventricular mass (P=0.596). Diet and exercise can lower BP in patients with resistant hypertension. A 4-month structured program of diet and exercise as adjunctive therapy delivered in a cardiac rehabilitation setting results in significant reductions in clinic and ambulatory BP and improvement in selected cardiovascular disease biomarkers. Registration: URL: https://www.clinicaltrials.gov; Unique identifier: NCT02342808."
+  },
+  {
+   "key": "Naci2018does",
+   "doi": "10.1136/bjsports-2018-099921",
+   "title": "How does exercise treatment compare with antihypertensive medications? A network meta-analysis of 391 randomised controlled trials assessing exercise and medication effects on systolic blood pressure",
+   "authors": [
+    "Huseyin Naci",
+    "Maximilian Salcher‐Konrad",
+    "Sofia Dias",
+    "Manuel R. Blum",
+    "Samali Anova Sahoo",
+    "David Nunan",
+    "John P. A. Ioannidis"
+   ],
+   "year": 2018,
+   "journal": "British Journal of Sports Medicine",
+   "abstract": "OBJECTIVE: To compare the effect of exercise regimens and medications on systolic blood pressure (SBP). DATA SOURCES: Medline (via PubMed) and the Cochrane Library. ELIGIBILITY CRITERIA: Randomised controlled trials (RCTs) of angiotensin-converting enzyme inhibitors (ACE-I), angiotensin-2 receptor blockers (ARBs), β-blockers, calcium channel blockers (CCBs) and diuretics were identified from existing Cochrane reviews. A previously published meta-analysis of exercise interventions was updated to identify recent RCTs that tested the SBP-lowering effects of endurance, dynamic resistance, isometric resistance, and combined endurance and resistance exercise interventions (up to September 2018). DESIGN: Random-effects network meta-analysis. OUTCOME: Difference in mean change from baseline SBP between comparator treatments (change from baseline in one group minus that in the other group) and its 95% credible interval (95% CrI), measured in mmHg. RESULTS: We included a total of 391 RCTs, 197 of which evaluated exercise interventions (10 461 participants) and 194 evaluated antihypertensive medications (29 281 participants). No RCTs compared directly exercise against medications. While all medication trials included hypertensive populations, only 56 exercise trials included hypertensive participants (≥140 mmHg), corresponding to 3508 individuals. In a 10% random sample, risk of bias was higher in exercise RCTs, primarily due to lack of blinding and incomplete outcome data. In analyses that combined all populations, antihypertensive medications achieved higher reductions in baseline SBP compared with exercise interventions (mean difference -3.96 mmHg, 95% CrI -5.02 to -2.91). Compared with control, all types of exercise (including combination of endurance and resistance) and all classes of antihypertensive medications were effective in lowering baseline SBP. Among hypertensive populations, there were no detectable differences in the SBP-lowering effects of ACE-I, ARB, β-blocker and diuretic medications when compared with endurance or dynamic resistance exercise. There was no detectable inconsistency between direct and indirect comparisons. Although there was evidence of small-study effects, this affected both medication and exercise trials. CONCLUSIONS: The effect of exercise interventions on SBP remains under-studied, especially among hypertensive populations. Our findings confirm modest but consistent reductions in SBP in many studied exercise interventions across all populations but individuals receiving medications generally achieved greater reductions than those following structured exercise regimens. Assuming equally reliable estimates, the SBP-lowering effect of exercise among hypertensive populations appears similar to that of commonly used antihypertensive medications. Generalisability of these findings to real-world clinical settings should be further evaluated."
+  },
+  {
+   "key": "Roerecke2017effect",
+   "doi": "10.1016/s2468-2667(17)30003-8",
+   "title": "The effect of a reduction in alcohol consumption on blood pressure: a systematic review and meta-analysis",
+   "authors": [
+    "Michael Roerecke",
+    "Janusz Kaczorowski",
+    "Sheldon W. Tobe",
+    "Gerrit Gmel",
+    "Omer S. M. Hasan",
+    "Jürgen Rehm"
+   ],
+   "year": 2017,
+   "journal": "The Lancet Public Health",
+   "abstract": "BACKGROUND: Although it is well established that heavy alcohol consumption increases the risk of hypertension, little is known about the effect of a reduction of alcohol intake on blood pressure. We aimed to assess the effect of a reduction in alcohol consumption on change in blood pressure stratified by initial amount of alcohol consumption and sex in adults. METHODS: In this systematic review and meta-analysis, we searched MedLine, Embase, CENTRAL, and ClinicalTrials.gov from database inception up to July 13, 2016, for trials investigating the effect of a change of alcohol consumption on blood pressure in adults using keywords and MeSH terms related to alcohol consumption, blood pressure, and clinical trials, with no language restrictions. We also searched reference lists of identified articles and published meta-analyses and reviews. We included full-text articles with original human trial data for the effect of a change of alcohol consumption on blood pressure in adults, which reported a quantifiable change in average alcohol consumption that lasted at least 7 days and a corresponding change in blood pressure. We extracted data from published reports. We did random-effects meta-analyses stratified by amount of alcohol intake at baseline. All meta-analyses were done with Stata (version 14.1). For the UK, we modelled the effect of a reduction of alcohol consumption for 50% of the population drinking more than two standard drinks per day (ie, 12 g pure alcohol per drink). FINDINGS: 36 trials with 2865 participants (2464 men and 401 women) were included. In people who drank two or fewer drinks per day, a reduction in alcohol was not associated with a significant reduction in blood pressure; however, in people who drank more than two drinks per day, a reduction in alcohol intake was associated with increased blood pressure reduction. Reduction in systolic blood pressure (mean difference -5·50 mm Hg, 95% CI -6·70 to -4·30) and diastolic blood pressure (-3·97, -4·70 to -3·25) was strongest in participants who drank six or more drinks per day if they reduced their intake by about 50%. For the UK, the results would translate into more than 7000 inpatient hospitalisations and 678 cardiovascular deaths prevented every year. INTERPRETATION: Reducing alcohol intake lowers blood pressure in a dose-dependent manner with an apparent threshold effect. Implementation of effective alcohol interventions in people who drink more than two drinks per day would reduce the disease burden from both alcohol consumption and hypertension, and should be prioritised in countries with substantial alcohol-attributable risk. FUNDING: National Institute on Alcohol Abuse and Alcoholism of the National Institutes of Health (NIH)."
+  },
+  {
+   "key": "Neter2003influence",
+   "doi": "10.1161/01.hyp.0000094221.86888.ae",
+   "title": "Influence of Weight Reduction on Blood Pressure",
+   "authors": [
+    "Judith E. Neter",
+    "B. Stam",
+    "Frans J. Kok",
+    "Diederick E. Grobbee",
+    "Johanna M. Geleijnse"
+   ],
+   "year": 2003,
+   "journal": "Hypertension",
+   "abstract": "Increased body weight is a strong risk factor for hypertension. A meta-analysis of randomized controlled trials was performed to estimate the effect of weight reduction on blood pressure overall and in population subgroups. Twenty-five randomized, controlled trials (comprising 34 strata) published between 1966 and 2002 with a total of 4874 participants were included. A random-effects model was used to account for heterogeneity among trials. A net weight reduction of -5.1 kg (95% confidence interval [CI], -6.03 to -4.25) by means of energy restriction, increased physical activity, or both reduced systolic blood pressure by -4.44 mm Hg (95% CI, -5.93 to -2.95) and diastolic blood pressure by -3.57 mm Hg (95% CI, -4.88 to -2.25). Blood pressure reductions were -1.05 mm Hg (95% CI, -1.43 to -0.66) systolic and -0.92 mm Hg (95% CI, -1.28 to -0.55) diastolic when expressed per kilogram of weight loss. As expected, significantly larger blood pressure reductions were observed in populations with an average weight loss >5 kg than in populations with less weight loss, both for systolic (-6.63 mm Hg [95% CI, -8.43 to -4.82] vs -2.70 mm Hg [95% CI, -4.59 to -0.81]) and diastolic (-5.12 mm Hg [95% CI, -6.48 to -3.75] vs -2.01 mm Hg [95% CI, -3.47 to -0.54]) blood pressure. The effect on diastolic blood pressure was significantly larger in populations taking antihypertensive drugs than in untreated populations (-5.31 mm Hg [95% CI, -6.64 to -3.99] vs -2.91 mm Hg [95% CI, -3.66 to -2.16]). This meta-analysis clearly shows that weight loss is important for the prevention and treatment of hypertension."
+  },
+  {
+   "key": "Group2010long",
+   "doi": "10.1001/archinternmed.2010.334",
+   "title": "Long-term Effects of a Lifestyle Intervention on Weight and Cardiovascular Risk Factors in Individuals With Type 2 Diabetes Mellitus",
+   "authors": [
+    "The Look AHEAD Research Group"
+   ],
+   "year": 2010,
+   "journal": "Archives of Internal Medicine",
+   "abstract": "BACKGROUND: Lifestyle interventions produce short-term improvements in glycemia and cardiovascular disease (CVD) risk factors in individuals with type 2 diabetes mellitus, but no long-term data are available. We examined the effects of lifestyle intervention on changes in weight, fitness, and CVD risk factors during a 4-year study. METHODS: The Look AHEAD (Action for Health in Diabetes) trial is a multicenter randomized clinical trial comparing the effects of an intensive lifestyle intervention (ILI) and diabetes support and education (DSE; the control group) on the incidence of major CVD events in 5145 overweight or obese individuals (59.5% female; mean age, 58.7 years) with type 2 diabetes mellitus. More than 93% of participants provided outcomes data at each annual assessment. RESULTS: Averaged across 4 years, ILI participants had a greater percentage of weight loss than DSE participants (-6.15% vs -0.88%; P < .001) and greater improvements in treadmill fitness (12.74% vs 1.96%; P < .001), hemoglobin A(1c) level (-0.36% vs -0.09%; P < .001), systolic (-5.33 vs -2.97 mm Hg; P < .001) and diastolic (-2.92 vs -2.48 mm Hg; P = .01) blood pressure, and levels of high-density lipoprotein cholesterol (3.67 vs 1.97 mg/dL; P < .001) and triglycerides (-25.56 vs -19.75 mg/dL; P < .001). Reductions in low-density lipoprotein cholesterol levels were greater in DSE than ILI participants (-11.27 vs -12.84 mg/dL; P = .009) owing to greater use of medications to lower lipid levels in the DSE group. At 4 years, ILI participants maintained greater improvements than DSE participants in weight, fitness, hemoglobin A(1c) levels, systolic blood pressure, and high-density lipoprotein cholesterol levels. CONCLUSIONS: Intensive lifestyle intervention can produce sustained weight loss and improvements in fitness, glycemic control, and CVD risk factors in individuals with type 2 diabetes. Whether these differences in risk factors translate to reduction in CVD events will ultimately be addressed by the Look AHEAD trial. TRIAL REGISTRATION: clinicaltrials.gov Identifier: NCT00017953."
+  },
+  {
+   "key": "Greenwood2024long",
+   "doi": "10.7326/m23-2626",
+   "title": "Long-Term Effect of Salt Substitution for Cardiovascular Outcomes : A Systematic Review and Meta-analysis.",
+   "authors": [
+    "Hannah Greenwood",
+    "Katelyn Barnes",
+    "Justin Clark",
+    "Lauren Ball",
+    "Loai Albarqouni"
+   ],
+   "year": 2024,
+   "journal": "Annals of internal medicine",
+   "abstract": "Salt substitution is a simple yet increasingly promising strategy to improve cardiovascular outcomes. To evaluate the long-term effects of salt substitution on cardiovascular outcomes. PubMed, EMBASE, Cochrane CENTRAL, and CINAHL searched from inception to 23 August 2023. Trial registries, citation analysis, and hand-search were also done. Randomized controlled trials (RCTs) comparing provision of or advice to use a salt substitute with no intervention or use of regular salt among adults for 6 months or longer in total study duration. Two authors independently screened articles, extracted data, and assessed risk of bias. Primary outcomes include mortality, major cardiovascular events (MACE), and adverse events at 6 months or greater. Secondary and post hoc outcomes include blood pressure, cause-specific mortality, and urinary excretion at 6 months or greater. Random-effects meta-analyses were done and certainty of effect estimates were assessed using GRADE (Grading of Recommendations Assessment, Development and Evaluation). Of the 16 included RCTs, 8 reported on primary outcomes. Most (n = 7 of 8) were done in China or Taiwan, 3 were done in residential facilities, and 7 included populations of older age (average 62 years) and/or with higher-than-average cardiovascular risk. In this population, salt substitute may reduce risk for all-cause mortality (6 RCTs; 27 710 participants; rate ratio [RR], 0.88 [95% CI, 0.82 to 0.93]; low certainty) and cardiovascular mortality (4 RCTs; 25 050 participants; RR, 0.83 [CI, 0.73 to 0.95]; low certainty). Salt substitute may result in a slight reduction in MACE (3 RCTs; 23 215 participants; RR, 0.85 [CI, 0.71 to 1.00]; very low certainty), with very low-certainty evidence of serious adverse events (6 RCTs; 27 995 participants; risk ratio, 1.04 [CI, 0.87 to 1.25]). The evidence base is dominated by a single, large RCT. Most RCTs were from China or Taiwan and involved participants with higher-than-average cardiovascular risk; therefore, generalizability to other populations is very limited. Salt substitution may reduce all-cause or cardiovascular mortality, but the evidence for reducing cardiovascular events and for not increasing serious adverse events is uncertain, particularly for a Western population. The certainty of evidence is higher among populations at higher cardiovascular risk and/or following a Chinese diet. National Health and Medical Research Council. (PROSPERO: CRD42022327566)."
+  },
+  {
+   "key": "Edwards2024isometric",
+   "doi": "10.1007/s40279-024-02036-x",
+   "title": "Isometric Exercise Training and Arterial Hypertension: An Updated Review",
+   "authors": [
+    "Jamie Edwards",
+    "Damian A. Coleman",
+    "Raphael Mendes Ritti‐Dias",
+    "Breno Quintella Farah",
+    "David J. Stensel",
+    "Samuel J. E. Lucas",
+    "Philip J. Millar",
+    "Ben DH. Gordon",
+    "Véronique Cornelissen",
+    "Neil A. Smart",
+    "Debra J. Carlson",
+    "Cheri L. McGowan",
+    "Ian Swaine",
+    "Linda S. Pescatello",
+    "Reuben Howden",
+    "Stewart Bruce‐Low",
+    "Chris Farmer",
+    "Paul Leeson",
+    "Rajan Sharma",
+    "Jamie M. O’Driscoll"
+   ],
+   "year": 2024,
+   "journal": "Sports Medicine",
+   "abstract": "Hypertension is recognised as a leading attributable risk factor for cardiovascular disease and premature mortality. Global initiatives towards the prevention and treatment of arterial hypertension are centred around non-pharmacological lifestyle modification. Exercise recommendations differ between professional and scientific organisations, but are generally unanimous on the primary role of traditional aerobic and dynamic resistance exercise. In recent years, isometric exercise training (IET) has emerged as an effective novel exercise intervention with consistent evidence of reductions in blood pressure (BP) superior to that reported from traditional guideline-recommended exercise modes. Despite a wealth of emerging new data and endorsement by select governing bodies, IET remains underutilised and is not widely prescribed in clinical practice. This expert-informed review critically examines the role of IET as a potential adjuvant tool in the future clinical management of BP. We explore the efficacy, prescription protocols, evidence quality and certainty, acute cardiovascular stimulus, and physiological mechanisms underpinning its anti-hypertensive effects. We end the review with take-home suggestions regarding the direction of future IET research."
+  },
+  {
+   "key": "Hansford2021effectiveness",
+   "doi": "10.1038/s41440-021-00720-3",
+   "title": "The effectiveness and safety of isometric resistance training for adults with high blood pressure: a systematic review and meta-analysis.",
+   "authors": [
+    "Harrison J Hansford",
+    "Belinda J Parmenter",
+    "Kelly A McLeod",
+    "Michael A Wewege",
+    "Neil A Smart",
+    "Aletta E Schutte",
+    "Matthew D Jones"
+   ],
+   "year": 2021,
+   "journal": "Hypertension research : official journal of the Japanese Society of Hypertension",
+   "abstract": "High blood pressure (BP) is a global health challenge. Isometric resistance training (IRT) has demonstrated antihypertensive effects, but safety data are not available, thereby limiting its recommendation for clinical use. We conducted a systematic review of randomized controlled trials comparing IRT to controls in adults with elevated BP (systolic ≥130 mmHg/diastolic ≥85 mmHg). This review provides an update to office BP estimations and is the first to investigate 24-h ambulatory BP, central BP, and safety. Data were analyzed using a random-effects meta-analysis. We assessed the risk of bias with the Cochrane risk of bias tool and the quality of evidence with GRADE. Twenty-four trials were included (n = 1143; age = 56 ± 9 years, 56% female). IRT resulted in clinically meaningful reductions in office systolic (-6.97 mmHg, 95% CI -8.77 to -5.18, p < 0.0001) and office diastolic BP (-3.86 mmHg, 95% CI -5.31 to -2.41, p < 0.0001). Novel findings included reductions in central systolic (-7.48 mmHg, 95% CI -14.89 to -0.07, p = 0.035), central diastolic (-3.75 mmHg, 95% CI -6.38 to -1.12, p = 0.005), and 24-h diastolic (-2.39 mmHg, 95% CI -4.28 to -0.40, p = 0.02) but not 24-h systolic BP (-2.77 mmHg, 95% CI -6.80 to 1.25, p = 0.18). These results are very low/low certainty with high heterogeneity. There was no significant increase in the risk of IRT, risk ratio (1.12, 95% CI 0.47 to 2.68, p = 0.8), or the risk difference (1.02, 95% CI 1.00 to 1.03, p = 0.13). This means that there is one adverse event per 38,444 bouts of IRT. IRT appears safe and may cause clinically relevant reductions in BP (office, central BP, and 24-h diastolic). High-quality trials are required to improve confidence in these findings. PROSPERO (CRD42020201888); OSF ( https://doi.org/10.17605/OSF.IO/H58BZ )."
+  },
+  {
+   "key": "Carey2022treatment",
+   "doi": "10.1001/jama.2022.19590",
+   "title": "Treatment of Hypertension: A Review.",
+   "authors": [
+    "Robert M Carey",
+    "Andrew E Moran",
+    "Paul K Whelton"
+   ],
+   "year": 2022,
+   "journal": "JAMA",
+   "abstract": "Hypertension, defined as persistent systolic blood pressure (SBP) at least 130 mm Hg or diastolic BP (DBP) at least 80 mm Hg, affects approximately 116 million adults in the US and more than 1 billion adults worldwide. Hypertension is associated with increased risk of cardiovascular disease (CVD) events (coronary heart disease, heart failure, and stroke) and death. First-line therapy for hypertension is lifestyle modification, including weight loss, healthy dietary pattern that includes low sodium and high potassium intake, physical activity, and moderation or elimination of alcohol consumption. The BP-lowering effects of individual lifestyle components are partially additive and enhance the efficacy of pharmacologic therapy. The decision to initiate antihypertensive medication should be based on the level of BP and the presence of high atherosclerotic CVD risk. First-line drug therapy for hypertension consists of a thiazide or thiazidelike diuretic such as hydrochlorothiazide or chlorthalidone, an angiotensin-converting enzyme inhibitor or angiotensin receptor blocker such as enalapril or candesartan, and a calcium channel blocker such as amlodipine and should be titrated according to office and home SBP/DBP levels to achieve in most people an SBP/DBP target (&lt;130/80 mm Hg for adults &lt;65 years and SBP &lt;130 mm Hg in adults ≥65 years). Randomized clinical trials have established the efficacy of BP lowering to reduce the risk of CVD morbidity and mortality. An SBP reduction of 10 mm Hg decreases risk of CVD events by approximately 20% to 30%. Despite the benefits of BP control, only 44% of US adults with hypertension have their SBP/DBP controlled to less than 140/90 mm Hg. Hypertension affects approximately 116 million adults in the US and more than 1 billion adults worldwide and is a leading cause of CVD morbidity and mortality. First-line therapy for hypertension is lifestyle modification, consisting of weight loss, dietary sodium reduction and potassium supplementation, healthy dietary pattern, physical activity, and limited alcohol consumption. When drug therapy is required, first-line therapies are thiazide or thiazidelike diuretics, angiotensin-converting enzyme inhibitor or angiotensin receptor blockers, and calcium channel blockers."
+  }
+ ]
+}

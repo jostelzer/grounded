@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "K1",
+      "kind": "method",
+      "prompt": "A 2026 systematic review gathered 25 studies of microplastics in living people. What kind of studies were most of them?",
+      "options": {
+        "A": "Trials that randomly assigned people to more or less plastic exposure",
+        "B": "Studies that followed the same people forward in time for many years",
+        "C": "Snapshots at one point in time, or comparisons of sick and healthy people",
+        "D": "Laboratory experiments on human cells grown from donated tissue samples"
+      }
+    },
+    {
+      "id": "K2",
+      "kind": "method",
+      "prompt": "The strongest human study on microplastics and the heart and blood vessels linked plastic to later heart attacks, strokes and deaths. How was it done?",
+      "options": {
+        "A": "Plaque removed from patients' neck arteries during surgery was tested for plastic, and the patients were followed for later events",
+        "B": "Healthy volunteers had their blood tested for plastic and were followed for a decade to see who developed heart disease",
+        "C": "People were randomly assigned to drink bottled or filtered water, and their heart health was tracked over several years",
+        "D": "Heart-attack patients were asked how often they used plastic food containers, and their answers were compared with healthy people's"
+      }
+    },
+    {
+      "id": "K3",
+      "kind": "method",
+      "prompt": "Why can't the amounts of microplastic reported by different human-tissue studies simply be compared with one another?",
+      "options": {
+        "A": "Each study measured only one type of plastic, and no two studies chose the same type",
+        "B": "Methods are standardised, but tissue samples differ too much between people to compare",
+        "C": "Plastic breaks down in stored tissue, so results depend on how long samples waited",
+        "D": "Labs use different particle-size cut-offs, contamination checks and units"
+      }
+    },
+    {
+      "id": "K4",
+      "kind": "certainty",
+      "prompt": "Taking all the evidence together, how sure is it that everyday microplastic exposure is harming people's health?",
+      "options": {
+        "A": "Well established",
+        "B": "Probable",
+        "C": "Uncertain",
+        "D": "No evidence either way"
+      }
+    },
+    {
+      "id": "K5",
+      "kind": "certainty",
+      "prompt": "In a study of artery plaque removed during surgery, patients whose plaque contained plastic later had more heart attacks, strokes and deaths. How strongly does this show that the plastic caused those events?",
+      "options": {
+        "A": "Established as a cause",
+        "B": "Probably a cause",
+        "C": "Linked, but cause not shown",
+        "D": "No link found"
+      }
+    },
+    {
+      "id": "K6",
+      "kind": "magnitude",
+      "prompt": "In the artery-plaque study, roughly how much higher was the rate of heart attack, stroke or death among patients whose plaque contained plastic, after adjusting for other risk factors?",
+      "options": {
+        "A": "About 45 times higher",
+        "B": "About 4.5 times higher",
+        "C": "About 1.5 times higher",
+        "D": "About 10% higher"
+      }
+    },
+    {
+      "id": "K7",
+      "kind": "magnitude",
+      "prompt": "A 2024 systematic review judged several harms from microplastics to be 'suspected'. How many of the 31 studies it relied on were done in humans?",
+      "options": {
+        "A": "Most of them (28 of 31)",
+        "B": "About half (15 of 31)",
+        "C": "A small minority (3 of 31)",
+        "D": "None of them (0 of 31)"
+      }
+    },
+    {
+      "id": "K8",
+      "kind": "mechanism",
+      "prompt": "In a laboratory study, mice were given manufactured polystyrene particles by mouth for four or eight weeks. What happened to their kidneys?",
+      "options": {
+        "A": "The particles passed straight through the gut and never reached kidney tissue",
+        "B": "The kidneys adapted, and their filtering had recovered fully by eight weeks",
+        "C": "The mice developed kidney tumours, though only those given the highest dose",
+        "D": "Particles built up in kidney cells, injuring them and making protein leak into urine"
+      }
+    },
+    {
+      "id": "K9",
+      "kind": "meaning",
+      "prompt": "People with inflammatory bowel disease had more microplastic in their stool. Why doesn't this show that plastic caused their disease?",
+      "options": {
+        "A": "The study was too small to detect any real difference between sick and healthy people",
+        "B": "An inflamed gut may hold or shed plastic differently, so illness could drive the levels",
+        "C": "On closer analysis, plastic levels in sick and healthy people turned out to be the same",
+        "D": "The particles found in stool were too large to have crossed the gut wall into tissue"
+      }
+    },
+    {
+      "id": "K10",
+      "kind": "misconception",
+      "prompt": "Microplastics have been reported in blood vessels, reproductive organs, the gut, lungs and eyes of living people. What does that finding on its own establish?",
+      "options": {
+        "A": "That plastic reaches these tissues, not whether it causes illness there",
+        "B": "That plastic is damaging these organs, since it does not belong in them",
+        "C": "That everyday exposure is already high enough to harm people's health",
+        "D": "Nothing, because such findings are almost certainly lab contamination"
+      }
+    },
+    {
+      "id": "K11",
+      "kind": "misconception",
+      "prompt": "Cell and animal studies show that some microplastic exposures can inflame and injure tissue. What is the soundest way to read these results?",
+      "options": {
+        "A": "They prove that everyday exposure is injuring human organs in just the same way",
+        "B": "They show harm only at doses far above anything people could ever encounter",
+        "C": "They are irrelevant, because cells and mice tell us nothing about human health",
+        "D": "They make harm plausible, but tested particles and doses differ from daily exposure"
+      }
+    },
+    {
+      "id": "K12",
+      "kind": "unknown",
+      "prompt": "Which of these questions can current research not yet answer?",
+      "options": {
+        "A": "Whether microplastics have been reported in living human tissue",
+        "B": "How much everyday exposure changes a person's chance of getting sick",
+        "C": "Whether polystyrene particles can injure mouse kidneys in the lab",
+        "D": "Whether surgery patients with plastic in their artery plaque had more later events"
+      }
+    }
+  ]
+}

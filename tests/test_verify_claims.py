@@ -397,6 +397,29 @@ T.
         self.assertEqual(audit["claims"][1]["adjudications"][0]["synthesis_quotes"],
                          ["yielded a statistically significant increase (8.7% corresponding to 0.6 mM"])
 
+    def test_extract_accepts_a_source_quoted_only_in_the_popsci_fact_bank(self):
+        review = ("## Q\n\nBrain creatine rose 8.7% [Dechent 1999](https://doi.org/10.1/dechent). "
+                  "Reviews describe modest increases [Roschel 2021](https://doi.org/10.1/roschel).\n\n"
+                  "**Sources**\n\n**Dechent P (1999)** T. *J*. https://doi.org/10.1/dechent\n")
+        (self.tmp / "review.md").write_text(review)
+        (self.tmp / "sources.json").write_text(json.dumps(self.ledger))
+        (self.tmp / "synthesis.md").write_text(self.SYNTHESIS)
+        (self.tmp / "facts.md").write_text(
+            "### F1. Reviews describe modest increases in brain creatine.\n"
+            "- kind: background\n- quote: [@Roschel2021] \"modest increases\"\n")
+        from tests.test_assertion_audit import assessment_fixture
+        (self.tmp / "evidence-assessment.json").write_text(json.dumps(
+            assessment_fixture(self.ledger, self.SYNTHESIS)))
+        args = argparse.Namespace(review=str(self.tmp / "review.md"), ledger=str(self.tmp / "sources.json"),
+                                  synthesis=str(self.tmp / "synthesis.md"), audit=str(self.tmp / "audit.json"),
+                                  facts=None)
+        with self.assertRaises(SystemExit):
+            verify_claims.cmd_extract(args)
+        args.facts = str(self.tmp / "facts.md")
+        verify_claims.cmd_extract(args)
+        audit = json.loads((self.tmp / "audit.json").read_text())
+        self.assertEqual(audit["claims"][2]["adjudications"][0]["synthesis_quotes"], ["modest increases"])
+
     def test_blind_packets_hide_source_and_place_and_packet_ids_adjudicate(self):
         audit = {"review": "r.md", "claims": [{
             "id": "C001", "claim": "Brain creatine rose 8.7%.", "location": "paragraph 1, sentence 1",

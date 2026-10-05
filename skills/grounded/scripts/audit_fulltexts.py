@@ -59,8 +59,8 @@ NOTE_SIGNALS = {
         r"generaliza|preclude)\w*\b", re.I
     ),
     "synthesis_use": re.compile(
-        r"\b(?:support|counter|boundary|mechanis|lead|inference|evidence|warn|"
-        r"context|demonstrat|inform|relevant|used|useful|weight)\w*\b", re.I
+        r"\bsynthesis use\s*:|\b(?:support|counter|boundary|mechanis|lead|inference|evidence|warn|"
+        r"context|demonstrat|inform|relevant|used|useful|weight|qualif|contradict|anchor)\w*\b", re.I
     ),
 }
 

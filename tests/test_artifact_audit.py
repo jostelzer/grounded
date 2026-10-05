@@ -112,6 +112,66 @@ class ArtifactAuditTests(unittest.TestCase):
         self.assertEqual(trailing[1]['claim'], 'Pain fell.')
         self.assertEqual(trailing[1]['dois'], ['10.0000/example'])
 
+    def test_marked_rounding_direction_words_and_detached_units_are_supported(self):
+        supported = [
+            ("about 16 minutes shorter to 16 minutes longer", "−16.1 to 15.8 minutes"),
+            ("The extra sleep was 35 minutes", "35 more minutes of sleep"),
+            ("about 4 points", "4.26 mm Hg (95% CI 3.62 to 4.89)"),
+            ("nearly five years", "mean follow-up 4.74 years"),
+            ("about 21,000 people", "20,995 persons"),
+            ("about four and a half times the rate", "hazard ratio 4.53"),
+            ("0.67 hours less school-time use", "−0.67 h"),
+            ("about 250 mothers", "246 women"),
+        ]
+        for claim, quote in supported:
+            self.assertFalse(audit_contract.missing_quantities(claim, quote), (claim, quote))
+
+    def test_unmarked_rounding_wrong_units_and_bare_sign_changes_stay_unmatched(self):
+        unmatched = [
+            ("16 minutes shorter", "−16.1 minutes"),          # rounding not marked
+            ("250 mothers", "246 women"),
+            ("about 100 trials", "133 trials"),               # not a rounding of 133
+            ("about 15 hours", "15 min"),                     # conflicting units
+            ("Risk about 5%", "Risk 5.2"),                    # percent against a plain number
+            ("0.67 hours", "−0.67 h"),                        # sign with no direction word
+            ("about 4 points", "14.26 mm Hg"),
+        ]
+        for claim, quote in unmatched:
+            self.assertTrue(audit_contract.missing_quantities(claim, quote), (claim, quote))
+
+    def test_exact_conversions_frequencies_and_number_words_are_supported(self):
+        supported = [
+            ("The session lasted two hours", "a 120-min session"),
+            ("followed to age 3 years", "through 36 months of age"),
+            ("lasted 1.5 hours", "90 minutes"),
+            ("two weeks later", "14 days after"),
+            ("9.80 hours means nine hours and forty-eight minutes", "9.80 h"),
+            ("About 38 in every 100 babies", "37.6% of infants"),
+            ("About six in every hundred mothers", "6.2% of mothers"),
+            ("about 4 in 10 babies", "37.6% of infants"),
+            ("The difference was essentially zero", "difference −0.18 min"),
+            ("gained 1.4 hours a day", "1.4 h/day"),
+            ("One hundred six infants took part", "106 infants"),
+            ("106 infants took part", "One hundred six infants were enrolled"),
+            ("246 mothers", "Two hundred and forty-six women"),
+        ]
+        for claim, quote in supported:
+            self.assertFalse(audit_contract.missing_quantities(claim, quote), (claim, quote))
+
+    def test_conversions_and_frequencies_do_not_excuse_wrong_values(self):
+        unmatched = [
+            ("lasted 2 hours", "90 minutes"),                 # a different duration
+            ("three weeks later", "14 days after"),
+            ("38 in every 100 babies", "37.6% of infants"),   # rounding not marked
+            ("about 4 in 10 babies", "33.0% of infants"),     # too far for "about 4 in 10"
+            ("about 4 in 10 babies", "40 infants"),           # a count is not a share
+            ("gained 1.4 hours", "1.4 h/day"),                # the rate is not named
+            ("5 mg", "5 g"),
+            ("hundreds of studies and 3 trials", "2 trials"),
+        ]
+        for claim, quote in unmatched:
+            self.assertTrue(audit_contract.missing_quantities(claim, quote), (claim, quote))
+
     def test_time_unit_aliases_preserve_sign_and_unit_distinctions(self):
         for unit in ('h', 'hr', 'hrs', 'hour', 'hours'):
             self.assertFalse(audit_contract.missing_quantities('−0.67 hours', f'−0.67 {unit}'))

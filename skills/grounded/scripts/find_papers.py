@@ -1363,7 +1363,7 @@ def build_parser():
     )
     ap.add_argument(
         "--lane",
-        choices=["reviews", "primary", "foundational", "recent", "contrary-null", "general"],
+        choices=["reviews", "primary", "foundational", "recent", "contrary-null", "background", "general"],
         default="general",
         help="search-funnel lane recorded in search-manifest.json",
     )

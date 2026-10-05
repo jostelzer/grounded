@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "K1",
+      "kind": "method",
+      "prompt": "The DASH-Sodium trial tested a healthy eating pattern at different salt levels in 412 people. How did the researchers control what participants ate?",
+      "options": {
+        "A": "They gave participants recipes and shopping lists, then checked progress monthly",
+        "B": "They asked participants to keep detailed food diaries and estimated sodium from them",
+        "C": "They supplied participants' meals, with each salt level eaten for 30 days",
+        "D": "They delivered groceries to participants' homes and added dietitian counselling"
+      }
+    },
+    {
+      "id": "K2",
+      "kind": "method",
+      "prompt": "A trial of about 21,000 people in rural China tested whether a potassium-enriched salt substitute prevents strokes. How was it designed?",
+      "options": {
+        "A": "600 villages were randomly assigned to the substitute or regular salt, and strokes and deaths were counted over about five years",
+        "B": "People who had chosen the substitute were compared with people who had chosen regular salt, and their stroke rates were tracked",
+        "C": "Blood pressure was measured after a month on each salt, and the change was used to project how many strokes would follow",
+        "D": "Stroke patients and healthy neighbours were asked about their past salt use, and the two groups' answers were compared"
+      }
+    },
+    {
+      "id": "K3",
+      "kind": "certainty",
+      "prompt": "How sure is the evidence that eating less sodium lowers blood pressure?",
+      "options": {
+        "A": "Well established",
+        "B": "Probable",
+        "C": "Uncertain",
+        "D": "No evidence either way"
+      }
+    },
+    {
+      "id": "K4",
+      "kind": "certainty",
+      "prompt": "Isometric exercise means holding a muscle still under strain, as in a wall squat or a handgrip squeeze. How sure is the evidence that it lowers blood pressure more than aerobic exercise such as brisk walking or cycling?",
+      "options": {
+        "A": "Well established",
+        "B": "Probable",
+        "C": "Uncertain",
+        "D": "No evidence either way"
+      }
+    },
+    {
+      "id": "K5",
+      "kind": "magnitude",
+      "prompt": "In trials where staff supervised diet, weight-loss and exercise programmes, roughly how much did combining several lifestyle changes lower clinic systolic (upper-number) blood pressure?",
+      "options": {
+        "A": "About 30–40 mmHg",
+        "B": "About 10–16 mmHg",
+        "C": "About 4 mmHg",
+        "D": "About 1–2 mmHg"
+      }
+    },
+    {
+      "id": "K6",
+      "kind": "magnitude",
+      "prompt": "As a rule of thumb, how much does systolic blood pressure fall for each kilogram of body weight lost?",
+      "options": {
+        "A": "About 10 mmHg",
+        "B": "About 5 mmHg",
+        "C": "About 1 mmHg",
+        "D": "About 0.1 mmHg"
+      }
+    },
+    {
+      "id": "K7",
+      "kind": "magnitude",
+      "prompt": "In large trials where people followed lifestyle programmes in ordinary life, shopping and cooking for themselves, how much further did systolic pressure fall than in a group given advice only?",
+      "options": {
+        "A": "No measurable difference",
+        "B": "About 4 mmHg",
+        "C": "About 10 mmHg",
+        "D": "About 16 mmHg"
+      }
+    },
+    {
+      "id": "K8",
+      "kind": "meaning",
+      "prompt": "The same lifestyle programmes lower blood pressure much more in supervised trials than in everyday life. What best explains the gap?",
+      "options": {
+        "A": "The body adapts within weeks, so the biological effect of diet and exercise fades",
+        "B": "Supervised trials enrolled people with milder high blood pressure, which responds better",
+        "C": "Everyday studies measured blood pressure less carefully, which hid most of the benefit",
+        "D": "People struggle to sustain the changes when they shop, cook and train on their own"
+      }
+    },
+    {
+      "id": "K9",
+      "kind": "misconception",
+      "prompt": "Someone with stage 2 hypertension drinks about one glass of wine a day. What do the trials suggest about cutting it out to lower their blood pressure?",
+      "options": {
+        "A": "It should lower systolic pressure by about 5 mmHg, as cutting back does for other drinkers",
+        "B": "Cutting back from two or fewer drinks a day produced no significant fall in blood pressure",
+        "C": "Any reduction in alcohol lowers pressure a little, so it is always worth a few mmHg",
+        "D": "It would raise blood pressure, because light drinking keeps the arteries relaxed"
+      }
+    },
+    {
+      "id": "K10",
+      "kind": "misconception",
+      "prompt": "Which reading of the evidence best fits someone newly diagnosed with stage 2 hypertension?",
+      "options": {
+        "A": "Lifestyle change still lowers pressure, often more at higher levels, alongside a medical decision on drugs",
+        "B": "Lifestyle change is mainly for mild high blood pressure; at stage 2 its effect is too small to be worth the effort",
+        "C": "Because supervised programmes match a drug's effect, a determined lifestyle overhaul can replace medication",
+        "D": "Lifestyle change only starts to help once drugs have brought pressure down to stage 1 levels"
+      }
+    },
+    {
+      "id": "K11",
+      "kind": "fact",
+      "prompt": "Most lifestyle measures have been shown to lower blood-pressure readings. Which one also has randomised-trial evidence of fewer strokes and deaths?",
+      "options": {
+        "A": "Isometric exercise such as wall squats",
+        "B": "Following the DASH eating pattern",
+        "C": "Losing excess body weight",
+        "D": "Using a potassium-enriched salt substitute"
+      }
+    },
+    {
+      "id": "K12",
+      "kind": "unknown",
+      "prompt": "Which of these questions does the current evidence leave open?",
+      "options": {
+        "A": "Whether supervised diet and exercise help people already taking several blood-pressure drugs",
+        "B": "Whether cutting sodium lowers blood pressure more when the starting pressure is higher",
+        "C": "Whether a potassium-enriched salt substitute has been shown to reduce strokes in any population",
+        "D": "Whether combined lifestyle programmes work as well for people starting above 160/100 mmHg"
+      }
+    }
+  ]
+}

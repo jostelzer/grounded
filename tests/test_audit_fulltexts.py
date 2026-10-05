@@ -91,6 +91,12 @@ class FulltextAuditTests(unittest.TestCase):
             self.assertEqual(manifest["summary"]["valid_distinct"], 1)
             self.assertEqual(manifest["summary"]["counted_with_complete_notes"], 1)
 
+    def test_documented_note_labels_satisfy_every_signal(self):
+        note = ("Design: cohort of 388 dyads. Result: 37.6% did not reach six hours. "
+                "Limitation: maternal report. Synthesis use: variability, not a deadline.")
+        for name, pattern in audit_fulltexts.NOTE_SIGNALS.items():
+            self.assertTrue(pattern.search(note), name)
+
     def test_missing_notes_do_not_count_an_authentic_text(self):
         with tempfile.TemporaryDirectory() as tmp:
             folder = Path(tmp)

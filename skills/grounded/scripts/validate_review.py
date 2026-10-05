@@ -21,7 +21,8 @@ from artifact_io import atomic_write_json
 from citation_apparatus import correction_note_dois, ledger_correction_dois
 import claim_receipts
 
-from review_config import WORD_BUDGETS, TIER_REQUIREMENTS, section_range
+import readability_profile
+from review_config import WORD_BUDGETS, TIER_REQUIREMENTS, section_range, source_range
 
 MOJIBAKE = re.compile(r"(?:\ufffd|Ã.|Â(?=\s|[^\w])|â(?:€|€™|€œ|€\x9d|€“|€”))")
 SCAFFOLD_LABEL = re.compile(
@@ -606,6 +607,13 @@ def validate_review(
     minimum, maximum = WORD_BUDGETS[style][size]
     tier_bound_count = body_word_count if legacy_word_count else breakdown["prose"]
     tier_bound_label = "body" if legacy_word_count else "prose body"
+    if style == "popsci" and not legacy_word_count:
+        # A feature is budgeted in the words its reader reads: citations, the
+        # standfirst, tables, captions and the scope note do not count. This is
+        # the count the writer's target and readability_profile.py use.
+        reader_words = readability_profile.profile(body)["measures"].get("prose_words")
+        if reader_words:
+            tier_bound_count, tier_bound_label = reader_words, "reader prose"
     if not minimum <= tier_bound_count <= maximum:
         overage = (
             f"trim {tier_bound_count - maximum} words"
@@ -621,7 +629,9 @@ def validate_review(
         apparatus_caps = (
             ("captions", breakdown["captions"], 80 * max(1, figure_count)),
             ("alt_text", breakdown["alt_text"], 40 * max(1, figure_count)),
-            ("tables", breakdown["tables"], 120),
+            # 120 words per table the tier allows: one compact table in a small
+            # review, room for two in a medium one.
+            ("tables", breakdown["tables"], 120 * max(1, TIER_REQUIREMENTS[size]["tables"][1])),
         )
         for name, actual, cap in apparatus_caps:
             if actual > cap:
@@ -644,7 +654,7 @@ def validate_review(
         requirements = TIER_REQUIREMENTS[size]
         checks = (
             ("sections", section_count, section_range(style, size)),
-            ("sources", len(source_dois), requirements["sources"]),
+            ("sources", len(source_dois), source_range(style, size)),
             ("tables", table_count, requirements["tables"]),
             ("fulltexts", fulltext_count, requirements["fulltexts"]),
         )

@@ -37,7 +37,7 @@ Head-to-head studies; network meta-analyses; separate evidence bases for each; d
 - **Then the classics**: `--sort cited` without a date filter to surface foundational papers in OpenAlex. PubMed has no equivalent citation-count sort.
 - **Then the newest**: `--from-year <two years ago>` to catch work newer than the latest reviews.
 - **Contradiction pass**: queries that name the null or the criticism explicitly; the index does not rank disagreement for you.
-- **Label every run with `--angle`, stable `--angle-id`, and `--lane`** so coverage is machine-auditable. Use the `reviews`, `primary`, `foundational`, `recent`, and `contrary-null` lanes across a large funnel.
+- **Label every run with `--angle`, stable `--angle-id`, and `--lane`** so coverage is machine-auditable. Use the `reviews`, `primary`, `foundational`, `recent`, and `contrary-null` lanes across a large funnel. Popsci adds a `background` lane, driven by the reader questions, for definitions, mechanisms, normal ranges and standard practice (`popsci-pipeline.md`); `audit_search.py --style popsci` requires it.
 - **Page deeply enough to test saturation**: increase `--limit` rather than treating repeated results in the first page as saturation. `--page-size` controls request batching, not the stopping limit.
 - **Give OpenAlex identity metadata**: use `OPENALEX_API_KEY`/`--openalex-api-key` where OpenAlex requires a key, or `OPENALEX_MAILTO`/`--mailto` for courtesy contact metadata. Requests are throttled and retried; a hard OpenAlex failure is logged and PubMed continues.
 

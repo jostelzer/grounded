@@ -59,6 +59,7 @@ from pathlib import Path
 import claim_evidence
 import claim_receipts
 import synthesis_quotes
+import fact_bank
 from artifact_io import atomic_write_json, atomic_write_text
 
 PACKET_FALLBACK_CHARS = 2500
@@ -144,6 +145,10 @@ def cmd_extract(args):
             sys.exit("--synthesis needs --ledger to map keys to DOIs")
         quoted = synthesis_quotes.quotes_by_doi(
             Path(args.synthesis).read_text(), ledger)
+        if getattr(args, "facts", None):
+            for doi, pairs in fact_bank.quotes_by_doi(
+                    Path(args.facts).read_text(), ledger).items():
+                quoted.setdefault(doi, []).extend(pairs)
         unquoted = []
         for c in claims:
             for adj in c["adjudications"]:
@@ -155,8 +160,8 @@ def cmd_extract(args):
             for doi in unquoted:
                 print(f"  ! cited source has no quote in the synthesis: {doi}")
             print("HARD FAIL: the review cites what the synthesis never quoted — "
-                  "add the quote to synthesis.md (and re-run synthesis-check) or "
-                  "drop the citation.")
+                  "add the quote to synthesis.md or facts.md (and re-run "
+                  "synthesis-check) or drop the citation.")
             sys.exit(1)
         assessment_path = Path(getattr(args, "assessment", None) or
                                Path(args.synthesis).with_name("evidence-assessment.json"))
@@ -661,6 +666,12 @@ def cmd_synthesis_check(args):
     assessed = evidence_assessment.assess(json.loads(assessment_path.read_text()), ledger, text)
     result["errors"].extend(assessed["errors"])
     result["warnings"].extend(assessed["warnings"])
+    if getattr(args, "facts", None):
+        facts = fact_bank.check_facts(Path(args.facts).read_text(), args.evidence, ledger,
+                                      text, getattr(args, "size", None))
+        result["errors"].extend("facts: " + e for e in facts["errors"])
+        result["warnings"].extend("facts: " + w for w in facts["warnings"])
+        result["metrics"]["facts"] = facts["metrics"]
     result["status"] = "fail" if result["errors"] else "pass"
     if args.report:
         atomic_write_json(args.report, result)
@@ -809,6 +820,8 @@ def main():
     p.add_argument("--assessment", help="defaults to evidence-assessment.json beside synthesis")
     p.add_argument("--ledger", required=True)
     p.add_argument("--evidence", required=True)
+    p.add_argument("--facts", help="popsci facts.md, checked against the same store")
+    p.add_argument("--size", choices=("small", "medium", "large"))
     p.add_argument("--report")
     p.set_defaults(fn=cmd_synthesis_check)
 
@@ -816,6 +829,7 @@ def main():
     p.add_argument("--review", required=True)
     p.add_argument("--ledger")
     p.add_argument("--synthesis", help="synthesis.md; every cited source must carry a quote there")
+    p.add_argument("--facts", help="popsci facts.md; its quotes also count as synthesis quotes")
     p.add_argument("--assessment", help="outcome certainty and study families, required for reviews")
     p.add_argument("--audit", required=True)
     p.set_defaults(fn=cmd_extract)

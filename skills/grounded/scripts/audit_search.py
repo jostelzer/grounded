@@ -46,6 +46,7 @@ def _override(value: dict[str, Any] | None) -> tuple[set[str], str | None]:
 def audit_search(
     manifest: dict[str, Any], *, size: str,
     thin_literature_override: dict[str, Any] | None = None,
+    style: str | None = None,
 ) -> dict[str, Any]:
     if size not in REQUIREMENTS:
         raise ValueError(f"unsupported size: {size}")
@@ -142,6 +143,10 @@ def audit_search(
         remaining = [lane for lane in missing_lanes if lane != "contrary-null"]
         if remaining:
             issue("lanes", "search is missing lane(s): " + ", ".join(remaining))
+    if style == "popsci" and "background" not in lanes:
+        # A feature explains terms, mechanisms and scale the evidence lanes skip.
+        errors.append("popsci search requires a completed background lane for the "
+                      "reader questions (definitions, mechanisms, scale)")
 
     chase_by_seed: dict[str, set[str]] = defaultdict(set)
     for record in completed:
@@ -186,6 +191,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("manifest", help="search-manifest.json")
     parser.add_argument("--size", choices=tuple(REQUIREMENTS), required=True)
     parser.add_argument("--thin-literature-override")
+    parser.add_argument("--style", choices=("scientific", "prose", "popsci", "bullets", "eli5"))
     args = parser.parse_args(argv)
     try:
         manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
@@ -194,7 +200,8 @@ def main(argv: list[str] | None = None) -> int:
             if args.thin_literature_override else None
         )
         result = audit_search(
-            manifest, size=args.size, thin_literature_override=override
+            manifest, size=args.size, thin_literature_override=override,
+            style=args.style,
         )
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"Search audit failed: {exc}", file=sys.stderr)

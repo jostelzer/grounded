@@ -22,7 +22,17 @@ knowledge; do not require a story or analogy. For bullets, check retrieval and
 comparison of findings. Report style drift separately from shared clarity and
 scientific fidelity; the same narrative rubric must not govern all four styles.
 
-For popsci, judge the article first without the author's plan or check results:
+For popsci, the standing evaluation set is in the repository's `evals/popsci-writing/`
+(see its README): frozen evidence packets from several fields with independently
+written comprehension quizzes, a labelled corpus of published features, and scoring
+tools. Compare conditions on the same packets, written by the same model, with
+three instruments: cold readers who see both articles and say which they would
+rather read and why, in both orders; cold readers' quiz scores from one article
+alone (accuracy, points the article does not cover, over- or under-confident
+certainty answers); and a blind fidelity check against the sources. Reader
+preference and comprehension lead; a fidelity loss vetoes. Add a regression case
+there when a delivered article disappoints. Judge the article first without the
+author's plan or check results:
 what invites continued reading, how the story progresses, where reading becomes
 effortful, and what understanding the ending delivers. Assess source fidelity
 separately afterward. For illustrations, describe what the actual pixels teach

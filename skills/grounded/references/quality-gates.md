@@ -157,6 +157,12 @@ a quote that is not verbatim in the stored text, or a number in a claim
 sentence that sits in none of its quotes; it warns on `numbers:` values no
 quote contains. Drafting starts only when it passes.
 
+For popsci, add `--facts facts.md --size <size>`: the story notes' quotes are
+checked against the same store, and its numbers and quoted words must sit in
+its quotes. Then `reader_questions.py --stage draft` must pass, and
+`audit_popsci.py` must pass before figures and before release
+(`popsci-pipeline.md`).
+
 ## Claim audit and receipts
 
 Follow `claim-verification.md` for the schema-v2 inventory, independent classification, element coverage, qualification benchmark, and exact review/evidence binding. Every empirical assertion is covered, including headings and uncited summaries. Partial source support is releasable only when the union covers every assertion element. Old audits must be re-extracted and checked. Run check, receipts, and final validation before export; export and PDF QA revalidate the complete inventory and evidence hashes.
@@ -214,9 +220,11 @@ four figure-lineage arguments once per rendered figure; omit them for a
 text-only review.
 
 ```bash
-python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --claims-audit claims_audit.json --release-manifest release-manifest.json --release vX.Y.Z --compiled-date YYYY-MM-DD --figure-spec figure.json --figure-prompt figure.prompt.txt --figure-inspection figure.inspection.json --figure-provenance figure.provenance.json
+python3 scripts/export_review.py --in review.md --out review.pdf --pdf --style <scientific|popsci|bullets|eli5> --ledger sources.json --claims-audit claims_audit.json --release-manifest release-manifest.json --figure-spec figure.json --figure-prompt figure.prompt.txt --figure-inspection figure.inspection.json --figure-provenance figure.provenance.json
 python3 scripts/qa_review_pdf.py review.pdf --manifest release-manifest.json --render-dir review-pdf-qa --report pdf-qa.json
 ```
+
+The masthead shows the installed skill's version from `VERSION`. Leave `--release` and `--compiled-date` out unless a maintainer is rebuilding a dated release; never invent a version.
 
 QA rehashes every input, independently rebuilds the HTML, checks the one-PDF
 scope, requires a visible terminal References heading, requires every DOI as

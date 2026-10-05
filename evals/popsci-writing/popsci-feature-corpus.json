@@ -1,0 +1,6900 @@
+{
+ "schema_version": 1,
+ "consulted": "2026-10-04",
+ "label_scheme": {
+  "scene": "a concrete moment, observation, case, place or hypothetical the reader can picture",
+  "orientation": "nut graf: what the piece is about, the question, why it matters, the short answer",
+  "method": "how a study or investigation was actually done (who/what was studied, procedure, measurement, duration)",
+  "finding": "what a study or analysis found (results, effect sizes)",
+  "explanation": "how something works: mechanism, background science, definitions",
+  "context": "history, prevalence/scale, stakes, who is affected, the field's state",
+  "complication": "competing explanation, contrary result, a limitation or uncertainty that matters",
+  "voice": "paragraph carried mainly by a quoted person's words (interview or written)",
+  "practical": "what people actually do, or implications for practice/policy",
+  "payoff": "closing paragraph(s) that return to the opening or deliver the final understanding"
+ },
+ "articles": [
+  {
+   "id": "quanta-brain-low-power",
+   "outlet": "Quanta Magazine",
+   "title": "The Brain Has a ‘Low-Power Mode’ That Blunts Our Senses",
+   "url": "https://www.quantamagazine.org/the-brain-has-a-low-power-mode-that-blunts-our-senses-20220614/",
+   "year": 2022,
+   "domain": "biology/ecology (neuroscience)",
+   "words_approx": 2200,
+   "crossheads": 3,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 81
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 26
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 48
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 85
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 106
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 105
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 57
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 95
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 64
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 57
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 62
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 24
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 19
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 37
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 48
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 36
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 47
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 75
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 13
+    }
+   ],
+   "note": "device analogy, headline result and its perceptual cost up front; backfills prior hunger studies, then method-finding pairs across two crossheads; ends on what it means for lab practice and humans"
+  },
+  {
+   "id": "quanta-muon-g2",
+   "outlet": "Quanta Magazine",
+   "title": "Last Hope Experiment Finds Evidence for Unknown Particles",
+   "url": "https://www.quantamagazine.org/last-hope-experiment-finds-evidence-for-unknown-particles-20210407/",
+   "year": 2021,
+   "domain": "physics/astronomy",
+   "words_approx": 3240,
+   "crossheads": 3,
+   "paragraphs": [
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 44
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 79
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 26
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 61
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 97
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 126
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 9
+    },
+    {
+     "label": "voice",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 18
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 24
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 71
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 115
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 98
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 101
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 10
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 78
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 39
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 65
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 90
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 115
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 96
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 66
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 92
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 116
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 66
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 10
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 57
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 69
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 75
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 40
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    }
+   ],
+   "note": "news-led feature: result and rival calculation in the first dozen paragraphs, then a long history-and-mechanism middle (g-factor, Brookhaven, two ways to compute hadron effects), a short reveal scene, and an ending that weighs competing readings"
+  },
+  {
+   "id": "quanta-mirror-neurons",
+   "outlet": "Quanta Magazine",
+   "title": "Overexposure Distorted the Science of Mirror Neurons",
+   "url": "https://www.quantamagazine.org/overexposure-distorted-the-science-of-mirror-neurons-20240402/",
+   "year": 2024,
+   "domain": "psychology/social science (social neuroscience)",
+   "words_approx": 1290,
+   "crossheads": 2,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 79
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 65
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 54
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 100
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 149
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 98
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 52
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 83
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 83
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 40
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    }
+   ],
+   "note": "discovery scene in a 1991 lab, then a rise-and-fall history of the idea (hype, critique, debate, decline in papers), ending with recent mouse work that revives a narrower version; history-of-an-idea arc with almost no method detail"
+  },
+  {
+   "id": "quanta-hubble-tension-webb",
+   "outlet": "Quanta Magazine",
+   "title": "The Webb Telescope Further Deepens the Biggest Controversy in Cosmology",
+   "url": "https://www.quantamagazine.org/the-webb-telescope-further-deepens-the-biggest-controversy-in-cosmology-20240813/",
+   "year": 2024,
+   "domain": "physics/astronomy",
+   "words_approx": 2820,
+   "crossheads": 4,
+   "paragraphs": [
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 89
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 108
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 25
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 29
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 86
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 90
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 41
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 23
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 4
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 67
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 56
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 15
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 15
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 53
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 49
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 24
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 36
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 107
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 37
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 54
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 107
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 111
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 17
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "voice",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 59
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 23
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 12
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 84
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 110
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 82
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 29
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 29
+    }
+   ],
+   "note": "news peg and two rival teams up front, a history section on measuring distance, then a close account of one team's blinded three-method analysis (unblinding, errors found, three numbers), ending on newer independent methods; dense in method and finding"
+  },
+  {
+   "id": "quanta-llm-emergent-abilities",
+   "outlet": "Quanta Magazine",
+   "title": "The Unpredictable Abilities Emerging From Large AI Models",
+   "url": "https://www.quantamagazine.org/the-unpredictable-abilities-emerging-from-large-ai-models-20230316/",
+   "year": 2023,
+   "domain": "technology (AI)",
+   "words_approx": 2060,
+   "crossheads": 3,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 6
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 74
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 83
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 102
+    },
+    {
+     "label": "voice",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 51
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 34
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 92
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 93
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 95
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 94
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 115
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 13
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 137
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 91
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 42
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 66
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 46
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 57
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 80
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 50
+    }
+   ],
+   "note": "opens on one benchmark puzzle (emoji movie), nut graf on emergent abilities, then a background block on models and scaling, the benchmark study and its breakthroughs, two rival explanations, and a risks section built on bias studies"
+  },
+  {
+   "id": "conversation-free-will-disbelief",
+   "outlet": "The Conversation (Insights)",
+   "title": "Free will: does refusing to believe in it make you a ‘bad’ person? Research is challenging this old idea",
+   "url": "https://theconversation.com/free-will-does-refusing-to-believe-in-it-make-you-a-bad-person-research-is-challenging-this-old-idea-283307",
+   "year": 2026,
+   "domain": "psychology/social science",
+   "words_approx": 2520,
+   "crossheads": 3,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 93
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 78
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 91
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 136
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 75
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 100
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 78
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 71
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 110
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 85
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 106
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 99
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 109
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    }
+   ],
+   "note": "researcher-written argument: reader-addressed hook, classic experiments told method-first, a long section of methodological complications (construct validity, lab-only outcomes, effect size, replication), the author's own study, then policy implications"
+  },
+  {
+   "id": "conversation-sweeteners",
+   "outlet": "The Conversation (Insights)",
+   "title": "Sweeteners and the quest for the perfect alternative to sugar",
+   "url": "https://theconversation.com/sweeteners-and-the-quest-for-the-perfect-alternative-to-sugar-277770",
+   "year": 2026,
+   "domain": "medicine/health (nutrition)",
+   "words_approx": 4440,
+   "crossheads": 5,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 18
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 39
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 70
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 28
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 25
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 19
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 29
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 9
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 71
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 29
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 25
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 81
+    }
+   ],
+   "note": "researcher-written: opens on the authors' own trial-design problem (a biscuit), long history of sweeteners, a policy section, an evidence-literacy section on why studies disagree, then a trial-by-trial walk through randomised evidence; the closing line returns to the opening biscuit"
+  },
+  {
+   "id": "conversation-child-iq",
+   "outlet": "The Conversation (Insights)",
+   "title": "The truth about child IQ: research shows it fluctuates and may be an unreliable predictor of future success",
+   "url": "https://theconversation.com/the-truth-about-child-iq-research-shows-it-fluctuates-and-may-be-an-unreliable-predictor-of-future-success-271569",
+   "year": 2026,
+   "domain": "psychology/social science (child development, parenting)",
+   "words_approx": 3100,
+   "crossheads": 7,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 17
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 104
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 103
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 89
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 85
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 91
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 22
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 85
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 96
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 100
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 81
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 91
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 70
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 60
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 70
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 85
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 29
+    }
+   ],
+   "note": "researcher-written evidence tour framed by Mozart (myth-busting open, Mozart close); seven crossheaded sections each pairing a meta-analysis or cohort with its implication; a personal childhood scene midway introduces the nature-nurture complication"
+  },
+  {
+   "id": "conversation-earth-like-exoplanet",
+   "outlet": "The Conversation (Insights)",
+   "title": "Our quest to find a truly Earth-like planet in deep space",
+   "url": "https://theconversation.com/our-quest-to-find-a-truly-earth-like-planet-in-deep-space-266550",
+   "year": 2025,
+   "domain": "physics/astronomy",
+   "words_approx": 3290,
+   "crossheads": 4,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 91
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 39
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 28
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 83
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 59
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 15
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 69
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 112
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 99
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 68
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 80
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 94
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 80
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 53
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 75
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 6
+    }
+   ],
+   "note": "researcher-written: discovery scene of the first exoplanet, a long history-of-ideas section, a techniques explainer, then the authors' own observing campaigns told as first-person scenes leading to measured masses; closes on the Earth-twin quest with a one-line kicker"
+  },
+  {
+   "id": "conversation-kremlin-troll-tweets",
+   "outlet": "The Conversation (Insights)",
+   "title": "I investigated millions of tweets from the Kremlin’s ‘troll factory’ and discovered classic propaganda techniques reimagined for the social media age",
+   "url": "https://theconversation.com/i-investigated-millions-of-tweets-from-the-kremlins-troll-factory-and-discovered-classic-propaganda-techniques-reimagined-for-the-social-media-age-237712",
+   "year": 2024,
+   "domain": "technology (social media, disinformation)",
+   "words_approx": 3840,
+   "crossheads": 7,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 29
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 71
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 85
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 57
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 39
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 56
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 106
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 39
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 20
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 24
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 25
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 33
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 26
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 34
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 46
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 24
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 50
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 51
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 71
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 19
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 23
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 29
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    }
+   ],
+   "note": "researcher-written: long institutional backstory (founder, whistleblowers) before the author's own corpus study; then one crossheaded section per case study (election, Covid, Crimea) built from analysis results and example posts; ends on platform policy and AI-era outlook"
+  },
+  {
+   "id": "sciencenews-static-electricity",
+   "outlet": "Science News",
+   "title": "Static electricity is a mystery, and scientists are all charged up",
+   "url": "https://www.sciencenews.org/article/static-electricity-is-a-mystery",
+   "year": 2026,
+   "domain": "physics/astronomy",
+   "words_approx": 2780,
+   "crossheads": 6,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 84
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 78
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 31
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 68
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 21
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 75
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 92
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 11
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 86
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 34
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 53
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 80
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 56
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 33
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 100
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 62
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 12
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 62
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 78
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 44
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 22
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 86
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 55
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 94
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 50
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 67
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 73
+    }
+   ],
+   "note": "lab-bench scene, nut graf on an unsolved basic phenomenon, explainer and history sections, then one experimental thread (bead levitation, surface contamination) with method then findings; a conference serves as recurring scene and the close returns to it"
+  },
+  {
+   "id": "sciencenews-epstein-barr",
+   "outlet": "Science News",
+   "title": "Why Epstein-Barr is the ‘everything virus’",
+   "url": "https://www.sciencenews.org/article/epstein-barr-virus-autoimmune",
+   "year": 2026,
+   "domain": "medicine/health",
+   "words_approx": 2880,
+   "crossheads": 4,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 65
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 73
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 84
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 30
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 53
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 85
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 25
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 47
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 81
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 20
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 79
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 60
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 18
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 78
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 21
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 29
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 56
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 31
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 20
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 33
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 60
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 66
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 60
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 62
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 52
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 77
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 18
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 78
+    }
+   ],
+   "note": "six-paragraph patient scene before the nut graf; discovery history, then the key cohort study (military blood samples) told as a 20-year puzzle with method before result; mechanism section on two hypotheses; treatment and vaccine pipeline; closes back on the patient"
+  },
+  {
+   "id": "sciencenews-southwest-megadrought",
+   "outlet": "Science News",
+   "title": "Will the U.S. megadrought ever end?",
+   "url": "https://www.sciencenews.org/article/united-states-megadrought-climate",
+   "year": 2026,
+   "domain": "earth science (climate, hydrology)",
+   "words_approx": 2300,
+   "crossheads": 3,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 46
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "voice",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 28
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 70
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 45
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 14
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 96
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 24
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 84
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 24
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 64
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 47
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 31
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 83
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 62
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 32
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 66
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 45
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "payoff",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 37
+    }
+   ],
+   "note": "opens on one town running out of water, nut graf on the regional drought and a contested new study; tree-ring and model studies follow, each method then finding, plus a mechanism block on the Pacific oscillation; returns to the town and its grocer at the end"
+  },
+  {
+   "id": "sciencenews-ai-scientific-discovery",
+   "outlet": "Science News",
+   "title": "Have we entered a new age of AI-enabled scientific discovery?",
+   "url": "https://www.sciencenews.org/article/ai-enabled-science-discovery-insight",
+   "year": 2026,
+   "domain": "technology (AI)",
+   "words_approx": 2830,
+   "crossheads": 5,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 13
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 70
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 35
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 88
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 44
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 47
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 84
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 71
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 93
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 55
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 57
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 123
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 95
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 63
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 71
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 78
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 110
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 91
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 41
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 50
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 46
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 91
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 32
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 24
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 44
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 37
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 34
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "voice",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 77
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 58
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 38
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 70
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 26
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 59
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 20
+    }
+   ],
+   "note": "trend feature organised by a recurring metaphor (AI searching inside a box); each section pairs a researcher case with a skeptic's caveat; studies appear as short case results (a small drug trial, a planet-orbit experiment), not as extended method-finding runs"
+  },
+  {
+   "id": "e360-species-turnover-slowdown",
+   "outlet": "Yale Environment 360",
+   "title": "Species Slowdown: Is Nature’s Ability to Self-Repair Stalling?",
+   "url": "https://e360.yale.edu/features/ecosystem-turnover-slowdown",
+   "year": 2026,
+   "domain": "biology/ecology",
+   "words_approx": 1700,
+   "crossheads": 0,
+   "paragraphs": [
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 35
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 59
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 30
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 80
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 47
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 74
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 70
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 78
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 80
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 46
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 69
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 61
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 50
+    }
+   ],
+   "note": "news-analysis structure: the result in the first sentence, one method paragraph, outside reactions and a dissenting dataset, then a long history-of-ideas detour (stability versus churn) that explains why the result matters, ending on what it means for conservation"
+  },
+  {
+   "id": "e360-upper-atmosphere-cooling",
+   "outlet": "Yale Environment 360",
+   "title": "The Upper Atmosphere Is Cooling, Prompting New Climate Concerns",
+   "url": "https://e360.yale.edu/features/climate-change-upper-atmosphere-cooling",
+   "year": 2023,
+   "domain": "earth science (atmosphere, climate)",
+   "words_approx": 2050,
+   "crossheads": 0,
+   "paragraphs": [
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 38
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 82
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 90
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 88
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 94
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 100
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 19
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 28
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 92
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 103
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 79
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 90
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 76
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 73
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 52
+    }
+   ],
+   "note": "paradox lede and nut graf (good news, new worries), a mechanism explainer, then a tour of consequences (satellites, ozone, weather), each built from one measurement or study; closes on the threat to data supply with a callback to the opening coinage"
+  },
+  {
+   "id": "hakai-twilight-zone-fish-carbon",
+   "outlet": "Hakai Magazine",
+   "title": "All the Fish We Cannot See",
+   "url": "https://hakaimagazine.com/features/all-the-fish-we-cannot-see/",
+   "year": 2023,
+   "domain": "biology/ecology (marine)",
+   "words_approx": 3430,
+   "crossheads": 0,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 152
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 143
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 78
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 137
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 129
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 18
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 118
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 115
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 119
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 17
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 183
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 64
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 12
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 38
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 92
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 78
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 80
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 90
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 131
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 23
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 71
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 14
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 101
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 10
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 14
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 53
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 15
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 30
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 170
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 80
+    }
+   ],
+   "note": "historical sonar mystery as the opening scene, three-paragraph nut graf ending on a question, then researcher-by-researcher threads (counting fish, respiration, poop sinking rates), each a method-complication-finding loop; turns to fisheries history and policy, closing on humility"
+  },
+  {
+   "id": "hakai-doggerland",
+   "outlet": "Hakai Magazine",
+   "title": "Conjuring the Lost Land Beneath the North Sea",
+   "url": "https://hakaimagazine.com/features/conjuring-the-lost-land-beneath-the-north-sea/",
+   "year": 2024,
+   "domain": "earth science (paleogeography, submerged-landscape archaeology)",
+   "words_approx": 4340,
+   "crossheads": 0,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 152
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 101
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 172
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 110
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 20
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 107
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 132
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 162
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 164
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 177
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 96
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 101
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 185
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 215
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 104
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 106
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 80
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 194
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 73
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 46
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 136
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 171
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 85
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 135
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 75
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 57
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 114
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 127
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "payoff",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 89
+    }
+   ],
+   "note": "place-led opening (an industrialised sea) and a nut graf that reframes a 'land bridge' as a homeland; long century-spanning history, then one researcher's seismic-mapping and sediment-DNA programme told method-first with a single artefact as the payoff object; closes on climate migration then and now"
+  },
+  {
+   "id": "eos-forest-bvoc-chemistry",
+   "outlet": "Eos (AGU)",
+   "title": "Chemical Conversations Between Forests and the Sky Affect Air Quality, Clouds, and More",
+   "url": "https://eos.org/features/chemical-conversations-between-forests-and-the-sky-affect-air-quality-clouds-and-more",
+   "year": 2026,
+   "domain": "earth science (atmospheric chemistry)",
+   "words_approx": 2250,
+   "crossheads": 8,
+   "paragraphs": [
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 17
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 86
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 19
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 48
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 75
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 25
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 88
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 36
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 53
+    }
+   ],
+   "note": "researcher-written review: question lede, then eight short crossheaded sections moving from mechanism to climate paradox, health, urban policy, modelling problems and new satellite tools; findings come as one-sentence citations of meta-analyses and models; no scenes, no quoted voices"
+  },
+  {
+   "id": "greatergood-gratitude-brain",
+   "outlet": "Greater Good Magazine (UC Berkeley)",
+   "title": "How Gratitude Changes You and Your Brain",
+   "url": "https://greatergood.berkeley.edu/article/item/how_gratitude_changes_you_and_your_brain",
+   "year": 2017,
+   "domain": "psychology/social science (mental health)",
+   "words_approx": 1500,
+   "crossheads": 4,
+   "paragraphs": [
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 75
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 62
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 86
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 43
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 88
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 56
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 23
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 77
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 80
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 70
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 39
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 86
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 83
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 99
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    }
+   ],
+   "note": "researcher-written report of one randomised trial: question, method, headline result inside the first six paragraphs, then four numbered crossheads, each a secondary finding followed by a 'what this means for you' paragraph; no scenes or outside voices"
+  },
+  {
+   "id": "sapiens-africa-migrations-deep-time",
+   "outlet": "SAPIENS",
+   "title": "Do Africa’s Mass Animal Migrations Extend Into Deep Time?",
+   "url": "https://www.sapiens.org/archaeology/animal-migration-africa-teeth-fossils-deep-time/",
+   "year": 2025,
+   "domain": "biology/ecology (paleoecology, zooarchaeology)",
+   "words_approx": 1340,
+   "crossheads": 4,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 22
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 30
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 47
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 28
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 22
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 13
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 1
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 46
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 88
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 13
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 27
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 57
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 74
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 14
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 23
+    }
+   ],
+   "note": "researcher-written first-person: herd scene, the field's assumption, and the overturning answer up front; background, then the author's isotope method told as a lab scene, an expected-versus-found finding, corroborating studies, and conservation implications; closing image returns to the herd"
+  },
+  {
+   "id": "undark-prenatal-acetaminophen",
+   "outlet": "Undark",
+   "title": "Can In-Utero Exposure to Acetaminophen Cause Autism and ADHD?",
+   "url": "https://undark.org/2023/07/10/can-in-utero-exposure-to-acetaminophen-cause-autism-and-adhd/",
+   "year": 2023,
+   "domain": "medicine/health (pregnancy, child development)",
+   "words_approx": 3360,
+   "crossheads": 0,
+   "paragraphs": [
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 54
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 66
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 29
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 59
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 87
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 64
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 42
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 100
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 22
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 44
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 90
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 84
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 8
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 22
+    },
+    {
+     "label": "method",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 110
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 52
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 55
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 81
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 17
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 82
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 50
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 23
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 47
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 58
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 86
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 68
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "complication",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 104
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 5
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 69
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 33
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 40
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 21
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 70
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 56
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 45
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 69
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 95
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 14
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "method",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 83
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 26
+    }
+   ],
+   "note": "evidence-weighing feature hung on a lawsuit: consensus statement versus rebuttals up front, drug history and alternatives, then the observational evidence followed by a long run of methodological complications (recall, heredity, confounding by indication) and one reanalysis that erases the effect; ends on what everyone agrees on and the studies still needed"
+  },
+  {
+   "id": "e360-tire-pollution",
+   "outlet": "Yale Environment 360",
+   "title": "Road Hazard: Evidence Mounts on Toxic Pollution from Tires",
+   "url": "https://e360.yale.edu/features/tire-pollution-toxic-chemicals",
+   "year": 2023,
+   "domain": "medicine/health (environmental health, toxicology)",
+   "words_approx": 1920,
+   "crossheads": 0,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 65
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 60
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 104
+    },
+    {
+     "label": "orientation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 79
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 84
+    },
+    {
+     "label": "explanation",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 59
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 67
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 49
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 125
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 41
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 81
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 61
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 83
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 86
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 80
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 91
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 106
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 108
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 73
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 70
+    }
+   ],
+   "note": "opens on a solved mystery (salmon die-offs traced to one tyre chemical) and widens to tyre pollution generally; the middle stacks measurements of scale and exposure, each often a single figure from a study or company test; ends on regulation and engineering fixes"
+  },
+  {
+   "id": "eos-antimicrobial-resistance-climate",
+   "outlet": "Eos (AGU)",
+   "title": "Antimicrobial Resistance Is Killing Millions. Climate Change Is Making It Worse.",
+   "url": "https://eos.org/features/antimicrobial-resistance-is-killing-millions-climate-change-is-making-it-worse",
+   "year": 2026,
+   "domain": "medicine/health (antimicrobial resistance, climate and health)",
+   "words_approx": 2100,
+   "crossheads": 5,
+   "paragraphs": [
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 76
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 33
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 62
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 51
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 50
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 49
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 4
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 49
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 29
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 34
+    },
+    {
+     "label": "scene",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "context",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 44
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 45
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "voice",
+     "has_number": true,
+     "has_quote": true,
+     "approx_words": 47
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 41
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 28
+    },
+    {
+     "label": "finding",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 18
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 45
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 32
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 25
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 19
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 45
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 52
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 26
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 26
+    },
+    {
+     "label": "orientation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 25
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 63
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 35
+    },
+    {
+     "label": "finding",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 42
+    },
+    {
+     "label": "complication",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 51
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 39
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 34
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 37
+    },
+    {
+     "label": "explanation",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 22
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 35
+    },
+    {
+     "label": "scene",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 68
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 31
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 72
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 46
+    },
+    {
+     "label": "practical",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 61
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 38
+    },
+    {
+     "label": "context",
+     "has_number": false,
+     "has_quote": false,
+     "approx_words": 10
+    },
+    {
+     "label": "practical",
+     "has_number": true,
+     "has_quote": false,
+     "approx_words": 82
+    },
+    {
+     "label": "voice",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 63
+    },
+    {
+     "label": "payoff",
+     "has_number": false,
+     "has_quote": true,
+     "approx_words": 28
+    }
+   ],
+   "note": "two patient stories run through the piece as recurring scenes; between them, short mechanism explainers each carried by an expert quote; studies appear as single-sentence citations; heavy on voice, thin on method; ends on global policy"
+  }
+ ]
+}

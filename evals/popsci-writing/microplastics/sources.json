@@ -1,0 +1,280 @@
+{
+ "entries": [
+  {
+   "key": "Tran2026health",
+   "doi": "10.1186/s12940-026-01282-y",
+   "title": "Health impacts of micro- and nanoplastics in humans: systematic review of in vivo evidence.",
+   "authors": [
+    "Hien Anh Anna Tran",
+    "John Joson Ng",
+    "Daniel Hengyi Tang",
+    "Cai Ting Yong",
+    "Andrew Fu Wah Ho"
+   ],
+   "year": 2026,
+   "journal": "Environmental health : a global access science source",
+   "abstract": "Microplastics and nanoplastics (MNPs) are pervasive environmental contaminants with potential human health implications. Although laboratory models implicate MNPs in oxidative stress, inflammation, and endocrine disruption, a comprehensive synthesis of direct in vivo human evidence is lacking. We aimed to systematically review studies measuring MNPs in living human subjects and summarise associated health findings. We systematically searched PubMed, Web of Science, Scopus, Cochrane and Embase through 26 December 2024. Two investigators independently screened and selected original research articles that quantified MNPs in biological samples from living humans. We excluded animal, in vitro, cell-line, and injection-based studies, as well as reports on non-plastic micro- and nanoparticles. Data extraction, performed in duplicate, included study design, participant characteristics, detection methods, polymer types, and reported health outcomes. Methodological quality was appraised using Risk Of Bias in Non-Randomized Studies-of Exposures (ROBINS-E). The primary outcome was the presence and burden of MNPs; secondary outcomes were clinical or biomarker associations. No metaanalysis was performed due to heterogeneity. From 5 522 records, 25 studies met inclusion. Studies employed pyrolysis-gas chromatography/mass spectrometry (n = 9), Raman spectroscopy (n = 8), infrared spectroscopy (n = 7), and Fourier-transform infrared spectroscopy (n = 3), often combined with microscopy for MNP detection. Predominant polymers were polyethylene, polypropylene, polyvinyl chloride, polyethylene terephthalate, and polystyrene. In cardiovascular research (5 studies; n = 454), higher thrombus and plasma MNP burdens correlated with inflammatory markers and adverse cardiac events. Reproductive research (seven studies; n = 327) linked semen and tissue MNPs to reduced sperm quality and accumulation in tumor and placental samples. Gastrointestinal research (9 studies; n = 537) associated fecal MNPs with liver enzyme elevations and gut dysbiosis. Respiratory (3 studies; n = 171) and ocular (1 study; n = 49) research detected MNPs in airway fluids and vitreous humor respectively, with links to airway inflammation and increased intraocular pressure. ROBINS-E assessments indicated moderate to high risk of confounding and exposure-measurement bias; consistency across detection modalities was limited. Human in vivo evidence confirms that MNPs accumulate in multiple organ systems and are associated with inflammation and functional impairment. Methodological heterogeneity and bias constrain causal inference. Prospective cohort studies with rigorous exposure assessment and confounder control are needed to advance understanding and guide policy."
+  },
+  {
+   "key": "Scotton2026invisible",
+   "doi": "10.1016/j.envpol.2026.128298",
+   "title": "The invisible burden: A meta-analysis of methodological evolutions and the reassessment of microplastic concentrations in human tissues.",
+   "authors": [
+    "Jaque Willian Scotton",
+    "Alessandro Cazonatto Galvão",
+    "Denise Ortigosa Stolf",
+    "Maria Lucia do Carmo Cruz Robazzi",
+    "Weber da Silva Robazza"
+   ],
+   "year": 2026,
+   "journal": "Environmental pollution (Barking, Essex : 1987)",
+   "abstract": "Reports of microplastics (MPs) in human internal organs have surged since 2019, yet results remain characterized by extreme heterogeneity. While such inconsistencies are often attributed to environmental or biological factors, these results are consistent with the hypothesis that methodological limitations may result in a significant gap in our understanding of the systemic body burden and associated toxicological risks. This study presents a systematic review and meta-analysis of 11 high-quality benchmark datasets, totaling 190 observations, to explore the extent to which the transition from the \"conventional era\" (manual μRaman and μFTIR) to the \"modern era\" (automated LDIR and Py-GC/MS) may influence reported MP concentrations. Using a hierarchical mixed-effects meta-regression, we identified an overall pooled mean of 3.09 particles/g (I2 = 96.7%). However, the inclusion of an interaction term between the analytical era and matrix complexity significantly enhanced the model's explanatory power, accounting for 59.48% of the total literature variance (p = 0.0012). A significant interaction effect (p = 0.0231) revealed that while detection increased globally, modern automated platforms effectively \"rescued\" sequestered particles within solid parenchymal tissues, such as the placenta, lung, and endometrium, yielding concentrations nearly 70 times higher than those obtained via previous manual protocols. This \"Scanning Power Paradox\" infers that scanning efficiency, rather than mere optical resolution, may have been a primary historical bottleneck in human MP research. Our findings indicate that the human body burden may have been systematically underestimated, suggesting that current toxicological risk assessments may rely on \"ghost data\" that severely masks true human exposure. Consequently, the transition to automated, census-based standards is not merely a technical upgrade but a toxicological necessity for defining the true internal dose-response relationships in microplastic-linked chronic diseases."
+  },
+  {
+   "key": "Chartres2024effects",
+   "doi": "10.1021/acs.est.3c09524",
+   "title": "Effects of Microplastic Exposure on Human Digestive, Reproductive, and Respiratory Health: A Rapid Systematic Review",
+   "authors": [
+    "Nicholas Chartres",
+    "Courtney Cooper",
+    "Garret D. Bland",
+    "Katherine E. Pelch",
+    "Sheiphali A. Gandhi",
+    "Abena BakenRa",
+    "Tracey J. Woodruff"
+   ],
+   "year": 2024,
+   "journal": "Environmental Science & Technology",
+   "abstract": "High Resolution Image Download MS PowerPoint Slide Microplastics are ubiquitous environmental contaminants for which there are documented human exposures, but there is a paucity of research evaluating their impacts on human health. We conducted a rapid systematic review using the “Navigation Guide” systematic review method. We searched four databases in July 2022 and April 2024 with no restriction on the date. We included studies using predefined eligibility criteria that quantitatively examined the association of microplastic exposure with any health outcomes. We amended the eligibility criteria after screening studies and prioritized digestive, reproductive, and respiratory outcomes for further evaluation. We included three human observational studies examining reproductive ( n = 2) and respiratory ( n = 1) outcomes and 28 animal studies examining reproductive ( n = 11), respiratory ( n = 7), and digestive ( n = 10) outcomes. For reproductive outcomes (sperm quality) and digestive outcomes (immunosuppresion) we rated overall body evidence as “high” quality and concluded microplastic exposure is “suspected” to adversely impact them. For reproductive outcomes (female follicles and reproductive hormones), digestive outcomes (gross or microanatomic colon/small intestine effects, alters cell proliferation and cell death, and chronic inflammation), and respiratory outcomes (pulmonary function, lung injury, chronic inflammation, and oxidative stress) we rated the overall body of evidence as “moderate” quality and concluded microplastic exposure is “suspected” to adversely impact them. We concluded that exposure to microplastics is “unclassifiable” for birth outcomes and gestational age in humans on the basis of the “low” and “very low” quality of the evidence. We concluded that microplastics are “suspected” to harm human reproductive, digestive, and respiratory health, with a suggested link to colon and lung cancer. Future research on microplastics should investigate additional health outcomes impacted by microplastic exposure and identify strategies to reduce exposure."
+  },
+  {
+   "key": "Prattichizzo2024micro",
+   "doi": "10.1093/eurheartj/ehae552",
+   "title": "Micro-nanoplastics and cardiovascular diseases: evidence and perspectives",
+   "authors": [
+    "Francesco Prattichizzo",
+    "Antonio Ceriello",
+    "Valeria Pellegrini",
+    "Rosalba La Grotta",
+    "Laura Graciotti",
+    "Fabiola Olivieri",
+    "Pasquale Paolisso",
+    "Bruno D’Agostino",
+    "Pasquale Iovino",
+    "Maria Luisa Balestrieri",
+    "Sanjay Rajagopalan",
+    "Philip J. Landrigan",
+    "Raffaele Marfella",
+    "Giuseppe Paolisso"
+   ],
+   "year": 2024,
+   "journal": "European Heart Journal",
+   "abstract": "Emerging evidence indicates that chemical exposures in the environment are overlooked drivers of cardiovascular diseases (CVD). Recent evidence suggests that micro- and nanoplastic (MNP) particles derived largely from the chemical or mechanical degradation of plastics might represent a novel CVD risk factor. Experimental data in preclinical models suggest that MNPs can foster oxidative stress, platelet aggregation, cell senescence, and inflammatory responses in endothelial and immune cells while promoting a range of cardiovascular and metabolic alterations that can lead to disease and premature death. In humans, MNPs derived from various plastics, including polyethylene and polyvinylchloride, have been detected in atherosclerotic plaques and other cardiovascular tissues, including pericardia, epicardial adipose tissues, pericardial adipose tissues, myocardia, and left atrial appendages. MNPs have measurable levels within thrombi and seem to accumulate preferentially within areas of vascular lesions. Their presence within carotid plaques is associated with subsequent increased incidence of cardiovascular events. To further investigate the possible causal role of MNPs in CVD, future studies should focus on large, prospective cohorts assessing the exposure of individuals to plastic-related pollution, the possible routes of absorption, the existence of a putative safety limit, the correspondence between exposure and accumulation in tissues, the timing between accumulation and CVD development, and the pathophysiological mechanisms instigated by pertinent concentrations of MNPs. Data from such studies would allow the design of preventive, or even therapeutic, strategies. Meanwhile, existing evidence suggests that reducing plastic production and use will produce benefits for the environment and for human health. This goal could be achieved through the UN Global Plastics Treaty that is currently in negotiation."
+  },
+  {
+   "key": "Lee2025effects",
+   "doi": "10.1038/s41581-025-00971-0",
+   "title": "Effects of microplastics and nanoplastics on the kidney and cardiovascular system",
+   "authors": [
+    "Yu‐Hsuan Lee",
+    "Cai‐Mei Zheng",
+    "Ying‐Jan Wang",
+    "Yung‐Li Wang",
+    "Hui‐Wen Chiu"
+   ],
+   "year": 2025,
+   "journal": "Nature Reviews Nephrology",
+   "abstract": "Microplastics and nanoplastics are ubiquitous environmental pollutants that contaminate air, food and water supplies, resulting in widespread human exposure and potential health risks. Varying concentrations of particulate plastics have been identified in human tissues and body fluids, including the heart, kidney, liver, brain, blood and urine. Studies in animal models and human cells have reported that particulate plastics can induce oxidative stress, cell death and inflammation as well as disrupt metabolism and immune function. They have also been shown to have toxic effects on kidney and cardiovascular cells, which are exacerbated by the presence of other environmental contaminants such as heavy metals. Patients with kidney failure might be at risk of increased exposure to particulate plastics during dialysis. Furthermore, clinical evidence suggests that particulate plastic exposure is a risk factor for cardiovascular disease. Approaches to mitigating such exposure include degradation via abiotic and biotic processes, improved waste management and water filtration approaches and use of alternative materials. Further research into the fate, toxicity and health consequences of particulate plastics is imperative to inform strategies to address this escalating environmental and health concern."
+  },
+  {
+   "key": "Mahmud2024molecular",
+   "doi": "10.3390/cells13211788",
+   "title": "Molecular and Cellular Effects of Microplastics and Nanoplastics: Focus on Inflammation and Senescence",
+   "authors": [
+    "Faiza Mahmud",
+    "Drishty B. Sarker",
+    "Jonathan A. Jocelyn",
+    "Qing‐Xiang Amy Sang"
+   ],
+   "year": 2024,
+   "journal": "Cells",
+   "abstract": "Microplastics and nanoplastics (MNPs) are ubiquitous environmental contaminants. Their prevalence, persistence, and increasing industrial production have led to questions about their long-term impact on human and animal health. This narrative review describes the effects of MNPs on oxidative stress, inflammation, and aging. Exposure to MNPs leads to increased production of reactive oxygen species (ROS) across multiple experimental models, including cell lines, organoids, and animal systems. ROS can cause damage to cellular macromolecules such as DNA, proteins, and lipids. Direct interaction between MNPs and immune cells or an indirect result of oxidative stress-mediated cellular damage may lead to increased production of pro-inflammatory cytokines throughout different MNP-exposure conditions. This inflammatory response is a common feature in the pathogenesis of neurodegenerative, cardiovascular, and other age-related diseases. MNPs also act as cell senescence inducers by promoting mitochondrial dysfunction, impairing autophagy, and activating DNA damage responses, exacerbating cellular aging altogether. Increased senescence of reproductive cells and transfer of MNPs/induced damages from parents to offspring in animals further corroborates the transgenerational health risks of the tiny particles. This review aims to provoke a deeper investigation into the notorious effects these pervasive particles may have on human well-being and longevity."
+  },
+  {
+   "key": "Zhu2022micro",
+   "doi": "10.1016/j.envint.2022.107662",
+   "title": "Micro- and nanoplastics: A new cardiovascular risk factor?",
+   "authors": [
+    "Xiaoqi Zhu",
+    "Chuanxuan Wang",
+    "Xiaoyu Duan",
+    "Boxuan Liang",
+    "Elvis Genbo Xu",
+    "Zhenlie Huang"
+   ],
+   "year": 2022,
+   "journal": "Environment International",
+   "abstract": "Exposure to micro- and nanoplastics (MNPs) is inevitable due to their omnipresence in the environment. A growing body of studies has advanced our understanding of the potential toxicity of MNPs but knowledge gaps still exist regarding the adverse effects of MNPs on the cardiovascular system and underlying mechanisms, particularly in humans. Here, we reviewed up-to-date data published in the past 10 years on MNP-driven cardiovascular toxicity and mechanisms. Forty-six articles concerning ADME (absorption, distribution, and aggregation behaviors) and toxicity of MNPs in the circulatory system of animals and human cells were analyzed and summarized. The results showed that MNPs affected cardiac functions and caused toxicity on (micro)vascular sites. Direct cardiac toxicity of MNPs included abnormal heart rate, cardiac function impairment, pericardial edema, and myocardial fibrosis. On (micro)vascular sites, MNPs induced hemolysis, thrombosis, blood coagulation, and vascular endothelial damage. The main mechanisms included oxidative stress, inflammation, apoptosis, pyroptosis, and interaction between MNPs and multiple cellular components. Cardiovascular toxicity was determined by the properties (type, size, surface, and structure) of MNPs, exposure dose and duration, protein presence, the life stage, sex, and species of the tested organisms, as well as the interaction with other environmental contamination. The limited quantitative information on MNPs' ADME and the lack of guidelines for MNP cardiotoxicity testing makes risk assessment on cardiac health impossible. Furthermore, the future directions of cardiovascular research on MNPs are recommended to enable more realistic health risk assessment."
+  },
+  {
+   "key": "Wang2021kidney",
+   "doi": "10.1289/ehp7612",
+   "title": "The Kidney-Related Effects of Polystyrene Microplastics on Human Kidney Proximal Tubular Epithelial Cells HK-2 and Male C57BL/6 Mice",
+   "authors": [
+    "Yung‐Li Wang",
+    "Yu‐Hsuan Lee",
+    "Yung‐Ho Hsu",
+    "I‐Jen Chiu",
+    "Cathy Chia‐Yu Huang",
+    "Chih‐Chia Huang",
+    "Zi‐Chun Chia",
+    "Chung‐Pei Lee",
+    "Yuh‐Feng Lin",
+    "Hui‐Wen Chiu"
+   ],
+   "year": 2021,
+   "journal": "Environmental Health Perspectives",
+   "abstract": "Background: Understanding the epidemic of chronic kidney disease of uncertain etiology may be critical for health policies and public health responses. Recent studies have shown that microplastics (MPs) contaminate our food chain and accumulate in the gut, liver, kidney, muscle, and so on. Humans manufacture many plastics-related products. Previous studies have indicated that particles of these products have several effects on the gut and liver. Polystyrene (PS)-MPs (PS-MPs) induce several responses, such as oxidative stress, and affect living organisms. Objectives: The aim of this study was to investigate the effects of PS-MPs in kidney cells in vitro and in vivo. Methods: PS-MPs were evaluated in human kidney proximal tubular epithelial cells (HK-2 cells) and male C57BL/6 mice. Mitochondrial reactive oxygen species (ROS), endoplasmic reticulum (ER) stress, inflammation, and autophagy were analyzed in kidney cells. In vivo, we evaluated biomarkers of kidney function, kidney ultrastructure, muscle mass, and grip strength, and urine protein levels, as well as the accumulation of PS-MPs in the kidney tissue. Results: Uptake of PS-MPs at different concentrations by HK-2 cells resulted in higher levels of mitochondrial ROS and the mitochondrial protein Bad. Cells exposed to PS-MPs had higher ER stress and markers of inflammation. MitoTEMPO, which is a mitochondrial ROS antioxidant, mitigated the higher levels of mitochondrial ROS, Bad, ER stress, and specific autophagy-related proteins seen with PS-MP exposure. Furthermore, cells exposed to PS-MPs had higher protein levels of LC3 and Beclin 1. PS-MPs also had changes in phosphorylation of mitogen-activated protein kinase (MAPK) and protein kinase B (AKT)/mitogen-activated protein kinase (mTOR) signaling pathways. In an in vivo study, PS-MPs accumulated and the treated mice had more histopathological lesions in the kidneys and higher levels of ER stress, inflammatory markers, and autophagy-related proteins in the kidneys after PS-MPs treatment by oral gavage. Conclusions: The results suggest that PS-MPs caused mitochondrial dysfunction, ER stress, inflammation, and autophagy in kidney cells and accumulated in HK-2 cells and in the kidneys of mice. These results suggest that long-term PS-MPs exposure may be a risk factor for kidney health. https://doi.org/10.1289/EHP7612"
+  },
+  {
+   "key": "Mattioda2023inflammatory",
+   "doi": "10.3390/biom13010140",
+   "title": "Pro-Inflammatory and Cytotoxic Effects of Polystyrene Microplastics on Human and Murine Intestinal Cell Lines",
+   "authors": [
+    "Virginia Mattioda",
+    "Valerio Benedetti",
+    "Carlotta Tessarolo",
+    "Francesca Oberto",
+    "Alessandra Favole",
+    "Marina Gallo",
+    "Walter Martelli",
+    "Maria Ines Crescio",
+    "Enrica Berio",
+    "Loretta Masoero",
+    "Alessandro Benedetto",
+    "Marzia Pezzolato",
+    "Elena Bozzetta",
+    "Carla Grattarola",
+    "Cristina Casalone",
+    "Cristiano Corona",
+    "Federica Giorda"
+   ],
+   "year": 2023,
+   "journal": "Biomolecules",
+   "abstract": "Plastic is a polymer extremely resistant to degradation that can remain for up to hundreds or thousands of years, leading to the accumulation of massive amounts of plastic waste throughout the planet's ecosystems. Due to exposure to various environmental factors, plastic breaks down into smaller particles named microplastics (1-5000 μm) and nanoplastics (<1 μm). Microplastics (MPs) are ubiquitous pollutants but, still, little is known about their effects on human and animal health. Herein, our aim is to investigate cytotoxicity, oxidative stress, inflammation and correlated gene modulation following exposure to polystyrene microplastics (PS-MPs) in HRT-18 and CMT-93 epithelial cell lines. After 6, 24 and 48 h PS-MPs treatment, cell viability (MTT) and oxidative stress (SOD) assays were performed; subsequently, expression changes and cytokines release were investigated by Real-Time PCR and Magnetic-beads panel Multiplex Assay, respectively. For each exposure time, a significantly increased cytotoxicity was observed in both cell lines, whereas SOD activity increased only in CMT-93 cells. Furthermore, Magnetic-beads Multiplex Assay revealed an increased release of IL-8 in HRT-18 cells' medium, also confirmed by gene expression analysis. Results obtained suggest the presence of a pro-inflammatory pattern induced by PS-MPs treatment that could be related to the observed increase in cytotoxicity."
+  },
+  {
+   "key": "Correia2026analytical",
+   "doi": "10.1590/0001-3765202620251113",
+   "title": "Analytical challenges and advances in detecting microplastics in human tissue and organ samples.",
+   "authors": [
+    "Thiago R Correia",
+    "Ananda P L Dias",
+    "Rafael L Pinto",
+    "Debora B Pereira",
+    "Ana Maria F DE Sousa",
+    "Mônica Regina C M Calderari"
+   ],
+   "year": 2026,
+   "journal": "Anais da Academia Brasileira de Ciencias",
+   "abstract": "Microplastic contamination of biological matrices is a pressing concern in environmental and biomedical research. While their presence has been confirmed in human blood, placentas, lungs, and other tissues, accurate identification remains an analytical challenge. Obstacles include the small size and heterogeneous composition of microplastics, as well as spectral interference from complex organic matter. This review systematically analyzes-following PRISMA 2020 guidelines-the current state of microplastic detection in human tissues, evaluating 218 studies (2000-2024). We focus on the primary techniques: Fourier Transform Infrared (FTIR) and Raman spectroscopy, and Pyrolysis-Gas Chromatography/Mass Spectrometry (Py-GC/MS). Our analysis confirms FTIR as the most widely employed technique, followed by Raman and Py-GC/MS, with each method exhibiting distinct advantages and limitations in sensitivity, specificity, and sample preparation requirements. A critical finding is the widespread lack of robust quality assurance; notably, few studies consistently implemented blank controls and spike-recovery experiments, thereby compromising the reproducibility and reliability of data. In response, we propose a consolidated framework of best practices for sample handling, contamination control, and analytical validation. This review underscores the urgent need for standardized, validated protocols to refine analytical techniques, ensure consistent results, and ultimately support accurate risk assessment of human exposure to microplastics."
+  },
+  {
+   "key": "Dmitrowicz2026micro",
+   "doi": "10.1007/s00204-026-04392-1",
+   "title": "Micro- and nanoplastics in human biological materials: a systematic review of detection methods and methodological challenges",
+   "authors": [
+    "Aleksandra Dmitrowicz",
+    "Mariusz Sacharczuk",
+    "Dominik Skiba"
+   ],
+   "year": 2026,
+   "journal": "Archives of Toxicology",
+   "abstract": "Micro- and nanoplastics are an increasing focus in biomedical research, yet their definition, classification, and detection methods remain largely unstandardised. The lack of consistent nomenclature, agreed size criteria, and uniform reporting methods significantly hinders comparison of available data. Therefore, a systematic review of studies on analytical methods for detecting micro- and nanoplastics ex vivo in human biological samples was conducted. Most included studies (63.89%) were published between 2024 and 2025, highlighting the topicality of this research area. Study populations varied widely in age and health status, and sample sizes were often small. The most frequently analysed samples included placenta, kidneys, liver, lungs, heart, and urine, while other tissues were reported sporadically. Detection methods primarily involved microscopic techniques, chromatographic approaches, and Raman and FTIR spectroscopy. Considerable variability was observed in sample preparation procedures, including storage, digestion, and filtration, which may affect analytical sensitivity and specificity. Differences were also noted in quality control strategies and contamination minimisation approaches. Reported particle sizes and concentration units varied substantially, and many studies did not distinguish between microplastics and nanoplastics, treating them as a single category. This further hinders data comparison and the accurate assessment of human exposure."
+  },
+  {
+   "key": "Marfella2024microplastics",
+   "doi": "10.1056/nejmoa2309822",
+   "title": "Microplastics and Nanoplastics in Atheromas and Cardiovascular Events",
+   "authors": [
+    "Raffaele Marfella",
+    "Francesco Prattichizzo",
+    "Celestino Sardu",
+    "Gianluca Fulgenzi",
+    "Laura Graciotti",
+    "Tatiana Spadoni",
+    "Nunzia D’Onofrio",
+    "Lucia Scisciola",
+    "Rosalba La Grotta",
+    "Chiara Frigé",
+    "Valeria Pellegrini",
+    "Maurizio Municinò",
+    "Mario Siniscalchi",
+    "Fabio Spinetti",
+    "Gennaro Vigliotti",
+    "Carmine Vecchione",
+    "Albino Carrizzo",
+    "Giulio Accarino",
+    "Antonio Squillante",
+    "Giuseppe Spaziano",
+    "Davida Mirra",
+    "Renata Esposito",
+    "Simona Altieri",
+    "Giovanni Falco",
+    "Angelo Fenti",
+    "Simona Galoppo",
+    "Silvana Canzano",
+    "Ferdinando Carlo Sasso",
+    "Giulia Matacchione",
+    "Fabiola Olivieri",
+    "Franca Ferraraccio",
+    "Iacopo Panarese",
+    "Pasquale Paolisso",
+    "Emanuele Barbato",
+    "Carmine Lubritto",
+    "Maria Luisa Balestrieri",
+    "Ciro Mauro",
+    "A. Enrique Caballero",
+    "Sanjay Rajagopalan",
+    "Antonio Ceriello",
+    "Bruno D’Agostino",
+    "Pasquale Iovino",
+    "Giuseppe Paolisso"
+   ],
+   "year": 2024,
+   "journal": "New England Journal of Medicine",
+   "abstract": "BACKGROUND: Microplastics and nanoplastics (MNPs) are emerging as a potential risk factor for cardiovascular disease in preclinical studies. Direct evidence that this risk extends to humans is lacking. METHODS: We conducted a prospective, multicenter, observational study involving patients who were undergoing carotid endarterectomy for asymptomatic carotid artery disease. The excised carotid plaque specimens were analyzed for the presence of MNPs with the use of pyrolysis-gas chromatography-mass spectrometry, stable isotope analysis, and electron microscopy. Inflammatory biomarkers were assessed with enzyme-linked immunosorbent assay and immunohistochemical assay. The primary end point was a composite of myocardial infarction, stroke, or death from any cause among patients who had evidence of MNPs in plaque as compared with patients with plaque that showed no evidence of MNPs. RESULTS: A total of 304 patients were enrolled in the study, and 257 completed a mean (±SD) follow-up of 33.7±6.9 months. Polyethylene was detected in carotid artery plaque of 150 patients (58.4%), with a mean level of 21.7±24.5 μg per milligram of plaque; 31 patients (12.1%) also had measurable amounts of polyvinyl chloride, with a mean level of 5.2±2.4 μg per milligram of plaque. Electron microscopy revealed visible, jagged-edged foreign particles among plaque macrophages and scattered in the external debris. Radiographic examination showed that some of these particles included chlorine. Patients in whom MNPs were detected within the atheroma were at higher risk for a primary end-point event than those in whom these substances were not detected (hazard ratio, 4.53; 95% confidence interval, 2.00 to 10.27; P<0.001). CONCLUSIONS: In this study, patients with carotid artery plaque in which MNPs were detected had a higher risk of a composite of myocardial infarction, stroke, or death from any cause at 34 months of follow-up than those in whom MNPs were not detected. (Funded by Programmi di Ricerca Scientifica di Rilevante Interesse Nazionale and others; ClinicalTrials.gov number, NCT05900947.)."
+  },
+  {
+   "key": "Yan2021analysis",
+   "doi": "10.1021/acs.est.1c03924",
+   "title": "Analysis of Microplastics in Human Feces Reveals a Correlation between Fecal Microplastics and Inflammatory Bowel Disease Status",
+   "authors": [
+    "Zehua Yan",
+    "Yafei Liu",
+    "Ting Zhang",
+    "Faming Zhang",
+    "Hongqiang Ren",
+    "Yan Zhang"
+   ],
+   "year": 2021,
+   "journal": "Environmental Science & Technology",
+   "abstract": "Human ingestion of microplastics (MPs) is inevitable due to the ubiquity of MPs in various foods and drinking water. Whether the ingestion of MPs poses a substantial risk to human health is far from understood. Here, by analyzing the characteristics of MPs in the feces of patients with inflammatory bowel disease (IBD) and healthy people, for the first time, we found that the fecal MP concentration in IBD patients (41.8 items/g dm) was significantly higher than that in healthy people (28.0 items/g dm). In total, 15 types of MPs were detected in feces, with poly(ethylene terephthalate) (22.3-34.0%) and polyamide (8.9-12.4%) being dominant, and their primary shapes were sheets and fibers, respectively. We present evidence indicating that a positive correlation exists between the concentration of fecal MPs and the severity of IBD. Combining a questionnaire survey and the characteristics of fecal MPs, we conclude that the plastic packaging of drinking water and food and dust exposure are important sources of human exposure to MPs. Furthermore, the positive correlation between fecal MPs and IBD status suggests that MP exposure may be related to the disease process or that IBD exacerbates the retention of MPs. The relative mechanisms deserve further studies. Our results also highlight that fecal MPs are useful for assessing human MP exposure and potential health risks."
+  },
+  {
+   "key": "Talaie2025toxicological",
+   "doi": "10.1016/j.toxlet.2025.06.021",
+   "title": "Toxicological effects of micro/nano-plastics on human reproductive health: A review.",
+   "authors": [
+    "Amirreza Talaie",
+    "Sanaz Alaee",
+    "Elham Hosseini",
+    "Shahabaldin Rezania",
+    "Amin Tamadon"
+   ],
+   "year": 2025,
+   "journal": "Toxicology letters",
+   "abstract": "Micro/Nano-plastics (MNPs), including microplastics (MPs; <5 mm) and nanoplastics (NPs; <100 nm), have become pervasive environmental pollutants due to extensive plastic production and insufficient recycling practices. These particles originate from the degradation of larger plastic materials through processes such as photo-oxidation, thermo-oxidation, and incomplete biodegradation, resulting in chemically reactive fragments that persist in air, water, and food. Once released, MNPs enter the human body primarily via ingestion, inhalation, and dermal absorption, ultimately accumulating in various tissues, including reproductive organs. This review provides a comprehensive summary of current knowledge regarding the toxicological effects of MNPs on male and female reproductive health, with a focus on mammalian models and relevance to human exposure. In males, MNPs have been associated with testicular damage, impaired spermatogenesis, reduced sperm count and motility, and disruptions in the hypothalamic-pituitary-gonadal axis. In females, exposure has been linked to altered folliculogenesis, disrupted ovarian hormone levels, impaired oocyte quality, and placental dysfunction. These effects are largely driven by mechanisms involving oxidative stress, inflammation, endocrine disruption, mitochondrial dysfunction, and apoptosis. Furthermore, MNPs have been shown to disrupt gut microbiota composition, contributing to systemic inflammation and reproductive dysfunction through emerging pathways such as the gut-testis axis. Given their widespread presence and multifaceted modes of action, MNPs pose a serious threat to human reproductive health. Therefore, there is an urgent need for stricter environmental regulations, improved waste management, and further research to understand the long-term and transgenerational consequences of MNP exposure."
+  }
+ ]
+}

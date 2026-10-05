@@ -525,7 +525,23 @@ class WordBreakdownTests(unittest.TestCase):
         markdown = self.review_with_figure(prose_words=1500)
         result = self.validate(markdown, strict_tier=True)
         message = " ".join(result.errors)
-        self.assertIn("prose body", message)
+        self.assertIn("reader prose", message)
+        self.assertIn("trim", message)
+
+    def test_popsci_budget_counts_the_words_a_reader_reads(self):
+        # 1,000 reader words with a citation after every ten. The citation
+        # labels must not push a small feature (650–1,300) over its budget.
+        cite = f" [Smith et al. 2024](https://doi.org/{DOI})."
+        sentences = [" ".join(["evidence"] * 10) + cite for _ in range(100)]
+        cited = "\n\n".join(" ".join(sentences[i:i + 5]) for i in range(0, 100, 5))
+        markdown = self.review_with_figure(prose_words=1).replace(
+            "### The turn\n\n", "### The turn\n\n" + cited + "\n\n")
+        self.assertGreater(validate_review._word_breakdown(cited)["prose"], 1300)
+        result = self.validate(markdown, strict_tier=True)
+        self.assertEqual([e for e in result.errors if "words" in e], [])
+        too_long = markdown.replace(cited, cited + "\n\n" + cited)
+        message = " ".join(self.validate(too_long, strict_tier=True).errors)
+        self.assertIn("reader prose", message)
         self.assertIn("trim", message)
 
     def test_legacy_flag_restores_single_bucket_behavior(self):
