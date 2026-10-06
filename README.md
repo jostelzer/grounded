@@ -40,14 +40,6 @@ Each review develops a connected explanation, reports findings without giving ad
 | Do school smartphone bans improve grades and mental health? | Bullets · small | [PDF](examples/school-smartphone-bans.pdf) · [Markdown](examples/school-smartphone-bans.md) | [Receipts](examples/school-smartphone-bans-receipts.md) |
 | Are seed oils really bad for you? | Scientific · large | [PDF](examples/seed-oils.pdf) · [Markdown](examples/seed-oils.md) | [Receipts](examples/seed-oils-receipts.md) |
 
-The figures combine explanatory study illustrations with exact data plots where numerical comparisons matter. The seed-oil review pairs three illustrations with two plots; the Ozempic review pairs one illustration of the meal experiments with two plots. Comparable values use matching label sizes, and every figure is checked at native size and in a phone-width preview.
-
-| Study illustrations | Quantitative comparisons |
-|---|---|
-| [![Dietary comparison and clinical follow-up, from the scientific seed-oil review](examples/seed-oils-comparison-framework.png)](examples/seed-oils.pdf) | [![School-time phone use and measured wellbeing, with confidence intervals](examples/school-smartphone-bans-observed.png)](examples/school-smartphone-bans.pdf) |
-| [![Tissue detection and unresolved health effects, from the ELI5 review](examples/microplastics-whole-answer.png)](examples/microplastics-health-eli5.pdf) | [![Weight change over 48 weeks with continued semaglutide and after a switch to placebo, with confidence intervals](examples/ozempic-continue-stop.png)](examples/ozempic-after-stopping.pdf) |
-| [![Phone storage and tablet-based wellbeing assessment as separate study components](examples/school-smartphone-bans-policy-comparison-white.png)](examples/school-smartphone-bans.pdf) | [![Linoleic-acid biomarker associations separated by exposure contrast](examples/seed-oils-prospective-estimates.png)](examples/seed-oils.pdf) |
-
 The examples use as many sources as the question needs. Full-text and abstract-only evidence are distinguished in the receipts; more references do not automatically mean stronger evidence. These familiar examples are development regressions, not held-out validation of the scientific rules.
 
 It can also audit text you already have — an LLM answer, a manuscript section, a press release:

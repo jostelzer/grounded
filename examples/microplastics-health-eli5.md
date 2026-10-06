@@ -9,8 +9,6 @@ Studies have reported [microplastics](https://en.wikipedia.org/wiki/Microplastic
 Some studies did not report using checks for stray plastic entering samples during laboratory work, which makes those findings harder to interpret [Roslan et al. 2024](https://doi.org/10.7189/jogh.14.04179). This uncertainty concerns the reliability of particular measurements; it does not mean every reported detection is false [Roslan et al. 2024](https://doi.org/10.7189/jogh.14.04179).
 
 <a id="fig-microplastics-whole-answer"></a>
-![An illustrated tissue sample with blue particles is enlarged beside a torso. A dashed line and question mark separate it from a second torso labelled “Health harm unclear”.](microplastics-whole-answer.png)
-
 **Figure 1. Finding plastic leaves its health effects unresolved.** Human tissue detections leave causal health effects uncertain [Roslan et al. 2024](https://doi.org/10.7189/jogh.14.04179), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y). The blue pieces represent detections, not measured sizes or amounts; the dashed line and question mark represent the unresolved causal connection. Neither torso represents a diagnosed patient.
 
 ### Testing what the pieces can do
@@ -26,8 +24,6 @@ Human follow-up studies connect a tissue measurement with what happens later. In
 The difference does not establish that plastic caused those events. The groups could also differ in other exposures, health conditions or behaviours that affected their later health [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). They were all patients undergoing surgery for artery disease, so this comparison cannot provide a risk estimate for the general population [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). The parallel paths in [Figure 2](#fig-microplastics-evidence-boundary) show how the tissue tests defined the groups whose health was then followed.
 
 <a id="fig-microplastics-evidence-boundary"></a>
-![Material in a narrowed blood vessel branches into tissue drawings with and without blue particles. Each row contains a person and an arrow pointing to a health-record clipboard; a brace joins the records.](microplastics-evidence-boundary.png)
-
 **Figure 2. Tissue tests defined the groups being followed.** The study followed patients with and without detected plastic in material removed during surgery [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822). The two rows depict those groups, with arrows to later health records and a brace marking their comparison. The drawing encodes neither patient numbers nor event counts. Other differences between the groups can affect the comparison [Marfella et al. 2024](https://doi.org/10.1056/nejmoa2309822), [Tran et al. 2026](https://doi.org/10.1186/s12940-026-01282-y).
 
 ### What remains uncertain

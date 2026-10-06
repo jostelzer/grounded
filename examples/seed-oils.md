@@ -25,8 +25,6 @@ Coconut oil further illustrates how changing the reference food changes the resu
 [Figure 1](#fig-seed-oils-comparison-framework) places the dietary comparison and blood collection beside the separate question of clinical follow-up. A replacement can change a blood measurement without establishing a change in disease outcomes; clinical-event trials test that further connection.
 
 <a id="fig-seed-oils-comparison-framework"></a>
-![A dietary comparison and blood collection appear beside a separate clinical consultation.](seed-oils-comparison-framework.png)
-
 **Figure 1. Dietary responses and clinical outcomes are distinct measurements.** Substitution trials measure lipid responses when unsaturated oils replace saturated fats [Schwab et al. 2014](https://doi.org/10.3402/fnr.v58.25145). Clinical-event syntheses assess disease outcomes, with uncertainty remaining for several omega-6-specific estimates [Hooper et al. 2018](https://doi.org/10.1002/14651858.cd011094.pub4). Panel A illustrates a dietary comparison and blood collection; panel B illustrates clinical follow-up. The scenes illustrate study concepts; they neither reconstruct a trial nor establish that lipid changes guarantee clinical benefit.
 
 ### Coronary events and mortality
@@ -46,8 +44,6 @@ The table and [Figure 2](#fig-seed-oils-coronary-estimates) keep these exposure 
 | Omega-6 review | Higher omega-6 | Effect uncertain | RR 1.00; 95% CI 0.88–1.12 | [Hooper et al. 2018](https://doi.org/10.1002/14651858.cd011094.pub4) |
 
 <a id="fig-seed-oils-coronary-estimates"></a>
-![Three point-and-whisker estimates compare coronary-event risk ratios from separate randomized-trial syntheses.](seed-oils-coronary-estimates.png)
-
 **Figure 2. Coronary-event estimates depend on the included intervention.** The substitution-focused synthesis reported RR 0.81 (95% CI 0.70–0.95) [Mozaffarian et al. 2010](https://doi.org/10.1371/journal.pmed.1000252). Estimates were 0.87 (0.72–1.06) for the broader polyunsaturated-fat synthesis [Abdelhamid et al. 2018](https://doi.org/10.1002/14651858.cd012345.pub2) and 0.88 (0.66–1.17) for the omega-6 synthesis [Hooper et al. 2018](https://doi.org/10.1002/14651858.cd011094.pub4). Horizontal categories identify syntheses; vertical position gives risk ratios, with one indicating no difference. Whiskers show confidence intervals. Differences in exposure definitions and overlapping evidence prevent interpreting the three points as independent estimates of one identical intervention.
 
 ### Why historical trials complicate the clinical answer
@@ -85,8 +81,6 @@ Randomized evidence is less decisive for diabetes diagnosis. A trial meta-analys
 [Figure 3](#fig-seed-oils-prospective-estimates) brings the cardiovascular and diabetes associations together while preserving their different exposure scales. The distinction from intervention evidence applies to both panels: the measured concentrations were associated with later outcomes in the studied cohorts, but do not establish what changing a particular cooking oil would do.
 
 <a id="fig-seed-oils-prospective-estimates"></a>
-![Separate point-and-whisker panels show cardiovascular and diabetes associations with linoleic-acid biomarkers.](seed-oils-prospective-estimates.png)
-
 **Figure 3. Biomarker associations use different exposure contrasts.** Per interquintile-range increase in linoleic acid, pooled analyses reported HRs of 0.93 for total cardiovascular disease, 0.78 for cardiovascular mortality and 0.88 for ischemic stroke [Marklund et al. 2019](https://doi.org/10.1161/circulationaha.118.038908). EPIC-InterAct reported HR 0.80 per standard-deviation increase for type 2 diabetes [Forouhi et al. 2016](https://doi.org/10.1371/journal.pmed.1002094). Vertical position gives the hazard ratio and whiskers show confidence intervals; one indicates no difference. Panel A uses an interquintile-range contrast, while panel B uses a standard-deviation (SD) contrast. The categories identify distinct outcomes, and the associations are not effects of an oil intervention.
 
 ### Inflammatory pathways and circulating markers
@@ -110,8 +104,6 @@ Attribution also remains tied to the complete diet comparison. The authors descr
 [Figure 4](#fig-seed-oils-blood-assay) follows the sample from the dietary study to the laboratory. The sample-transfer arrow connects the dietary comparison to the assay, where mediator production was measured after stimulation.
 
 <a id="fig-seed-oils-blood-assay"></a>
-![Dietary guidance and blood collection connect to a separate blood tube and laboratory assay plate.](seed-oils-blood-assay.png)
-
 **Figure 4. A dietary comparison followed by sampled-blood analysis.** The trial evaluated mediator production after laboratory stimulation of whole blood and did not directly assess clinical outcomes [Sergeant et al. 2026](https://doi.org/10.3390/nu18111814). Panel A depicts dietary guidance and blood collection; panel B depicts handling a sample for an assay. The arrow represents sample transfer, and the plate is a schematic laboratory representation. Neither encodes response magnitudes or disease effects.
 
 ### Heating changes the exposure being studied
@@ -123,8 +115,6 @@ A rapeseed-oil experiment makes the role of prior condition more explicit. Heati
 The toxicological concern has a plausible biological basis. Reviews describe aldehydic oxidation products that can form in oils, enter food and interact with biological systems [Grootveld et al. 2020](https://doi.org/10.3390/nu12040974). A narrative review also links linoleic-acid oxidation products with oxidized LDL and atherosclerotic lesions [DiNicolantonio & O’Keefe 2018](https://doi.org/10.1136/openhrt-2018-000898). These proposed connections are relevant to evaluating degraded oils, but they do not quantify the exposure–outcome relationship for ordinary unheated oil consumption.
 
 <a id="fig-seed-oils-heating-study"></a>
-![A heated oil vial and headspace sampling connect to laboratory analysis.](seed-oils-heating-study.png)
-
 **Figure 5. Heating and analysis of volatile products.** A rapeseed-oil experiment measured volatile compounds formed during heating [Grebenteuch et al. 2021](https://doi.org/10.3390/foods10102417). Panel A illustrates heating and headspace sampling; panel B illustrates analytical sample handling. The schematic does not encode compound quantities. Connecting the measured chemistry to human disease requires exposure and outcome evidence [Grootveld 2022](https://doi.org/10.3389/fnut.2021.711640).
 
 Evidence about repeatedly heated oils adds hazard information without closing that gap. Reviews identify oxidation products in abused frying oils as a plausible health concern [Dobarganes & Márquez-Ruiz 2015](https://doi.org/10.1017/s0007114514002347), and an experiment found tissue injury after rats consumed repeatedly heated oil [Perumalla Venkata & Subramanyam 2016](https://doi.org/10.1016/j.toxrep.2016.08.003). The latter result concerns an animal exposure under experimental conditions. Translating it into a numerical estimate for human cooking would require information about the compounds consumed and the corresponding human outcomes.

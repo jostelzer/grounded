@@ -8,8 +8,6 @@
 - The school-policy question is whether changing access improves student outcomes. [Figure 1](#fig-school-smartphone-bans-policy-comparison) separates an access rule from the assessment of benefit.
 
 <a id="fig-school-smartphone-bans-policy-comparison"></a>
-![Panel A shows a pupil placing a phone in a hanging storage pocket; panel B shows a pupil answering a questionnaire on a tablet.](school-smartphone-bans-policy-comparison-white.png)
-
 **Figure 1. An access rule is distinct from an outcome assessment.** Panel A illustrates phone storage; panel B illustrates questionnaire-based assessment. The scenes represent neither treatment groups nor an effect size. These policy evaluations compared different restrictions and measured student outcomes separately [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211), [King et al. 2024](https://doi.org/10.1556/2006.2024.00058).
 
 ### Less school-time use without a detected wellbeing advantage
@@ -18,8 +16,6 @@
 - The same comparison found no evidence of better mental wellbeing, with uncertainty spanning benefit and harm ([Figure 2](#fig-school-smartphone-bans-observed)) [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Unmeasured school differences and possible under-reporting of use in restrictive schools limit what these [cross-sectional](https://en.wikipedia.org/wiki/Cross-sectional_study) findings establish about policy effects [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
 
 <a id="fig-school-smartphone-bans-observed"></a>
-![Two point-and-whisker panels show school-time phone use below zero and wellbeing with an interval crossing zero, using separate vertical scales.](school-smartphone-bans-observed.png)
-
 **Figure 2. Lower school-time use did not establish better wellbeing.** Both panels report the restrictive-minus-permissive school comparison. Vertical axes show adjusted differences in phone hours per school day (A) and Warwick–Edinburgh Mental Wellbeing Scale points (B). Panel A is −0.67 hours, with a 95% confidence interval of −0.92 to −0.43 [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211). Points mark estimates, whiskers mark intervals, and dashed zero lines mark no difference; the panels use different units. Panel B is −0.48 points, with a 95% confidence interval of −2.05 to 1.06; the observational comparison does not establish causality [Goodyear et al. 2025](https://doi.org/10.1016/j.lanepe.2025.101211).
 
 ### Academic gains and engagement answer different questions

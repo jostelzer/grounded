@@ -19,8 +19,6 @@ A smaller lasting loss can still matter for health [Rubino et al. 2021](https://
 Looking further ahead is harder [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). A review combining weight-management studies estimated that regain after newer medicines, semaglutide and tirzepatide, averaged a little under a kilogram a month [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). Its model projected a return to starting weight around a year and a half after stopping [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). Most of the studies followed patients for much shorter periods, so that date extends a model beyond the observed results [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304). The measured year after STEP 1 is firmer ground than a forecast of what must happen next [Wilding et al. 2022](https://doi.org/10.1111/dom.14725), [West et al. 2026](https://doi.org/10.1136/bmj-2025-085304).
 
 <a id="fig-weight-course"></a>
-![A teal line joins baseline weight, a low point at treatment end and a higher point after one year; the last point remains below baseline.](ozempic-weight-course.png)
-
 **Figure 1. Average weight rose after treatment ended.** The horizontal axis is weeks from treatment start; the vertical axis is percentage change from starting weight. The dots show selected group means without intervals, and connecting segments are visual guides rather than measured intermediate paths. STEP 1 ended both injections and counselling [Wilding et al. 2022](https://doi.org/10.1111/dom.14725); STEP 4 retained counselling during its randomized withdrawal comparison [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224).
 
 ### How the medicine changes a meal
@@ -38,8 +36,6 @@ What happens when that appetite effect is removed? How often appetite returns, a
 The medicine itself leaves gradually [Yang & Yang 2024](https://doi.org/10.2147/dddt.s470826). Its half-life is about a week: roughly half the remaining drug is eliminated over that interval [Yang & Yang 2024](https://doi.org/10.2147/dddt.s470826). Stopping injections therefore allows drug levels to fall over weeks [Yang & Yang 2024](https://doi.org/10.2147/dddt.s470826). A review of weight-loss biology describes another pressure toward regain: after losing weight, people can feel hungrier and sometimes burn less energy than expected even allowing for their smaller size [Reiss et al. 2025](https://doi.org/10.3390/biom15030408). Those pressures form part of the background to stopping appetite treatment [Reiss et al. 2025](https://doi.org/10.3390/biom15030408).
 
 <a id="fig-meal-test"></a>
-![A full served plate connects by an arrow to a plate with leftovers and a fork, then to an intake record.](ozempic-meal-test.png)
-
 **Figure 2. Appetite became a measurable meal.** In the controlled tests, participants received food in excess, ate until comfortably full, and investigators recorded intake [Blundell et al. 2017](https://doi.org/10.1111/dom.12932), [Friedrichsen et al. 2021](https://doi.org/10.1111/dom.14280). The left-to-right sequence sketches that procedure. The pictured food is schematic; its composition and fraction left over carry no quantitative result.
 
 ### The support stayed, the injection changed
@@ -53,8 +49,6 @@ The continuing support was specific: a daily food-energy target about 500 calori
 There was a different trade-off in digestive symptoms [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). New gastrointestinal events during the comparison period were reported by about four in ten people continuing semaglutide and about 26% of those switched to placebo [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). This result describes new events over many months; it does not say when someone's existing nausea, vomiting or other digestive symptoms disappeared after stopping [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224). The STEP 1 follow-up did not systematically collect adverse events, leaving a gap precisely where readers might hope for a recovery calendar [Wilding et al. 2022](https://doi.org/10.1111/dom.14725). Here, “withdrawal” means stopping treatment; these studies did not test for an addiction-like withdrawal syndrome [Wilding et al. 2022](https://doi.org/10.1111/dom.14725), [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224).
 
 <a id="fig-continue-stop"></a>
-![A teal continuation dot below zero and a rust placebo dot above zero have attached vertical intervals on one weight-change scale.](ozempic-continue-stop.png)
-
 **Figure 3. Continuing and stopping sent weight in opposite directions.** The horizontal axis names assigned treatment; the vertical axis is percentage weight change from assignment, after the initial semaglutide treatment period. Dots show the group averages after 48 weeks and whiskers show 95% [confidence intervals](https://en.wikipedia.org/wiki/Confidence_interval) [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224), [Pedersen et al. 2025](https://doi.org/10.1503/cmaj.250502). The comparison included people who had reached 2.4 mg, with counselling continued in both groups [Rubino et al. 2021](https://doi.org/10.1001/jama.2021.3224), [Pedersen et al. 2025](https://doi.org/10.1503/cmaj.250502).
 
 ### Blood sugar has its own story
