@@ -31,7 +31,7 @@ Ask in plain language, naming a size, a style, and an output format — like thi
 
 Missing dimensions are inferred from context and defaults; Grounded asks only when ambiguity materially changes the task. The examples below use four writing styles and three review sizes.
 
-The Ozempic review was researched and written afresh on **5 October 2026 under the v0.6 popsci rules**: one continuous story built on a handful of studies told as small stories, how each was done, plain numbers with their rounding marked, and a table of exact figures after the ending. The other three were rewritten with the **v0.5.5 writing conventions on 5 September 2026**, reusing the authenticated literature searches from **4 September 2026**. Each develops a connected explanation, reports findings without giving advice, and places illustrations and plots beside the evidence they explain. Fresh independent checks cover source context, the complete argument and every figure’s scientific meaning. Each review includes its evidence receipts.
+Each review develops a connected explanation, reports findings without giving advice, and places illustrations and plots beside the evidence they explain. Every assertion was checked independently against its source, and each review comes with its evidence receipts. The masthead of each PDF shows the Grounded version that wrote it.
 
 | Question | Style · size | Read the review | Evidence receipts |
 |---|---|---|---|

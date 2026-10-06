@@ -150,4 +150,4 @@ This narrative review covers human research on stopping semaglutide, with relate
 
 **Receipts**
 
-*135 cited sentences · 151 source checks · 131 supported at full text · 3 at abstract · 17 partial · 0 contradicted — every pair's verbatim quote is in `review-receipts.md`.*
+*135 cited sentences · 151 source checks · 131 supported at full text · 3 at abstract · 17 partial · 0 contradicted — every pair's verbatim quote is in `ozempic-after-stopping-receipts.md`.*
